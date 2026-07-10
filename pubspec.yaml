@@ -1,0 +1,24 @@
+name: conta_bold_ds
+description: Catálogo do Design System do Conta BOLD (Redesenho v.01) — Flutter web, deploy Vercel.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.0.10
+  google_fonts: ^6.2.1
+
+dev_dependencies:
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - lib/design_system/assets/
+    - lib/design_system/assets/icons/
+    - lib/design_system/assets/fonts/
