@@ -36,6 +36,7 @@ export 'widgets/bold_pix_mark.dart';       // BoldPixMark
 export 'widgets/bold_background.dart';     // BoldBackground (backdrop)
 export 'widgets/bold_glass_surface.dart';  // BoldGlassSurface
 export 'widgets/bold_home_indicator.dart'; // BoldHomeIndicator
+export 'widgets/bold_page_dots.dart';      // BoldPageDots (carrossel/onboarding)
 export 'widgets/bold_skeleton.dart';       // BoldSkeleton (shimmer loading)
 export 'widgets/bold_controls.dart';       // BoldSwitch, BoldSegmentedControl
 export 'widgets/bold_checkbox.dart';       // BoldCheckbox
