@@ -295,9 +295,23 @@ class _Pill extends StatelessWidget {
 // Fonte: rotas em lib/routing/routes.dart. Cada passo = um nó; `branches` são
 // caminhos alternativos/decisões dentro do passo.
 // ═══════════════════════════════════════════════════════════════════════════
+// Padrão de user flow do time (ver documentação): verde = início · rosa = fim ·
+// AMARELO = usuário · ROXO = sistema · retângulo = ação · losango = decisão ·
+// roxo + X = caso de erro. Seta cheia = fluxo · tracejada = anotação/erro.
+enum StepType {
+  start,
+  end,
+  userAction,
+  userDecision,
+  systemAction,
+  systemDecision,
+  systemError,
+}
+
 class FlowStep {
-  const FlowStep(this.label, {this.note, this.branches = const []});
+  const FlowStep(this.label, {this.type, this.note, this.branches = const []});
   final String label;
+  final StepType? type; // null = legado (forma inferida por posição)
   final String? note;
   final List<String> branches;
 }
@@ -396,16 +410,37 @@ const List<AppFlow> kFlows = [
     group: 'PIX',
     icon: 'arrow-right-arrow-left-light',
     route: '/pix/pagar',
-    description: 'Transferência via chave, dados, copia-e-cola ou QR Code.',
+    description:
+        'Transferência via chave, contato, copia-e-cola ou agência/conta.',
     steps: [
-      FlowStep('Área PIX'),
-      FlowStep('Para quem?', note: 'Chave, nome ou Pix copia-e-cola',
-          branches: ['Ler QR Code', 'Dados bancários', 'Contato favorito']),
-      FlowStep('Confirmar dados', note: 'Retorno do DICT (nome/instituição)'),
-      FlowStep('Valor'),
-      FlowStep('Revisar'),
-      FlowStep('Autorização', note: 'Senha / biometria'),
-      FlowStep('Comprovante'),
+      FlowStep('Início', type: StepType.start),
+      FlowStep('Abre a Área Pix', type: StepType.userAction),
+      FlowStep('Escolhe para quem enviar',
+          type: StepType.userDecision,
+          branches: [
+            'Chave / nome',
+            'Copia e cola',
+            'Contato favorito',
+            'Agência e conta',
+          ]),
+      FlowStep('Informa a chave / os dados', type: StepType.userAction),
+      FlowStep('Chave encontrada no DICT?', type: StepType.systemDecision),
+      FlowStep('Chave não encontrada',
+          type: StepType.systemError,
+          note: 'Chave inexistente ou indisponível no DICT'),
+      FlowStep('Consulta o destinatário (DICT)', type: StepType.systemAction),
+      FlowStep('Informa o valor', type: StepType.userAction),
+      FlowStep('Saldo e limite suficientes?', type: StepType.systemDecision),
+      FlowStep('Saldo insuficiente / limite excedido',
+          type: StepType.systemError,
+          note: 'Sem saldo ou acima do limite Pix do período'),
+      FlowStep('Revisa e confirma (senha / biometria)',
+          type: StepType.userAction),
+      FlowStep('Autenticação válida?', type: StepType.systemDecision),
+      FlowStep('Falha na autenticação',
+          type: StepType.systemError, note: 'Senha/biometria incorreta'),
+      FlowStep('Efetiva o Pix', type: StepType.systemAction),
+      FlowStep('Comprovante', type: StepType.end),
     ],
   ),
   AppFlow(
@@ -413,11 +448,18 @@ const List<AppFlow> kFlows = [
     group: 'PIX',
     icon: 'arrow-down-to-line-light',
     route: '/pix/receber',
-    description: 'Geração de QR Code estático ou dinâmico para receber.',
+    description: 'Geração de QR Code para receber (com ou sem valor).',
     steps: [
-      FlowStep('Área PIX'),
-      FlowStep('Receber', branches: ['QR estático', 'QR dinâmico (com valor)']),
-      FlowStep('Compartilhar QR / copia-e-cola'),
+      FlowStep('Início', type: StepType.start),
+      FlowStep('Abre a Área Pix', type: StepType.userAction),
+      FlowStep('Toca em Receber', type: StepType.userAction),
+      FlowStep('Define um valor?',
+          type: StepType.userDecision, branches: ['Com valor', 'Sem valor']),
+      FlowStep('Gera o QR Code', type: StepType.systemAction),
+      FlowStep('Falha ao gerar o QR',
+          type: StepType.systemError, note: 'Sem conexão / erro no servidor'),
+      FlowStep('Compartilha ou copia o código', type: StepType.userAction),
+      FlowStep('QR pronto', type: StepType.end),
     ],
   ),
   AppFlow(
@@ -427,10 +469,19 @@ const List<AppFlow> kFlows = [
     route: '/pix/chaves',
     description: 'Cadastro, definição da chave preferida e remoção de chaves.',
     steps: [
-      FlowStep('Área PIX'),
-      FlowStep('Minhas chaves'),
-      FlowStep('Gerenciar',
-          branches: ['Cadastrar chave', 'Definir preferida', 'Remover']),
+      FlowStep('Início', type: StepType.start),
+      FlowStep('Abre Minhas chaves', type: StepType.userAction),
+      FlowStep('O que deseja fazer?',
+          type: StepType.userDecision,
+          branches: ['Cadastrar', 'Definir preferida', 'Remover']),
+      FlowStep('Cadastra uma nova chave', type: StepType.userAction),
+      FlowStep('Chave disponível e dentro do limite?',
+          type: StepType.systemDecision),
+      FlowStep('Chave já cadastrada / limite atingido',
+          type: StepType.systemError,
+          note: 'Chave em uso em outra conta ou 5 chaves (PF) já ativas'),
+      FlowStep('Registra a chave', type: StepType.systemAction),
+      FlowStep('Chave ativa', type: StepType.end),
     ],
   ),
   AppFlow(
@@ -440,10 +491,20 @@ const List<AppFlow> kFlows = [
     route: '/pix/automatico',
     description: 'Autorização e gestão de débitos recorrentes por PIX.',
     steps: [
-      FlowStep('PIX Automático'),
-      FlowStep('Ação', branches: ['Criar', 'Autorizar', 'Revogar']),
-      FlowStep('Configurar', note: 'Valor, periodicidade, limite'),
-      FlowStep('Confirmar autorização'),
+      FlowStep('Início', type: StepType.start),
+      FlowStep('Abre o PIX Automático', type: StepType.userAction),
+      FlowStep('Qual ação?',
+          type: StepType.userDecision,
+          branches: ['Criar', 'Autorizar', 'Revogar']),
+      FlowStep('Configura (valor, periodicidade, limite)',
+          type: StepType.userAction),
+      FlowStep('Confirma a autorização', type: StepType.userAction),
+      FlowStep('Autorização aceita?', type: StepType.systemDecision),
+      FlowStep('Autorização recusada',
+          type: StepType.systemError,
+          note: 'Dados inválidos ou limite recorrente excedido'),
+      FlowStep('Registra a autorização', type: StepType.systemAction),
+      FlowStep('Débito recorrente ativo', type: StepType.end),
     ],
   ),
   AppFlow(
@@ -453,13 +514,21 @@ const List<AppFlow> kFlows = [
     route: '/pix/contestacao',
     description: 'Mecanismo Especial de Devolução para transações suspeitas.',
     steps: [
-      FlowStep('Contestar PIX'),
-      FlowStep('Selecionar transação'),
-      FlowStep('Motivo', note: 'Golpe, fraude, erro'),
-      FlowStep('Descrever ocorrência'),
-      FlowStep('Confirmar'),
-      FlowStep('Protocolo', note: 'Registro da contestação'),
-      FlowStep('Acompanhar status'),
+      FlowStep('Início', type: StepType.start),
+      FlowStep('Abre Contestar Pix', type: StepType.userAction),
+      FlowStep('Seleciona a transação', type: StepType.userAction),
+      FlowStep('Escolhe o motivo',
+          type: StepType.userDecision, branches: ['Golpe', 'Fraude', 'Erro']),
+      FlowStep('Descreve a ocorrência', type: StepType.userAction),
+      FlowStep('Confirma a contestação', type: StepType.userAction),
+      FlowStep('Elegível ao MED (prazo e critérios)?',
+          type: StepType.systemDecision),
+      FlowStep('Fora do prazo / não elegível',
+          type: StepType.systemError,
+          note: 'Além do prazo do MED ou transação inelegível'),
+      FlowStep('Registra e gera protocolo', type: StepType.systemAction),
+      FlowStep('Acompanha o status', type: StepType.userAction),
+      FlowStep('Contestação registrada', type: StepType.end),
     ],
   ),
   // ─────────────────────────── PAGAMENTOS ───────────────────────────────────
@@ -637,18 +706,31 @@ class _FlowchartView extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style:
                         BoldType.bodySmall.copyWith(color: c.textSecondary)),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
+                if (flow.steps.any((s) => s.type != null)) ...[
+                  const _FlowLegend(),
+                  const SizedBox(height: 20),
+                ],
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     for (var i = 0; i < flow.steps.length; i++) ...[
                       _FlowBox(
                         step: flow.steps[i],
-                        kind: _kindOf(i, flow.steps.length, flow.steps[i]),
+                        index: i,
+                        total: flow.steps.length,
                       ),
                       if (flow.steps[i].branches.isNotEmpty)
-                        _BranchFan(branches: flow.steps[i].branches),
-                      if (i < flow.steps.length - 1) const _DownArrow(),
+                        _BranchFan(
+                          branches: flow.steps[i].branches,
+                          accent: flow.steps[i].type == StepType.systemDecision
+                              ? _sysStroke
+                              : _usrStroke,
+                        ),
+                      if (i < flow.steps.length - 1)
+                        _DownArrow(
+                            dashed: flow.steps[i + 1].type ==
+                                StepType.systemError),
                     ],
                   ],
                 ),
@@ -661,6 +743,19 @@ class _FlowchartView extends StatelessWidget {
   }
 }
 
+// Paleta do padrão de user flow do time (documentação).
+const Color _usrFill = Color(0xFFFCE7A6); // amarelo — usuário
+const Color _usrStroke = Color(0xFFE0A93B);
+const Color _usrText = Color(0xFF5C4610);
+const Color _sysFill = Color(0xFFE7DBFA); // roxo — sistema
+const Color _sysStroke = Color(0xFF7B3FF2);
+const Color _sysText = Color(0xFF3A2A6B);
+const Color _startFill = Color(0xFFCBEFD5); // verde — início
+const Color _startText = Color(0xFF0A3F24);
+const Color _endFill = Color(0xFFF8C9CF); // rosa — fim
+const Color _endText = Color(0xFF7A2E3E);
+const Color _errBadge = Color(0xFFEF4757); // vermelho — X do caso de erro
+
 enum _NodeKind { start, process, decision, end }
 
 _NodeKind _kindOf(int i, int total, FlowStep s) {
@@ -670,63 +765,67 @@ _NodeKind _kindOf(int i, int total, FlowStep s) {
   return _NodeKind.process;
 }
 
-// Nó do fluxograma na forma canônica: terminal (pílula) · processo (retângulo)
-// · decisão (losango).
+// Nó do fluxograma. Com `step.type` definido, segue o PADRÃO do time (amarelo =
+// usuário, roxo = sistema; retângulo = ação, losango = decisão, roxo+X = erro;
+// verde = início, rosa = fim). Sem type, cai no legado (formas da marca).
 class _FlowBox extends StatelessWidget {
-  const _FlowBox({required this.step, required this.kind});
+  const _FlowBox(
+      {required this.step, required this.index, required this.total});
   final FlowStep step;
-  final _NodeKind kind;
+  final int index;
+  final int total;
 
   @override
   Widget build(BuildContext context) {
-    switch (kind) {
-      case _NodeKind.start:
-        return _pill(context, gradient: BoldGradients.brand);
-      case _NodeKind.end:
-        return _pill(context, outlined: true);
-      case _NodeKind.decision:
-        return _diamond(context);
-      case _NodeKind.process:
-        return _rect(context);
+    final t = step.type;
+    if (t == null) return _legacy(context);
+    switch (t) {
+      case StepType.start:
+        return _stadium(_startFill, _startText);
+      case StepType.end:
+        return _stadium(_endFill, _endText);
+      case StepType.userAction:
+        return _rect(context, _usrFill, _usrStroke, _usrText);
+      case StepType.systemAction:
+        return _rect(context, _sysFill, _sysStroke, _sysText);
+      case StepType.systemError:
+        return _rect(context, _sysFill, _errBadge, _sysText, error: true);
+      case StepType.userDecision:
+        return _diamond(context, _usrFill, _usrStroke, _usrText);
+      case StepType.systemDecision:
+        return _diamond(context, _sysFill, _sysStroke, _sysText);
     }
   }
 
-  // Terminal (início/fim): pílula. Início = gradiente da marca; fim = contorno.
-  Widget _pill(BuildContext context, {Gradient? gradient, bool outlined = false}) {
-    final c = BoldColors.of(context);
-    final fg = gradient != null ? BoldColors.onGradient : c.textPrimary;
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 440),
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
-      decoration: BoxDecoration(
-        gradient: gradient,
-        color: gradient == null ? (c.isDark ? c.surface : BoldColors.white) : null,
-        borderRadius: BorderRadius.circular(999),
-        border: outlined ? Border.all(color: c.borderStrong, width: 1.5) : null,
-      ),
-      child: Text(step.label,
-          textAlign: TextAlign.center,
-          style: BoldType.labelMd
-              .copyWith(color: fg, fontWeight: FontWeight.w600)),
-    );
-  }
+  // ── Padrão (tipado) ──────────────────────────────────────────────────────
+  Widget _stadium(Color fill, Color text) => Container(
+        constraints: const BoxConstraints(maxWidth: 440),
+        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 12),
+        decoration:
+            BoxDecoration(color: fill, borderRadius: BorderRadius.circular(999)),
+        child: Text(step.label,
+            textAlign: TextAlign.center,
+            style: BoldType.labelMd
+                .copyWith(color: text, fontWeight: FontWeight.w700)),
+      );
 
-  // Processo: retângulo arredondado.
-  Widget _rect(BuildContext context) {
+  Widget _rect(BuildContext context, Color fill, Color stroke, Color text,
+      {bool error = false}) {
     final c = BoldColors.of(context);
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 460),
-      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
+    final box = Container(
+      constraints: const BoxConstraints(maxWidth: 360),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: BoldColors.primary04.withValues(alpha: c.isDark ? 0.10 : 0.06),
+        color: fill,
         borderRadius: BorderRadius.circular(12),
-        border:
-            Border.all(color: BoldColors.primary04.withValues(alpha: 0.30)),
+        border: Border.all(
+            color: error ? _errBadge : stroke, width: error ? 1.5 : 1),
       ),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Text(step.label,
             textAlign: TextAlign.center,
-            style: BoldType.labelMd.copyWith(color: c.textPrimary)),
+            style:
+                BoldType.labelMd.copyWith(color: text, fontWeight: FontWeight.w600)),
         if (step.note != null) ...[
           const SizedBox(height: 3),
           Text(step.note!,
@@ -735,23 +834,35 @@ class _FlowBox extends StatelessWidget {
         ],
       ]),
     );
+    if (!error) return box;
+    return Stack(clipBehavior: Clip.none, children: [
+      box,
+      Positioned(
+        right: -8,
+        top: -8,
+        child: Container(
+          width: 22,
+          height: 22,
+          alignment: Alignment.center,
+          decoration: const BoxDecoration(
+              color: _errBadge, shape: BoxShape.circle),
+          child: const Icon(Icons.close, size: 14, color: Colors.white),
+        ),
+      ),
+    ]);
   }
 
-  // Decisão: losango (âmbar). Nota fica logo abaixo.
-  Widget _diamond(BuildContext context) {
+  Widget _diamond(BuildContext context, Color fill, Color stroke, Color text) {
     final c = BoldColors.of(context);
     return Column(mainAxisSize: MainAxisSize.min, children: [
       CustomPaint(
-        painter: _DiamondPainter(
-          fill: BoldColors.warning04.withValues(alpha: c.isDark ? 0.20 : 0.13),
-          stroke: BoldColors.warning04,
-        ),
+        painter: _DiamondPainter(fill: fill, stroke: stroke),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 46, vertical: 26),
+          padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 26),
           child: Text(step.label,
               textAlign: TextAlign.center,
               style: BoldType.labelMd
-                  .copyWith(color: c.textPrimary, fontWeight: FontWeight.w600)),
+                  .copyWith(color: text, fontWeight: FontWeight.w600)),
         ),
       ),
       if (step.note != null) ...[
@@ -761,6 +872,49 @@ class _FlowBox extends StatelessWidget {
             style: BoldType.bodySmall.copyWith(color: c.textSecondary)),
       ],
     ]);
+  }
+
+  // ── Legado (fluxos ainda não migrados ao padrão) ─────────────────────────
+  Widget _legacy(BuildContext context) {
+    switch (_kindOf(index, total, step)) {
+      case _NodeKind.start:
+        return _pillLegacy(context, gradient: BoldGradients.brand);
+      case _NodeKind.end:
+        return _pillLegacy(context, outlined: true);
+      case _NodeKind.decision:
+        return _diamond(
+            context,
+            BoldColors.warning04.withValues(alpha: 0.13),
+            BoldColors.warning04,
+            BoldColors.of(context).textPrimary);
+      case _NodeKind.process:
+        return _rect(
+            context,
+            BoldColors.primary04.withValues(alpha: 0.06),
+            BoldColors.primary04.withValues(alpha: 0.30),
+            BoldColors.of(context).textPrimary);
+    }
+  }
+
+  Widget _pillLegacy(BuildContext context,
+      {Gradient? gradient, bool outlined = false}) {
+    final c = BoldColors.of(context);
+    final fg = gradient != null ? BoldColors.onGradient : c.textPrimary;
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 440),
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+      decoration: BoxDecoration(
+        gradient: gradient,
+        color:
+            gradient == null ? (c.isDark ? c.surface : BoldColors.white) : null,
+        borderRadius: BorderRadius.circular(999),
+        border: outlined ? Border.all(color: c.borderStrong, width: 1.5) : null,
+      ),
+      child: Text(step.label,
+          textAlign: TextAlign.center,
+          style:
+              BoldType.labelMd.copyWith(color: fg, fontWeight: FontWeight.w600)),
+    );
   }
 }
 
@@ -789,31 +943,44 @@ class _DiamondPainter extends CustomPainter {
   bool shouldRepaint(_DiamondPainter o) => o.fill != fill || o.stroke != stroke;
 }
 
-// Seta vertical (linha + ponta) entre nós.
+// Seta vertical entre nós. `dashed` (anotação/erro) vs cheia (fluxo).
 class _DownArrow extends StatelessWidget {
-  const _DownArrow();
+  const _DownArrow({this.dashed = false});
+  final bool dashed;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 30,
       width: 24,
-      child: CustomPaint(painter: _ArrowPainter(BoldColors.of(context).textMuted)),
+      child: CustomPaint(
+          painter:
+              _ArrowPainter(BoldColors.of(context).textMuted, dashed: dashed)),
     );
   }
 }
 
 class _ArrowPainter extends CustomPainter {
-  _ArrowPainter(this.color);
+  _ArrowPainter(this.color, {this.dashed = false});
   final Color color;
+  final bool dashed;
   @override
   void paint(Canvas canvas, Size size) {
     final cx = size.width / 2;
-    canvas.drawLine(
-        Offset(cx, 0),
-        Offset(cx, size.height - 7),
-        Paint()
-          ..color = color
-          ..strokeWidth = 1.5);
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1.5;
+    final endY = size.height - 7;
+    if (dashed) {
+      const dash = 4.0, gap = 3.0;
+      var y = 0.0;
+      while (y < endY) {
+        canvas.drawLine(Offset(cx, y), Offset(cx, (y + dash).clamp(0, endY)),
+            paint);
+        y += dash + gap;
+      }
+    } else {
+      canvas.drawLine(Offset(cx, 0), Offset(cx, endY), paint);
+    }
     final head = Path()
       ..moveTo(cx - 5, size.height - 8)
       ..lineTo(cx + 5, size.height - 8)
@@ -823,18 +990,21 @@ class _ArrowPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_ArrowPainter o) => o.color != color;
+  bool shouldRepaint(_ArrowPainter o) => o.color != color || o.dashed != dashed;
 }
 
-// Leque de DECISÃO: barra horizontal saindo do losango para N saídas.
+// Leque de DECISÃO: barra horizontal saindo do losango para N saídas. As
+// opções ficam rotuladas nas saídas (padrão do time).
 class _BranchFan extends StatelessWidget {
-  const _BranchFan({required this.branches});
+  const _BranchFan({required this.branches, this.accent});
   final List<String> branches;
+  final Color? accent;
   static const double _cw = 150;
 
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
+    final line = accent ?? c.textMuted;
     final n = branches.length;
     return SizedBox(
       width: n * _cw,
@@ -843,8 +1013,7 @@ class _BranchFan extends StatelessWidget {
           height: 26,
           width: n * _cw,
           child: CustomPaint(
-              painter:
-                  _BusPainter(count: n, cellWidth: _cw, color: c.textMuted)),
+              painter: _BusPainter(count: n, cellWidth: _cw, color: line)),
         ),
         Row(children: [
           for (final b in branches)
@@ -862,7 +1031,7 @@ class _BranchFan extends StatelessWidget {
       decoration: BoxDecoration(
         color: c.isDark ? c.surface : BoldColors.white,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: c.border),
+        border: Border.all(color: accent?.withValues(alpha: 0.5) ?? c.border),
       ),
       child: Text(label,
           textAlign: TextAlign.center,
@@ -907,6 +1076,59 @@ class _BusPainter extends CustomPainter {
   @override
   bool shouldRepaint(_BusPainter o) =>
       o.count != count || o.color != color || o.cellWidth != cellWidth;
+}
+
+// Legenda do padrão de user flow (mostrada nos fluxos tipados).
+class _FlowLegend extends StatelessWidget {
+  const _FlowLegend();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+      decoration: BoxDecoration(
+        color: c.isDark ? c.surface : BoldColors.neutral10,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: c.border),
+      ),
+      child: Wrap(
+        spacing: 16,
+        runSpacing: 8,
+        alignment: WrapAlignment.center,
+        children: [
+          _item(context, _startFill, _startFill, 'Início'),
+          _item(context, _endFill, _endFill, 'Fim'),
+          _item(context, _usrFill, _usrStroke, 'Usuário · ação'),
+          _item(context, _usrFill, _usrStroke, 'Usuário · decisão', diamond: true),
+          _item(context, _sysFill, _sysStroke, 'Sistema · ação'),
+          _item(context, _sysFill, _sysStroke, 'Sistema · decisão', diamond: true),
+          _item(context, _sysFill, _errBadge, 'Caso de erro', error: true),
+        ],
+      ),
+    );
+  }
+
+  Widget _item(BuildContext context, Color fill, Color stroke, String label,
+      {bool diamond = false, bool error = false}) {
+    final c = BoldColors.of(context);
+    Widget sw = Container(
+      width: 15,
+      height: 15,
+      decoration: BoxDecoration(
+        color: fill,
+        borderRadius: BorderRadius.circular(diamond ? 3 : 5),
+        border: Border.all(color: error ? _errBadge : stroke, width: 1.2),
+      ),
+    );
+    if (diamond) sw = Transform.rotate(angle: 0.785398, child: sw);
+    return Row(mainAxisSize: MainAxisSize.min, children: [
+      SizedBox(width: 20, height: 18, child: Center(child: sw)),
+      const SizedBox(width: 6),
+      Text(label,
+          style: BoldType.labelSm.copyWith(color: c.textSecondary, fontSize: 11)),
+    ]);
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
