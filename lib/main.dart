@@ -634,13 +634,24 @@ class _FlowchartView extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(24, 24, 24, 96),
               children: [
                 Text(flow.description,
+                    textAlign: TextAlign.center,
                     style:
                         BoldType.bodySmall.copyWith(color: c.textSecondary)),
-                const SizedBox(height: 22),
-                for (var i = 0; i < flow.steps.length; i++) ...[
-                  _FlowNode(index: i + 1, step: flow.steps[i]),
-                  if (i < flow.steps.length - 1) const _FlowConnector(),
-                ],
+                const SizedBox(height: 24),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    for (var i = 0; i < flow.steps.length; i++) ...[
+                      _FlowBox(
+                        step: flow.steps[i],
+                        kind: _kindOf(i, flow.steps.length, flow.steps[i]),
+                      ),
+                      if (flow.steps[i].branches.isNotEmpty)
+                        _BranchFan(branches: flow.steps[i].branches),
+                      if (i < flow.steps.length - 1) const _DownArrow(),
+                    ],
+                  ],
+                ),
               ],
             ),
           ),
@@ -650,84 +661,252 @@ class _FlowchartView extends StatelessWidget {
   }
 }
 
-class _FlowNode extends StatelessWidget {
-  const _FlowNode({required this.index, required this.step});
-  final int index;
+enum _NodeKind { start, process, decision, end }
+
+_NodeKind _kindOf(int i, int total, FlowStep s) {
+  if (s.branches.isNotEmpty) return _NodeKind.decision;
+  if (i == 0) return _NodeKind.start;
+  if (i == total - 1) return _NodeKind.end;
+  return _NodeKind.process;
+}
+
+// Nó do fluxograma na forma canônica: terminal (pílula) · processo (retângulo)
+// · decisão (losango).
+class _FlowBox extends StatelessWidget {
+  const _FlowBox({required this.step, required this.kind});
   final FlowStep step;
+  final _NodeKind kind;
 
   @override
   Widget build(BuildContext context) {
-    final c = BoldColors.of(context);
-    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Container(
-        width: 28,
-        height: 28,
-        alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          gradient: BoldGradients.brand,
-          shape: BoxShape.circle,
-        ),
-        child: Text('$index',
-            style: BoldType.labelSm.copyWith(
-                color: BoldColors.onGradient, fontWeight: FontWeight.w700)),
-      ),
-      const SizedBox(width: 14),
-      Expanded(
-        child: BoldCard(
-          glass: true,
-          radius: 14,
-          padding: const EdgeInsets.all(14),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text(step.label,
-                style: BoldType.labelMd.copyWith(color: c.textPrimary)),
-            if (step.note != null) ...[
-              const SizedBox(height: 3),
-              Text(step.note!,
-                  style: BoldType.bodySmall.copyWith(color: c.textSecondary)),
-            ],
-            if (step.branches.isNotEmpty) ...[
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: [for (final b in step.branches) _branchChip(context, b)],
-              ),
-            ],
-          ]),
-        ),
-      ),
-    ]);
+    switch (kind) {
+      case _NodeKind.start:
+        return _pill(context, gradient: BoldGradients.brand);
+      case _NodeKind.end:
+        return _pill(context, outlined: true);
+      case _NodeKind.decision:
+        return _diamond(context);
+      case _NodeKind.process:
+        return _rect(context);
+    }
   }
 
-  Widget _branchChip(BuildContext context, String label) {
+  // Terminal (início/fim): pílula. Início = gradiente da marca; fim = contorno.
+  Widget _pill(BuildContext context, {Gradient? gradient, bool outlined = false}) {
+    final c = BoldColors.of(context);
+    final fg = gradient != null ? BoldColors.onGradient : c.textPrimary;
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 440),
+      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
+      decoration: BoxDecoration(
+        gradient: gradient,
+        color: gradient == null ? (c.isDark ? c.surface : BoldColors.white) : null,
+        borderRadius: BorderRadius.circular(999),
+        border: outlined ? Border.all(color: c.borderStrong, width: 1.5) : null,
+      ),
+      child: Text(step.label,
+          textAlign: TextAlign.center,
+          style: BoldType.labelMd
+              .copyWith(color: fg, fontWeight: FontWeight.w600)),
+    );
+  }
+
+  // Processo: retângulo arredondado.
+  Widget _rect(BuildContext context) {
     final c = BoldColors.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      constraints: const BoxConstraints(maxWidth: 460),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
       decoration: BoxDecoration(
-        color: BoldColors.primary04.withValues(alpha: c.isDark ? 0.16 : 0.10),
-        borderRadius: BorderRadius.circular(200),
-        border: Border.all(
-            color: BoldColors.primary04.withValues(alpha: 0.35), width: 1),
+        color: BoldColors.primary04.withValues(alpha: c.isDark ? 0.10 : 0.06),
+        borderRadius: BorderRadius.circular(12),
+        border:
+            Border.all(color: BoldColors.primary04.withValues(alpha: 0.30)),
       ),
-      child: Text(label,
-          style: BoldType.labelSm.copyWith(
-              color: c.isDark ? BoldColors.primary06 : BoldColors.primary03,
-              fontSize: 11)),
+      child: Column(mainAxisSize: MainAxisSize.min, children: [
+        Text(step.label,
+            textAlign: TextAlign.center,
+            style: BoldType.labelMd.copyWith(color: c.textPrimary)),
+        if (step.note != null) ...[
+          const SizedBox(height: 3),
+          Text(step.note!,
+              textAlign: TextAlign.center,
+              style: BoldType.bodySmall.copyWith(color: c.textSecondary)),
+        ],
+      ]),
+    );
+  }
+
+  // Decisão: losango (âmbar). Nota fica logo abaixo.
+  Widget _diamond(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      CustomPaint(
+        painter: _DiamondPainter(
+          fill: BoldColors.warning04.withValues(alpha: c.isDark ? 0.20 : 0.13),
+          stroke: BoldColors.warning04,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 46, vertical: 26),
+          child: Text(step.label,
+              textAlign: TextAlign.center,
+              style: BoldType.labelMd
+                  .copyWith(color: c.textPrimary, fontWeight: FontWeight.w600)),
+        ),
+      ),
+      if (step.note != null) ...[
+        const SizedBox(height: 6),
+        Text(step.note!,
+            textAlign: TextAlign.center,
+            style: BoldType.bodySmall.copyWith(color: c.textSecondary)),
+      ],
+    ]);
+  }
+}
+
+class _DiamondPainter extends CustomPainter {
+  _DiamondPainter({required this.fill, required this.stroke});
+  final Color fill;
+  final Color stroke;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final path = Path()
+      ..moveTo(size.width / 2, 0)
+      ..lineTo(size.width, size.height / 2)
+      ..lineTo(size.width / 2, size.height)
+      ..lineTo(0, size.height / 2)
+      ..close();
+    canvas.drawPath(path, Paint()..color = fill);
+    canvas.drawPath(
+        path,
+        Paint()
+          ..color = stroke
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5);
+  }
+
+  @override
+  bool shouldRepaint(_DiamondPainter o) => o.fill != fill || o.stroke != stroke;
+}
+
+// Seta vertical (linha + ponta) entre nós.
+class _DownArrow extends StatelessWidget {
+  const _DownArrow();
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 30,
+      width: 24,
+      child: CustomPaint(painter: _ArrowPainter(BoldColors.of(context).textMuted)),
     );
   }
 }
 
-class _FlowConnector extends StatelessWidget {
-  const _FlowConnector();
+class _ArrowPainter extends CustomPainter {
+  _ArrowPainter(this.color);
+  final Color color;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cx = size.width / 2;
+    canvas.drawLine(
+        Offset(cx, 0),
+        Offset(cx, size.height - 7),
+        Paint()
+          ..color = color
+          ..strokeWidth = 1.5);
+    final head = Path()
+      ..moveTo(cx - 5, size.height - 8)
+      ..lineTo(cx + 5, size.height - 8)
+      ..lineTo(cx, size.height)
+      ..close();
+    canvas.drawPath(head, Paint()..color = color);
+  }
+
+  @override
+  bool shouldRepaint(_ArrowPainter o) => o.color != color;
+}
+
+// Leque de DECISÃO: barra horizontal saindo do losango para N saídas.
+class _BranchFan extends StatelessWidget {
+  const _BranchFan({required this.branches});
+  final List<String> branches;
+  static const double _cw = 150;
+
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
-    // Alinhado ao centro do badge (28px de largura → centro em 14).
-    return Padding(
-      padding: const EdgeInsets.only(left: 13),
-      child: Container(width: 2, height: 20, color: c.border),
+    final n = branches.length;
+    return SizedBox(
+      width: n * _cw,
+      child: Column(children: [
+        SizedBox(
+          height: 26,
+          width: n * _cw,
+          child: CustomPaint(
+              painter:
+                  _BusPainter(count: n, cellWidth: _cw, color: c.textMuted)),
+        ),
+        Row(children: [
+          for (final b in branches)
+            SizedBox(width: _cw, child: Center(child: _pill(context, b))),
+        ]),
+      ]),
     );
   }
+
+  Widget _pill(BuildContext context, String label) {
+    final c = BoldColors.of(context);
+    return Container(
+      constraints: const BoxConstraints(maxWidth: 138),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      decoration: BoxDecoration(
+        color: c.isDark ? c.surface : BoldColors.white,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: c.border),
+      ),
+      child: Text(label,
+          textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+          style: BoldType.labelSm.copyWith(color: c.textPrimary, fontSize: 11)),
+    );
+  }
+}
+
+class _BusPainter extends CustomPainter {
+  _BusPainter(
+      {required this.count, required this.cellWidth, required this.color});
+  final int count;
+  final double cellWidth;
+  final Color color;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final line = Paint()
+      ..color = color
+      ..strokeWidth = 1.5;
+    const busY = 12.0;
+    final topCx = size.width / 2;
+    canvas.drawLine(Offset(topCx, 0), Offset(topCx, busY), line);
+    final firstCx = cellWidth / 2;
+    final lastCx = size.width - cellWidth / 2;
+    if (count > 1) {
+      canvas.drawLine(Offset(firstCx, busY), Offset(lastCx, busY), line);
+    }
+    for (var i = 0; i < count; i++) {
+      final cx = cellWidth / 2 + i * cellWidth;
+      canvas.drawLine(Offset(cx, busY), Offset(cx, size.height - 7), line);
+      final head = Path()
+        ..moveTo(cx - 5, size.height - 8)
+        ..lineTo(cx + 5, size.height - 8)
+        ..lineTo(cx, size.height)
+        ..close();
+      canvas.drawPath(head, Paint()..color = color);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_BusPainter o) =>
+      o.count != count || o.color != color || o.cellWidth != cellWidth;
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
