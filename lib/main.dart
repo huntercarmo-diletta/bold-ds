@@ -316,6 +316,14 @@ class FlowStep {
   final List<String> branches;
 }
 
+// Caso de erro FORA do fluxo feliz: sai de uma decisão do sistema (`from`).
+class ErrorCase {
+  const ErrorCase(this.label, {required this.from, this.note});
+  final String label;
+  final String from; // decisão de origem (rótulo do passo)
+  final String? note;
+}
+
 class AppFlow {
   const AppFlow({
     required this.name,
@@ -324,6 +332,7 @@ class AppFlow {
     required this.route,
     required this.description,
     required this.steps,
+    this.errors = const <ErrorCase>[],
   });
   final String name;
   final String group;
@@ -331,6 +340,7 @@ class AppFlow {
   final String route;
   final String description;
   final List<FlowStep> steps;
+  final List<ErrorCase> errors;
 }
 
 const List<AppFlow> kFlows = [
@@ -424,23 +434,25 @@ const List<AppFlow> kFlows = [
             'Agência e conta',
           ]),
       FlowStep('Informa a chave / os dados', type: StepType.userAction),
-      FlowStep('Chave encontrada no DICT?', type: StepType.systemDecision),
-      FlowStep('Chave não encontrada',
-          type: StepType.systemError,
-          note: 'Chave inexistente ou indisponível no DICT'),
       FlowStep('Consulta o destinatário (DICT)', type: StepType.systemAction),
+      FlowStep('Chave encontrada no DICT?', type: StepType.systemDecision),
       FlowStep('Informa o valor', type: StepType.userAction),
       FlowStep('Saldo e limite suficientes?', type: StepType.systemDecision),
-      FlowStep('Saldo insuficiente / limite excedido',
-          type: StepType.systemError,
-          note: 'Sem saldo ou acima do limite Pix do período'),
       FlowStep('Revisa e confirma (senha / biometria)',
           type: StepType.userAction),
       FlowStep('Autenticação válida?', type: StepType.systemDecision),
-      FlowStep('Falha na autenticação',
-          type: StepType.systemError, note: 'Senha/biometria incorreta'),
       FlowStep('Efetiva o Pix', type: StepType.systemAction),
       FlowStep('Comprovante', type: StepType.end),
+    ],
+    errors: [
+      ErrorCase('Chave não encontrada',
+          from: 'Chave encontrada no DICT?',
+          note: 'Chave inexistente ou indisponível no DICT'),
+      ErrorCase('Saldo insuficiente / limite excedido',
+          from: 'Saldo e limite suficientes?',
+          note: 'Sem saldo ou acima do limite Pix do período'),
+      ErrorCase('Falha na autenticação',
+          from: 'Autenticação válida?', note: 'Senha/biometria incorreta'),
     ],
   ),
   AppFlow(
@@ -456,10 +468,12 @@ const List<AppFlow> kFlows = [
       FlowStep('Define um valor?',
           type: StepType.userDecision, branches: ['Com valor', 'Sem valor']),
       FlowStep('Gera o QR Code', type: StepType.systemAction),
-      FlowStep('Falha ao gerar o QR',
-          type: StepType.systemError, note: 'Sem conexão / erro no servidor'),
       FlowStep('Compartilha ou copia o código', type: StepType.userAction),
       FlowStep('QR pronto', type: StepType.end),
+    ],
+    errors: [
+      ErrorCase('Falha ao gerar o QR',
+          from: 'Gera o QR Code', note: 'Sem conexão / erro no servidor'),
     ],
   ),
   AppFlow(
@@ -477,11 +491,13 @@ const List<AppFlow> kFlows = [
       FlowStep('Cadastra uma nova chave', type: StepType.userAction),
       FlowStep('Chave disponível e dentro do limite?',
           type: StepType.systemDecision),
-      FlowStep('Chave já cadastrada / limite atingido',
-          type: StepType.systemError,
-          note: 'Chave em uso em outra conta ou 5 chaves (PF) já ativas'),
       FlowStep('Registra a chave', type: StepType.systemAction),
       FlowStep('Chave ativa', type: StepType.end),
+    ],
+    errors: [
+      ErrorCase('Chave já cadastrada / limite atingido',
+          from: 'Chave disponível e dentro do limite?',
+          note: 'Chave em uso em outra conta ou 5 chaves (PF) já ativas'),
     ],
   ),
   AppFlow(
@@ -500,11 +516,13 @@ const List<AppFlow> kFlows = [
           type: StepType.userAction),
       FlowStep('Confirma a autorização', type: StepType.userAction),
       FlowStep('Autorização aceita?', type: StepType.systemDecision),
-      FlowStep('Autorização recusada',
-          type: StepType.systemError,
-          note: 'Dados inválidos ou limite recorrente excedido'),
       FlowStep('Registra a autorização', type: StepType.systemAction),
       FlowStep('Débito recorrente ativo', type: StepType.end),
+    ],
+    errors: [
+      ErrorCase('Autorização recusada',
+          from: 'Autorização aceita?',
+          note: 'Dados inválidos ou limite recorrente excedido'),
     ],
   ),
   AppFlow(
@@ -523,12 +541,14 @@ const List<AppFlow> kFlows = [
       FlowStep('Confirma a contestação', type: StepType.userAction),
       FlowStep('Elegível ao MED (prazo e critérios)?',
           type: StepType.systemDecision),
-      FlowStep('Fora do prazo / não elegível',
-          type: StepType.systemError,
-          note: 'Além do prazo do MED ou transação inelegível'),
       FlowStep('Registra e gera protocolo', type: StepType.systemAction),
       FlowStep('Acompanha o status', type: StepType.userAction),
       FlowStep('Contestação registrada', type: StepType.end),
+    ],
+    errors: [
+      ErrorCase('Fora do prazo / não elegível',
+          from: 'Elegível ao MED (prazo e critérios)?',
+          note: 'Além do prazo do MED ou transação inelegível'),
     ],
   ),
   // ─────────────────────────── PAGAMENTOS ───────────────────────────────────
@@ -727,13 +747,14 @@ class _FlowchartView extends StatelessWidget {
                               ? _sysStroke
                               : _usrStroke,
                         ),
-                      if (i < flow.steps.length - 1)
-                        _DownArrow(
-                            dashed: flow.steps[i + 1].type ==
-                                StepType.systemError),
+                      if (i < flow.steps.length - 1) const _DownArrow(),
                     ],
                   ],
                 ),
+                if (flow.errors.isNotEmpty) ...[
+                  const SizedBox(height: 32),
+                  _ErrorCasesSection(errors: flow.errors),
+                ],
               ],
             ),
           ),
@@ -1076,6 +1097,129 @@ class _BusPainter extends CustomPainter {
   @override
   bool shouldRepaint(_BusPainter o) =>
       o.count != count || o.color != color || o.cellWidth != cellWidth;
+}
+
+// Seção de CASOS DE ERRO — fora do fluxo feliz. Cada erro é um nó do sistema
+// (roxo + X) que sai de uma decisão (`from`), ligado por conector tracejado.
+class _ErrorCasesSection extends StatelessWidget {
+  const _ErrorCasesSection({required this.errors});
+  final List<ErrorCase> errors;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Container(
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+      decoration: BoxDecoration(
+        color: c.isDark ? c.surface : BoldColors.neutral10,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: c.border),
+      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Row(children: [
+          const Icon(Icons.error_outline, size: 16, color: _errBadge),
+          const SizedBox(width: 6),
+          Text('Casos de erro — fora do fluxo feliz',
+              style: BoldType.labelMd
+                  .copyWith(color: c.textPrimary, fontWeight: FontWeight.w600)),
+        ]),
+        const SizedBox(height: 14),
+        for (final e in errors)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: _card(context, e),
+          ),
+      ]),
+    );
+  }
+
+  Widget _card(BuildContext context, ErrorCase e) {
+    final c = BoldColors.of(context);
+    return Stack(clipBehavior: Clip.none, children: [
+      Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
+        decoration: BoxDecoration(
+          color: _sysFill,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: _errBadge, width: 1.5),
+        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(e.label,
+              style: BoldType.labelMd
+                  .copyWith(color: _sysText, fontWeight: FontWeight.w600)),
+          if (e.note != null) ...[
+            const SizedBox(height: 3),
+            Text(e.note!,
+                style: BoldType.bodySmall.copyWith(color: _sysText)),
+          ],
+          const SizedBox(height: 8),
+          Row(children: [
+            const _DashChip(),
+            const SizedBox(width: 6),
+            Flexible(
+              child: Text('sai de: ${e.from}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: BoldType.labelSm
+                      .copyWith(color: c.textMuted, fontSize: 11)),
+            ),
+          ]),
+        ]),
+      ),
+      Positioned(
+        right: -8,
+        top: -8,
+        child: Container(
+          width: 22,
+          height: 22,
+          alignment: Alignment.center,
+          decoration:
+              const BoxDecoration(color: _errBadge, shape: BoxShape.circle),
+          child: const Icon(Icons.close, size: 14, color: Colors.white),
+        ),
+      ),
+    ]);
+  }
+}
+
+// Traço tracejado horizontal (indica saída de erro / anotação — padrão da doc).
+class _DashChip extends StatelessWidget {
+  const _DashChip();
+  @override
+  Widget build(BuildContext context) => SizedBox(
+        width: 22,
+        height: 8,
+        child: CustomPaint(painter: _HDashPainter(_errBadge)),
+      );
+}
+
+class _HDashPainter extends CustomPainter {
+  _HDashPainter(this.color);
+  final Color color;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = 1.5;
+    final cy = size.height / 2;
+    const dash = 3.0, gap = 2.5;
+    var x = 0.0;
+    final endX = size.width - 5;
+    while (x < endX) {
+      canvas.drawLine(Offset(x, cy), Offset((x + dash).clamp(0, endX), cy), paint);
+      x += dash + gap;
+    }
+    final head = Path()
+      ..moveTo(size.width - 6, cy - 3)
+      ..lineTo(size.width, cy)
+      ..lineTo(size.width - 6, cy + 3)
+      ..close();
+    canvas.drawPath(head, Paint()..color = color);
+  }
+
+  @override
+  bool shouldRepaint(_HDashPainter o) => o.color != color;
 }
 
 // Legenda do padrão de user flow (mostrada nos fluxos tipados).
