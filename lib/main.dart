@@ -60,7 +60,10 @@ class _CatalogHome extends StatefulWidget {
 }
 
 class _CatalogHomeState extends State<_CatalogHome> {
-  _Tab _tab = _Tab.preview;
+  // Destino selecionado na navegação lateral: -1 = Design System;
+  // 0.. = índice do fluxo em [kFlows].
+  int _dest = -1;
+  _Tab _dsTab = _Tab.preview;
 
   @override
   Widget build(BuildContext context) {
@@ -70,23 +73,26 @@ class _CatalogHomeState extends State<_CatalogHome> {
     final bg = c.isDark ? c.background : BoldColors.white;
     return Scaffold(
       backgroundColor: bg,
-      body: ColoredBox(
-        color: bg,
-        child: SafeArea(
-          child: Column(children: [
-            _TopBar(
-              tab: _tab,
-              onTab: (t) => setState(() => _tab = t),
+      body: SafeArea(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            _Sidebar(
+              dest: _dest,
+              onSelect: (d) => setState(() => _dest = d),
               isDark: c.isDark,
               onToggleTheme: () =>
                   widget.onMode(c.isDark ? ThemeMode.light : ThemeMode.dark),
             ),
             Expanded(
-              child: _tab == _Tab.preview
-                  ? const _PreviewTab()
-                  : const _SpecsTab(),
+              child: _dest == -1
+                  ? _DesignSystemView(
+                      tab: _dsTab,
+                      onTab: (t) => setState(() => _dsTab = t),
+                    )
+                  : _FlowchartView(flow: kFlows[_dest]),
             ),
-          ]),
+          ],
         ),
       ),
     );
@@ -94,55 +100,163 @@ class _CatalogHomeState extends State<_CatalogHome> {
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// Top bar — título + toggle claro/escuro + tabs Preview/Specs.
+// Navegação lateral — Design System + fluxos (agrupados). É o índice do site.
 // ═══════════════════════════════════════════════════════════════════════════
-class _TopBar extends StatelessWidget {
-  const _TopBar({
-    required this.tab,
-    required this.onTab,
+class _Sidebar extends StatelessWidget {
+  const _Sidebar({
+    required this.dest,
+    required this.onSelect,
     required this.isDark,
     required this.onToggleTheme,
   });
-  final _Tab tab;
-  final ValueChanged<_Tab> onTab;
+  final int dest;
+  final ValueChanged<int> onSelect;
   final bool isDark;
   final VoidCallback onToggleTheme;
 
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
+    // Agrupa os fluxos por `group`, preservando a ordem de declaração.
+    final groups = <String, List<int>>{};
+    for (var i = 0; i < kFlows.length; i++) {
+      (groups[kFlows[i].group] ??= <int>[]).add(i);
+    }
     return Container(
-      padding: const EdgeInsets.fromLTRB(20, 12, 12, 12),
+      width: 268,
       decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: c.border)),
+        color: isDark ? c.surface : BoldColors.neutral10,
+        border: Border(right: BorderSide(color: c.border)),
       ),
-      child: Row(children: [
-        BoldPixMark(size: 22, color: BoldColors.primary04),
-        const SizedBox(width: 10),
-        Expanded(
-          child: Text('Conta BOLD · Design System',
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: BoldType.title.copyWith(color: c.textPrimary)),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 18, 12, 14),
+          child: Row(children: [
+            BoldPixMark(size: 20, color: BoldColors.primary04),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text('Conta BOLD',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: BoldType.title.copyWith(color: c.textPrimary)),
+            ),
+            BoldIconButton(
+              icon: isDark ? 'sun' : 'moon',
+              semanticLabel: isDark ? 'Modo claro' : 'Modo escuro',
+              type: BoldIconButtonType.tertiary,
+              onPressed: onToggleTheme,
+            ),
+          ]),
         ),
-        _Pill(
-            label: 'Preview',
-            selected: tab == _Tab.preview,
-            onTap: () => onTab(_Tab.preview)),
-        const SizedBox(width: 4),
-        _Pill(
-            label: 'Specs',
-            selected: tab == _Tab.specs,
-            onTap: () => onTab(_Tab.specs)),
-        const SizedBox(width: 8),
-        BoldIconButton(
-          icon: isDark ? 'sun' : 'moon',
-          semanticLabel: isDark ? 'Modo claro' : 'Modo escuro',
-          type: BoldIconButtonType.tertiary,
-          onPressed: onToggleTheme,
+        Divider(height: 1, color: c.border),
+        Expanded(
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 28),
+            children: [
+              _navItem(context,
+                  icon: 'puzzle-light',
+                  label: 'Design System',
+                  selected: dest == -1,
+                  onTap: () => onSelect(-1)),
+              for (final g in groups.entries) ...[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 16, 10, 6),
+                  child: Text(g.key.toUpperCase(),
+                      style: BoldType.labelSm.copyWith(
+                          color: c.textMuted, letterSpacing: 1, fontSize: 10)),
+                ),
+                for (final i in g.value)
+                  _navItem(context,
+                      icon: kFlows[i].icon,
+                      label: kFlows[i].name,
+                      selected: dest == i,
+                      onTap: () => onSelect(i)),
+              ],
+            ],
+          ),
         ),
       ]),
     );
+  }
+
+  Widget _navItem(BuildContext context,
+      {required String icon,
+      required String label,
+      required bool selected,
+      required VoidCallback onTap}) {
+    final c = BoldColors.of(context);
+    final fg = selected ? BoldColors.primary04 : c.textPrimary;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Material(
+        color: selected
+            ? BoldColors.primary04.withValues(alpha: 0.12)
+            : BoldColors.transparent,
+        borderRadius: BorderRadius.circular(10),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+            child: Row(children: [
+              BoldIcon(icon,
+                  size: 18,
+                  color: selected ? BoldColors.primary04 : c.textSecondary),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text(label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BoldType.labelMd.copyWith(
+                        color: fg,
+                        fontWeight:
+                            selected ? FontWeight.w600 : FontWeight.w500)),
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Conteúdo do Design System (Preview / Specs) — o catálogo original.
+class _DesignSystemView extends StatelessWidget {
+  const _DesignSystemView({required this.tab, required this.onTab});
+  final _Tab tab;
+  final ValueChanged<_Tab> onTab;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Column(children: [
+      Container(
+        padding: const EdgeInsets.fromLTRB(24, 12, 20, 12),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: c.border)),
+        ),
+        child: Row(children: [
+          Expanded(
+            child: Text('Design System',
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: BoldType.title.copyWith(color: c.textPrimary)),
+          ),
+          _Pill(
+              label: 'Preview',
+              selected: tab == _Tab.preview,
+              onTap: () => onTab(_Tab.preview)),
+          const SizedBox(width: 4),
+          _Pill(
+              label: 'Specs',
+              selected: tab == _Tab.specs,
+              onTap: () => onTab(_Tab.specs)),
+        ]),
+      ),
+      Expanded(
+        child: tab == _Tab.preview ? const _PreviewTab() : const _SpecsTab(),
+      ),
+    ]);
   }
 }
 
@@ -172,6 +286,446 @@ class _Pill extends StatelessWidget {
             style: BoldType.labelSm.copyWith(
                 color: selected ? BoldColors.primary04 : c.textSecondary)),
       ),
+    );
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FLUXOS — documentação dos fluxos do app (app-newbold), como fluxogramas.
+// Fonte: rotas em lib/routing/routes.dart. Cada passo = um nó; `branches` são
+// caminhos alternativos/decisões dentro do passo.
+// ═══════════════════════════════════════════════════════════════════════════
+class FlowStep {
+  const FlowStep(this.label, {this.note, this.branches = const []});
+  final String label;
+  final String? note;
+  final List<String> branches;
+}
+
+class AppFlow {
+  const AppFlow({
+    required this.name,
+    required this.group,
+    required this.icon,
+    required this.route,
+    required this.description,
+    required this.steps,
+  });
+  final String name;
+  final String group;
+  final String icon;
+  final String route;
+  final String description;
+  final List<FlowStep> steps;
+}
+
+const List<AppFlow> kFlows = [
+  // ───────────────────────────── CONTA ──────────────────────────────────────
+  AppFlow(
+    name: 'Abertura de conta',
+    group: 'Conta',
+    icon: 'id-card-light',
+    route: '/boas-vindas → /onboarding/*',
+    description:
+        'Onboarding completo (PF e PJ), do cadastro ao KYC e aprovação.',
+    steps: [
+      FlowStep('Boas-vindas', note: 'Entrar ou abrir conta'),
+      FlowStep('Tipo de conta', branches: ['Pessoa Física', 'Pessoa Jurídica']),
+      FlowStep('Informar CPF'),
+      FlowStep('Documentos da empresa', note: 'Só PJ (CNPJ, contrato social)'),
+      FlowStep('Criar senha'),
+      FlowStep('Verificar OTP', note: 'Código enviado por SMS/e-mail'),
+      FlowStep('Dados pessoais'),
+      FlowStep('Endereço'),
+      FlowStep('Dados da empresa', note: 'Só PJ'),
+      FlowStep('KYC — selfie'),
+      FlowStep('KYC — documento'),
+      FlowStep('Análise', note: 'Aguardando validação',
+          branches: ['Aprovada', 'Reprovada']),
+      FlowStep('Configurar passkey', note: 'Login sem senha'),
+      FlowStep('Home'),
+    ],
+  ),
+  AppFlow(
+    name: 'Login',
+    group: 'Conta',
+    icon: 'lock-light',
+    route: '/login',
+    description: 'Autenticação com CPF + senha, biometria ou acesso rápido.',
+    steps: [
+      FlowStep('Boas-vindas'),
+      FlowStep('Login', note: 'CPF + senha',
+          branches: ['Login recorrente', 'Biometria', 'Recuperar senha']),
+      FlowStep('Selecionar conta', note: 'Quando há mais de uma conta'),
+      FlowStep('Home'),
+    ],
+  ),
+  AppFlow(
+    name: 'Extrato',
+    group: 'Conta',
+    icon: 'receipt-light',
+    route: '/extrato',
+    description: 'Consulta de lançamentos, filtros, detalhe e exportação.',
+    steps: [
+      FlowStep('Extrato', note: 'Passado / Futuro (agendados)'),
+      FlowStep('Filtros', note: 'Tipo, período, direção'),
+      FlowStep('Detalhe da transação'),
+      FlowStep('Exportar', note: 'Comprovante / relatório'),
+    ],
+  ),
+  AppFlow(
+    name: 'Segurança da conta',
+    group: 'Conta',
+    icon: 'fingerprint-light',
+    route: '/perfil → /conta/*',
+    description: 'Passkey, login biométrico, dispositivos e troca de senha.',
+    steps: [
+      FlowStep('Perfil'),
+      FlowStep('Segurança'),
+      FlowStep('Ação', branches: [
+        'Passkey',
+        'Login biométrico',
+        'Meus dispositivos',
+        'Alterar senha',
+      ]),
+    ],
+  ),
+  // ───────────────────────────── PIX ────────────────────────────────────────
+  AppFlow(
+    name: 'PIX — Enviar',
+    group: 'PIX',
+    icon: 'arrow-right-arrow-left-light',
+    route: '/pix/pagar',
+    description: 'Transferência via chave, dados, copia-e-cola ou QR Code.',
+    steps: [
+      FlowStep('Área PIX'),
+      FlowStep('Para quem?', note: 'Chave, nome ou Pix copia-e-cola',
+          branches: ['Ler QR Code', 'Dados bancários', 'Contato favorito']),
+      FlowStep('Confirmar dados', note: 'Retorno do DICT (nome/instituição)'),
+      FlowStep('Valor'),
+      FlowStep('Revisar'),
+      FlowStep('Autorização', note: 'Senha / biometria'),
+      FlowStep('Comprovante'),
+    ],
+  ),
+  AppFlow(
+    name: 'PIX — Receber',
+    group: 'PIX',
+    icon: 'arrow-down-to-line-light',
+    route: '/pix/receber',
+    description: 'Geração de QR Code estático ou dinâmico para receber.',
+    steps: [
+      FlowStep('Área PIX'),
+      FlowStep('Receber', branches: ['QR estático', 'QR dinâmico (com valor)']),
+      FlowStep('Compartilhar QR / copia-e-cola'),
+    ],
+  ),
+  AppFlow(
+    name: 'PIX — Minhas chaves',
+    group: 'PIX',
+    icon: 'key-light',
+    route: '/pix/chaves',
+    description: 'Cadastro, definição da chave preferida e remoção de chaves.',
+    steps: [
+      FlowStep('Área PIX'),
+      FlowStep('Minhas chaves'),
+      FlowStep('Gerenciar',
+          branches: ['Cadastrar chave', 'Definir preferida', 'Remover']),
+    ],
+  ),
+  AppFlow(
+    name: 'PIX Automático',
+    group: 'PIX',
+    icon: 'arrow-rotate-left-light',
+    route: '/pix/automatico',
+    description: 'Autorização e gestão de débitos recorrentes por PIX.',
+    steps: [
+      FlowStep('PIX Automático'),
+      FlowStep('Ação', branches: ['Criar', 'Autorizar', 'Revogar']),
+      FlowStep('Configurar', note: 'Valor, periodicidade, limite'),
+      FlowStep('Confirmar autorização'),
+    ],
+  ),
+  AppFlow(
+    name: 'PIX — Contestação (MED)',
+    group: 'PIX',
+    icon: 'shield-user-light-full',
+    route: '/pix/contestacao',
+    description: 'Mecanismo Especial de Devolução para transações suspeitas.',
+    steps: [
+      FlowStep('Contestar PIX'),
+      FlowStep('Selecionar transação'),
+      FlowStep('Motivo', note: 'Golpe, fraude, erro'),
+      FlowStep('Descrever ocorrência'),
+      FlowStep('Confirmar'),
+      FlowStep('Protocolo', note: 'Registro da contestação'),
+      FlowStep('Acompanhar status'),
+    ],
+  ),
+  // ─────────────────────────── PAGAMENTOS ───────────────────────────────────
+  AppFlow(
+    name: 'Boleto — Pagar',
+    group: 'Pagamentos',
+    icon: 'barcode-light',
+    route: '/boleto',
+    description: 'Pagamento de boleto por leitura de código ou digitação.',
+    steps: [
+      FlowStep('Hub de boleto'),
+      FlowStep('Código de barras', note: 'Câmera ou linha digitável'),
+      FlowStep('Revisar', note: 'Valor, vencimento, beneficiário'),
+      FlowStep('Autorização'),
+      FlowStep('Comprovante'),
+    ],
+  ),
+  AppFlow(
+    name: 'Recarga de celular',
+    group: 'Pagamentos',
+    icon: 'mobile-light',
+    route: '/recarga',
+    description: 'Recarga de crédito pré-pago em 4 passos.',
+    steps: [
+      FlowStep('Número'),
+      FlowStep('Operadora'),
+      FlowStep('Valor'),
+      FlowStep('Revisar'),
+      FlowStep('Comprovante'),
+    ],
+  ),
+  // ────────────────────────── TRANSFERÊNCIAS ────────────────────────────────
+  AppFlow(
+    name: 'TED',
+    group: 'Transferências',
+    icon: 'money-bill-transfer-light',
+    route: '/ted',
+    description: 'Transferência para conta de outra instituição.',
+    steps: [
+      FlowStep('Hub TED', branches: ['Enviar', 'Receber (meus dados)']),
+      FlowStep('Enviar', note: 'Dados do destinatário e banco'),
+      FlowStep('Revisar'),
+      FlowStep('Autorização'),
+      FlowStep('Comprovante'),
+    ],
+  ),
+  AppFlow(
+    name: 'Transferência interna',
+    group: 'Transferências',
+    icon: 'money-bill-transfer-in-light',
+    route: '/contatos/transferencia-interna',
+    description: 'Transferência entre contas BOLD (sem custo).',
+    steps: [
+      FlowStep('Contatos'),
+      FlowStep('Transferência interna', note: 'Valor + destinatário BOLD'),
+      FlowStep('Revisar'),
+      FlowStep('Comprovante'),
+    ],
+  ),
+  // ─────────────────────────────── PJ ───────────────────────────────────────
+  AppFlow(
+    name: 'Cobranças (PJ)',
+    group: 'PJ',
+    icon: 'file-invoice-dollar-light',
+    route: '/cobrancas',
+    description: 'Emissão de cobranças por boleto ou PIX QR dinâmico.',
+    steps: [
+      FlowStep('Hub de cobranças'),
+      FlowStep('Emitir', branches: ['Boleto', 'PIX QR dinâmico']),
+      FlowStep('Preview da cobrança'),
+      FlowStep('Compartilhar'),
+    ],
+  ),
+  AppFlow(
+    name: 'Equipe / Usuários (PJ)',
+    group: 'PJ',
+    icon: 'users-light',
+    route: '/usuarios',
+    description: 'Gestão de operadores, perfis, alçadas e aprovações.',
+    steps: [
+      FlowStep('Usuários'),
+      FlowStep('Ação', branches: [
+        'Convidar operador',
+        'Perfis',
+        'Alçadas',
+        'Aprovações pendentes',
+      ]),
+      FlowStep('Convite recebido', note: 'Aceite via deeplink (operador novo)'),
+    ],
+  ),
+  // ───────────────────────────── SEGURANÇA ──────────────────────────────────
+  AppFlow(
+    name: 'Autorização Quântica',
+    group: 'Segurança',
+    icon: 'qrcode-light',
+    route: '/scanner → /ib/aprovar',
+    description:
+        'Aprovação de transações do Internet Banking lendo o QR (selo quântico).',
+    steps: [
+      FlowStep('Scanner', note: 'Lê o QR exibido no Internet Banking'),
+      FlowStep('Revisar transação'),
+      FlowStep('Decisão', branches: ['Aprovar', 'Recusar']),
+      FlowStep('Selo quântico', note: 'Confirmação assinada no dispositivo'),
+    ],
+  ),
+  AppFlow(
+    name: 'Pareamento de dispositivo',
+    group: 'Segurança',
+    icon: 'mobile-gear-light',
+    route: '/dispositivos/parear',
+    description: 'Autoriza um novo aparelho a aprovar pagamentos.',
+    steps: [
+      FlowStep('Meus dispositivos'),
+      FlowStep('Parear dispositivo', note: 'Leitura de QR'),
+      FlowStep('Confirmar', note: 'Aparelho autorizado'),
+    ],
+  ),
+  // ───────────────────────────── ASSISTENTE ─────────────────────────────────
+  AppFlow(
+    name: 'Lia (assistente)',
+    group: 'Assistente',
+    icon: 'star-light',
+    route: '/lia',
+    description: 'Assistente virtual — conversa e preferências.',
+    steps: [
+      FlowStep('Abrir Lia', note: 'Pela nav inferior ou avatar'),
+      FlowStep('Conversa', note: 'Voz/texto, idioma configurável'),
+      FlowStep('Preferências da Lia', note: 'Idioma, avatar, visibilidade'),
+    ],
+  ),
+];
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Fluxograma de um fluxo — nós numerados conectados verticalmente.
+// ═══════════════════════════════════════════════════════════════════════════
+class _FlowchartView extends StatelessWidget {
+  const _FlowchartView({required this.flow});
+  final AppFlow flow;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Column(children: [
+      Container(
+        padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: c.border)),
+        ),
+        child: Row(children: [
+          BoldIcon(flow.icon, size: 24, color: BoldColors.primary04),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(flow.name,
+                    style: BoldType.title.copyWith(color: c.textPrimary)),
+                Text(flow.route,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BoldType.labelSm.copyWith(color: c.textMuted)),
+              ],
+            ),
+          ),
+        ]),
+      ),
+      Expanded(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 640),
+            child: ListView(
+              padding: const EdgeInsets.fromLTRB(24, 24, 24, 96),
+              children: [
+                Text(flow.description,
+                    style:
+                        BoldType.bodySmall.copyWith(color: c.textSecondary)),
+                const SizedBox(height: 22),
+                for (var i = 0; i < flow.steps.length; i++) ...[
+                  _FlowNode(index: i + 1, step: flow.steps[i]),
+                  if (i < flow.steps.length - 1) const _FlowConnector(),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    ]);
+  }
+}
+
+class _FlowNode extends StatelessWidget {
+  const _FlowNode({required this.index, required this.step});
+  final int index;
+  final FlowStep step;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Container(
+        width: 28,
+        height: 28,
+        alignment: Alignment.center,
+        decoration: const BoxDecoration(
+          gradient: BoldGradients.brand,
+          shape: BoxShape.circle,
+        ),
+        child: Text('$index',
+            style: BoldType.labelSm.copyWith(
+                color: BoldColors.onGradient, fontWeight: FontWeight.w700)),
+      ),
+      const SizedBox(width: 14),
+      Expanded(
+        child: BoldCard(
+          glass: true,
+          radius: 14,
+          padding: const EdgeInsets.all(14),
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(step.label,
+                style: BoldType.labelMd.copyWith(color: c.textPrimary)),
+            if (step.note != null) ...[
+              const SizedBox(height: 3),
+              Text(step.note!,
+                  style: BoldType.bodySmall.copyWith(color: c.textSecondary)),
+            ],
+            if (step.branches.isNotEmpty) ...[
+              const SizedBox(height: 10),
+              Wrap(
+                spacing: 6,
+                runSpacing: 6,
+                children: [for (final b in step.branches) _branchChip(context, b)],
+              ),
+            ],
+          ]),
+        ),
+      ),
+    ]);
+  }
+
+  Widget _branchChip(BuildContext context, String label) {
+    final c = BoldColors.of(context);
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: BoldColors.primary04.withValues(alpha: c.isDark ? 0.16 : 0.10),
+        borderRadius: BorderRadius.circular(200),
+        border: Border.all(
+            color: BoldColors.primary04.withValues(alpha: 0.35), width: 1),
+      ),
+      child: Text(label,
+          style: BoldType.labelSm.copyWith(
+              color: c.isDark ? BoldColors.primary06 : BoldColors.primary03,
+              fontSize: 11)),
+    );
+  }
+}
+
+class _FlowConnector extends StatelessWidget {
+  const _FlowConnector();
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    // Alinhado ao centro do badge (28px de largura → centro em 14).
+    return Padding(
+      padding: const EdgeInsets.only(left: 13),
+      child: Container(width: 2, height: 20, color: c.border),
     );
   }
 }
