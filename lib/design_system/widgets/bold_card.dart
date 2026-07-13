@@ -81,7 +81,7 @@ class BoldCard extends StatelessWidget {
             ),
             child: CustomPaint(
               foregroundPainter: highlight
-                  ? BoldCardSurface.strokePainter(radius)
+                  ? BoldCardSurface.strokePainter(radius, c.isDark)
                   : BoldCardSurface.simpleStrokePainter(radius, c.isDark),
               child: inner,
             ),
@@ -109,13 +109,14 @@ class BoldCard extends StatelessWidget {
 /// stroke) and the calm default (a sober grey stroke). Change it here and
 /// all cards follow.
 class BoldCardSurface {
-  /// Fill do card glass @ 26% — theme-aware: dark vinho #4C0202, light rosa
-  /// #FFC8DC (mesmo vidro único do [BoldGlass]).
-  static Color fill(bool isDark) =>
-      (isDark ? BoldColors.glassFill : BoldColors.glassFillLight)
-          .withValues(alpha: 0.26);
+  /// Fill do card glass — theme-aware: dark vinho-ink escuro #16060A @ 50%
+  /// (painel mais escuro); light BRANCO #FFFFFF @ 50% (mesmo vidro único do
+  /// [BoldGlass]).
+  static Color fill(bool isDark) => isDark
+      ? BoldColors.glassFill.withValues(alpha: 0.50)
+      : BoldColors.glassFillLight.withValues(alpha: 0.50);
 
-  /// Thin pink stroke, brighter at the top-left and fading out (destaque).
+  /// Destaque no DARK — stroke rosa, mais forte no topo-esquerdo (gradiente).
   static const LinearGradient strokeGradient = LinearGradient(
     begin: Alignment.topLeft,
     end: Alignment.bottomRight,
@@ -123,25 +124,38 @@ class BoldCardSurface {
     stops: [0.0, 0.58],
   );
 
-  /// Stroke do card glass 1px @ 30% — dark rosa #FF9898, light branco.
-  static Color simpleStroke(bool isDark) =>
-      (isDark ? BoldColors.glassStroke : BoldColors.white)
-          .withValues(alpha: 0.30);
+  /// Destaque no LIGHT — mesmo gesto, mas BRANCO (combina com o fill laranja).
+  static const LinearGradient strokeGradientLight = LinearGradient(
+    begin: Alignment.topLeft,
+    end: Alignment.bottomRight,
+    colors: [Color(0xCCFFFFFF), Color(0x1AFFFFFF)],
+    stops: [0.0, 0.58],
+  );
 
-  static CustomPainter strokePainter(double radius) =>
-      _CardStrokePainter(radius);
+  /// Stroke do card glass 1px — dark rosa #FF9898 @ 30%; light BRANCO @ 55%.
+  static Color simpleStroke(bool isDark) => isDark
+      ? BoldColors.glassStroke.withValues(alpha: 0.30)
+      : BoldColors.white.withValues(alpha: 0.55);
+
+  /// Destaque: gradiente rosa no dark, gradiente branco no light.
+  static CustomPainter strokePainter(double radius, bool isDark) =>
+      _CardStrokePainter(radius,
+          gradient: isDark ? strokeGradient : strokeGradientLight);
 
   static CustomPainter simpleStrokePainter(double radius, bool isDark) =>
       _CardStrokePainter(radius, color: simpleStroke(isDark));
 }
 
 class _CardStrokePainter extends CustomPainter {
-  _CardStrokePainter(this.radius, {this.color});
+  _CardStrokePainter(this.radius, {this.color, this.gradient});
   final double radius;
 
-  /// Solid stroke colour; when null the pink [BoldCardSurface.strokeGradient]
-  /// shader is used instead.
+  /// Solid stroke colour (cards simples). Tem precedência sobre [gradient].
   final Color? color;
+
+  /// Gradiente do stroke (cards destaque). Se ambos forem nulos, cai no
+  /// [BoldCardSurface.strokeGradient] (rosa) por retrocompatibilidade.
+  final Gradient? gradient;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -152,7 +166,8 @@ class _CardStrokePainter extends CustomPainter {
     if (color != null) {
       paint.color = color!;
     } else {
-      paint.shader = BoldCardSurface.strokeGradient.createShader(rect);
+      paint.shader =
+          (gradient ?? BoldCardSurface.strokeGradient).createShader(rect);
     }
     canvas.drawRRect(
       RRect.fromRectAndRadius(rect.deflate(0.5), Radius.circular(radius)),
@@ -162,7 +177,7 @@ class _CardStrokePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant _CardStrokePainter o) =>
-      o.radius != radius || o.color != color;
+      o.radius != radius || o.color != color || o.gradient != gradient;
 }
 
 /// A small rounded icon chip (gradient or tinted) used on action cards/lists.
@@ -182,7 +197,7 @@ class BoldIconChip extends StatelessWidget {
     this.iconSize = 20,
   }) : child = null;
 
-  /// Custom-content variant: supply any [child] (e.g. an SVG `PIX` mark)
+  /// Custom-content variant: supply any [child] (e.g. an SVG `Pix` mark)
   /// instead of an [IconData]. Background still follows gradient/tint.
   const BoldIconChip.custom({
     super.key,

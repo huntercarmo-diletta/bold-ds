@@ -21,6 +21,7 @@ class BoldSearchInput extends StatefulWidget {
     this.onChanged,
     this.onSubmitted,
     this.focusNode,
+    this.error = false,
   });
 
   final TextEditingController controller;
@@ -28,6 +29,9 @@ class BoldSearchInput extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onSubmitted;
   final FocusNode? focusNode;
+
+  /// Estado de erro — borda vermelha (o dado digitado não foi reconhecido).
+  final bool error;
 
   @override
   State<BoldSearchInput> createState() => _BoldSearchInputState();
@@ -52,7 +56,10 @@ class _BoldSearchInputState extends State<BoldSearchInput> {
       decoration: BoxDecoration(
         color: c.isDark ? c.field : BoldColors.white,
         border: Border.all(
-            color: c.isDark ? c.border : BoldColors.neutral08, width: 1),
+            color: widget.error
+                ? c.danger
+                : (c.isDark ? c.border : BoldColors.neutral08),
+            width: widget.error ? 1.5 : 1),
         borderRadius: BoldRadius.fieldR,
       ),
       child: Row(children: [
@@ -77,13 +84,32 @@ class _BoldSearchInputState extends State<BoldSearchInput> {
               cursorColor: BoldColors.primary,
               backgroundCursorColor: BoldColors.neutral07,
               style: BoldType.body.copyWith(color: c.textPrimary),
-              selectionColor: BoldColors.primary.withOpacity(0.25),
+              selectionColor: BoldColors.primary.withValues(alpha: 0.25),
               keyboardType: TextInputType.text,
               textInputAction: TextInputAction.search,
               onChanged: widget.onChanged,
               onSubmitted: widget.onSubmitted,
             ),
           ]),
+        ),
+        // Botão de limpar (X) — aparece só com texto; limpa tudo e avisa via
+        // onChanged('') para o caller voltar ao estado inicial.
+        ValueListenableBuilder<TextEditingValue>(
+          valueListenable: widget.controller,
+          builder: (_, v, __) => v.text.isEmpty
+              ? const SizedBox.shrink()
+              : GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () {
+                    widget.controller.clear();
+                    widget.onChanged?.call('');
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: BoldIcon('circle-xmark-light',
+                        size: BoldIconSize.md, color: c.textMuted),
+                  ),
+                ),
         ),
       ]),
     );

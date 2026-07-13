@@ -37,6 +37,8 @@ export 'widgets/bold_background.dart';     // BoldBackground (backdrop)
 export 'widgets/bold_glass_surface.dart';  // BoldGlassSurface
 export 'widgets/bold_home_indicator.dart'; // BoldHomeIndicator
 export 'widgets/bold_page_dots.dart';      // BoldPageDots (carrossel/onboarding)
+export 'widgets/bold_glass_avatar.dart';   // BoldGlassAvatar (avatar do usuário)
+export 'widgets/bold_copy_button.dart';    // BoldCopyButton (copiar + check in-place)
 export 'widgets/bold_skeleton.dart';       // BoldSkeleton (shimmer loading)
 export 'widgets/bold_controls.dart';       // BoldSwitch, BoldSegmentedControl
 export 'widgets/bold_checkbox.dart';       // BoldCheckbox
@@ -51,6 +53,7 @@ export 'widgets/bold_section_header.dart'; // BoldSectionHeader, BoldSeeAllLink
 export 'widgets/bold_button.dart';         // BoldButton (variants + sm/md/lg)
 export 'widgets/bold_icon_button.dart';    // BoldIconButton
 export 'widgets/bold_text_field.dart';     // BoldTextField
+export 'widgets/bold_currency_field.dart'; // BoldCurrencyField (valor em centavos)
 export 'widgets/bold_search_input.dart';   // BoldSearchInput
 export 'widgets/bold_otp_input.dart';      // BoldOtpInput
 export 'widgets/bold_keypad.dart';         // BoldKeypad, BoldPinDots

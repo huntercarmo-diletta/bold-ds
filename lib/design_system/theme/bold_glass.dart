@@ -4,13 +4,12 @@ import 'bold_colors.dart';
 
 /// Conta BOLD — single source of truth for the "glass" surface.
 ///
-/// **SPEC ÚNICA do vidro (Redesenho v.01, Figma 4841-38668):**
-/// fill `#FFFFFF 26%` · stroke 1px `#FFFFFF 30%` · backdrop blur UNIFORME 15.
-/// Não existe outro vidro: sem variantes progressivas, sem tints rosa, sem
-/// gradientes — TODO elemento glass (cards, bars, tiles, chips, sheets) lê
-/// daqui. O vidro assume fundo com imagem escurecida
-/// ([BoldBackground] aplica sempre #000000 50% sobre a foto), então o ink
-/// sobre/dentro do vidro é BRANCO.
+/// **SPEC ÚNICA do vidro:** fill + stroke 1px + backdrop blur UNIFORME 15.
+/// Theme-aware: **dark** = fill vinho-ink escuro `#16060A` @ 50% + stroke rosa
+/// `#FF9898`; **light** = fill BRANCO `#FFFFFF` @ 50% + stroke BRANCO. Não existe outro vidro:
+/// sem variantes progressivas, sem gradientes — TODO elemento glass (cards,
+/// bars, tiles, chips, sheets) lê daqui. O ink sobre/dentro do vidro é BRANCO
+/// no dark; no light segue o ink do tema.
 class BoldGlass {
   BoldGlass._();
 
@@ -29,17 +28,17 @@ class BoldGlass {
   /// the empty layer instead of the real backdrop and the blur vanishes.
   static const Clip clip = Clip.antiAlias;
 
-  /// Fill do vidro @ 26% — theme-aware: dark = vinho #4C0202, light = rosa
-  /// #FFC8DC (spec Figma).
-  static Color fill(BoldScheme c) => (c.isDark
-          ? BoldColors.glassFill
-          : BoldColors.glassFillLight)
-      .withValues(alpha: 0.26);
+  /// Fill do vidro — theme-aware: dark = vinho-ink escuro #16060A @ 50%
+  /// (painel mais escuro); light = BRANCO #FFFFFF @ 50%.
+  static Color fill(BoldScheme c) => c.isDark
+      ? BoldColors.glassFill.withValues(alpha: 0.50)
+      : BoldColors.glassFillLight.withValues(alpha: 0.50);
 
-  /// Stroke do vidro 1px @ 30% — dark = rosa #FF9898, light = branco.
-  static Color border(BoldScheme c) =>
-      (c.isDark ? BoldColors.glassStroke : BoldColors.white)
-          .withValues(alpha: 0.30);
+  /// Stroke do vidro 1px — dark = rosa #FF9898 @ 30%; light = BRANCO @ 55%
+  /// (borda branca nítida sobre o fill laranja).
+  static Color border(BoldScheme c) => c.isDark
+      ? BoldColors.glassStroke.withValues(alpha: 0.30)
+      : BoldColors.white.withValues(alpha: 0.55);
 
   /// Largura do stroke do vidro.
   static const double borderWidth = 1;

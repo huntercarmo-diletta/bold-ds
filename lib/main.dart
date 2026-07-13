@@ -207,9 +207,15 @@ class _PreviewTab extends StatelessWidget {
                 builder: (_) => const _GradientBar()),
             _Section(
                 title: 'Vidro (glass)',
-                note: 'fill 26% + stroke 30% + blur 15 · theme-aware',
+                note: 'fill 50% + stroke + blur 15 · theme-aware (dark vinho / light branco)',
                 composedOf: const ['Cores'],
                 builder: (_) => const _GlassSample()),
+            _Section(
+                title: 'Fundo (backdrop)',
+                note:
+                    'home = imagem + degradê rosa→laranja @80% + wash @65% · secundário = sólido wine-ink + glow',
+                composedOf: const ['Cores', 'Vidro (glass)'],
+                builder: (_) => const _BackdropSample()),
             _Section(title: 'Tipografia', builder: (_) => const _TypeScale()),
 
             // ───────────────────────── ÁTOMOS ─────────────────────────────
@@ -741,6 +747,12 @@ class _Swatches extends StatelessWidget {
           ('info', BoldColors.info04),
           ('soft', BoldColors.infoSoft),
         ]),
+        _Ramp('Fundo / superfície', [
+          ('bg', BoldColors.background),
+          ('flow', BoldColors.secondaryFlow),
+          ('surf', BoldColors.surface),
+          ('glass', BoldColors.glassFill),
+        ]),
       ],
     );
   }
@@ -827,6 +839,38 @@ class _GlassSample extends StatelessWidget {
         ),
       ]),
     );
+  }
+}
+
+/// Mostra os dois fundos do DS lado a lado: HOME (imagem + degradê + wash) e
+/// SECUNDÁRIO (sólido wine-ink + glow). Ambos theme-aware.
+class _BackdropSample extends StatelessWidget {
+  const _BackdropSample();
+
+  @override
+  Widget build(BuildContext context) {
+    final sc = BoldColors.of(context);
+    Widget frame(String label, String sub, Widget bg) => Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: SizedBox(height: 170, width: double.infinity, child: bg),
+            ),
+            const SizedBox(height: 6),
+            Text(label,
+                style: BoldType.labelMd.copyWith(color: sc.textPrimary)),
+            Text(sub,
+                style: BoldType.labelSm
+                    .copyWith(color: sc.textMuted, fontSize: 10)),
+          ]),
+        );
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      frame('BoldHomeBackground', 'home + entrada',
+          const BoldHomeBackground(child: SizedBox.expand())),
+      const SizedBox(width: 12),
+      frame('BoldSecondaryBackground', 'fluxos secundários',
+          const BoldSecondaryBackground(child: SizedBox.expand())),
+    ]);
   }
 }
 

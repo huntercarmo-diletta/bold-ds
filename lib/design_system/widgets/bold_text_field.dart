@@ -17,7 +17,7 @@ import 'bold_icon.dart';
 ///    drives the error. Use this for the 16 form-based screens.
 ///    ```dart
 ///    BoldTextField(
-///      label: 'Chave PIX',
+///      label: 'Chave Pix',
 ///      controller: _key,
 ///      validator: (v) => (v == null || v.isEmpty) ? 'Informe a chave' : null,
 ///    );
@@ -32,7 +32,7 @@ import 'bold_icon.dart';
 /// Don't combine [validator] and [errorText] on the same field — pick one.
 ///
 /// Masks (CPF/CNPJ/phone/agência-conta) go through [inputFormatters].
-/// Multi-line fields (PIX message, charge description, dispute reason) set
+/// Multi-line fields (Pix message, charge description, dispute reason) set
 /// [maxLines].
 class BoldTextField extends StatelessWidget {
   const BoldTextField({
@@ -61,6 +61,8 @@ class BoldTextField extends StatelessWidget {
     this.textInputAction,
     this.autofocus = false,
     this.focusNode,
+    this.autocorrect = true,
+    this.enableSuggestions = true,
   });
 
   final String? label;
@@ -68,6 +70,10 @@ class BoldTextField extends StatelessWidget {
   final TextEditingController? controller;
   final TextInputType? keyboardType;
   final bool obscureText;
+
+  /// Corretor/sugestões do teclado. Desligar em campos técnicos (e-mail, chave).
+  final bool autocorrect;
+  final bool enableSuggestions;
 
   /// Trailing widget (e.g. a visibility toggle).
   final Widget? suffixIcon;
@@ -156,6 +162,8 @@ class BoldTextField extends StatelessWidget {
             keyboardType: keyboardType ??
                 (_multiline ? TextInputType.multiline : null),
             obscureText: obscureText,
+            autocorrect: autocorrect,
+            enableSuggestions: enableSuggestions,
             onChanged: onChanged,
             onFieldSubmitted: onSubmitted,
             onSaved: onSaved,

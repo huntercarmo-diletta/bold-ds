@@ -1,8 +1,8 @@
 import 'package:flutter/widgets.dart';
 import '../theme/bold_colors.dart';
-import '../theme/bold_glass.dart';
 import '../theme/bold_typography.dart';
 import 'bold_button.dart';
+import 'bold_glass_avatar.dart';
 import 'bold_icon.dart';
 import 'bold_icon_button.dart';
 import 'bold_input_chip.dart';
@@ -97,25 +97,10 @@ class _NavLeftHome extends BoldNavLeftAccessory {
       width: 40,
       height: 40,
       child: Stack(clipBehavior: Clip.none, children: [
-        ClipOval(
-          child: BackdropFilter(
-            filter: BoldGlass.blurFilter,
-            child: Container(
-              width: 40,
-              height: 40,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: BoldGlass.fill(c),
-                shape: BoxShape.circle,
-                border: Border.all(
-                    color: BoldGlass.border(c), width: BoldGlass.borderWidth),
-              ),
-              child: Text(firstName.isEmpty ? '?' : firstName[0].toUpperCase(),
-                  style: BoldType.title
-                      .copyWith(fontSize: 15, color: c.textPrimary)),
-            ),
-          ),
-        ),
+        BoldGlassAvatar(
+            initial: firstName.isEmpty ? '?' : firstName[0].toUpperCase(),
+            size: 40,
+            fontSize: 15),
         Positioned(
           right: -2,
           bottom: -2,

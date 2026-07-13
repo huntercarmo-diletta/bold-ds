@@ -473,9 +473,15 @@ class _BoldQuantumPairingScreenState extends State<BoldQuantumPairingScreen>
     super.dispose();
   }
 
-  double _progressFor(double ms) => widget.progress != null
-      ? _clamp01(widget.progress!)
-      : _clamp01((ms % _kLoopMs) / _kTotalMs);
+  double _progressFor(double ms) {
+    if (widget.progress != null) return _clamp01(widget.progress!);
+    // Fluxo REAL (tem onCompleted): toca UMA vez e congela no frame final —
+    // com o sheet do passkey abrindo em seguida, o loop recomeçava atrás
+    // (onboarding do Diego/relato do Michel). O loop contínuo fica só para
+    // previews/demos (sem onCompleted).
+    if (widget.onCompleted != null) return _clamp01(ms / _kTotalMs);
+    return _clamp01((ms % _kLoopMs) / _kTotalMs);
+  }
 
   @override
   Widget build(BuildContext context) {

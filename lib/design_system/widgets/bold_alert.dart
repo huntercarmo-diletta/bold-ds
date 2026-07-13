@@ -20,9 +20,10 @@ import 'bold_list.dart';
 ///
 /// ```dart
 /// BoldAlert(
-///   intent: BoldIntent.info,
-///   title: 'Limite noturno ativo',
-///   message: 'Entre 20h e 6h o limite por transferência é de R$ 1.000.',
+///   intent: BoldIntent.error,
+///   title: 'Não foi possível enviar o Pix',
+///   message: 'Saldo insuficiente para esta transferência.',
+///   onClose: () {},
 /// );
 /// BoldAlert(intent: BoldIntent.success, title: 'PIX enviado');
 /// ```
@@ -98,8 +99,11 @@ class BoldAlert extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title,
-                    style: BoldType.title
-                        .copyWith(fontSize: 14, color: BoldColors.neutral01)),
+                    style: BoldType.title.copyWith(
+                        fontSize: 14, fontWeight: FontWeight.w700,
+                        // Fundo do alerta é SEMPRE escuro → título branco fixo (o
+                        // default do BoldType.title é escuro e sumia no fundo).
+                        color: BoldColors.textPrimary)),
                 if (message != null) ...[
                   const SizedBox(height: 3),
                   Text(message!,
@@ -285,7 +289,9 @@ class _BoldToastViewState extends State<_BoldToastView>
             child: Transform.translate(
                 offset: Offset(0, (1 - _anim.value) * -12), child: child),
           ),
-          child: toast,
+          // Material ancestral: o toast vive no Overlay raiz (sem Scaffold), e
+          // sem Material o texto ganha o sublinhado amarelo de debug do Flutter.
+          child: Material(type: MaterialType.transparency, child: toast),
         ),
       ),
     );

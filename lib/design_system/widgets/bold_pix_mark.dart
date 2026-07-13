@@ -3,15 +3,15 @@ import '../theme/bold_colors.dart';
 import '../theme/bold_metrics.dart';
 import 'bold_icon.dart';
 
-/// Conta BOLD — Official PIX mark (Banco Central pinwheel).
+/// Conta BOLD — Official Pix mark (Banco Central pinwheel).
 ///
-/// Thin wrapper over the **18×18 FontAwesome `pix` glyph** so the PIX mark sits
+/// Thin wrapper over the **18×18 FontAwesome `pix` glyph** so the Pix mark sits
 /// on the exact same icon grid as every other icon (no off-standard sizes).
 ///
 /// In new code prefer `BoldIcon('pix')` (outline) / `BoldIcon('pix-solid')`
-/// directly. This component stays for the documented PIX brand entry points
-/// (BCB UX rules): PIX tab, "PIX" shortcut, PIX area header. Do NOT use a
-/// generic QR icon for PIX — `BoldIcon('qr')` is only for QR-scanning actions.
+/// directly. This component stays for the documented Pix brand entry points
+/// (BCB UX rules): Pix tab, "Pix" shortcut, Pix area header. Do NOT use a
+/// generic QR icon for Pix — `BoldIcon('qr')` is only for QR-scanning actions.
 class BoldPixMark extends StatelessWidget {
   const BoldPixMark({
     super.key,

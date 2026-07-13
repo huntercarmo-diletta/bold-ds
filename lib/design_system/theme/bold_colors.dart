@@ -46,13 +46,15 @@ class BoldColors {
   /// Fim do gradiente da marca (brand/gradient: #90093A → #F33F80).
   static const Color brandGradientEnd = Color(0xFFF33F80);
 
-  /// Vidro (Redesenho v.01): fill vinho #4C0202 @ 26% + stroke rosa #FF9898
-  /// @ 30%. Cores-base — o alpha é aplicado no token [BoldGlass].
-  static const Color glassFill = Color(0xFF4C0202);
+  /// Vidro DARK: fill vinho-ink ESCURO #16060A @ 50% (painel mais escuro, era
+  /// #4C0202 @ 26%) + stroke rosa #FF9898 @ 30%. Cores-base — o alpha é
+  /// aplicado no token [BoldGlass].
+  static const Color glassFill = Color(0xFF16060A);
   static const Color glassStroke = Color(0xFFFF9898);
 
-  /// Glass no LIGHT mode: fill rosa #FFC8DC @ 26% + stroke branco @ 30%.
-  static const Color glassFillLight = Color(0xFFFFC8DC);
+  /// Glass no LIGHT mode: fill BRANCO #FFFFFF @ 26% + stroke branco. Vidro
+  /// neutro/frost no claro. Ver [BoldGlass]/[BoldCardSurface].
+  static const Color glassFillLight = Color(0xFFFFFFFF);
 
   /// primary-04 @ 18% — drop shadow de botão/realce.
   static const Color primary04Alpha18 = Color(0x2EFE3976);
@@ -182,6 +184,14 @@ class BoldColors {
   static const Color surfacePressed = Color(0xFF2A2C3A);
   static const Color surfaceDeep = Color(0xFF101019);
 
+  /// Fundo SÓLIDO dos fluxos secundários (tudo que não faz parte da navegação
+  /// inferior). É o par plano do backdrop de imagem da home: um "wine-ink"
+  /// profundo, herdando o vinho da marca (`brandPrincipal` #90093A / glass
+  /// #4C0202) rebaixado a quase-preto — dialoga com o resto do app mas é
+  /// distinto do azul-preto das surfaces, então os cards continuam saltando.
+  /// Versão mode-aware em [BoldScheme.secondaryFlow]; este é o default dark.
+  static const Color secondaryFlow = Color(0xFF100913);
+
   static const Color textPrimary = Color(0xFFFFFFFF);
   static const Color textBody = Color(0xFFE8E9EE);
   static const Color textBodySoft = Color(0xFFC8CBD4);
@@ -212,6 +222,7 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
   const BoldScheme({
     required this.brightness,
     required this.background,
+    required this.secondaryFlow,
     required this.surface,
     required this.surfaceRaised,
     required this.field,
@@ -226,21 +237,42 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
     required this.borderSoft,
     required this.borderStrong,
     required this.overlay,
+    // Papéis de marca/estado mode-aware (Figma-like): o componente referencia o
+    // papel; o valor troca por modo. Ver [BoldScheme.dark]/[light].
+    required this.primary,
+    required this.onPrimary,
+    required this.primaryPressed,
+    required this.primaryWash,
+    required this.accent,
+    required this.danger,
+    required this.success,
+    required this.warning,
+    required this.info,
   });
 
   final Brightness brightness;
   final Color background, surface, surfaceRaised, field, surfacePressed;
+
+  /// Fundo sólido dos fluxos secundários (fora da navegação inferior).
+  /// Ver [BoldColors.secondaryFlow].
+  final Color secondaryFlow;
   final Color textPrimary, textBody, textBodySoft, textSecondary, textLabel, textMuted;
   final Color border, borderSoft, borderStrong;
 
   /// Legibility wash sobre a imagem de fundo.
   final Color overlay;
 
+  /// Papéis de marca/estado (resolvem por modo — o componente usa o papel, não
+  /// o primitivo). Dark = shades claros/vibrantes; light = shades profundos.
+  final Color primary, onPrimary, primaryPressed, primaryWash;
+  final Color accent, danger, success, warning, info;
+
   bool get isDark => brightness == Brightness.dark;
 
   factory BoldScheme.dark() => const BoldScheme(
         brightness: Brightness.dark,
         background: Color(0xFF0A0B12),
+        secondaryFlow: Color(0xFF100913), // wine-ink (fluxos secundários)
         surface: Color(0xFF14151F),
         surfaceRaised: Color(0xFF1A1B27),
         field: Color(0xFF1E1F2D),
@@ -255,11 +287,22 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
         borderSoft: Color(0x12FFFFFF),
         borderStrong: Color(0x2EFFFFFF),
         overlay: Color(0xB30A0B12),
+        // Marca/estado no DARK: shades claros/vibrantes (leem sobre o escuro).
+        primary: Color(0xFFFE3976),        // primary04
+        onPrimary: Color(0xFFFFFFFF),
+        primaryPressed: Color(0xFFCC1E58), // primary03
+        primaryWash: Color(0x33FE3976),    // primary04 @20%
+        accent: Color(0xFFFE7B5E),         // accent04
+        danger: Color(0xFFFF4D5E),         // error05
+        success: Color(0xFF2FD27A),        // success05
+        warning: Color(0xFFFDB43D),        // warning05
+        info: Color(0xFF3B82F6),           // info04
       );
 
   factory BoldScheme.light() => const BoldScheme(
         brightness: Brightness.light,
         background: Color(0xFFF4F3F6),
+        secondaryFlow: Color(0xFFF6F3F5), // off-white plum sutil (par claro)
         surface: Color(0xFFFFFFFF),
         surfaceRaised: Color(0xFFFFFFFF),
         field: Color(0xFFF1F0F4),
@@ -276,6 +319,16 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
         borderSoft: Color(0x0D000000),
         borderStrong: Color(0x24000000),
         overlay: Color(0xD9F4F3F6),
+        // Marca/estado no LIGHT: shades profundos (contraste no branco).
+        primary: Color(0xFFCC1E58),        // primary03
+        onPrimary: Color(0xFFFFFFFF),
+        primaryPressed: Color(0xFF600627), // primary02
+        primaryWash: Color(0xFFFFEDF3),    // primary08
+        accent: Color(0xFFC24A2E),         // accent03
+        danger: Color(0xFFB42318),         // error03
+        success: Color(0xFF0E9154),        // success04
+        warning: Color(0xFFF6A21A),        // warning04
+        info: Color(0xFF3B82F6),           // info04
       );
 
   @override

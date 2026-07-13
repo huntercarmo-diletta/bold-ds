@@ -28,7 +28,7 @@ class BoldIcon extends StatelessWidget {
 
   /// Nome semântico → arquivo SVG real (kebab, pesos light/solid do FontAwesome).
   static const Map<String, String> alias = {
-    // marca PIX (FontAwesome — mesma viewBox/margem dos outros, fica no padrão;
+    // marca Pix (FontAwesome — mesma viewBox/margem dos outros, fica no padrão;
     // use 'pix' p/ chrome de ícone, BoldPixMark só p/ marca grande/hero)
     'pix': 'pix-light', 'pix-solid': 'pix-solid',
     // chrome / navegação

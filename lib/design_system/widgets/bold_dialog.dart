@@ -13,7 +13,7 @@ import 'bold_button.dart';
 /// final ok = await BoldDialog.confirm(
 ///   context,
 ///   icon: Icons.delete_outline,
-///   title: 'Excluir esta chave PIX?',
+///   title: 'Excluir esta chave Pix?',
 ///   message: 'Você precisará cadastrá-la de novo para receber por ela.',
 ///   confirmLabel: 'Excluir',
 /// );
@@ -67,7 +67,12 @@ class BoldDialog {
                         fontSize: 13.5, color: BoldColors.textSecondary)),
               ],
               const SizedBox(height: 20),
-              Row(
+              // IntrinsicHeight + stretch: com label longo ("Cancelar
+              // agendamento") o botão quebrava linha e ficava mais alto/
+              // desalinhado do vizinho (QA BUG 63).
+              IntrinsicHeight(
+                child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
                     child: BoldButton(
@@ -85,7 +90,7 @@ class BoldDialog {
                     ),
                   ),
                 ],
-              ),
+              )),
             ],
           ),
         ),

@@ -182,8 +182,10 @@ class BoldTopBar extends StatelessWidget {
     // com respiro inferior pra nada colar na borda do vidro.
     return BoldGlassSurface(
       child: Padding(
+        // Safe-area do notch + respiro (senão o back/título colam na borda).
         padding: EdgeInsets.only(
-            top: MediaQuery.of(context).padding.top, bottom: BoldSpace.x4),
+            top: MediaQuery.of(context).padding.top + BoldSpace.x2,
+            bottom: BoldSpace.x4),
         child: column,
       ),
     );
@@ -222,10 +224,13 @@ class BoldTopBar extends StatelessWidget {
   }
 
   Widget _buildSheet(BuildContext context) {
+    final c = BoldColors.of(context);
     return Container(
-      decoration: const BoxDecoration(
-        color: BoldColors.white,
-        borderRadius: BorderRadius.only(
+      decoration: BoxDecoration(
+        // Superfície do tema (dark no dark) — branco fixo criava faixa branca
+        // no topo do sheet com o título (texto branco) invisível.
+        color: c.surface,
+        borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(BoldRadius.sheet),
             topRight: Radius.circular(BoldRadius.sheet)),
       ),
@@ -237,7 +242,7 @@ class BoldTopBar extends StatelessWidget {
               width: 64,
               height: 5,
               decoration: BoxDecoration(
-                  color: BoldColors.neutral08, borderRadius: BoldRadius.pillR),
+                  color: c.border, borderRadius: BoldRadius.pillR),
             ),
           ),
         ),
@@ -322,8 +327,11 @@ class _AccountButton extends StatelessWidget {
             const BoldSkeleton(width: 58, height: 11, radius: 6)
           else
             Text(label, style: BoldType.labelMd.copyWith(color: ink)),
-          const SizedBox(width: 6),
-          BoldIcon('chevron-down', size: 12, color: ink),
+          // Chevron só quando há troca de conta (senão é rótulo estático).
+          if (onTap != null) ...[
+            const SizedBox(width: 6),
+            BoldIcon('chevron-down', size: 12, color: ink),
+          ],
         ]),
       ),
     );

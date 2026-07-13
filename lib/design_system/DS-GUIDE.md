@@ -98,9 +98,16 @@ Sinal de que está integrado certo: `grep 'Color(0x'` **fora** de `lib/design_sy
 - `BoldSpace` (base 4): `x1 4` · `x2 8` · `x3 12` · `x4 16` · `x5 20` · `x6 24` · `x8 32` · `x10 40`. **Não existe `x7` nem `x9`.** Respiro de rodapé = `bottomBreath` (32).
 - `BoldIconSize`: `xs 14` · `sm 16` · `md 18` · `lg 20` · `xl 24` · `xxl 28`.
 
-**Glass — `BoldGlass`.** Vidro único do DS: **fill 26% + stroke 30% + blur 15**, theme-aware (dark `#4C0202`/`#FF9898`, light `#FFC8DC`/`#FFFFFF`). É característica de **container**, nunca de elemento. Encapsulado — não remontar à mão.
+**Glass — `BoldGlass`.** Vidro único do DS: **fill + stroke + blur 15**, theme-aware — dark fill vinho-ink escuro `#16060A` @50% (painel escuro) / stroke rosa `#FF9898` @30%; **light fill BRANCO `#FFFFFF` @50% / stroke BRANCO @55%**. Cards destaque (`BoldCard(glass: true, highlight: true)`) seguem: stroke gradiente rosa no dark, **branco no light**. É característica de **container**, nunca de elemento. Encapsulado — não remontar à mão.
 
 **Gradiente — `BoldGradients.brand`.**
+
+**Fundo (backdrop) — dois papéis, um por contexto de navegação:**
+- **Home → `BoldHomeBackground`** (encapsula `BoldBackground(style: BoldBackdrop.image)`): skyline cyberpunk + **degradê rosa→laranja @80%** + **wash de legibilidade @65%** (branco no light / `#0A0B12` no dark). A imagem + degradê transparecem ~35%, dando o toque da marca sobre uma base legível. É o backdrop oficial da home; use este componente semântico em vez de espalhar `BoldBackdrop.image`. Mesmas 3 camadas nas telas de ENTRADA/brand (login, splash, boas-vindas, Lia) via `AtmosphericBackground` (ds_compat).
+- **Fluxos secundários (TUDO fora da home: hubs e telas empurradas — Área Pix, Boleto, TED, Recarga, Segurança, Perfil…) → `BoldSecondaryBackground`** (ou `BoldBackground(style: BoldBackdrop.solid)` quando precisar de wrapper de tela): cor SÓLIDA `BoldScheme.secondaryFlow` (dark "wine-ink" `#100913` herdando o vinho da marca; light `#F6F3F5`) **+ glow sutil da marca** (rosa no topo, véu violeta embaixo). Calmo e focado, faz os cards saltarem, mas mantém o ar da marca. É o fundo padrão dos scaffolds legados (`BoldDarkScaffold`/`BoldLightScaffold`) — herança automática.
+  - `BoldSecondaryBackground()` = camada `Positioned.fill` (drop-in em `Stack` de scaffold/shell). `BoldSecondaryBackground(child:)` = wrapper de tela inteira.
+
+Os demais `BoldBackdrop` (`brilhoRosa`, `vidroFrio`, `aurora`, `porDoSol`, `gradeTech`) são moods opcionais de personalização. **Regra prática:** é a home/entrada? `BoldHomeBackground`. É qualquer outro fluxo? `BoldSecondaryBackground`.
 
 ---
 

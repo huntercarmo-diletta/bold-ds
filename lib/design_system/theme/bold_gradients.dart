@@ -4,7 +4,7 @@ import 'bold_colors.dart';
 /// Conta BOLD — Gradient tokens.
 ///
 /// v2 — the signature is the brand "sunset" (pink → coral → yellow), from the
-/// logo's "O" ring. Use [brand] for hero moments (balance, primary CTA, PIX).
+/// logo's "O" ring. Use [brand] for hero moments (balance, primary CTA, Pix).
 /// Text on it must be [BoldColors.onGradient] (white washes out on the yellow).
 class BoldGradients {
   BoldGradients._();
@@ -37,7 +37,7 @@ class BoldGradients {
   static const Alignment _from = Alignment(-0.7, -1);
   static const Alignment _to = Alignment(0.7, 1);
 
-  /// PIX (featured nav circle / PIX area) — the brand sunset.
+  /// Pix (featured nav circle / Pix area) — the brand sunset.
   static const Gradient pix =
       LinearGradient(begin: _from, end: _to, colors: [Color(0xFFFE3976), Color(0xFFFB6A1E)]);
   static const Gradient pay =

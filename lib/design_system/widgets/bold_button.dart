@@ -74,9 +74,9 @@ class BoldButton extends StatelessWidget {
     final spec = _spec(size);
     switch (variant) {
       case BoldButtonVariant.primary:
-        // Cor principal SÓLIDA (primary-04, a mesma do item ativo da navbar) —
-        // sem gradiente. Texto branco + glow leve no tom.
-        return _solid(BoldColors.primary04, spec, c);
+        // Cor principal SÓLIDA (papel mode-aware: dark=primary04, light=primary03)
+        // — sem gradiente. Texto onPrimary + glow leve no tom.
+        return _solid(c.primary, spec, c);
       case BoldButtonVariant.accent:
         return _gradient(BoldGradients.accentButton, spec, c);
       case BoldButtonVariant.secondary:
@@ -90,9 +90,7 @@ class BoldButton extends StatelessWidget {
         // Tertiary/ghost: BRANCO sobre a imagem (dark), coral no light.
         return _link(c.isDark ? BoldColors.white : BoldColors.accent, spec);
       case BoldButtonVariant.destructive:
-        return filled
-            ? _solid(BoldColors.dangerBright, spec, c)
-            : _link(BoldColors.danger, spec);
+        return filled ? _solid(c.danger, spec, c) : _link(c.danger, spec);
       case BoldButtonVariant.white:
         // Filled branco com texto brandPrincipal — CTA sobre superfície de cor
         // (banner). Radius pill como o resto do DS.
@@ -203,7 +201,7 @@ class BoldButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: _disabled ? c.surfacePressed : color,
           borderRadius: BorderRadius.circular(_kBtnRadius),
-          boxShadow: _disabled ? null : BoldElevation.glow(color),
+          // Sem glow/drop-shadow — botão sólido limpo (pedido do user).
         ),
         child: Material(
           color: Colors.transparent,
