@@ -121,6 +121,9 @@ class _Sidebar extends StatefulWidget {
 class _SidebarState extends State<_Sidebar> {
   // Accordion FLUXOGRAMAS: começa aberto se já há um fluxo selecionado.
   late bool _flowsOpen = widget.dest >= 0;
+  // Barra lateral retrátil: recolhida vira uma faixa estreita só com o botão
+  // de reabrir + troca de tema.
+  bool _collapsed = false;
 
   @override
   void didUpdateWidget(_Sidebar old) {
@@ -140,10 +143,40 @@ class _SidebarState extends State<_Sidebar> {
     for (var i = 0; i < kFlows.length; i++) {
       (groups[kFlows[i].group] ??= <int>[]).add(i);
     }
+    final railBg = isDark ? c.surface : BoldColors.neutral10;
+    // Recolhida: faixa estreita só com reabrir + troca de tema.
+    if (_collapsed) {
+      return Container(
+        width: 56,
+        decoration: BoxDecoration(
+          color: railBg,
+          border: Border(right: BorderSide(color: c.border)),
+        ),
+        child: Column(children: [
+          const SizedBox(height: 14),
+          BoldIconButton(
+            icon: 'bars-light',
+            semanticLabel: 'Expandir menu',
+            type: BoldIconButtonType.tertiary,
+            onPressed: () => setState(() => _collapsed = false),
+          ),
+          const SizedBox(height: 10),
+          BoldPixMark(size: 20, color: BoldColors.primary04),
+          const Spacer(),
+          BoldIconButton(
+            icon: isDark ? 'sun' : 'moon',
+            semanticLabel: isDark ? 'Modo claro' : 'Modo escuro',
+            type: BoldIconButtonType.tertiary,
+            onPressed: widget.onToggleTheme,
+          ),
+          const SizedBox(height: 14),
+        ]),
+      );
+    }
     return Container(
       width: 268,
       decoration: BoxDecoration(
-        color: isDark ? c.surface : BoldColors.neutral10,
+        color: railBg,
         border: Border(right: BorderSide(color: c.border)),
       ),
       child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -163,6 +196,12 @@ class _SidebarState extends State<_Sidebar> {
               semanticLabel: isDark ? 'Modo claro' : 'Modo escuro',
               type: BoldIconButtonType.tertiary,
               onPressed: widget.onToggleTheme,
+            ),
+            BoldIconButton(
+              icon: 'arrow-left-light',
+              semanticLabel: 'Recolher menu',
+              type: BoldIconButtonType.tertiary,
+              onPressed: () => setState(() => _collapsed = true),
             ),
           ]),
         ),
