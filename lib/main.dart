@@ -144,7 +144,8 @@ class _SidebarState extends State<_Sidebar> {
       (groups[kFlows[i].group] ??= <int>[]).add(i);
     }
     final railBg = isDark ? c.surface : BoldColors.neutral10;
-    // Recolhida: faixa estreita só com reabrir + troca de tema.
+    // Recolhida: rail estreito de ícones navegáveis (Design System + fluxos),
+    // com tooltip do nome e destaque de seleção; reabrir + tema nas pontas.
     if (_collapsed) {
       return Container(
         width: 56,
@@ -160,9 +161,35 @@ class _SidebarState extends State<_Sidebar> {
             type: BoldIconButtonType.tertiary,
             onPressed: () => setState(() => _collapsed = false),
           ),
-          const SizedBox(height: 10),
-          BoldPixMark(size: 20, color: BoldColors.primary04),
-          const Spacer(),
+          const SizedBox(height: 6),
+          Divider(height: 1, color: c.border),
+          Expanded(
+            child: ListView(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              children: [
+                _railItem(context,
+                    icon: 'puzzle-light',
+                    tooltip: 'Design System',
+                    selected: dest == -1,
+                    onTap: () => onSelect(-1)),
+                for (final g in groups.entries) ...[
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 14, vertical: 8),
+                    child: Divider(height: 1, color: c.border),
+                  ),
+                  for (final i in g.value)
+                    _railItem(context,
+                        icon: kFlows[i].icon,
+                        tooltip: '${g.key} · ${kFlows[i].name}',
+                        selected: dest == i,
+                        onTap: () => onSelect(i)),
+                ],
+              ],
+            ),
+          ),
+          Divider(height: 1, color: c.border),
+          const SizedBox(height: 8),
           BoldIconButton(
             icon: isDark ? 'sun' : 'moon',
             semanticLabel: isDark ? 'Modo claro' : 'Modo escuro',
@@ -243,6 +270,42 @@ class _SidebarState extends State<_Sidebar> {
           ),
         ),
       ]),
+    );
+  }
+
+  // Item do rail (sidebar recolhida): só o ícone, centralizado, com tooltip do
+  // nome e destaque quando selecionado.
+  Widget _railItem(BuildContext context,
+      {required String icon,
+      required String tooltip,
+      required bool selected,
+      required VoidCallback onTap}) {
+    final c = BoldColors.of(context);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      child: Tooltip(
+        message: tooltip,
+        waitDuration: const Duration(milliseconds: 300),
+        child: Material(
+          color: selected
+              ? BoldColors.primary04.withValues(alpha: 0.12)
+              : BoldColors.transparent,
+          borderRadius: BorderRadius.circular(10),
+          child: InkWell(
+            borderRadius: BorderRadius.circular(10),
+            onTap: onTap,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 9),
+              child: Center(
+                child: BoldIcon(icon,
+                    size: 18,
+                    color:
+                        selected ? BoldColors.primary04 : c.textSecondary),
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
