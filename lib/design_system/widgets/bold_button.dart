@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../theme/bold_colors.dart';
 import '../theme/bold_typography.dart';
 import '../theme/bold_metrics.dart';
-import '../theme/bold_gradients.dart';
 import 'bold_icon.dart';
 
 /// Raio dos botões (Redesenho v.01): 16 pra casar com os cards.
@@ -13,8 +12,8 @@ const double _kBtnRadius = 16;
 /// [glyph] (lead) e [trailingGlyph] (trail).
 ///
 /// * [BoldButtonVariant.primary]     — gradiente rosa da marca. "Avançar / enviar".
-/// * [BoldButtonVariant.accent]      — gradiente coral. "Confirmar / CTA".
-/// * [BoldButtonVariant.secondary]   — outline neutro. Alternativa.
+/// * [BoldButtonVariant.secondary]   — outline neutro. Alternativa (também o CTA
+///   que substituiu o antigo `accent`, aposentado).
 /// * [BoldButtonVariant.text]        — link (coral).
 /// * [BoldButtonVariant.destructive] — perigo (link; `filled: true` = pill sólido).
 /// * [BoldButtonVariant.white]       — filled branco, texto brandPrincipal (CTA sobre cor).
@@ -27,7 +26,7 @@ const double _kBtnRadius = 16;
 /// BoldButton('Cancelar', variant: BoldButtonVariant.secondary, onPressed: _close);
 /// BoldButton('Revogar', variant: BoldButtonVariant.destructive, filled: true, onPressed: _revoke);
 /// ```
-enum BoldButtonVariant { primary, accent, secondary, text, destructive, white }
+enum BoldButtonVariant { primary, secondary, text, destructive, white }
 
 /// Densidade do [BoldButton] — xs (28h, chips de ação) · sm (40h) · md (48h) · lg (56h).
 enum BoldButtonSize { xs, sm, md, lg }
@@ -89,8 +88,6 @@ class BoldButton extends StatelessWidget {
         // Cor principal SÓLIDA (papel mode-aware: dark=primary04, light=primary03)
         // — sem gradiente. Texto onPrimary + glow leve no tom.
         return _solid(c.primary, spec, c);
-      case BoldButtonVariant.accent:
-        return _gradient(BoldGradients.accentButton, spec, c);
       case BoldButtonVariant.secondary:
         // Sobre a imagem escurecida (scheme dark): outline BRANCO sem fill.
         return c.isDark
@@ -158,34 +155,6 @@ class BoldButton extends StatelessWidget {
 
   EdgeInsets _pad(_Spec s) =>
       EdgeInsets.symmetric(vertical: s.vpad, horizontal: s.hpad);
-
-  Widget _gradient(Gradient gradient, _Spec spec, BoldScheme c) {
-    // Texto adaptativo: branco no escuro, escuro no claro. O gradiente sunset é
-    // bem claro (termina em amarelo), então texto branco fica invisível no tema
-    // claro — `c.textPrimary` resolve isso. Fundo desabilitado idem (adaptativo).
-    return _wrap(Opacity(
-      opacity: _disabled ? 0.5 : 1,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: _disabled ? null : gradient,
-          color: _disabled ? c.surfacePressed : null,
-          borderRadius: BorderRadius.circular(_kBtnRadius),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(_kBtnRadius)),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: loading ? null : onPressed,
-            child: Padding(
-              padding: _pad(spec),
-              child: Center(child: _content(c.textPrimary, spec)),
-            ),
-          ),
-        ),
-      ),
-    ));
-  }
 
   Widget _outline(Color fg, Color border, Color fill, _Spec spec) {
     // O caller manda o fill JÁ com alpha (transparent = sem fundo de verdade;

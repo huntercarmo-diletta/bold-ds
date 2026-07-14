@@ -1595,9 +1595,6 @@ class _PreviewTab extends StatelessWidget {
                 builder: (_) => Column(children: [
                       BoldButton('Primário', onPressed: () {}),
                       const SizedBox(height: 8),
-                      BoldButton('Accent',
-                          variant: BoldButtonVariant.accent, onPressed: () {}),
-                      const SizedBox(height: 8),
                       BoldButton('Secundário',
                           variant: BoldButtonVariant.secondary, onPressed: () {}),
                       const SizedBox(height: 8),
