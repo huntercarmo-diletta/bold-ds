@@ -1822,6 +1822,54 @@ class _PreviewTab extends StatelessWidget {
                 title: 'Dialog / Toast (gatilhos)',
                 composedOf: const ['BoldButton', 'BoldCard', 'Tipografia'],
                 builder: (_) => const _OverlayDemo()),
+            _Section(
+                title: 'Comprovante (BoldReceipt)',
+                composedOf: const [
+                  'BoldSpotIcon',
+                  'BoldCard',
+                  'BoldLogo',
+                  'Tipografia'
+                ],
+                builder: (_) => BoldCard(
+                      radius: 20,
+                      padding: const EdgeInsets.all(20),
+                      child: const BoldReceipt(
+                        title: 'Comprovante de pagamento',
+                        timestamp: '14/07/2026 · 15:32',
+                        rows: [
+                          BoldReceiptRow(label: 'Valor', value: 'R\$ 250,00'),
+                          BoldReceiptRow(
+                              label: 'Tipo de pagamento', value: 'Pix'),
+                        ],
+                        sections: [
+                          BoldReceiptSection(
+                              icon: 'user-light',
+                              title: 'Destino',
+                              rows: [
+                                BoldReceiptRow(
+                                    label: 'Nome', value: 'Roberto da Silva'),
+                                BoldReceiptRow(
+                                    label: 'CPF/CNPJ', value: '***.777.888-**'),
+                                BoldReceiptRow(
+                                    label: 'Instituição',
+                                    value: 'Banco XYZ S.A.'),
+                              ]),
+                          BoldReceiptSection(
+                              icon: 'user-light',
+                              title: 'Origem',
+                              rows: [
+                                BoldReceiptRow(
+                                    label: 'Nome', value: 'Agatha Pedroso'),
+                                BoldReceiptRow(
+                                    label: 'CPF/CNPJ', value: '***.290.688-**'),
+                                BoldReceiptRow(
+                                    label: 'Instituição', value: 'Conta BOLD'),
+                              ]),
+                        ],
+                        footerLines: ['Conta BOLD · Instituição de pagamento'],
+                        transactionId: 'E1898765420260714153210abc',
+                      ),
+                    )),
           ],
         ),
       ),
