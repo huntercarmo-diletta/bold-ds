@@ -45,6 +45,7 @@ class BoldButton extends StatelessWidget {
     this.loading = false,
     this.expand = true,
     this.filled = false,
+    this.error = false,
   });
 
   final String label;
@@ -66,12 +67,23 @@ class BoldButton extends StatelessWidget {
   /// Só pra [BoldButtonVariant.destructive]: pill vermelho sólido em vez de link.
   final bool filled;
 
+  /// Estado de erro (portado do DS CPF Seguro): adota a paleta destrutiva na
+  /// própria ação, independente do [variant] — ex.: retry de operação falha.
+  final bool error;
+
   bool get _disabled => onPressed == null && !loading;
 
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
     final spec = _spec(size);
+    if (error) {
+      // Variantes "de peso" viram pill vermelho; text/secondary viram link vermelho.
+      return (variant == BoldButtonVariant.text ||
+              variant == BoldButtonVariant.secondary)
+          ? _link(c.danger, spec)
+          : _solid(c.danger, spec, c);
+    }
     switch (variant) {
       case BoldButtonVariant.primary:
         // Cor principal SÓLIDA (papel mode-aware: dark=primary04, light=primary03)

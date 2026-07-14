@@ -69,6 +69,12 @@ export 'widgets/bold_navigation_button.dart'; // BoldNavigationButton, BoldNavAc
 export 'widgets/bold_card.dart';           // BoldCard, BoldIconChip, BoldCardSurface
 export 'widgets/bold_list.dart';           // BoldSpotIcon, BoldListTile, BoldListGroup
 export 'widgets/bold_app_list.dart';       // BoldAppList + Left/Middle/RightAccessory (sealed)
+export 'widgets/bold_amount_display.dart'; // BoldAmountDisplay (valor entre hairlines) — CPF Seguro
+export 'widgets/bold_detail_row.dart';     // BoldDetailRow (título/descrição + hairline) — CPF Seguro
+export 'widgets/bold_receipt.dart';        // BoldReceipt + Row/Section (comprovante) — CPF Seguro
+export 'widgets/bold_progress_bar.dart';   // BoldProgressBar (trilho h5 + caption) — CPF Seguro
+export 'widgets/bold_radio_list.dart';     // BoldRadioList + BoldRadioOption — CPF Seguro
+export 'widgets/bold_tooltip.dart';        // BoldTooltip (label flutuante + tail) — CPF Seguro
 export 'widgets/bold_quick_card.dart';     // BoldMenuTile
 export 'widgets/bold_avatar_stack.dart';   // BoldAvatarStack
 export 'widgets/bold_avatar_row.dart';     // BoldAvatarRow (Enviar para)

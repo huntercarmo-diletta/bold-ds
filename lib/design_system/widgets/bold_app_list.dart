@@ -226,6 +226,46 @@ sealed class BoldMiddleAccessory extends StatelessWidget {
     bool disabled,
   }) = _MiddleTitleSubTag;
 
+  /// Só subtítulo/body (sem título). Portado do DS CPF Seguro.
+  const factory BoldMiddleAccessory.subtitle({
+    Key? key,
+    required String subtitle,
+    bool disabled,
+  }) = _MiddleSubtitle;
+
+  /// Título + body + label (rodapé). Portado do DS CPF Seguro.
+  const factory BoldMiddleAccessory.titleBodyLabel({
+    Key? key,
+    required String title,
+    String? body,
+    String? label,
+    bool disabled,
+  }) = _MiddleTitleBodyLabel;
+
+  /// 2 colunas: (título/subtítulo) esq · (accessoryTitle + tag) dir. Portado
+  /// do DS CPF Seguro — rows de extrato/status com valor à direita.
+  const factory BoldMiddleAccessory.titleSubtitleAtitleTag({
+    Key? key,
+    required String title,
+    String? subtitle,
+    required String accessoryTitle,
+    required String tagLabel,
+    required BoldStatusTone tagTone,
+    String? tagIcon,
+    bool disabled,
+  }) = _MiddleTitleSubAtitleTag;
+
+  /// 2 colunas: (título/subtítulo) esq · (accessoryTitle/accessorySubtitle)
+  /// dir. Portado do DS CPF Seguro.
+  const factory BoldMiddleAccessory.titleSubtitleAtitleAsubtitle({
+    Key? key,
+    required String title,
+    String? subtitle,
+    required String accessoryTitle,
+    String? accessorySubtitle,
+    bool disabled,
+  }) = _MiddleTitleSubAtitleAsub;
+
   const factory BoldMiddleAccessory.custom({
     Key? key,
     required Widget child,
@@ -387,6 +427,160 @@ class _MiddleTitleSubTag extends BoldMiddleAccessory {
   }
 }
 
+class _MiddleSubtitle extends BoldMiddleAccessory {
+  const _MiddleSubtitle({super.key, required this.subtitle, this.disabled = false});
+  final String subtitle;
+  final bool disabled;
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis,
+          style: _mSub(c, disabled)),
+    );
+  }
+}
+
+class _MiddleTitleBodyLabel extends BoldMiddleAccessory {
+  const _MiddleTitleBodyLabel({
+    super.key,
+    required this.title,
+    this.body,
+    this.label,
+    this.disabled = false,
+  });
+  final String title;
+  final String? body;
+  final String? label;
+  final bool disabled;
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,
+            style: _mTitle(c, disabled)),
+        if (body != null) ...[
+          const SizedBox(height: 2),
+          Text(body!, maxLines: 1, overflow: TextOverflow.ellipsis,
+              style: _mSub(c, disabled)),
+        ],
+        if (label != null) ...[
+          const SizedBox(height: 2),
+          Text(label!, maxLines: 1, overflow: TextOverflow.ellipsis,
+              style: _mEyebrow(c)),
+        ],
+      ],
+    );
+  }
+}
+
+class _MiddleTitleSubAtitleTag extends BoldMiddleAccessory {
+  const _MiddleTitleSubAtitleTag({
+    super.key,
+    required this.title,
+    this.subtitle,
+    required this.accessoryTitle,
+    required this.tagLabel,
+    required this.tagTone,
+    this.tagIcon,
+    this.disabled = false,
+  });
+  final String title;
+  final String? subtitle;
+  final String accessoryTitle;
+  final String tagLabel;
+  final BoldStatusTone tagTone;
+  final String? tagIcon;
+  final bool disabled;
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Expanded(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,
+                style: _mTitle(c, disabled)),
+            if (subtitle != null) ...[
+              const SizedBox(height: 2),
+              Text(subtitle!, maxLines: 1, overflow: TextOverflow.ellipsis,
+                  style: _mSub(c, disabled)),
+            ],
+          ],
+        ),
+      ),
+      const SizedBox(width: 12),
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(accessoryTitle, maxLines: 1, overflow: TextOverflow.ellipsis,
+              style: _mTitle(c, disabled)),
+          const SizedBox(height: 2),
+          BoldStatusTag(label: tagLabel, tone: tagTone, icon: tagIcon),
+        ],
+      ),
+    ]);
+  }
+}
+
+class _MiddleTitleSubAtitleAsub extends BoldMiddleAccessory {
+  const _MiddleTitleSubAtitleAsub({
+    super.key,
+    required this.title,
+    this.subtitle,
+    required this.accessoryTitle,
+    this.accessorySubtitle,
+    this.disabled = false,
+  });
+  final String title;
+  final String? subtitle;
+  final String accessoryTitle;
+  final String? accessorySubtitle;
+  final bool disabled;
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      Expanded(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,
+                style: _mTitle(c, disabled)),
+            if (subtitle != null) ...[
+              const SizedBox(height: 2),
+              Text(subtitle!, maxLines: 1, overflow: TextOverflow.ellipsis,
+                  style: _mSub(c, disabled)),
+            ],
+          ],
+        ),
+      ),
+      const SizedBox(width: 12),
+      Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(accessoryTitle, maxLines: 1, overflow: TextOverflow.ellipsis,
+              style: _mTitle(c, disabled)),
+          if (accessorySubtitle != null) ...[
+            const SizedBox(height: 2),
+            Text(accessorySubtitle!, maxLines: 1, overflow: TextOverflow.ellipsis,
+                style: _mSub(c, disabled)),
+          ],
+        ],
+      ),
+    ]);
+  }
+}
+
 class _MiddleCustom extends BoldMiddleAccessory {
   const _MiddleCustom({super.key, required this.child});
   final Widget child;
@@ -425,6 +619,15 @@ sealed class BoldRightAccessory extends StatelessWidget {
     required String value,
     bool negative,
   }) = _RightAmount;
+
+  /// Valor num chip (pill): ícone opcional + valor. Portado do DS CPF Seguro —
+  /// crédito destacado no extrato/atividade.
+  const factory BoldRightAccessory.amountChip({
+    Key? key,
+    required String amount,
+    String? icon,
+    BoldStatusTone tone,
+  }) = _RightAmountChip;
 
   const factory BoldRightAccessory.time({Key? key, required String time}) =
       _RightTime;
@@ -505,6 +708,21 @@ class _RightAmount extends BoldRightAccessory {
   @override
   Widget build(BuildContext context) =>
       BoldListAmount(value, negative: negative);
+}
+
+class _RightAmountChip extends BoldRightAccessory {
+  const _RightAmountChip({
+    super.key,
+    required this.amount,
+    this.icon,
+    this.tone = BoldStatusTone.neutral,
+  });
+  final String amount;
+  final String? icon;
+  final BoldStatusTone tone;
+  @override
+  Widget build(BuildContext context) =>
+      BoldStatusTag(label: amount, tone: tone, icon: icon);
 }
 
 class _RightTime extends BoldRightAccessory {
@@ -595,6 +813,8 @@ class BoldAppList extends StatelessWidget {
     this.right,
     this.footer,
     this.onTap,
+    this.background,
+    this.radius,
   });
 
   /// Row estilo **menu** — spot outline primary + title/subtitle + chevron.
@@ -666,6 +886,25 @@ class BoldAppList extends StatelessWidget {
         right: BoldRightAccessory.amount(value: amount, negative: negative),
       );
 
+  /// Row standalone estilo **banner de perfil** — avatar + nome/subtítulo,
+  /// fundo primary wash arredondado. Portado do DS CPF Seguro.
+  factory BoldAppList.profileBanner({
+    Key? key,
+    required String initials,
+    required String name,
+    String? subtitle,
+    VoidCallback? onTap,
+  }) =>
+      BoldAppList(
+        key: key,
+        onTap: onTap,
+        background: BoldColors.primary08,
+        radius: 24,
+        left: BoldLeftAccessory.avatar(initials: initials),
+        middle:
+            BoldMiddleAccessory.titleSubtitle(title: name, subtitle: subtitle),
+      );
+
   final BoldLeftAccessory? left;
   final BoldMiddleAccessory? middle;
   final BoldRightAccessory? right;
@@ -674,10 +913,27 @@ class BoldAppList extends StatelessWidget {
   final Widget? footer;
   final VoidCallback? onTap;
 
+  /// Fundo da row (standalone). Default null = transparente. Não usar dentro de
+  /// [BoldAppListGroup] (o group já dá o card).
+  final Color? background;
+
+  /// Radius da row (standalone com [background]). Default null = 0.
+  final double? radius;
+
   @override
   Widget build(BuildContext context) {
-    Widget content = Padding(
-      padding: const EdgeInsets.symmetric(vertical: BoldSpace.x3),
+    // Standalone com fundo/radius (ex.: profileBanner) ganha padding horizontal;
+    // dentro de um group, transparente e sem radius (o group já dá o card).
+    final decorated = background != null || radius != null;
+    Widget content = Container(
+      padding: EdgeInsets.symmetric(
+          horizontal: decorated ? BoldSpace.x4 : 0, vertical: BoldSpace.x3),
+      decoration: decorated
+          ? BoxDecoration(
+              color: background,
+              borderRadius: BorderRadius.circular(radius ?? 0),
+            )
+          : null,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
