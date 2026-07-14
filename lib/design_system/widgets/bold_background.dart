@@ -11,6 +11,10 @@ enum BoldBackdrop {
   /// City image + wash + brand glow. The most literal "glass". DEFAULT.
   image,
 
+  /// Cor SÓLIDA plana ([BoldScheme.secondaryFlow]) + glow sutil — backdrop dos
+  /// FLUXOS SECUNDÁRIOS (telas empurradas: Área Pix, Segurança, Configurações…).
+  solid,
+
   /// One soft pink glow on a clean base. Minimal / elegant.
   brilhoRosa,
 
@@ -62,8 +66,11 @@ class BoldBackground extends StatelessWidget {
     final c = BoldColors.of(context);
     // Explícito > personalização do app (scope) > default imagem.
     final backdrop = style ?? BoldBackdropScope.of(context) ?? BoldBackdrop.image;
+    // O backdrop sólido pinta a própria cor de base (fluxos secundários).
+    final base =
+        backdrop == BoldBackdrop.solid ? c.secondaryFlow : c.background;
     return Container(
-      color: c.background,
+      color: base,
       child: Stack(children: [
         ..._layers(c, backdrop),
         child,
@@ -77,6 +84,9 @@ class BoldBackground extends StatelessWidget {
     switch (style) {
       case BoldBackdrop.image:
         return _imageLayers(c);
+      case BoldBackdrop.solid:
+        // Cor sólida (pintada pelo container base) + glow sutil da marca.
+        return _solidGlowLayers(c);
       case BoldBackdrop.brilhoRosa:
         return [_glow(const Alignment(0, -1), 1.15, _pink.withValues(alpha: .34 * k))];
       case BoldBackdrop.vidroFrio:
@@ -161,6 +171,52 @@ class BoldBackground extends StatelessWidget {
           ),
         ),
       );
+
+  // Glows do backdrop SÓLIDO (fluxos secundários): rosa vindo do topo + véu
+  // violeta embaixo, bem discretos — a base wine-ink já carrega a marca.
+  List<Widget> _solidGlowLayers(BoldScheme c) {
+    final k = c.isDark ? 1.0 : 0.7;
+    return [
+      _glow(const Alignment(0.7, -0.95), 1.15, _pink.withValues(alpha: .16 * k)),
+      _glow(const Alignment(-0.85, 1.0), 1.05, _violet.withValues(alpha: .12 * k)),
+    ];
+  }
+}
+
+/// Conta BOLD — Fundo dos FLUXOS SECUNDÁRIOS (fora da navegação inferior).
+/// Sólido [BoldScheme.secondaryFlow] + glow sutil. Sem [child] é uma camada
+/// (`Positioned.fill`, pra usar dentro de um Stack de scaffold/shell); com
+/// [child] vira wrapper de tela inteira.
+class BoldSecondaryBackground extends StatelessWidget {
+  const BoldSecondaryBackground({super.key, this.child});
+
+  final Widget? child;
+
+  @override
+  Widget build(BuildContext context) {
+    if (child == null) {
+      return const Positioned.fill(
+        child: BoldBackground(
+            style: BoldBackdrop.solid, child: SizedBox.expand()),
+      );
+    }
+    return BoldBackground(style: BoldBackdrop.solid, child: child!);
+  }
+}
+
+/// Conta BOLD — Fundo da HOME (skyline + wash + glow), componente semântico
+/// sobre [BoldBackground] com [BoldBackdrop.image].
+class BoldHomeBackground extends StatelessWidget {
+  const BoldHomeBackground({super.key, required this.child});
+
+  final Widget child;
+
+  static Widget statusBarScrim(BuildContext context) =>
+      BoldBackground.statusBarScrim(context);
+
+  @override
+  Widget build(BuildContext context) =>
+      BoldBackground(style: BoldBackdrop.image, child: child);
 }
 
 /// Escopo de personalização do backdrop. Envolva o app (root) com ele — todo

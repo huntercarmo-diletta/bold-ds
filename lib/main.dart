@@ -102,7 +102,7 @@ class _CatalogHomeState extends State<_CatalogHome> {
 // ═══════════════════════════════════════════════════════════════════════════
 // Navegação lateral — Design System + fluxos (agrupados). É o índice do site.
 // ═══════════════════════════════════════════════════════════════════════════
-class _Sidebar extends StatelessWidget {
+class _Sidebar extends StatefulWidget {
   const _Sidebar({
     required this.dest,
     required this.onSelect,
@@ -115,8 +115,26 @@ class _Sidebar extends StatelessWidget {
   final VoidCallback onToggleTheme;
 
   @override
+  State<_Sidebar> createState() => _SidebarState();
+}
+
+class _SidebarState extends State<_Sidebar> {
+  // Accordion FLUXOGRAMAS: começa aberto se já há um fluxo selecionado.
+  late bool _flowsOpen = widget.dest >= 0;
+
+  @override
+  void didUpdateWidget(_Sidebar old) {
+    super.didUpdateWidget(old);
+    // Selecionou um fluxo (ex.: via deep-link) → garante o accordion aberto.
+    if (widget.dest >= 0 && !_flowsOpen) _flowsOpen = true;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
+    final isDark = widget.isDark;
+    final dest = widget.dest;
+    final onSelect = widget.onSelect;
     // Agrupa os fluxos por `group`, preservando a ordem de declaração.
     final groups = <String, List<int>>{};
     for (var i = 0; i < kFlows.length; i++) {
@@ -144,7 +162,7 @@ class _Sidebar extends StatelessWidget {
               icon: isDark ? 'sun' : 'moon',
               semanticLabel: isDark ? 'Modo claro' : 'Modo escuro',
               type: BoldIconButtonType.tertiary,
-              onPressed: onToggleTheme,
+              onPressed: widget.onToggleTheme,
             ),
           ]),
         ),
@@ -158,24 +176,77 @@ class _Sidebar extends StatelessWidget {
                   label: 'Design System',
                   selected: dest == -1,
                   onTap: () => onSelect(-1)),
-              for (final g in groups.entries) ...[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 16, 10, 6),
-                  child: Text(g.key.toUpperCase(),
-                      style: BoldType.labelSm.copyWith(
-                          color: c.textMuted, letterSpacing: 1, fontSize: 10)),
-                ),
-                for (final i in g.value)
-                  _navItem(context,
-                      icon: kFlows[i].icon,
-                      label: kFlows[i].name,
-                      selected: dest == i,
-                      onTap: () => onSelect(i)),
-              ],
+              const SizedBox(height: 6),
+              // Accordion FLUXOGRAMAS — engloba TODOS os fluxos do app,
+              // agrupados por área (Conta, PIX, Pagamentos…) como subgrupos.
+              _accordionHeader(context),
+              if (_flowsOpen)
+                for (final g in groups.entries) ...[
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(18, 12, 10, 6),
+                    child: Text(g.key.toUpperCase(),
+                        style: BoldType.labelSm.copyWith(
+                            color: c.textMuted,
+                            letterSpacing: 1,
+                            fontSize: 10)),
+                  ),
+                  for (final i in g.value)
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8),
+                      child: _navItem(context,
+                          icon: kFlows[i].icon,
+                          label: kFlows[i].name,
+                          selected: dest == i,
+                          onTap: () => onSelect(i)),
+                    ),
+                ],
             ],
           ),
         ),
       ]),
+    );
+  }
+
+  // Cabeçalho do accordion FLUXOGRAMAS: linha clicável que abre/fecha a lista
+  // de fluxos. `_flowsOpen` guarda o estado; a seta vira com AnimatedRotation.
+  Widget _accordionHeader(BuildContext context) {
+    final c = BoldColors.of(context);
+    // Ativo quando aberto OU quando há um fluxo selecionado por baixo.
+    final hasSelectedFlow = widget.dest >= 0;
+    final accent = _flowsOpen || hasSelectedFlow;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Material(
+        color: BoldColors.transparent,
+        borderRadius: BorderRadius.circular(10),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () => setState(() => _flowsOpen = !_flowsOpen),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+            child: Row(children: [
+              BoldIcon('table-tree-light',
+                  size: 18,
+                  color: accent ? BoldColors.primary04 : c.textSecondary),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text('Fluxogramas',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BoldType.labelMd.copyWith(
+                        color: accent ? BoldColors.primary04 : c.textPrimary,
+                        fontWeight: FontWeight.w600)),
+              ),
+              AnimatedRotation(
+                turns: _flowsOpen ? 0 : -0.25,
+                duration: const Duration(milliseconds: 160),
+                child: BoldIcon('chevron-down',
+                    size: 16, color: c.textSecondary),
+              ),
+            ]),
+          ),
+        ),
+      ),
     );
   }
 
