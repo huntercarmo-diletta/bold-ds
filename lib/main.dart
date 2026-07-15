@@ -2900,11 +2900,33 @@ class _IllustrationCard extends StatelessWidget {
         child: SvgPicture.asset(
           'lib/design_system/assets/illustrations/${name}_$theme.svg',
           fit: BoxFit.contain,
+          // Cores da ilustração vêm dos tokens do DS (não do hex do arquivo).
+          colorMapper: const _DsColorMapper(),
         ),
       ),
       const SizedBox(height: 6),
       Text(label, style: BoldType.labelSm.copyWith(color: c.textMuted)),
     ]);
+  }
+}
+
+// Vincula as cores das ilustrações aos tokens do DS: cada hex da família
+// Primary presente no SVG é substituído, no render, pelo `BoldColors.primaryXX`
+// correspondente — o token vira a fonte única (mudou o token, a arte acompanha).
+// O hex no arquivo é só a "chave"; line-art (cinza/preto) e acentos passam direto.
+class _DsColorMapper extends ColorMapper {
+  const _DsColorMapper();
+  @override
+  Color substitute(
+      String? id, String elementName, String attributeName, Color color) {
+    if (color == const Color(0xFF300313)) return BoldColors.primary01;
+    if (color == const Color(0xFF600627)) return BoldColors.primary02;
+    if (color == const Color(0xFFFE3976)) return BoldColors.primary04;
+    if (color == const Color(0xFFF66FA0)) return BoldColors.primary05;
+    if (color == const Color(0xFFFF87AB)) return BoldColors.primary06;
+    if (color == const Color(0xFFFFB6CB)) return BoldColors.primary07;
+    if (color == const Color(0xFFFFF6FA)) return BoldColors.primary09;
+    return color;
   }
 }
 
