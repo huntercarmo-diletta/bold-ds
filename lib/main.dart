@@ -2334,17 +2334,273 @@ class _OverlayDemo extends StatelessWidget {
 // ═══════════════════════════════════════════════════════════════════════════
 // SPECS — tokens em tabela.
 // ═══════════════════════════════════════════════════════════════════════════
-class _SpecsTab extends StatelessWidget {
-  const _SpecsTab();
+// ═══════════════════════════════════════════════════════════════════════════
+// SPEC SHEET — formato "print": cabeçalho (nome + descrição + "compõe:") e
+// corpo (matriz de variações Type × State, ou faixa de eixo único).
+// ═══════════════════════════════════════════════════════════════════════════
+
+/// Ficha de um componente na aba Specs: nome grande, descrição, chips do que o
+/// compõe e o corpo (uma [_VariantMatrix] ou [_VariantStrip]).
+class _ComponentSpec extends StatelessWidget {
+  const _ComponentSpec({
+    required this.title,
+    required this.description,
+    this.composedOf,
+    required this.child,
+  });
+  final String title;
+  final String description;
+  final List<String>? composedOf;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 44),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(title, style: BoldType.headlineSm.copyWith(color: c.textPrimary)),
+        const SizedBox(height: 8),
+        Text(description,
+            style: BoldType.bodySmall
+                .copyWith(color: c.textSecondary, height: 1.45)),
+        if (composedOf != null && composedOf!.isNotEmpty) ...[
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text('compõe:',
+                  style: BoldType.labelSm.copyWith(color: c.textSecondary)),
+              for (final w in composedOf!) _DepChip(name: w),
+            ],
+          ),
+        ],
+        const SizedBox(height: 24),
+        child,
+      ]),
+    );
+  }
+}
+
+/// Matriz rotulada nos dois eixos (linhas × colunas), como o print do SpotIcon.
+/// Caption + rótulos roxos; o grid de hairline envolve só as células. Os
+/// cabeçalhos de coluna e o grid usam a MESMA largura flexível por coluna, então
+/// ficam alinhados; o eixo de linhas ("Type") é uma legenda rotacionada.
+class _VariantMatrix extends StatelessWidget {
+  const _VariantMatrix({
+    required this.rowAxis,
+    required this.rows,
+    required this.colAxis,
+    required this.cols,
+    required this.cell,
+    this.cellHeight = 78,
+  });
+  final String rowAxis;
+  final List<String> rows;
+  final String colAxis;
+  final List<String> cols;
+  final Widget Function(int row, int col) cell;
+  final double cellHeight;
+
+  static const double _labelW = 62; // largura da coluna de rótulos de linha
+  static const double _axisW = 22; // faixa da legenda vertical ("Type")
+  static const double _lead = _labelW + _axisW + 6; // recuo até a 1ª célula
+
+  @override
+  Widget build(BuildContext context) {
+    // Altura fixa do corpo (evita IntrinsicHeight sobre Table flex, que lança):
+    // n células + (n+1) hairlines de 1px.
+    final bodyH = rows.length * cellHeight + (rows.length + 1);
+    final line = BoldColors.infoSoft.withValues(alpha: 0.38);
+    final axis = BoldType.labelSm
+        .copyWith(color: BoldColors.infoSoft, fontWeight: FontWeight.w600);
+    final cap = BoldType.labelSm.copyWith(
+        color: BoldColors.infoSoft,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.4);
+
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      // ── Eixo de colunas: caption "State" + cabeçalhos, alinhados ao grid ──
+      Row(children: [
+        const SizedBox(width: _lead),
+        Expanded(child: Center(child: Text(colAxis, style: cap))),
+      ]),
+      const SizedBox(height: 2),
+      Container(
+        margin: const EdgeInsets.only(left: _lead),
+        height: 1,
+        color: line,
+      ),
+      const SizedBox(height: 4),
+      Row(children: [
+        const SizedBox(width: _lead),
+        for (final h in cols)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+              child: Center(
+                  child: Text(h, textAlign: TextAlign.center, style: axis)),
+            ),
+          ),
+      ]),
+      const SizedBox(height: 2),
+      // ── Corpo: legenda vertical "Type" + rótulos de linha + grid ──────────
+      SizedBox(
+        height: bodyH,
+        child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          SizedBox(
+            width: _axisW,
+            child: Center(
+              child: RotatedBox(
+                  quarterTurns: 3, child: Text(rowAxis, style: cap)),
+            ),
+          ),
+          const SizedBox(width: 6),
+          Column(
+            children: [
+              for (var r = 0; r < rows.length; r++)
+                SizedBox(
+                  width: _labelW,
+                  height: cellHeight + 1, // + hairline entre linhas
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Text(rows[r],
+                          textAlign: TextAlign.right, style: axis),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Table(
+                border: TableBorder.all(color: line, width: 1),
+                defaultColumnWidth: const FlexColumnWidth(),
+                children: [
+                  for (var r = 0; r < rows.length; r++)
+                    TableRow(children: [
+                      for (var col = 0; col < cols.length; col++)
+                        SizedBox(
+                          height: cellHeight,
+                          child: Center(child: cell(r, col)),
+                        ),
+                    ]),
+                ],
+              ),
+            ),
+          ),
+        ]),
+      ),
+    ]);
+  }
+}
+
+/// Faixa de variação de eixo único: células rotuladas embaixo, num Wrap. Para
+/// componentes que variam só numa dimensão (ex.: variantes de botão, tons).
+class _VariantStrip extends StatelessWidget {
+  const _VariantStrip({required this.items, this.cellWidth = 120});
+  final List<(String, Widget)> items;
+  final double cellWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    final line = BoldColors.infoSoft.withValues(alpha: 0.38);
+    final axis = BoldType.labelSm
+        .copyWith(color: BoldColors.infoSoft, fontWeight: FontWeight.w600);
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: [
+        for (final (label, w) in items)
+          SizedBox(
+            width: cellWidth,
+            child: Column(children: [
+              Container(
+                height: 74,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: line, width: 1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(child: w),
+              ),
+              const SizedBox(height: 6),
+              Text(label, textAlign: TextAlign.center, style: axis),
+            ]),
+          ),
+      ],
+    );
+  }
+}
+
+class _SpecsTab extends StatelessWidget {
+  const _SpecsTab();
+
+  // Ícone canônico de demonstração da matriz (glyph de usuário, como o print).
+  static Widget _spot(int row, int col) {
+    final filled = row == 0;
+    return switch (col) {
+      0 => BoldSpotIcon('user-light', filled: filled),
+      1 => BoldSpotIcon('user-light', filled: filled, disabled: true),
+      2 => BoldSpotIcon('user-light',
+          filled: filled, tone: BoldSpotTone.primary),
+      3 => BoldSpotIcon('user-light',
+          filled: filled, tone: BoldSpotTone.danger),
+      4 => BoldSpotIcon('user-light',
+          filled: filled, tone: BoldSpotTone.warning),
+      5 => BoldSpotIcon('user-light',
+          filled: filled, tone: BoldSpotTone.success),
+      6 => BoldSpotIcon('user-light',
+          filled: filled, tone: BoldSpotTone.primary, loading: true),
+      _ => BoldSpotIcon('user-light',
+          filled: filled, tone: BoldSpotTone.secure),
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 560),
+        constraints: const BoxConstraints(maxWidth: 860),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 24, 20, 120),
           children: [
+            // ───────────────────────── COMPONENTES ────────────────────────
+            _ComponentSpec(
+              title: 'SpotIcon',
+              description:
+                  '2 tipos (fill · outline) × 8 estados. Tamanho padrão 34 (mobile), glyph escala pra ~58% do container. Badge é ortogonal — passe direto.',
+              composedOf: const ['BoldIcon', 'Cores'],
+              child: _VariantMatrix(
+                rowAxis: 'Type',
+                rows: const ['fill', 'outline'],
+                colAxis: 'State',
+                cols: const [
+                  'normal',
+                  'disabled',
+                  'primary',
+                  'error',
+                  'warning',
+                  'success',
+                  'loading',
+                  'secure',
+                ],
+                cell: _spot,
+              ),
+            ),
+
+            // ───────────────────────────── TOKENS ─────────────────────────
+            Text('TOKENS',
+                style: BoldType.labelLg
+                    .copyWith(color: c.textPrimary, letterSpacing: 1.2)),
+            const SizedBox(height: 16),
             _SpecTable(title: 'Cor', rows: const [
               ('primary04', '#FE3976'),
               ('accent04', '#FE7B5E'),

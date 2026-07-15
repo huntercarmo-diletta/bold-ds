@@ -16,15 +16,23 @@ export 'bold_status_tag.dart';
 /// [BoldListTimeStatus], [BoldListAmount] ou uma [BoldStatusTag].
 
 /// Tom do [BoldSpotIcon]. Semânticos usam as escalas (wash 07/08 + base 04).
-enum BoldSpotTone { primary, neutral, success, warning, danger }
+/// `secure` = ouro de blindagem (CPF Seguro / selo quântico).
+enum BoldSpotTone { primary, neutral, success, warning, danger, secure }
 
 /// Conta BOLD — SpotIcon (átomo). Ícone circular tonalizado, leading canônico
-/// de lista — também standalone (banners, alertas, KPIs). `filled` inverte:
-/// bg sólido no tom + glyph branco. `badge` = dot de atenção no canto.
+/// de lista — também standalone (banners, alertas, KPIs).
+///
+/// **Eixos ortogonais:**
+/// - `filled` inverte o tipo: `false` = wash tonal + glyph no tom (outline);
+///   `true` = bg sólido no tom base + glyph branco (fill).
+/// - `tone` dá a cor semântica (neutral/primary/success/warning/danger/secure).
+/// - `disabled` neutraliza e rebaixa (não-interativo); `loading` troca o glyph
+///   por um spinner tonal. `badge` = dot de atenção no canto. Todos combináveis.
 ///
 /// ```dart
 /// BoldSpotIcon('pix', tone: BoldSpotTone.primary);
 /// BoldSpotIcon('circle-check-light', tone: BoldSpotTone.success, filled: true);
+/// BoldSpotIcon('shield-user-solid-full', tone: BoldSpotTone.secure, loading: true);
 /// ```
 class BoldSpotIcon extends StatelessWidget {
   const BoldSpotIcon(
@@ -33,6 +41,8 @@ class BoldSpotIcon extends StatelessWidget {
     this.tone = BoldSpotTone.neutral,
     this.filled = false,
     this.badge = false,
+    this.disabled = false,
+    this.loading = false,
     this.size = 38,
   });
 
@@ -45,33 +55,54 @@ class BoldSpotIcon extends StatelessWidget {
 
   /// Dot de atenção (danger) no canto superior direito.
   final bool badge;
+
+  /// Estado não-interativo: neutraliza o tom e rebaixa a opacidade.
+  final bool disabled;
+
+  /// Troca o glyph por um spinner tonal (busy). Mantém o container do tom.
+  final bool loading;
+
   final double size;
 
   @override
   Widget build(BuildContext context) {
-    final s = _spotSpec(tone, filled, BoldColors.of(context).isDark);
-    return Container(
-      width: size,
-      height: size,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(color: s.bg, shape: BoxShape.circle),
-      child: Stack(
-          clipBehavior: Clip.none,
-          alignment: Alignment.center,
-          children: [
-            BoldIcon(icon, size: BoldIconSize.lg, color: s.fg),
-            if (badge)
-              Positioned(
-                top: -1,
-                right: -1,
-                child: Container(
-                  width: 8,
-                  height: 8,
-                  decoration: const BoxDecoration(
-                      color: BoldColors.danger, shape: BoxShape.circle),
+    final isDark = BoldColors.of(context).isDark;
+    final s = disabled
+        ? _spotDisabled(filled, isDark)
+        : _spotSpec(tone, filled, isDark);
+    return Opacity(
+      opacity: disabled ? 0.55 : 1.0,
+      child: Container(
+        width: size,
+        height: size,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(color: s.bg, shape: BoxShape.circle),
+        child: Stack(
+            clipBehavior: Clip.none,
+            alignment: Alignment.center,
+            children: [
+              if (loading)
+                SizedBox(
+                  width: size * 0.42,
+                  height: size * 0.42,
+                  child: CircularProgressIndicator(
+                      strokeWidth: 2, color: s.fg),
+                )
+              else
+                BoldIcon(icon, size: BoldIconSize.lg, color: s.fg),
+              if (badge)
+                Positioned(
+                  top: -1,
+                  right: -1,
+                  child: Container(
+                    width: 8,
+                    height: 8,
+                    decoration: const BoxDecoration(
+                        color: BoldColors.danger, shape: BoxShape.circle),
+                  ),
                 ),
-              ),
-          ]),
+            ]),
+      ),
     );
   }
 }
@@ -80,6 +111,18 @@ class _SpotSpec {
   const _SpotSpec(this.bg, this.fg);
   final Color bg;
   final Color fg;
+}
+
+/// Estado desabilitado: neutro rebaixado, independente do tom.
+_SpotSpec _spotDisabled(bool filled, bool isDark) {
+  if (filled) {
+    return isDark
+        ? const _SpotSpec(BoldColors.neutral02, BoldColors.neutral05)
+        : const _SpotSpec(BoldColors.neutral08, BoldColors.neutral05);
+  }
+  return isDark
+      ? _SpotSpec(BoldColors.white.withValues(alpha: 0.06), BoldColors.neutral04)
+      : const _SpotSpec(BoldColors.neutral10, BoldColors.neutral06);
 }
 
 _SpotSpec _spotSpec(BoldSpotTone tone, bool filled, bool isDark) {
@@ -98,6 +141,8 @@ _SpotSpec _spotSpec(BoldSpotTone tone, bool filled, bool isDark) {
         const _SpotSpec(BoldColors.warning04, BoldColors.white),
       BoldSpotTone.danger =>
         const _SpotSpec(BoldColors.error04, BoldColors.white),
+      BoldSpotTone.secure =>
+        const _SpotSpec(BoldColors.secure04, BoldColors.white),
     };
   }
   // Não-filled = wash tonal. No dark os washes claros (07/08) viram borrões
@@ -115,6 +160,8 @@ _SpotSpec _spotSpec(BoldSpotTone tone, bool filled, bool isDark) {
           BoldColors.warning04.withValues(alpha: 0.20), BoldColors.warning05),
       BoldSpotTone.danger => _SpotSpec(
           BoldColors.error04.withValues(alpha: 0.20), BoldColors.error05),
+      BoldSpotTone.secure => _SpotSpec(
+          BoldColors.secure04.withValues(alpha: 0.20), BoldColors.secure05),
     };
   }
   return switch (tone) {
@@ -128,6 +175,8 @@ _SpotSpec _spotSpec(BoldSpotTone tone, bool filled, bool isDark) {
       const _SpotSpec(BoldColors.warning07, BoldColors.warning03),
     BoldSpotTone.danger =>
       const _SpotSpec(BoldColors.error07, BoldColors.error03),
+    BoldSpotTone.secure =>
+      const _SpotSpec(BoldColors.secure07, BoldColors.secure03),
   };
 }
 
