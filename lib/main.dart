@@ -196,24 +196,27 @@ class _SidebarState extends State<_Sidebar> {
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 10),
               children: [
+                // No rail, cada seção é UM ícone (não explode os subitens):
+                // Design System vai direto pra visão geral; Fluxogramas (sem
+                // página índice) reabre o menu com o accordion de fluxos.
                 _railItem(context,
                     icon: 'puzzle-light',
                     tooltip: 'Design System',
                     selected: dest == -1,
                     onTap: () => onSelectTier(null)),
-                for (final g in groups.entries) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 8),
-                    child: Divider(height: 1, color: c.border),
-                  ),
-                  for (final i in g.value)
-                    _railItem(context,
-                        icon: kFlows[i].icon,
-                        tooltip: '${g.key} · ${kFlows[i].name}',
-                        selected: dest == i,
-                        onTap: () => onSelect(i)),
-                ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14, vertical: 8),
+                  child: Divider(height: 1, color: c.border),
+                ),
+                _railItem(context,
+                    icon: 'table-tree-light',
+                    tooltip: 'Fluxogramas',
+                    selected: dest >= 0,
+                    onTap: () => setState(() {
+                          _collapsed = false;
+                          _flowsOpen = true;
+                        })),
               ],
             ),
           ),
