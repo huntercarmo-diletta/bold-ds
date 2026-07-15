@@ -1594,6 +1594,19 @@ class _PreviewTab extends StatelessWidget {
   // Camada em foco; null = mostra tudo (visão geral).
   final _DsTier? tier;
 
+  // Intercala um divider entre duas seções consecutivas. Não insere depois de
+  // um _TierHeader (o cabeçalho já delimita o início da camada).
+  static List<Widget> _sep(List<Widget> items) {
+    final out = <Widget>[];
+    for (final w in items) {
+      if (w is _Section && out.isNotEmpty && out.last is _Section) {
+        out.add(const _SectionDivider());
+      }
+      out.add(w);
+    }
+    return out;
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = tier;
@@ -2159,12 +2172,13 @@ class _PreviewTab extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(20, 24, 20, 120),
           children: [
             // Visão geral (tier null) mostra a intro + todas as camadas em
-            // ordem; uma camada selecionada mostra só as seções dela.
+            // ordem; uma camada selecionada mostra só as seções dela. `_sep`
+            // intercala um divider entre seções consecutivas (não após header).
             if (t == null) const _Intro(),
-            if (t == null || t == _DsTier.tokens) ...tokens,
-            if (t == null || t == _DsTier.atoms) ...atoms,
-            if (t == null || t == _DsTier.molecules) ...molecules,
-            if (t == null || t == _DsTier.organisms) ...organisms,
+            if (t == null || t == _DsTier.tokens) ..._sep(tokens),
+            if (t == null || t == _DsTier.atoms) ..._sep(atoms),
+            if (t == null || t == _DsTier.molecules) ..._sep(molecules),
+            if (t == null || t == _DsTier.organisms) ..._sep(organisms),
           ],
         ),
       ),
@@ -2219,6 +2233,20 @@ class _TierHeader extends StatelessWidget {
         Text(description,
             style: BoldType.bodySmall.copyWith(color: c.textMuted)),
       ]),
+    );
+  }
+}
+
+// Hairline entre seções de componente. O espaçamento em cima casa com o
+// `top: 28` de _Section, deixando o divider centrado no vão entre elementos.
+class _SectionDivider extends StatelessWidget {
+  const _SectionDivider();
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(top: 28),
+      child: Divider(height: 1, thickness: 1, color: c.border),
     );
   }
 }
