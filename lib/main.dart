@@ -1905,6 +1905,62 @@ class _PreviewTab extends StatelessWidget {
                         ),
                       ]);
                 }),
+            _Section(
+                title: 'Resumo de transação (BoldTransactionSummary)',
+                composedOf: const [
+                  'BoldTopBar',
+                  'BoldSpotIcon',
+                  'BoldAppList',
+                  'BoldSectionHeader',
+                  'BoldBottomApp'
+                ],
+                builder: (_) => ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: SizedBox(
+                        height: 720,
+                        child: BoldTransactionSummary(
+                          title: 'Pix enviado',
+                          amountText: 'R\$ 35,00',
+                          subtitle: '23 de fevereiro de 2025 · 18:09',
+                          sections: [
+                            BoldSummarySection(label: 'Para', rows: [
+                              BoldSummaryRow(
+                                left: BoldLeftAccessory.custom(
+                                    child: const BoldGlassAvatar(
+                                        initial: 'CR',
+                                        size: 40,
+                                        fontSize: 15)),
+                                title: 'Carlos Roberto',
+                                subtitle: '***.456.567-**',
+                              ),
+                              const BoldSummaryRow(
+                                left: BoldLeftAccessory.spotIcon(
+                                    icon: 'bank', tone: BoldSpotTone.neutral),
+                                title: 'Banco',
+                                subtitle: '014 - Santander Brasil S.A.',
+                              ),
+                            ]),
+                            const BoldSummarySection(label: 'Detalhes', rows: [
+                              BoldSummaryRow(
+                                left: BoldLeftAccessory.spotIcon(
+                                    icon: 'note-light-full',
+                                    tone: BoldSpotTone.neutral),
+                                title: 'Descrição',
+                                subtitle: 'Uber de hoje',
+                              ),
+                            ]),
+                          ],
+                          helpActions: [
+                            BoldSummaryAction(
+                                icon: 'messages-question-light-full',
+                                title: 'Contestar transação',
+                                onTap: () {}),
+                          ],
+                          onBack: () {},
+                          onPrimary: () {},
+                        ),
+                      ),
+                    )),
           ],
         ),
       ),
