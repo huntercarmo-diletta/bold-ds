@@ -2167,9 +2167,9 @@ class _PreviewTab extends StatelessWidget {
     ];
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 460),
+        constraints: const BoxConstraints(maxWidth: 760),
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 24, 20, 120),
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
           children: [
             // Visão geral (tier null) mostra a intro + todas as camadas em
             // ordem; uma camada selecionada mostra só as seções dela. `_sep`
@@ -2667,9 +2667,9 @@ class _SpecsTab extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 560),
+        constraints: const BoxConstraints(maxWidth: 760),
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 24, 20, 120),
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
           children: [
             _SpecTable(title: 'Cor', rows: const [
               ('primary04', '#FE3976'),
