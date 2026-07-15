@@ -1867,6 +1867,44 @@ class _PreviewTab extends StatelessWidget {
                         transactionId: 'E1898765420260714153210abc',
                       ),
                     )),
+            _Section(
+                title: 'Limites (App list · valueAction)',
+                composedOf: const [
+                  'BoldAppList',
+                  'BoldRightAccessory.valueAction',
+                  'BoldIcon',
+                  'Tipografia'
+                ],
+                builder: (context) {
+                  final c = BoldColors.of(context);
+                  return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(children: [
+                          BoldIcon('pix', size: 20, color: c.textPrimary),
+                          const SizedBox(width: 8),
+                          Text('Pix',
+                              style: BoldType.title
+                                  .copyWith(color: c.textPrimary)),
+                        ]),
+                        const SizedBox(height: 8),
+                        Divider(height: 1, color: c.border),
+                        BoldAppList(
+                          middle:
+                              const BoldMiddleAccessory.title(title: 'Diário'),
+                          right: const BoldRightAccessory.valueAction(
+                              value: 'R\$ 2.500,00'),
+                          onTap: () {},
+                        ),
+                        BoldAppList(
+                          middle:
+                              const BoldMiddleAccessory.title(title: 'Noturno'),
+                          right: const BoldRightAccessory.valueAction(
+                              value: 'R\$ 2.500,00'),
+                          onTap: () {},
+                        ),
+                      ]);
+                }),
           ],
         ),
       ),

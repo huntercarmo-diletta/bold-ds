@@ -620,6 +620,13 @@ sealed class BoldRightAccessory extends StatelessWidget {
     bool negative,
   }) = _RightAmount;
 
+  /// Valor (texto) + chevron — linha que abre pra editar (ex.: Meus Limites,
+  /// configurações com valor atual). Combina [amount] read-only com [action].
+  const factory BoldRightAccessory.valueAction({
+    Key? key,
+    required String value,
+  }) = _RightValueAction;
+
   /// Valor num chip (pill): ícone opcional + valor. Portado do DS CPF Seguro —
   /// crédito destacado no extrato/atividade.
   const factory BoldRightAccessory.amountChip({
@@ -708,6 +715,20 @@ class _RightAmount extends BoldRightAccessory {
   @override
   Widget build(BuildContext context) =>
       BoldListAmount(value, negative: negative);
+}
+
+class _RightValueAction extends BoldRightAccessory {
+  const _RightValueAction({super.key, required this.value});
+  final String value;
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Row(mainAxisSize: MainAxisSize.min, children: [
+      Text(value, style: BoldType.labelMd.copyWith(color: c.textPrimary)),
+      const SizedBox(width: 6),
+      BoldIcon('chevron-right', size: BoldIconSize.md, color: c.textMuted),
+    ]);
+  }
 }
 
 class _RightAmountChip extends BoldRightAccessory {
