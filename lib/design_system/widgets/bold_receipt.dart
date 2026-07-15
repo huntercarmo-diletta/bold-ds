@@ -131,7 +131,8 @@ class BoldReceipt extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(row.label, style: BoldType.bodySm.copyWith(color: c.textMuted)),
+          Text(row.label,
+              style: BoldType.bodySm.copyWith(color: c.textSecondary)),
           const SizedBox(width: 16),
           Expanded(
             child: Text(row.value,

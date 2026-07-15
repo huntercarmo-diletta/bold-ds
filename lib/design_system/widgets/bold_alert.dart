@@ -59,6 +59,33 @@ _IntentSpec _spec(BoldIntent intent) => switch (intent) {
           BoldColors.primary07),
     };
 
+// Spec do TOAST — espelha 1:1 o CpfSeguroToast: glyphs check/xmark/triangle/
+// hand-wave, spot filled 34, radius 8, e o estado neutro (info) em neutral10/08
+// (o CPF não tem toast rosa/primary). Separado do _spec do BoldAlert de propósito
+// (o alert inline mantém o visual próprio).
+class _ToastSpec {
+  const _ToastSpec(this.glyph, this.tone, this.bg, this.border);
+  final String glyph;
+  final BoldSpotTone tone;
+  final Color bg;
+  final Color border;
+}
+
+_ToastSpec _toastSpec(BoldIntent intent) => switch (intent) {
+      BoldIntent.success => const _ToastSpec('check-light',
+          BoldSpotTone.success, BoldColors.success07Alpha70, BoldColors.success06),
+      BoldIntent.error => const _ToastSpec('xmark-light', BoldSpotTone.danger,
+          BoldColors.error07Alpha70, BoldColors.error06),
+      // 'triangle-exclamation-light 1' = asset com nome vindo do import (espaço).
+      BoldIntent.warning => const _ToastSpec(
+          'triangle-exclamation-light 1',
+          BoldSpotTone.warning,
+          BoldColors.warning07Alpha70,
+          BoldColors.warning06),
+      BoldIntent.info => const _ToastSpec('hand-wave-light',
+          BoldSpotTone.neutral, BoldColors.neutral10Alpha70, BoldColors.neutral08),
+    };
+
 class BoldAlert extends StatelessWidget {
   const BoldAlert({
     super.key,
@@ -216,12 +243,13 @@ class _BoldToastViewState extends State<_BoldToastView>
 
   @override
   Widget build(BuildContext context) {
-    final s = _spec(widget.intent);
+    final s = _toastSpec(widget.intent);
     final safeTop = MediaQuery.of(context).padding.top;
-    // Espelha o toast do CPF Seguro: vidro semântico por estado (wash 07 @70% +
-    // border 06 + spot no tom), blur 10, título + subtítulo. No TOPO.
+    // Espelha 1:1 o toast do CPF Seguro: vidro semântico (wash 07 @70% + border
+    // 06, neutro no info), blur 10, spot filled 34, radius 8, sombra soft. No TOPO.
+    const radius = BorderRadius.all(Radius.circular(8));
     final toast = ClipRRect(
-      borderRadius: BoldRadius.chipR,
+      borderRadius: radius,
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
         child: Semantics(
@@ -230,7 +258,7 @@ class _BoldToastViewState extends State<_BoldToastView>
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: s.bg,
-              borderRadius: BoldRadius.chipR,
+              borderRadius: radius,
               border: Border.all(color: s.border, width: 1),
               boxShadow: const [
                 BoxShadow(
@@ -244,7 +272,7 @@ class _BoldToastViewState extends State<_BoldToastView>
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  BoldSpotIcon(s.glyph, tone: s.tone, filled: true, size: 28),
+                  BoldSpotIcon(s.glyph, tone: s.tone, filled: true, size: 34),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(

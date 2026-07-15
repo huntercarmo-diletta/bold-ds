@@ -51,6 +51,18 @@ class _BoldCatalogAppState extends State<BoldCatalogApp> {
 
 enum _Tab { preview, specs }
 
+// Camadas do catálogo (atomic design) — viram subitens da aba Design System.
+enum _DsTier { tokens, atoms, molecules, organisms }
+
+extension _DsTierX on _DsTier {
+  String get label => switch (this) {
+        _DsTier.tokens => 'Tokens',
+        _DsTier.atoms => 'Átomos',
+        _DsTier.molecules => 'Moléculas',
+        _DsTier.organisms => 'Organismos',
+      };
+}
+
 class _CatalogHome extends StatefulWidget {
   const _CatalogHome({required this.mode, required this.onMode});
   final ThemeMode mode;
@@ -64,6 +76,8 @@ class _CatalogHomeState extends State<_CatalogHome> {
   // 0.. = índice do fluxo em [kFlows].
   int _dest = -1;
   _Tab _dsTab = _Tab.preview;
+  // Camada do Design System em foco no preview; null = visão geral (tudo).
+  _DsTier? _dsTier;
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +94,12 @@ class _CatalogHomeState extends State<_CatalogHome> {
             _Sidebar(
               dest: _dest,
               onSelect: (d) => setState(() => _dest = d),
+              dsTier: _dsTier,
+              onSelectTier: (t) => setState(() {
+                _dest = -1;
+                _dsTab = _Tab.preview;
+                _dsTier = t;
+              }),
               isDark: c.isDark,
               onToggleTheme: () =>
                   widget.onMode(c.isDark ? ThemeMode.light : ThemeMode.dark),
@@ -89,6 +109,7 @@ class _CatalogHomeState extends State<_CatalogHome> {
                   ? _DesignSystemView(
                       tab: _dsTab,
                       onTab: (t) => setState(() => _dsTab = t),
+                      tier: _dsTier,
                     )
                   : _FlowchartView(flow: kFlows[_dest]),
             ),
@@ -106,11 +127,15 @@ class _Sidebar extends StatefulWidget {
   const _Sidebar({
     required this.dest,
     required this.onSelect,
+    required this.dsTier,
+    required this.onSelectTier,
     required this.isDark,
     required this.onToggleTheme,
   });
   final int dest;
   final ValueChanged<int> onSelect;
+  final _DsTier? dsTier;
+  final ValueChanged<_DsTier?> onSelectTier;
   final bool isDark;
   final VoidCallback onToggleTheme;
 
@@ -119,6 +144,8 @@ class _Sidebar extends StatefulWidget {
 }
 
 class _SidebarState extends State<_Sidebar> {
+  // Accordion DESIGN SYSTEM: começa aberto quando o DS está em foco (dest -1).
+  late bool _dsOpen = widget.dest < 0;
   // Accordion FLUXOGRAMAS: começa aberto se já há um fluxo selecionado.
   late bool _flowsOpen = widget.dest >= 0;
   // Barra lateral retrátil: recolhida vira uma faixa estreita só com o botão
@@ -138,6 +165,8 @@ class _SidebarState extends State<_Sidebar> {
     final isDark = widget.isDark;
     final dest = widget.dest;
     final onSelect = widget.onSelect;
+    final dsTier = widget.dsTier;
+    final onSelectTier = widget.onSelectTier;
     // Agrupa os fluxos por `group`, preservando a ordem de declaração.
     final groups = <String, List<int>>{};
     for (var i = 0; i < kFlows.length; i++) {
@@ -167,24 +196,27 @@ class _SidebarState extends State<_Sidebar> {
             child: ListView(
               padding: const EdgeInsets.symmetric(vertical: 10),
               children: [
+                // No rail, cada seção é UM ícone (não explode os subitens):
+                // Design System vai direto pra visão geral; Fluxogramas (sem
+                // página índice) reabre o menu com o accordion de fluxos.
                 _railItem(context,
                     icon: 'puzzle-light',
                     tooltip: 'Design System',
                     selected: dest == -1,
-                    onTap: () => onSelect(-1)),
-                for (final g in groups.entries) ...[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 14, vertical: 8),
-                    child: Divider(height: 1, color: c.border),
-                  ),
-                  for (final i in g.value)
-                    _railItem(context,
-                        icon: kFlows[i].icon,
-                        tooltip: '${g.key} · ${kFlows[i].name}',
-                        selected: dest == i,
-                        onTap: () => onSelect(i)),
-                ],
+                    onTap: () => onSelectTier(null)),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14, vertical: 8),
+                  child: Divider(height: 1, color: c.border),
+                ),
+                _railItem(context,
+                    icon: 'table-tree-light',
+                    tooltip: 'Fluxogramas',
+                    selected: dest >= 0,
+                    onTap: () => setState(() {
+                          _collapsed = false;
+                          _flowsOpen = true;
+                        })),
               ],
             ),
           ),
@@ -237,11 +269,26 @@ class _SidebarState extends State<_Sidebar> {
           child: ListView(
             padding: const EdgeInsets.fromLTRB(12, 12, 12, 28),
             children: [
-              _navItem(context,
-                  icon: 'puzzle-light',
-                  label: 'Design System',
-                  selected: dest == -1,
-                  onTap: () => onSelect(-1)),
+              // Accordion DESIGN SYSTEM — camadas do atomic design como
+              // subseções (Visão geral + Tokens/Átomos/Moléculas/Organismos).
+              _dsHeader(context),
+              if (_dsOpen) ...[
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: _subItem(context,
+                      label: 'Visão geral',
+                      selected: dest == -1 && dsTier == null,
+                      onTap: () => onSelectTier(null)),
+                ),
+                for (final ti in _DsTier.values)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8),
+                    child: _subItem(context,
+                        label: ti.label,
+                        selected: dest == -1 && dsTier == ti,
+                        onTap: () => onSelectTier(ti)),
+                  ),
+              ],
               const SizedBox(height: 6),
               // Accordion FLUXOGRAMAS — engloba TODOS os fluxos do app,
               // agrupados por área (Conta, PIX, Pagamentos…) como subgrupos.
@@ -303,6 +350,93 @@ class _SidebarState extends State<_Sidebar> {
                         selected ? BoldColors.primary04 : c.textSecondary),
               ),
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Cabeçalho do accordion DESIGN SYSTEM: abre/fecha as camadas. Fica ativo
+  // (rosa) enquanto o DS está em foco (dest -1).
+  Widget _dsHeader(BuildContext context) {
+    final c = BoldColors.of(context);
+    final active = widget.dest == -1;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Material(
+        color: BoldColors.transparent,
+        borderRadius: BorderRadius.circular(10),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: () => setState(() => _dsOpen = !_dsOpen),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
+            child: Row(children: [
+              BoldIcon('puzzle-light',
+                  size: 18,
+                  color: active ? BoldColors.primary04 : c.textSecondary),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Text('Design System',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BoldType.labelMd.copyWith(
+                        color: active ? BoldColors.primary04 : c.textPrimary,
+                        fontWeight: FontWeight.w600)),
+              ),
+              AnimatedRotation(
+                turns: _dsOpen ? 0 : -0.25,
+                duration: const Duration(milliseconds: 160),
+                child: BoldIcon('chevron-down',
+                    size: 16, color: c.textSecondary),
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Subitem de navegação (camadas do DS): indentado, com um "dot" à esquerda no
+  // lugar do ícone. Destaca em rosa quando selecionado.
+  Widget _subItem(BuildContext context,
+      {required String label,
+      required bool selected,
+      required VoidCallback onTap}) {
+    final c = BoldColors.of(context);
+    final fg = selected ? BoldColors.primary04 : c.textPrimary;
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 2),
+      child: Material(
+        color: selected
+            ? BoldColors.primary04.withValues(alpha: 0.12)
+            : BoldColors.transparent,
+        borderRadius: BorderRadius.circular(10),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(10),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(children: [
+              Container(
+                width: 6,
+                height: 6,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: selected ? BoldColors.primary04 : c.textMuted,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BoldType.labelMd.copyWith(
+                        color: fg,
+                        fontWeight:
+                            selected ? FontWeight.w600 : FontWeight.w500)),
+              ),
+            ]),
           ),
         ),
       ),
@@ -395,13 +529,17 @@ class _SidebarState extends State<_Sidebar> {
 
 // Conteúdo do Design System (Preview / Specs) — o catálogo original.
 class _DesignSystemView extends StatelessWidget {
-  const _DesignSystemView({required this.tab, required this.onTab});
+  const _DesignSystemView(
+      {required this.tab, required this.onTab, required this.tier});
   final _Tab tab;
   final ValueChanged<_Tab> onTab;
+  final _DsTier? tier;
 
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
+    final title =
+        tier == null ? 'Design System' : 'Design System · ${tier!.label}';
     return Column(children: [
       Container(
         padding: const EdgeInsets.fromLTRB(24, 12, 20, 12),
@@ -410,7 +548,7 @@ class _DesignSystemView extends StatelessWidget {
         ),
         child: Row(children: [
           Expanded(
-            child: Text('Design System',
+            child: Text(title,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: BoldType.title.copyWith(color: c.textPrimary)),
@@ -427,7 +565,8 @@ class _DesignSystemView extends StatelessWidget {
         ]),
       ),
       Expanded(
-        child: tab == _Tab.preview ? const _PreviewTab() : const _SpecsTab(),
+        child:
+            tab == _Tab.preview ? _PreviewTab(tier: tier) : const _SpecsTab(),
       ),
     ]);
   }
@@ -1454,18 +1593,27 @@ class _FlowLegend extends StatelessWidget {
 // (widgets + tokens: Cores / Tipografia / Vidro / Gradiente).
 // ═══════════════════════════════════════════════════════════════════════════
 class _PreviewTab extends StatelessWidget {
-  const _PreviewTab();
+  const _PreviewTab({this.tier});
+  // Camada em foco; null = mostra tudo (visão geral).
+  final _DsTier? tier;
+
+  // Intercala um divider entre duas seções consecutivas. Não insere depois de
+  // um _TierHeader (o cabeçalho já delimita o início da camada).
+  static List<Widget> _sep(List<Widget> items) {
+    final out = <Widget>[];
+    for (final w in items) {
+      if (w is _Section && out.isNotEmpty && out.last is _Section) {
+        out.add(const _SectionDivider());
+      }
+      out.add(w);
+    }
+    return out;
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 460),
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 24, 20, 120),
-          children: [
-            const _Intro(),
-
+    final t = tier;
+    final tokens = <Widget>[
             // ───────────────────────── TOKENS ─────────────────────────────
             const _TierHeader(
                 tier: 'TOKENS',
@@ -1489,7 +1637,8 @@ class _PreviewTab extends StatelessWidget {
                 composedOf: const ['Cores', 'Vidro (glass)'],
                 builder: (_) => const _BackdropSample()),
             _Section(title: 'Tipografia', builder: (_) => const _TypeScale()),
-
+    ];
+    final atoms = <Widget>[
             // ───────────────────────── ÁTOMOS ─────────────────────────────
             const _TierHeader(
                 tier: 'ÁTOMOS',
@@ -1636,6 +1785,8 @@ class _PreviewTab extends StatelessWidget {
                     text: '0001 · 1234567-8',
                     semanticLabel: 'Copiar conta',
                     label: 'Conta copiada')),
+    ];
+    final molecules = <Widget>[
             // ──────────────────────── MOLÉCULAS ───────────────────────────
             const _TierHeader(
                 tier: 'MOLÉCULAS',
@@ -2099,6 +2250,8 @@ class _PreviewTab extends StatelessWidget {
                       secondary:
                           BoldNavAction(label: 'Agora não', onPressed: () {}),
                     )),
+    ];
+    final organisms = <Widget>[
             // ─────────────────────── ORGANISMOS ───────────────────────────
             const _TierHeader(
                 tier: 'ORGANISMOS',
@@ -2267,6 +2420,155 @@ class _PreviewTab extends StatelessWidget {
                 builder: (_) => const Center(
                     child: SizedBox(
                         width: 200, height: 200, child: BoldQuantumCore()))),
+            _Section(
+                title: 'Limites (App list · valueAction)',
+                composedOf: const [
+                  'BoldAppList',
+                  'BoldRightAccessory.valueAction',
+                  'BoldIcon',
+                  'Tipografia'
+                ],
+                builder: (context) {
+                  final c = BoldColors.of(context);
+                  return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(children: [
+                          BoldIcon('pix', size: 20, color: c.textPrimary),
+                          const SizedBox(width: 8),
+                          Text('Pix',
+                              style: BoldType.title
+                                  .copyWith(color: c.textPrimary)),
+                        ]),
+                        const SizedBox(height: 8),
+                        Divider(height: 1, color: c.border),
+                        BoldAppList(
+                          middle:
+                              const BoldMiddleAccessory.title(title: 'Diário'),
+                          right: const BoldRightAccessory.valueAction(
+                              value: 'R\$ 2.500,00'),
+                          onTap: () {},
+                        ),
+                        BoldAppList(
+                          middle:
+                              const BoldMiddleAccessory.title(title: 'Noturno'),
+                          right: const BoldRightAccessory.valueAction(
+                              value: 'R\$ 2.500,00'),
+                          onTap: () {},
+                        ),
+                      ]);
+                }),
+            _Section(
+                title: 'Resumo de transação (BoldTransactionSummary)',
+                composedOf: const [
+                  'BoldTopBar',
+                  'BoldSpotIcon',
+                  'BoldAppList',
+                  'BoldSectionHeader',
+                  'BoldBottomApp'
+                ],
+                builder: (_) => ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: SizedBox(
+                        height: 720,
+                        child: BoldTransactionSummary(
+                          title: 'Pix enviado',
+                          amountText: 'R\$ 35,00',
+                          subtitle: '23 de fevereiro de 2025 · 18:09',
+                          sections: [
+                            BoldSummarySection(label: 'Para', rows: [
+                              BoldSummaryRow(
+                                left: BoldLeftAccessory.custom(
+                                    child: const BoldGlassAvatar(
+                                        initial: 'CR',
+                                        size: 40,
+                                        fontSize: 15)),
+                                title: 'Carlos Roberto',
+                                subtitle: '***.456.567-**',
+                              ),
+                              const BoldSummaryRow(
+                                left: BoldLeftAccessory.spotIcon(
+                                    icon: 'bank', tone: BoldSpotTone.neutral),
+                                title: 'Banco',
+                                subtitle: '014 - Santander Brasil S.A.',
+                              ),
+                            ]),
+                            const BoldSummarySection(label: 'Detalhes', rows: [
+                              BoldSummaryRow(
+                                left: BoldLeftAccessory.spotIcon(
+                                    icon: 'note-light-full',
+                                    tone: BoldSpotTone.neutral),
+                                title: 'Descrição',
+                                subtitle: 'Uber de hoje',
+                              ),
+                            ]),
+                          ],
+                          helpActions: [
+                            BoldSummaryAction(
+                                icon: 'messages-question-light-full',
+                                title: 'Contestar transação',
+                                onTap: () {}),
+                          ],
+                          onBack: () {},
+                          onPrimary: () {},
+                        ),
+                      ),
+                    )),
+            _Section(
+                title: 'Amount display (BoldAmountDisplay)',
+                composedOf: const ['Tipografia', 'Hairline'],
+                builder: (_) => const BoldAmountDisplay(
+                      value: 'R\$ 1.234,56',
+                      label: 'Valor',
+                      timestamp: 'Hoje · 14:20',
+                    )),
+            _Section(
+                title: 'Detail row (BoldDetailRow)',
+                composedOf: const ['BoldIcon', 'Tipografia', 'Hairline'],
+                builder: (_) => const BoldDetailRow(
+                      title: 'Chave Pix',
+                      description: 'joao@email.com',
+                      icon: 'key-light',
+                      chevron: true,
+                    )),
+            _Section(
+                title: 'Progress bar (BoldProgressBar)',
+                composedOf: const ['Cor', 'Tipografia'],
+                builder: (_) =>
+                    const BoldProgressBar(value: 0.6, caption: '60% do limite')),
+            _Section(
+                title: 'Radio list (BoldRadioList)',
+                composedOf: const ['BoldIcon', 'Tipografia'],
+                builder: (_) {
+                  var sel = 'pix';
+                  return StatefulBuilder(
+                    builder: (context, setLocal) => BoldRadioList(
+                      title: 'Forma de pagamento',
+                      value: sel,
+                      onChanged: (v) => setLocal(() => sel = v),
+                      options: const [
+                        BoldRadioOption(value: 'pix', label: 'Pix'),
+                        BoldRadioOption(value: 'boleto', label: 'Boleto'),
+                        BoldRadioOption(value: 'cartao', label: 'Cartão'),
+                      ],
+                    ),
+                  );
+                }),
+    ];
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 760),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
+          children: [
+            // Visão geral (tier null) mostra a intro + todas as camadas em
+            // ordem; uma camada selecionada mostra só as seções dela. `_sep`
+            // intercala um divider entre seções consecutivas (não após header).
+            if (t == null) const _Intro(),
+            if (t == null || t == _DsTier.tokens) ..._sep(tokens),
+            if (t == null || t == _DsTier.atoms) ..._sep(atoms),
+            if (t == null || t == _DsTier.molecules) ..._sep(molecules),
+            if (t == null || t == _DsTier.organisms) ..._sep(organisms),
           ],
         ),
       ),
@@ -2321,6 +2623,20 @@ class _TierHeader extends StatelessWidget {
         Text(description,
             style: BoldType.bodySmall.copyWith(color: c.textMuted)),
       ]),
+    );
+  }
+}
+
+// Hairline entre seções de componente. O espaçamento em cima casa com o
+// `top: 28` de _Section, deixando o divider centrado no vão entre elementos.
+class _SectionDivider extends StatelessWidget {
+  const _SectionDivider();
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(top: 28),
+      child: Divider(height: 1, thickness: 1, color: c.border),
     );
   }
 }
@@ -2975,9 +3291,9 @@ class _SpecsTab extends StatelessWidget {
     final c = BoldColors.of(context);
     return Center(
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 860),
+        constraints: const BoxConstraints(maxWidth: 760),
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 24, 20, 120),
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
           children: [
             const _TierHeader(
                 tier: 'ÁTOMOS',

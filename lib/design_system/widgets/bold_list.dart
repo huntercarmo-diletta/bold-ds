@@ -223,17 +223,38 @@ class BoldListTimeStatus extends StatelessWidget {
 
 /// Valor de transação à direita ("—  R$ 560,00"); travessão prefixa débito.
 class BoldListAmount extends StatelessWidget {
-  const BoldListAmount(this.value, {super.key, this.negative = false});
+  const BoldListAmount(this.value,
+      {super.key,
+      this.negative = false,
+      this.credit = false,
+      this.strikethrough = false});
   final String value;
+
+  /// Débito: prefixo "—", cor neutra.
   final bool negative;
+
+  /// Crédito: prefixo "+", cor success (verde). Variante do DS "Amount chips".
+  final bool credit;
+
+  /// Cancelado/estornado: valor riscado, cor neutra.
+  final bool strikethrough;
 
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
-    return Text(negative ? '—  $value' : value,
+    final text = credit
+        ? '+  $value'
+        : negative
+            ? '—  $value'
+            : value;
+    return Text(text,
         maxLines: 1,
         style: BoldType.title.copyWith(
-            fontSize: 14, fontWeight: FontWeight.w600, color: c.textPrimary));
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+            color: credit ? c.success : c.textPrimary,
+            decoration: strikethrough ? TextDecoration.lineThrough : null,
+            decorationColor: c.textSecondary));
   }
 }
 

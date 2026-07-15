@@ -54,6 +54,7 @@ export 'widgets/bold_button.dart';         // BoldButton (variants + sm/md/lg)
 export 'widgets/bold_icon_button.dart';    // BoldIconButton
 export 'widgets/bold_text_field.dart';     // BoldTextField
 export 'widgets/bold_currency_field.dart'; // BoldCurrencyField (valor em centavos)
+export 'widgets/bold_money_input_formatter.dart'; // BoldMoneyInputFormatter (R$ em campo)
 export 'widgets/bold_search_input.dart';   // BoldSearchInput
 export 'widgets/bold_otp_input.dart';      // BoldOtpInput
 export 'widgets/bold_keypad.dart';         // BoldKeypad, BoldPinDots
@@ -72,6 +73,7 @@ export 'widgets/bold_app_list.dart';       // BoldAppList + Left/Middle/RightAcc
 export 'widgets/bold_amount_display.dart'; // BoldAmountDisplay (valor entre hairlines) — CPF Seguro
 export 'widgets/bold_detail_row.dart';     // BoldDetailRow (título/descrição + hairline) — CPF Seguro
 export 'widgets/bold_receipt.dart';        // BoldReceipt + Row/Section (comprovante) — CPF Seguro
+export 'widgets/bold_transaction_summary.dart'; // BoldTransactionSummary + Row/Section/Action
 export 'widgets/bold_progress_bar.dart';   // BoldProgressBar (trilho h5 + caption) — CPF Seguro
 export 'widgets/bold_radio_list.dart';     // BoldRadioList + BoldRadioOption — CPF Seguro
 export 'widgets/bold_tooltip.dart';        // BoldTooltip (label flutuante + tail) — CPF Seguro
