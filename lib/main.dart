@@ -2881,10 +2881,11 @@ class _IllustrationCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
+    // Fundos derivados da paleta Primary do DS (nada hardcoded): claro→escuro.
     final (Color bg, String label) = switch (theme) {
-      'dark' => (const Color(0xFF16060A), 'Dark'),
-      'theme3' => (BoldColors.primary01, 'Theme 3'),
-      _ => (BoldColors.white, 'Light'),
+      'dark' => (BoldColors.primary01, 'Dark'),
+      'theme3' => (BoldColors.primary02, 'Theme 3'),
+      _ => (BoldColors.primary09, 'Light'),
     };
     return Column(mainAxisSize: MainAxisSize.min, children: [
       Container(
