@@ -1961,6 +1961,61 @@ class _PreviewTab extends StatelessWidget {
                         ),
                       ),
                     )),
+            _Section(
+                title: 'Amount display (BoldAmountDisplay)',
+                composedOf: const ['Tipografia', 'Hairline'],
+                builder: (_) => const BoldAmountDisplay(
+                      value: 'R\$ 1.234,56',
+                      label: 'Valor',
+                      timestamp: 'Hoje · 14:20',
+                    )),
+            _Section(
+                title: 'Detail row (BoldDetailRow)',
+                composedOf: const ['BoldIcon', 'Tipografia', 'Hairline'],
+                builder: (_) => const BoldDetailRow(
+                      title: 'Chave Pix',
+                      description: 'joao@email.com',
+                      icon: 'key-light',
+                      chevron: true,
+                    )),
+            _Section(
+                title: 'Progress bar (BoldProgressBar)',
+                composedOf: const ['Cor', 'Tipografia'],
+                builder: (_) =>
+                    const BoldProgressBar(value: 0.6, caption: '60% do limite')),
+            _Section(
+                title: 'Radio list (BoldRadioList)',
+                composedOf: const ['BoldIcon', 'Tipografia'],
+                builder: (_) {
+                  var sel = 'pix';
+                  return StatefulBuilder(
+                    builder: (context, setLocal) => BoldRadioList(
+                      title: 'Forma de pagamento',
+                      value: sel,
+                      onChanged: (v) => setLocal(() => sel = v),
+                      options: const [
+                        BoldRadioOption(value: 'pix', label: 'Pix'),
+                        BoldRadioOption(value: 'boleto', label: 'Boleto'),
+                        BoldRadioOption(value: 'cartao', label: 'Cartão'),
+                      ],
+                    ),
+                  );
+                }),
+            _Section(
+                title: 'Tooltip (BoldTooltip)',
+                composedOf: const ['Cor', 'Tipografia'],
+                builder: (_) => const Align(
+                      alignment: Alignment.centerLeft,
+                      child: BoldTooltip(label: 'Dica rápida'),
+                    )),
+            _Section(
+                title: 'Copy button (BoldCopyButton)',
+                composedOf: const ['BoldIcon', 'BoldToast'],
+                builder: (_) => const Align(
+                      alignment: Alignment.centerLeft,
+                      child: BoldCopyButton(
+                          text: 'E1234567890', semanticLabel: 'Copiar ID'),
+                    )),
           ],
         ),
       ),
