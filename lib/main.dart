@@ -14,6 +14,7 @@
 //
 // Build:  flutter build web -t lib/catalog/main_catalog.dart --release
 // Deploy: Vercel serve build/web (vercel.json → outputDirectory).
+import 'dart:math' as math;
 import 'package:conta_bold_ds/design_system/bold_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -50,7 +51,7 @@ class _BoldCatalogAppState extends State<BoldCatalogApp> {
   }
 }
 
-enum _Tab { preview, specs }
+enum _Tab { preview, specs, map }
 
 // Camadas do catálogo (atomic design) — viram subitens da aba Design System.
 enum _DsTier { tokens, atoms, molecules, organisms, illustrations }
@@ -606,11 +607,19 @@ class _DesignSystemView extends StatelessWidget {
               label: 'Specs',
               selected: tab == _Tab.specs,
               onTap: () => onTab(_Tab.specs)),
+          const SizedBox(width: 4),
+          _Pill(
+              label: 'Mapa',
+              selected: tab == _Tab.map,
+              onTap: () => onTab(_Tab.map)),
         ]),
       ),
       Expanded(
-        child:
-            tab == _Tab.preview ? _PreviewTab(tier: tier) : const _SpecsTab(),
+        child: switch (tab) {
+          _Tab.preview => _PreviewTab(tier: tier),
+          _Tab.specs => const _SpecsTab(),
+          _Tab.map => const _DepMapTab(),
+        },
       ),
     ]);
   }
@@ -1724,6 +1733,14 @@ class _PreviewTab extends StatelessWidget {
                       BoldCheckbox(label: 'Vazio'),
                       BoldCheckbox(indeterminate: true, label: 'Parcial'),
                       BoldCheckbox(checked: true, disabled: true, label: 'Off'),
+                      BoldCheckbox(
+                          checked: true,
+                          variant: BoldCheckboxVariant.neutral,
+                          label: 'Neutral'),
+                      BoldCheckbox(
+                          checked: true,
+                          size: BoldCheckboxSize.sm,
+                          label: 'Pequeno'),
                     ])),
             _Section(
                 title: 'Switch',
@@ -1755,6 +1772,7 @@ class _PreviewTab extends StatelessWidget {
                       BoldStatusTag(label: 'Falha', tone: BoldStatusTone.danger),
                       BoldStatusTag(label: 'Pendente', tone: BoldStatusTone.warning),
                       BoldStatusTag(label: 'Info', tone: BoldStatusTone.primary),
+                      BoldStatusTag(label: 'Neutro', tone: BoldStatusTone.neutral),
                     ])),
             _Section(
                 title: 'Chips',
@@ -1768,6 +1786,92 @@ class _PreviewTab extends StatelessWidget {
                 title: 'Home indicator',
                 composedOf: const ['Cores'],
                 builder: (_) => const BoldHomeIndicator()),
+
+            _Section(
+                title: 'Glass surface',
+                composedOf: const ['Cores', 'Vidro (glass)'],
+                note: 'fill + stroke + blur · característica do container',
+                builder: (_) => const BoldGlassSurface(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            BoldIcon('home'),
+                            BoldIcon('pix'),
+                            BoldIcon('cards'),
+                            BoldIcon('gear'),
+                          ],
+                        ),
+                      ),
+                    )),
+            _Section(
+                title: 'Page dots',
+                composedOf: const ['Cores'],
+                builder: (_) => const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      BoldPageDots(count: 4, activeIndex: 0),
+                      SizedBox(height: 10),
+                      BoldPageDots(count: 4, activeIndex: 2),
+                    ])),
+            _Section(
+                title: 'Glass avatar',
+                composedOf: const ['Vidro (glass)', 'Cores', 'Tipografia'],
+                builder: (_) => Row(children: const [
+                      BoldGlassAvatar(initial: 'D'),
+                      SizedBox(width: 12),
+                      BoldGlassAvatar(initial: 'HS', size: 56),
+                      SizedBox(width: 12),
+                      BoldGlassAvatar(
+                          initial: 'RC',
+                          size: 56,
+                          image: AssetImage(
+                              'lib/design_system/assets/city-cyberpunk.webp')),
+                    ])),
+            _Section(
+                title: 'Copy button',
+                composedOf: const ['BoldIcon', 'Cores', 'Tipografia'],
+                note: 'toque → copia + check verde in-place',
+                builder: (_) => const BoldCopyButton(
+                    text: '0001 · 1234567-8',
+                    semanticLabel: 'Copiar conta',
+                    label: 'Conta copiada')),
+            _Section(
+                title: 'Spinner',
+                composedOf: const ['Cores'],
+                note: 'arco com gradiente + trilho · sm / md / lg',
+                builder: (_) => const Row(children: [
+                      BoldSpinner(size: BoldSpinnerSize.sm),
+                      SizedBox(width: 20),
+                      BoldSpinner(),
+                      SizedBox(width: 20),
+                      BoldSpinner(size: BoldSpinnerSize.lg),
+                    ])),
+            _Section(
+                title: 'Illustration',
+                note: 'multicor — não recolore, só escala',
+                builder: (_) => const Row(children: [
+                      BoldIllustration('quantum-seal', size: 88),
+                      SizedBox(width: 16),
+                      BoldIllustration('city', size: 88),
+                    ])),
+            _Section(
+                title: 'Motion (BoldAnimateIn)',
+                note: 'presets de entrada: fade / slideUp / scaleIn',
+                builder: (_) =>
+                    Wrap(spacing: 10, runSpacing: 10, children: const [
+                      BoldAnimateIn(
+                          preset: BoldMotionPreset.slideUp,
+                          child: BoldStatusBadge('slideUp')),
+                      BoldAnimateIn(
+                          preset: BoldMotionPreset.fade,
+                          child: BoldStatusBadge('fade')),
+                      BoldAnimateIn(
+                          preset: BoldMotionPreset.scaleIn,
+                          child: BoldStatusBadge('scaleIn')),
+                    ])),
     ];
     final molecules = <Widget>[
             // ──────────────────────── MOLÉCULAS ───────────────────────────
@@ -1782,6 +1886,10 @@ class _PreviewTab extends StatelessWidget {
                       BoldSpotIcon('bank', tone: BoldSpotTone.primary, filled: true),
                       BoldSpotIcon('bell-light', tone: BoldSpotTone.success),
                       BoldSpotIcon('key-light', tone: BoldSpotTone.danger, badge: true),
+                      BoldSpotIcon('shield', tone: BoldSpotTone.secure),
+                      BoldSpotIcon('user-light', disabled: true),
+                      BoldSpotIcon('user-light',
+                          tone: BoldSpotTone.primary, loading: true),
                     ])),
             _Section(
                 title: 'Botões',
@@ -1797,6 +1905,27 @@ class _PreviewTab extends StatelessWidget {
                       const SizedBox(height: 8),
                       BoldButton('Destrutivo',
                           variant: BoldButtonVariant.destructive, onPressed: () {}),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: BoldColors.primary04,
+                            borderRadius: BorderRadius.circular(14)),
+                        child: BoldButton('Branco',
+                            variant: BoldButtonVariant.white, onPressed: () {}),
+                      ),
+                      const SizedBox(height: 12),
+                      Wrap(spacing: 8, runSpacing: 8, children: [
+                        const BoldButton('Carregando',
+                            loading: true, expand: false),
+                        const BoldButton('Off',
+                            onPressed: null, expand: false),
+                        BoldButton('Revogar',
+                            variant: BoldButtonVariant.destructive,
+                            filled: true,
+                            expand: false,
+                            onPressed: () {}),
+                      ]),
                     ])),
             _Section(
                 title: 'Icon buttons',
@@ -1822,6 +1951,33 @@ class _PreviewTab extends StatelessWidget {
                           semanticLabel: 'x',
                           badge: true,
                           onPressed: () {}),
+                      BoldIconButton(
+                          icon: 'pix',
+                          semanticLabel: 'x',
+                          type: BoldIconButtonType.secondaryPrimary,
+                          onPressed: () {}),
+                      BoldIconButton(
+                          icon: 'key',
+                          semanticLabel: 'x',
+                          type: BoldIconButtonType.tertiaryPrimary,
+                          onPressed: () {}),
+                      BoldIconButton(
+                          icon: 'bell',
+                          semanticLabel: 'x',
+                          size: BoldIconButtonSize.sm,
+                          onPressed: () {}),
+                      BoldIconButton(
+                          icon: 'bell',
+                          semanticLabel: 'x',
+                          size: BoldIconButtonSize.lg,
+                          onPressed: () {}),
+                      BoldIconButton(
+                          icon: 'bell',
+                          semanticLabel: 'x',
+                          state: BoldIconButtonState.error,
+                          onPressed: () {}),
+                      const BoldIconButton(
+                          icon: 'bell', semanticLabel: 'x', disabled: true),
                     ])),
             _Section(
                 title: 'Segmented control',
@@ -1836,8 +1992,21 @@ class _PreviewTab extends StatelessWidget {
             _Section(
                 title: 'Text field',
                 composedOf: const ['Tipografia', 'Cores'],
-                builder: (_) => const BoldTextField(
-                    label: 'Nome', hint: 'Como te chamam')),
+                builder: (_) => const Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BoldTextField(label: 'Nome', hint: 'Como te chamam'),
+                      SizedBox(height: 12),
+                      BoldTextField(
+                          label: 'E-mail',
+                          hint: 'voce@email.com',
+                          errorText: 'E-mail inválido'),
+                      SizedBox(height: 12),
+                      BoldTextField(
+                          label: 'Desabilitado',
+                          hint: 'Indisponível',
+                          enabled: false),
+                    ])),
             _Section(
                 title: 'Search input',
                 composedOf: const ['BoldIcon', 'Tipografia', 'Cores'],
@@ -1849,9 +2018,17 @@ class _PreviewTab extends StatelessWidget {
                       BoldInputChip(label: 'R\$ 50'),
                       BoldInputChip(label: 'R\$ 100', filled: true),
                       BoldInputChip(
+                          label: 'Saldo',
+                          leadIcon: 'eye',
+                          tone: BoldInputChipTone.neutral),
+                      BoldInputChip(
                           label: 'Filtro',
                           trailIcon: 'chevron-down',
                           tone: BoldInputChipTone.neutral),
+                      BoldInputChip(
+                          label: 'Extrato',
+                          trailIcon: 'chevron-right',
+                          tone: BoldInputChipTone.ghost),
                     ])),
             _Section(
                 title: 'OTP input',
@@ -1972,6 +2149,194 @@ class _PreviewTab extends StatelessWidget {
                       const SizedBox(height: 16),
                       const BoldAvatarStack(initials: ['DL', 'HS', 'MJ', 'AB']),
                     ])),
+
+            _Section(
+                title: 'Currency field',
+                composedOf: const ['Tipografia', 'Cores'],
+                builder: (_) => const Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BoldCurrencyField(initialValue: 1234.56),
+                      SizedBox(height: 12),
+                      BoldCurrencyField(large: true, initialValue: 1234.56),
+                    ])),
+            _Section(
+                title: 'PIN dots',
+                composedOf: const ['Cores'],
+                builder: (_) => const Row(children: [
+                      BoldPinDots(length: 4, filled: 0),
+                      SizedBox(width: 24),
+                      BoldPinDots(length: 4, filled: 2),
+                      SizedBox(width: 24),
+                      BoldPinDots(length: 4, filled: 4),
+                    ])),
+            _Section(
+                title: 'Filter chip',
+                composedOf: const ['Cores', 'Tipografia'],
+                builder: (_) => Wrap(spacing: 8, runSpacing: 8, children: [
+                      BoldFilterChip('Todos', selected: true, onTap: () {}),
+                      BoldFilterChip('Entradas', selected: false, onTap: () {}),
+                      BoldFilterChip('Saídas', selected: false, onTap: () {}),
+                    ])),
+            _Section(
+                title: 'Status badge',
+                composedOf: const ['Cores', 'Tipografia'],
+                builder: (_) => const Wrap(spacing: 8, runSpacing: 8, children: [
+                      BoldStatusBadge('Concluído'),
+                      BoldStatusBadge('Erro', color: BoldColors.danger),
+                      BoldStatusBadge('Validada', icon: Icons.check),
+                    ])),
+            _Section(
+                title: 'Icon chip',
+                composedOf: const ['Gradientes', 'Cores'],
+                builder: (_) => const Wrap(spacing: 12, runSpacing: 12, children: [
+                      BoldIconChip(Icons.send, gradient: BoldGradients.pix),
+                      BoldIconChip(Icons.qr_code, tint: BoldColors.accent),
+                      BoldIconChip.custom(
+                          gradient: BoldGradients.brand,
+                          child: Icon(Icons.bolt,
+                              size: 20, color: BoldColors.white)),
+                    ])),
+            _Section(
+                title: 'List tile / group',
+                composedOf: const ['BoldSpotIcon', 'BoldCard', 'Tipografia'],
+                builder: (_) => BoldListGroup(title: 'Atividade', children: [
+                      const BoldListTile(
+                          leading: BoldSpotIcon('arrow-down-light',
+                              tone: BoldSpotTone.success, filled: true),
+                          title: 'Recebido de Ana',
+                          subtitle: 'Hoje',
+                          trailing: BoldListAmount('R\$ 560,00')),
+                      const BoldListTile(
+                          leading: BoldSpotIcon('arrow-up-light',
+                              tone: BoldSpotTone.neutral, filled: true),
+                          title: 'Boleto',
+                          subtitle: 'Ontem',
+                          trailing: BoldListAmount('R\$ 132,90', negative: true)),
+                      BoldListTile(
+                          leading: const BoldSpotIcon('mobile-light',
+                              tone: BoldSpotTone.primary),
+                          title: 'Recarga',
+                          trailing: const BoldListTime('14min'),
+                          onTap: () {}),
+                    ])),
+            _Section(
+                title: 'Amount display',
+                composedOf: const ['Tipografia', 'Cores'],
+                builder: (_) => const Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BoldAmountDisplay(
+                          value: 'R\$ 560,00', timestamp: '13/10 às 14:25'),
+                      SizedBox(height: 12),
+                      BoldAmountDisplay(
+                          value: 'R\$ 2.912,47',
+                          label: 'Seu saldo',
+                          centered: false),
+                    ])),
+            _Section(
+                title: 'Detail row',
+                composedOf: const ['BoldIcon', 'Tipografia'],
+                builder: (_) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const BoldDetailRow(title: 'Para', description: 'Ana Silva'),
+                      const BoldDetailRow(
+                          title: 'Chave Pix',
+                          description: 'ana@email.com',
+                          icon: 'key-light'),
+                      BoldDetailRow(
+                          title: 'Ajuda',
+                          icon: 'circle-question-light',
+                          chevron: true,
+                          hairline: false,
+                          onTap: () {}),
+                    ])),
+            _Section(
+                title: 'Progress bar',
+                composedOf: const ['Cores', 'Tipografia'],
+                builder: (_) => const Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BoldProgressBar(value: 0.2, caption: '1 de 5'),
+                      SizedBox(height: 14),
+                      BoldProgressBar(value: 0.6, caption: '3 de 5'),
+                      SizedBox(height: 14),
+                      BoldProgressBar(value: 1.0, caption: 'Concluído'),
+                    ])),
+            _Section(
+                title: 'Radio list',
+                composedOf: const ['Cores', 'Tipografia'],
+                builder: (_) => BoldRadioList(
+                      title: 'Motivo',
+                      value: 'oferta',
+                      onChanged: (_) {},
+                      options: const [
+                        BoldRadioOption(
+                            value: 'oferta', label: 'Oferta de outro banco'),
+                        BoldRadioOption(value: 'tarifas', label: 'Tarifas'),
+                        BoldRadioOption(value: 'outro', label: 'Outro motivo'),
+                      ],
+                    )),
+            _Section(
+                title: 'Tooltip',
+                composedOf: const ['Cores', 'Tipografia'],
+                builder: (_) => const Wrap(spacing: 20, runSpacing: 16, children: [
+                      BoldTooltip(label: 'Dica', style: BoldTooltipStyle.dark),
+                      BoldTooltip(
+                          label: 'Dica',
+                          style: BoldTooltipStyle.light,
+                          side: BoldTooltipSide.bottom),
+                    ])),
+            _Section(
+                title: 'Menu tile',
+                composedOf: const ['BoldCard', 'BoldIcon', 'Tipografia'],
+                builder: (_) => Wrap(spacing: 12, runSpacing: 12, children: [
+                      BoldMenuTile(
+                          icon: 'qrcode-light',
+                          label: 'Ler QR',
+                          size: BoldMenuTileSize.compact,
+                          onTap: () {}),
+                      BoldMenuTile(
+                          icon: 'pix-light',
+                          label: 'Fazer um Pix',
+                          size: BoldMenuTileSize.wide,
+                          onTap: () {}),
+                      BoldMenuTile(
+                          icon: 'barcode-light',
+                          label: 'Pagar conta',
+                          size: BoldMenuTileSize.large,
+                          onTap: () {}),
+                    ])),
+            _Section(
+                title: 'Alert',
+                composedOf: const ['BoldSpotIcon', 'Vidro (glass)', 'Cores'],
+                builder: (_) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BoldAlert(
+                          intent: BoldIntent.error,
+                          title: 'Pix não enviado',
+                          message: 'Saldo insuficiente.',
+                          onClose: () {}),
+                      const SizedBox(height: 10),
+                      const BoldAlert(
+                          intent: BoldIntent.success, title: 'Pix enviado'),
+                      const SizedBox(height: 10),
+                      const BoldAlert(
+                          intent: BoldIntent.info,
+                          title: 'Limite diário',
+                          message: 'Até R\$ 5.000,00 por dia.'),
+                    ])),
+            _Section(
+                title: 'Navigation button',
+                composedOf: const ['BoldButton', 'Tipografia'],
+                note: 'coluna de CTAs de rodapé (primary/secondary/tertiary)',
+                builder: (_) => BoldNavigationButton(
+                      primary: BoldNavAction(label: 'Continuar', onPressed: () {}),
+                      secondary:
+                          BoldNavAction(label: 'Agora não', onPressed: () {}),
+                    )),
     ];
     final organisms = <Widget>[
             // ─────────────────────── ORGANISMOS ───────────────────────────
@@ -2062,6 +2427,123 @@ class _PreviewTab extends StatelessWidget {
                         transactionId: 'E1898765420260714153210abc',
                       ),
                     )),
+            _Section(
+                title: 'Circle button',
+                composedOf: const ['BoldIcon', 'Cores'],
+                builder: (_) => Wrap(spacing: 12, children: [
+                      BoldCircleButton('bell', onTap: () {}),
+                      BoldCircleButton('bell', dot: true, onTap: () {}),
+                      BoldCircleButton('edit', active: true, onTap: () {}),
+                    ])),
+            _Section(
+                title: 'Account pill / switcher',
+                composedOf: const ['BoldIcon', 'Tipografia', 'Cores'],
+                builder: (_) => Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      const BoldAccountPill(label: 'CONTA PF'),
+                      BoldAccountPill(label: 'CONTA PJ', onTap: () {}),
+                      BoldAccountSwitcher(name: 'Ana Carolina', onTap: () {}),
+                    ])),
+            _Section(
+                title: 'Bottom app',
+                composedOf: const ['Vidro (glass)', 'BoldNavigationButton', 'BoldIcon'],
+                builder: (_) => Column(children: [
+                      SizedBox(
+                          width: 340,
+                          child: BoldBottomApp.nav<int>(
+                            current: 0,
+                            onTap: (_) {},
+                            items: const [
+                              BoldTabItem(
+                                  value: 0,
+                                  label: 'Início',
+                                  icon: Icons.home_rounded),
+                              BoldTabItem(
+                                  value: 1,
+                                  label: 'Cartões',
+                                  icon: Icons.credit_card),
+                              BoldTabItem(
+                                  value: 2,
+                                  label: 'Pix',
+                                  icon: Icons.qr_code_rounded),
+                              BoldTabItem(
+                                  value: 3,
+                                  label: 'Perfil',
+                                  icon: Icons.person_rounded),
+                            ],
+                          )),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                          width: 340,
+                          child: BoldBottomApp.button(
+                            primary: BoldNavAction(
+                                label: 'Continuar', onPressed: () {}),
+                            secondary: BoldNavAction(
+                                label: 'Cancelar', onPressed: () {}),
+                            safeBottom: false,
+                          )),
+                    ])),
+            _Section(
+                title: 'Bottom sheet',
+                composedOf: const ['BoldGlassSurface', 'BoldIconButton'],
+                note: 'BoldSheet.show(context, …) — sobe do rodapé sobre scrim',
+                builder: (ctx) => BoldButton('Abrir sheet',
+                    expand: false,
+                    onPressed: () => BoldSheet.show(ctx,
+                        title: 'Escolha uma conta',
+                        builder: (_) => Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                BoldAppList.menuItem(
+                                    icon: 'user-light',
+                                    title: 'Conta PF',
+                                    subtitle: 'Ag 0001 · 12345-6',
+                                    onTap: () {}),
+                                BoldAppList.menuItem(
+                                    icon: 'building-light',
+                                    title: 'Conta PJ',
+                                    subtitle: 'Ag 0001 · 67890-1',
+                                    onTap: () {}),
+                              ],
+                            )))),
+            _Section(
+                title: 'Password sheet (PIN)',
+                composedOf: const [
+                  'BoldSheet',
+                  'BoldPinDots',
+                  'BoldKeypad',
+                  'BoldButton'
+                ],
+                note: 'BoldPasswordSheet.show — dots + keypad + CTA',
+                builder: (ctx) => BoldButton('Confirmar com senha',
+                    expand: false,
+                    onPressed: () => BoldPasswordSheet.show(ctx,
+                        subtitle: 'Digite os 6 dígitos da sua senha.',
+                        onForgot: () {}))),
+
+            // ─────────────────────── MOTION / especiais ───────────────────
+            const _TierHeader(
+                tier: 'MOTION / especiais',
+                description:
+                    'Autorização Quântica — visual violeta, independente da marca.'),
+            _Section(
+                title: 'Quantum seal',
+                composedOf: const ['CustomPaint', 'Tipografia'],
+                builder: (_) => Wrap(spacing: 16, runSpacing: 16, children: const [
+                      BoldQuantumSeal(waiting: true, size: 110),
+                      BoldQuantumSeal(waiting: false, failed: false, size: 110),
+                      BoldQuantumSeal(waiting: false, failed: true, size: 110),
+                    ])),
+            _Section(
+                title: 'Quantum core',
+                composedOf: const ['CustomPaint'],
+                note: 'núcleo pintado (loop demo) — a tela cheia vive na aba Specs',
+                builder: (_) => const Center(
+                    child: SizedBox(
+                        width: 200, height: 200, child: BoldQuantumCore()))),
             _Section(
                 title: 'Limites (App list · valueAction)',
                 composedOf: const [
@@ -2196,21 +2678,6 @@ class _PreviewTab extends StatelessWidget {
                     ),
                   );
                 }),
-            _Section(
-                title: 'Tooltip (BoldTooltip)',
-                composedOf: const ['Cor', 'Tipografia'],
-                builder: (_) => const Align(
-                      alignment: Alignment.centerLeft,
-                      child: BoldTooltip(label: 'Dica rápida'),
-                    )),
-            _Section(
-                title: 'Copy button (BoldCopyButton)',
-                composedOf: const ['BoldIcon', 'BoldToast'],
-                builder: (_) => const Align(
-                      alignment: Alignment.centerLeft,
-                      child: BoldCopyButton(
-                          text: 'E1234567890', semanticLabel: 'Copiar ID'),
-                    )),
     ];
     final illustrations = <Widget>[
       const _TierHeader(
@@ -2358,7 +2825,14 @@ class _DepChip extends StatelessWidget {
   final String name;
 
   // Tokens ganham um leve tint da marca pra distinguir de widgets.
-  static const _tokens = {'Cores', 'Tipografia', 'Vidro', 'Gradiente'};
+  static const _tokens = {
+    'Cores',
+    'Tipografia',
+    'Vidro',
+    'Gradiente',
+    'Gradientes',
+    'Vidro (glass)',
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -2775,17 +3249,1471 @@ class _OverlayDemo extends StatelessWidget {
 // ═══════════════════════════════════════════════════════════════════════════
 // SPECS — tokens em tabela.
 // ═══════════════════════════════════════════════════════════════════════════
-class _SpecsTab extends StatelessWidget {
-  const _SpecsTab();
+// ═══════════════════════════════════════════════════════════════════════════
+// SPEC SHEET — formato "print": cabeçalho (nome + descrição + "compõe:") e
+// corpo (matriz de variações Type × State, ou faixa de eixo único).
+// ═══════════════════════════════════════════════════════════════════════════
+
+/// Ficha de um componente na aba Specs: nome grande, descrição, chips do que o
+/// compõe e o corpo (uma [_VariantMatrix] ou [_VariantStrip]).
+class _ComponentSpec extends StatelessWidget {
+  const _ComponentSpec({
+    required this.title,
+    required this.description,
+    this.composedOf,
+    required this.child,
+  });
+  final String title;
+  final String description;
+  final List<String>? composedOf;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 44),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Text(title, style: BoldType.headlineSm.copyWith(color: c.textPrimary)),
+        const SizedBox(height: 8),
+        Text(description,
+            style: BoldType.bodySmall
+                .copyWith(color: c.textSecondary, height: 1.45)),
+        if (composedOf != null && composedOf!.isNotEmpty) ...[
+          const SizedBox(height: 14),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text('compõe:',
+                  style: BoldType.labelSm.copyWith(color: c.textSecondary)),
+              for (final w in composedOf!) _DepChip(name: w),
+            ],
+          ),
+        ],
+        const SizedBox(height: 24),
+        child,
+      ]),
+    );
+  }
+}
+
+/// Matriz rotulada nos dois eixos (linhas × colunas), como o print do SpotIcon.
+/// Caption + rótulos roxos; o grid de hairline envolve só as células. Os
+/// cabeçalhos de coluna e o grid usam a MESMA largura flexível por coluna, então
+/// ficam alinhados; o eixo de linhas ("Type") é uma legenda rotacionada.
+class _VariantMatrix extends StatelessWidget {
+  const _VariantMatrix({
+    required this.rowAxis,
+    required this.rows,
+    required this.colAxis,
+    required this.cols,
+    required this.cell,
+    this.cellHeight = 78,
+  });
+  final String rowAxis;
+  final List<String> rows;
+  final String colAxis;
+  final List<String> cols;
+  final Widget Function(int row, int col) cell;
+  final double cellHeight;
+
+  static const double _labelW = 62; // largura da coluna de rótulos de linha
+  static const double _axisW = 22; // faixa da legenda vertical ("Type")
+  static const double _lead = _labelW + _axisW + 6; // recuo até a 1ª célula
+
+  @override
+  Widget build(BuildContext context) {
+    // Altura fixa do corpo (evita IntrinsicHeight sobre Table flex, que lança):
+    // n células + (n+1) hairlines de 1px.
+    final bodyH = rows.length * cellHeight + (rows.length + 1);
+    final line = BoldColors.infoSoft.withValues(alpha: 0.38);
+    final axis = BoldType.labelSm
+        .copyWith(color: BoldColors.infoSoft, fontWeight: FontWeight.w600);
+    final cap = BoldType.labelSm.copyWith(
+        color: BoldColors.infoSoft,
+        fontWeight: FontWeight.w700,
+        letterSpacing: 0.4);
+
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      // ── Eixo de colunas: caption "State" + cabeçalhos, alinhados ao grid ──
+      Row(children: [
+        const SizedBox(width: _lead),
+        Expanded(child: Center(child: Text(colAxis, style: cap))),
+      ]),
+      const SizedBox(height: 2),
+      Container(
+        margin: const EdgeInsets.only(left: _lead),
+        height: 1,
+        color: line,
+      ),
+      const SizedBox(height: 4),
+      Row(children: [
+        const SizedBox(width: _lead),
+        for (final h in cols)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 2),
+              child: Center(
+                  child: Text(h, textAlign: TextAlign.center, style: axis)),
+            ),
+          ),
+      ]),
+      const SizedBox(height: 2),
+      // ── Corpo: legenda vertical "Type" + rótulos de linha + grid ──────────
+      SizedBox(
+        height: bodyH,
+        child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+          SizedBox(
+            width: _axisW,
+            child: Center(
+              child: RotatedBox(
+                  quarterTurns: 3, child: Text(rowAxis, style: cap)),
+            ),
+          ),
+          const SizedBox(width: 6),
+          Column(
+            children: [
+              for (var r = 0; r < rows.length; r++)
+                SizedBox(
+                  width: _labelW,
+                  height: cellHeight + 1, // + hairline entre linhas
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Text(rows[r],
+                          textAlign: TextAlign.right, style: axis),
+                    ),
+                  ),
+                ),
+            ],
+          ),
+          Expanded(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: Table(
+                border: TableBorder.all(color: line, width: 1),
+                defaultColumnWidth: const FlexColumnWidth(),
+                children: [
+                  for (var r = 0; r < rows.length; r++)
+                    TableRow(children: [
+                      for (var col = 0; col < cols.length; col++)
+                        SizedBox(
+                          height: cellHeight,
+                          child: Center(child: cell(r, col)),
+                        ),
+                    ]),
+                ],
+              ),
+            ),
+          ),
+        ]),
+      ),
+    ]);
+  }
+}
+
+/// Faixa de variação de eixo único: células rotuladas embaixo, num Wrap. Para
+/// componentes que variam só numa dimensão (ex.: variantes de botão, tons).
+class _VariantStrip extends StatelessWidget {
+  const _VariantStrip({required this.items, this.cellWidth = 120});
+  final List<(String, Widget)> items;
+  final double cellWidth;
+
+  @override
+  Widget build(BuildContext context) {
+    final line = BoldColors.infoSoft.withValues(alpha: 0.38);
+    final axis = BoldType.labelSm
+        .copyWith(color: BoldColors.infoSoft, fontWeight: FontWeight.w600);
+    return Wrap(
+      spacing: 10,
+      runSpacing: 10,
+      children: [
+        for (final (label, w) in items)
+          SizedBox(
+            width: cellWidth,
+            child: Column(children: [
+              Container(
+                height: 74,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: line, width: 1),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(child: w),
+              ),
+              const SizedBox(height: 6),
+              Text(label, textAlign: TextAlign.center, style: axis),
+            ]),
+          ),
+      ],
+    );
+  }
+}
+
+class _SpecsTab extends StatelessWidget {
+  const _SpecsTab();
+
+  // Ícone canônico de demonstração da matriz (glyph de usuário, como o print).
+  static Widget _spot(int row, int col) {
+    final filled = row == 0;
+    return switch (col) {
+      0 => BoldSpotIcon('user-light', filled: filled),
+      1 => BoldSpotIcon('user-light', filled: filled, disabled: true),
+      2 => BoldSpotIcon('user-light',
+          filled: filled, tone: BoldSpotTone.primary),
+      3 => BoldSpotIcon('user-light',
+          filled: filled, tone: BoldSpotTone.danger),
+      4 => BoldSpotIcon('user-light',
+          filled: filled, tone: BoldSpotTone.warning),
+      5 => BoldSpotIcon('user-light',
+          filled: filled, tone: BoldSpotTone.success),
+      6 => BoldSpotIcon('user-light',
+          filled: filled, tone: BoldSpotTone.primary, loading: true),
+      _ => BoldSpotIcon('user-light',
+          filled: filled, tone: BoldSpotTone.secure),
+    };
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 760),
         child: ListView(
           padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
           children: [
+            const _TierHeader(
+                tier: 'ÁTOMOS',
+                description: 'Primitivos indivisíveis — só consomem tokens.'),
+            _ComponentSpec(
+              title: 'SpotIcon',
+              description:
+                  '2 tipos (fill · outline) × 8 estados. Tamanho padrão 34 (mobile), glyph escala pra ~58% do container. Badge é ortogonal — passe direto.',
+              composedOf: const ['BoldIcon', 'Cores'],
+              child: _VariantMatrix(
+                rowAxis: 'Type',
+                rows: const ['fill', 'outline'],
+                colAxis: 'State',
+                cols: const [
+                  'normal',
+                  'disabled',
+                  'primary',
+                  'error',
+                  'warning',
+                  'success',
+                  'loading',
+                  'secure',
+                ],
+                cell: _spot,
+              ),
+            ),
+
+            // BoldIcon(String name, {double size = BoldIconSize.md, Color? color})
+            _ComponentSpec(
+              title: 'BoldIcon',
+              description:
+                  'Glyph SVG recolorido via ColorFilter — 1 eixo: o alias semântico (mapa nome→arquivo FontAwesome). Cor default = textSecondary do tema; tamanho pelo param size (BoldIconSize.xs…xxl, default md 18).',
+              composedOf: const ['Cores'],
+              child: _VariantStrip(
+                cellWidth: 96,
+                items: [
+                  ('home', BoldIcon('home')),
+                  ('pix', BoldIcon('pix')),
+                  ('bell', BoldIcon('bell')),
+                  ('eye', BoldIcon('eye')),
+                  ('bank', BoldIcon('bank')),
+                  ('key', BoldIcon('key')),
+                  ('qr', BoldIcon('qr')),
+                  ('chevron-right', BoldIcon('chevron-right')),
+                  ('size 28', BoldIcon('shield', size: 28)),
+                ],
+              ),
+            ),
+            // const BoldLogo({double width = 200, bool onDark = true})
+            _ComponentSpec(
+              title: 'BoldLogo',
+              description:
+                  'Wordmark oficial CONTA/BOLD (o "O" carrega o gradiente da marca) — 1 eixo: onDark. onDark:true = wordmark branco (fundos escuros); onDark:false = wordmark preto (precisa de fundo claro atrás).',
+              composedOf: const ['Cores'],
+              child: _VariantStrip(
+                cellWidth: 160,
+                items: [
+                  (
+                    'onDark: true',
+                    Container(
+                      color: BoldColors.neutral01,
+                      padding: const EdgeInsets.all(10),
+                      child: const BoldLogo(width: 110),
+                    ),
+                  ),
+                  (
+                    'onDark: false',
+                    Container(
+                      color: BoldColors.white,
+                      padding: const EdgeInsets.all(10),
+                      child: const BoldLogo(width: 110, onDark: false),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // const BoldPixMark({double size = BoldIconSize.lg, Color? color, bool solid = true})
+            _ComponentSpec(
+              title: 'BoldPixMark',
+              description:
+                  'Marca Pix oficial (pinwheel do BCB) sobre o mesmo grid do BoldIcon — 1 eixo: solid (preenchida, default) vs. outline. Cor default = rosa da marca.',
+              composedOf: const ['BoldIcon', 'Cores'],
+              child: _VariantStrip(
+                items: [
+                  ('solid', BoldPixMark(size: 32)),
+                  ('outline', BoldPixMark(size: 32, solid: false)),
+                  ('color', BoldPixMark(size: 32, color: BoldColors.primary04)),
+                ],
+              ),
+            ),
+            // const BoldGlassSurface({required Widget child})
+            _ComponentSpec(
+              title: 'BoldGlassSurface',
+              description:
+                  'A superfície "vidro" ÚNICA do DS: fill 26% + stroke 1px 30% + blur 15, theme-aware. É característica de CONTAINER (top bar, bottom app, toast) — nunca de elemento. Envolve o child.',
+              composedOf: const ['Cores', 'Vidro (glass)'],
+              child: const BoldGlassSurface(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      BoldIcon('home'),
+                      BoldIcon('pix'),
+                      BoldIcon('cards'),
+                      BoldIcon('gear'),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            // const BoldHomeIndicator({Color color = BoldColors.neutral01, Color? background})
+            _ComponentSpec(
+              title: 'BoldHomeIndicator',
+              description:
+                  'Slot inferior mínimo: a barra de gesto do iOS (pill num container h34). Só tokens. color = tom do pill; background = fundo do container.',
+              composedOf: const ['Cores'],
+              child: _VariantStrip(
+                cellWidth: 170,
+                items: [
+                  ('default', const BoldHomeIndicator()),
+                  (
+                    'sobre escuro',
+                    const BoldHomeIndicator(
+                      color: BoldColors.white,
+                      background: BoldColors.neutral01,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // const BoldPageDots({required int count, required int activeIndex, Color? activeColor, double size = 8, double spacing = BoldSpace.x2})
+            _ComponentSpec(
+              title: 'BoldPageDots',
+              description:
+                  'Indicador de página de carrossel/onboarding: o dot ativo vira uma pílula alongada no tom da marca. Presentational puro — count × activeIndex controlados pelo caller.',
+              composedOf: const ['Cores'],
+              child: _VariantStrip(
+                cellWidth: 140,
+                items: [
+                  ('4 · ativo 0', const BoldPageDots(count: 4, activeIndex: 0)),
+                  ('4 · ativo 2', const BoldPageDots(count: 4, activeIndex: 2)),
+                  ('3 · ativo 1', const BoldPageDots(count: 3, activeIndex: 1)),
+                ],
+              ),
+            ),
+            // const BoldGlassAvatar({required String initial, double size = 40, ImageProvider? image, double? fontSize})
+            _ComponentSpec(
+              title: 'BoldGlassAvatar',
+              description:
+                  'Avatar canônico do usuário: disco de vidro (fill+stroke+blur) — inicial(is) em textPrimary quando não há foto, ou a foto cobrindo o disco quando image é passado.',
+              composedOf: const ['Vidro (glass)', 'Cores', 'Tipografia'],
+              child: _VariantStrip(
+                items: [
+                  ('inicial', const BoldGlassAvatar(initial: 'D')),
+                  ('2 letras', const BoldGlassAvatar(initial: 'HS', size: 56)),
+                  (
+                    'foto',
+                    const BoldGlassAvatar(
+                      initial: 'RC',
+                      size: 56,
+                      image: AssetImage(
+                          'lib/design_system/assets/city-cyberpunk.webp'),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // const BoldCopyButton({required String text, required String semanticLabel, String label = 'Copiado', VoidCallback? onCopied})
+            _ComponentSpec(
+              title: 'BoldCopyButton',
+              description:
+                  'Botão de copiar com feedback IN-PLACE: ao tocar copia o texto e o ícone vira um check verde por ~2s. Aqui no estado idle (ícone "copy").',
+              composedOf: const ['BoldIcon', 'Cores', 'Tipografia'],
+              child: const SizedBox(
+                height: 72,
+                child: Center(
+                  child: BoldCopyButton(
+                    text: '0001 · 1234567-8',
+                    semanticLabel: 'Copiar conta',
+                    label: 'Conta copiada',
+                  ),
+                ),
+              ),
+            ),
+            // const BoldSkeleton({double? width, double height = 16, double radius = 8}) · factory BoldSkeleton.circle(double size)
+            _ComponentSpec(
+              title: 'BoldSkeleton',
+              description:
+                  'Placeholder de carregamento com shimmer deslizante — 1 eixo: a forma (retângulo width/height/radius e o factory circle(size) p/ avatar/spot).',
+              composedOf: const ['Cores'],
+              child: _VariantStrip(
+                items: [
+                  ('rect', const BoldSkeleton(width: 96, height: 16)),
+                  ('pill', const BoldSkeleton(width: 80, height: 20, radius: 200)),
+                  ('circle', BoldSkeleton.circle(44)),
+                ],
+              ),
+            ),
+            // const BoldSwitch({required bool value, required ValueChanged<bool>? onChanged, bool accent = true})
+            _ComponentSpec(
+              title: 'BoldSwitch',
+              description:
+                  '2 eixos: accent (laranja = biometria/segurança · violeta = permissões) × estado (off · on · desabilitado). Controlado — value fixo, onChanged null desabilita.',
+              composedOf: const ['Cores'],
+              child: _VariantMatrix(
+                rowAxis: 'Accent',
+                rows: const ['laranja', 'violeta'],
+                colAxis: 'Estado',
+                cols: const ['off', 'on', 'disabled'],
+                cellHeight: 60,
+                cell: (row, col) => BoldSwitch(
+                  value: col == 1,
+                  accent: row == 0,
+                  onChanged: col == 2 ? null : (_) {},
+                ),
+              ),
+            ),
+            // const BoldSegmentedControl({required List<String> segments, required int selectedIndex, required ValueChanged<int> onChanged})
+            _ComponentSpec(
+              title: 'BoldSegmentedControl',
+              description:
+                  'Track pílula com 2+ opções; o segmento selecionado preenche. 1 eixo: a contagem de segmentos. Controlado via selectedIndex/onChanged.',
+              composedOf: const ['Cores', 'Tipografia'],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BoldSegmentedControl(
+                    segments: const ['Pessoa Física', 'Pessoa Jurídica'],
+                    selectedIndex: 0,
+                    onChanged: (_) {},
+                  ),
+                  const SizedBox(height: 12),
+                  BoldSegmentedControl(
+                    segments: const ['Dia', 'Semana', 'Mês'],
+                    selectedIndex: 1,
+                    onChanged: (_) {},
+                  ),
+                ],
+              ),
+            ),
+            // const BoldCheckbox({bool checked, bool indeterminate, bool disabled, BoldCheckboxSize size, BoldCheckboxVariant variant, String? label, String? description, ValueChanged<bool>? onChanged})
+            _ComponentSpec(
+              title: 'BoldCheckbox',
+              description:
+                  '2 eixos: variant (primary rosa-preenchido · neutral outline) × estado (vazio · marcado · parcial · desabilitado). Também há size sm/md e slots label/description.',
+              composedOf: const ['Cores', 'Tipografia'],
+              child: _VariantMatrix(
+                rowAxis: 'Variant',
+                rows: const ['primary', 'neutral'],
+                colAxis: 'Estado',
+                cols: const ['vazio', 'marcado', 'parcial', 'disabled'],
+                cellHeight: 56,
+                cell: (row, col) => BoldCheckbox(
+                  variant: row == 0
+                      ? BoldCheckboxVariant.primary
+                      : BoldCheckboxVariant.neutral,
+                  checked: col == 1 || col == 3,
+                  indeterminate: col == 2,
+                  disabled: col == 3,
+                  onChanged: (_) {},
+                ),
+              ),
+            ),
+
+            const _TierHeader(
+                tier: 'MOLÉCULAS',
+                description: 'Combinações simples de átomos.'),
+            // const BoldPageTitle({required String title, String? subtitle})
+            _ComponentSpec(
+              title: 'BoldPageTitle',
+              description:
+                  'Headline + subtítulo opcional. Fica abaixo do TopBar em telas de formulário/config.',
+              composedOf: const ['Tipografia'],
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BoldPageTitle(title: 'Alterar senha'),
+                  SizedBox(height: 20),
+                  BoldPageTitle(
+                      title: 'Meus dados',
+                      subtitle: 'Atualize suas informações.'),
+                ],
+              ),
+            ),
+            // const BoldSectionHeader({required String label, Widget? trailing, EdgeInsetsGeometry padding})
+            // const BoldSeeAllLink({VoidCallback? onPressed, String label = 'Ver todos'})
+            _ComponentSpec(
+              title: 'BoldSectionHeader + BoldSeeAllLink',
+              description:
+                  'Rótulo + slot trailing opcional (tipicamente BoldSeeAllLink "Ver todos"). Separa o conteúdo em seções.',
+              composedOf: const ['Tipografia'],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const BoldSectionHeader(label: 'Menu'),
+                  const SizedBox(height: 12),
+                  BoldSectionHeader(
+                      label: 'Serviços',
+                      trailing: BoldSeeAllLink(onPressed: () {})),
+                ],
+              ),
+            ),
+            // const BoldButton(String label, {VoidCallback? onPressed, BoldButtonVariant variant, BoldButtonSize size, IconData? icon, String? glyph, String? trailingGlyph, bool loading, bool expand, bool filled, bool error})
+            _ComponentSpec(
+              title: 'BoldButton',
+              description:
+                  '5 variantes (primary · secondary · text · destructive · white) × 4 tamanhos (xs · sm · md · lg). expand:false aqui p/ caber; no app o default estica. A variante white ganha um fundo primary04 na célula p/ contraste.',
+              composedOf: const ['BoldIcon', 'Gradientes', 'Tipografia'],
+              child: _VariantMatrix(
+                rowAxis: 'Variant',
+                rows: const ['primary', 'secondary', 'text', 'destructive', 'white'],
+                colAxis: 'Size',
+                cols: const ['xs', 'sm', 'md', 'lg'],
+                cellHeight: 64,
+                cell: (row, col) {
+                  const variants = [
+                    BoldButtonVariant.primary,
+                    BoldButtonVariant.secondary,
+                    BoldButtonVariant.text,
+                    BoldButtonVariant.destructive,
+                    BoldButtonVariant.white,
+                  ];
+                  const sizes = [
+                    BoldButtonSize.xs,
+                    BoldButtonSize.sm,
+                    BoldButtonSize.md,
+                    BoldButtonSize.lg,
+                  ];
+                  final btn = BoldButton(
+                    'Ação',
+                    variant: variants[row],
+                    size: sizes[col],
+                    expand: false,
+                    onPressed: () {},
+                  );
+                  if (variants[row] == BoldButtonVariant.white) {
+                    return Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: BoldColors.primary04,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: btn,
+                    );
+                  }
+                  return btn;
+                },
+              ),
+            ),
+            // BoldButton — estados (mesmo construtor).
+            _ComponentSpec(
+              title: 'BoldButton — estados',
+              description:
+                  'loading (spinner) · disabled (onPressed null) · destructive filled (pill vermelho sólido) · com glyph (trailingGlyph) · error (paleta destrutiva sobre qualquer variante).',
+              child: _VariantStrip(
+                cellWidth: 190,
+                items: [
+                  ('loading', const BoldButton('Enviar', loading: true, expand: false)),
+                  ('disabled',
+                      const BoldButton('Enviar', onPressed: null, expand: false)),
+                  (
+                    'destructive filled',
+                    BoldButton('Revogar',
+                        variant: BoldButtonVariant.destructive,
+                        filled: true,
+                        expand: false,
+                        onPressed: () {})
+                  ),
+                  (
+                    'com glyph',
+                    BoldButton('Continuar',
+                        trailingGlyph: 'chevron-right',
+                        expand: false,
+                        onPressed: () {})
+                  ),
+                  (
+                    'error',
+                    BoldButton('Tentar de novo',
+                        error: true, expand: false, onPressed: () {})
+                  ),
+                ],
+              ),
+            ),
+            // const BoldIconButton({required String icon, required String semanticLabel, BoldIconButtonType type, BoldIconButtonSize size, BoldIconButtonState state, double? iconSize, bool disabled, VoidCallback? onPressed, bool badge, double? rotate, BoldIconFlush? flush})
+            _ComponentSpec(
+              title: 'BoldIconButton',
+              description:
+                  '5 tipos (primary · secondary · secondaryPrimary · tertiary · tertiaryPrimary) × 3 tamanhos (sm 32 · md 40 · lg 56). error, disabled e badge são ortogonais — ver strip abaixo.',
+              composedOf: const ['BoldIcon', 'Cores'],
+              child: _VariantMatrix(
+                rowAxis: 'Type',
+                rows: const [
+                  'primary',
+                  'secondary',
+                  'secondaryPrimary',
+                  'tertiary',
+                  'tertiaryPrimary'
+                ],
+                colAxis: 'Size',
+                cols: const ['sm', 'md', 'lg'],
+                cell: (row, col) {
+                  const types = [
+                    BoldIconButtonType.primary,
+                    BoldIconButtonType.secondary,
+                    BoldIconButtonType.secondaryPrimary,
+                    BoldIconButtonType.tertiary,
+                    BoldIconButtonType.tertiaryPrimary,
+                  ];
+                  const sizes = [
+                    BoldIconButtonSize.sm,
+                    BoldIconButtonSize.md,
+                    BoldIconButtonSize.lg,
+                  ];
+                  return BoldIconButton(
+                    icon: 'bell',
+                    semanticLabel: 'Notificações',
+                    type: types[row],
+                    size: sizes[col],
+                    onPressed: () {},
+                  );
+                },
+              ),
+            ),
+            // BoldIconButton — error / disabled / badge (mesmo construtor).
+            _ComponentSpec(
+              title: 'BoldIconButton — estados & badge',
+              description:
+                  'error (BoldIconButtonState.error) · disabled (disabled:true) · badge (dot de notificação).',
+              child: _VariantStrip(
+                cellWidth: 110,
+                items: [
+                  (
+                    'error',
+                    BoldIconButton(
+                        icon: 'bell',
+                        semanticLabel: 'Erro',
+                        state: BoldIconButtonState.error,
+                        onPressed: () {})
+                  ),
+                  (
+                    'disabled',
+                    const BoldIconButton(
+                        icon: 'bell',
+                        semanticLabel: 'Desabilitado',
+                        disabled: true)
+                  ),
+                  (
+                    'badge',
+                    BoldIconButton(
+                        icon: 'bell',
+                        semanticLabel: 'Notificações',
+                        badge: true,
+                        onPressed: () {})
+                  ),
+                ],
+              ),
+            ),
+            // const BoldTextField({String? label, String? hint, TextEditingController? controller, bool obscureText, Widget? suffixIcon, IconData? prefixIcon, String? errorText, bool readOnly, bool enabled, bool mono, ...})
+            _ComponentSpec(
+              title: 'BoldTextField',
+              description:
+                  'Label + hint. Estados: default · erro (errorText) · disabled (enabled:false) · obscure (senha + suffix) · readOnly · mono+prefix (CPF/códigos). Focus acende o anel; erro troca p/ vermelho.',
+              composedOf: const ['BoldIcon', 'Tipografia'],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BoldTextField(
+                      label: 'Nome',
+                      hint: 'Digite seu nome',
+                      controller: TextEditingController(text: 'Ana')),
+                  const SizedBox(height: 16),
+                  BoldTextField(
+                      label: 'E-mail',
+                      hint: 'voce@email.com',
+                      errorText: 'E-mail inválido',
+                      controller: TextEditingController(text: 'ana@')),
+                  const SizedBox(height: 16),
+                  const BoldTextField(
+                      label: 'Campo desabilitado',
+                      hint: 'Indisponível',
+                      enabled: false),
+                  const SizedBox(height: 16),
+                  BoldTextField(
+                      label: 'Senha',
+                      hint: '••••••',
+                      obscureText: true,
+                      suffixIcon: const Icon(Icons.visibility_off, size: 20),
+                      controller: TextEditingController(text: 'segredo')),
+                  const SizedBox(height: 16),
+                  BoldTextField(
+                      label: 'Chave Pix (somente leitura)',
+                      readOnly: true,
+                      mono: true,
+                      controller: TextEditingController(text: 'ana@bold.com')),
+                  const SizedBox(height: 16),
+                  BoldTextField(
+                      label: 'CPF (mono)',
+                      mono: true,
+                      prefixIcon: Icons.badge_outlined,
+                      controller:
+                          TextEditingController(text: '123.456.789-00')),
+                ],
+              ),
+            ),
+            // const BoldCurrencyField({TextEditingController? controller, double? initialValue, ValueChanged<double>? onChanged, bool large, String? Function(String?)? validator})
+            _ComponentSpec(
+              title: 'BoldCurrencyField',
+              description:
+                  'Campo de valor em centavos: "R\$ " fixo, formata milhar/decimal. large:true = número hero; false = médio.',
+              child: _VariantStrip(
+                cellWidth: 260,
+                items: [
+                  ('large: false', const BoldCurrencyField(initialValue: 1234.56)),
+                  ('large: true',
+                      const BoldCurrencyField(large: true, initialValue: 1234.56)),
+                ],
+              ),
+            ),
+            // const BoldSearchInput({required TextEditingController controller, String placeholder, ValueChanged<String>? onChanged, ValueChanged<String>? onSubmitted, FocusNode? focusNode, bool error})
+            _ComponentSpec(
+              title: 'BoldSearchInput',
+              description:
+                  'Busca compacta (lupa + placeholder inline, pill); o X limpa quando há texto. error:true = borda vermelha.',
+              composedOf: const ['BoldIcon'],
+              child: _VariantStrip(
+                cellWidth: 260,
+                items: [
+                  (
+                    'default',
+                    BoldSearchInput(
+                        controller: TextEditingController(),
+                        placeholder: 'Buscar serviço…')
+                  ),
+                  (
+                    'error',
+                    BoldSearchInput(
+                        controller: TextEditingController(text: 'xyz'),
+                        error: true)
+                  ),
+                ],
+              ),
+            ),
+            // const BoldOtpInput({required String value, String? error, int length = 6})
+            _ComponentSpec(
+              title: 'BoldOtpInput',
+              description:
+                  '6 boxes; preenchido · próximo (primário) · erro (danger + mensagem). Visual apenas — a digitação vem de um keypad externo.',
+              child: _VariantStrip(
+                cellWidth: 340,
+                items: [
+                  ('preenchendo', const BoldOtpInput(value: '123')),
+                  ('erro',
+                      const BoldOtpInput(value: '12345', error: 'Código incorreto')),
+                ],
+              ),
+            ),
+            // const BoldKeypad({required ValueChanged<String> onKey, required VoidCallback onDelete, bool compact})
+            _ComponentSpec(
+              title: 'BoldKeypad',
+              description:
+                  'Teclado numérico 3 colunas + apagar. Input puro — ligue onKey/onDelete. compact:true p/ sheets de PIN.',
+              child: _VariantStrip(
+                cellWidth: 240,
+                items: [
+                  ('default', BoldKeypad(onKey: (_) {}, onDelete: () {})),
+                  ('compact',
+                      BoldKeypad(compact: true, onKey: (_) {}, onDelete: () {})),
+                ],
+              ),
+            ),
+            // const BoldPinDots({required int length, required int filled})
+            _ComponentSpec(
+              title: 'BoldPinDots',
+              description:
+                  'Fileira de dots de PIN; preenche filled de length (aceso = primário, apagado = anel muted).',
+              child: _VariantStrip(
+                cellWidth: 160,
+                items: [
+                  ('0 / 4', const BoldPinDots(length: 4, filled: 0)),
+                  ('2 / 4', const BoldPinDots(length: 4, filled: 2)),
+                  ('4 / 4', const BoldPinDots(length: 4, filled: 4)),
+                ],
+              ),
+            ),
+            // enum BoldStatusTone { warning, neutral, primary, success, danger }
+            _ComponentSpec(
+              title: 'BoldStatusTag',
+              description:
+                  'Pill de status semântico (tom + label + ícone opcional). 1 eixo: BoldStatusTone. Acessório de listas/rows.',
+              composedOf: const ['BoldIcon', 'Cores', 'Tipografia'],
+              child: const _VariantStrip(
+                cellWidth: 130,
+                items: [
+                  ('neutral', BoldStatusTag(label: 'Neutro', tone: BoldStatusTone.neutral)),
+                  ('primary', BoldStatusTag(label: 'Ativo', tone: BoldStatusTone.primary)),
+                  ('success', BoldStatusTag(label: 'R\$ 300,00', tone: BoldStatusTone.success, icon: 'arrow-trend-up-light')),
+                  ('warning', BoldStatusTag(label: 'Pendente', tone: BoldStatusTone.warning)),
+                  ('danger', BoldStatusTag(label: 'Recusado', tone: BoldStatusTone.danger)),
+                ],
+              ),
+            ),
+            // const BoldStatusBadge(String label, {Color color = BoldColors.success, IconData? icon})
+            _ComponentSpec(
+              title: 'BoldStatusBadge',
+              description:
+                  'Badge tintado por intent (bg 14% + label bold). Eixos: cor semântica e ícone opcional (IconData).',
+              composedOf: const ['Cores', 'Tipografia'],
+              child: const _VariantStrip(
+                cellWidth: 150,
+                items: [
+                  ('default (success)', BoldStatusBadge('Concluído')),
+                  ('color', BoldStatusBadge('Erro', color: BoldColors.danger)),
+                  ('icon', BoldStatusBadge('Chave validada', icon: Icons.check)),
+                ],
+              ),
+            ),
+            // const BoldFilterChip(String label, {required bool selected, required VoidCallback onTap})
+            _ComponentSpec(
+              title: 'BoldFilterChip',
+              description:
+                  'Chip de filtro multi-seleção (pill). Ativo preenche + border primário; 1 eixo: selected. Controlado — selected fixo aqui.',
+              composedOf: const ['Cores', 'Tipografia'],
+              child: _VariantStrip(
+                cellWidth: 140,
+                items: [
+                  ('selected: false',
+                      BoldFilterChip('Todos', selected: false, onTap: () {})),
+                  ('selected: true',
+                      BoldFilterChip('Entradas', selected: true, onTap: () {})),
+                ],
+              ),
+            ),
+            // enum BoldInputChipTone { primary, neutral, ghost }
+            // const BoldInputChip({required String label, String? trailIcon, String? leadIcon, BoldInputChipTone tone, bool filled, VoidCallback? onTap})
+            _ComponentSpec(
+              title: 'BoldInputChip',
+              description:
+                  'Chip pill interativo (dropdown de contexto, filtro removível). Eixos: tone (primary/neutral/ghost) + filled + lead/trailIcon.',
+              composedOf: const ['BoldIcon', 'Vidro (glass)', 'Tipografia'],
+              child: const _VariantStrip(
+                cellWidth: 160,
+                items: [
+                  ('primary', BoldInputChip(label: 'Conta PF', trailIcon: 'chevron-down')),
+                  ('primary · filled', BoldInputChip(label: '15 dias', trailIcon: 'circle-minus-light', filled: true)),
+                  ('neutral (glassy)', BoldInputChip(label: 'Seu saldo', leadIcon: 'eye', tone: BoldInputChipTone.neutral)),
+                  ('ghost', BoldInputChip(label: 'Extrato', trailIcon: 'chevron-right', tone: BoldInputChipTone.ghost)),
+                ],
+              ),
+            ),
+            // const BoldCard({required Widget child, EdgeInsetsGeometry padding, VoidCallback? onTap, Gradient? gradient, Color? color, Color? borderColor, double radius, List<BoxShadow>? shadow, bool glass, bool highlight})
+            _ComponentSpec(
+              title: 'BoldCard',
+              description:
+                  'Superfície base: surface + hairline, radius 24. Variantes: plain sólido, glass (default calmo / highlight rosa), gradient e onTap (clicável).',
+              composedOf: const ['BoldCardSurface', 'Vidro (glass)', 'Cores'],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const BoldCard(child: Text('plain — surface sólido + hairline')),
+                  const SizedBox(height: 12),
+                  const BoldCard(glass: true, child: Text('glass — default sóbrio (stroke cinza)')),
+                  const SizedBox(height: 12),
+                  const BoldCard(glass: true, highlight: true, child: Text('glass · highlight — destaque (stroke rosa)')),
+                  const SizedBox(height: 12),
+                  const BoldCard(gradient: BoldGradients.brand, child: Text('gradient — hero (brand sunset)')),
+                  const SizedBox(height: 12),
+                  BoldCard(onTap: () {}, child: const Text('onTap — bloco clicável (InkWell)')),
+                ],
+              ),
+            ),
+            // const BoldIconChip(IconData icon, {Gradient? gradient, Color? tint, double size, double iconSize})
+            // const BoldIconChip.custom({required Widget child, Gradient? gradient, Color? tint, double size, double iconSize})
+            _ComponentSpec(
+              title: 'BoldIconChip',
+              description:
+                  'Chip de ícone arredondado (leading de action cards). Variantes: gradient (featured), tint (suave) e .custom (glyph/SVG próprio).',
+              composedOf: const ['Gradientes', 'Cores'],
+              child: const _VariantStrip(
+                cellWidth: 120,
+                items: [
+                  ('gradient', BoldIconChip(Icons.send, gradient: BoldGradients.pix)),
+                  ('tint', BoldIconChip(Icons.qr_code, tint: BoldColors.accent)),
+                  ('.custom', BoldIconChip.custom(gradient: BoldGradients.brand, child: Icon(Icons.bolt, size: 20, color: BoldColors.white))),
+                ],
+              ),
+            ),
+            // BoldListGroup({required List<Widget> children, String? title}) + BoldListTile({Widget? leading, required String title, String? subtitle, Widget? trailing, VoidCallback? onTap, bool enabled})
+            _ComponentSpec(
+              title: 'BoldListTile · BoldListGroup',
+              description:
+                  'Card que empilha rows (leading spot + título/subtítulo + trailing) com hairline. Trailing: chevron (onTap), BoldListAmount ±, BoldListTime, BoldListTimeStatus.',
+              composedOf: const ['BoldSpotIcon', 'BoldCard', 'BoldStatusTag', 'BoldIcon'],
+              child: BoldListGroup(
+                title: 'Atividade',
+                children: [
+                  BoldListTile(
+                    leading: const BoldSpotIcon('pix', tone: BoldSpotTone.primary),
+                    title: 'Fazer um Pix',
+                    subtitle: 'Transferência instantânea',
+                    onTap: () {},
+                  ),
+                  const BoldListTile(
+                    leading: BoldSpotIcon('arrow-down-light', tone: BoldSpotTone.success, filled: true),
+                    title: 'Recebido de Ana',
+                    subtitle: 'Hoje',
+                    trailing: BoldListAmount('R\$ 560,00'),
+                  ),
+                  const BoldListTile(
+                    leading: BoldSpotIcon('arrow-up-light', tone: BoldSpotTone.neutral, filled: true),
+                    title: 'Pagamento boleto',
+                    subtitle: 'Ontem',
+                    trailing: BoldListAmount('R\$ 132,90', negative: true),
+                  ),
+                  const BoldListTile(
+                    leading: BoldSpotIcon('mobile-light', tone: BoldSpotTone.primary),
+                    title: 'Recarga celular',
+                    trailing: BoldListTime('14min'),
+                  ),
+                  const BoldListTile(
+                    leading: BoldSpotIcon('clock-light', tone: BoldSpotTone.warning),
+                    title: 'Transferência TED',
+                    trailing: BoldListTimeStatus(
+                      time: '12:04',
+                      status: BoldStatusTagData(label: 'Concluído', tone: BoldStatusTone.success),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // BoldAppList.menuItem/activityItem/transactionItem/profileBanner + BoldAppListGroup({required List<Widget> children, String? title})
+            _ComponentSpec(
+              title: 'BoldAppList',
+              description:
+                  'Row componível (left/middle/right) via factories: menuItem, activityItem, transactionItem e profileBanner (standalone). Rows full-width.',
+              composedOf: const ['BoldSpotIcon', 'BoldStatusTag', 'BoldCard', 'Tipografia'],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BoldAppListGroup(
+                    title: 'Factories',
+                    children: [
+                      BoldAppList.menuItem(icon: 'pix-light', title: 'Fazer um Pix', subtitle: 'Instantâneo', onTap: () {}),
+                      BoldAppList.activityItem(
+                        icon: 'arrow-down-light',
+                        iconTone: BoldSpotTone.success,
+                        title: 'Recebido de Ana',
+                        subtitle: 'Pix',
+                        time: '14min',
+                        status: const BoldStatusTagData(label: 'Concluído', tone: BoldStatusTone.success),
+                      ),
+                      BoldAppList.transactionItem(
+                        title: 'Mercado Central',
+                        source: 'Pix',
+                        time: '11:34',
+                        amount: 'R\$ 89,90',
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  BoldAppList.profileBanner(initials: 'CM', name: 'Carla Mendes', subtitle: 'Ver perfil', onTap: () {}),
+                ],
+              ),
+            ),
+            // const BoldAmountDisplay({required String value, String? timestamp, String? label, bool centered})
+            _ComponentSpec(
+              title: 'BoldAmountDisplay',
+              description:
+                  'Bloco de valor entre hairlines: valor grande + timestamp/label opcionais. Eixos: centered (comprovante) x alinhado à esquerda (header de extrato).',
+              composedOf: const ['Tipografia', 'Cores'],
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BoldAmountDisplay(value: 'R\$ 560,00', timestamp: '13/10/2023 às 14:25'),
+                  SizedBox(height: 16),
+                  BoldAmountDisplay(value: 'R\$ 2.912,47', label: 'Seu saldo', centered: false),
+                ],
+              ),
+            ),
+            // const BoldDetailRow({required String title, String? description, String? icon, bool chevron, bool hairline, VoidCallback? onTap})
+            _ComponentSpec(
+              title: 'BoldDetailRow',
+              description:
+                  'Row de detalhe título/descrição com hairline inferior (detalhe de transação, dados do cartão). Spot à esquerda e chevron opcionais.',
+              composedOf: const ['BoldSpotIcon', 'BoldIcon', 'Tipografia'],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const BoldDetailRow(title: 'Para', description: 'Ana Silva'),
+                  const BoldDetailRow(title: 'Valor', description: 'R\$ 300,67'),
+                  const BoldDetailRow(title: 'Chave Pix', description: 'ana@email.com', icon: 'key-light'),
+                  BoldDetailRow(title: 'Ajuda', icon: 'circle-question-light', chevron: true, hairline: false, onTap: () {}),
+                ],
+              ),
+            ),
+            // const BoldReceipt({required String title, required String timestamp, String icon, BoldSpotTone statusTone, List<BoldReceiptRow> rows, List<BoldReceiptSection> sections, List<String> footerLines, String? transactionId})
+            _ComponentSpec(
+              title: 'BoldReceipt',
+              description:
+                  'Comprovante (organismo): spot de status + título + timestamp + rows label/valor + seções + rodapé institucional com ID e logo. statusTone dá o estado.',
+              composedOf: const ['BoldSpotIcon', 'BoldCard', 'BoldLogo', 'Tipografia'],
+              child: const BoldReceipt(
+                title: 'Comprovante de pagamento',
+                timestamp: '24 Out 2022 - 11:34:32',
+                statusTone: BoldSpotTone.success,
+                rows: [
+                  BoldReceiptRow(label: 'Valor', value: 'R\$ 300,67'),
+                  BoldReceiptRow(label: 'Tipo de pagamento', value: 'Pix'),
+                ],
+                sections: [
+                  BoldReceiptSection(
+                    icon: 'user-light',
+                    title: 'Destino',
+                    rows: [
+                      BoldReceiptRow(label: 'Nome', value: 'Ana Silva'),
+                      BoldReceiptRow(label: 'Instituição', value: 'Banco BOLD'),
+                    ],
+                  ),
+                ],
+                footerLines: ['BOLD Instituição de Pagamento S.A.', 'CNPJ 00.000.000/0001-00'],
+                transactionId: 'E1234567890',
+              ),
+            ),
+            // const BoldProgressBar({required double value, String? caption, bool onGlass})
+            _ComponentSpec(
+              title: 'BoldProgressBar',
+              description:
+                  'Trilho h5 + preenchimento (0..1) + caption opcional. onGlass = skin claro sobre foto. 1 eixo: value.',
+              composedOf: const ['Cores', 'Tipografia'],
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BoldProgressBar(value: 0.2, caption: '1 de 5 confirmados'),
+                  SizedBox(height: 16),
+                  BoldProgressBar(value: 0.6, caption: '3 de 5 confirmados'),
+                  SizedBox(height: 16),
+                  BoldProgressBar(value: 1.0, caption: 'Concluído'),
+                ],
+              ),
+            ),
+            // const BoldRadioList({required List<BoldRadioOption> options, required String? value, required ValueChanged<String> onChanged, String? title})
+            _ComponentSpec(
+              title: 'BoldRadioList',
+              description:
+                  'Lista single-select com título opcional; a opção marcada pinta ring+dot primário. Controlado — value fixo aqui.',
+              composedOf: const ['Cores', 'Tipografia'],
+              child: BoldRadioList(
+                title: 'Selecione o motivo',
+                value: 'oferta',
+                onChanged: (_) {},
+                options: const [
+                  BoldRadioOption(value: 'oferta', label: 'Recebi oferta de outro banco'),
+                  BoldRadioOption(value: 'tarifas', label: 'Preço das tarifas'),
+                  BoldRadioOption(value: 'outro', label: 'Outro motivo'),
+                ],
+              ),
+            ),
+            // enum BoldTooltipSide { top, right, bottom, left } · BoldTooltipStyle { dark, light } · BoldTooltipSize { big, small, xsmall }
+            // const BoldTooltip({required String label, BoldTooltipSide side, BoldTooltipSize size, BoldTooltipStyle style, bool tail})
+            _ComponentSpec(
+              title: 'BoldTooltip',
+              description:
+                  'Label flutuante com tail. Dois eixos ortogonais: style (dark/light) × side (top/right/bottom/left). Posicionamento é do caller.',
+              composedOf: const ['Cores', 'Tipografia'],
+              child: _VariantMatrix(
+                rowAxis: 'Style',
+                rows: const ['dark', 'light'],
+                colAxis: 'Side',
+                cols: const ['top', 'right', 'bottom', 'left'],
+                cellHeight: 92,
+                cell: (row, col) => BoldTooltip(
+                  label: 'Dica',
+                  style: row == 0 ? BoldTooltipStyle.dark : BoldTooltipStyle.light,
+                  side: const [
+                    BoldTooltipSide.top,
+                    BoldTooltipSide.right,
+                    BoldTooltipSide.bottom,
+                    BoldTooltipSide.left,
+                  ][col],
+                ),
+              ),
+            ),
+            // enum BoldMenuTileSize { compact, wide, large }
+            // const BoldMenuTile({required String icon, required String label, VoidCallback? onTap, BoldMenuTileSize size})
+            _ComponentSpec(
+              title: 'BoldMenuTile',
+              description:
+                  'Card glass alinhado à esquerda (ícone + label). 1 eixo: size (compact / wide / large).',
+              composedOf: const ['BoldCard', 'BoldIcon', 'Tipografia'],
+              child: _VariantStrip(
+                cellWidth: 160,
+                items: [
+                  ('compact', BoldMenuTile(icon: 'qrcode-light', label: 'Ler QR', size: BoldMenuTileSize.compact, onTap: () {})),
+                  ('wide', BoldMenuTile(icon: 'pix-light', label: 'Fazer um Pix', size: BoldMenuTileSize.wide, onTap: () {})),
+                  ('large', BoldMenuTile(icon: 'barcode-light', label: 'Pagar conta', size: BoldMenuTileSize.large, onTap: () {})),
+                ],
+              ),
+            ),
+            // const BoldAvatarStack({required List<String> initials, double size, double overlap, bool bordered})
+            _ComponentSpec(
+              title: 'BoldAvatarStack',
+              description:
+                  'Mini-avatares de iniciais empilhados com overlap. 1 eixo: bordered (anel branco) true/false.',
+              composedOf: const ['Gradientes', 'Tipografia'],
+              child: const _VariantStrip(
+                cellWidth: 160,
+                items: [
+                  ('bordered: true', BoldAvatarStack(initials: ['CM', 'BL', 'RS'])),
+                  ('bordered: false', BoldAvatarStack(initials: ['CM', 'BL', 'RS'], bordered: false)),
+                ],
+              ),
+            ),
+            // const BoldAvatarRow({required List<String> initials, List<String>? labels, List<String>? sublabels, double size, ValueChanged<int>? onTapAvatar, VoidCallback? onAdd})
+            _ComponentSpec(
+              title: 'BoldAvatarRow',
+              description:
+                  'Fileira "Enviar para": avatares + botão-spot tracejado (adicionar). Formas: compacta (só avatares) e rotulada (nome + banco).',
+              composedOf: const ['Gradientes', 'BoldIcon', 'Tipografia'],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BoldAvatarRow(initials: const ['CM', 'BL', 'RS'], onAdd: () {}),
+                  const SizedBox(height: 16),
+                  BoldAvatarRow(
+                    initials: const ['CM', 'BL'],
+                    labels: const ['Carla', 'Bruno'],
+                    sublabels: const ['Nubank', 'Itaú'],
+                    onAdd: () {},
+                  ),
+                ],
+              ),
+            ),
+            // const BoldEmptyState({required String title, required String caption, String icon})
+            _ComponentSpec(
+              title: 'BoldEmptyState',
+              description:
+                  'Estado vazio de lista: card glass com spot circular + título + caption, centralizado.',
+              composedOf: const ['BoldCard', 'BoldIcon', 'Tipografia'],
+              child: const BoldEmptyState(
+                title: 'Nada por aqui',
+                caption: 'Suas transações aparecerão aqui.',
+              ),
+            ),
+            // enum BoldIntent { error, warning, success, info }
+            // const BoldAlert({required BoldIntent intent, required String title, String? message, VoidCallback? onClose})
+            _ComponentSpec(
+              title: 'BoldAlert',
+              description:
+                  'Aviso inline glass tintado por intent (error/warning/success/info): wash + border + spot no tom. onClose opcional. Componente largo. (BoldToast usa os mesmos intents via BoldToast.show — API imperativa.)',
+              composedOf: const ['BoldSpotIcon', 'BoldIcon', 'Vidro (glass)', 'Cores'],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BoldAlert(
+                    intent: BoldIntent.error,
+                    title: 'Não foi possível enviar o Pix',
+                    message: 'Saldo insuficiente para esta transferência.',
+                    onClose: () {},
+                  ),
+                  const SizedBox(height: 12),
+                  const BoldAlert(intent: BoldIntent.warning, title: 'Chave a expirar', message: 'Revalide sua chave Pix em 3 dias.'),
+                  const SizedBox(height: 12),
+                  const BoldAlert(intent: BoldIntent.success, title: 'PIX enviado'),
+                  const SizedBox(height: 12),
+                  const BoldAlert(intent: BoldIntent.info, title: 'Limite diário', message: 'Você pode transferir até R\$ 5.000,00 por dia.'),
+                ],
+              ),
+            ),
+
+            const _TierHeader(
+                tier: 'ORGANISMOS',
+                description: 'Composições em superfície — consomem moléculas.'),
+            // BoldCircleButton(String icon, {VoidCallback? onTap, bool dot, bool active, double size, double iconSize})
+            _ComponentSpec(
+              title: 'BoldCircleButton',
+              description:
+                  'Botão redondo glass da top bar, com ponto de notificação (dot) e tint de marca quando active. 1 eixo: estado.',
+              composedOf: const ['BoldIcon', 'Cores'],
+              child: _VariantStrip(
+                cellWidth: 96,
+                items: [
+                  ('base', BoldCircleButton('bell', onTap: () {})),
+                  ('dot', BoldCircleButton('bell', dot: true, onTap: () {})),
+                  ('active', BoldCircleButton('edit', active: true, onTap: () {})),
+                ],
+              ),
+            ),
+            // BoldAvatar({String? initials, ImageProvider? image, double size, bool gear, VoidCallback? onTap})
+            _ComponentSpec(
+              title: 'BoldAvatar',
+              description:
+                  'Avatar de perfil: imagem se houver, senão iniciais sobre gradiente de marca. gear anexa um badge de configurações.',
+              composedOf: const ['Gradientes', 'BoldIcon', 'Tipografia'],
+              child: _VariantStrip(
+                cellWidth: 96,
+                items: [
+                  ('initials', const BoldAvatar(initials: 'AC')),
+                  ('image', BoldAvatar(image: const AssetImage('lib/design_system/assets/city-cyberpunk.webp'))),
+                  ('gear', const BoldAvatar(initials: 'AC', gear: true)),
+                ],
+              ),
+            ),
+            // BoldAccountPill({required String label, Color color, VoidCallback? onTap})
+            _ComponentSpec(
+              title: 'BoldAccountPill',
+              description:
+                  'Pill sólida que expõe a conta ativa (PF/PJ). Ganha chevron quando onTap abre o seletor. Fill sólido + texto branco p/ ler sobre o header.',
+              composedOf: const ['BoldIcon', 'Tipografia'],
+              child: _VariantStrip(
+                cellWidth: 120,
+                items: [
+                  ('estático', const BoldAccountPill(label: 'CONTA PF')),
+                  ('com seletor', BoldAccountPill(label: 'CONTA PJ', onTap: () {})),
+                ],
+              ),
+            ),
+            // BoldAccountSwitcher({required String name, VoidCallback? onTap})
+            _ComponentSpec(
+              title: 'BoldAccountSwitcher',
+              description:
+                  'O nome da conta COMO seletor: pill com tint de marca + chevron-down. Emparelhe com um "Olá," acima no header da home.',
+              composedOf: const ['BoldIcon', 'Tipografia', 'Cores'],
+              child: SizedBox(
+                width: 200,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('Olá,', style: BoldType.bodySmall),
+                    const SizedBox(height: 4),
+                    BoldAccountSwitcher(name: 'Ana Carolina', onTap: () {}),
+                  ],
+                ),
+              ),
+            ),
+            // BoldBalance({required String value, bool hidden, VoidCallback? onExtrato, String? entradas, String? saidas, bool loading, bool statsLoading})
+            _ComponentSpec(
+              title: 'BoldBalance',
+              description:
+                  'Card de saldo (glass) da home: label + Extrato, valor em Headline e pills de entradas/saídas. Reflete hidden, e tem skeletons de valor (loading) e de totais (statsLoading).',
+              composedOf: const ['BoldCard', 'BoldStatusTag', 'BoldSkeleton', 'BoldIcon'],
+              child: SizedBox(
+                width: 320,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    BoldBalance(value: 'R\$ 2.912,47', onExtrato: () {}, entradas: 'R\$ 300,00', saidas: 'R\$ 180,00'),
+                    const SizedBox(height: 12),
+                    BoldBalance(value: 'R\$ 2.912,47', hidden: true, onExtrato: () {}, entradas: 'R\$ 300,00', saidas: 'R\$ 180,00'),
+                    const SizedBox(height: 12),
+                    BoldBalance(value: 'R\$ 2.912,47', onExtrato: () {}, loading: true, statsLoading: true),
+                  ],
+                ),
+              ),
+            ),
+            // BoldNoticeRow({required String icon, required String title, String? subtitle, int? count, VoidCallback? onTap})
+            _ComponentSpec(
+              title: 'BoldNoticeRow',
+              description:
+                  'Linha-aviso glass da home: ícone-tile + título/subtítulo e badge de contagem opcional (some se null ou 0). Full-width.',
+              composedOf: const ['BoldCard', 'BoldIcon', 'Tipografia'],
+              child: SizedBox(
+                width: 320,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    BoldNoticeRow(icon: 'paper-plane-light', title: 'Autorizações', subtitle: 'Veja o que está esperando você.', count: 8, onTap: () {}),
+                    const SizedBox(height: 12),
+                    BoldNoticeRow(icon: 'paper-plane-light', title: 'Autorizações', subtitle: 'Nada pendente no momento.', onTap: () {}),
+                  ],
+                ),
+              ),
+            ),
+            // BoldPromoBanner({required String title, String? subtitle, required String primaryLabel, required String secondaryLabel, List<String> avatars, int? moreCount, VoidCallback? onPrimary, VoidCallback? onSecondary, VoidCallback? onClose})
+            _ComponentSpec(
+              title: 'BoldPromoBanner',
+              description:
+                  'Banner de destaque (gradiente de marca) com título/subtítulo, cluster de avatares + contagem, dois CTAs e X de fechar. Full-width.',
+              composedOf: const ['BoldButton', 'BoldAvatarStack', 'BoldIcon'],
+              child: SizedBox(
+                width: 320,
+                child: BoldPromoBanner(
+                  title: 'Veja as pessoas próximas',
+                  subtitle: 'Realize transações :)',
+                  primaryLabel: 'Enviar dinheiro',
+                  secondaryLabel: 'Receber',
+                  avatars: const ['CM', 'BL'],
+                  moreCount: 400,
+                  onPrimary: () {},
+                  onSecondary: () {},
+                  onClose: () {},
+                ),
+              ),
+            ),
+            // BoldPromoCard({required String title, String? subtitle, Widget? illustration, VoidCallback? onClose, VoidCallback? onTap})
+            _ComponentSpec(
+              title: 'BoldPromoCard',
+              description:
+                  'Card de atenção/promoção do carrossel: título Headline + subtítulo, ilustração (placeholder se null) e X. Mesmo gradiente do banner, SEM botões.',
+              composedOf: const ['BoldIcon', 'Cores', 'Tipografia'],
+              child: SizedBox(
+                width: 320,
+                child: BoldPromoCard(
+                  title: 'Habilite sua biometria',
+                  subtitle: 'O melhor de dois mundos',
+                  onClose: () {},
+                  onTap: () {},
+                ),
+              ),
+            ),
+            // BoldTopBar.page / .home / .stepper / .sheet
+            _ComponentSpec(
+              title: 'BoldTopBar',
+              description:
+                  'Organismo do slot superior (glass + BoldNavTopBar + stepper opcional). Named ctors: .page (back + título), .home (conta + saudação), .stepper (page + progresso) e .sheet (cabeçalho de bottom sheet).',
+              composedOf: const ['BoldGlassSurface', 'BoldNavTopBar', 'BoldStepper'],
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(width: 340, child: BoldTopBar.page(title: 'Menu completo', onBack: () {})),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: 340,
+                    child: BoldTopBar.home(
+                      firstName: 'Ana',
+                      accountLabel: '0001·9',
+                      onSwitchAccount: () {},
+                      onOpenProfile: () {},
+                      icons: [
+                        BoldNavRightIcon(icon: 'bell', semanticLabel: 'Notificações', badge: true, onPressed: () {}),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(width: 340, child: BoldTopBar.stepper(title: 'Abrir conta', onBack: () {}, current: 2, total: 4)),
+                  const SizedBox(height: 12),
+                  SizedBox(width: 340, child: BoldTopBar.sheet(title: 'Escolha uma conta', onClose: () {})),
+                ],
+              ),
+            ),
+            // BoldBottomApp.nav / .button / .keyboard / .buttonAndKeyboard / .child + BoldTabItem
+            _ComponentSpec(
+              title: 'BoldBottomApp + BoldTabItem',
+              description:
+                  'Organismo do slot inferior (glass + home indicator). Named ctors: .nav (tabs — a ativa ganha spot rosa), .button (1–3 CTAs), .keyboard (teclado), .buttonAndKeyboard e .child (escape hatch).',
+              composedOf: const ['BoldGlassSurface', 'BoldNavigationButton', 'BoldKeypad'],
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 340,
+                    child: BoldBottomApp.nav<int>(
+                      current: 0,
+                      onTap: (_) {},
+                      items: const [
+                        BoldTabItem(value: 0, label: 'Início', icon: Icons.home_rounded),
+                        BoldTabItem(value: 1, label: 'Cartões', icon: Icons.credit_card),
+                        BoldTabItem(value: 2, label: 'Pix', icon: Icons.qr_code_rounded),
+                        BoldTabItem(value: 3, label: 'Perfil', icon: Icons.person_rounded),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: 340,
+                    child: BoldBottomApp.button(
+                      primary: BoldNavAction(label: 'Continuar', onPressed: () {}),
+                      secondary: BoldNavAction(label: 'Cancelar', onPressed: () {}),
+                      homeIndicator: true,
+                      safeBottom: false,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // BoldDialog.confirm — API IMPERATIVA (showDialog); sem forma de widget p/ preview.
+            _ComponentSpec(
+              title: 'BoldDialog',
+              description:
+                  'Diálogo de confirmação crítica (ícone + título + descrição + cancelar/ação). API IMPERATIVA: await BoldDialog.confirm(context, ...) — sem forma de widget inline.',
+              composedOf: const ['BoldButton', 'Tipografia', 'Cores'],
+              child: Text(
+                'BoldDialog.confirm(context, …) → Future<bool>. Acionado via showDialog; não renderiza standalone.',
+                style: BoldType.bodySmall,
+              ),
+            ),
+
+            const _TierHeader(
+                tier: 'MOTION / especiais',
+                description:
+                    'Autorização Quântica — visual violeta, independente da marca.'),
+            // BoldQuantumSeal({bool waiting, bool failed, VoidCallback? onCompleted, VoidCallback? onFailed, double size, bool showLabel, String label, String failLabel})
+            _ComponentSpec(
+              title: 'BoldQuantumSeal',
+              description:
+                  'Selo de autorização quântica (sobreposto à transação). Três estados por waiting+failed: securing (loop), sucesso (verde, check) e falha (vermelho, X).',
+              composedOf: const ['CustomPaint', 'Tipografia'],
+              child: const _VariantStrip(
+                cellWidth: 150,
+                items: [
+                  ('waiting', BoldQuantumSeal(waiting: true, size: 120)),
+                  ('success', BoldQuantumSeal(waiting: false, failed: false, size: 120)),
+                  ('failed', BoldQuantumSeal(waiting: false, failed: true, size: 120)),
+                ],
+              ),
+            ),
+            // BoldQuantumCore({double? progress}) · BoldQuantumPairingScreen({double? progress, ...}) — tela cheia
+            _ComponentSpec(
+              title: 'BoldQuantumCore + BoldQuantumPairingScreen',
+              description:
+                  'Animação de pareamento pós-quântico. Core = núcleo pintado (progress 0..1, ou null = loop demo). PairingScreen = TELA CHEIA (header, fase, barra, 4 passos) — aqui num viewport constrito.',
+              composedOf: const ['BoldQuantumCore', 'BoldProgressBar', 'Tipografia'],
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  SizedBox(width: 220, height: 220, child: BoldQuantumCore()),
+                  SizedBox(height: 12),
+                  SizedBox(width: 320, height: 480, child: BoldQuantumPairingScreen()),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: 24),
+            // ───────────────────────────── TOKENS ─────────────────────────
+            Text('TOKENS',
+                style: BoldType.labelLg
+                    .copyWith(color: c.textPrimary, letterSpacing: 1.2)),
+            const SizedBox(height: 16),
             _SpecTable(title: 'Cor', rows: const [
               ('primary04', '#FE3976'),
               ('accent04', '#FE7B5E'),
@@ -2861,4 +4789,490 @@ class _SpecTable extends StatelessWidget {
       ]),
     );
   }
+}
+const List<(String, int)> _dmNodes = [
+  ('Colors', 0),
+  ('Gradients', 0),
+  ('Metrics', 0),
+  ('Typography', 0),
+  ('Glass', 0),
+  ('Theme', 0),
+  ('Icon', 1),
+  ('Logo', 1),
+  ('PixMark', 1),
+  ('Background', 1),
+  ('GlassSurface', 1),
+  ('HomeIndicator', 1),
+  ('PageDots', 1),
+  ('GlassAvatar', 1),
+  ('CopyButton', 1),
+  ('Skeleton', 1),
+  ('Controls', 1),
+  ('Checkbox', 1),
+  ('PageTitle', 2),
+  ('SectionHeader', 2),
+  ('Button', 2),
+  ('IconButton', 2),
+  ('TextField', 2),
+  ('CurrencyField', 2),
+  ('SearchInput', 2),
+  ('OtpInput', 2),
+  ('Keypad', 2),
+  ('Chip', 2),
+  ('StatusTag', 2),
+  ('InputChip', 2),
+  ('NavTopBar', 2),
+  ('Stepper', 2),
+  ('NavigationButton', 2),
+  ('Card', 2),
+  ('List', 2),
+  ('AppList', 2),
+  ('AmountDisplay', 2),
+  ('DetailRow', 2),
+  ('Receipt', 2),
+  ('ProgressBar', 2),
+  ('RadioList', 2),
+  ('Tooltip', 2),
+  ('MenuTile', 2),
+  ('AvatarStack', 2),
+  ('AvatarRow', 2),
+  ('EmptyState', 2),
+  ('Alert', 2),
+  ('AppBar', 3),
+  ('Balance', 3),
+  ('NoticeRow', 3),
+  ('PromoBanner', 3),
+  ('PromoCard', 3),
+  ('TopBar', 3),
+  ('BottomApp', 3),
+  ('Dialog', 3),
+  ('QuantumPairing', 4),
+  ('QuantumSeal', 4),
+];
+
+const List<(int, int)> _dmEdges = [
+  (1, 0),
+  (4, 0),
+  (5, 0),
+  (5, 3),
+  (5, 2),
+  (17, 0),
+  (17, 3),
+  (10, 0),
+  (10, 4),
+  (21, 0),
+  (21, 2),
+  (21, 6),
+  (47, 0),
+  (47, 3),
+  (47, 2),
+  (47, 1),
+  (47, 6),
+  (52, 0),
+  (52, 3),
+  (52, 2),
+  (52, 10),
+  (52, 6),
+  (52, 30),
+  (52, 15),
+  (52, 31),
+  (28, 0),
+  (28, 3),
+  (28, 6),
+  (39, 0),
+  (39, 3),
+  (15, 0),
+  (14, 0),
+  (14, 3),
+  (14, 6),
+  (33, 0),
+  (33, 2),
+  (33, 4),
+  (32, 20),
+  (29, 0),
+  (29, 4),
+  (29, 2),
+  (29, 3),
+  (29, 6),
+  (20, 0),
+  (20, 3),
+  (20, 2),
+  (20, 6),
+  (42, 0),
+  (42, 2),
+  (42, 3),
+  (42, 33),
+  (42, 6),
+  (48, 0),
+  (48, 2),
+  (48, 3),
+  (48, 33),
+  (48, 6),
+  (48, 15),
+  (48, 28),
+  (9, 0),
+  (11, 0),
+  (11, 2),
+  (54, 0),
+  (54, 3),
+  (54, 2),
+  (54, 20),
+  (37, 0),
+  (37, 3),
+  (37, 2),
+  (37, 6),
+  (37, 34),
+  (25, 0),
+  (25, 2),
+  (25, 3),
+  (23, 0),
+  (23, 3),
+  (36, 0),
+  (36, 3),
+  (36, 2),
+  (53, 0),
+  (53, 4),
+  (53, 2),
+  (53, 3),
+  (53, 10),
+  (53, 11),
+  (53, 26),
+  (53, 32),
+  (16, 0),
+  (16, 3),
+  (16, 2),
+  (51, 0),
+  (51, 2),
+  (51, 3),
+  (51, 6),
+  (24, 0),
+  (24, 2),
+  (24, 3),
+  (24, 6),
+  (22, 0),
+  (22, 3),
+  (22, 2),
+  (22, 6),
+  (35, 0),
+  (35, 2),
+  (35, 3),
+  (35, 47),
+  (35, 33),
+  (35, 17),
+  (35, 16),
+  (35, 6),
+  (35, 21),
+  (35, 34),
+  (30, 0),
+  (30, 3),
+  (30, 20),
+  (30, 13),
+  (30, 6),
+  (30, 21),
+  (30, 29),
+  (41, 0),
+  (41, 3),
+  (13, 0),
+  (13, 4),
+  (13, 3),
+  (6, 0),
+  (6, 2),
+  (43, 0),
+  (43, 1),
+  (43, 3),
+  (34, 0),
+  (34, 3),
+  (34, 2),
+  (34, 33),
+  (34, 6),
+  (34, 28),
+  (26, 0),
+  (26, 3),
+  (50, 0),
+  (50, 2),
+  (50, 3),
+  (50, 43),
+  (50, 20),
+  (50, 6),
+  (38, 0),
+  (38, 3),
+  (38, 2),
+  (38, 33),
+  (38, 6),
+  (38, 34),
+  (38, 7),
+  (31, 0),
+  (31, 3),
+  (49, 0),
+  (49, 2),
+  (49, 3),
+  (49, 33),
+  (49, 6),
+  (19, 0),
+  (19, 3),
+  (56, 3),
+  (46, 0),
+  (46, 4),
+  (46, 3),
+  (46, 2),
+  (46, 6),
+  (46, 34),
+  (27, 0),
+  (27, 3),
+  (27, 2),
+  (40, 0),
+  (40, 3),
+  (18, 0),
+  (18, 3),
+  (55, 0),
+  (55, 3),
+  (8, 0),
+  (8, 2),
+  (8, 6),
+  (12, 0),
+  (12, 2),
+  (44, 0),
+  (44, 1),
+  (44, 3),
+  (44, 6),
+  (45, 0),
+  (45, 2),
+  (45, 3),
+  (45, 33),
+  (45, 6),
+];
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MAPA DE DEPENDÊNCIAS — aba do catálogo. Grafo REAL dos imports de
+// lib/design_system (57 módulos · 189 arcos, gerado por script). Toque num nó
+// pra destacar a rede dele (o que consome + quem o consome). Lanes por camada.
+// ═══════════════════════════════════════════════════════════════════════════
+class _DepMapTab extends StatefulWidget {
+  const _DepMapTab();
+  @override
+  State<_DepMapTab> createState() => _DepMapTabState();
+}
+
+class _DepMapTabState extends State<_DepMapTab> {
+  int? _sel;
+
+  static final List<Set<int>> _adj = () {
+    final a = List.generate(_dmNodes.length, (_) => <int>{});
+    for (final (co, de) in _dmEdges) {
+      a[co].add(de);
+      a[de].add(co);
+    }
+    return a;
+  }();
+
+  Set<int> _network(int i) {
+    final seen = <int>{i};
+    final q = <int>[i];
+    while (q.isNotEmpty) {
+      final x = q.removeLast();
+      for (final y in _adj[x]) {
+        if (seen.add(y)) q.add(y);
+      }
+    }
+    return seen;
+  }
+
+  static const double laneW = 172, pillH = 30, gap = 9, headH = 38, topPad = 6;
+  static const List<String> _laneLabels = [
+    'TOKENS',
+    'ÁTOMOS',
+    'MOLÉCULAS',
+    'ORGANISMOS',
+    'MOTION'
+  ];
+
+  List<Color> _layerColors() => const [
+        Color(0xFF8A8D99), // tokens (slate)
+        BoldColors.info04, // átomos (azul)
+        BoldColors.success04, // moléculas (verde)
+        BoldColors.warning04, // organismos (âmbar)
+        BoldColors.infoSoft, // motion (violeta)
+      ];
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    final lc = _layerColors();
+
+    final perLayer = List.generate(5, (_) => <int>[]);
+    for (var i = 0; i < _dmNodes.length; i++) {
+      perLayer[_dmNodes[i].$2].add(i);
+    }
+    final pos = <int, Offset>{};
+    for (var l = 0; l < 5; l++) {
+      for (var k = 0; k < perLayer[l].length; k++) {
+        pos[perLayer[l][k]] = Offset(
+          l * laneW + laneW / 2,
+          topPad + headH + k * (pillH + gap) + pillH / 2,
+        );
+      }
+    }
+    final maxRows = perLayer.map((e) => e.length).fold<int>(0, math.max);
+    final boardW = laneW * 5;
+    final boardH = topPad + headH + maxRows * (pillH + gap) + 32;
+    final net = _sel == null ? null : _network(_sel!);
+    final active = net != null;
+
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Padding(
+        padding: const EdgeInsets.fromLTRB(24, 20, 24, 6),
+        child:
+            Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('Mapa de dependências',
+              style: BoldType.headlineSm.copyWith(color: c.textPrimary)),
+          const SizedBox(height: 4),
+          Text(
+            active
+                ? 'Rede de "${_dmNodes[_sel!].$1}" — ${net.length - 1} nós conectados. Toque de novo pra limpar.'
+                : 'Grafo real dos imports de lib/design_system (57 módulos · 189 arcos). Toque num nó pra ver a rede dele.',
+            style: BoldType.bodySmall.copyWith(color: c.textSecondary),
+          ),
+        ]),
+      ),
+      Expanded(
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(20, 0, 20, 60),
+            child: SizedBox(
+              width: boardW,
+              height: boardH,
+              child: Stack(children: [
+                Positioned.fill(
+                  child: CustomPaint(
+                    painter: _DepEdgePainter(
+                        pos: pos, net: net, layerColors: lc, ghost: c.borderStrong),
+                  ),
+                ),
+                for (var l = 0; l < 5; l++)
+                  Positioned(
+                    left: l * laneW,
+                    top: topPad,
+                    width: laneW,
+                    child: Center(
+                      child: Text(_laneLabels[l],
+                          style: BoldType.labelSm.copyWith(
+                              color: lc[l],
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.6)),
+                    ),
+                  ),
+                for (final entry in pos.entries)
+                  _pill(entry.key, entry.value, net, lc),
+              ]),
+            ),
+          ),
+        ),
+      ),
+    ]);
+  }
+
+  Widget _pill(int i, Offset center, Set<int>? net, List<Color> lc) {
+    final color = lc[_dmNodes[i].$2];
+    final inNet = net?.contains(i) ?? true;
+    final isSel = _sel == i;
+    final dim = net != null && !inNet;
+    return Positioned(
+      left: center.dx - laneW / 2 + 8,
+      top: center.dy - pillH / 2,
+      width: laneW - 16,
+      height: pillH,
+      child: Opacity(
+        opacity: dim ? 0.16 : 1,
+        child: GestureDetector(
+          onTap: () => setState(() => _sel = isSel ? null : i),
+          child: Container(
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            decoration: BoxDecoration(
+              color: isSel
+                  ? color
+                  : (net != null && inNet
+                      ? color.withValues(alpha: 0.12)
+                      : BoldColors.transparent),
+              borderRadius: BorderRadius.circular(999),
+              border: Border.all(
+                  color: color.withValues(alpha: isSel ? 1 : 0.4), width: 1.4),
+            ),
+            child: Text(
+              _dmNodes[i].$1,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: BoldType.labelSm.copyWith(
+                  color: isSel ? BoldColors.white : color,
+                  fontWeight: FontWeight.w600),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DepEdgePainter extends CustomPainter {
+  _DepEdgePainter({
+    required this.pos,
+    required this.net,
+    required this.layerColors,
+    required this.ghost,
+  });
+  final Map<int, Offset> pos;
+  final Set<int>? net;
+  final List<Color> layerColors;
+  final Color ghost;
+
+  static const double _halfW = _DepMapTabState.laneW / 2 - 8;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    for (final (cIdx, dIdx) in _dmEdges) {
+      final a = pos[dIdx];
+      final b = pos[cIdx];
+      if (a == null || b == null) continue;
+      final on = net != null && net!.contains(cIdx) && net!.contains(dIdx);
+      final Color col;
+      final double w;
+      if (net == null) {
+        col = ghost.withValues(alpha: 0.5);
+        w = 1.0;
+      } else if (on) {
+        col = layerColors[_dmNodes[cIdx].$2].withValues(alpha: 0.85);
+        w = 1.6;
+      } else {
+        col = ghost.withValues(alpha: 0.05);
+        w = 1.0;
+      }
+      final paint = Paint()
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = w
+        ..color = col;
+      final dx = b.dx - a.dx;
+      final Path path = Path();
+      if (dx.abs() < 4) {
+        const s = 70.0;
+        path
+          ..moveTo(a.dx + _halfW, a.dy)
+          ..cubicTo(a.dx + _halfW + s, a.dy, b.dx + _halfW + s, b.dy,
+              b.dx + _halfW, b.dy);
+      } else {
+        final ax = a.dx + (dx > 0 ? _halfW : -_halfW);
+        final bx = b.dx + (dx > 0 ? -_halfW : _halfW);
+        final off = math.max(40.0, (bx - ax).abs() * 0.42);
+        path
+          ..moveTo(ax, a.dy)
+          ..cubicTo(ax + (dx > 0 ? off : -off), a.dy,
+              bx + (dx > 0 ? -off : off), b.dy, bx, b.dy);
+      }
+      canvas.drawPath(path, paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_DepEdgePainter o) => o.net != net;
 }

@@ -145,6 +145,15 @@ class BoldColors {
   static const Color success07Alpha70 = Color(0xB3F1FEF6);
 
   // ═══════════════════════════════════════════════════════════════════════
+  // SECURE (gold) — 04 = base. Cofre/blindagem: "CPF Seguro", selo quântico,
+  // estados protegidos. Ouro fosco (não é o warning âmbar nem o brandYellow neon).
+  // ═══════════════════════════════════════════════════════════════════════
+  static const Color secure03 = Color(0xFF8A6D1F); // deep — glyph sobre wash
+  static const Color secure04 = Color(0xFFC9A227); // base
+  static const Color secure05 = Color(0xFFE0BE4D);
+  static const Color secure07 = Color(0xFFFBF3D6); // wash
+
+  // ═══════════════════════════════════════════════════════════════════════
   // INFO (blue / violet)
   // ═══════════════════════════════════════════════════════════════════════
   static const Color info04 = Color(0xFF3B82F6); // base
@@ -169,6 +178,7 @@ class BoldColors {
   static const Color danger = error04;
   static const Color dangerBright = error05;
   static const Color warning = warning04;
+  static const Color secure = secure04;
   static const Color info = info04;
 
   /// Hairline suave pra divisórias / separadores em superfície clara.
