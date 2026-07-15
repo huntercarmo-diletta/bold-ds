@@ -26,6 +26,7 @@ export 'theme/bold_metrics.dart';
 export 'theme/bold_typography.dart';
 export 'theme/bold_glass.dart';
 export 'theme/bold_theme.dart';
+export 'theme/bold_motion.dart';           // BoldMotion + BoldAnimateIn (presets)
 
 // ═══════════════════════════════════════════════════════════════════════════
 // ÁTOMOS — primitivos indivisíveis (consomem só tokens)
@@ -40,6 +41,8 @@ export 'widgets/bold_page_dots.dart';      // BoldPageDots (carrossel/onboarding
 export 'widgets/bold_glass_avatar.dart';   // BoldGlassAvatar (avatar do usuário)
 export 'widgets/bold_copy_button.dart';    // BoldCopyButton (copiar + check in-place)
 export 'widgets/bold_skeleton.dart';       // BoldSkeleton (shimmer loading)
+export 'widgets/bold_spinner.dart';        // BoldSpinner (arco com gradiente)
+export 'widgets/bold_illustration.dart';   // BoldIllustration (multicor, sem recolor)
 export 'widgets/bold_controls.dart';       // BoldSwitch, BoldSegmentedControl
 export 'widgets/bold_checkbox.dart';       // BoldCheckbox
 
@@ -95,6 +98,8 @@ export 'widgets/bold_promo_card.dart';   // BoldPromoCard (carrossel de promos)
 export 'widgets/bold_top_bar.dart';    // BoldTopBar (.page/.home/.stepper/.sheet)
 export 'widgets/bold_bottom_app.dart'; // BoldBottomApp (.nav/.button/.keyboard/.buttonAndKeyboard/.child) + BoldTabItem
 export 'widgets/bold_dialog.dart';     // BoldDialog
+export 'widgets/bold_sheet.dart';      // BoldSheet (bottom sheet + .show)
+export 'widgets/bold_password_sheet.dart'; // BoldPasswordSheet (PIN/senha)
 
 // ═══════════════════════════════════════════════════════════════════════════
 // MOTION / especiais — Autorização Quântica (visual violeta, independente da marca)
