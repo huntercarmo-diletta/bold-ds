@@ -1531,6 +1531,14 @@ class _PreviewTab extends StatelessWidget {
                       BoldCheckbox(label: 'Vazio'),
                       BoldCheckbox(indeterminate: true, label: 'Parcial'),
                       BoldCheckbox(checked: true, disabled: true, label: 'Off'),
+                      BoldCheckbox(
+                          checked: true,
+                          variant: BoldCheckboxVariant.neutral,
+                          label: 'Neutral'),
+                      BoldCheckbox(
+                          checked: true,
+                          size: BoldCheckboxSize.sm,
+                          label: 'Pequeno'),
                     ])),
             _Section(
                 title: 'Switch',
@@ -1562,6 +1570,7 @@ class _PreviewTab extends StatelessWidget {
                       BoldStatusTag(label: 'Falha', tone: BoldStatusTone.danger),
                       BoldStatusTag(label: 'Pendente', tone: BoldStatusTone.warning),
                       BoldStatusTag(label: 'Info', tone: BoldStatusTone.primary),
+                      BoldStatusTag(label: 'Neutro', tone: BoldStatusTone.neutral),
                     ])),
             _Section(
                 title: 'Chips',
@@ -1576,6 +1585,57 @@ class _PreviewTab extends StatelessWidget {
                 composedOf: const ['Cores'],
                 builder: (_) => const BoldHomeIndicator()),
 
+            _Section(
+                title: 'Glass surface',
+                composedOf: const ['Cores', 'Vidro (glass)'],
+                note: 'fill + stroke + blur · característica do container',
+                builder: (_) => const BoldGlassSurface(
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            BoldIcon('home'),
+                            BoldIcon('pix'),
+                            BoldIcon('cards'),
+                            BoldIcon('gear'),
+                          ],
+                        ),
+                      ),
+                    )),
+            _Section(
+                title: 'Page dots',
+                composedOf: const ['Cores'],
+                builder: (_) => const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      BoldPageDots(count: 4, activeIndex: 0),
+                      SizedBox(height: 10),
+                      BoldPageDots(count: 4, activeIndex: 2),
+                    ])),
+            _Section(
+                title: 'Glass avatar',
+                composedOf: const ['Vidro (glass)', 'Cores', 'Tipografia'],
+                builder: (_) => Row(children: const [
+                      BoldGlassAvatar(initial: 'D'),
+                      SizedBox(width: 12),
+                      BoldGlassAvatar(initial: 'HS', size: 56),
+                      SizedBox(width: 12),
+                      BoldGlassAvatar(
+                          initial: 'RC',
+                          size: 56,
+                          image: AssetImage(
+                              'lib/design_system/assets/city-cyberpunk.webp')),
+                    ])),
+            _Section(
+                title: 'Copy button',
+                composedOf: const ['BoldIcon', 'Cores', 'Tipografia'],
+                note: 'toque → copia + check verde in-place',
+                builder: (_) => const BoldCopyButton(
+                    text: '0001 · 1234567-8',
+                    semanticLabel: 'Copiar conta',
+                    label: 'Conta copiada')),
             // ──────────────────────── MOLÉCULAS ───────────────────────────
             const _TierHeader(
                 tier: 'MOLÉCULAS',
@@ -1588,6 +1648,10 @@ class _PreviewTab extends StatelessWidget {
                       BoldSpotIcon('bank', tone: BoldSpotTone.primary, filled: true),
                       BoldSpotIcon('bell-light', tone: BoldSpotTone.success),
                       BoldSpotIcon('key-light', tone: BoldSpotTone.danger, badge: true),
+                      BoldSpotIcon('shield', tone: BoldSpotTone.secure),
+                      BoldSpotIcon('user-light', disabled: true),
+                      BoldSpotIcon('user-light',
+                          tone: BoldSpotTone.primary, loading: true),
                     ])),
             _Section(
                 title: 'Botões',
@@ -1603,6 +1667,27 @@ class _PreviewTab extends StatelessWidget {
                       const SizedBox(height: 8),
                       BoldButton('Destrutivo',
                           variant: BoldButtonVariant.destructive, onPressed: () {}),
+                      const SizedBox(height: 8),
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            color: BoldColors.primary04,
+                            borderRadius: BorderRadius.circular(14)),
+                        child: BoldButton('Branco',
+                            variant: BoldButtonVariant.white, onPressed: () {}),
+                      ),
+                      const SizedBox(height: 12),
+                      Wrap(spacing: 8, runSpacing: 8, children: [
+                        const BoldButton('Carregando',
+                            loading: true, expand: false),
+                        const BoldButton('Off',
+                            onPressed: null, expand: false),
+                        BoldButton('Revogar',
+                            variant: BoldButtonVariant.destructive,
+                            filled: true,
+                            expand: false,
+                            onPressed: () {}),
+                      ]),
                     ])),
             _Section(
                 title: 'Icon buttons',
@@ -1628,6 +1713,33 @@ class _PreviewTab extends StatelessWidget {
                           semanticLabel: 'x',
                           badge: true,
                           onPressed: () {}),
+                      BoldIconButton(
+                          icon: 'pix',
+                          semanticLabel: 'x',
+                          type: BoldIconButtonType.secondaryPrimary,
+                          onPressed: () {}),
+                      BoldIconButton(
+                          icon: 'key',
+                          semanticLabel: 'x',
+                          type: BoldIconButtonType.tertiaryPrimary,
+                          onPressed: () {}),
+                      BoldIconButton(
+                          icon: 'bell',
+                          semanticLabel: 'x',
+                          size: BoldIconButtonSize.sm,
+                          onPressed: () {}),
+                      BoldIconButton(
+                          icon: 'bell',
+                          semanticLabel: 'x',
+                          size: BoldIconButtonSize.lg,
+                          onPressed: () {}),
+                      BoldIconButton(
+                          icon: 'bell',
+                          semanticLabel: 'x',
+                          state: BoldIconButtonState.error,
+                          onPressed: () {}),
+                      const BoldIconButton(
+                          icon: 'bell', semanticLabel: 'x', disabled: true),
                     ])),
             _Section(
                 title: 'Segmented control',
@@ -1642,8 +1754,21 @@ class _PreviewTab extends StatelessWidget {
             _Section(
                 title: 'Text field',
                 composedOf: const ['Tipografia', 'Cores'],
-                builder: (_) => const BoldTextField(
-                    label: 'Nome', hint: 'Como te chamam')),
+                builder: (_) => const Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BoldTextField(label: 'Nome', hint: 'Como te chamam'),
+                      SizedBox(height: 12),
+                      BoldTextField(
+                          label: 'E-mail',
+                          hint: 'voce@email.com',
+                          errorText: 'E-mail inválido'),
+                      SizedBox(height: 12),
+                      BoldTextField(
+                          label: 'Desabilitado',
+                          hint: 'Indisponível',
+                          enabled: false),
+                    ])),
             _Section(
                 title: 'Search input',
                 composedOf: const ['BoldIcon', 'Tipografia', 'Cores'],
@@ -1655,9 +1780,17 @@ class _PreviewTab extends StatelessWidget {
                       BoldInputChip(label: 'R\$ 50'),
                       BoldInputChip(label: 'R\$ 100', filled: true),
                       BoldInputChip(
+                          label: 'Saldo',
+                          leadIcon: 'eye',
+                          tone: BoldInputChipTone.neutral),
+                      BoldInputChip(
                           label: 'Filtro',
                           trailIcon: 'chevron-down',
                           tone: BoldInputChipTone.neutral),
+                      BoldInputChip(
+                          label: 'Extrato',
+                          trailIcon: 'chevron-right',
+                          tone: BoldInputChipTone.ghost),
                     ])),
             _Section(
                 title: 'OTP input',
@@ -1779,6 +1912,193 @@ class _PreviewTab extends StatelessWidget {
                       const BoldAvatarStack(initials: ['DL', 'HS', 'MJ', 'AB']),
                     ])),
 
+            _Section(
+                title: 'Currency field',
+                composedOf: const ['Tipografia', 'Cores'],
+                builder: (_) => const Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BoldCurrencyField(initialValue: 1234.56),
+                      SizedBox(height: 12),
+                      BoldCurrencyField(large: true, initialValue: 1234.56),
+                    ])),
+            _Section(
+                title: 'PIN dots',
+                composedOf: const ['Cores'],
+                builder: (_) => const Row(children: [
+                      BoldPinDots(length: 4, filled: 0),
+                      SizedBox(width: 24),
+                      BoldPinDots(length: 4, filled: 2),
+                      SizedBox(width: 24),
+                      BoldPinDots(length: 4, filled: 4),
+                    ])),
+            _Section(
+                title: 'Filter chip',
+                composedOf: const ['Cores', 'Tipografia'],
+                builder: (_) => Wrap(spacing: 8, runSpacing: 8, children: [
+                      BoldFilterChip('Todos', selected: true, onTap: () {}),
+                      BoldFilterChip('Entradas', selected: false, onTap: () {}),
+                      BoldFilterChip('Saídas', selected: false, onTap: () {}),
+                    ])),
+            _Section(
+                title: 'Status badge',
+                composedOf: const ['Cores', 'Tipografia'],
+                builder: (_) => const Wrap(spacing: 8, runSpacing: 8, children: [
+                      BoldStatusBadge('Concluído'),
+                      BoldStatusBadge('Erro', color: BoldColors.danger),
+                      BoldStatusBadge('Validada', icon: Icons.check),
+                    ])),
+            _Section(
+                title: 'Icon chip',
+                composedOf: const ['Gradientes', 'Cores'],
+                builder: (_) => const Wrap(spacing: 12, runSpacing: 12, children: [
+                      BoldIconChip(Icons.send, gradient: BoldGradients.pix),
+                      BoldIconChip(Icons.qr_code, tint: BoldColors.accent),
+                      BoldIconChip.custom(
+                          gradient: BoldGradients.brand,
+                          child: Icon(Icons.bolt,
+                              size: 20, color: BoldColors.white)),
+                    ])),
+            _Section(
+                title: 'List tile / group',
+                composedOf: const ['BoldSpotIcon', 'BoldCard', 'Tipografia'],
+                builder: (_) => BoldListGroup(title: 'Atividade', children: [
+                      const BoldListTile(
+                          leading: BoldSpotIcon('arrow-down-light',
+                              tone: BoldSpotTone.success, filled: true),
+                          title: 'Recebido de Ana',
+                          subtitle: 'Hoje',
+                          trailing: BoldListAmount('R\$ 560,00')),
+                      const BoldListTile(
+                          leading: BoldSpotIcon('arrow-up-light',
+                              tone: BoldSpotTone.neutral, filled: true),
+                          title: 'Boleto',
+                          subtitle: 'Ontem',
+                          trailing: BoldListAmount('R\$ 132,90', negative: true)),
+                      BoldListTile(
+                          leading: const BoldSpotIcon('mobile-light',
+                              tone: BoldSpotTone.primary),
+                          title: 'Recarga',
+                          trailing: const BoldListTime('14min'),
+                          onTap: () {}),
+                    ])),
+            _Section(
+                title: 'Amount display',
+                composedOf: const ['Tipografia', 'Cores'],
+                builder: (_) => const Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BoldAmountDisplay(
+                          value: 'R\$ 560,00', timestamp: '13/10 às 14:25'),
+                      SizedBox(height: 12),
+                      BoldAmountDisplay(
+                          value: 'R\$ 2.912,47',
+                          label: 'Seu saldo',
+                          centered: false),
+                    ])),
+            _Section(
+                title: 'Detail row',
+                composedOf: const ['BoldIcon', 'Tipografia'],
+                builder: (_) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const BoldDetailRow(title: 'Para', description: 'Ana Silva'),
+                      const BoldDetailRow(
+                          title: 'Chave Pix',
+                          description: 'ana@email.com',
+                          icon: 'key-light'),
+                      BoldDetailRow(
+                          title: 'Ajuda',
+                          icon: 'circle-question-light',
+                          chevron: true,
+                          hairline: false,
+                          onTap: () {}),
+                    ])),
+            _Section(
+                title: 'Progress bar',
+                composedOf: const ['Cores', 'Tipografia'],
+                builder: (_) => const Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BoldProgressBar(value: 0.2, caption: '1 de 5'),
+                      SizedBox(height: 14),
+                      BoldProgressBar(value: 0.6, caption: '3 de 5'),
+                      SizedBox(height: 14),
+                      BoldProgressBar(value: 1.0, caption: 'Concluído'),
+                    ])),
+            _Section(
+                title: 'Radio list',
+                composedOf: const ['Cores', 'Tipografia'],
+                builder: (_) => BoldRadioList(
+                      title: 'Motivo',
+                      value: 'oferta',
+                      onChanged: (_) {},
+                      options: const [
+                        BoldRadioOption(
+                            value: 'oferta', label: 'Oferta de outro banco'),
+                        BoldRadioOption(value: 'tarifas', label: 'Tarifas'),
+                        BoldRadioOption(value: 'outro', label: 'Outro motivo'),
+                      ],
+                    )),
+            _Section(
+                title: 'Tooltip',
+                composedOf: const ['Cores', 'Tipografia'],
+                builder: (_) => const Wrap(spacing: 20, runSpacing: 16, children: [
+                      BoldTooltip(label: 'Dica', style: BoldTooltipStyle.dark),
+                      BoldTooltip(
+                          label: 'Dica',
+                          style: BoldTooltipStyle.light,
+                          side: BoldTooltipSide.bottom),
+                    ])),
+            _Section(
+                title: 'Menu tile',
+                composedOf: const ['BoldCard', 'BoldIcon', 'Tipografia'],
+                builder: (_) => Wrap(spacing: 12, runSpacing: 12, children: [
+                      BoldMenuTile(
+                          icon: 'qrcode-light',
+                          label: 'Ler QR',
+                          size: BoldMenuTileSize.compact,
+                          onTap: () {}),
+                      BoldMenuTile(
+                          icon: 'pix-light',
+                          label: 'Fazer um Pix',
+                          size: BoldMenuTileSize.wide,
+                          onTap: () {}),
+                      BoldMenuTile(
+                          icon: 'barcode-light',
+                          label: 'Pagar conta',
+                          size: BoldMenuTileSize.large,
+                          onTap: () {}),
+                    ])),
+            _Section(
+                title: 'Alert',
+                composedOf: const ['BoldSpotIcon', 'Vidro (glass)', 'Cores'],
+                builder: (_) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BoldAlert(
+                          intent: BoldIntent.error,
+                          title: 'Pix não enviado',
+                          message: 'Saldo insuficiente.',
+                          onClose: () {}),
+                      const SizedBox(height: 10),
+                      const BoldAlert(
+                          intent: BoldIntent.success, title: 'Pix enviado'),
+                      const SizedBox(height: 10),
+                      const BoldAlert(
+                          intent: BoldIntent.info,
+                          title: 'Limite diário',
+                          message: 'Até R\$ 5.000,00 por dia.'),
+                    ])),
+            _Section(
+                title: 'Navigation button',
+                composedOf: const ['BoldButton', 'Tipografia'],
+                note: 'coluna de CTAs de rodapé (primary/secondary/tertiary)',
+                builder: (_) => BoldNavigationButton(
+                      primary: BoldNavAction(label: 'Continuar', onPressed: () {}),
+                      secondary:
+                          BoldNavAction(label: 'Agora não', onPressed: () {}),
+                    )),
             // ─────────────────────── ORGANISMOS ───────────────────────────
             const _TierHeader(
                 tier: 'ORGANISMOS',
@@ -1867,6 +2187,86 @@ class _PreviewTab extends StatelessWidget {
                         transactionId: 'E1898765420260714153210abc',
                       ),
                     )),
+            _Section(
+                title: 'Circle button',
+                composedOf: const ['BoldIcon', 'Cores'],
+                builder: (_) => Wrap(spacing: 12, children: [
+                      BoldCircleButton('bell', onTap: () {}),
+                      BoldCircleButton('bell', dot: true, onTap: () {}),
+                      BoldCircleButton('edit', active: true, onTap: () {}),
+                    ])),
+            _Section(
+                title: 'Account pill / switcher',
+                composedOf: const ['BoldIcon', 'Tipografia', 'Cores'],
+                builder: (_) => Wrap(
+                    spacing: 12,
+                    runSpacing: 12,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      const BoldAccountPill(label: 'CONTA PF'),
+                      BoldAccountPill(label: 'CONTA PJ', onTap: () {}),
+                      BoldAccountSwitcher(name: 'Ana Carolina', onTap: () {}),
+                    ])),
+            _Section(
+                title: 'Bottom app',
+                composedOf: const ['Vidro (glass)', 'BoldNavigationButton', 'BoldIcon'],
+                builder: (_) => Column(children: [
+                      SizedBox(
+                          width: 340,
+                          child: BoldBottomApp.nav<int>(
+                            current: 0,
+                            onTap: (_) {},
+                            items: const [
+                              BoldTabItem(
+                                  value: 0,
+                                  label: 'Início',
+                                  icon: Icons.home_rounded),
+                              BoldTabItem(
+                                  value: 1,
+                                  label: 'Cartões',
+                                  icon: Icons.credit_card),
+                              BoldTabItem(
+                                  value: 2,
+                                  label: 'Pix',
+                                  icon: Icons.qr_code_rounded),
+                              BoldTabItem(
+                                  value: 3,
+                                  label: 'Perfil',
+                                  icon: Icons.person_rounded),
+                            ],
+                          )),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                          width: 340,
+                          child: BoldBottomApp.button(
+                            primary: BoldNavAction(
+                                label: 'Continuar', onPressed: () {}),
+                            secondary: BoldNavAction(
+                                label: 'Cancelar', onPressed: () {}),
+                            safeBottom: false,
+                          )),
+                    ])),
+
+            // ─────────────────────── MOTION / especiais ───────────────────
+            const _TierHeader(
+                tier: 'MOTION / especiais',
+                description:
+                    'Autorização Quântica — visual violeta, independente da marca.'),
+            _Section(
+                title: 'Quantum seal',
+                composedOf: const ['CustomPaint', 'Tipografia'],
+                builder: (_) => Wrap(spacing: 16, runSpacing: 16, children: const [
+                      BoldQuantumSeal(waiting: true, size: 110),
+                      BoldQuantumSeal(waiting: false, failed: false, size: 110),
+                      BoldQuantumSeal(waiting: false, failed: true, size: 110),
+                    ])),
+            _Section(
+                title: 'Quantum core',
+                composedOf: const ['CustomPaint'],
+                note: 'núcleo pintado (loop demo) — a tela cheia vive na aba Specs',
+                builder: (_) => const Center(
+                    child: SizedBox(
+                        width: 200, height: 200, child: BoldQuantumCore()))),
           ],
         ),
       ),
