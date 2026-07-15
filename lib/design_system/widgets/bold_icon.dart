@@ -38,6 +38,7 @@ class BoldIcon extends StatelessWidget {
     'bell': 'bell-light', 'gear': 'gear-light', 'edit': 'sliders-light',
     'close': 'xmark-light', 'add': 'plus-light',
     'chevron-right': 'angle-right-light', 'chevron-down': 'angle-down-light',
+    'chevron-left': 'chevron-left-light 1',
     'arrow-forward': 'arrow-right-long-light',
     'share': 'arrow-up-from-bracket-light',
     'copy': 'clone-light', 'qr': 'qrcode-light',

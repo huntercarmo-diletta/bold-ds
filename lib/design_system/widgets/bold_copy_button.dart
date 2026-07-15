@@ -2,16 +2,15 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../theme/bold_colors.dart';
-import '../theme/bold_typography.dart';
 import 'bold_icon.dart';
+import 'bold_status_tag.dart';
 
 /// Conta BOLD — CopyButton (átomo). Botão de copiar com feedback IN-PLACE: ao
-/// tocar, copia [text] pro clipboard e o ícone vira um check verde com um
-/// micro-rótulo ("Copiado") logo abaixo; ambos somem juntos após ~2s. Feedback
-/// perto da ação (melhor que toast distante). Reutilizável em conta, chaves
-/// PIX, códigos, etc.
+/// tocar, copia [text] pro clipboard e o ícone de copiar (pequeno) vira um
+/// [BoldStatusTag] success com check-circle + [label] ("Conta copiada"); reverte
+/// após ~2s. Feedback perto da ação (melhor que toast distante).
 ///
-/// **Composição** — BoldIcon (átomo) + tokens ([BoldColors], [BoldType]).
+/// **Composição** — BoldIcon + BoldStatusTag (átomos) + tokens.
 ///
 /// ```dart
 /// BoldCopyButton(text: user.conta, semanticLabel: 'Copiar conta', label: 'Conta copiada');
@@ -64,41 +63,43 @@ class _BoldCopyButtonState extends State<BoldCopyButton> {
     return Semantics(
       button: true,
       label: widget.semanticLabel,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: _copy,
-        // Stack sem clip: o rótulo transborda pra baixo sem empurrar o layout.
-        child: SizedBox(
-          width: 40,
-          height: 40,
-          child: Stack(clipBehavior: Clip.none, alignment: Alignment.center, children: [
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
-              transitionBuilder: (child, anim) =>
-                  ScaleTransition(scale: anim, child: FadeTransition(opacity: anim, child: child)),
-              child: _copied
-                  ? Icon(Icons.check_rounded,
-                      key: const ValueKey('check'), size: 20, color: c.success)
-                  : BoldIcon('copy',
-                      key: const ValueKey('copy'), size: 18, color: c.textSecondary),
+      // Stack sem clip: o ícone pequeno define o footprint; o status tag do
+      // feedback é FORA do fluxo (Positioned), flutuando por cima do conteúdo à
+      // esquerda — não empurra/reflui nenhum componente vizinho.
+      child: Stack(
+        clipBehavior: Clip.none,
+        alignment: Alignment.center,
+        children: [
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: _copy,
+            child: Padding(
+              padding: const EdgeInsets.all(3),
+              child: BoldIcon('copy', size: 13, color: c.textSecondary),
             ),
-            Positioned(
-              top: 34,
-              left: -28,
-              right: -28,
-              child: AnimatedOpacity(
-                opacity: _copied ? 1 : 0,
-                duration: const Duration(milliseconds: 200),
-                child: Center(
-                  child: Text(widget.label,
-                      maxLines: 1,
-                      overflow: TextOverflow.visible,
-                      style: BoldType.labelSm.copyWith(color: c.success)),
+          ),
+          // top-only Positioned: left/right nulos → alinha no eixo horizontal
+          // pelo alignment do Stack (center), centralizando o tag sob o ícone.
+          Positioned(
+            top: 22,
+            child: IgnorePointer(
+              child: AnimatedScale(
+                scale: _copied ? 1 : 0.85,
+                duration: const Duration(milliseconds: 180),
+                curve: Curves.easeOut,
+                child: AnimatedOpacity(
+                  opacity: _copied ? 1 : 0,
+                  duration: const Duration(milliseconds: 180),
+                  child: BoldStatusTag(
+                    label: widget.label,
+                    tone: BoldStatusTone.success,
+                    icon: 'circle-check-solid',
+                  ),
                 ),
               ),
             ),
-          ]),
-        ),
+          ),
+        ],
       ),
     );
   }

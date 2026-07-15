@@ -618,6 +618,8 @@ sealed class BoldRightAccessory extends StatelessWidget {
     Key? key,
     required String value,
     bool negative,
+    bool credit,
+    bool strikethrough,
   }) = _RightAmount;
 
   /// Valor (texto) + chevron — linha que abre pra editar (ex.: Meus Limites,
@@ -709,12 +711,20 @@ class _RightStatus extends BoldRightAccessory {
 }
 
 class _RightAmount extends BoldRightAccessory {
-  const _RightAmount({super.key, required this.value, this.negative = false});
+  const _RightAmount({
+    super.key,
+    required this.value,
+    this.negative = false,
+    this.credit = false,
+    this.strikethrough = false,
+  });
   final String value;
   final bool negative;
+  final bool credit;
+  final bool strikethrough;
   @override
-  Widget build(BuildContext context) =>
-      BoldListAmount(value, negative: negative);
+  Widget build(BuildContext context) => BoldListAmount(value,
+      negative: negative, credit: credit, strikethrough: strikethrough);
 }
 
 class _RightValueAction extends BoldRightAccessory {
