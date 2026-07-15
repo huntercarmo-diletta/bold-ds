@@ -22,3 +22,4 @@ flutter:
     - lib/design_system/assets/
     - lib/design_system/assets/icons/
     - lib/design_system/assets/fonts/
+    - lib/design_system/assets/illustrations/

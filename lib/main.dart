@@ -16,6 +16,7 @@
 // Deploy: Vercel serve build/web (vercel.json → outputDirectory).
 import 'package:conta_bold_ds/design_system/bold_design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 void main() {
@@ -52,7 +53,7 @@ class _BoldCatalogAppState extends State<BoldCatalogApp> {
 enum _Tab { preview, specs }
 
 // Camadas do catálogo (atomic design) — viram subitens da aba Design System.
-enum _DsTier { tokens, atoms, molecules, organisms }
+enum _DsTier { tokens, atoms, molecules, organisms, illustrations }
 
 extension _DsTierX on _DsTier {
   String get label => switch (this) {
@@ -60,8 +61,51 @@ extension _DsTierX on _DsTier {
         _DsTier.atoms => 'Átomos',
         _DsTier.molecules => 'Moléculas',
         _DsTier.organisms => 'Organismos',
+        _DsTier.illustrations => 'Ilustrações',
       };
 }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// ILUSTRAÇÕES — catálogo do CPF Seguro Design System (Figma), exportadas como
+// SVG em lib/design_system/assets/illustrations/<nome>_<tema>.svg. Cada uma tem
+// as variações de tema Light/Dark/Theme 3 (algumas só Light/Dark).
+// ═══════════════════════════════════════════════════════════════════════════
+class _Illu {
+  const _Illu(this.name, this.label,
+      [this.themes = const ['light', 'dark', 'theme3']]);
+  final String name;
+  final String label;
+  final List<String> themes;
+}
+
+const _kIllustrations = <_Illu>[
+  _Illu('timer_woman', 'Timer woman'),
+  _Illu('money_jar', 'Money jar'),
+  _Illu('online_payment', 'Online payment'),
+  _Illu('sad_face', 'Sad face'),
+  _Illu('security_phone', 'Security phone'),
+  _Illu('config', 'Config'),
+  _Illu('search', 'Search'),
+  _Illu('page_not_found', 'Page not found'),
+  _Illu('error', 'Error'),
+  _Illu('file_not_found', 'File not found'),
+  _Illu('invalid_file', 'Invalid file'),
+  _Illu('pix', 'Pix'),
+  _Illu('internet_off', 'Internet off'),
+  _Illu('search_engine', 'Search engine'),
+  _Illu('data_analysis', 'Data analysis'),
+  _Illu('no_files_line', 'No files (line)'),
+  _Illu('search_line', 'Search (line)'),
+  _Illu('success', 'Success'),
+  _Illu('graphics', 'Graphics'),
+  _Illu('success_alt', 'Success 2'),
+  _Illu('invalid_state', 'Invalid state'),
+  _Illu('no_files', 'No files', ['light', 'dark']),
+  _Illu('files_search', 'Files search'),
+  _Illu('key_word', 'Key word'),
+  _Illu('no_data', 'No data'),
+  _Illu('fingerprint', 'Fingerprint'),
+];
 
 class _CatalogHome extends StatefulWidget {
   const _CatalogHome({required this.mode, required this.onMode});
@@ -2168,6 +2212,19 @@ class _PreviewTab extends StatelessWidget {
                           text: 'E1234567890', semanticLabel: 'Copiar ID'),
                     )),
     ];
+    final illustrations = <Widget>[
+      const _TierHeader(
+          tier: 'ILUSTRAÇÕES',
+          description:
+              'Ilustrações do CPF Seguro — cada uma com suas variações de tema.'),
+      for (final il in _kIllustrations)
+        _Section(
+            title: il.label,
+            note: il.themes.length < 3
+                ? 'variações: Light · Dark'
+                : 'variações: Light · Dark · Theme 3',
+            builder: (_) => _IllustrationRow(il)),
+    ];
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 760),
@@ -2182,6 +2239,8 @@ class _PreviewTab extends StatelessWidget {
             if (t == null || t == _DsTier.atoms) ..._sep(atoms),
             if (t == null || t == _DsTier.molecules) ..._sep(molecules),
             if (t == null || t == _DsTier.organisms) ..._sep(organisms),
+            if (t == null || t == _DsTier.illustrations)
+              ..._sep(illustrations),
           ],
         ),
       ),
@@ -2318,6 +2377,59 @@ class _DepChip extends StatelessWidget {
               color: isToken ? BoldColors.primary04 : c.textMuted,
               fontSize: 11)),
     );
+  }
+}
+
+// Uma ilustração no catálogo: as variações de tema lado a lado (Wrap).
+class _IllustrationRow extends StatelessWidget {
+  const _IllustrationRow(this.illu);
+  final _Illu illu;
+  @override
+  Widget build(BuildContext context) {
+    return Wrap(
+      spacing: 12,
+      runSpacing: 12,
+      children: [
+        for (final t in illu.themes) _IllustrationCard(name: illu.name, theme: t),
+      ],
+    );
+  }
+}
+
+// Card de uma variação: SVG num quadro com fundo apropriado ao tema (as
+// variações Dark/Theme 3 têm traços claros, então precisam de fundo escuro/
+// tonalizado pra ler bem) + legenda do tema.
+class _IllustrationCard extends StatelessWidget {
+  const _IllustrationCard({required this.name, required this.theme});
+  final String name;
+  final String theme;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    final (Color bg, String label) = switch (theme) {
+      'dark' => (const Color(0xFF16060A), 'Dark'),
+      'theme3' => (BoldColors.primary01, 'Theme 3'),
+      _ => (BoldColors.white, 'Light'),
+    };
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      Container(
+        width: 150,
+        height: 150,
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: bg,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: c.border),
+        ),
+        child: SvgPicture.asset(
+          'lib/design_system/assets/illustrations/${name}_$theme.svg',
+          fit: BoxFit.contain,
+        ),
+      ),
+      const SizedBox(height: 6),
+      Text(label, style: BoldType.labelSm.copyWith(color: c.textMuted)),
+    ]);
   }
 }
 
