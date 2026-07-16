@@ -62,14 +62,8 @@ class BoldColors {
   /// primary-04 @ 40% — glow/shadow forte.
   static const Color primary04Alpha40 = Color(0x66FE3976);
 
-  // ═══════════════════════════════════════════════════════════════════════
-  // ACCENT (coral) — mid-stop do gradiente da marca
-  // ═══════════════════════════════════════════════════════════════════════
-  static const Color accent03 = Color(0xFFC24A2E);
-  static const Color accent04 = Color(0xFFFE7B5E); // base
-  static const Color accent05 = Color(0xFFFF9578);
-  static const Color accent07 = Color(0xFFFFD6C9);
-  static const Color accent08 = Color(0xFFFFF2EE);
+  // ACCENT removido (2026-07-16): a rampa coral foi descontinuada do DS.
+  // Usos funcionais migraram para primary; decorativos, para warning.
 
   /// Amarelo — cauda do gradiente da marca (highlight do "O" do logo).
   static const Color brandYellow = Color(0xFFFEED35);
@@ -169,11 +163,6 @@ class BoldColors {
   static const Color primary500 = primary05;
   static const Color primaryDeep = primary03;
   static const Color primaryIndigo = primary06; // legacy alias → rosa claro
-  static const Color accent = accent04;
-  static const Color accentDeep = accent03;
-  static const Color accentLight = accent05;
-  static const Color accentEyebrow = Color(0xFFFF9A52);
-  static const Color accentSoftText = Color(0xFFF89B5E);
   static const Color onGradient = white;
 
   static const Color success = success04;
@@ -228,7 +217,7 @@ class BoldColors {
 }
 
 /// Mode-aware surfaces / text / borders (light + dark). As cores de marca
-/// (primary, accent, semânticas) vivem em [BoldColors] — não viram. Leia estas
+/// (primary, semânticas) vivem em [BoldColors] — não viram. Leia estas
 /// via `BoldColors.of(context)`.
 @immutable
 class BoldScheme extends ThemeExtension<BoldScheme> {
@@ -256,7 +245,6 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
     required this.onPrimary,
     required this.primaryPressed,
     required this.primaryWash,
-    required this.accent,
     required this.danger,
     required this.success,
     required this.warning,
@@ -278,7 +266,7 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
   /// Papéis de marca/estado (resolvem por modo — o componente usa o papel, não
   /// o primitivo). Dark = shades claros/vibrantes; light = shades profundos.
   final Color primary, onPrimary, primaryPressed, primaryWash;
-  final Color accent, danger, success, warning, info;
+  final Color danger, success, warning, info;
 
   bool get isDark => brightness == Brightness.dark;
 
@@ -305,7 +293,6 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
         onPrimary: Color(0xFFFFFFFF),
         primaryPressed: Color(0xFFCC1E58), // primary03
         primaryWash: Color(0x33FE3976),    // primary04 @20%
-        accent: Color(0xFFFE7B5E),         // accent04
         danger: Color(0xFFFF4D5E),         // error05
         success: Color(0xFF2FD27A),        // success05
         warning: Color(0xFFFDB43D),        // warning05
@@ -337,7 +324,6 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
         onPrimary: Color(0xFFFFFFFF),
         primaryPressed: Color(0xFF600627), // primary02
         primaryWash: Color(0xFFFFEDF3),    // primary08
-        accent: Color(0xFFC24A2E),         // accent03
         danger: Color(0xFFB42318),         // error03
         success: Color(0xFF0E9154),        // success04
         warning: Color(0xFFF6A21A),        // warning04

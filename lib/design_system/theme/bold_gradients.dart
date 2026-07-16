@@ -27,12 +27,6 @@ class BoldGradients {
     colors: [Color(0xFFFE3976), Color(0xFFFB6A1E)],
   );
 
-  static const Gradient accentButton = LinearGradient(
-    begin: Alignment.topCenter,
-    end: Alignment.bottomCenter,
-    colors: [BoldColors.accentLight, BoldColors.accentDeep],
-  );
-
   // 150deg diagonal used by the shortcut tiles & featured icons.
   static const Alignment _from = Alignment(-0.7, -1);
   static const Alignment _to = Alignment(0.7, 1);

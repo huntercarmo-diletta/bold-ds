@@ -2191,7 +2191,7 @@ class _PreviewTab extends StatelessWidget {
                 composedOf: const ['Gradientes', 'Cores'],
                 builder: (_) => const Wrap(spacing: 12, runSpacing: 12, children: [
                       BoldIconChip(Icons.send, gradient: BoldGradients.pix),
-                      BoldIconChip(Icons.qr_code, tint: BoldColors.accent),
+                      BoldIconChip(Icons.qr_code, tint: BoldColors.primary),
                       BoldIconChip.custom(
                           gradient: BoldGradients.brand,
                           child: Icon(Icons.bolt,
@@ -2947,11 +2947,11 @@ class _DsColorMapper extends ColorMapper {
     if (color == const Color(0xFFFFFFFF)) return BoldColors.white;
     // Vermelho → error (match exato do error03).
     if (color == const Color(0xFFB42318)) return BoldColors.error03;
-    // Corais/laranjas → rampa Accent (mais próxima).
-    if (color == const Color(0xFFFF7066)) return BoldColors.accent04;
-    if (color == const Color(0xFFF47971)) return BoldColors.accent04;
-    if (color == const Color(0xFFF9AA81)) return BoldColors.accent05;
-    if (color == const Color(0xFFF3ABA5)) return BoldColors.accent05;
+    // Corais/laranjas → rampa Warning (accent foi descontinuado do DS).
+    if (color == const Color(0xFFFF7066)) return BoldColors.warning04;
+    if (color == const Color(0xFFF47971)) return BoldColors.warning04;
+    if (color == const Color(0xFFF9AA81)) return BoldColors.warning05;
+    if (color == const Color(0xFFF3ABA5)) return BoldColors.warning05;
     // Âmbar/dourado → rampa Warning (mais próxima).
     if (color == const Color(0xFFF9AB43)) return BoldColors.warning05;
     if (color == const Color(0xFFFFCF74)) return BoldColors.warning06;
@@ -2981,14 +2981,8 @@ class _Swatches extends StatelessWidget {
           ('08', BoldColors.primary08),
           ('09', BoldColors.primary09),
         ]),
-        _Ramp('Accent', [
-          ('03', BoldColors.accent03),
-          ('04', BoldColors.accent04),
-          ('05', BoldColors.accent05),
-          ('07', BoldColors.accent07),
-          ('08', BoldColors.accent08),
-        ]),
         _Ramp('Neutral', [
+          ('00', BoldColors.neutral00),
           ('01', BoldColors.neutral01),
           ('02', BoldColors.neutral02),
           ('03', BoldColors.neutral03),
@@ -4220,7 +4214,7 @@ class _SpecsTab extends StatelessWidget {
                 cellWidth: 120,
                 items: [
                   ('gradient', BoldIconChip(Icons.send, gradient: BoldGradients.pix)),
-                  ('tint', BoldIconChip(Icons.qr_code, tint: BoldColors.accent)),
+                  ('tint', BoldIconChip(Icons.qr_code, tint: BoldColors.primary)),
                   ('.custom', BoldIconChip.custom(gradient: BoldGradients.brand, child: Icon(Icons.bolt, size: 20, color: BoldColors.white))),
                 ],
               ),
@@ -4768,7 +4762,6 @@ class _SpecsTab extends StatelessWidget {
             const SizedBox(height: 16),
             _SpecTable(title: 'Cor', rows: const [
               ('primary04', '#FE3976'),
-              ('accent04', '#FE7B5E'),
               ('glass fill (dark)', '#4C0202 · 26%'),
               ('glass fill (light)', '#FFC8DC · 26%'),
               ('glass stroke', 'branco 30% (light) · #FF9898 (dark)'),

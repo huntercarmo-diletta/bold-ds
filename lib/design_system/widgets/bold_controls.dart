@@ -28,7 +28,7 @@ class BoldSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final onColor = accent ? BoldColors.accent : BoldColors.primary;
+    final onColor = accent ? BoldColors.warning : BoldColors.primary;
     return GestureDetector(
       onTap: onChanged == null ? null : () => onChanged!(!value),
       child: AnimatedContainer(

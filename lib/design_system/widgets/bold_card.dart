@@ -184,7 +184,7 @@ class _CardStrokePainter extends CustomPainter {
 ///
 /// ```dart
 /// BoldIconChip(Icons.send, gradient: BoldGradients.pix);     // featured
-/// BoldIconChip(Icons.qr_code, tint: BoldColors.accent);      // soft tinted
+/// BoldIconChip(Icons.qr_code, tint: BoldColors.primary);     // soft tinted
 /// BoldIconChip.custom(gradient: BoldGradients.pix, child: SvgPicture...); // SVG / custom glyph
 /// ```
 class BoldIconChip extends StatelessWidget {
