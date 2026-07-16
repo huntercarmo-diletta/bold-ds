@@ -1932,11 +1932,6 @@ class _PreviewTab extends StatelessWidget {
                 composedOf: const ['BoldIcon', 'Cores'],
                 builder: (_) => Wrap(spacing: 10, runSpacing: 10, children: [
                       BoldIconButton(
-                          icon: 'bell',
-                          semanticLabel: 'x',
-                          type: BoldIconButtonType.primary,
-                          onPressed: () {}),
-                      BoldIconButton(
                           icon: 'qr',
                           semanticLabel: 'x',
                           type: BoldIconButtonType.secondary,
@@ -1955,11 +1950,6 @@ class _PreviewTab extends StatelessWidget {
                           icon: 'pix',
                           semanticLabel: 'x',
                           type: BoldIconButtonType.secondaryPrimary,
-                          onPressed: () {}),
-                      BoldIconButton(
-                          icon: 'key',
-                          semanticLabel: 'x',
-                          type: BoldIconButtonType.tertiaryPrimary,
                           onPressed: () {}),
                       BoldIconButton(
                           icon: 'bell',
@@ -3925,21 +3915,17 @@ class _SpecsTab extends StatelessWidget {
               child: _VariantMatrix(
                 rowAxis: 'Type',
                 rows: const [
-                  'primary',
                   'secondary',
                   'secondaryPrimary',
-                  'tertiary',
-                  'tertiaryPrimary'
+                  'tertiary'
                 ],
                 colAxis: 'Size',
                 cols: const ['sm', 'md', 'lg'],
                 cell: (row, col) {
                   const types = [
-                    BoldIconButtonType.primary,
                     BoldIconButtonType.secondary,
                     BoldIconButtonType.secondaryPrimary,
                     BoldIconButtonType.tertiary,
-                    BoldIconButtonType.tertiaryPrimary,
                   ];
                   const sizes = [
                     BoldIconButtonSize.sm,
