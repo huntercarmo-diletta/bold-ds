@@ -2919,6 +2919,7 @@ class _DsColorMapper extends ColorMapper {
   @override
   Color substitute(
       String? id, String elementName, String attributeName, Color color) {
+    // Primary (rosa) — match exato.
     if (color == const Color(0xFF300313)) return BoldColors.primary01;
     if (color == const Color(0xFF600627)) return BoldColors.primary02;
     if (color == const Color(0xFFFE3976)) return BoldColors.primary04;
@@ -2926,6 +2927,34 @@ class _DsColorMapper extends ColorMapper {
     if (color == const Color(0xFFFF87AB)) return BoldColors.primary06;
     if (color == const Color(0xFFFFB6CB)) return BoldColors.primary07;
     if (color == const Color(0xFFFFF6FA)) return BoldColors.primary09;
+    // Neutral (cinza) — match exato com a rampa do DS.
+    if (color == const Color(0xFF3D3939)) return BoldColors.neutral01;
+    if (color == const Color(0xFF525252)) return BoldColors.neutral02;
+    if (color == const Color(0xFF737373)) return BoldColors.neutral03;
+    if (color == const Color(0xFF808080)) return BoldColors.neutral04;
+    if (color == const Color(0xFFA0A0A0)) return BoldColors.neutral05;
+    if (color == const Color(0xFFB3B3B3)) return BoldColors.neutral06;
+    if (color == const Color(0xFFC6C6C6)) return BoldColors.neutral07;
+    if (color == const Color(0xFFD9D9D9)) return BoldColors.neutral08;
+    if (color == const Color(0xFFECECEC)) return BoldColors.neutral09;
+    if (color == const Color(0xFFEBEBEB)) return BoldColors.neutral09; // ~snap
+    if (color == const Color(0xFFF6F6F6)) return BoldColors.neutral10;
+    // Line-art escuro → neutral00 (token novo). #262626 ~snap pro mesmo.
+    if (color == const Color(0xFF2B2B2B)) return BoldColors.neutral00;
+    if (color == const Color(0xFF262626)) return BoldColors.neutral00; // ~snap
+    // Preto / branco.
+    if (color == const Color(0xFF000000)) return BoldColors.black;
+    if (color == const Color(0xFFFFFFFF)) return BoldColors.white;
+    // Vermelho → error (match exato do error03).
+    if (color == const Color(0xFFB42318)) return BoldColors.error03;
+    // Corais/laranjas → rampa Accent (mais próxima).
+    if (color == const Color(0xFFFF7066)) return BoldColors.accent04;
+    if (color == const Color(0xFFF47971)) return BoldColors.accent04;
+    if (color == const Color(0xFFF9AA81)) return BoldColors.accent05;
+    if (color == const Color(0xFFF3ABA5)) return BoldColors.accent05;
+    // Âmbar/dourado → rampa Warning (mais próxima).
+    if (color == const Color(0xFFF9AB43)) return BoldColors.warning05;
+    if (color == const Color(0xFFFFCF74)) return BoldColors.warning06;
     return color;
   }
 }

@@ -77,6 +77,9 @@ class BoldColors {
   // ═══════════════════════════════════════════════════════════════════════
   // NEUTRAL (grey) + white/black + alphas
   // ═══════════════════════════════════════════════════════════════════════
+  // NOVO (2026-07-16): traço/contorno das ilustrações (mais escuro que
+  // neutral01). Criado para vincular o line-art dos SVGs a um token do DS.
+  static const Color neutral00 = Color(0xFF2B2B2B);
   static const Color neutral01 = Color(0xFF3D3939);
   static const Color neutral02 = Color(0xFF525252);
   static const Color neutral03 = Color(0xFF737373);
