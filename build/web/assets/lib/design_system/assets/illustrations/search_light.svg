@@ -1,12 +1,12 @@
 <svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="300" height="300" fill="#CACACA"/>
+
 <g id="Illustration">
-<rect width="2438" height="5632" transform="translate(-500 -1444)" fill="white"/>
+
 <g id="Frame 888">
 <g id="Frame 882">
-<rect x="-15.5" y="-47.5" width="331" height="995" stroke="#ECECEC"/>
+
 <g id="search_flat">
-<rect x="-15.5" y="-15.5" width="331" height="963" rx="4.5" stroke="#9747FF" stroke-dasharray="10 5"/>
+
 <g id="Theme=Light">
 <g id="OBJECTS">
 <path id="Vector" d="M271.5 144.407C258.969 135.466 243.953 131.14 230.128 124.663C216.832 118.435 207.372 108.427 195.476 100.181C176.039 86.7069 153.572 76.603 130.708 70.4369C107.588 64.2022 79.3456 60.7484 58.271 74.5694C47.9059 81.3668 39.4692 91.9096 36.0327 103.815C31.9428 117.982 35.9452 132.457 37.9067 146.614C39.501 158.118 32.0428 164.464 23.2561 171.002C2.68156 186.307 3.25317 214.003 15.9661 233.854H280.761C296.485 205.644 303.399 167.169 271.5 144.408V144.407Z" fill="#FFB6CB"/>

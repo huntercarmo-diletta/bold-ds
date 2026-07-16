@@ -1,12 +1,12 @@
 <svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-<rect width="300" height="300" fill="#CACACA"/>
+
 <g id="Illustration">
-<rect width="2438" height="5632" transform="translate(-1682 -3876)" fill="white"/>
+
 <g id="Frame 888">
 <g id="Frame 889">
-<rect x="-15.5" y="-363.5" width="331" height="995" stroke="#ECECEC"/>
+
 <g id="success-flatline">
-<rect x="-15.5" y="-331.5" width="331" height="963" rx="4.5" stroke="#9747FF" stroke-dasharray="10 5"/>
+
 <g id="Theme=Dark" clip-path="url(#clip0_4579_5411)">
 <path id="Vector" fill-rule="evenodd" clip-rule="evenodd" d="M143.816 14.0054C171.542 14.2918 198.108 27.2787 218.195 46.3136C236.733 63.8797 239.023 90.8148 249.436 114.092C261.548 141.168 287.952 164.276 284.114 193.67C280.117 224.28 255.502 248.907 229.618 265.885C204.484 282.37 173.495 290.661 143.816 285.691C116.473 281.112 98.8064 256.938 76.6966 240.275C55.159 224.044 23.2959 215.518 16.2487 189.55C9.21643 163.638 33.7755 140.873 42.8616 115.602C51.5635 91.4002 50.1504 63.0373 68.3069 44.7653C87.9152 25.0322 115.941 13.7174 143.816 14.0054Z" fill="#600627"/>
 <circle id="Ellipse 6" cx="189.5" cy="69.5" r="12.5" fill="#FF87AB"/>
