@@ -1998,6 +1998,28 @@ class _PreviewTab extends StatelessWidget {
                           enabled: false),
                     ])),
             _Section(
+                title: 'Select field',
+                composedOf: const ['BoldIcon', 'Tipografia', 'Cores'],
+                builder: (_) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      BoldSelectField(
+                          label: 'Tipo de chave',
+                          value: 'CPF',
+                          onTap: () {}),
+                      const SizedBox(height: 12),
+                      BoldSelectField(
+                          label: 'País',
+                          placeholder: 'Selecionar',
+                          onTap: () {}),
+                      const SizedBox(height: 12),
+                      BoldSelectField(
+                          label: 'Desabilitado',
+                          value: 'Indisponível',
+                          enabled: false,
+                          onTap: () {}),
+                    ])),
+            _Section(
                 title: 'Search input',
                 composedOf: const ['BoldIcon', 'Tipografia', 'Cores'],
                 builder: (_) => const _SearchDemo()),

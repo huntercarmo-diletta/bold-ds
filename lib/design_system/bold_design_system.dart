@@ -56,6 +56,7 @@ export 'widgets/bold_section_header.dart'; // BoldSectionHeader, BoldSeeAllLink
 export 'widgets/bold_button.dart';         // BoldButton (variants + sm/md/lg)
 export 'widgets/bold_icon_button.dart';    // BoldIconButton
 export 'widgets/bold_text_field.dart';     // BoldTextField
+export 'widgets/bold_select_field.dart';   // BoldSelectField
 export 'widgets/bold_currency_field.dart'; // BoldCurrencyField (valor em centavos)
 export 'widgets/bold_money_input_formatter.dart'; // BoldMoneyInputFormatter (R$ em campo)
 export 'widgets/bold_search_input.dart';   // BoldSearchInput
