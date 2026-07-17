@@ -2126,10 +2126,15 @@ class _PreviewTab extends StatelessWidget {
                     caption: 'Suas transações aparecem aqui.')),
             _Section(
                 title: 'Promo card',
-                composedOf: const ['Gradiente', 'Tipografia', 'BoldIcon'],
+                composedOf: const ['Vidro', 'Tipografia', 'BoldIcon'],
                 builder: (_) => BoldPromoCard(
                     title: 'Habilite sua passkey',
                     subtitle: 'Login sem senha, resistente a phishing.',
+                    // Imagem placeholder no container 100×100 (ilustração do DS)
+                    // pra visualizar o card com imagem real.
+                    illustration: SvgPicture.asset(
+                        'lib/design_system/assets/illustrations/fingerprint_light.svg',
+                        fit: BoxFit.contain),
                     onTap: () {},
                     onClose: () {})),
             _Section(
