@@ -2984,10 +2984,11 @@ class _Swatches extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        _Ramp('Primary', [
+      children: [
+        const _Ramp('Primary', [
           ('01', BoldColors.primary01),
           ('02', BoldColors.primary02),
           ('03', BoldColors.primary03),
@@ -3042,11 +3043,13 @@ class _Swatches extends StatelessWidget {
           ('info', BoldColors.info04),
           ('soft', BoldColors.infoSoft),
         ]),
+        // Theme-aware: lê o scheme ATIVO (não as constantes do dark), então os
+        // hex acompanham claro/escuro — espelhando o app.
         _Ramp('Fundo / superfície', [
-          ('bg', BoldColors.background),
-          ('flow', BoldColors.secondaryFlow),
-          ('surf', BoldColors.surface),
-          ('glass', BoldColors.glassFill),
+          ('bg', c.background),
+          ('flow', c.secondaryFlow),
+          ('surf', c.surface),
+          ('glass', BoldGlass.fill(c)),
         ]),
       ],
     );
