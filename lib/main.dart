@@ -127,9 +127,9 @@ class _CatalogHomeState extends State<_CatalogHome> {
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
-    // Fundo sólido: rosa claro (primary08) no light — pra as superfícies glass
-    // (branco @50%) lerem por cima; neutral escuro no dark.
-    final bg = c.isDark ? c.background : BoldColors.primary08;
+    // Fundo = o background REAL do tema (espelha o app): light #F4F3F6, dark
+    // neutral escuro. As superfícies glass (branco @50%) leem por cima dele.
+    final bg = c.background;
     return Scaffold(
       backgroundColor: bg,
       body: SafeArea(
