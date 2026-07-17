@@ -1712,7 +1712,33 @@ class _PreviewTab extends StatelessWidget {
             _Section(
                 title: 'Logo',
                 composedOf: const ['Cores'],
-                builder: (_) => const BoldLogo(width: 150)),
+                builder: (ctx) {
+                  final cc = BoldColors.of(ctx);
+                  Widget box(Color bg, bool onDark, String label) => Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 190,
+                            height: 92,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: bg,
+                              borderRadius: BorderRadius.circular(14),
+                              border: Border.all(color: cc.border),
+                            ),
+                            child: BoldLogo(width: 130, onDark: onDark),
+                          ),
+                          const SizedBox(height: 6),
+                          Text(label,
+                              style: BoldType.labelSm
+                                  .copyWith(color: cc.textMuted)),
+                        ],
+                      );
+                  return Wrap(spacing: 12, runSpacing: 12, children: [
+                    box(BoldColors.white, false, 'Light'),
+                    box(BoldColors.neutral00, true, 'Dark'),
+                  ]);
+                }),
             _Section(
                 title: 'Marca PIX',
                 composedOf: const ['Cores'],
