@@ -24,11 +24,15 @@ class BoldStatusTagData {
 ///
 /// Success/danger vêm 1:1 do Figma; os demais tons replicam a receita.
 ///
+/// [dot] mostra um ponto sólido no tom (●) antes do label — usado nas tags de
+/// status (Ativa/Pendente/Rejeitada/Cancelada). Tem precedência sobre [icon].
+///
 /// **Composição** — BoldIcon (átomo) + tokens (escalas semânticas).
 ///
 /// ```dart
 /// BoldStatusTag(label: 'R$ 300,00', icon: 'arrow-trend-up-light',
 ///     tone: BoldStatusTone.success);
+/// BoldStatusTag(label: 'Ativa', dot: true, tone: BoldStatusTone.success);
 /// ```
 class BoldStatusTag extends StatelessWidget {
   const BoldStatusTag({
@@ -36,18 +40,22 @@ class BoldStatusTag extends StatelessWidget {
     required this.label,
     this.tone = BoldStatusTone.neutral,
     this.icon,
+    this.dot = false,
   });
 
   final String label;
   final BoldStatusTone tone;
   final String? icon;
 
+  /// Ponto sólido no tom antes do label (●). Precede [icon].
+  final bool dot;
+
   @override
   Widget build(BuildContext context) {
-    final t = _toneSpec(tone, BoldColors.of(context).isDark);
+    final t = _toneSpec(tone, BoldColors.of(context));
     return Container(
       height: 20,
-      padding: const EdgeInsetsDirectional.only(start: 4, end: 8),
+      padding: EdgeInsetsDirectional.only(start: dot ? 8 : 4, end: 8),
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: t.fill,
@@ -61,7 +69,14 @@ class BoldStatusTag extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (icon != null) ...[
+          if (dot) ...[
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(color: t.fg, shape: BoxShape.circle),
+            ),
+            const SizedBox(width: 5),
+          ] else if (icon != null) ...[
             BoldIcon(icon!, size: 8, color: t.fg),
             const SizedBox(width: 4),
           ],
@@ -93,14 +108,35 @@ class _ToneSpec {
   final Color stroke;
 }
 
-// Success/danger: vidro branco theme-aware (cor só no texto/ícone). Dark → fill
-// branco 15% / stroke 25% / fg 05; light → fill 40% / stroke 74% / fg 04.
-// Warning/neutral/primary mantêm o wash sólido do tom.
-_ToneSpec _toneSpec(BoldStatusTone t, bool isDark) {
+// Todas as escalas são theme-aware.
+// - Success/danger: vidro branco (cor só no texto/ícone). Dark → fill branco
+//   15% / stroke 25% / fg 05; light → fill 40% / stroke 74% / fg 04.
+// - Warning/primary/neutral (tons tintados): LIGHT mantém o wash claro do Figma
+//   (07/08/10) + fg escuro; DARK usa tinta sutil do tom sobre a surface
+//   (alphaBlend 16%) + fg claro (05) — senão o wash claro vira um pill quase
+//   branco no dark.
+_ToneSpec _toneSpec(BoldStatusTone t, BoldScheme s) {
+  final isDark = s.isDark;
   Color glassFill() =>
       BoldColors.white.withValues(alpha: isDark ? 0.15 : 0.40);
   Color glassStroke() =>
       BoldColors.white.withValues(alpha: isDark ? 0.25 : 0.74);
+
+  _ToneSpec tinted({
+    required Color base, // matiz do fill (dark) + stroke
+    required Color washLight, // fill claro do Figma (light)
+    required Color fgLight,
+    required Color fgDark,
+  }) {
+    if (isDark) {
+      return _ToneSpec(
+        fg: fgDark,
+        fill: Color.alphaBlend(base.withValues(alpha: 0.16), s.surface),
+        stroke: base.withValues(alpha: 0.45),
+      );
+    }
+    return _ToneSpec(fg: fgLight, fill: washLight, stroke: fgLight);
+  }
 
   return switch (t) {
     BoldStatusTone.success => _ToneSpec(
@@ -111,17 +147,20 @@ _ToneSpec _toneSpec(BoldStatusTone t, bool isDark) {
         fg: isDark ? BoldColors.error05 : BoldColors.error04,
         fill: glassFill(),
         stroke: glassStroke()),
-    BoldStatusTone.warning => const _ToneSpec(
-        fg: BoldColors.warning03,
-        fill: BoldColors.warning07,
-        stroke: BoldColors.warning03),
-    BoldStatusTone.primary => const _ToneSpec(
-        fg: BoldColors.primary04,
-        fill: BoldColors.primary08,
-        stroke: BoldColors.primary04),
-    BoldStatusTone.neutral => const _ToneSpec(
-        fg: BoldColors.neutral03,
-        fill: BoldColors.neutral10,
-        stroke: BoldColors.neutral03),
+    BoldStatusTone.warning => tinted(
+        base: BoldColors.warning04,
+        washLight: BoldColors.warning07,
+        fgLight: BoldColors.warning03,
+        fgDark: BoldColors.warning05),
+    BoldStatusTone.primary => tinted(
+        base: BoldColors.primary04,
+        washLight: BoldColors.primary08,
+        fgLight: BoldColors.primary04,
+        fgDark: BoldColors.primary05),
+    BoldStatusTone.neutral => tinted(
+        base: BoldColors.neutral05,
+        washLight: BoldColors.neutral10,
+        fgLight: BoldColors.neutral03,
+        fgDark: BoldColors.neutral05),
   };
 }

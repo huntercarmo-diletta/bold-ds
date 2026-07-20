@@ -23,12 +23,14 @@ class BoldSwitch extends StatelessWidget {
   final bool value;
   final ValueChanged<bool>? onChanged;
 
-  /// true → orange on-state (biometrics); false → violet (permissions).
+  /// DEPRECATED — ignorado. Todo toggle liga em rosa (primary), sem exceção.
+  /// Mantido só pra não quebrar callers antigos.
   final bool accent;
 
   @override
   Widget build(BuildContext context) {
-    final onColor = accent ? BoldColors.warning : BoldColors.primary;
+    // Regra do DS: TODO toggle liga em primary (rosa). Sem variante laranja.
+    final onColor = BoldColors.primary;
     return GestureDetector(
       onTap: onChanged == null ? null : () => onChanged!(!value),
       child: AnimatedContainer(

@@ -197,6 +197,7 @@ sealed class BoldMiddleAccessory extends StatelessWidget {
     required String title,
     String? subtitle,
     bool disabled,
+    int subtitleMaxLines,
   }) = _MiddleTitleSubtitle;
 
   /// título + `subtitle • accessorySubtitle` inline (extrato).
@@ -300,10 +301,19 @@ class _MiddleTitle extends BoldMiddleAccessory {
 
 class _MiddleTitleSubtitle extends BoldMiddleAccessory {
   const _MiddleTitleSubtitle(
-      {super.key, required this.title, this.subtitle, this.disabled = false});
+      {super.key,
+      required this.title,
+      this.subtitle,
+      this.disabled = false,
+      this.subtitleMaxLines = 2});
   final String title;
   final String? subtitle;
   final bool disabled;
+
+  /// Linhas do subtítulo — default 2 (evita truncar textos curtos tipo "Login
+  /// sem senha, resistente a phishing"). Passe 1 pra forçar linha única.
+  final int subtitleMaxLines;
+
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
@@ -315,7 +325,9 @@ class _MiddleTitleSubtitle extends BoldMiddleAccessory {
             style: _mTitle(c, disabled)),
         if (subtitle != null) ...[
           const SizedBox(height: 2),
-          Text(subtitle!, maxLines: 1, overflow: TextOverflow.ellipsis,
+          Text(subtitle!,
+              maxLines: subtitleMaxLines,
+              overflow: TextOverflow.ellipsis,
               style: _mSub(c, disabled)),
         ],
       ],

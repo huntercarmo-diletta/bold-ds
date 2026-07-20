@@ -97,6 +97,7 @@ class BoldTopBar extends StatelessWidget {
     VoidCallback? onSwitchAccount,
     List<BoldNavRightIcon> icons = const [],
     bool safeArea = true,
+    ImageProvider? avatarImage,
   }) =>
       BoldTopBar._(
         key: key,
@@ -108,6 +109,7 @@ class BoldTopBar extends StatelessWidget {
           accountLoading: accountLoading,
           onSwitchAccount: onSwitchAccount,
           icons: icons,
+          avatarImage: avatarImage,
         ),
       );
 
@@ -235,16 +237,14 @@ class BoldTopBar extends StatelessWidget {
             topRight: Radius.circular(BoldRadius.sheet)),
       ),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
-        SizedBox(
-          height: 24,
-          child: Center(
-            child: Container(
-              width: 64,
-              height: 5,
-              decoration: BoxDecoration(
-                  color: c.border, borderRadius: BoldRadius.pillR),
-            ),
-          ),
+        // Grip iOS — mesmo spec do [BoldSheet] (fonte única do handle).
+        Container(
+          width: 40,
+          height: 4,
+          margin: const EdgeInsets.only(top: 10, bottom: 6),
+          decoration: BoxDecoration(
+              color: c.textMuted.withValues(alpha: 0.5),
+              borderRadius: BorderRadius.circular(999)),
         ),
         BoldNavTopBar(
           left: BoldNavLeftAccessory.close(onPressed: _onClose),
@@ -264,6 +264,7 @@ class _HomeHeader extends StatelessWidget {
     this.onOpenProfile,
     this.onSwitchAccount,
     this.icons = const [],
+    this.avatarImage,
   });
 
   final String firstName;
@@ -272,6 +273,7 @@ class _HomeHeader extends StatelessWidget {
   final VoidCallback? onOpenProfile;
   final VoidCallback? onSwitchAccount;
   final List<BoldNavRightIcon> icons;
+  final ImageProvider? avatarImage;
 
   @override
   Widget build(BuildContext context) {
@@ -291,7 +293,9 @@ class _HomeHeader extends StatelessWidget {
           ]),
           const SizedBox(height: BoldSpace.x4),
           BoldNavLeftAccessory.home(
-              firstName: firstName, onOpenProfile: onOpenProfile),
+              firstName: firstName,
+              onOpenProfile: onOpenProfile,
+              avatarImage: avatarImage),
         ],
       ),
     );

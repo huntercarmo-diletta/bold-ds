@@ -63,9 +63,12 @@ class BoldSelectField extends StatelessWidget {
                     const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
                 decoration: BoxDecoration(
                   borderRadius: BoldRadius.fieldR,
+                  // Selecionado (com valor) = stroke rosa, igual ao input.
                   border: Border.all(
-                      color: c.isDark ? c.border : BoldColors.neutral08,
-                      width: 1),
+                      color: (enabled && hasValue)
+                          ? BoldColors.primary
+                          : (c.isDark ? c.border : BoldColors.neutral08),
+                      width: (enabled && hasValue) ? 1.5 : 1),
                 ),
                 child: Row(children: [
                   Expanded(
