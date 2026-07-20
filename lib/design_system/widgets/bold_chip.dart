@@ -50,8 +50,9 @@ class BoldStatusBadge extends StatelessWidget {
 }
 
 /// Chip de filtro selecionável (Todos / Entradas / Saídas…). Theme-aware e
-/// acessível. Altura ≈ status badge (~26px): texto `bodySm` (12·h16) + py4 +
-/// borda 1px.
+/// acessível. Pílula visual ≈ status badge (~26px): texto `bodySm` (12·h16) +
+/// py4 + borda 1px — mas o **alvo de toque é ampliado p/ 44px** (WCAG 2.5.5)
+/// via padding vertical transparente dentro do `InkWell`, sem inflar o pill.
 /// - **não-selecionado** = fundo transparente + borda neutra + `textPrimary`
 ///   (alto contraste);
 /// - **selecionado** = fill `primary` sólido + ink `onPrimary` (contraste AA,
@@ -82,19 +83,24 @@ class BoldFilterChip extends StatelessWidget {
         child: InkWell(
           borderRadius: BoldRadius.pillR,
           onTap: onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 150),
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-            decoration: BoxDecoration(
-              color: selected ? c.primary : BoldColors.transparent,
-              borderRadius: BoldRadius.pillR,
-              border: Border.all(color: selected ? c.primary : c.border),
-            ),
-            child: Text(
-              label,
-              style: BoldType.bodySm.copyWith(
-                fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
-                color: selected ? c.onPrimary : c.textPrimary,
+          // pílula ~26px, mas alvo de toque de 44px (WCAG 2.5.5): 26 + 9×2 = 44.
+          // o padding só amplia a área toque/ink, não infla o pill visível.
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 9),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 150),
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+              decoration: BoxDecoration(
+                color: selected ? c.primary : BoldColors.transparent,
+                borderRadius: BoldRadius.pillR,
+                border: Border.all(color: selected ? c.primary : c.border),
+              ),
+              child: Text(
+                label,
+                style: BoldType.bodySm.copyWith(
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                  color: selected ? c.onPrimary : c.textPrimary,
+                ),
               ),
             ),
           ),
