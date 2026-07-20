@@ -50,11 +50,13 @@ class BoldStatusBadge extends StatelessWidget {
 }
 
 /// Chip de filtro selecionável (Todos / Entradas / Saídas…). Theme-aware e
-/// acessível:
+/// acessível. Altura ≈ status badge (~26px): texto `bodySm` (12·h16) + py4 +
+/// borda 1px.
+/// - **não-selecionado** = fundo transparente + borda neutra + `textPrimary`
+///   (alto contraste);
 /// - **selecionado** = fill `primary` sólido + ink `onPrimary` (contraste AA,
 ///   mesma lógica do BoldButton primário);
-/// - **não-selecionado** = outline neutro do tema (`border` + `textSecondary`);
-/// - alvo de toque mínimo 44px e `Semantics(selected)` pra leitores de tela.
+/// - `Semantics(selected)` pra leitores de tela.
 class BoldFilterChip extends StatelessWidget {
   const BoldFilterChip(
     this.label, {
@@ -82,9 +84,6 @@ class BoldFilterChip extends StatelessWidget {
           onTap: onTap,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 150),
-            // mesma altura do BoldStatusBadge (~26,5px): texto 11×1.5 = 16,5 +
-            // padding vertical 4×2 = 8 + borda 1×2 = 2. (o badge usa vertical 5
-            // e não tem borda; aqui tiramos 1 do padding pra compensar a borda.)
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
             decoration: BoxDecoration(
               color: selected ? c.primary : BoldColors.transparent,
@@ -93,10 +92,9 @@ class BoldFilterChip extends StatelessWidget {
             ),
             child: Text(
               label,
-              style: BoldType.bodySmall.copyWith(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                color: selected ? c.onPrimary : c.textSecondary,
+              style: BoldType.bodySm.copyWith(
+                fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                color: selected ? c.onPrimary : c.textPrimary,
               ),
             ),
           ),
