@@ -72,6 +72,7 @@ export 'widgets/bold_stepper.dart';        // BoldStepper
 export 'widgets/bold_navigation_button.dart'; // BoldNavigationButton, BoldNavAction
 // Cards, listas e estados
 export 'widgets/bold_card.dart';           // BoldCard, BoldIconChip, BoldCardSurface
+export 'widgets/bold_accordion.dart';      // BoldAccordion (card expansivel / FAQ)
 export 'widgets/bold_list.dart';           // BoldSpotIcon, BoldListTile, BoldListGroup
 export 'widgets/bold_app_list.dart';       // BoldAppList + Left/Middle/RightAccessory (sealed)
 export 'widgets/bold_amount_display.dart'; // BoldAmountDisplay (valor entre hairlines) — CPF Seguro

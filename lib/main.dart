@@ -2145,6 +2145,32 @@ class _PreviewTab extends StatelessWidget {
                         style: BoldType.bodySmall
                             .copyWith(color: BoldColors.of(ctx).textPrimary)))),
             _Section(
+                title: 'Accordion',
+                note: 'começa fechado; toque pra abrir/fechar',
+                composedOf: const ['BoldCard', 'BoldIcon', 'Tipografia'],
+                builder: (ctx) {
+                  final cc = BoldColors.of(ctx);
+                  Widget resposta(String t) => Text(t,
+                      style: BoldType.bodySm
+                          .copyWith(color: cc.textSecondary, height: 1.5));
+                  return Column(children: [
+                    BoldAccordion(
+                      title: 'O que é o Pix Automático?',
+                      child: resposta(
+                          'Pagamentos recorrentes autorizados uma única vez; a '
+                          'cada cobrança o débito é agendado automaticamente.'),
+                    ),
+                    const SizedBox(height: BoldSpace.x3),
+                    BoldAccordion(
+                      title: 'Já começa aberto (initiallyOpen)',
+                      initiallyOpen: true,
+                      child: resposta(
+                          'Variante com o conteúdo visível de início — para '
+                          'destacar o primeiro item quando fizer sentido.'),
+                    ),
+                  ]);
+                }),
+            _Section(
                 title: 'Empty state',
                 composedOf: const ['BoldCard', 'BoldIcon', 'Tipografia'],
                 builder: (_) => const BoldEmptyState(
