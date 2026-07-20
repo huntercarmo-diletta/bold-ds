@@ -82,9 +82,10 @@ class BoldFilterChip extends StatelessWidget {
           onTap: onTap,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 150),
-            // vertical 13 + texto ~18 ≈ alvo de toque 44px (sem `alignment`,
-            // que num Wrap de largura ilimitada quebra com "infinite size").
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
+            // mesma altura do BoldStatusBadge (~26,5px): texto 11×1.5 = 16,5 +
+            // padding vertical 4×2 = 8 + borda 1×2 = 2. (o badge usa vertical 5
+            // e não tem borda; aqui tiramos 1 do padding pra compensar a borda.)
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
             decoration: BoxDecoration(
               color: selected ? c.primary : BoldColors.transparent,
               borderRadius: BoldRadius.pillR,
@@ -93,8 +94,8 @@ class BoldFilterChip extends StatelessWidget {
             child: Text(
               label,
               style: BoldType.bodySmall.copyWith(
-                fontSize: 13.5,
-                fontWeight: FontWeight.w600,
+                fontSize: 11,
+                fontWeight: FontWeight.w700,
                 color: selected ? c.onPrimary : c.textSecondary,
               ),
             ),
