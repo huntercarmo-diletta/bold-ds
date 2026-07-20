@@ -49,7 +49,12 @@ class BoldStatusBadge extends StatelessWidget {
   }
 }
 
-/// A selectable filter chip (multi-select). Active fills violet.
+/// Chip de filtro selecionável (Todos / Entradas / Saídas…). Theme-aware e
+/// acessível:
+/// - **selecionado** = fill `primary` sólido + ink `onPrimary` (contraste AA,
+///   mesma lógica do BoldButton primário);
+/// - **não-selecionado** = outline neutro do tema (`border` + `textSecondary`);
+/// - alvo de toque mínimo 44px e `Semantics(selected)` pra leitores de tela.
 class BoldFilterChip extends StatelessWidget {
   const BoldFilterChip(
     this.label, {
@@ -64,34 +69,34 @@ class BoldFilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      borderRadius: BoldRadius.pillR,
-      child: InkWell(
+    final c = BoldColors.of(context);
+    return Semantics(
+      button: true,
+      selected: selected,
+      label: label,
+      child: Material(
+        color: BoldColors.transparent,
         borderRadius: BoldRadius.pillR,
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 9),
-          decoration: BoxDecoration(
-            color: selected
-                ? BoldColors.primary.withValues(alpha: 0.18)
-                : Colors.white.withValues(alpha: 0.04),
-            borderRadius: BoldRadius.pillR,
-            border: Border.all(
-              color: selected
-                  ? BoldColors.primary
-                  : Colors.white.withValues(alpha: 0.10),
+        child: InkWell(
+          borderRadius: BoldRadius.pillR,
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            constraints: const BoxConstraints(minHeight: 44),
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+            decoration: BoxDecoration(
+              color: selected ? c.primary : BoldColors.transparent,
+              borderRadius: BoldRadius.pillR,
+              border: Border.all(color: selected ? c.primary : c.border),
             ),
-          ),
-          child: Text(
-            label,
-            style: BoldType.bodySmall.copyWith(
-              fontSize: 13.5,
-              fontWeight: FontWeight.w700,
-              color: selected
-                  ? const Color(0xFFC4B5FD)
-                  : BoldColors.textSecondary,
+            child: Text(
+              label,
+              style: BoldType.bodySmall.copyWith(
+                fontSize: 13.5,
+                fontWeight: FontWeight.w600,
+                color: selected ? c.onPrimary : c.textSecondary,
+              ),
             ),
           ),
         ),
