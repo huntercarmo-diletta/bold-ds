@@ -82,9 +82,9 @@ class BoldFilterChip extends StatelessWidget {
           onTap: onTap,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 150),
-            constraints: const BoxConstraints(minHeight: 44),
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+            // vertical 13 + texto ~18 ≈ alvo de toque 44px (sem `alignment`,
+            // que num Wrap de largura ilimitada quebra com "infinite size").
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 13),
             decoration: BoxDecoration(
               color: selected ? c.primary : BoldColors.transparent,
               borderRadius: BoldRadius.pillR,
