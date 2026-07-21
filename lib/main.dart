@@ -2019,6 +2019,11 @@ class _PreviewTab extends StatelessWidget {
                 composedOf: const ['Tipografia', 'Cores'],
                 builder: (_) => const _SegmentedDemo()),
             _Section(
+                title: 'Tabs (abas sublinhadas)',
+                composedOf: const ['Tipografia', 'Cores'],
+                note: 'seções/listas · aba ativa com sublinhado primary · distinto do segmented',
+                builder: (_) => const _TabsDemo()),
+            _Section(
                 title: 'Section header',
                 composedOf: const ['Tipografia', 'BoldSeeAllLink'],
                 builder: (_) => BoldSectionHeader(
@@ -3307,6 +3312,24 @@ class _SegmentedDemoState extends State<_SegmentedDemo> {
   Widget build(BuildContext context) {
     return BoldSegmentedControl(
       segments: const ['Claro', 'Escuro', 'Sistema'],
+      selectedIndex: _i,
+      onChanged: (i) => setState(() => _i = i),
+    );
+  }
+}
+
+class _TabsDemo extends StatefulWidget {
+  const _TabsDemo();
+  @override
+  State<_TabsDemo> createState() => _TabsDemoState();
+}
+
+class _TabsDemoState extends State<_TabsDemo> {
+  int _i = 0;
+  @override
+  Widget build(BuildContext context) {
+    return BoldTabs(
+      tabs: const ['Ativos', 'Encerrados'],
       selectedIndex: _i,
       onChanged: (i) => setState(() => _i = i),
     );

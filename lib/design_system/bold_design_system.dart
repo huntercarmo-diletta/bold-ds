@@ -70,6 +70,7 @@ export 'widgets/bold_input_chip.dart';     // BoldInputChip
 export 'widgets/bold_nav_top_bar.dart';    // BoldNavTopBar + acessórios sealed
 export 'widgets/bold_stepper.dart';        // BoldStepper
 export 'widgets/bold_navigation_button.dart'; // BoldNavigationButton, BoldNavAction
+export 'widgets/bold_tabs.dart';           // BoldTabs (abas sublinhadas — seções/listas)
 // Cards, listas e estados
 export 'widgets/bold_card.dart';           // BoldCard, BoldIconChip, BoldCardSurface
 export 'widgets/bold_accordion.dart';      // BoldAccordion (card expansivel / FAQ)
