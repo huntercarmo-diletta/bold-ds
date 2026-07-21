@@ -2603,6 +2603,11 @@ class _PreviewTab extends StatelessWidget {
                               ],
                             )))),
             _Section(
+                title: 'Date picker',
+                composedOf: const ['BoldSheet', 'BoldButton', 'BoldIconButton'],
+                note: 'BoldDatePicker.show(context, …) — calendário Seg→Dom, dia selecionado spot primary, hoje com ponto',
+                builder: (_) => const _DatePickerDemo()),
+            _Section(
                 title: 'Password sheet (PIN)',
                 composedOf: const [
                   'BoldSheet',
@@ -3333,6 +3338,46 @@ class _TabsDemoState extends State<_TabsDemo> {
       selectedIndex: _i,
       onChanged: (i) => setState(() => _i = i),
     );
+  }
+}
+
+class _DatePickerDemo extends StatefulWidget {
+  const _DatePickerDemo();
+  @override
+  State<_DatePickerDemo> createState() => _DatePickerDemoState();
+}
+
+class _DatePickerDemoState extends State<_DatePickerDemo> {
+  DateTime? _date;
+
+  String get _label => _date == null
+      ? 'Nenhuma data escolhida'
+      : 'Escolhida: ${_date!.day.toString().padLeft(2, '0')}/'
+          '${_date!.month.toString().padLeft(2, '0')}/${_date!.year}';
+
+  Future<void> _open() async {
+    final now = DateTime.now();
+    final picked = await BoldDatePicker.show(
+      context,
+      title: 'Vencimento',
+      initialDate: _date,
+      firstDate: now,
+      lastDate: now.add(const Duration(days: 365)),
+    );
+    if (picked != null) setState(() => _date = picked);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Row(children: [
+      BoldButton('Abrir calendário', expand: false, onPressed: _open),
+      const SizedBox(width: 14),
+      Expanded(
+        child: Text(_label,
+            style: BoldType.bodySmall.copyWith(color: c.textSecondary)),
+      ),
+    ]);
   }
 }
 
