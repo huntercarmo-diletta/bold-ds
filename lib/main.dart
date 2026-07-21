@@ -1809,6 +1809,25 @@ class _PreviewTab extends StatelessWidget {
                       BoldStatusBadge('Ativo'),
                     ])),
             _Section(
+                title: 'Quick action',
+                composedOf: const ['Cores', 'Tipografia', 'Ícone'],
+                note: 'ícone + label no frame · 1ª em destaque (primary) · Expanded numa Row',
+                builder: (_) => Row(children: const [
+                      Expanded(
+                          child: BoldQuickAction(
+                              icon: 'pix', label: 'Pix', highlighted: true)),
+                      SizedBox(width: 10),
+                      Expanded(
+                          child: BoldQuickAction(icon: 'qr', label: 'Scanear')),
+                      SizedBox(width: 10),
+                      Expanded(
+                          child: BoldQuickAction(icon: 'pay', label: 'Pagar')),
+                      SizedBox(width: 10),
+                      Expanded(
+                          child:
+                              BoldQuickAction(icon: 'add', label: 'Depositar')),
+                    ])),
+            _Section(
                 title: 'Home indicator',
                 composedOf: const ['Cores'],
                 builder: (_) => const BoldHomeIndicator()),

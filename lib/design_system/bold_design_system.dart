@@ -83,6 +83,7 @@ export 'widgets/bold_progress_bar.dart';   // BoldProgressBar (trilho h5 + capti
 export 'widgets/bold_radio_list.dart';     // BoldRadioList + BoldRadioOption — CPF Seguro
 export 'widgets/bold_tooltip.dart';        // BoldTooltip (label flutuante + tail) — CPF Seguro
 export 'widgets/bold_quick_card.dart';     // BoldMenuTile
+export 'widgets/bold_quick_action.dart';   // BoldQuickAction (ícone+label em frame, linha do saldo)
 export 'widgets/bold_avatar_stack.dart';   // BoldAvatarStack
 export 'widgets/bold_avatar_row.dart';     // BoldAvatarRow (Enviar para)
 export 'widgets/bold_empty_state.dart';    // BoldEmptyState
