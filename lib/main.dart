@@ -1690,6 +1690,12 @@ class _PreviewTab extends StatelessWidget {
                 composedOf: const ['Cores', 'Vidro (glass)'],
                 builder: (_) => const _BackdropSample()),
             _Section(title: 'Tipografia', builder: (_) => const _TypeScale()),
+            _Section(
+                title: 'Elevação (BoldElevation)',
+                note:
+                    'presets de sombra · nav = app bar/nav flutuante do Figma (offset 0,4 · blur 10 · preto 13% light / 35% dark)',
+                composedOf: const ['Cores'],
+                builder: (_) => const _ElevationSamples()),
     ];
     final atoms = <Widget>[
             // ───────────────────────── ÁTOMOS ─────────────────────────────
@@ -3217,6 +3223,49 @@ class _GlassSample extends StatelessWidget {
               style: BoldType.bodySmall.copyWith(color: c.textPrimary)),
         ),
       ]),
+    );
+  }
+}
+
+/// Amostra dos presets de sombra do [BoldElevation]. O `nav` é theme-tinted
+/// (preto 13% no light / 35% no dark), então mostro os dois sobre fundos
+/// correspondentes pra a sombra registrar em qualquer tema ativo.
+class _ElevationSamples extends StatelessWidget {
+  const _ElevationSamples();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+
+    Widget chip(String label, List<BoxShadow> shadow, {Color? bg}) => Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 96,
+              height: 64,
+              decoration: BoxDecoration(
+                color: bg ?? c.surface,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: shadow,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(label,
+                style: BoldType.labelMd.copyWith(color: c.textSecondary)),
+          ],
+        );
+
+    return Wrap(
+      spacing: 20,
+      runSpacing: 20,
+      children: [
+        chip('flat', BoldElevation.flat),
+        chip('raised', BoldElevation.raised),
+        chip('glow(primary)', BoldElevation.glow(BoldColors.primary)),
+        chip('nav (light)', BoldElevation.nav(), bg: const Color(0xFFFFFFFF)),
+        chip('nav (dark)', BoldElevation.nav(dark: true),
+            bg: const Color(0xFF14151F)),
+      ],
     );
   }
 }

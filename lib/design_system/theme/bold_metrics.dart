@@ -87,4 +87,17 @@ class BoldElevation {
           offset: const Offset(0, 10),
         ),
       ];
+
+  /// App bar / nav flutuante — do CPF Seguro Design System (Figma), effect de
+  /// elevação "app-navigation". Composta das variáveis de sombra do arquivo:
+  /// `position-x/0` · `position-y/4` · `blur/10` · `spread/0`. Cor preto @ 13%
+  /// no tema claro (Elevation/Light); no escuro a opacidade é aprofundada p/ a
+  /// sombra registrar sobre o fundo escuro (Elevation/Dark).
+  static List<BoxShadow> nav({bool dark = false}) => [
+        BoxShadow(
+          color: Color(dark ? 0x59000000 : 0x21000000),
+          offset: const Offset(0, 4),
+          blurRadius: 10,
+        ),
+      ];
 }
