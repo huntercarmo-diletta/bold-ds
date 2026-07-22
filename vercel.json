@@ -1,3 +1,6 @@
 {
+  "framework": null,
+  "installCommand": "echo skip-install",
+  "buildCommand": "if [ ! -x flutter/bin/flutter ]; then curl -sL -o flutter.tar.xz https://storage.googleapis.com/flutter_infra_release/releases/stable/linux/flutter_linux_3.44.4-stable.tar.xz && tar xf flutter.tar.xz && rm flutter.tar.xz; fi && git config --global --add safe.directory '*' && export PATH=\"$PWD/flutter/bin:$PATH\" && flutter config --enable-web --no-analytics && flutter pub get && flutter build web --release",
   "outputDirectory": "build/web"
 }

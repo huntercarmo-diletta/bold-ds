@@ -1,24 +1,21 @@
 // Conta BOLD — Design System · Catálogo (Flutter web / Vercel).
 //
-// App SEPARADO do app real: importa SÓ o barrel puro do DS
+// App SEPARADO do app real: importa só o barrel puro do DS
 // (bold_design_system.dart, sem Firebase/Riverpod/plugins), então builda pra
-// web sem tocar na infra. Espelha o catálogo do cpf-seguro-flutter: Preview
-// (componentes vivos por camada do Atomic Design) + Specs (tokens em tabela).
+// web sem tocar na infra. Estrutura ESPELHA o catálogo do cpf-seguro-flutter:
+// abas Foundations (Gramática + Árvore) · Styles (tokens) · Components (por
+// função) · Specs (tabelas) · Integração (adoção real no app-newbold).
 //
-// REGRAS DO CATÁLOGO (e do DS):
-//  1. Ordem canônica: TOKENS → ÁTOMOS → MOLÉCULAS → ORGANISMOS.
-//  2. Todo componente declara o que o compõe (composedOf) — inclusive os tokens
-//     que consome (Cores/Tipografia/Vidro/Gradiente).
-//  3. Nenhuma cor ou texto hardcoded: cor = BoldColors, texto = BoldType. Mudou
-//     no DS, cascateia em tudo.
-//
-// Build:  flutter build web -t lib/catalog/main_catalog.dart --release
+// Build:  flutter build web --release
 // Deploy: Vercel serve build/web (vercel.json → outputDirectory).
-import 'package:conta_bold_ds/design_system/bold_design_system.dart';
-import 'ds_tree_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import 'design_system/bold_design_system.dart';
+import 'ds_tree_screen.dart';
+import 'grammar_screen.dart';
+import 'integration_screen.dart';
 
 void main() {
   // Poppins é a fonte oficial do DS (token de runtime). Carrega via google_fonts
@@ -51,26 +48,6 @@ class _BoldCatalogAppState extends State<BoldCatalogApp> {
   }
 }
 
-enum _Tab { preview, specs, map }
-
-// Camadas do catálogo (atomic design) — viram subitens da aba Design System.
-enum _DsTier { tokens, atoms, molecules, organisms, illustrations }
-
-extension _DsTierX on _DsTier {
-  String get label => switch (this) {
-        _DsTier.tokens => 'Tokens',
-        _DsTier.atoms => 'Átomos',
-        _DsTier.molecules => 'Moléculas',
-        _DsTier.organisms => 'Organismos',
-        _DsTier.illustrations => 'Ilustrações',
-      };
-}
-
-// ═══════════════════════════════════════════════════════════════════════════
-// ILUSTRAÇÕES — catálogo do CPF Seguro Design System (Figma), exportadas como
-// SVG em lib/design_system/assets/illustrations/<nome>_<tema>.svg. Cada uma tem
-// as variações de tema Light/Dark/Theme 3 (algumas só Light/Dark).
-// ═══════════════════════════════════════════════════════════════════════════
 class _Illu {
   const _Illu(this.name, this.label,
       [this.themes = const ['light', 'dark', 'theme3']]);
@@ -108,6 +85,38 @@ const _kIllustrations = <_Illu>[
   _Illu('fingerprint', 'Fingerprint'),
 ];
 
+// ═══════════════════════════════════════════════════════════════════════════
+// Navegação — abas de topo (padrão do catálogo CPF): Foundations · Styles ·
+// Components · Specs · Integração. Sem aba SDK (não faz sentido no Bold).
+// ═══════════════════════════════════════════════════════════════════════════
+enum _Tab { foundations, styles, components, specs, integracao }
+
+extension _TabX on _Tab {
+  String get label => switch (this) {
+        _Tab.foundations => 'Foundations',
+        _Tab.styles => 'Styles',
+        _Tab.components => 'Components',
+        _Tab.specs => 'Specs',
+        _Tab.integracao => 'Integração',
+      };
+}
+
+// Categorias de Components — agrupamento por FUNÇÃO (Material 3). O eixo atômico
+// (token→átomo→molécula→organismo) vive em Foundations (Gramática + Árvore).
+enum _Cat { acoes, inputs, selecao, comunicacao, conteineres, navegacao, dominio }
+
+extension _CatX on _Cat {
+  String get label => switch (this) {
+        _Cat.acoes => 'Ações',
+        _Cat.inputs => 'Campos & entrada',
+        _Cat.selecao => 'Seleção',
+        _Cat.comunicacao => 'Comunicação',
+        _Cat.conteineres => 'Contêineres',
+        _Cat.navegacao => 'Navegação',
+        _Cat.dominio => 'BOLD · domínio',
+      };
+}
+
 class _CatalogHome extends StatefulWidget {
   const _CatalogHome({required this.mode, required this.onMode});
   final ThemeMode mode;
@@ -117,2597 +126,322 @@ class _CatalogHome extends StatefulWidget {
 }
 
 class _CatalogHomeState extends State<_CatalogHome> {
-  // Destino selecionado na navegação lateral: -1 = Design System;
-  // 0.. = índice do fluxo em [kFlows].
-  int _dest = -1;
-  _Tab _dsTab = _Tab.preview;
-  // Camada do Design System em foco no preview; null = visão geral (tudo).
-  _DsTier? _dsTier;
+  _Tab _tab = _Tab.components;
 
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
-    // Fundo sólido e limpo (sem imagem/glass): branco no claro, neutral escuro
-    // no dark. As superfícies glass dos componentes leem por cima dele.
     final bg = c.isDark ? c.background : BoldColors.white;
     return Scaffold(
       backgroundColor: bg,
       body: SafeArea(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            _Sidebar(
-              dest: _dest,
-              onSelect: (d) => setState(() => _dest = d),
-              dsTier: _dsTier,
-              onSelectTier: (t) => setState(() {
-                _dest = -1;
-                _dsTab = _Tab.preview;
-                _dsTier = t;
-              }),
-              isDark: c.isDark,
-              onToggleTheme: () =>
-                  widget.onMode(c.isDark ? ThemeMode.light : ThemeMode.dark),
-            ),
-            Expanded(
-              child: _dest == -1
-                  ? _DesignSystemView(
-                      tab: _dsTab,
-                      onTab: (t) => setState(() => _dsTab = t),
-                      tier: _dsTier,
-                    )
-                  : _FlowchartView(flow: kFlows[_dest]),
-            ),
-          ],
-        ),
+        child: Column(children: [
+          _CatTopBar(
+            active: _tab,
+            onTap: (t) => setState(() => _tab = t),
+            isDark: c.isDark,
+            onToggleTheme: () =>
+                widget.onMode(c.isDark ? ThemeMode.light : ThemeMode.dark),
+          ),
+          Expanded(child: _body()),
+        ]),
       ),
     );
   }
+
+  Widget _body() {
+    switch (_tab) {
+      case _Tab.foundations:
+        return const _FoundationsView();
+      case _Tab.styles:
+        return const _StylesView();
+      case _Tab.components:
+        return const _ComponentsView();
+      case _Tab.specs:
+        return const _SpecsView();
+      case _Tab.integracao:
+        return const IntegrationScreen();
+    }
+  }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// Navegação lateral — Design System + fluxos (agrupados). É o índice do site.
-// ═══════════════════════════════════════════════════════════════════════════
-class _Sidebar extends StatefulWidget {
-  const _Sidebar({
-    required this.dest,
-    required this.onSelect,
-    required this.dsTier,
-    required this.onSelectTier,
-    required this.isDark,
-    required this.onToggleTheme,
-  });
-  final int dest;
-  final ValueChanged<int> onSelect;
-  final _DsTier? dsTier;
-  final ValueChanged<_DsTier?> onSelectTier;
+// Barra de topo: marca + abas + troca de tema. Mesma pegada do header da CPF.
+class _CatTopBar extends StatelessWidget {
+  const _CatTopBar(
+      {required this.active,
+      required this.onTap,
+      required this.isDark,
+      required this.onToggleTheme});
+  final _Tab active;
+  final ValueChanged<_Tab> onTap;
   final bool isDark;
   final VoidCallback onToggleTheme;
 
   @override
-  State<_Sidebar> createState() => _SidebarState();
-}
-
-class _SidebarState extends State<_Sidebar> {
-  // Accordion DESIGN SYSTEM: começa aberto quando o DS está em foco (dest -1).
-  late bool _dsOpen = widget.dest < 0;
-  // Accordion FLUXOGRAMAS: começa aberto se já há um fluxo selecionado.
-  late bool _flowsOpen = widget.dest >= 0;
-  // Barra lateral retrátil: recolhida vira uma faixa estreita só com o botão
-  // de reabrir + troca de tema.
-  bool _collapsed = false;
-
-  @override
-  void didUpdateWidget(_Sidebar old) {
-    super.didUpdateWidget(old);
-    // Selecionou um fluxo (ex.: via deep-link) → garante o accordion aberto.
-    if (widget.dest >= 0 && !_flowsOpen) _flowsOpen = true;
-  }
-
-  @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
-    final isDark = widget.isDark;
-    final dest = widget.dest;
-    final onSelect = widget.onSelect;
-    final dsTier = widget.dsTier;
-    final onSelectTier = widget.onSelectTier;
-    // Agrupa os fluxos por `group`, preservando a ordem de declaração.
-    final groups = <String, List<int>>{};
-    for (var i = 0; i < kFlows.length; i++) {
-      (groups[kFlows[i].group] ??= <int>[]).add(i);
-    }
-    final railBg = isDark ? c.surface : BoldColors.neutral10;
-    // Recolhida: rail estreito de ícones navegáveis (Design System + fluxos),
-    // com tooltip do nome e destaque de seleção; reabrir + tema nas pontas.
-    if (_collapsed) {
-      return Container(
-        width: 56,
-        decoration: BoxDecoration(
-          color: railBg,
-          border: Border(right: BorderSide(color: c.border)),
-        ),
-        child: Column(children: [
-          const SizedBox(height: 14),
-          BoldIconButton(
-            icon: 'bars-light',
-            semanticLabel: 'Expandir menu',
-            type: BoldIconButtonType.tertiary,
-            onPressed: () => setState(() => _collapsed = false),
-          ),
-          const SizedBox(height: 6),
-          Divider(height: 1, color: c.border),
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              children: [
-                // No rail, cada seção é UM ícone (não explode os subitens):
-                // Design System vai direto pra visão geral; Fluxogramas (sem
-                // página índice) reabre o menu com o accordion de fluxos.
-                _railItem(context,
-                    icon: 'puzzle-light',
-                    tooltip: 'Design System',
-                    selected: dest == -1,
-                    onTap: () => onSelectTier(null)),
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 14, vertical: 8),
-                  child: Divider(height: 1, color: c.border),
-                ),
-                _railItem(context,
-                    icon: 'table-tree-light',
-                    tooltip: 'Fluxogramas',
-                    selected: dest >= 0,
-                    onTap: () => setState(() {
-                          _collapsed = false;
-                          _flowsOpen = true;
-                        })),
-              ],
-            ),
-          ),
-          Divider(height: 1, color: c.border),
-          const SizedBox(height: 8),
-          BoldIconButton(
-            icon: isDark ? 'sun' : 'moon',
-            semanticLabel: isDark ? 'Modo claro' : 'Modo escuro',
-            type: BoldIconButtonType.tertiary,
-            onPressed: widget.onToggleTheme,
-          ),
-          const SizedBox(height: 14),
-        ]),
-      );
-    }
     return Container(
-      width: 268,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
       decoration: BoxDecoration(
-        color: railBg,
-        border: Border(right: BorderSide(color: c.border)),
+        color: c.isDark ? c.surface : BoldColors.white,
+        border: Border(bottom: BorderSide(color: c.border)),
       ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-        Padding(
-          padding: const EdgeInsets.fromLTRB(20, 18, 12, 14),
-          child: Row(children: [
-            BoldPixMark(size: 20, color: BoldColors.primary04),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text('Conta BOLD',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: BoldType.title.copyWith(color: c.textPrimary)),
-            ),
-            BoldIconButton(
-              icon: isDark ? 'sun' : 'moon',
-              semanticLabel: isDark ? 'Modo claro' : 'Modo escuro',
-              type: BoldIconButtonType.tertiary,
-              onPressed: widget.onToggleTheme,
-            ),
-            BoldIconButton(
-              icon: 'arrow-left-light',
-              semanticLabel: 'Recolher menu',
-              type: BoldIconButtonType.tertiary,
-              onPressed: () => setState(() => _collapsed = true),
-            ),
-          ]),
-        ),
-        Divider(height: 1, color: c.border),
+      child: Row(children: [
+        BoldPixMark(size: 18, color: BoldColors.primary04),
+        const SizedBox(width: 10),
+        Text('Conta BOLD · Design System',
+            style: BoldType.labelLg.copyWith(
+                color: c.textPrimary,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 0.2)),
+        const SizedBox(width: 24),
         Expanded(
-          child: ListView(
-            padding: const EdgeInsets.fromLTRB(12, 12, 12, 28),
-            children: [
-              // Accordion DESIGN SYSTEM — camadas do atomic design como
-              // subseções (Visão geral + Tokens/Átomos/Moléculas/Organismos).
-              _dsHeader(context),
-              if (_dsOpen) ...[
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(children: [
+              for (final t in _Tab.values)
                 Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: _subItem(context,
-                      label: 'Visão geral',
-                      selected: dest == -1 && dsTier == null,
-                      onTap: () => onSelectTier(null)),
+                  padding: const EdgeInsets.only(right: 4),
+                  child: _CatTabButton(
+                      label: t.label,
+                      selected: active == t,
+                      onTap: () => onTap(t)),
                 ),
-                for (final ti in _DsTier.values)
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8),
-                    child: _subItem(context,
-                        label: ti.label,
-                        selected: dest == -1 && dsTier == ti,
-                        onTap: () => onSelectTier(ti)),
-                  ),
-              ],
-              const SizedBox(height: 6),
-              // Accordion FLUXOGRAMAS — engloba TODOS os fluxos do app,
-              // agrupados por área (Conta, PIX, Pagamentos…) como subgrupos.
-              _accordionHeader(context),
-              if (_flowsOpen)
-                for (final g in groups.entries) ...[
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 12, 10, 6),
-                    child: Text(g.key.toUpperCase(),
-                        style: BoldType.labelSm.copyWith(
-                            color: c.textMuted,
-                            letterSpacing: 1,
-                            fontSize: 10)),
-                  ),
-                  for (final i in g.value)
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8),
-                      child: _navItem(context,
-                          icon: kFlows[i].icon,
-                          label: kFlows[i].name,
-                          selected: dest == i,
-                          onTap: () => onSelect(i)),
-                    ),
-                ],
-            ],
+            ]),
           ),
+        ),
+        const SizedBox(width: 12),
+        BoldIconButton(
+          icon: isDark ? 'sun' : 'moon',
+          semanticLabel: isDark ? 'Modo claro' : 'Modo escuro',
+          type: BoldIconButtonType.tertiary,
+          onPressed: onToggleTheme,
         ),
       ]),
     );
   }
-
-  // Item do rail (sidebar recolhida): só o ícone, centralizado, com tooltip do
-  // nome e destaque quando selecionado.
-  Widget _railItem(BuildContext context,
-      {required String icon,
-      required String tooltip,
-      required bool selected,
-      required VoidCallback onTap}) {
-    final c = BoldColors.of(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      child: Tooltip(
-        message: tooltip,
-        waitDuration: const Duration(milliseconds: 300),
-        child: Material(
-          color: selected
-              ? BoldColors.primary04.withValues(alpha: 0.12)
-              : BoldColors.transparent,
-          borderRadius: BorderRadius.circular(10),
-          child: InkWell(
-            borderRadius: BorderRadius.circular(10),
-            onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 9),
-              child: Center(
-                child: BoldIcon(icon,
-                    size: 18,
-                    color:
-                        selected ? BoldColors.primary04 : c.textSecondary),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Cabeçalho do accordion DESIGN SYSTEM: abre/fecha as camadas. Fica ativo
-  // (rosa) enquanto o DS está em foco (dest -1).
-  Widget _dsHeader(BuildContext context) {
-    final c = BoldColors.of(context);
-    final active = widget.dest == -1;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
-      child: Material(
-        color: BoldColors.transparent,
-        borderRadius: BorderRadius.circular(10),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(10),
-          onTap: () => setState(() => _dsOpen = !_dsOpen),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
-            child: Row(children: [
-              BoldIcon('puzzle-light',
-                  size: 18,
-                  color: active ? BoldColors.primary04 : c.textSecondary),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text('Design System',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: BoldType.labelMd.copyWith(
-                        color: active ? BoldColors.primary04 : c.textPrimary,
-                        fontWeight: FontWeight.w600)),
-              ),
-              AnimatedRotation(
-                turns: _dsOpen ? 0 : -0.25,
-                duration: const Duration(milliseconds: 160),
-                child: BoldIcon('chevron-down',
-                    size: 16, color: c.textSecondary),
-              ),
-            ]),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Subitem de navegação (camadas do DS): indentado, com um "dot" à esquerda no
-  // lugar do ícone. Destaca em rosa quando selecionado.
-  Widget _subItem(BuildContext context,
-      {required String label,
-      required bool selected,
-      required VoidCallback onTap}) {
-    final c = BoldColors.of(context);
-    final fg = selected ? BoldColors.primary04 : c.textPrimary;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
-      child: Material(
-        color: selected
-            ? BoldColors.primary04.withValues(alpha: 0.12)
-            : BoldColors.transparent,
-        borderRadius: BorderRadius.circular(10),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(10),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            child: Row(children: [
-              Container(
-                width: 6,
-                height: 6,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: selected ? BoldColors.primary04 : c.textMuted,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Text(label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: BoldType.labelMd.copyWith(
-                        color: fg,
-                        fontWeight:
-                            selected ? FontWeight.w600 : FontWeight.w500)),
-              ),
-            ]),
-          ),
-        ),
-      ),
-    );
-  }
-
-  // Cabeçalho do accordion FLUXOGRAMAS: linha clicável que abre/fecha a lista
-  // de fluxos. `_flowsOpen` guarda o estado; a seta vira com AnimatedRotation.
-  Widget _accordionHeader(BuildContext context) {
-    final c = BoldColors.of(context);
-    // Ativo quando aberto OU quando há um fluxo selecionado por baixo.
-    final hasSelectedFlow = widget.dest >= 0;
-    final accent = _flowsOpen || hasSelectedFlow;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
-      child: Material(
-        color: BoldColors.transparent,
-        borderRadius: BorderRadius.circular(10),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(10),
-          onTap: () => setState(() => _flowsOpen = !_flowsOpen),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
-            child: Row(children: [
-              BoldIcon('table-tree-light',
-                  size: 18,
-                  color: accent ? BoldColors.primary04 : c.textSecondary),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text('Fluxogramas',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: BoldType.labelMd.copyWith(
-                        color: accent ? BoldColors.primary04 : c.textPrimary,
-                        fontWeight: FontWeight.w600)),
-              ),
-              AnimatedRotation(
-                turns: _flowsOpen ? 0 : -0.25,
-                duration: const Duration(milliseconds: 160),
-                child: BoldIcon('chevron-down',
-                    size: 16, color: c.textSecondary),
-              ),
-            ]),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _navItem(BuildContext context,
-      {required String icon,
-      required String label,
-      required bool selected,
-      required VoidCallback onTap}) {
-    final c = BoldColors.of(context);
-    final fg = selected ? BoldColors.primary04 : c.textPrimary;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
-      child: Material(
-        color: selected
-            ? BoldColors.primary04.withValues(alpha: 0.12)
-            : BoldColors.transparent,
-        borderRadius: BorderRadius.circular(10),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(10),
-          onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
-            child: Row(children: [
-              BoldIcon(icon,
-                  size: 18,
-                  color: selected ? BoldColors.primary04 : c.textSecondary),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: BoldType.labelMd.copyWith(
-                        color: fg,
-                        fontWeight:
-                            selected ? FontWeight.w600 : FontWeight.w500)),
-              ),
-            ]),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
-// Conteúdo do Design System (Preview / Specs) — o catálogo original.
-class _DesignSystemView extends StatelessWidget {
-  const _DesignSystemView(
-      {required this.tab, required this.onTab, required this.tier});
-  final _Tab tab;
-  final ValueChanged<_Tab> onTab;
-  final _DsTier? tier;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = BoldColors.of(context);
-    final title =
-        tier == null ? 'Design System' : 'Design System · ${tier!.label}';
-    return Column(children: [
-      Container(
-        padding: const EdgeInsets.fromLTRB(24, 12, 20, 12),
-        decoration: BoxDecoration(
-          border: Border(bottom: BorderSide(color: c.border)),
-        ),
-        child: Row(children: [
-          Expanded(
-            child: Text(title,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: BoldType.title.copyWith(color: c.textPrimary)),
-          ),
-          _Pill(
-              label: 'Preview',
-              selected: tab == _Tab.preview,
-              onTap: () => onTab(_Tab.preview)),
-          const SizedBox(width: 4),
-          _Pill(
-              label: 'Specs',
-              selected: tab == _Tab.specs,
-              onTap: () => onTab(_Tab.specs)),
-          const SizedBox(width: 4),
-          _Pill(
-              label: 'Mapa',
-              selected: tab == _Tab.map,
-              onTap: () => onTab(_Tab.map)),
-        ]),
-      ),
-      Expanded(
-        child: switch (tab) {
-          _Tab.preview => _PreviewTab(tier: tier),
-          _Tab.specs => const _SpecsTab(),
-          _Tab.map => const DsTreeScreen(),
-        },
-      ),
-    ]);
-  }
-}
-
-class _Pill extends StatelessWidget {
-  const _Pill(
+class _CatTabButton extends StatelessWidget {
+  const _CatTabButton(
       {required this.label, required this.selected, required this.onTap});
   final String label;
   final bool selected;
   final VoidCallback onTap;
-
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
-        decoration: BoxDecoration(
-          color: selected
-              ? BoldColors.primary04.withValues(alpha: 0.18)
-              : BoldColors.transparent,
-          borderRadius: BorderRadius.circular(200),
-          border: Border.all(
-              color: selected ? BoldColors.primary04 : c.border, width: 1),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          decoration: BoxDecoration(
+            color: selected
+                ? BoldColors.primary04.withValues(alpha: 0.14)
+                : BoldColors.transparent,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(label,
+              style: BoldType.labelMd.copyWith(
+                  color: selected ? BoldColors.primary04 : c.textSecondary,
+                  fontWeight: FontWeight.w600)),
         ),
-        child: Text(label,
-            style: BoldType.labelSm.copyWith(
-                color: selected ? BoldColors.primary04 : c.textSecondary)),
       ),
     );
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════
-// FLUXOS — documentação dos fluxos do app (app-newbold), como fluxogramas.
-// Fonte: rotas em lib/routing/routes.dart. Cada passo = um nó; `branches` são
-// caminhos alternativos/decisões dentro do passo.
-// ═══════════════════════════════════════════════════════════════════════════
-// Padrão de user flow do time (ver documentação): verde = início · rosa = fim ·
-// AMARELO = usuário · ROXO = sistema · retângulo = ação · losango = decisão ·
-// roxo + X = caso de erro. Seta cheia = fluxo · tracejada = anotação/erro.
-enum StepType {
-  start,
-  end,
-  userAction,
-  userDecision,
-  systemAction,
-  systemDecision,
-  systemError,
-}
-
-class FlowStep {
-  const FlowStep(this.label, {this.type, this.note, this.branches = const []});
+// Pílula de sub-navegação (Foundations / Components).
+class _CatNavPill extends StatelessWidget {
+  const _CatNavPill(
+      {required this.label, required this.selected, required this.onTap});
   final String label;
-  final StepType? type; // null = legado (forma inferida por posição)
-  final String? note;
-  final List<String> branches;
-}
-
-// Caso de erro FORA do fluxo feliz: sai de uma decisão do sistema (`from`).
-class ErrorCase {
-  const ErrorCase(this.label, {required this.from, this.note});
-  final String label;
-  final String from; // decisão de origem (rótulo do passo)
-  final String? note;
-}
-
-class AppFlow {
-  const AppFlow({
-    required this.name,
-    required this.group,
-    required this.icon,
-    required this.route,
-    required this.description,
-    required this.steps,
-    this.errors = const <ErrorCase>[],
-  });
-  final String name;
-  final String group;
-  final String icon;
-  final String route;
-  final String description;
-  final List<FlowStep> steps;
-  final List<ErrorCase> errors;
-}
-
-const List<AppFlow> kFlows = [
-  // ───────────────────────────── CONTA ──────────────────────────────────────
-  AppFlow(
-    name: 'Abertura de conta',
-    group: 'Conta',
-    icon: 'id-card-light',
-    route: '/boas-vindas → /onboarding/*',
-    description:
-        'Onboarding completo (PF e PJ), do cadastro ao KYC e aprovação.',
-    steps: [
-      FlowStep('Boas-vindas', note: 'Entrar ou abrir conta'),
-      FlowStep('Tipo de conta', branches: ['Pessoa Física', 'Pessoa Jurídica']),
-      FlowStep('Informar CPF'),
-      FlowStep('Documentos da empresa', note: 'Só PJ (CNPJ, contrato social)'),
-      FlowStep('Criar senha'),
-      FlowStep('Verificar OTP', note: 'Código enviado por SMS/e-mail'),
-      FlowStep('Dados pessoais'),
-      FlowStep('Endereço'),
-      FlowStep('Dados da empresa', note: 'Só PJ'),
-      FlowStep('KYC — selfie'),
-      FlowStep('KYC — documento'),
-      FlowStep('Análise', note: 'Aguardando validação',
-          branches: ['Aprovada', 'Reprovada']),
-      FlowStep('Configurar passkey', note: 'Login sem senha'),
-      FlowStep('Home'),
-    ],
-  ),
-  AppFlow(
-    name: 'Login',
-    group: 'Conta',
-    icon: 'lock-light',
-    route: '/login',
-    description: 'Autenticação com CPF + senha, biometria ou acesso rápido.',
-    steps: [
-      FlowStep('Boas-vindas'),
-      FlowStep('Login', note: 'CPF + senha',
-          branches: ['Login recorrente', 'Biometria', 'Recuperar senha']),
-      FlowStep('Selecionar conta', note: 'Quando há mais de uma conta'),
-      FlowStep('Home'),
-    ],
-  ),
-  AppFlow(
-    name: 'Extrato',
-    group: 'Conta',
-    icon: 'receipt-light',
-    route: '/extrato',
-    description: 'Consulta de lançamentos, filtros, detalhe e exportação.',
-    steps: [
-      FlowStep('Extrato', note: 'Passado / Futuro (agendados)'),
-      FlowStep('Filtros', note: 'Tipo, período, direção'),
-      FlowStep('Detalhe da transação'),
-      FlowStep('Exportar', note: 'Comprovante / relatório'),
-    ],
-  ),
-  AppFlow(
-    name: 'Segurança da conta',
-    group: 'Conta',
-    icon: 'fingerprint-light',
-    route: '/perfil → /conta/*',
-    description: 'Passkey, login biométrico, dispositivos e troca de senha.',
-    steps: [
-      FlowStep('Perfil'),
-      FlowStep('Segurança'),
-      FlowStep('Ação', branches: [
-        'Passkey',
-        'Login biométrico',
-        'Meus dispositivos',
-        'Alterar senha',
-      ]),
-    ],
-  ),
-  // ───────────────────────────── PIX ────────────────────────────────────────
-  AppFlow(
-    name: 'PIX — Enviar',
-    group: 'PIX',
-    icon: 'arrow-right-arrow-left-light',
-    route: '/pix/pagar',
-    description:
-        'Transferência via chave, contato, copia-e-cola ou agência/conta.',
-    steps: [
-      FlowStep('Início', type: StepType.start),
-      FlowStep('Abre a Área Pix', type: StepType.userAction),
-      FlowStep('Escolhe para quem enviar',
-          type: StepType.userDecision,
-          branches: [
-            'Chave / nome',
-            'Copia e cola',
-            'Contato favorito',
-            'Agência e conta',
-          ]),
-      FlowStep('Informa a chave / os dados', type: StepType.userAction),
-      FlowStep('Consulta o destinatário (DICT)', type: StepType.systemAction),
-      FlowStep('Chave encontrada no DICT?', type: StepType.systemDecision),
-      FlowStep('Informa o valor', type: StepType.userAction),
-      FlowStep('Saldo e limite suficientes?', type: StepType.systemDecision),
-      FlowStep('Revisa e confirma (senha / biometria)',
-          type: StepType.userAction),
-      FlowStep('Autenticação válida?', type: StepType.systemDecision),
-      FlowStep('Efetiva o Pix', type: StepType.systemAction),
-      FlowStep('Comprovante', type: StepType.end),
-    ],
-    errors: [
-      ErrorCase('Chave não encontrada',
-          from: 'Chave encontrada no DICT?',
-          note: 'Chave inexistente ou indisponível no DICT'),
-      ErrorCase('Saldo insuficiente / limite excedido',
-          from: 'Saldo e limite suficientes?',
-          note: 'Sem saldo ou acima do limite Pix do período'),
-      ErrorCase('Falha na autenticação',
-          from: 'Autenticação válida?', note: 'Senha/biometria incorreta'),
-    ],
-  ),
-  AppFlow(
-    name: 'PIX — Receber',
-    group: 'PIX',
-    icon: 'arrow-down-to-line-light',
-    route: '/pix/receber',
-    description: 'Geração de QR Code para receber (com ou sem valor).',
-    steps: [
-      FlowStep('Início', type: StepType.start),
-      FlowStep('Abre a Área Pix', type: StepType.userAction),
-      FlowStep('Toca em Receber', type: StepType.userAction),
-      FlowStep('Define um valor?',
-          type: StepType.userDecision, branches: ['Com valor', 'Sem valor']),
-      FlowStep('Gera o QR Code', type: StepType.systemAction),
-      FlowStep('Compartilha ou copia o código', type: StepType.userAction),
-      FlowStep('QR pronto', type: StepType.end),
-    ],
-    errors: [
-      ErrorCase('Falha ao gerar o QR',
-          from: 'Gera o QR Code', note: 'Sem conexão / erro no servidor'),
-    ],
-  ),
-  AppFlow(
-    name: 'PIX — Minhas chaves',
-    group: 'PIX',
-    icon: 'key-light',
-    route: '/pix/chaves',
-    description: 'Cadastro, definição da chave preferida e remoção de chaves.',
-    steps: [
-      FlowStep('Início', type: StepType.start),
-      FlowStep('Abre Minhas chaves', type: StepType.userAction),
-      FlowStep('O que deseja fazer?',
-          type: StepType.userDecision,
-          branches: ['Cadastrar', 'Definir preferida', 'Remover']),
-      FlowStep('Cadastra uma nova chave', type: StepType.userAction),
-      FlowStep('Chave disponível e dentro do limite?',
-          type: StepType.systemDecision),
-      FlowStep('Registra a chave', type: StepType.systemAction),
-      FlowStep('Chave ativa', type: StepType.end),
-    ],
-    errors: [
-      ErrorCase('Chave já cadastrada / limite atingido',
-          from: 'Chave disponível e dentro do limite?',
-          note: 'Chave em uso em outra conta ou 5 chaves (PF) já ativas'),
-    ],
-  ),
-  AppFlow(
-    name: 'PIX Automático',
-    group: 'PIX',
-    icon: 'arrow-rotate-left-light',
-    route: '/pix/automatico',
-    description: 'Autorização e gestão de débitos recorrentes por PIX.',
-    steps: [
-      FlowStep('Início', type: StepType.start),
-      FlowStep('Abre o PIX Automático', type: StepType.userAction),
-      FlowStep('Qual ação?',
-          type: StepType.userDecision,
-          branches: ['Criar', 'Autorizar', 'Revogar']),
-      FlowStep('Configura (valor, periodicidade, limite)',
-          type: StepType.userAction),
-      FlowStep('Confirma a autorização', type: StepType.userAction),
-      FlowStep('Autorização aceita?', type: StepType.systemDecision),
-      FlowStep('Registra a autorização', type: StepType.systemAction),
-      FlowStep('Débito recorrente ativo', type: StepType.end),
-    ],
-    errors: [
-      ErrorCase('Autorização recusada',
-          from: 'Autorização aceita?',
-          note: 'Dados inválidos ou limite recorrente excedido'),
-    ],
-  ),
-  AppFlow(
-    name: 'PIX — Contestação (MED)',
-    group: 'PIX',
-    icon: 'shield-user-light-full',
-    route: '/pix/contestacao',
-    description: 'Mecanismo Especial de Devolução para transações suspeitas.',
-    steps: [
-      FlowStep('Início', type: StepType.start),
-      FlowStep('Abre Contestar Pix', type: StepType.userAction),
-      FlowStep('Seleciona a transação', type: StepType.userAction),
-      FlowStep('Escolhe o motivo',
-          type: StepType.userDecision, branches: ['Golpe', 'Fraude', 'Erro']),
-      FlowStep('Descreve a ocorrência', type: StepType.userAction),
-      FlowStep('Confirma a contestação', type: StepType.userAction),
-      FlowStep('Elegível ao MED (prazo e critérios)?',
-          type: StepType.systemDecision),
-      FlowStep('Registra e gera protocolo', type: StepType.systemAction),
-      FlowStep('Acompanha o status', type: StepType.userAction),
-      FlowStep('Contestação registrada', type: StepType.end),
-    ],
-    errors: [
-      ErrorCase('Fora do prazo / não elegível',
-          from: 'Elegível ao MED (prazo e critérios)?',
-          note: 'Além do prazo do MED ou transação inelegível'),
-    ],
-  ),
-  // ─────────────────────────── PAGAMENTOS ───────────────────────────────────
-  AppFlow(
-    name: 'Boleto — Pagar',
-    group: 'Pagamentos',
-    icon: 'barcode-light',
-    route: '/boleto',
-    description: 'Pagamento de boleto por leitura de código ou digitação.',
-    steps: [
-      FlowStep('Hub de boleto'),
-      FlowStep('Código de barras', note: 'Câmera ou linha digitável'),
-      FlowStep('Revisar', note: 'Valor, vencimento, beneficiário'),
-      FlowStep('Autorização'),
-      FlowStep('Comprovante'),
-    ],
-  ),
-  AppFlow(
-    name: 'Recarga de celular',
-    group: 'Pagamentos',
-    icon: 'mobile-light',
-    route: '/recarga',
-    description: 'Recarga de crédito pré-pago em 4 passos.',
-    steps: [
-      FlowStep('Número'),
-      FlowStep('Operadora'),
-      FlowStep('Valor'),
-      FlowStep('Revisar'),
-      FlowStep('Comprovante'),
-    ],
-  ),
-  // ────────────────────────── TRANSFERÊNCIAS ────────────────────────────────
-  AppFlow(
-    name: 'TED',
-    group: 'Transferências',
-    icon: 'money-bill-transfer-light',
-    route: '/ted',
-    description: 'Transferência para conta de outra instituição.',
-    steps: [
-      FlowStep('Hub TED', branches: ['Enviar', 'Receber (meus dados)']),
-      FlowStep('Enviar', note: 'Dados do destinatário e banco'),
-      FlowStep('Revisar'),
-      FlowStep('Autorização'),
-      FlowStep('Comprovante'),
-    ],
-  ),
-  AppFlow(
-    name: 'Transferência interna',
-    group: 'Transferências',
-    icon: 'money-bill-transfer-in-light',
-    route: '/contatos/transferencia-interna',
-    description: 'Transferência entre contas BOLD (sem custo).',
-    steps: [
-      FlowStep('Contatos'),
-      FlowStep('Transferência interna', note: 'Valor + destinatário BOLD'),
-      FlowStep('Revisar'),
-      FlowStep('Comprovante'),
-    ],
-  ),
-  // ─────────────────────────────── PJ ───────────────────────────────────────
-  AppFlow(
-    name: 'Cobranças (PJ)',
-    group: 'PJ',
-    icon: 'file-invoice-dollar-light',
-    route: '/cobrancas',
-    description: 'Emissão de cobranças por boleto ou PIX QR dinâmico.',
-    steps: [
-      FlowStep('Hub de cobranças'),
-      FlowStep('Emitir', branches: ['Boleto', 'PIX QR dinâmico']),
-      FlowStep('Preview da cobrança'),
-      FlowStep('Compartilhar'),
-    ],
-  ),
-  AppFlow(
-    name: 'Equipe / Usuários (PJ)',
-    group: 'PJ',
-    icon: 'users-light',
-    route: '/usuarios',
-    description: 'Gestão de operadores, perfis, alçadas e aprovações.',
-    steps: [
-      FlowStep('Usuários'),
-      FlowStep('Ação', branches: [
-        'Convidar operador',
-        'Perfis',
-        'Alçadas',
-        'Aprovações pendentes',
-      ]),
-      FlowStep('Convite recebido', note: 'Aceite via deeplink (operador novo)'),
-    ],
-  ),
-  // ───────────────────────────── SEGURANÇA ──────────────────────────────────
-  AppFlow(
-    name: 'Autorização Quântica',
-    group: 'Segurança',
-    icon: 'qrcode-light',
-    route: '/scanner → /ib/aprovar',
-    description:
-        'Aprovação de transações do Internet Banking lendo o QR (selo quântico).',
-    steps: [
-      FlowStep('Scanner', note: 'Lê o QR exibido no Internet Banking'),
-      FlowStep('Revisar transação'),
-      FlowStep('Decisão', branches: ['Aprovar', 'Recusar']),
-      FlowStep('Selo quântico', note: 'Confirmação assinada no dispositivo'),
-    ],
-  ),
-  AppFlow(
-    name: 'Pareamento de dispositivo',
-    group: 'Segurança',
-    icon: 'mobile-gear-light',
-    route: '/dispositivos/parear',
-    description: 'Autoriza um novo aparelho a aprovar pagamentos.',
-    steps: [
-      FlowStep('Meus dispositivos'),
-      FlowStep('Parear dispositivo', note: 'Leitura de QR'),
-      FlowStep('Confirmar', note: 'Aparelho autorizado'),
-    ],
-  ),
-  // ───────────────────────────── ASSISTENTE ─────────────────────────────────
-  AppFlow(
-    name: 'Lia (assistente)',
-    group: 'Assistente',
-    icon: 'star-light',
-    route: '/lia',
-    description: 'Assistente virtual — conversa e preferências.',
-    steps: [
-      FlowStep('Abrir Lia', note: 'Pela nav inferior ou avatar'),
-      FlowStep('Conversa', note: 'Voz/texto, idioma configurável'),
-      FlowStep('Preferências da Lia', note: 'Idioma, avatar, visibilidade'),
-    ],
-  ),
-];
-
-// ═══════════════════════════════════════════════════════════════════════════
-// Fluxograma de um fluxo — nós numerados conectados verticalmente.
-// ═══════════════════════════════════════════════════════════════════════════
-class _FlowchartView extends StatelessWidget {
-  const _FlowchartView({required this.flow});
-  final AppFlow flow;
-
+  final bool selected;
+  final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
-    return Column(children: [
-      Container(
-        padding: const EdgeInsets.fromLTRB(24, 14, 24, 14),
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+          decoration: BoxDecoration(
+            color: selected ? BoldColors.primary04 : BoldColors.transparent,
+            borderRadius: BorderRadius.circular(200),
+            border: Border.all(
+                color: selected ? BoldColors.primary04 : c.border, width: 1),
+          ),
+          child: Text(label,
+              style: BoldType.labelMd.copyWith(
+                  color: selected ? BoldColors.white : c.textSecondary,
+                  fontWeight: FontWeight.w600)),
+        ),
+      ),
+    );
+  }
+}
+
+// Divisor de macro-grupo dentro de uma categoria de Components.
+class _CatMacroHeader extends StatelessWidget {
+  const _CatMacroHeader(this.label);
+  final String label;
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(top: 40),
+      child: Row(children: [
+        Text(label,
+            style: BoldType.labelSm.copyWith(
+                color: BoldColors.primary04,
+                fontWeight: FontWeight.w700,
+                letterSpacing: 1.2)),
+        const SizedBox(width: 12),
+        Expanded(child: Container(height: 1, color: c.border)),
+      ]),
+    );
+  }
+}
+
+// Cabeçalho de tela (Styles / Components) — título + subtítulo + hairline.
+class _CatHeader extends StatelessWidget {
+  const _CatHeader({required this.title, required this.subtitle});
+  final String title;
+  final String subtitle;
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 24),
+      child: Container(
+        padding: const EdgeInsets.only(bottom: 20),
         decoration: BoxDecoration(
           border: Border(bottom: BorderSide(color: c.border)),
         ),
-        child: Row(children: [
-          BoldIcon(flow.icon, size: 24, color: BoldColors.primary04),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(flow.name,
-                    style: BoldType.title.copyWith(color: c.textPrimary)),
-                Text(flow.route,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: BoldType.labelSm.copyWith(color: c.textMuted)),
-              ],
-            ),
-          ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text(title,
+              style: BoldType.headlineSm.copyWith(color: c.textPrimary)),
+          const SizedBox(height: 4),
+          Text(subtitle,
+              style: BoldType.bodySmall
+                  .copyWith(color: c.textSecondary, height: 1.5)),
+        ]),
+      ),
+    );
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// FOUNDATIONS — Gramática + Árvore de dependências.
+// ═══════════════════════════════════════════════════════════════════════════
+class _FoundationsView extends StatefulWidget {
+  const _FoundationsView();
+  @override
+  State<_FoundationsView> createState() => _FoundationsViewState();
+}
+
+class _FoundationsViewState extends State<_FoundationsView> {
+  int _view = 0; // 0 = Gramática · 1 = Árvore
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Container(
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 12),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: c.border)),
+        ),
+        child: Wrap(spacing: 8, children: [
+          _CatNavPill(
+              label: 'Gramática',
+              selected: _view == 0,
+              onTap: () => setState(() => _view = 0)),
+          _CatNavPill(
+              label: 'Árvore de dependências',
+              selected: _view == 1,
+              onTap: () => setState(() => _view = 1)),
         ]),
       ),
       Expanded(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 640),
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 96),
-              children: [
-                Text(flow.description,
-                    textAlign: TextAlign.center,
-                    style:
-                        BoldType.bodySmall.copyWith(color: c.textSecondary)),
-                const SizedBox(height: 20),
-                if (flow.steps.any((s) => s.type != null)) ...[
-                  const _FlowLegend(),
-                  const SizedBox(height: 20),
-                ],
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    for (var i = 0; i < flow.steps.length; i++) ...[
-                      _FlowBox(
-                        step: flow.steps[i],
-                        index: i,
-                        total: flow.steps.length,
-                      ),
-                      if (flow.steps[i].branches.isNotEmpty)
-                        _BranchFan(
-                          branches: flow.steps[i].branches,
-                          accent: flow.steps[i].type == StepType.systemDecision
-                              ? _sysStroke
-                              : _usrStroke,
-                        ),
-                      if (i < flow.steps.length - 1) const _DownArrow(),
-                    ],
-                  ],
-                ),
-                if (flow.errors.isNotEmpty) ...[
-                  const SizedBox(height: 32),
-                  _ErrorCasesSection(errors: flow.errors),
-                ],
-              ],
-            ),
-          ),
-        ),
-      ),
-    ]);
-  }
-}
-
-// Paleta do padrão de user flow do time (documentação).
-const Color _usrFill = Color(0xFFFCE7A6); // amarelo — usuário
-const Color _usrStroke = Color(0xFFE0A93B);
-const Color _usrText = Color(0xFF5C4610);
-const Color _sysFill = Color(0xFFE7DBFA); // roxo — sistema
-const Color _sysStroke = Color(0xFF7B3FF2);
-const Color _sysText = Color(0xFF3A2A6B);
-const Color _startFill = Color(0xFFCBEFD5); // verde — início
-const Color _startText = Color(0xFF0A3F24);
-const Color _endFill = Color(0xFFF8C9CF); // rosa — fim
-const Color _endText = Color(0xFF7A2E3E);
-const Color _errBadge = Color(0xFFEF4757); // vermelho — X do caso de erro
-
-enum _NodeKind { start, process, decision, end }
-
-_NodeKind _kindOf(int i, int total, FlowStep s) {
-  if (s.branches.isNotEmpty) return _NodeKind.decision;
-  if (i == 0) return _NodeKind.start;
-  if (i == total - 1) return _NodeKind.end;
-  return _NodeKind.process;
-}
-
-// Nó do fluxograma. Com `step.type` definido, segue o PADRÃO do time (amarelo =
-// usuário, roxo = sistema; retângulo = ação, losango = decisão, roxo+X = erro;
-// verde = início, rosa = fim). Sem type, cai no legado (formas da marca).
-class _FlowBox extends StatelessWidget {
-  const _FlowBox(
-      {required this.step, required this.index, required this.total});
-  final FlowStep step;
-  final int index;
-  final int total;
-
-  @override
-  Widget build(BuildContext context) {
-    final t = step.type;
-    if (t == null) return _legacy(context);
-    switch (t) {
-      case StepType.start:
-        return _stadium(_startFill, _startText);
-      case StepType.end:
-        return _stadium(_endFill, _endText);
-      case StepType.userAction:
-        return _rect(context, _usrFill, _usrStroke, _usrText);
-      case StepType.systemAction:
-        return _rect(context, _sysFill, _sysStroke, _sysText);
-      case StepType.systemError:
-        return _rect(context, _sysFill, _errBadge, _sysText, error: true);
-      case StepType.userDecision:
-        return _diamond(context, _usrFill, _usrStroke, _usrText);
-      case StepType.systemDecision:
-        return _diamond(context, _sysFill, _sysStroke, _sysText);
-    }
-  }
-
-  // ── Padrão (tipado) ──────────────────────────────────────────────────────
-  Widget _stadium(Color fill, Color text) => Container(
-        constraints: const BoxConstraints(maxWidth: 440),
-        padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 12),
-        decoration:
-            BoxDecoration(color: fill, borderRadius: BorderRadius.circular(999)),
-        child: Text(step.label,
-            textAlign: TextAlign.center,
-            style: BoldType.labelMd
-                .copyWith(color: text, fontWeight: FontWeight.w700)),
-      );
-
-  Widget _rect(BuildContext context, Color fill, Color stroke, Color text,
-      {bool error = false}) {
-    final c = BoldColors.of(context);
-    final box = Container(
-      constraints: const BoxConstraints(maxWidth: 360),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: fill,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-            color: error ? _errBadge : stroke, width: error ? 1.5 : 1),
-      ),
-      child: Column(mainAxisSize: MainAxisSize.min, children: [
-        Text(step.label,
-            textAlign: TextAlign.center,
-            style:
-                BoldType.labelMd.copyWith(color: text, fontWeight: FontWeight.w600)),
-        if (step.note != null) ...[
-          const SizedBox(height: 3),
-          Text(step.note!,
-              textAlign: TextAlign.center,
-              style: BoldType.bodySmall.copyWith(color: c.textSecondary)),
-        ],
-      ]),
-    );
-    if (!error) return box;
-    return Stack(clipBehavior: Clip.none, children: [
-      box,
-      Positioned(
-        right: -8,
-        top: -8,
-        child: Container(
-          width: 22,
-          height: 22,
-          alignment: Alignment.center,
-          decoration: const BoxDecoration(
-              color: _errBadge, shape: BoxShape.circle),
-          child: const Icon(Icons.close, size: 14, color: Colors.white),
-        ),
-      ),
-    ]);
-  }
-
-  Widget _diamond(BuildContext context, Color fill, Color stroke, Color text) {
-    final c = BoldColors.of(context);
-    return Column(mainAxisSize: MainAxisSize.min, children: [
-      CustomPaint(
-        painter: _DiamondPainter(fill: fill, stroke: stroke),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 26),
-          child: Text(step.label,
-              textAlign: TextAlign.center,
-              style: BoldType.labelMd
-                  .copyWith(color: text, fontWeight: FontWeight.w600)),
-        ),
-      ),
-      if (step.note != null) ...[
-        const SizedBox(height: 6),
-        Text(step.note!,
-            textAlign: TextAlign.center,
-            style: BoldType.bodySmall.copyWith(color: c.textSecondary)),
-      ],
-    ]);
-  }
-
-  // ── Legado (fluxos ainda não migrados ao padrão) ─────────────────────────
-  Widget _legacy(BuildContext context) {
-    switch (_kindOf(index, total, step)) {
-      case _NodeKind.start:
-        return _pillLegacy(context, gradient: BoldGradients.brand);
-      case _NodeKind.end:
-        return _pillLegacy(context, outlined: true);
-      case _NodeKind.decision:
-        return _diamond(
-            context,
-            BoldColors.warning04.withValues(alpha: 0.13),
-            BoldColors.warning04,
-            BoldColors.of(context).textPrimary);
-      case _NodeKind.process:
-        return _rect(
-            context,
-            BoldColors.primary04.withValues(alpha: 0.06),
-            BoldColors.primary04.withValues(alpha: 0.30),
-            BoldColors.of(context).textPrimary);
-    }
-  }
-
-  Widget _pillLegacy(BuildContext context,
-      {Gradient? gradient, bool outlined = false}) {
-    final c = BoldColors.of(context);
-    final fg = gradient != null ? BoldColors.onGradient : c.textPrimary;
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 440),
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 12),
-      decoration: BoxDecoration(
-        gradient: gradient,
-        color:
-            gradient == null ? (c.isDark ? c.surface : BoldColors.white) : null,
-        borderRadius: BorderRadius.circular(999),
-        border: outlined ? Border.all(color: c.borderStrong, width: 1.5) : null,
-      ),
-      child: Text(step.label,
-          textAlign: TextAlign.center,
-          style:
-              BoldType.labelMd.copyWith(color: fg, fontWeight: FontWeight.w600)),
-    );
-  }
-}
-
-class _DiamondPainter extends CustomPainter {
-  _DiamondPainter({required this.fill, required this.stroke});
-  final Color fill;
-  final Color stroke;
-  @override
-  void paint(Canvas canvas, Size size) {
-    final path = Path()
-      ..moveTo(size.width / 2, 0)
-      ..lineTo(size.width, size.height / 2)
-      ..lineTo(size.width / 2, size.height)
-      ..lineTo(0, size.height / 2)
-      ..close();
-    canvas.drawPath(path, Paint()..color = fill);
-    canvas.drawPath(
-        path,
-        Paint()
-          ..color = stroke
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 1.5);
-  }
-
-  @override
-  bool shouldRepaint(_DiamondPainter o) => o.fill != fill || o.stroke != stroke;
-}
-
-// Seta vertical entre nós. `dashed` (anotação/erro) vs cheia (fluxo).
-class _DownArrow extends StatelessWidget {
-  const _DownArrow({this.dashed = false});
-  final bool dashed;
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 30,
-      width: 24,
-      child: CustomPaint(
-          painter:
-              _ArrowPainter(BoldColors.of(context).textMuted, dashed: dashed)),
-    );
-  }
-}
-
-class _ArrowPainter extends CustomPainter {
-  _ArrowPainter(this.color, {this.dashed = false});
-  final Color color;
-  final bool dashed;
-  @override
-  void paint(Canvas canvas, Size size) {
-    final cx = size.width / 2;
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 1.5;
-    final endY = size.height - 7;
-    if (dashed) {
-      const dash = 4.0, gap = 3.0;
-      var y = 0.0;
-      while (y < endY) {
-        canvas.drawLine(Offset(cx, y), Offset(cx, (y + dash).clamp(0, endY)),
-            paint);
-        y += dash + gap;
-      }
-    } else {
-      canvas.drawLine(Offset(cx, 0), Offset(cx, endY), paint);
-    }
-    final head = Path()
-      ..moveTo(cx - 5, size.height - 8)
-      ..lineTo(cx + 5, size.height - 8)
-      ..lineTo(cx, size.height)
-      ..close();
-    canvas.drawPath(head, Paint()..color = color);
-  }
-
-  @override
-  bool shouldRepaint(_ArrowPainter o) => o.color != color || o.dashed != dashed;
-}
-
-// Leque de DECISÃO: barra horizontal saindo do losango para N saídas. As
-// opções ficam rotuladas nas saídas (padrão do time).
-class _BranchFan extends StatelessWidget {
-  const _BranchFan({required this.branches, this.accent});
-  final List<String> branches;
-  final Color? accent;
-  static const double _cw = 150;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = BoldColors.of(context);
-    final line = accent ?? c.textMuted;
-    final n = branches.length;
-    return SizedBox(
-      width: n * _cw,
-      child: Column(children: [
-        SizedBox(
-          height: 26,
-          width: n * _cw,
-          child: CustomPaint(
-              painter: _BusPainter(count: n, cellWidth: _cw, color: line)),
-        ),
-        Row(children: [
-          for (final b in branches)
-            SizedBox(width: _cw, child: Center(child: _pill(context, b))),
-        ]),
-      ]),
-    );
-  }
-
-  Widget _pill(BuildContext context, String label) {
-    final c = BoldColors.of(context);
-    return Container(
-      constraints: const BoxConstraints(maxWidth: 138),
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      decoration: BoxDecoration(
-        color: c.isDark ? c.surface : BoldColors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: accent?.withValues(alpha: 0.5) ?? c.border),
-      ),
-      child: Text(label,
-          textAlign: TextAlign.center,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: BoldType.labelSm.copyWith(color: c.textPrimary, fontSize: 11)),
-    );
-  }
-}
-
-class _BusPainter extends CustomPainter {
-  _BusPainter(
-      {required this.count, required this.cellWidth, required this.color});
-  final int count;
-  final double cellWidth;
-  final Color color;
-  @override
-  void paint(Canvas canvas, Size size) {
-    final line = Paint()
-      ..color = color
-      ..strokeWidth = 1.5;
-    const busY = 12.0;
-    final topCx = size.width / 2;
-    canvas.drawLine(Offset(topCx, 0), Offset(topCx, busY), line);
-    final firstCx = cellWidth / 2;
-    final lastCx = size.width - cellWidth / 2;
-    if (count > 1) {
-      canvas.drawLine(Offset(firstCx, busY), Offset(lastCx, busY), line);
-    }
-    for (var i = 0; i < count; i++) {
-      final cx = cellWidth / 2 + i * cellWidth;
-      canvas.drawLine(Offset(cx, busY), Offset(cx, size.height - 7), line);
-      final head = Path()
-        ..moveTo(cx - 5, size.height - 8)
-        ..lineTo(cx + 5, size.height - 8)
-        ..lineTo(cx, size.height)
-        ..close();
-      canvas.drawPath(head, Paint()..color = color);
-    }
-  }
-
-  @override
-  bool shouldRepaint(_BusPainter o) =>
-      o.count != count || o.color != color || o.cellWidth != cellWidth;
-}
-
-// Seção de CASOS DE ERRO — fora do fluxo feliz. Cada erro é um nó do sistema
-// (roxo + X) que sai de uma decisão (`from`), ligado por conector tracejado.
-class _ErrorCasesSection extends StatelessWidget {
-  const _ErrorCasesSection({required this.errors});
-  final List<ErrorCase> errors;
-
-  @override
-  Widget build(BuildContext context) {
-    final c = BoldColors.of(context);
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
-      decoration: BoxDecoration(
-        color: c.isDark ? c.surface : BoldColors.neutral10,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: c.border),
-      ),
-      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-        Row(children: [
-          const Icon(Icons.error_outline, size: 16, color: _errBadge),
-          const SizedBox(width: 6),
-          Text('Casos de erro — fora do fluxo feliz',
-              style: BoldType.labelMd
-                  .copyWith(color: c.textPrimary, fontWeight: FontWeight.w600)),
-        ]),
-        const SizedBox(height: 14),
-        for (final e in errors)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 12),
-            child: _card(context, e),
-          ),
-      ]),
-    );
-  }
-
-  Widget _card(BuildContext context, ErrorCase e) {
-    final c = BoldColors.of(context);
-    return Stack(clipBehavior: Clip.none, children: [
-      Container(
-        width: double.infinity,
-        padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
-        decoration: BoxDecoration(
-          color: _sysFill,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: _errBadge, width: 1.5),
-        ),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(e.label,
-              style: BoldType.labelMd
-                  .copyWith(color: _sysText, fontWeight: FontWeight.w600)),
-          if (e.note != null) ...[
-            const SizedBox(height: 3),
-            Text(e.note!,
-                style: BoldType.bodySmall.copyWith(color: _sysText)),
-          ],
-          const SizedBox(height: 8),
-          Row(children: [
-            const _DashChip(),
-            const SizedBox(width: 6),
-            Flexible(
-              child: Text('sai de: ${e.from}',
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: BoldType.labelSm
-                      .copyWith(color: c.textMuted, fontSize: 11)),
-            ),
-          ]),
-        ]),
-      ),
-      Positioned(
-        right: -8,
-        top: -8,
-        child: Container(
-          width: 22,
-          height: 22,
-          alignment: Alignment.center,
-          decoration:
-              const BoxDecoration(color: _errBadge, shape: BoxShape.circle),
-          child: const Icon(Icons.close, size: 14, color: Colors.white),
-        ),
-      ),
-    ]);
-  }
-}
-
-// Traço tracejado horizontal (indica saída de erro / anotação — padrão da doc).
-class _DashChip extends StatelessWidget {
-  const _DashChip();
-  @override
-  Widget build(BuildContext context) => SizedBox(
-        width: 22,
-        height: 8,
-        child: CustomPaint(painter: _HDashPainter(_errBadge)),
-      );
-}
-
-class _HDashPainter extends CustomPainter {
-  _HDashPainter(this.color);
-  final Color color;
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = 1.5;
-    final cy = size.height / 2;
-    const dash = 3.0, gap = 2.5;
-    var x = 0.0;
-    final endX = size.width - 5;
-    while (x < endX) {
-      canvas.drawLine(Offset(x, cy), Offset((x + dash).clamp(0, endX), cy), paint);
-      x += dash + gap;
-    }
-    final head = Path()
-      ..moveTo(size.width - 6, cy - 3)
-      ..lineTo(size.width, cy)
-      ..lineTo(size.width - 6, cy + 3)
-      ..close();
-    canvas.drawPath(head, Paint()..color = color);
-  }
-
-  @override
-  bool shouldRepaint(_HDashPainter o) => o.color != color;
-}
-
-// Legenda do padrão de user flow (mostrada nos fluxos tipados).
-class _FlowLegend extends StatelessWidget {
-  const _FlowLegend();
-
-  @override
-  Widget build(BuildContext context) {
-    final c = BoldColors.of(context);
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: c.isDark ? c.surface : BoldColors.neutral10,
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: c.border),
-      ),
-      child: Wrap(
-        spacing: 16,
-        runSpacing: 8,
-        alignment: WrapAlignment.center,
-        children: [
-          _item(context, _startFill, _startFill, 'Início'),
-          _item(context, _endFill, _endFill, 'Fim'),
-          _item(context, _usrFill, _usrStroke, 'Usuário · ação'),
-          _item(context, _usrFill, _usrStroke, 'Usuário · decisão', diamond: true),
-          _item(context, _sysFill, _sysStroke, 'Sistema · ação'),
-          _item(context, _sysFill, _sysStroke, 'Sistema · decisão', diamond: true),
-          _item(context, _sysFill, _errBadge, 'Caso de erro', error: true),
-        ],
-      ),
-    );
-  }
-
-  Widget _item(BuildContext context, Color fill, Color stroke, String label,
-      {bool diamond = false, bool error = false}) {
-    final c = BoldColors.of(context);
-    Widget sw = Container(
-      width: 15,
-      height: 15,
-      decoration: BoxDecoration(
-        color: fill,
-        borderRadius: BorderRadius.circular(diamond ? 3 : 5),
-        border: Border.all(color: error ? _errBadge : stroke, width: 1.2),
-      ),
-    );
-    if (diamond) sw = Transform.rotate(angle: 0.785398, child: sw);
-    return Row(mainAxisSize: MainAxisSize.min, children: [
-      SizedBox(width: 20, height: 18, child: Center(child: sw)),
-      const SizedBox(width: 6),
-      Text(label,
-          style: BoldType.labelSm.copyWith(color: c.textSecondary, fontSize: 11)),
+          child: _view == 0 ? const GrammarScreen() : const DsTreeScreen()),
     ]);
   }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
-// PREVIEW — componentes vivos, por camada do Atomic Design.
-// Cada _Section.composedOf lista os building blocks do DS que ele consome
-// (widgets + tokens: Cores / Tipografia / Vidro / Gradiente).
+// STYLES — tokens: scheme, cores, gradiente, vidro, backdrop, tipografia,
+// raio, spacing, elevação, motion + ilustrações. O material bruto do sistema.
 // ═══════════════════════════════════════════════════════════════════════════
-class _PreviewTab extends StatelessWidget {
-  const _PreviewTab({this.tier});
-  // Camada em foco; null = mostra tudo (visão geral).
-  final _DsTier? tier;
-
-  // Intercala um divider entre duas seções consecutivas. Não insere depois de
-  // um _TierHeader (o cabeçalho já delimita o início da camada).
-  static List<Widget> _sep(List<Widget> items) {
-    final out = <Widget>[];
-    for (final w in items) {
-      if (w is _Section && out.isNotEmpty && out.last is _Section) {
-        out.add(const _SectionDivider());
-      }
-      out.add(w);
-    }
-    return out;
-  }
-
+class _StylesView extends StatelessWidget {
+  const _StylesView();
   @override
   Widget build(BuildContext context) {
-    final t = tier;
-    final tokens = <Widget>[
-            // ───────────────────────── TOKENS ─────────────────────────────
-            const _TierHeader(
-                tier: 'TOKENS',
-                description:
-                    'Fundação — cor, forma, texto, vidro. Tudo deriva daqui.'),
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 880),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(24, 32, 24, 120),
+          children: [
+            const _CatHeader(
+              title: 'Styles · Tokens',
+              subtitle:
+                  'O material bruto do sistema. O Scheme resolve os papéis por '
+                  'tema; cor, tipografia, vidro, gradiente, raio, spacing, '
+                  'elevação e motion são o que todo componente consome — nunca '
+                  'valores crus.',
+            ),
+            _Section(
+                title: 'Scheme',
+                note: 'papéis mode-aware (light & dark) que os widgets consomem',
+                composedOf: const ['Cores'],
+                builder: (_) => const _TokScheme()),
             _Section(title: 'Cores', builder: (_) => const _Swatches()),
             _Section(
                 title: 'Gradiente da marca',
-                note: 'derivado das Cores',
+                note: 'rosa → coral → amarelo (o "O" do logo)',
                 composedOf: const ['Cores'],
                 builder: (_) => const _GradientBar()),
             _Section(
                 title: 'Vidro (glass)',
-                note: 'fill 50% + stroke + blur 15 · theme-aware (dark vinho / light branco)',
+                note:
+                    'spec única: fill 50% + stroke 1px + blur 15 · theme-aware',
                 composedOf: const ['Cores'],
                 builder: (_) => const _GlassSample()),
             _Section(
                 title: 'Fundo (backdrop)',
-                note:
-                    'home = imagem + degradê rosa→laranja @80% + wash @65% · secundário = sólido wine-ink + glow',
+                note: 'home (imagem + degradê) · secundário (wine-ink sólido)',
                 composedOf: const ['Cores', 'Vidro (glass)'],
                 builder: (_) => const _BackdropSample()),
             _Section(title: 'Tipografia', builder: (_) => const _TypeScale()),
-    ];
-    final atoms = <Widget>[
-            // ───────────────────────── ÁTOMOS ─────────────────────────────
-            const _TierHeader(
-                tier: 'ÁTOMOS',
-                description:
-                    'Primitivos indivisíveis — só consomem tokens.'),
             _Section(
-                title: 'Ícone (BoldIcon)',
+                title: 'Raio (radius)',
+                note: 'cantos generosos; controles são pílula',
+                builder: (_) => const _TokRadius()),
+            _Section(
+                title: 'Espaçamento',
+                note: 'escala base-4 · x5=20 é o gutter lateral',
+                builder: (_) => const _TokSpacing()),
+            _Section(
+                title: 'Elevação',
+                note: 'sombras suaves; glow tingido pela ação',
                 composedOf: const ['Cores'],
-                builder: (_) => Wrap(spacing: 16, runSpacing: 12, children: const [
-                      BoldIcon('home'),
-                      BoldIcon('pix'),
-                      BoldIcon('bell'),
-                      BoldIcon('eye'),
-                      BoldIcon('bank'),
-                      BoldIcon('key'),
-                      BoldIcon('chevron-right'),
-                    ])),
-            _Section(
-                title: 'Logo',
-                composedOf: const ['Cores'],
-                builder: (_) => const BoldLogo(width: 150)),
-            _Section(
-                title: 'Marca PIX',
-                composedOf: const ['Cores'],
-                builder: (_) => BoldPixMark(size: 40, color: BoldColors.primary04)),
-            _Section(
-                title: 'Avatar',
-                composedOf: const ['Cores', 'Tipografia', 'Gradiente'],
-                builder: (_) => Row(children: const [
-                      BoldAvatar(initials: 'DL'),
-                      SizedBox(width: 12),
-                      BoldAvatar(initials: 'HS', size: 56),
-                    ])),
-            _Section(
-                title: 'Checkbox',
-                composedOf: const ['BoldIcon', 'Cores', 'Tipografia'],
-                builder: (_) => Wrap(spacing: 20, runSpacing: 12, children: const [
-                      BoldCheckbox(checked: true, label: 'Marcado'),
-                      BoldCheckbox(label: 'Vazio'),
-                      BoldCheckbox(indeterminate: true, label: 'Parcial'),
-                      BoldCheckbox(checked: true, disabled: true, label: 'Off'),
-                      BoldCheckbox(
-                          checked: true,
-                          variant: BoldCheckboxVariant.neutral,
-                          label: 'Neutral'),
-                      BoldCheckbox(
-                          checked: true,
-                          size: BoldCheckboxSize.sm,
-                          label: 'Pequeno'),
-                    ])),
-            _Section(
-                title: 'Switch',
-                composedOf: const ['Cores'],
-                builder: (_) => const _SwitchDemo()),
-            _Section(
-                title: 'Skeleton (loading)',
-                composedOf: const ['Cores'],
-                builder: (_) => Column(children: [
-                      Row(children: [
-                        BoldSkeleton.circle(40),
-                        const SizedBox(width: 12),
-                        const Expanded(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            BoldSkeleton(width: 140, height: 14),
-                            SizedBox(height: 8),
-                            BoldSkeleton(width: 90, height: 12),
-                          ],
-                        )),
-                      ]),
-                    ])),
-            _Section(
-                title: 'Status tag',
-                composedOf: const ['Cores', 'Tipografia'],
-                builder: (_) => Wrap(spacing: 8, runSpacing: 8, children: const [
-                      BoldStatusTag(label: 'Sucesso', tone: BoldStatusTone.success),
-                      BoldStatusTag(label: 'Falha', tone: BoldStatusTone.danger),
-                      BoldStatusTag(label: 'Pendente', tone: BoldStatusTone.warning),
-                      BoldStatusTag(label: 'Info', tone: BoldStatusTone.primary),
-                      BoldStatusTag(label: 'Neutro', tone: BoldStatusTone.neutral),
-                    ])),
-            _Section(
-                title: 'Chips',
-                composedOf: const ['Cores', 'Tipografia'],
-                builder: (_) => Wrap(spacing: 8, runSpacing: 8, children: const [
-                      BoldInputChip(label: 'Tag'),
-                      BoldInputChip(label: 'Muted', tone: BoldInputChipTone.neutral),
-                      BoldStatusBadge('Ativo'),
-                    ])),
-            _Section(
-                title: 'Home indicator',
-                composedOf: const ['Cores'],
-                builder: (_) => const BoldHomeIndicator()),
-
-            _Section(
-                title: 'Glass surface',
-                composedOf: const ['Cores', 'Vidro (glass)'],
-                note: 'fill + stroke + blur · característica do container',
-                builder: (_) => const BoldGlassSurface(
-                      child: Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: 14, horizontal: 18),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            BoldIcon('home'),
-                            BoldIcon('pix'),
-                            BoldIcon('cards'),
-                            BoldIcon('gear'),
-                          ],
-                        ),
-                      ),
-                    )),
-            _Section(
-                title: 'Page dots',
-                composedOf: const ['Cores'],
-                builder: (_) => const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BoldPageDots(count: 4, activeIndex: 0),
-                      SizedBox(height: 10),
-                      BoldPageDots(count: 4, activeIndex: 2),
-                    ])),
-            _Section(
-                title: 'Glass avatar',
-                composedOf: const ['Vidro (glass)', 'Cores', 'Tipografia'],
-                builder: (_) => Row(children: const [
-                      BoldGlassAvatar(initial: 'D'),
-                      SizedBox(width: 12),
-                      BoldGlassAvatar(initial: 'HS', size: 56),
-                      SizedBox(width: 12),
-                      BoldGlassAvatar(
-                          initial: 'RC',
-                          size: 56,
-                          image: AssetImage(
-                              'lib/design_system/assets/city-cyberpunk.webp')),
-                    ])),
-            _Section(
-                title: 'Copy button',
-                composedOf: const ['BoldIcon', 'Cores', 'Tipografia'],
-                note: 'toque → copia + check verde in-place',
-                builder: (_) => const BoldCopyButton(
-                    text: '0001 · 1234567-8',
-                    semanticLabel: 'Copiar conta',
-                    label: 'Conta copiada')),
-            _Section(
-                title: 'Spinner',
-                composedOf: const ['Cores'],
-                note: 'arco com gradiente + trilho · sm / md / lg',
-                builder: (_) => const Row(children: [
-                      BoldSpinner(size: BoldSpinnerSize.sm),
-                      SizedBox(width: 20),
-                      BoldSpinner(),
-                      SizedBox(width: 20),
-                      BoldSpinner(size: BoldSpinnerSize.lg),
-                    ])),
-            _Section(
-                title: 'Illustration',
-                note: 'multicor — não recolore, só escala',
-                builder: (_) => const Row(children: [
-                      BoldIllustration('quantum-seal', size: 88),
-                      SizedBox(width: 16),
-                      BoldIllustration('city', size: 88),
-                    ])),
-            _Section(
-                title: 'Motion (BoldAnimateIn)',
-                note: 'presets de entrada: fade / slideUp / scaleIn',
-                builder: (_) =>
-                    Wrap(spacing: 10, runSpacing: 10, children: const [
-                      BoldAnimateIn(
-                          preset: BoldMotionPreset.slideUp,
-                          child: BoldStatusBadge('slideUp')),
-                      BoldAnimateIn(
-                          preset: BoldMotionPreset.fade,
-                          child: BoldStatusBadge('fade')),
-                      BoldAnimateIn(
-                          preset: BoldMotionPreset.scaleIn,
-                          child: BoldStatusBadge('scaleIn')),
-                    ])),
-    ];
-    final molecules = <Widget>[
-            // ──────────────────────── MOLÉCULAS ───────────────────────────
-            const _TierHeader(
-                tier: 'MOLÉCULAS',
-                description: 'Combinações simples de átomos.'),
-            _Section(
-                title: 'Spot icon',
-                composedOf: const ['BoldIcon', 'Cores'],
-                builder: (_) => Wrap(spacing: 12, runSpacing: 12, children: const [
-                      BoldSpotIcon('pix-light', tone: BoldSpotTone.primary),
-                      BoldSpotIcon('bank', tone: BoldSpotTone.primary, filled: true),
-                      BoldSpotIcon('bell-light', tone: BoldSpotTone.success),
-                      BoldSpotIcon('key-light', tone: BoldSpotTone.danger, badge: true),
-                      BoldSpotIcon('shield', tone: BoldSpotTone.secure),
-                      BoldSpotIcon('user-light', disabled: true),
-                      BoldSpotIcon('user-light',
-                          tone: BoldSpotTone.primary, loading: true),
-                    ])),
-            _Section(
-                title: 'Botões',
-                composedOf: const ['Tipografia', 'Cores', 'BoldIcon'],
-                builder: (_) => Column(children: [
-                      BoldButton('Primário', onPressed: () {}),
-                      const SizedBox(height: 8),
-                      BoldButton('Secundário',
-                          variant: BoldButtonVariant.secondary, onPressed: () {}),
-                      const SizedBox(height: 8),
-                      BoldButton('Texto',
-                          variant: BoldButtonVariant.text, onPressed: () {}),
-                      const SizedBox(height: 8),
-                      BoldButton('Destrutivo',
-                          variant: BoldButtonVariant.destructive, onPressed: () {}),
-                      const SizedBox(height: 8),
-                      Container(
-                        padding: const EdgeInsets.all(8),
-                        decoration: BoxDecoration(
-                            color: BoldColors.primary04,
-                            borderRadius: BorderRadius.circular(14)),
-                        child: BoldButton('Branco',
-                            variant: BoldButtonVariant.white, onPressed: () {}),
-                      ),
-                      const SizedBox(height: 12),
-                      Wrap(spacing: 8, runSpacing: 8, children: [
-                        const BoldButton('Carregando',
-                            loading: true, expand: false),
-                        const BoldButton('Off',
-                            onPressed: null, expand: false),
-                        BoldButton('Revogar',
-                            variant: BoldButtonVariant.destructive,
-                            filled: true,
-                            expand: false,
-                            onPressed: () {}),
-                      ]),
-                    ])),
-            _Section(
-                title: 'Icon buttons',
-                composedOf: const ['BoldIcon', 'Cores'],
-                builder: (_) => Wrap(spacing: 10, runSpacing: 10, children: [
-                      BoldIconButton(
-                          icon: 'bell',
-                          semanticLabel: 'x',
-                          type: BoldIconButtonType.primary,
-                          onPressed: () {}),
-                      BoldIconButton(
-                          icon: 'qr',
-                          semanticLabel: 'x',
-                          type: BoldIconButtonType.secondary,
-                          onPressed: () {}),
-                      BoldIconButton(
-                          icon: 'eye',
-                          semanticLabel: 'x',
-                          type: BoldIconButtonType.tertiary,
-                          onPressed: () {}),
-                      BoldIconButton(
-                          icon: 'bell',
-                          semanticLabel: 'x',
-                          badge: true,
-                          onPressed: () {}),
-                      BoldIconButton(
-                          icon: 'pix',
-                          semanticLabel: 'x',
-                          type: BoldIconButtonType.secondaryPrimary,
-                          onPressed: () {}),
-                      BoldIconButton(
-                          icon: 'key',
-                          semanticLabel: 'x',
-                          type: BoldIconButtonType.tertiaryPrimary,
-                          onPressed: () {}),
-                      BoldIconButton(
-                          icon: 'bell',
-                          semanticLabel: 'x',
-                          size: BoldIconButtonSize.sm,
-                          onPressed: () {}),
-                      BoldIconButton(
-                          icon: 'bell',
-                          semanticLabel: 'x',
-                          size: BoldIconButtonSize.lg,
-                          onPressed: () {}),
-                      BoldIconButton(
-                          icon: 'bell',
-                          semanticLabel: 'x',
-                          state: BoldIconButtonState.error,
-                          onPressed: () {}),
-                      const BoldIconButton(
-                          icon: 'bell', semanticLabel: 'x', disabled: true),
-                    ])),
-            _Section(
-                title: 'Segmented control',
-                composedOf: const ['Tipografia', 'Cores'],
-                builder: (_) => const _SegmentedDemo()),
-            _Section(
-                title: 'Section header',
-                composedOf: const ['Tipografia', 'BoldSeeAllLink'],
-                builder: (_) => BoldSectionHeader(
-                    label: 'Enviar para',
-                    trailing: BoldSeeAllLink(label: 'Ver tudo', onPressed: () {}))),
-            _Section(
-                title: 'Text field',
-                composedOf: const ['Tipografia', 'Cores'],
-                builder: (_) => const Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      BoldTextField(label: 'Nome', hint: 'Como te chamam'),
-                      SizedBox(height: 12),
-                      BoldTextField(
-                          label: 'E-mail',
-                          hint: 'voce@email.com',
-                          errorText: 'E-mail inválido'),
-                      SizedBox(height: 12),
-                      BoldTextField(
-                          label: 'Desabilitado',
-                          hint: 'Indisponível',
-                          enabled: false),
-                    ])),
-            _Section(
-                title: 'Search input',
-                composedOf: const ['BoldIcon', 'Tipografia', 'Cores'],
-                builder: (_) => const _SearchDemo()),
-            _Section(
-                title: 'Input chip',
-                composedOf: const ['Tipografia', 'BoldIcon', 'Cores'],
-                builder: (_) => Wrap(spacing: 8, runSpacing: 8, children: const [
-                      BoldInputChip(label: 'R\$ 50'),
-                      BoldInputChip(label: 'R\$ 100', filled: true),
-                      BoldInputChip(
-                          label: 'Saldo',
-                          leadIcon: 'eye',
-                          tone: BoldInputChipTone.neutral),
-                      BoldInputChip(
-                          label: 'Filtro',
-                          trailIcon: 'chevron-down',
-                          tone: BoldInputChipTone.neutral),
-                      BoldInputChip(
-                          label: 'Extrato',
-                          trailIcon: 'chevron-right',
-                          tone: BoldInputChipTone.ghost),
-                    ])),
-            _Section(
-                title: 'OTP input',
-                composedOf: const ['Tipografia', 'Cores'],
-                builder: (_) => const BoldOtpInput(value: '1234', length: 6)),
-            _Section(
-                title: 'Stepper',
-                composedOf: const ['Tipografia', 'Cores'],
-                builder: (_) => const BoldStepper(
-                    current: 2, total: 4, labelText: 'PASSO 2 DE 4')),
-            _Section(
-                title: 'Page title',
-                composedOf: const ['Tipografia'],
-                builder: (_) => const BoldPageTitle(
-                    title: 'Quanto você quer enviar?',
-                    subtitle: 'O valor sai da sua conta BOLD.')),
-            _Section(
-                title: 'Keypad',
-                composedOf: const ['Tipografia', 'BoldIcon', 'Cores'],
-                builder: (_) => BoldKeypad(onKey: (_) {}, onDelete: () {})),
-            _Section(
-                title: 'App list — menu (grupo glass)',
-                composedOf: const ['BoldSpotIcon', 'BoldCard', 'BoldIcon', 'Tipografia'],
-                builder: (_) => BoldAppListGroup(title: 'Menu', children: [
-                      BoldAppList.menuItem(
-                          icon: 'pix-light',
-                          title: 'Fazer um Pix',
-                          subtitle: 'Para qualquer chave',
-                          onTap: () {}),
-                      BoldAppList.menuItem(
-                          icon: 'bank',
-                          title: 'Minha conta',
-                          subtitle: 'Ag 0001 · Conta 12345-6',
-                          onTap: () {}),
-                    ])),
-            _Section(
-                title: 'App list — atividade',
-                composedOf: const ['BoldSpotIcon', 'BoldStatusTag', 'Tipografia'],
-                builder: (_) => BoldAppListGroup(children: [
-                      BoldAppList.activityItem(
-                          icon: 'pix-light',
-                          iconTone: BoldSpotTone.success,
-                          title: 'Recebido de Diletta',
-                          subtitle: 'PIX',
-                          time: '14:20',
-                          status: const BoldStatusTagData(
-                              label: 'Concluído', tone: BoldStatusTone.success)),
-                    ])),
-            _Section(
-                title: 'Notice row',
-                composedOf: const ['BoldCard', 'BoldIcon', 'Tipografia'],
-                builder: (_) => BoldNoticeRow(
-                    icon: 'paper-plane-light',
-                    title: 'Autorizações',
-                    subtitle: 'Veja o que está esperando você.',
-                    count: 3,
-                    onTap: () {})),
-            // TODO(ds): BoldQuickAction ainda não foi portado pro DS atual
-            // (fila de portes: FeatureCard/DetailCard/QuickAccessCard).
-            // Reativar quando o componente existir.
-            // _Section(
-            //     title: 'Quick action',
-            //     composedOf: const ['BoldIcon', 'Tipografia', 'Cores'],
-            //     builder: (_) => Row(children: [
-            //           BoldQuickAction(icon: 'pix-light', label: 'Pix', onTap: () {}),
-            //           const SizedBox(width: 16),
-            //           BoldQuickAction(
-            //               icon: 'bank', label: 'Conta', highlighted: true, onTap: () {}),
-            //         ])),
-            _Section(
-                title: 'Card',
-                composedOf: const ['Vidro', 'Cores'],
-                builder: (ctx) => BoldCard(
-                    glass: true,
-                    child: Text('Card glass padrão do DS.',
-                        style: BoldType.bodySmall
-                            .copyWith(color: BoldColors.of(ctx).textPrimary)))),
-            _Section(
-                title: 'Empty state',
-                composedOf: const ['BoldCard', 'BoldIcon', 'Tipografia'],
-                builder: (_) => const BoldEmptyState(
-                    title: 'Nada por aqui',
-                    caption: 'Suas transações aparecem aqui.')),
-            _Section(
-                title: 'Promo card',
-                composedOf: const ['Gradiente', 'Tipografia', 'BoldIcon'],
-                builder: (_) => BoldPromoCard(
-                    title: 'Habilite sua passkey',
-                    subtitle: 'Login sem senha, resistente a phishing.',
-                    onTap: () {},
-                    onClose: () {})),
-            _Section(
-                title: 'Promo banner',
-                composedOf: const [
-                  'BoldAvatarStack',
-                  'BoldButton',
-                  'Gradiente',
-                  'Tipografia'
-                ],
-                builder: (_) => BoldPromoBanner(
-                    title: 'Veja as pessoas próximas',
-                    subtitle: 'Realize transações :)',
-                    primaryLabel: 'Enviar',
-                    secondaryLabel: 'Receber',
-                    avatars: const ['DL', 'HS', 'MJ'],
-                    moreCount: 4,
-                    onPrimary: () {},
-                    onSecondary: () {},
-                    onClose: () {})),
-            _Section(
-                title: 'Avatar row / stack',
-                composedOf: const ['BoldAvatar'],
-                builder: (_) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      BoldAvatarRow(
-                          initials: const ['DL', 'HS', 'MJ'], onAdd: () {}),
-                      const SizedBox(height: 16),
-                      const BoldAvatarStack(initials: ['DL', 'HS', 'MJ', 'AB']),
-                    ])),
-
-            _Section(
-                title: 'Currency field',
-                composedOf: const ['Tipografia', 'Cores'],
-                builder: (_) => const Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      BoldCurrencyField(initialValue: 1234.56),
-                      SizedBox(height: 12),
-                      BoldCurrencyField(large: true, initialValue: 1234.56),
-                    ])),
-            _Section(
-                title: 'PIN dots',
-                composedOf: const ['Cores'],
-                builder: (_) => const Row(children: [
-                      BoldPinDots(length: 4, filled: 0),
-                      SizedBox(width: 24),
-                      BoldPinDots(length: 4, filled: 2),
-                      SizedBox(width: 24),
-                      BoldPinDots(length: 4, filled: 4),
-                    ])),
-            _Section(
-                title: 'Filter chip',
-                composedOf: const ['Cores', 'Tipografia'],
-                builder: (_) => Wrap(spacing: 8, runSpacing: 8, children: [
-                      BoldFilterChip('Todos', selected: true, onTap: () {}),
-                      BoldFilterChip('Entradas', selected: false, onTap: () {}),
-                      BoldFilterChip('Saídas', selected: false, onTap: () {}),
-                    ])),
-            _Section(
-                title: 'Status badge',
-                composedOf: const ['Cores', 'Tipografia'],
-                builder: (_) => const Wrap(spacing: 8, runSpacing: 8, children: [
-                      BoldStatusBadge('Concluído'),
-                      BoldStatusBadge('Erro', color: BoldColors.danger),
-                      BoldStatusBadge('Validada', icon: Icons.check),
-                    ])),
-            _Section(
-                title: 'Icon chip',
-                composedOf: const ['Gradientes', 'Cores'],
-                builder: (_) => const Wrap(spacing: 12, runSpacing: 12, children: [
-                      BoldIconChip(Icons.send, gradient: BoldGradients.pix),
-                      BoldIconChip(Icons.qr_code, tint: BoldColors.accent),
-                      BoldIconChip.custom(
-                          gradient: BoldGradients.brand,
-                          child: Icon(Icons.bolt,
-                              size: 20, color: BoldColors.white)),
-                    ])),
-            _Section(
-                title: 'List tile / group',
-                composedOf: const ['BoldSpotIcon', 'BoldCard', 'Tipografia'],
-                builder: (_) => BoldListGroup(title: 'Atividade', children: [
-                      const BoldListTile(
-                          leading: BoldSpotIcon('arrow-down-light',
-                              tone: BoldSpotTone.success, filled: true),
-                          title: 'Recebido de Ana',
-                          subtitle: 'Hoje',
-                          trailing: BoldListAmount('R\$ 560,00')),
-                      const BoldListTile(
-                          leading: BoldSpotIcon('arrow-up-light',
-                              tone: BoldSpotTone.neutral, filled: true),
-                          title: 'Boleto',
-                          subtitle: 'Ontem',
-                          trailing: BoldListAmount('R\$ 132,90', negative: true)),
-                      BoldListTile(
-                          leading: const BoldSpotIcon('mobile-light',
-                              tone: BoldSpotTone.primary),
-                          title: 'Recarga',
-                          trailing: const BoldListTime('14min'),
-                          onTap: () {}),
-                    ])),
-            _Section(
-                title: 'Amount display',
-                composedOf: const ['Tipografia', 'Cores'],
-                builder: (_) => const Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      BoldAmountDisplay(
-                          value: 'R\$ 560,00', timestamp: '13/10 às 14:25'),
-                      SizedBox(height: 12),
-                      BoldAmountDisplay(
-                          value: 'R\$ 2.912,47',
-                          label: 'Seu saldo',
-                          centered: false),
-                    ])),
-            _Section(
-                title: 'Detail row',
-                composedOf: const ['BoldIcon', 'Tipografia'],
-                builder: (_) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      const BoldDetailRow(title: 'Para', description: 'Ana Silva'),
-                      const BoldDetailRow(
-                          title: 'Chave Pix',
-                          description: 'ana@email.com',
-                          icon: 'key-light'),
-                      BoldDetailRow(
-                          title: 'Ajuda',
-                          icon: 'circle-question-light',
-                          chevron: true,
-                          hairline: false,
-                          onTap: () {}),
-                    ])),
-            _Section(
-                title: 'Progress bar',
-                composedOf: const ['Cores', 'Tipografia'],
-                builder: (_) => const Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      BoldProgressBar(value: 0.2, caption: '1 de 5'),
-                      SizedBox(height: 14),
-                      BoldProgressBar(value: 0.6, caption: '3 de 5'),
-                      SizedBox(height: 14),
-                      BoldProgressBar(value: 1.0, caption: 'Concluído'),
-                    ])),
-            _Section(
-                title: 'Radio list',
-                composedOf: const ['Cores', 'Tipografia'],
-                builder: (_) => BoldRadioList(
-                      title: 'Motivo',
-                      value: 'oferta',
-                      onChanged: (_) {},
-                      options: const [
-                        BoldRadioOption(
-                            value: 'oferta', label: 'Oferta de outro banco'),
-                        BoldRadioOption(value: 'tarifas', label: 'Tarifas'),
-                        BoldRadioOption(value: 'outro', label: 'Outro motivo'),
-                      ],
-                    )),
-            _Section(
-                title: 'Tooltip',
-                composedOf: const ['Cores', 'Tipografia'],
-                builder: (_) => const Wrap(spacing: 20, runSpacing: 16, children: [
-                      BoldTooltip(label: 'Dica', style: BoldTooltipStyle.dark),
-                      BoldTooltip(
-                          label: 'Dica',
-                          style: BoldTooltipStyle.light,
-                          side: BoldTooltipSide.bottom),
-                    ])),
-            _Section(
-                title: 'Menu tile',
-                composedOf: const ['BoldCard', 'BoldIcon', 'Tipografia'],
-                builder: (_) => Wrap(spacing: 12, runSpacing: 12, children: [
-                      BoldMenuTile(
-                          icon: 'qrcode-light',
-                          label: 'Ler QR',
-                          size: BoldMenuTileSize.compact,
-                          onTap: () {}),
-                      BoldMenuTile(
-                          icon: 'pix-light',
-                          label: 'Fazer um Pix',
-                          size: BoldMenuTileSize.wide,
-                          onTap: () {}),
-                      BoldMenuTile(
-                          icon: 'barcode-light',
-                          label: 'Pagar conta',
-                          size: BoldMenuTileSize.large,
-                          onTap: () {}),
-                    ])),
-            _Section(
-                title: 'Alert',
-                composedOf: const ['BoldSpotIcon', 'Vidro (glass)', 'Cores'],
-                builder: (_) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      BoldAlert(
-                          intent: BoldIntent.error,
-                          title: 'Pix não enviado',
-                          message: 'Saldo insuficiente.',
-                          onClose: () {}),
-                      const SizedBox(height: 10),
-                      const BoldAlert(
-                          intent: BoldIntent.success, title: 'Pix enviado'),
-                      const SizedBox(height: 10),
-                      const BoldAlert(
-                          intent: BoldIntent.info,
-                          title: 'Limite diário',
-                          message: 'Até R\$ 5.000,00 por dia.'),
-                    ])),
-            _Section(
-                title: 'Navigation button',
-                composedOf: const ['BoldButton', 'Tipografia'],
-                note: 'coluna de CTAs de rodapé (primary/secondary/tertiary)',
-                builder: (_) => BoldNavigationButton(
-                      primary: BoldNavAction(label: 'Continuar', onPressed: () {}),
-                      secondary:
-                          BoldNavAction(label: 'Agora não', onPressed: () {}),
-                    )),
-    ];
-    final organisms = <Widget>[
-            // ─────────────────────── ORGANISMOS ───────────────────────────
-            const _TierHeader(
-                tier: 'ORGANISMOS',
-                description: 'Composições em superfície glass.'),
-            _Section(
-                title: 'Top bar (home)',
-                composedOf: const ['BoldAvatar', 'BoldIconButton', 'Vidro', 'Tipografia'],
-                builder: (_) => BoldTopBar.home(
-                      firstName: 'Diletta',
-                      safeArea: false,
-                      accountLabel: '12345-6',
-                      onOpenProfile: () {},
-                      onSwitchAccount: () {},
-                      icons: [
-                        BoldNavRightIcon(
-                            icon: 'eye-off', semanticLabel: 'Ocultar', onPressed: () {}),
-                        BoldNavRightIcon(
-                            icon: 'bell',
-                            semanticLabel: 'Notificações',
-                            badge: true,
-                            onPressed: () {}),
-                      ],
-                    )),
-            _Section(
-                title: 'Balance',
-                composedOf: const ['BoldCard', 'BoldStatusTag', 'BoldIcon', 'Tipografia'],
-                builder: (_) => BoldBalance(
-                      value: 'R\$ 2.912,47',
-                      entradas: 'R\$ 300,00',
-                      saidas: 'R\$ 120,00',
-                      onExtrato: () {},
-                    )),
-            _Section(
-                title: 'Tab bar',
-                composedOf: const ['BoldIcon', 'Tipografia', 'Vidro'],
-                builder: (_) => const _TabBarDemo()),
-            _Section(
-                title: 'Dialog / Toast (gatilhos)',
-                composedOf: const ['BoldButton', 'BoldCard', 'Tipografia'],
-                builder: (_) => const _OverlayDemo()),
-            _Section(
-                title: 'Comprovante (BoldReceipt)',
-                composedOf: const [
-                  'BoldSpotIcon',
-                  'BoldCard',
-                  'BoldLogo',
-                  'Tipografia'
-                ],
-                builder: (_) => BoldCard(
-                      radius: 20,
-                      padding: const EdgeInsets.all(20),
-                      child: const BoldReceipt(
-                        title: 'Comprovante de pagamento',
-                        timestamp: '14/07/2026 · 15:32',
-                        rows: [
-                          BoldReceiptRow(label: 'Valor', value: 'R\$ 250,00'),
-                          BoldReceiptRow(
-                              label: 'Tipo de pagamento', value: 'Pix'),
-                        ],
-                        sections: [
-                          BoldReceiptSection(
-                              icon: 'user-light',
-                              title: 'Destino',
-                              rows: [
-                                BoldReceiptRow(
-                                    label: 'Nome', value: 'Roberto da Silva'),
-                                BoldReceiptRow(
-                                    label: 'CPF/CNPJ', value: '***.777.888-**'),
-                                BoldReceiptRow(
-                                    label: 'Instituição',
-                                    value: 'Banco XYZ S.A.'),
-                              ]),
-                          BoldReceiptSection(
-                              icon: 'user-light',
-                              title: 'Origem',
-                              rows: [
-                                BoldReceiptRow(
-                                    label: 'Nome', value: 'Agatha Pedroso'),
-                                BoldReceiptRow(
-                                    label: 'CPF/CNPJ', value: '***.290.688-**'),
-                                BoldReceiptRow(
-                                    label: 'Instituição', value: 'Conta BOLD'),
-                              ]),
-                        ],
-                        footerLines: ['Conta BOLD · Instituição de pagamento'],
-                        transactionId: 'E1898765420260714153210abc',
-                      ),
-                    )),
-            _Section(
-                title: 'Circle button',
-                composedOf: const ['BoldIcon', 'Cores'],
-                builder: (_) => Wrap(spacing: 12, children: [
-                      BoldCircleButton('bell', onTap: () {}),
-                      BoldCircleButton('bell', dot: true, onTap: () {}),
-                      BoldCircleButton('edit', active: true, onTap: () {}),
-                    ])),
-            _Section(
-                title: 'Account pill / switcher',
-                composedOf: const ['BoldIcon', 'Tipografia', 'Cores'],
-                builder: (_) => Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [
-                      const BoldAccountPill(label: 'CONTA PF'),
-                      BoldAccountPill(label: 'CONTA PJ', onTap: () {}),
-                      BoldAccountSwitcher(name: 'Ana Carolina', onTap: () {}),
-                    ])),
-            _Section(
-                title: 'Bottom app',
-                composedOf: const ['Vidro (glass)', 'BoldNavigationButton', 'BoldIcon'],
-                builder: (_) => Column(children: [
-                      SizedBox(
-                          width: 340,
-                          child: BoldBottomApp.nav<int>(
-                            current: 0,
-                            onTap: (_) {},
-                            items: const [
-                              BoldTabItem(
-                                  value: 0,
-                                  label: 'Início',
-                                  icon: Icons.home_rounded),
-                              BoldTabItem(
-                                  value: 1,
-                                  label: 'Cartões',
-                                  icon: Icons.credit_card),
-                              BoldTabItem(
-                                  value: 2,
-                                  label: 'Pix',
-                                  icon: Icons.qr_code_rounded),
-                              BoldTabItem(
-                                  value: 3,
-                                  label: 'Perfil',
-                                  icon: Icons.person_rounded),
-                            ],
-                          )),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                          width: 340,
-                          child: BoldBottomApp.button(
-                            primary: BoldNavAction(
-                                label: 'Continuar', onPressed: () {}),
-                            secondary: BoldNavAction(
-                                label: 'Cancelar', onPressed: () {}),
-                            safeBottom: false,
-                          )),
-                    ])),
-            _Section(
-                title: 'Bottom sheet',
-                composedOf: const ['BoldGlassSurface', 'BoldIconButton'],
-                note: 'BoldSheet.show(context, …) — sobe do rodapé sobre scrim',
-                builder: (ctx) => BoldButton('Abrir sheet',
-                    expand: false,
-                    onPressed: () => BoldSheet.show(ctx,
-                        title: 'Escolha uma conta',
-                        builder: (_) => Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                BoldAppList.menuItem(
-                                    icon: 'user-light',
-                                    title: 'Conta PF',
-                                    subtitle: 'Ag 0001 · 12345-6',
-                                    onTap: () {}),
-                                BoldAppList.menuItem(
-                                    icon: 'building-light',
-                                    title: 'Conta PJ',
-                                    subtitle: 'Ag 0001 · 67890-1',
-                                    onTap: () {}),
-                              ],
-                            )))),
-            _Section(
-                title: 'Password sheet (PIN)',
-                composedOf: const [
-                  'BoldSheet',
-                  'BoldPinDots',
-                  'BoldKeypad',
-                  'BoldButton'
-                ],
-                note: 'BoldPasswordSheet.show — dots + keypad + CTA',
-                builder: (ctx) => BoldButton('Confirmar com senha',
-                    expand: false,
-                    onPressed: () => BoldPasswordSheet.show(ctx,
-                        subtitle: 'Digite os 6 dígitos da sua senha.',
-                        onForgot: () {}))),
-
-            // ─────────────────────── MOTION / especiais ───────────────────
-            const _TierHeader(
-                tier: 'MOTION / especiais',
-                description:
-                    'Autorização Quântica — visual violeta, independente da marca.'),
-            _Section(
-                title: 'Quantum seal',
-                composedOf: const ['CustomPaint', 'Tipografia'],
-                builder: (_) => Wrap(spacing: 16, runSpacing: 16, children: const [
-                      BoldQuantumSeal(waiting: true, size: 110),
-                      BoldQuantumSeal(waiting: false, failed: false, size: 110),
-                      BoldQuantumSeal(waiting: false, failed: true, size: 110),
-                    ])),
-            _Section(
-                title: 'Quantum core',
-                composedOf: const ['CustomPaint'],
-                note: 'núcleo pintado (loop demo) — a tela cheia vive na aba Specs',
-                builder: (_) => const Center(
-                    child: SizedBox(
-                        width: 200, height: 200, child: BoldQuantumCore()))),
-            _Section(
-                title: 'Limites (App list · valueAction)',
-                composedOf: const [
-                  'BoldAppList',
-                  'BoldRightAccessory.valueAction',
-                  'BoldIcon',
-                  'Tipografia'
-                ],
-                builder: (context) {
-                  final c = BoldColors.of(context);
-                  return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(children: [
-                          BoldIcon('pix', size: 20, color: c.textPrimary),
-                          const SizedBox(width: 8),
-                          Text('Pix',
-                              style: BoldType.title
-                                  .copyWith(color: c.textPrimary)),
-                        ]),
-                        const SizedBox(height: 8),
-                        Divider(height: 1, color: c.border),
-                        BoldAppList(
-                          middle:
-                              const BoldMiddleAccessory.title(title: 'Diário'),
-                          right: const BoldRightAccessory.valueAction(
-                              value: 'R\$ 2.500,00'),
-                          onTap: () {},
-                        ),
-                        BoldAppList(
-                          middle:
-                              const BoldMiddleAccessory.title(title: 'Noturno'),
-                          right: const BoldRightAccessory.valueAction(
-                              value: 'R\$ 2.500,00'),
-                          onTap: () {},
-                        ),
-                      ]);
-                }),
-            _Section(
-                title: 'Resumo de transação (BoldTransactionSummary)',
-                composedOf: const [
-                  'BoldTopBar',
-                  'BoldSpotIcon',
-                  'BoldAppList',
-                  'BoldSectionHeader',
-                  'BoldBottomApp'
-                ],
-                builder: (_) => ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: SizedBox(
-                        height: 720,
-                        child: BoldTransactionSummary(
-                          title: 'Pix enviado',
-                          amountText: 'R\$ 35,00',
-                          subtitle: '23 de fevereiro de 2025 · 18:09',
-                          sections: [
-                            BoldSummarySection(label: 'Para', rows: [
-                              BoldSummaryRow(
-                                left: BoldLeftAccessory.custom(
-                                    child: const BoldGlassAvatar(
-                                        initial: 'CR',
-                                        size: 40,
-                                        fontSize: 15)),
-                                title: 'Carlos Roberto',
-                                subtitle: '***.456.567-**',
-                              ),
-                              const BoldSummaryRow(
-                                left: BoldLeftAccessory.spotIcon(
-                                    icon: 'bank', tone: BoldSpotTone.neutral),
-                                title: 'Banco',
-                                subtitle: '014 - Santander Brasil S.A.',
-                              ),
-                            ]),
-                            const BoldSummarySection(label: 'Detalhes', rows: [
-                              BoldSummaryRow(
-                                left: BoldLeftAccessory.spotIcon(
-                                    icon: 'note-light-full',
-                                    tone: BoldSpotTone.neutral),
-                                title: 'Descrição',
-                                subtitle: 'Uber de hoje',
-                              ),
-                            ]),
-                          ],
-                          helpActions: [
-                            BoldSummaryAction(
-                                icon: 'messages-question-light-full',
-                                title: 'Contestar transação',
-                                onTap: () {}),
-                          ],
-                          onBack: () {},
-                          onPrimary: () {},
-                        ),
-                      ),
-                    )),
-            _Section(
-                title: 'Amount display (BoldAmountDisplay)',
-                composedOf: const ['Tipografia', 'Hairline'],
-                builder: (_) => const BoldAmountDisplay(
-                      value: 'R\$ 1.234,56',
-                      label: 'Valor',
-                      timestamp: 'Hoje · 14:20',
-                    )),
-            _Section(
-                title: 'Detail row (BoldDetailRow)',
-                composedOf: const ['BoldIcon', 'Tipografia', 'Hairline'],
-                builder: (_) => const BoldDetailRow(
-                      title: 'Chave Pix',
-                      description: 'joao@email.com',
-                      icon: 'key-light',
-                      chevron: true,
-                    )),
-            _Section(
-                title: 'Progress bar (BoldProgressBar)',
-                composedOf: const ['Cor', 'Tipografia'],
-                builder: (_) =>
-                    const BoldProgressBar(value: 0.6, caption: '60% do limite')),
-            _Section(
-                title: 'Radio list (BoldRadioList)',
-                composedOf: const ['BoldIcon', 'Tipografia'],
-                builder: (_) {
-                  var sel = 'pix';
-                  return StatefulBuilder(
-                    builder: (context, setLocal) => BoldRadioList(
-                      title: 'Forma de pagamento',
-                      value: sel,
-                      onChanged: (v) => setLocal(() => sel = v),
-                      options: const [
-                        BoldRadioOption(value: 'pix', label: 'Pix'),
-                        BoldRadioOption(value: 'boleto', label: 'Boleto'),
-                        BoldRadioOption(value: 'cartao', label: 'Cartão'),
-                      ],
-                    ),
-                  );
-                }),
-    ];
-    final illustrations = <Widget>[
-      const _TierHeader(
-          tier: 'ILUSTRAÇÕES',
-          description:
-              'Ilustrações do CPF Seguro — cada uma com suas variações de tema.'),
-      for (final il in _kIllustrations)
-        _Section(
-            title: il.label,
-            note: il.themes.length < 3
-                ? 'variações: Light · Dark'
-                : 'variações: Light · Dark · Theme 3',
-            builder: (_) => _IllustrationRow(il)),
-    ];
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 760),
-        child: ListView(
-          padding: const EdgeInsets.fromLTRB(24, 24, 24, 120),
-          children: [
-            // Visão geral (tier null) mostra a intro + todas as camadas em
-            // ordem; uma camada selecionada mostra só as seções dela. `_sep`
-            // intercala um divider entre seções consecutivas (não após header).
-            if (t == null) const _Intro(),
-            if (t == null || t == _DsTier.tokens) ..._sep(tokens),
-            if (t == null || t == _DsTier.atoms) ..._sep(atoms),
-            if (t == null || t == _DsTier.molecules) ..._sep(molecules),
-            if (t == null || t == _DsTier.organisms) ..._sep(organisms),
-            if (t == null || t == _DsTier.illustrations)
-              ..._sep(illustrations),
+                builder: (_) => const _TokElevation()),
+            _Section(
+                title: 'Motion',
+                note: 'durações + curvas amarradas por contexto',
+                builder: (_) => const _TokMotion()),
+            const _CatMacroHeader('ILUSTRAÇÕES'),
+            for (final il in _kIllustrations)
+              _Section(
+                  title: il.label,
+                  note: il.themes.length < 3
+                      ? 'variações: Light · Dark'
+                      : 'variações: Light · Dark · Theme 3',
+                  builder: (_) => _IllustrationRow(il)),
           ],
         ),
       ),
@@ -2715,9 +449,1105 @@ class _PreviewTab extends StatelessWidget {
   }
 }
 
+// ── Token showcases novos (radius / spacing / elevation / motion / scheme) ──
+class _TokScheme extends StatelessWidget {
+  const _TokScheme();
+  static const _roles = <String>[
+    'background',
+    'surface',
+    'field',
+    'primary',
+    'textPrimary',
+  ];
+  static Color _val(BoldScheme s, String r) => switch (r) {
+        'background' => s.background,
+        'surface' => s.surface,
+        'field' => s.field,
+        'primary' => s.primary,
+        _ => s.textPrimary,
+      };
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    Widget col(String label, BoldScheme s) => Expanded(
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text(label,
+                style: BoldType.labelSm.copyWith(
+                    color: c.textSecondary, fontWeight: FontWeight.w700)),
+            const SizedBox(height: 8),
+            for (final r in _roles)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 6),
+                child: Row(children: [
+                  Container(
+                    width: 28,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: _val(s, r),
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(color: c.border),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(r,
+                      style: BoldType.labelSm
+                          .copyWith(color: c.textMuted, fontSize: 11)),
+                ]),
+              ),
+          ]),
+        );
+    return Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      col('LIGHT', BoldScheme.light()),
+      const SizedBox(width: 20),
+      col('DARK', BoldScheme.dark()),
+    ]);
+  }
+}
+
+class _TokRadius extends StatelessWidget {
+  const _TokRadius();
+  static const _items = <(String, double)>[
+    ('chip · 10', BoldRadius.chip),
+    ('field · 16', BoldRadius.field),
+    ('sheet · 22', BoldRadius.sheet),
+    ('card · 24', BoldRadius.card),
+    ('pill · 999', BoldRadius.pill),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Wrap(spacing: 14, runSpacing: 14, children: [
+      for (final (label, r) in _items)
+        SizedBox(
+          width: 100,
+          child: Column(children: [
+            Container(
+              height: 52,
+              decoration: BoxDecoration(
+                color: BoldColors.primary04.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(r),
+                border: Border.all(color: BoldColors.primary04.withValues(alpha: 0.4)),
+              ),
+            ),
+            const SizedBox(height: 6),
+            Text(label,
+                style: BoldType.labelSm.copyWith(color: c.textMuted, fontSize: 11)),
+          ]),
+        ),
+    ]);
+  }
+}
+
+class _TokSpacing extends StatelessWidget {
+  const _TokSpacing();
+  static const _scale = <(String, double)>[
+    ('x1 · 4', BoldSpace.x1),
+    ('x2 · 8', BoldSpace.x2),
+    ('x3 · 12', BoldSpace.x3),
+    ('x4 · 16', BoldSpace.x4),
+    ('x5 · 20 · gutter', BoldSpace.x5),
+    ('x6 · 24', BoldSpace.x6),
+    ('x8 · 32', BoldSpace.x8),
+    ('x10 · 40', BoldSpace.x10),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      for (final (label, v) in _scale)
+        Padding(
+          padding: const EdgeInsets.only(bottom: 10),
+          child: Row(children: [
+            SizedBox(
+                width: 128,
+                child: Text(label,
+                    style: BoldType.labelSm
+                        .copyWith(color: c.textSecondary, fontSize: 11))),
+            Container(
+              width: v,
+              height: 14,
+              decoration: BoxDecoration(
+                color: BoldColors.primary04,
+                borderRadius: BorderRadius.circular(3),
+              ),
+            ),
+          ]),
+        ),
+    ]);
+  }
+}
+
+class _TokElevation extends StatelessWidget {
+  const _TokElevation();
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    final surface = c.isDark ? c.surface : BoldColors.white;
+    final items = <(String, List<BoxShadow>)>[
+      ('flat', BoldElevation.flat),
+      ('raised', BoldElevation.raised),
+      ('glow(primary)', BoldElevation.glow(BoldColors.primary04)),
+    ];
+    return Wrap(spacing: 28, runSpacing: 20, children: [
+      for (final (label, sh) in items)
+        SizedBox(
+          width: 120,
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              width: 120,
+              height: 56,
+              decoration: BoxDecoration(
+                color: surface,
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: sh,
+                border: Border.all(color: c.border),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(label,
+                style: BoldType.labelSm.copyWith(color: c.textMuted)),
+          ]),
+        ),
+    ]);
+  }
+}
+
+class _TokMotion extends StatefulWidget {
+  const _TokMotion();
+  @override
+  State<_TokMotion> createState() => _TokMotionState();
+}
+
+class _TokMotionState extends State<_TokMotion> {
+  int _run = 0;
+  static const _ctx = <(String, Duration)>[
+    ('fast · 150ms', BoldMotion.fast),
+    ('base · 250ms', BoldMotion.base),
+    ('slow · 400ms', BoldMotion.slow),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      SizedBox(
+        width: 160,
+        child: BoldButton('Reproduzir',
+            variant: BoldButtonVariant.secondary,
+            size: BoldButtonSize.sm,
+            onPressed: () => setState(() => _run++)),
+      ),
+      const SizedBox(height: 16),
+      Wrap(spacing: 16, runSpacing: 16, children: [
+        for (final (name, dur) in _ctx)
+          SizedBox(
+            width: 200,
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(name,
+                  style: BoldType.labelSm.copyWith(color: c.textMuted)),
+              const SizedBox(height: 6),
+              Container(
+                height: 44,
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                    color: c.field, borderRadius: BorderRadius.circular(8)),
+                child: TweenAnimationBuilder<double>(
+                  key: ValueKey('$name-$_run'),
+                  tween: Tween(begin: 0, end: 1),
+                  duration: dur,
+                  curve: BoldMotion.standard,
+                  builder: (context, t, child) => Align(
+                    alignment: Alignment.centerLeft,
+                    child: Transform.translate(
+                      offset: Offset(t * 152, 0),
+                      child: Opacity(
+                          opacity: (0.25 + 0.75 * t).clamp(0.0, 1.0),
+                          child: child),
+                    ),
+                  ),
+                  child: Container(
+                    margin: const EdgeInsets.all(6),
+                    width: 32,
+                    height: 32,
+                    decoration: BoxDecoration(
+                        color: BoldColors.primary04,
+                        borderRadius: BorderRadius.circular(8)),
+                  ),
+                ),
+              ),
+            ]),
+          ),
+      ]),
+    ]);
+  }
+}
+
 // ═══════════════════════════════════════════════════════════════════════════
-// Scaffolding — intro, tier header, section, dep chip.
+// COMPONENTS — widgets Bold* agrupados por FUNÇÃO, com preview vivo.
 // ═══════════════════════════════════════════════════════════════════════════
+class _ComponentsView extends StatefulWidget {
+  const _ComponentsView();
+  @override
+  State<_ComponentsView> createState() => _ComponentsViewState();
+}
+
+class _ComponentsViewState extends State<_ComponentsView> {
+  _Cat _cat = _Cat.acoes;
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 880),
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(24, 32, 24, 120),
+          children: [
+            const _CatHeader(
+              title: 'Components',
+              subtitle:
+                  'Componentes reais do DS, agrupados por função. Cada seção '
+                  'traz o preview vivo e os chips "formado por:" (o que consome). '
+                  'O eixo atômico completo vive em Foundations.',
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: Wrap(spacing: 8, runSpacing: 8, children: [
+                for (final cat in _Cat.values)
+                  _CatNavPill(
+                      label: cat.label,
+                      selected: cat == _cat,
+                      onTap: () => setState(() => _cat = cat)),
+              ]),
+            ),
+            ..._componentSections(_cat),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+List<Widget> _componentSections(_Cat c) {
+  switch (c) {
+    case _Cat.acoes:
+      return [
+        _Section(
+            title: 'Botões',
+            composedOf: const ['Tipografia', 'Cores', 'BoldIcon'],
+            builder: (_) => Column(children: [
+                  BoldButton('Primário', onPressed: () {}),
+                  const SizedBox(height: 8),
+                  BoldButton('Secundário',
+                      variant: BoldButtonVariant.secondary, onPressed: () {}),
+                  const SizedBox(height: 8),
+                  BoldButton('Texto',
+                      variant: BoldButtonVariant.text, onPressed: () {}),
+                  const SizedBox(height: 8),
+                  BoldButton('Destrutivo',
+                      variant: BoldButtonVariant.destructive, onPressed: () {}),
+                  const SizedBox(height: 12),
+                  Wrap(spacing: 8, runSpacing: 8, children: [
+                    const BoldButton('Carregando', loading: true, expand: false),
+                    const BoldButton('Off', onPressed: null, expand: false),
+                    BoldButton('Revogar',
+                        variant: BoldButtonVariant.destructive,
+                        filled: true,
+                        expand: false,
+                        onPressed: () {}),
+                  ]),
+                ])),
+        _Section(
+            title: 'Icon buttons',
+            composedOf: const ['BoldIcon', 'Cores'],
+            builder: (_) => Wrap(spacing: 10, runSpacing: 10, children: [
+                  BoldIconButton(
+                      icon: 'bell',
+                      semanticLabel: 'x',
+                      type: BoldIconButtonType.secondaryPrimary,
+                      onPressed: () {}),
+                  BoldIconButton(
+                      icon: 'qr',
+                      semanticLabel: 'x',
+                      type: BoldIconButtonType.secondary,
+                      onPressed: () {}),
+                  BoldIconButton(
+                      icon: 'eye',
+                      semanticLabel: 'x',
+                      type: BoldIconButtonType.tertiary,
+                      onPressed: () {}),
+                  BoldIconButton(
+                      icon: 'bell',
+                      semanticLabel: 'x',
+                      badge: true,
+                      onPressed: () {}),
+                  BoldIconButton(
+                      icon: 'bell',
+                      semanticLabel: 'x',
+                      size: BoldIconButtonSize.sm,
+                      onPressed: () {}),
+                  BoldIconButton(
+                      icon: 'bell',
+                      semanticLabel: 'x',
+                      size: BoldIconButtonSize.lg,
+                      onPressed: () {}),
+                  const BoldIconButton(
+                      icon: 'bell', semanticLabel: 'x', disabled: true),
+                ])),
+        _Section(
+            title: 'Circle button',
+            composedOf: const ['BoldIcon', 'Cores'],
+            builder: (_) => Wrap(spacing: 12, children: [
+                  BoldCircleButton('bell', onTap: () {}),
+                  BoldCircleButton('bell', dot: true, onTap: () {}),
+                  BoldCircleButton('edit', active: true, onTap: () {}),
+                ])),
+        _Section(
+            title: 'Copy button',
+            composedOf: const ['BoldIcon', 'Cores', 'Tipografia'],
+            note: 'toque → copia + check verde in-place',
+            builder: (_) => const BoldCopyButton(
+                text: '0001 · 1234567-8',
+                semanticLabel: 'Copiar conta',
+                label: 'Conta copiada')),
+        _Section(
+            title: 'Menu tile',
+            composedOf: const ['BoldCard', 'BoldIcon', 'Tipografia'],
+            builder: (_) => Wrap(spacing: 12, runSpacing: 12, children: [
+                  BoldMenuTile(
+                      icon: 'qrcode-light',
+                      label: 'Ler QR',
+                      size: BoldMenuTileSize.compact,
+                      onTap: () {}),
+                  BoldMenuTile(
+                      icon: 'pix-light',
+                      label: 'Fazer um Pix',
+                      size: BoldMenuTileSize.wide,
+                      onTap: () {}),
+                  BoldMenuTile(
+                      icon: 'barcode-light',
+                      label: 'Pagar conta',
+                      size: BoldMenuTileSize.large,
+                      onTap: () {}),
+                ])),
+        _Section(
+            title: 'Navigation button',
+            composedOf: const ['BoldButton', 'Tipografia'],
+            note: 'coluna de CTAs de rodapé (primary/secondary)',
+            builder: (_) => BoldNavigationButton(
+                  primary: BoldNavAction(label: 'Continuar', onPressed: () {}),
+                  secondary: BoldNavAction(label: 'Agora não', onPressed: () {}),
+                )),
+      ];
+    case _Cat.inputs:
+      return [
+        _Section(
+            title: 'Text field',
+            composedOf: const ['Tipografia', 'Cores'],
+            builder: (_) => const Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BoldTextField(label: 'Nome', hint: 'Como te chamam'),
+                  SizedBox(height: 12),
+                  BoldTextField(
+                      label: 'E-mail',
+                      hint: 'voce@email.com',
+                      errorText: 'E-mail inválido'),
+                  SizedBox(height: 12),
+                  BoldTextField(
+                      label: 'Desabilitado',
+                      hint: 'Indisponível',
+                      enabled: false),
+                ])),
+        _Section(
+            title: 'Search input',
+            composedOf: const ['BoldIcon', 'Tipografia', 'Cores'],
+            builder: (_) => const _SearchDemo()),
+        _Section(
+            title: 'Currency field',
+            composedOf: const ['Tipografia', 'Cores'],
+            builder: (_) => const Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BoldCurrencyField(initialValue: 1234.56),
+                  SizedBox(height: 12),
+                  BoldCurrencyField(large: true, initialValue: 1234.56),
+                ])),
+        _Section(
+            title: 'OTP input',
+            composedOf: const ['Tipografia', 'Cores'],
+            builder: (_) => const BoldOtpInput(value: '1234', length: 6)),
+        _Section(
+            title: 'PIN dots',
+            composedOf: const ['Cores'],
+            builder: (_) => const Row(children: [
+                  BoldPinDots(length: 4, filled: 0),
+                  SizedBox(width: 24),
+                  BoldPinDots(length: 4, filled: 2),
+                  SizedBox(width: 24),
+                  BoldPinDots(length: 4, filled: 4),
+                ])),
+        _Section(
+            title: 'Keypad',
+            composedOf: const ['Tipografia', 'BoldIcon', 'Cores'],
+            builder: (_) => BoldKeypad(onKey: (_) {}, onDelete: () {})),
+      ];
+    case _Cat.selecao:
+      return [
+        _Section(
+            title: 'Checkbox',
+            composedOf: const ['BoldIcon', 'Cores', 'Tipografia'],
+            builder: (_) => Wrap(spacing: 20, runSpacing: 12, children: const [
+                  BoldCheckbox(checked: true, label: 'Marcado'),
+                  BoldCheckbox(label: 'Vazio'),
+                  BoldCheckbox(indeterminate: true, label: 'Parcial'),
+                  BoldCheckbox(checked: true, disabled: true, label: 'Off'),
+                  BoldCheckbox(
+                      checked: true,
+                      variant: BoldCheckboxVariant.neutral,
+                      label: 'Neutral'),
+                ])),
+        _Section(
+            title: 'Switch',
+            composedOf: const ['Cores'],
+            builder: (_) => const _SwitchDemo()),
+        _Section(
+            title: 'Radio list',
+            composedOf: const ['Cores', 'Tipografia'],
+            builder: (_) => BoldRadioList(
+                  title: 'Motivo',
+                  value: 'oferta',
+                  onChanged: (_) {},
+                  options: const [
+                    BoldRadioOption(
+                        value: 'oferta', label: 'Oferta de outro banco'),
+                    BoldRadioOption(value: 'tarifas', label: 'Tarifas'),
+                    BoldRadioOption(value: 'outro', label: 'Outro motivo'),
+                  ],
+                )),
+        _Section(
+            title: 'Segmented control',
+            composedOf: const ['Tipografia', 'Cores'],
+            builder: (_) => const _SegmentedDemo()),
+        _Section(
+            title: 'Filter chip',
+            composedOf: const ['Cores', 'Tipografia'],
+            builder: (_) => Wrap(spacing: 8, runSpacing: 8, children: [
+                  BoldFilterChip('Todos', selected: true, onTap: () {}),
+                  BoldFilterChip('Entradas', selected: false, onTap: () {}),
+                  BoldFilterChip('Saídas', selected: false, onTap: () {}),
+                ])),
+        _Section(
+            title: 'Input chip',
+            composedOf: const ['Tipografia', 'BoldIcon', 'Cores'],
+            builder: (_) => Wrap(spacing: 8, runSpacing: 8, children: const [
+                  BoldInputChip(label: 'R\$ 50'),
+                  BoldInputChip(label: 'R\$ 100', filled: true),
+                  BoldInputChip(
+                      label: 'Saldo',
+                      leadIcon: 'eye',
+                      tone: BoldInputChipTone.neutral),
+                  BoldInputChip(
+                      label: 'Filtro',
+                      trailIcon: 'chevron-down',
+                      tone: BoldInputChipTone.neutral),
+                ])),
+      ];
+    case _Cat.comunicacao:
+      return [
+        const _CatMacroHeader('STATUS'),
+        _Section(
+            title: 'Status tag',
+            composedOf: const ['Cores', 'Tipografia'],
+            builder: (_) => Wrap(spacing: 8, runSpacing: 8, children: const [
+                  BoldStatusTag(label: 'Sucesso', tone: BoldStatusTone.success),
+                  BoldStatusTag(label: 'Falha', tone: BoldStatusTone.danger),
+                  BoldStatusTag(label: 'Pendente', tone: BoldStatusTone.warning),
+                  BoldStatusTag(label: 'Info', tone: BoldStatusTone.primary),
+                  BoldStatusTag(label: 'Neutro', tone: BoldStatusTone.neutral),
+                ])),
+        _Section(
+            title: 'Status badge',
+            composedOf: const ['Cores', 'Tipografia'],
+            builder: (_) => const Wrap(spacing: 8, runSpacing: 8, children: [
+                  BoldStatusBadge('Concluído'),
+                  BoldStatusBadge('Erro', color: BoldColors.danger),
+                  BoldStatusBadge('Validada', icon: Icons.check),
+                ])),
+        const _CatMacroHeader('FEEDBACK & LOADING'),
+        _Section(
+            title: 'Spinner',
+            composedOf: const ['Cores'],
+            note: 'arco com gradiente + trilho · sm / md / lg',
+            builder: (_) => const Row(children: [
+                  BoldSpinner(size: BoldSpinnerSize.sm),
+                  SizedBox(width: 20),
+                  BoldSpinner(),
+                  SizedBox(width: 20),
+                  BoldSpinner(size: BoldSpinnerSize.lg),
+                ])),
+        _Section(
+            title: 'Skeleton (loading)',
+            composedOf: const ['Cores'],
+            builder: (_) => Row(children: [
+                  BoldSkeleton.circle(40),
+                  const SizedBox(width: 12),
+                  const Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      BoldSkeleton(width: 140, height: 14),
+                      SizedBox(height: 8),
+                      BoldSkeleton(width: 90, height: 12),
+                    ],
+                  )),
+                ])),
+        _Section(
+            title: 'Progress bar',
+            composedOf: const ['Cores', 'Tipografia'],
+            builder: (_) => const Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BoldProgressBar(value: 0.2, caption: '1 de 5'),
+                  SizedBox(height: 14),
+                  BoldProgressBar(value: 0.6, caption: '3 de 5'),
+                  SizedBox(height: 14),
+                  BoldProgressBar(value: 1.0, caption: 'Concluído'),
+                ])),
+        _Section(
+            title: 'Tooltip',
+            composedOf: const ['Cores', 'Tipografia'],
+            builder: (_) => const Wrap(spacing: 20, runSpacing: 16, children: [
+                  BoldTooltip(label: 'Dica', style: BoldTooltipStyle.dark),
+                  BoldTooltip(
+                      label: 'Dica',
+                      style: BoldTooltipStyle.light,
+                      side: BoldTooltipSide.bottom),
+                ])),
+        _Section(
+            title: 'Alert',
+            composedOf: const ['BoldSpotIcon', 'Vidro (glass)', 'Cores'],
+            builder: (_) => Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BoldAlert(
+                      intent: BoldIntent.error,
+                      title: 'Pix não enviado',
+                      message: 'Saldo insuficiente.',
+                      onClose: () {}),
+                  const SizedBox(height: 10),
+                  const BoldAlert(
+                      intent: BoldIntent.success, title: 'Pix enviado'),
+                  const SizedBox(height: 10),
+                  const BoldAlert(
+                      intent: BoldIntent.info,
+                      title: 'Limite diário',
+                      message: 'Até R\$ 5.000,00 por dia.'),
+                ])),
+        const _CatMacroHeader('BANNERS & OVERLAYS'),
+        _Section(
+            title: 'Promo card',
+            composedOf: const ['Gradiente', 'Tipografia', 'BoldIcon'],
+            builder: (_) => BoldPromoCard(
+                title: 'Habilite sua passkey',
+                subtitle: 'Login sem senha, resistente a phishing.',
+                onTap: () {},
+                onClose: () {})),
+        _Section(
+            title: 'Promo banner',
+            composedOf: const [
+              'BoldAvatarStack',
+              'BoldButton',
+              'Gradiente',
+              'Tipografia'
+            ],
+            builder: (_) => BoldPromoBanner(
+                title: 'Veja as pessoas próximas',
+                subtitle: 'Realize transações :)',
+                primaryLabel: 'Enviar',
+                secondaryLabel: 'Receber',
+                avatars: const ['DL', 'HS', 'MJ'],
+                moreCount: 4,
+                onPrimary: () {},
+                onSecondary: () {},
+                onClose: () {})),
+        _Section(
+            title: 'Notice row',
+            composedOf: const ['BoldCard', 'BoldIcon', 'Tipografia'],
+            builder: (_) => BoldNoticeRow(
+                icon: 'paper-plane-light',
+                title: 'Autorizações',
+                subtitle: 'Veja o que está esperando você.',
+                count: 3,
+                onTap: () {})),
+        _Section(
+            title: 'Dialog / Toast (gatilhos)',
+            composedOf: const ['BoldButton', 'BoldCard', 'Tipografia'],
+            builder: (_) => const _OverlayDemo()),
+      ];
+    case _Cat.conteineres:
+      return [
+        const _CatMacroHeader('SUPERFÍCIE & CARDS'),
+        _Section(
+            title: 'Glass surface',
+            composedOf: const ['Cores', 'Vidro (glass)'],
+            note: 'fill + stroke + blur · característica do container',
+            builder: (_) => const BoldGlassSurface(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 14, horizontal: 18),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        BoldIcon('home'),
+                        BoldIcon('pix'),
+                        BoldIcon('cards'),
+                        BoldIcon('gear'),
+                      ],
+                    ),
+                  ),
+                )),
+        _Section(
+            title: 'Card',
+            composedOf: const ['Vidro', 'Cores'],
+            builder: (ctx) => BoldCard(
+                glass: true,
+                child: Text('Card glass padrão do DS.',
+                    style: BoldType.bodySmall
+                        .copyWith(color: BoldColors.of(ctx).textPrimary)))),
+        _Section(
+            title: 'Empty state',
+            composedOf: const ['BoldCard', 'BoldIcon', 'Tipografia'],
+            builder: (_) => const BoldEmptyState(
+                title: 'Nada por aqui',
+                caption: 'Suas transações aparecem aqui.')),
+        const _CatMacroHeader('LISTAS & LINHAS'),
+        _Section(
+            title: 'List tile / group',
+            composedOf: const ['BoldSpotIcon', 'BoldCard', 'Tipografia'],
+            builder: (_) => BoldListGroup(title: 'Atividade', children: [
+                  const BoldListTile(
+                      leading: BoldSpotIcon('arrow-down-light',
+                          tone: BoldSpotTone.success, filled: true),
+                      title: 'Recebido de Ana',
+                      subtitle: 'Hoje',
+                      trailing: BoldListAmount('R\$ 560,00')),
+                  const BoldListTile(
+                      leading: BoldSpotIcon('arrow-up-light',
+                          tone: BoldSpotTone.neutral, filled: true),
+                      title: 'Boleto',
+                      subtitle: 'Ontem',
+                      trailing: BoldListAmount('R\$ 132,90', negative: true)),
+                ])),
+        _Section(
+            title: 'App list — menu (grupo glass)',
+            composedOf: const [
+              'BoldSpotIcon',
+              'BoldCard',
+              'BoldIcon',
+              'Tipografia'
+            ],
+            builder: (_) => BoldAppListGroup(title: 'Menu', children: [
+                  BoldAppList.menuItem(
+                      icon: 'pix-light',
+                      title: 'Fazer um Pix',
+                      subtitle: 'Para qualquer chave',
+                      onTap: () {}),
+                  BoldAppList.menuItem(
+                      icon: 'bank',
+                      title: 'Minha conta',
+                      subtitle: 'Ag 0001 · Conta 12345-6',
+                      onTap: () {}),
+                ])),
+        _Section(
+            title: 'App list — atividade',
+            composedOf: const ['BoldSpotIcon', 'BoldStatusTag', 'Tipografia'],
+            builder: (_) => BoldAppListGroup(children: [
+                  BoldAppList.activityItem(
+                      icon: 'pix-light',
+                      iconTone: BoldSpotTone.success,
+                      title: 'Recebido de Diletta',
+                      subtitle: 'PIX',
+                      time: '14:20',
+                      status: const BoldStatusTagData(
+                          label: 'Concluído', tone: BoldStatusTone.success)),
+                ])),
+        _Section(
+            title: 'Detail row',
+            composedOf: const ['BoldIcon', 'Tipografia'],
+            builder: (_) => Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const BoldDetailRow(title: 'Para', description: 'Ana Silva'),
+                  const BoldDetailRow(
+                      title: 'Chave Pix',
+                      description: 'ana@email.com',
+                      icon: 'key-light'),
+                  BoldDetailRow(
+                      title: 'Ajuda',
+                      icon: 'circle-question-light',
+                      chevron: true,
+                      hairline: false,
+                      onTap: () {}),
+                ])),
+        _Section(
+            title: 'Section header',
+            composedOf: const ['Tipografia', 'BoldSeeAllLink'],
+            builder: (_) => BoldSectionHeader(
+                label: 'Enviar para',
+                trailing: BoldSeeAllLink(label: 'Ver tudo', onPressed: () {}))),
+        const _CatMacroHeader('SHEETS'),
+        _Section(
+            title: 'Bottom sheet',
+            composedOf: const ['BoldGlassSurface', 'BoldIconButton'],
+            note: 'BoldSheet.show(context, …) — sobe do rodapé sobre scrim',
+            builder: (ctx) => BoldButton('Abrir sheet',
+                expand: false,
+                onPressed: () => BoldSheet.show(ctx,
+                    title: 'Escolha uma conta',
+                    builder: (_) => Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            BoldAppList.menuItem(
+                                icon: 'user-light',
+                                title: 'Conta PF',
+                                subtitle: 'Ag 0001 · 12345-6',
+                                onTap: () {}),
+                            BoldAppList.menuItem(
+                                icon: 'building-light',
+                                title: 'Conta PJ',
+                                subtitle: 'Ag 0001 · 67890-1',
+                                onTap: () {}),
+                          ],
+                        )))),
+        _Section(
+            title: 'Password sheet (PIN)',
+            composedOf: const [
+              'BoldSheet',
+              'BoldPinDots',
+              'BoldKeypad',
+              'BoldButton'
+            ],
+            note: 'BoldPasswordSheet.show — dots + keypad + CTA',
+            builder: (ctx) => BoldButton('Confirmar com senha',
+                expand: false,
+                onPressed: () => BoldPasswordSheet.show(ctx,
+                    subtitle: 'Digite os 6 dígitos da sua senha.',
+                    onForgot: () {}))),
+      ];
+    case _Cat.navegacao:
+      return [
+        const _CatMacroHeader('TOPO'),
+        _Section(
+            title: 'Top bar (home)',
+            composedOf: const [
+              'BoldAvatar',
+              'BoldIconButton',
+              'Vidro',
+              'Tipografia'
+            ],
+            builder: (_) => BoldTopBar.home(
+                  firstName: 'Diletta',
+                  safeArea: false,
+                  accountLabel: '12345-6',
+                  onOpenProfile: () {},
+                  onSwitchAccount: () {},
+                  icons: [
+                    BoldNavRightIcon(
+                        icon: 'eye-off',
+                        semanticLabel: 'Ocultar',
+                        onPressed: () {}),
+                    BoldNavRightIcon(
+                        icon: 'bell',
+                        semanticLabel: 'Notificações',
+                        badge: true,
+                        onPressed: () {}),
+                  ],
+                )),
+        _Section(
+            title: 'Stepper',
+            composedOf: const ['Tipografia', 'Cores'],
+            builder: (_) => const BoldStepper(
+                current: 2, total: 4, labelText: 'PASSO 2 DE 4')),
+        const _CatMacroHeader('RODAPÉ & PÁGINA'),
+        _Section(
+            title: 'Bottom app',
+            composedOf: const [
+              'Vidro (glass)',
+              'BoldNavigationButton',
+              'BoldIcon'
+            ],
+            builder: (_) => Column(children: [
+                  SizedBox(
+                      width: 340,
+                      child: BoldBottomApp.nav<int>(
+                        current: 0,
+                        onTap: (_) {},
+                        items: const [
+                          BoldTabItem(
+                              value: 0,
+                              label: 'Início',
+                              icon: Icons.home_rounded),
+                          BoldTabItem(
+                              value: 1,
+                              label: 'Cartões',
+                              icon: Icons.credit_card),
+                          BoldTabItem(
+                              value: 2,
+                              label: 'Pix',
+                              icon: Icons.qr_code_rounded),
+                          BoldTabItem(
+                              value: 3,
+                              label: 'Perfil',
+                              icon: Icons.person_rounded),
+                        ],
+                      )),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                      width: 340,
+                      child: BoldBottomApp.button(
+                        primary:
+                            BoldNavAction(label: 'Continuar', onPressed: () {}),
+                        secondary:
+                            BoldNavAction(label: 'Cancelar', onPressed: () {}),
+                        safeBottom: false,
+                      )),
+                ])),
+        _Section(
+            title: 'Tab bar',
+            composedOf: const ['BoldIcon', 'Tipografia', 'Vidro'],
+            builder: (_) => const _TabBarDemo()),
+        _Section(
+            title: 'Home indicator',
+            composedOf: const ['Cores'],
+            builder: (_) => const BoldHomeIndicator()),
+        _Section(
+            title: 'Page dots',
+            composedOf: const ['Cores'],
+            builder: (_) => const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BoldPageDots(count: 4, activeIndex: 0),
+                  SizedBox(height: 10),
+                  BoldPageDots(count: 4, activeIndex: 2),
+                ])),
+        _Section(
+            title: 'Page title',
+            composedOf: const ['Tipografia'],
+            builder: (_) => const BoldPageTitle(
+                title: 'Quanto você quer enviar?',
+                subtitle: 'O valor sai da sua conta BOLD.')),
+        _Section(
+            title: 'Account pill / switcher',
+            composedOf: const ['BoldIcon', 'Tipografia', 'Cores'],
+            builder: (_) => Wrap(
+                spacing: 12,
+                runSpacing: 12,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  const BoldAccountPill(label: 'CONTA PF'),
+                  BoldAccountPill(label: 'CONTA PJ', onTap: () {}),
+                  BoldAccountSwitcher(name: 'Ana Carolina', onTap: () {}),
+                ])),
+      ];
+    case _Cat.dominio:
+      return [
+        const _CatMacroHeader('IDENTIDADE & ÍCONES'),
+        _Section(
+            title: 'Ícone (BoldIcon)',
+            composedOf: const ['Cores'],
+            builder: (_) => Wrap(spacing: 16, runSpacing: 12, children: const [
+                  BoldIcon('home'),
+                  BoldIcon('pix'),
+                  BoldIcon('bell'),
+                  BoldIcon('eye'),
+                  BoldIcon('bank'),
+                  BoldIcon('key'),
+                  BoldIcon('chevron-right'),
+                ])),
+        _Section(
+            title: 'Spot icon',
+            composedOf: const ['BoldIcon', 'Cores'],
+            builder: (_) => Wrap(spacing: 12, runSpacing: 12, children: const [
+                  BoldSpotIcon('pix-light', tone: BoldSpotTone.primary),
+                  BoldSpotIcon('bank', tone: BoldSpotTone.primary, filled: true),
+                  BoldSpotIcon('bell-light', tone: BoldSpotTone.success),
+                  BoldSpotIcon('key-light', tone: BoldSpotTone.danger, badge: true),
+                  BoldSpotIcon('shield', tone: BoldSpotTone.secure),
+                  BoldSpotIcon('user-light', disabled: true),
+                ])),
+        _Section(
+            title: 'Logo',
+            composedOf: const ['Cores'],
+            builder: (_) => const BoldLogo(width: 150)),
+        _Section(
+            title: 'Marca PIX',
+            composedOf: const ['Cores'],
+            builder: (_) => BoldPixMark(size: 40, color: BoldColors.primary04)),
+        _Section(
+            title: 'Avatar',
+            composedOf: const ['Cores', 'Tipografia', 'Gradiente'],
+            builder: (_) => Row(children: const [
+                  BoldAvatar(initials: 'DL'),
+                  SizedBox(width: 12),
+                  BoldAvatar(initials: 'HS', size: 56),
+                ])),
+        _Section(
+            title: 'Avatar row / stack',
+            composedOf: const ['BoldAvatar'],
+            builder: (_) => Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BoldAvatarRow(initials: const ['DL', 'HS', 'MJ'], onAdd: () {}),
+                  const SizedBox(height: 16),
+                  const BoldAvatarStack(initials: ['DL', 'HS', 'MJ', 'AB']),
+                ])),
+        _Section(
+            title: 'Glass avatar',
+            composedOf: const ['Vidro (glass)', 'Cores', 'Tipografia'],
+            builder: (_) => Row(children: const [
+                  BoldGlassAvatar(initial: 'D'),
+                  SizedBox(width: 12),
+                  BoldGlassAvatar(initial: 'HS', size: 56),
+                ])),
+        _Section(
+            title: 'Icon chip',
+            composedOf: const ['Gradientes', 'Cores'],
+            builder: (_) => const Wrap(spacing: 12, runSpacing: 12, children: [
+                  BoldIconChip(Icons.send, gradient: BoldGradients.pix),
+                  BoldIconChip(Icons.qr_code, tint: BoldColors.warning04),
+                  BoldIconChip.custom(
+                      gradient: BoldGradients.brand,
+                      child: Icon(Icons.bolt, size: 20, color: BoldColors.white)),
+                ])),
+        const _CatMacroHeader('VALOR & CARTEIRA'),
+        _Section(
+            title: 'Amount display',
+            composedOf: const ['Tipografia', 'Cores'],
+            builder: (_) => const Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BoldAmountDisplay(
+                      value: 'R\$ 560,00', timestamp: '13/10 às 14:25'),
+                  SizedBox(height: 12),
+                  BoldAmountDisplay(
+                      value: 'R\$ 2.912,47',
+                      label: 'Seu saldo',
+                      centered: false),
+                ])),
+        _Section(
+            title: 'Balance',
+            composedOf: const [
+              'BoldCard',
+              'BoldStatusTag',
+              'BoldIcon',
+              'Tipografia'
+            ],
+            builder: (_) => BoldBalance(
+                  value: 'R\$ 2.912,47',
+                  entradas: 'R\$ 300,00',
+                  saidas: 'R\$ 120,00',
+                  onExtrato: () {},
+                )),
+        _Section(
+            title: 'Comprovante (BoldReceipt)',
+            composedOf: const [
+              'BoldSpotIcon',
+              'BoldCard',
+              'BoldLogo',
+              'Tipografia'
+            ],
+            builder: (_) => BoldCard(
+                  radius: 20,
+                  padding: const EdgeInsets.all(20),
+                  child: const BoldReceipt(
+                    title: 'Comprovante de pagamento',
+                    timestamp: '14/07/2026 · 15:32',
+                    rows: [
+                      BoldReceiptRow(label: 'Valor', value: 'R\$ 250,00'),
+                      BoldReceiptRow(label: 'Tipo de pagamento', value: 'Pix'),
+                    ],
+                    sections: [
+                      BoldReceiptSection(icon: 'user-light', title: 'Destino', rows: [
+                        BoldReceiptRow(label: 'Nome', value: 'Roberto da Silva'),
+                        BoldReceiptRow(
+                            label: 'CPF/CNPJ', value: '***.777.888-**'),
+                      ]),
+                    ],
+                    footerLines: ['Conta BOLD · Instituição de pagamento'],
+                    transactionId: 'E1898765420260714153210abc',
+                  ),
+                )),
+        _Section(
+            title: 'Resumo de transação',
+            composedOf: const [
+              'BoldTopBar',
+              'BoldSpotIcon',
+              'BoldAppList',
+              'BoldSectionHeader',
+              'BoldBottomApp'
+            ],
+            builder: (_) => ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: SizedBox(
+                    height: 720,
+                    child: BoldTransactionSummary(
+                      title: 'Pix enviado',
+                      amountText: 'R\$ 35,00',
+                      subtitle: '23 de fevereiro de 2025 · 18:09',
+                      sections: [
+                        BoldSummarySection(label: 'Para', rows: [
+                          BoldSummaryRow(
+                            left: BoldLeftAccessory.custom(
+                                child: const BoldGlassAvatar(
+                                    initial: 'CR', size: 40, fontSize: 15)),
+                            title: 'Carlos Roberto',
+                            subtitle: '***.456.567-**',
+                          ),
+                          const BoldSummaryRow(
+                            left: BoldLeftAccessory.spotIcon(
+                                icon: 'bank', tone: BoldSpotTone.neutral),
+                            title: 'Banco',
+                            subtitle: '014 - Santander Brasil S.A.',
+                          ),
+                        ]),
+                      ],
+                      helpActions: [
+                        BoldSummaryAction(
+                            icon: 'messages-question-light-full',
+                            title: 'Contestar transação',
+                            onTap: () {}),
+                      ],
+                      onBack: () {},
+                      onPrimary: () {},
+                    ),
+                  ),
+                )),
+        const _CatMacroHeader('SEGURANÇA'),
+        _Section(
+            title: 'Quantum seal',
+            composedOf: const ['CustomPaint', 'Tipografia'],
+            builder: (_) => Wrap(spacing: 16, runSpacing: 16, children: const [
+                  BoldQuantumSeal(waiting: true, size: 110),
+                  BoldQuantumSeal(waiting: false, failed: false, size: 110),
+                  BoldQuantumSeal(waiting: false, failed: true, size: 110),
+                ])),
+        _Section(
+            title: 'Quantum core',
+            composedOf: const ['CustomPaint'],
+            note: 'núcleo pintado (loop demo)',
+            builder: (_) => const Center(
+                child: SizedBox(
+                    width: 200, height: 200, child: BoldQuantumCore()))),
+      ];
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// SPECS — tabelas de spec dos componentes (matriz Type × State / faixa).
+// ═══════════════════════════════════════════════════════════════════════════
+class _SpecsView extends StatelessWidget {
+  const _SpecsView();
+  @override
+  Widget build(BuildContext context) => const _SpecsTab();
+}
+
 class _Intro extends StatelessWidget {
   const _Intro();
   @override
@@ -2951,13 +1781,6 @@ class _Swatches extends StatelessWidget {
           ('07', BoldColors.primary07),
           ('08', BoldColors.primary08),
           ('09', BoldColors.primary09),
-        ]),
-        _Ramp('Accent', [
-          ('03', BoldColors.accent03),
-          ('04', BoldColors.accent04),
-          ('05', BoldColors.accent05),
-          ('07', BoldColors.accent07),
-          ('08', BoldColors.accent08),
         ]),
         _Ramp('Neutral', [
           ('01', BoldColors.neutral01),
@@ -3897,26 +2720,22 @@ class _SpecsTab extends StatelessWidget {
             _ComponentSpec(
               title: 'BoldIconButton',
               description:
-                  '5 tipos (primary · secondary · secondaryPrimary · tertiary · tertiaryPrimary) × 3 tamanhos (sm 32 · md 40 · lg 56). error, disabled e badge são ortogonais — ver strip abaixo.',
+                  '3 tipos (secondary · secondaryPrimary · tertiary) × 3 tamanhos (sm 32 · md 40 · lg 56). error, disabled e badge são ortogonais — ver strip abaixo.',
               composedOf: const ['BoldIcon', 'Cores'],
               child: _VariantMatrix(
                 rowAxis: 'Type',
                 rows: const [
-                  'primary',
                   'secondary',
                   'secondaryPrimary',
                   'tertiary',
-                  'tertiaryPrimary'
                 ],
                 colAxis: 'Size',
                 cols: const ['sm', 'md', 'lg'],
                 cell: (row, col) {
                   const types = [
-                    BoldIconButtonType.primary,
                     BoldIconButtonType.secondary,
                     BoldIconButtonType.secondaryPrimary,
                     BoldIconButtonType.tertiary,
-                    BoldIconButtonType.tertiaryPrimary,
                   ];
                   const sizes = [
                     BoldIconButtonSize.sm,
@@ -4191,7 +3010,7 @@ class _SpecsTab extends StatelessWidget {
                 cellWidth: 120,
                 items: [
                   ('gradient', BoldIconChip(Icons.send, gradient: BoldGradients.pix)),
-                  ('tint', BoldIconChip(Icons.qr_code, tint: BoldColors.accent)),
+                  ('tint', BoldIconChip(Icons.qr_code, tint: BoldColors.warning04)),
                   ('.custom', BoldIconChip.custom(gradient: BoldGradients.brand, child: Icon(Icons.bolt, size: 20, color: BoldColors.white))),
                 ],
               ),

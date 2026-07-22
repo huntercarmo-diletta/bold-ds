@@ -1,30 +1,20 @@
-// This is a basic Flutter widget test.
+// Smoke test do catálogo do Design System do Conta BOLD.
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
+// Monta o app do catálogo e confirma que a barra de topo (com as abas) renderiza.
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:conta_bold_ds/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+  testWidgets('Catálogo monta e mostra a barra de topo', (tester) async {
+    await tester.pumpWidget(const BoldCatalogApp());
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Conta BOLD · Design System'), findsOneWidget);
+    expect(find.text('Foundations'), findsOneWidget);
+    expect(find.text('Integração'), findsOneWidget);
+    // Components é a aba default: aparece na barra E como título da tela.
+    expect(find.text('Components'), findsWidgets);
   });
 }
