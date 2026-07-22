@@ -660,9 +660,11 @@ class _Pill extends StatelessWidget {
 // Fonte: rotas em lib/routing/routes.dart. Cada passo = um nó; `branches` são
 // caminhos alternativos/decisões dentro do passo.
 // ═══════════════════════════════════════════════════════════════════════════
-// Padrão de user flow do time (ver documentação): verde = início · rosa = fim ·
-// AMARELO = usuário · ROXO = sistema · retângulo = ação · losango = decisão ·
-// roxo + X = caso de erro. Seta cheia = fluxo · tracejada = anotação/erro.
+// Padrão ISO 5807 (a FORMA carrega o significado; a cor é reforço semântico):
+// terminador (stadium) = início/fim · retângulo = processo/ação · losango =
+// decisão (ramos rotulados) · paralelogramo = entrada/saída · retângulo+X =
+// erro/exceção. Seta cheia = fluxo · tracejada = anotação/erro. Direção
+// top→bottom, um único início, tamanhos e espaçamento consistentes.
 enum StepType {
   start,
   end,
@@ -671,6 +673,7 @@ enum StepType {
   systemAction,
   systemDecision,
   systemError,
+  io, // entrada/saída (paralelogramo) — input do usuário / exibição de dados
 }
 
 class FlowStep {
@@ -866,6 +869,38 @@ const List<AppFlow> kFlows = [
     ],
   ),
   AppFlow(
+    name: 'PIX — Chave por e-mail (portabilidade)',
+    group: 'PIX',
+    icon: 'envelope-light',
+    route: '/pix/chaves (e-mail)',
+    description:
+        'Adicionar chave Pix de e-mail: consentimento → OTP → cadastro em '
+        'andamento. Se a chave já for de outra conta, cai em portabilidade.',
+    steps: [
+      FlowStep('Início', type: StepType.start),
+      FlowStep('Informa o e-mail', type: StepType.io),
+      FlowStep('Confirma o consentimento',
+          type: StepType.userAction,
+          note: 'nome · 6 dígitos do CPF · instituição'),
+      FlowStep('Envia código OTP', type: StepType.systemAction, note: 'por e-mail'),
+      FlowStep('Informa o código', type: StepType.io, note: '6 dígitos'),
+      FlowStep('Código válido e chave disponível?',
+          type: StepType.systemDecision),
+      FlowStep('Registra a chave', type: StepType.systemAction),
+      FlowStep('Cadastro em andamento',
+          type: StepType.io, note: 'aguarda efetivação (8h–20h, dias úteis)'),
+      FlowStep('Chave em cadastro', type: StepType.end),
+    ],
+    errors: [
+      ErrorCase('Código inválido ou expirado',
+          from: 'Código válido e chave disponível?',
+          note: 'Permite reenviar o código'),
+      ErrorCase('Chave é de outra conta → portabilidade / reivindicação',
+          from: 'Código válido e chave disponível?',
+          note: 'Mesmo titular = portabilidade; caso contrário = reivindicação'),
+    ],
+  ),
+  AppFlow(
     name: 'PIX Automático',
     group: 'PIX',
     icon: 'arrow-rotate-left-light',
@@ -914,6 +949,106 @@ const List<AppFlow> kFlows = [
       ErrorCase('Fora do prazo / não elegível',
           from: 'Elegível ao MED (prazo e critérios)?',
           note: 'Além do prazo do MED ou transação inelegível'),
+    ],
+  ),
+  AppFlow(
+    name: 'PIX — Cobrar (QR Code)',
+    group: 'PIX',
+    icon: 'qr',
+    route: '/pix/cobrar',
+    description:
+        'Gerar uma cobrança por QR Code. Escolha o tipo e, no QR simples, '
+        'defina chave e valor (opcional).',
+    steps: [
+      FlowStep('Início', type: StepType.start),
+      FlowStep('Abre Cobrar', type: StepType.userAction),
+      FlowStep('Tipo de cobrança?',
+          type: StepType.userDecision,
+          branches: ['QR simples', 'Com vencimento', 'Imediato', 'Meus QR']),
+      FlowStep('Seleciona a chave Pix',
+          type: StepType.io, note: 'chave de recebimento'),
+      FlowStep('Informa o valor',
+          type: StepType.io, note: 'opcional — pode gerar sem valor'),
+      FlowStep('Gera o QR Code', type: StepType.systemAction),
+      FlowStep('Exibe QR + Pix copia e cola', type: StepType.io),
+      FlowStep('QR Code gerado', type: StepType.end),
+    ],
+    errors: [
+      ErrorCase('Sem chave cadastrada',
+          from: 'Seleciona a chave Pix',
+          note: 'Oferece criar uma chave antes de continuar'),
+    ],
+  ),
+  AppFlow(
+    name: 'PIX — Cobrar com vencimento',
+    group: 'PIX',
+    icon: 'qr',
+    route: '/pix/cobrar (com vencimento)',
+    description:
+        'Cobrança com data de vencimento e adições opcionais (juros, multa, '
+        'desconto, abatimento).',
+    steps: [
+      FlowStep('Início', type: StepType.start),
+      FlowStep('Seleciona a chave Pix', type: StepType.io),
+      FlowStep('Informa o valor', type: StepType.io),
+      FlowStep('Escolhe o vencimento',
+          type: StepType.io, note: 'BoldDatePicker (+ expiração)'),
+      FlowStep('Adicionar juros/multa/desconto?',
+          type: StepType.userDecision, branches: ['Sim', 'Não']),
+      FlowStep('Configura as adições',
+          type: StepType.io, note: 'juros · multa · desconto · abatimento'),
+      FlowStep('Revisa o resumo', type: StepType.userAction),
+      FlowStep('Gera a cobrança', type: StepType.systemAction),
+      FlowStep('Exibe QR (com vencimento)', type: StepType.io),
+      FlowStep('Cobrança gerada', type: StepType.end),
+    ],
+  ),
+  AppFlow(
+    name: 'PIX — Cobrar imediato',
+    group: 'PIX',
+    icon: 'qr',
+    route: '/pix/cobrar (imediato)',
+    description:
+        'Cobrança que vence no mesmo dia: o QR tem janela de expiração '
+        '(3 min…12 h) em vez de data de vencimento.',
+    steps: [
+      FlowStep('Início', type: StepType.start),
+      FlowStep('Seleciona a chave Pix', type: StepType.io),
+      FlowStep('Informa o valor', type: StepType.io),
+      FlowStep('Permitir alterar o valor?',
+          type: StepType.userDecision, branches: ['Sim', 'Não']),
+      FlowStep('Define a expiração',
+          type: StepType.io, note: '3 min…12 h a partir da geração'),
+      FlowStep('Dados do devedor',
+          type: StepType.io, note: 'opcional'),
+      FlowStep('Revisa o resumo', type: StepType.userAction),
+      FlowStep('Gera a cobrança', type: StepType.systemAction),
+      FlowStep('Exibe QR (imediato)', type: StepType.io),
+      FlowStep('Cobrança gerada', type: StepType.end),
+    ],
+  ),
+  AppFlow(
+    name: 'PIX — Meus QR codes',
+    group: 'PIX',
+    icon: 'qr',
+    route: '/pix/cobrar/meus-qr',
+    description:
+        'Lista as cobranças geradas, com filtro por período e abas '
+        'Ativos/Encerrados; abre o detalhe com opção de cancelar.',
+    steps: [
+      FlowStep('Início', type: StepType.start),
+      FlowStep('Abre Meus QR codes', type: StepType.userAction),
+      FlowStep('Filtra o período',
+          type: StepType.io, note: '15 / 30 / 60 dias'),
+      FlowStep('Aba?',
+          type: StepType.userDecision, branches: ['Ativos', 'Encerrados']),
+      FlowStep('Seleciona a cobrança', type: StepType.userAction),
+      FlowStep('Exibe detalhe',
+          type: StepType.io, note: 'QR + status + Pix copia e cola'),
+      FlowStep('Cancelar cobrança?',
+          type: StepType.userDecision, branches: ['Sim', 'Não']),
+      FlowStep('Cancela a cobrança', type: StepType.systemAction),
+      FlowStep('Concluído', type: StepType.end),
     ],
   ),
   // ─────────────────────────── PAGAMENTOS ───────────────────────────────────
@@ -1108,9 +1243,8 @@ class _FlowchartView extends StatelessWidget {
                       if (flow.steps[i].branches.isNotEmpty)
                         _BranchFan(
                           branches: flow.steps[i].branches,
-                          accent: flow.steps[i].type == StepType.systemDecision
-                              ? _sysStroke
-                              : _usrStroke,
+                          // ramos de decisão herdam a cor da decisão (warning)
+                          accent: BoldColors.of(context).warning,
                         ),
                       if (i < flow.steps.length - 1) const _DownArrow(),
                     ],
@@ -1129,18 +1263,45 @@ class _FlowchartView extends StatelessWidget {
   }
 }
 
-// Paleta do padrão de user flow do time (documentação).
-const Color _usrFill = Color(0xFFFCE7A6); // amarelo — usuário
-const Color _usrStroke = Color(0xFFE0A93B);
-const Color _usrText = Color(0xFF5C4610);
-const Color _sysFill = Color(0xFFE7DBFA); // roxo — sistema
-const Color _sysStroke = Color(0xFF7B3FF2);
-const Color _sysText = Color(0xFF3A2A6B);
-const Color _startFill = Color(0xFFCBEFD5); // verde — início
-const Color _startText = Color(0xFF0A3F24);
-const Color _endFill = Color(0xFFF8C9CF); // rosa — fim
-const Color _endText = Color(0xFF7A2E3E);
-const Color _errBadge = Color(0xFFEF4757); // vermelho — X do caso de erro
+// ── Paleta ISO 5807 — theme-aware, semântica e limitada ──────────────────────
+// A FORMA carrega o significado; a cor só reforça. As cores vêm dos tokens do
+// tema (BoldScheme), então funcionam com contraste em light E dark. Erro =
+// vermelho fixo (acessível nos dois temas).
+const Color _errBadge = Color(0xFFEF4757);
+
+class _NodeStyle {
+  const _NodeStyle(this.fill, this.stroke, this.text);
+  final Color fill, stroke, text;
+}
+
+// Estilo (fill/stroke/text) por papel, a partir dos tokens semânticos do tema:
+// início=success · fim=primary · decisão=warning · entrada/saída=info ·
+// processo=superfície neutra · erro=danger.
+_NodeStyle _roleStyle(StepType? t, BoldScheme c) {
+  switch (t) {
+    case StepType.start:
+      return _NodeStyle(
+          c.success.withValues(alpha: 0.14), c.success, c.textPrimary);
+    case StepType.end:
+      return _NodeStyle(
+          c.primary.withValues(alpha: 0.14), c.primary, c.textPrimary);
+    case StepType.userDecision:
+    case StepType.systemDecision:
+      return _NodeStyle(
+          c.warning.withValues(alpha: 0.14), c.warning, c.textPrimary);
+    case StepType.io:
+      return _NodeStyle(c.info.withValues(alpha: 0.14), c.info, c.textPrimary);
+    case StepType.systemError:
+      return _NodeStyle(
+          _errBadge.withValues(alpha: 0.12), _errBadge, c.textPrimary);
+    case StepType.userAction:
+    case StepType.systemAction:
+    case null:
+      // processo = superfície neutra (a própria forma "retângulo" já diz ação)
+      return _NodeStyle(
+          c.isDark ? c.surface : BoldColors.neutral10, c.border, c.textPrimary);
+  }
+}
 
 enum _NodeKind { start, process, decision, end }
 
@@ -1151,9 +1312,10 @@ _NodeKind _kindOf(int i, int total, FlowStep s) {
   return _NodeKind.process;
 }
 
-// Nó do fluxograma. Com `step.type` definido, segue o PADRÃO do time (amarelo =
-// usuário, roxo = sistema; retângulo = ação, losango = decisão, roxo+X = erro;
-// verde = início, rosa = fim). Sem type, cai no legado (formas da marca).
+// Nó do fluxograma (ISO 5807): a FORMA define o papel — terminador (stadium) =
+// início/fim · retângulo = processo · losango = decisão · paralelogramo =
+// entrada/saída · retângulo+X = erro. Cor = reforço semântico via _roleStyle.
+// Sem `step.type`, cai no legado (formas da marca).
 class _FlowBox extends StatelessWidget {
   const _FlowBox(
       {required this.step, required this.index, required this.total});
@@ -1163,55 +1325,59 @@ class _FlowBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
     final t = step.type;
     if (t == null) return _legacy(context);
+    final s = _roleStyle(t, c);
     switch (t) {
       case StepType.start:
-        return _stadium(_startFill, _startText);
       case StepType.end:
-        return _stadium(_endFill, _endText);
+        return _stadium(s);
       case StepType.userAction:
-        return _rect(context, _usrFill, _usrStroke, _usrText);
       case StepType.systemAction:
-        return _rect(context, _sysFill, _sysStroke, _sysText);
+        return _rect(context, s);
       case StepType.systemError:
-        return _rect(context, _sysFill, _errBadge, _sysText, error: true);
+        return _rect(context, s, error: true);
       case StepType.userDecision:
-        return _diamond(context, _usrFill, _usrStroke, _usrText);
       case StepType.systemDecision:
-        return _diamond(context, _sysFill, _sysStroke, _sysText);
+        return _diamond(context, s);
+      case StepType.io:
+        return _parallelogram(context, s);
     }
   }
 
-  // ── Padrão (tipado) ──────────────────────────────────────────────────────
-  Widget _stadium(Color fill, Color text) => Container(
+  // ── Formas ISO 5807 ────────────────────────────────────────────────────────
+  // Terminador (início/fim).
+  Widget _stadium(_NodeStyle s) => Container(
         constraints: const BoxConstraints(maxWidth: 440),
         padding: const EdgeInsets.symmetric(horizontal: 26, vertical: 12),
-        decoration:
-            BoxDecoration(color: fill, borderRadius: BorderRadius.circular(999)),
+        decoration: BoxDecoration(
+          color: s.fill,
+          borderRadius: BorderRadius.circular(999),
+          border: Border.all(color: s.stroke, width: 1.5),
+        ),
         child: Text(step.label,
             textAlign: TextAlign.center,
             style: BoldType.labelMd
-                .copyWith(color: text, fontWeight: FontWeight.w700)),
+                .copyWith(color: s.text, fontWeight: FontWeight.w700)),
       );
 
-  Widget _rect(BuildContext context, Color fill, Color stroke, Color text,
-      {bool error = false}) {
+  // Processo (ação). Com `error`, ganha traço vermelho + badge X.
+  Widget _rect(BuildContext context, _NodeStyle s, {bool error = false}) {
     final c = BoldColors.of(context);
     final box = Container(
       constraints: const BoxConstraints(maxWidth: 360),
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
-        color: fill,
+        color: s.fill,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-            color: error ? _errBadge : stroke, width: error ? 1.5 : 1),
+        border: Border.all(color: s.stroke, width: error ? 1.5 : 1),
       ),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         Text(step.label,
             textAlign: TextAlign.center,
-            style:
-                BoldType.labelMd.copyWith(color: text, fontWeight: FontWeight.w600)),
+            style: BoldType.labelMd
+                .copyWith(color: s.text, fontWeight: FontWeight.w600)),
         if (step.note != null) ...[
           const SizedBox(height: 3),
           Text(step.note!,
@@ -1230,25 +1396,49 @@ class _FlowBox extends StatelessWidget {
           width: 22,
           height: 22,
           alignment: Alignment.center,
-          decoration: const BoxDecoration(
-              color: _errBadge, shape: BoxShape.circle),
+          decoration:
+              const BoxDecoration(color: _errBadge, shape: BoxShape.circle),
           child: const Icon(Icons.close, size: 14, color: Colors.white),
         ),
       ),
     ]);
   }
 
-  Widget _diamond(BuildContext context, Color fill, Color stroke, Color text) {
+  // Decisão (losango). Os ramos rotulados saem no _BranchFan abaixo.
+  Widget _diamond(BuildContext context, _NodeStyle s) {
     final c = BoldColors.of(context);
     return Column(mainAxisSize: MainAxisSize.min, children: [
       CustomPaint(
-        painter: _DiamondPainter(fill: fill, stroke: stroke),
+        painter: _DiamondPainter(fill: s.fill, stroke: s.stroke),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 44, vertical: 26),
           child: Text(step.label,
               textAlign: TextAlign.center,
               style: BoldType.labelMd
-                  .copyWith(color: text, fontWeight: FontWeight.w600)),
+                  .copyWith(color: s.text, fontWeight: FontWeight.w600)),
+        ),
+      ),
+      if (step.note != null) ...[
+        const SizedBox(height: 6),
+        Text(step.note!,
+            textAlign: TextAlign.center,
+            style: BoldType.bodySmall.copyWith(color: c.textSecondary)),
+      ],
+    ]);
+  }
+
+  // Entrada/Saída (paralelogramo) — input do usuário / exibição de dados.
+  Widget _parallelogram(BuildContext context, _NodeStyle s) {
+    final c = BoldColors.of(context);
+    return Column(mainAxisSize: MainAxisSize.min, children: [
+      CustomPaint(
+        painter: _ParallelogramPainter(fill: s.fill, stroke: s.stroke),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(34, 12, 34, 12),
+          child: Text(step.label,
+              textAlign: TextAlign.center,
+              style: BoldType.labelMd
+                  .copyWith(color: s.text, fontWeight: FontWeight.w600)),
         ),
       ),
       if (step.note != null) ...[
@@ -1262,23 +1452,16 @@ class _FlowBox extends StatelessWidget {
 
   // ── Legado (fluxos ainda não migrados ao padrão) ─────────────────────────
   Widget _legacy(BuildContext context) {
+    final c = BoldColors.of(context);
     switch (_kindOf(index, total, step)) {
       case _NodeKind.start:
         return _pillLegacy(context, gradient: BoldGradients.brand);
       case _NodeKind.end:
         return _pillLegacy(context, outlined: true);
       case _NodeKind.decision:
-        return _diamond(
-            context,
-            BoldColors.warning04.withValues(alpha: 0.13),
-            BoldColors.warning04,
-            BoldColors.of(context).textPrimary);
+        return _diamond(context, _roleStyle(StepType.userDecision, c));
       case _NodeKind.process:
-        return _rect(
-            context,
-            BoldColors.primary04.withValues(alpha: 0.06),
-            BoldColors.primary04.withValues(alpha: 0.30),
-            BoldColors.of(context).textPrimary);
+        return _rect(context, _roleStyle(StepType.userAction, c));
     }
   }
 
@@ -1327,6 +1510,34 @@ class _DiamondPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_DiamondPainter o) => o.fill != fill || o.stroke != stroke;
+}
+
+// Paralelogramo (entrada/saída — ISO 5807). Inclinação fixa de 14px.
+class _ParallelogramPainter extends CustomPainter {
+  _ParallelogramPainter({required this.fill, required this.stroke});
+  final Color fill;
+  final Color stroke;
+  static const double _skew = 14;
+  @override
+  void paint(Canvas canvas, Size size) {
+    final path = Path()
+      ..moveTo(_skew, 0)
+      ..lineTo(size.width, 0)
+      ..lineTo(size.width - _skew, size.height)
+      ..lineTo(0, size.height)
+      ..close();
+    canvas.drawPath(path, Paint()..color = fill);
+    canvas.drawPath(
+        path,
+        Paint()
+          ..color = stroke
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.5);
+  }
+
+  @override
+  bool shouldRepaint(_ParallelogramPainter o) =>
+      o.fill != fill || o.stroke != stroke;
 }
 
 // Seta vertical entre nós. `dashed` (anotação/erro) vs cheia (fluxo).
@@ -1505,18 +1716,18 @@ class _ErrorCasesSection extends StatelessWidget {
         width: double.infinity,
         padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
         decoration: BoxDecoration(
-          color: _sysFill,
+          color: _errBadge.withValues(alpha: 0.10),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(color: _errBadge, width: 1.5),
         ),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(e.label,
               style: BoldType.labelMd
-                  .copyWith(color: _sysText, fontWeight: FontWeight.w600)),
+                  .copyWith(color: c.textPrimary, fontWeight: FontWeight.w600)),
           if (e.note != null) ...[
             const SizedBox(height: 3),
             Text(e.note!,
-                style: BoldType.bodySmall.copyWith(color: _sysText)),
+                style: BoldType.bodySmall.copyWith(color: c.textSecondary)),
           ],
           const SizedBox(height: 8),
           Row(children: [
@@ -1587,7 +1798,10 @@ class _HDashPainter extends CustomPainter {
   bool shouldRepaint(_HDashPainter o) => o.color != color;
 }
 
-// Legenda do padrão de user flow (mostrada nos fluxos tipados).
+// Legenda do padrão ISO 5807 — a FORMA define o papel; a cor reforça (tokens do
+// tema). Mostrada nos fluxos tipados.
+enum _LegendShape { stadium, rect, diamond, parallelogram }
+
 class _FlowLegend extends StatelessWidget {
   const _FlowLegend();
 
@@ -1606,33 +1820,70 @@ class _FlowLegend extends StatelessWidget {
         runSpacing: 8,
         alignment: WrapAlignment.center,
         children: [
-          _item(context, _startFill, _startFill, 'Início'),
-          _item(context, _endFill, _endFill, 'Fim'),
-          _item(context, _usrFill, _usrStroke, 'Usuário · ação'),
-          _item(context, _usrFill, _usrStroke, 'Usuário · decisão', diamond: true),
-          _item(context, _sysFill, _sysStroke, 'Sistema · ação'),
-          _item(context, _sysFill, _sysStroke, 'Sistema · decisão', diamond: true),
-          _item(context, _sysFill, _errBadge, 'Caso de erro', error: true),
+          _item(context, _LegendShape.stadium, _roleStyle(StepType.start, c),
+              'Terminador · início'),
+          _item(context, _LegendShape.stadium, _roleStyle(StepType.end, c),
+              'Terminador · fim'),
+          _item(context, _LegendShape.rect, _roleStyle(StepType.userAction, c),
+              'Processo'),
+          _item(context, _LegendShape.diamond,
+              _roleStyle(StepType.userDecision, c), 'Decisão'),
+          _item(context, _LegendShape.parallelogram,
+              _roleStyle(StepType.io, c), 'Entrada / saída'),
+          _item(context, _LegendShape.rect,
+              _roleStyle(StepType.systemError, c), 'Erro', error: true),
         ],
       ),
     );
   }
 
-  Widget _item(BuildContext context, Color fill, Color stroke, String label,
-      {bool diamond = false, bool error = false}) {
+  Widget _item(
+      BuildContext context, _LegendShape shape, _NodeStyle s, String label,
+      {bool error = false}) {
     final c = BoldColors.of(context);
-    Widget sw = Container(
-      width: 15,
-      height: 15,
-      decoration: BoxDecoration(
-        color: fill,
-        borderRadius: BorderRadius.circular(diamond ? 3 : 5),
-        border: Border.all(color: error ? _errBadge : stroke, width: 1.2),
-      ),
-    );
-    if (diamond) sw = Transform.rotate(angle: 0.785398, child: sw);
+    Widget sw;
+    switch (shape) {
+      case _LegendShape.stadium:
+        sw = Container(
+            width: 18,
+            height: 12,
+            decoration: BoxDecoration(
+                color: s.fill,
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(color: s.stroke, width: 1.2)));
+      case _LegendShape.rect:
+        final r = Container(
+            width: 16,
+            height: 13,
+            decoration: BoxDecoration(
+                color: s.fill,
+                borderRadius: BorderRadius.circular(3),
+                border: Border.all(color: s.stroke, width: 1.2)));
+        sw = error
+            ? Stack(alignment: Alignment.center, children: [
+                r,
+                const Icon(Icons.close, size: 9, color: _errBadge),
+              ])
+            : r;
+      case _LegendShape.diamond:
+        sw = Transform.rotate(
+            angle: 0.785398,
+            child: Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                    color: s.fill,
+                    border: Border.all(color: s.stroke, width: 1.2))));
+      case _LegendShape.parallelogram:
+        sw = SizedBox(
+            width: 20,
+            height: 13,
+            child: CustomPaint(
+                painter:
+                    _ParallelogramPainter(fill: s.fill, stroke: s.stroke)));
+    }
     return Row(mainAxisSize: MainAxisSize.min, children: [
-      SizedBox(width: 20, height: 18, child: Center(child: sw)),
+      SizedBox(width: 22, height: 16, child: Center(child: sw)),
       const SizedBox(width: 6),
       Text(label,
           style: BoldType.labelSm.copyWith(color: c.textSecondary, fontSize: 11)),
