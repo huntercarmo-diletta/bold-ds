@@ -29,7 +29,7 @@ class BoldTheme {
       brightness: s.brightness,
       primary: BoldColors.primary,
       onPrimary: Colors.white,
-      secondary: BoldColors.accent,
+      secondary: BoldColors.primary,
       onSecondary: Colors.white,
       surface: s.surface,
       onSurface: s.textBody,

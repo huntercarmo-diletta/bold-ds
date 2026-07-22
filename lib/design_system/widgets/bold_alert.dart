@@ -1,7 +1,6 @@
 import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 import '../theme/bold_colors.dart';
-import '../theme/bold_glass.dart';
 import '../theme/bold_typography.dart';
 import '../theme/bold_metrics.dart';
 import 'bold_icon.dart';
@@ -9,8 +8,10 @@ import 'bold_list.dart';
 
 /// Conta BOLD — Alert (molécula). Aviso inline dentro do fluxo (limites,
 /// instruções, confirmações, erros). O [intent] escolhe o TOM SEMÂNTICO das
-/// escalas: bg = wash (07/08/09), border = tom claro (06/07), spot no tom base
-/// — o texto permanece neutro (legibilidade primeiro).
+/// escalas: bg = wash 07 (superfície SÓLIDA clara), border = tom 05, título no
+/// tom 02 (escuro) e mensagem em neutral02 — o par claro+escuro garante
+/// contraste WCAG AA independente da foto de fundo. Espelha o info-box do Figma
+/// (CPF Seguro): caixa clara sólida com texto escuro, não vidro translúcido.
 ///
 /// - `info`    → primary (rosa da marca)
 /// - `error`   → error   · `warning` → warning · `success` → success
@@ -29,35 +30,85 @@ import 'bold_list.dart';
 /// ```
 enum BoldIntent { error, warning, success, info }
 
+// Glyph + tom do spot por intent (estáticos; independem do tema).
 class _IntentSpec {
-  const _IntentSpec(this.glyph, this.tone, this.bg, this.border);
+  const _IntentSpec(this.glyph, this.tone);
   final String glyph;
   final BoldSpotTone tone;
-  final Color bg;
-  final Color border;
 }
 
-// Fill = wash @70% (tokens *Alpha70) — com a foto de fundo, todo fill do DS é
-// GLASSY (tint translúcido + blur); inputs são a exceção (branco sólido).
 _IntentSpec _spec(BoldIntent intent) => switch (intent) {
-      BoldIntent.error => const _IntentSpec('circle-exclamation-light',
-          BoldSpotTone.danger, BoldColors.error07Alpha70, BoldColors.error06),
-      BoldIntent.warning => const _IntentSpec(
-          'circle-exclamation-light',
-          BoldSpotTone.warning,
-          BoldColors.warning07Alpha70,
-          BoldColors.warning06),
-      BoldIntent.success => const _IntentSpec(
-          'circle-check-light',
-          BoldSpotTone.success,
-          BoldColors.success07Alpha70,
-          BoldColors.success06),
-      BoldIntent.info => const _IntentSpec(
-          'circle-info-light',
-          BoldSpotTone.primary,
-          BoldColors.primary09Alpha70,
-          BoldColors.primary07),
+      BoldIntent.error =>
+        const _IntentSpec('circle-exclamation-light', BoldSpotTone.danger),
+      BoldIntent.warning =>
+        const _IntentSpec('circle-exclamation-light', BoldSpotTone.warning),
+      BoldIntent.success =>
+        const _IntentSpec('circle-check-light', BoldSpotTone.success),
+      BoldIntent.info =>
+        const _IntentSpec('circle-info-light', BoldSpotTone.primary),
     };
+
+// Cores do alerta resolvidas por TEMA (o par superfície↔texto é o que garante
+// o contraste WCAG AA):
+//   • LIGHT → caixa clara (wash 07) + título no tom 02 (escuro) — info-box Figma.
+//   • DARK  → superfície escura tingida (base @14% sobre surface) + título no
+//     tom vibrante 05 + mensagem clara (textBody).
+// Mensagem usa scheme.textBody (troca sozinho por tema: escuro no light, claro
+// no dark). base = matiz do tint; washLight/borderLight/titleLight = paleta do
+// modo claro; titleDark = tom vibrante do modo escuro.
+class _AlertColors {
+  const _AlertColors(this.bg, this.border, this.title, this.text);
+  final Color bg, border, title, text;
+}
+
+_AlertColors _colorsFor(BoldIntent intent, BoldScheme s) {
+  final (
+    Color base,
+    Color washLight,
+    Color borderLight,
+    Color titleLight,
+    Color titleDark,
+  ) = switch (intent) {
+    BoldIntent.warning => (
+        BoldColors.warning04,
+        BoldColors.warning07,
+        BoldColors.warning05,
+        BoldColors.warning02,
+        BoldColors.warning05,
+      ),
+    BoldIntent.error => (
+        BoldColors.error05,
+        BoldColors.error07,
+        BoldColors.error05,
+        BoldColors.error02,
+        BoldColors.error05,
+      ),
+    BoldIntent.success => (
+        BoldColors.success05,
+        BoldColors.success07,
+        BoldColors.success05,
+        BoldColors.success02,
+        BoldColors.success05,
+      ),
+    BoldIntent.info => (
+        BoldColors.primary04,
+        BoldColors.primary09,
+        BoldColors.primary05,
+        BoldColors.primary02,
+        BoldColors.primary05,
+      ),
+  };
+
+  if (s.isDark) {
+    return _AlertColors(
+      Color.alphaBlend(base.withValues(alpha: 0.14), s.surface),
+      base.withValues(alpha: 0.50),
+      titleDark,
+      s.textBody,
+    );
+  }
+  return _AlertColors(washLight, borderLight, titleLight, s.textBody);
+}
 
 // Spec do TOAST — espelha 1:1 o CpfSeguroToast: glyphs check/xmark/triangle/
 // hand-wave, spot filled 34, radius 8, e o estado neutro (info) em neutral10/08
@@ -76,9 +127,8 @@ _ToastSpec _toastSpec(BoldIntent intent) => switch (intent) {
           BoldSpotTone.success, BoldColors.success07Alpha70, BoldColors.success06),
       BoldIntent.error => const _ToastSpec('xmark-light', BoldSpotTone.danger,
           BoldColors.error07Alpha70, BoldColors.error06),
-      // 'triangle-exclamation-light 1' = asset com nome vindo do import (espaço).
       BoldIntent.warning => const _ToastSpec(
-          'triangle-exclamation-light 1',
+          'triangle-exclamation-light',
           BoldSpotTone.warning,
           BoldColors.warning07Alpha70,
           BoldColors.warning06),
@@ -103,19 +153,17 @@ class BoldAlert extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final s = _spec(intent);
-    // Glass tintado: o wash translúcido + blur deixam a foto de fundo passar.
-    return ClipRRect(
-      borderRadius: BoldRadius.fieldR,
-      clipBehavior: BoldGlass.clip,
-      child: BackdropFilter(
-        filter: BoldGlass.blurFilter,
-        child: Container(
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            color: s.bg,
-            borderRadius: BoldRadius.fieldR,
-            border: Border.all(color: s.border, width: 1),
-          ),
+    final scheme = BoldColors.of(context);
+    final cs = _colorsFor(intent, scheme);
+    // Caixa sólida theme-aware (sem glass): light = clara+texto escuro, dark =
+    // escura tingida+texto claro. O par superfície↔texto garante WCAG AA.
+    return Container(
+      padding: const EdgeInsets.all(14),
+      decoration: BoxDecoration(
+        color: cs.bg,
+        borderRadius: BoldRadius.fieldR,
+        border: Border.all(color: cs.border, width: 1),
+      ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -127,15 +175,15 @@ class BoldAlert extends StatelessWidget {
               children: [
                 Text(title,
                     style: BoldType.title.copyWith(
-                        fontSize: 14, fontWeight: FontWeight.w700,
-                        // Fundo do alerta é SEMPRE escuro → título branco fixo (o
-                        // default do BoldType.title é escuro e sumia no fundo).
-                        color: BoldColors.textPrimary)),
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        // Título no tom do intent (02 escuro no light / 05
+                        // vibrante no dark) — alto contraste sobre a superfície.
+                        color: cs.title)),
                 if (message != null) ...[
                   const SizedBox(height: 3),
                   Text(message!,
-                      style: BoldType.bodySmall
-                          .copyWith(color: BoldColors.neutral03)),
+                      style: BoldType.bodySmall.copyWith(color: cs.text)),
                 ],
               ],
             ),
@@ -147,12 +195,10 @@ class BoldAlert extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(left: 8, top: 2),
                 child: BoldIcon('close',
-                    size: BoldIconSize.sm, color: BoldColors.neutral05),
+                    size: BoldIconSize.sm, color: scheme.textSecondary),
               ),
             ),
         ],
-      ),
-        ),
       ),
     );
   }

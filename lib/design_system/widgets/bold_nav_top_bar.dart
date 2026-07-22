@@ -35,6 +35,7 @@ sealed class BoldNavLeftAccessory extends StatelessWidget {
     VoidCallback? onOpenProfile,
     String? accountLabel,
     VoidCallback? onSwitchAccount,
+    ImageProvider? avatarImage,
   }) = _NavLeftHome;
 }
 
@@ -79,6 +80,7 @@ class _NavLeftHome extends BoldNavLeftAccessory {
     this.onOpenProfile,
     this.accountLabel,
     this.onSwitchAccount,
+    this.avatarImage,
   });
   final String firstName;
   final VoidCallback? onOpenProfile;
@@ -86,6 +88,10 @@ class _NavLeftHome extends BoldNavLeftAccessory {
   /// Conta ativa ("Conta PF") — rende um [BoldInputChip] de troca sob o nome.
   final String? accountLabel;
   final VoidCallback? onSwitchAccount;
+
+  /// Foto de perfil do usuário — quando setada, mostra a foto no lugar da
+  /// inicial (mantendo o stroke primary e o mini-avatar).
+  final ImageProvider? avatarImage;
 
   @override
   Widget build(BuildContext context) {
@@ -97,10 +103,21 @@ class _NavLeftHome extends BoldNavLeftAccessory {
       width: 40,
       height: 40,
       child: Stack(clipBehavior: Clip.none, children: [
-        BoldGlassAvatar(
-            initial: firstName.isEmpty ? '?' : firstName[0].toUpperCase(),
-            size: 40,
-            fontSize: 15),
+        if (avatarImage != null)
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: BoldColors.primary04, width: 1),
+              image: DecorationImage(image: avatarImage!, fit: BoxFit.cover),
+            ),
+          )
+        else
+          BoldGlassAvatar(
+              initial: firstName.isEmpty ? '?' : firstName[0].toUpperCase(),
+              size: 40,
+              fontSize: 15),
         Positioned(
           right: -2,
           bottom: -2,

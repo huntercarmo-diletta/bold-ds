@@ -106,3 +106,12 @@ export 'widgets/bold_password_sheet.dart'; // BoldPasswordSheet (PIN/senha)
 // ═══════════════════════════════════════════════════════════════════════════
 export 'widgets/bold_quantum_pairing.dart'; // BoldQuantumPairingScreen, BoldQuantumCore
 export 'widgets/bold_quantum_seal.dart';    // BoldQuantumSeal
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Trazidos da cópia viva do app (base) — ver PARITY_BOLD.md
+// ═══════════════════════════════════════════════════════════════════════════
+export 'widgets/bold_select_field.dart'; // BoldSelectField
+export 'widgets/bold_tab_bar.dart';      // BoldTabBar, BoldTabItem
+export 'widgets/bold_accordion.dart';    // BoldAccordion
+export 'widgets/bold_bottom_nav.dart';   // BoldBottomNav, BoldNavItem
+export 'widgets/bold_quick_action.dart'; // BoldQuickAction

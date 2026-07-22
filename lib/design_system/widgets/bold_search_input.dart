@@ -42,7 +42,18 @@ class _BoldSearchInputState extends State<BoldSearchInput> {
   FocusNode get _node => widget.focusNode ?? (_own ??= FocusNode());
 
   @override
+  void initState() {
+    super.initState();
+    _node.addListener(_onFocusChange);
+  }
+
+  void _onFocusChange() {
+    if (mounted) setState(() {});
+  }
+
+  @override
   void dispose() {
+    _node.removeListener(_onFocusChange);
     _own?.dispose();
     super.dispose();
   }
@@ -50,6 +61,8 @@ class _BoldSearchInputState extends State<BoldSearchInput> {
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
+    // Foco = stroke rosa (mesma variante do BoldTextField).
+    final focused = _node.hasFocus;
     return Container(
       height: 48,
       padding: const EdgeInsets.only(left: 12, right: 8),
@@ -58,8 +71,10 @@ class _BoldSearchInputState extends State<BoldSearchInput> {
         border: Border.all(
             color: widget.error
                 ? c.danger
-                : (c.isDark ? c.border : BoldColors.neutral08),
-            width: widget.error ? 1.5 : 1),
+                : (focused
+                    ? BoldColors.primary
+                    : (c.isDark ? c.border : BoldColors.neutral08)),
+            width: (widget.error || focused) ? 1.5 : 1),
         borderRadius: BoldRadius.fieldR,
       ),
       child: Row(children: [

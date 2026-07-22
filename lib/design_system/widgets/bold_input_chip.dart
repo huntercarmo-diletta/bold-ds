@@ -79,8 +79,16 @@ class BoldInputChip extends StatelessWidget {
             const SizedBox(width: 5),
           ],
           Text(label,
+              // height 1.0 + strut = caixa de linha justa ao glifo, pra o texto
+              // ficar CENTRADO na vertical do pill (o line-height padrão o
+              // empurrava pra cima).
+              strutStyle: const StrutStyle(
+                  fontSize: 12, height: 1.0, forceStrutHeight: true),
               style: BoldType.bodySmall.copyWith(
-                  fontSize: 12, fontWeight: FontWeight.w700, color: fg)),
+                  fontSize: 12,
+                  height: 1.0,
+                  fontWeight: FontWeight.w700,
+                  color: fg)),
           if (trailIcon != null) ...[
             const SizedBox(width: 5),
             BoldIcon(trailIcon!, size: 13, color: fg),

@@ -32,12 +32,17 @@ class BoldNoticeRow extends StatelessWidget {
     this.subtitle,
     this.count,
     this.onTap,
+    this.subtitleMaxLines = 2,
   });
 
   /// BoldIcon name (semantic alias ou svg cru) — glyph branco no tile.
   final String icon;
   final String title;
   final String? subtitle;
+
+  /// Linhas do subtítulo — default 2 (evita truncar textos como "Aponte para
+  /// QR, boleto ou código de autorização"). Passe 1 pra forçar linha única.
+  final int subtitleMaxLines;
 
   /// Contagem no badge à direita (some se null ou 0).
   final int? count;
@@ -75,7 +80,7 @@ class BoldNoticeRow extends StatelessWidget {
                   style: BoldType.labelMd.copyWith(color: c.textPrimary)),
               if (subtitle != null)
                 Text(subtitle!,
-                    maxLines: 1,
+                    maxLines: subtitleMaxLines,
                     overflow: TextOverflow.ellipsis,
                     style:
                         BoldType.bodySm.copyWith(color: c.textSecondary)),

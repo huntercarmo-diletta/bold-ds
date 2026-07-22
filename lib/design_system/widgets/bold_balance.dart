@@ -129,14 +129,15 @@ class BoldBalance extends StatelessWidget {
             Row(children: [
               if (entradas != null)
                 BoldStatusTag(
-                    label: entradas!,
+                    // o "olho" oculta o saldo E os totais (pedido do Michel)
+                    label: hidden ? 'R\$ ••••' : entradas!,
                     icon: 'arrow-right-to-bracket-solid',
                     tone: BoldStatusTone.success),
               if (entradas != null && saidas != null)
                 const SizedBox(width: BoldSpace.x1),
               if (saidas != null)
                 BoldStatusTag(
-                    label: saidas!,
+                    label: hidden ? 'R\$ ••••' : saidas!,
                     icon: 'arrow-right-from-bracket-solid',
                     tone: BoldStatusTone.danger),
             ]),

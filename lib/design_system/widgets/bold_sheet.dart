@@ -41,17 +41,24 @@ class BoldSheet extends StatelessWidget {
     String? title,
     required WidgetBuilder builder,
     bool dismissible = true,
+    bool useRootNavigator = false,
+    EdgeInsets? padding,
   }) {
     return showModalBottomSheet<T>(
       context: context,
       isScrollControlled: true,
       useSafeArea: true,
+      // O grip é do próprio BoldSheet — desliga o handle do Material pra não
+      // duplicar (o tema global pode ligá-lo).
+      showDragHandle: false,
+      useRootNavigator: useRootNavigator,
       backgroundColor: Colors.transparent,
       barrierColor: BoldColors.blackAlpha40,
       isDismissible: dismissible,
       builder: (ctx) => BoldSheet(
         title: title,
         onClose: dismissible ? () => Navigator.of(ctx).maybePop() : null,
+        padding: padding ?? const EdgeInsets.fromLTRB(20, 4, 20, 20),
         child: builder(ctx),
       ),
     );
@@ -103,7 +110,14 @@ class BoldSheet extends StatelessWidget {
                 ],
               ),
             ),
-          Flexible(child: Padding(padding: padding, child: child)),
+          // SingleChildScrollView dentro do Flexible: o sheet ENCOLHE pro
+          // tamanho do conteúdo (não estica até o topo) e rola só quando o
+          // conteúdo passa da altura disponível.
+          Flexible(
+            child: SingleChildScrollView(
+              child: Padding(padding: padding, child: child),
+            ),
+          ),
         ],
       ),
     );

@@ -97,7 +97,7 @@ class BoldButton extends StatelessWidget {
                 c.surface.withValues(alpha: 0.5), spec);
       case BoldButtonVariant.text:
         // Tertiary/ghost: BRANCO sobre a imagem (dark), coral no light.
-        return _link(c.isDark ? BoldColors.white : BoldColors.accent, spec);
+        return _link(c.isDark ? BoldColors.white : BoldColors.primary, spec);
       case BoldButtonVariant.destructive:
         return filled ? _solid(c.danger, spec, c) : _link(c.danger, spec);
       case BoldButtonVariant.white:

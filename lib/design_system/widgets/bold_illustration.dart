@@ -29,9 +29,11 @@ class BoldIllustration extends StatelessWidget {
   static const String _base = 'lib/design_system/assets';
 
   /// Registro nome → caminho (multicolor). Some crescer conforme o kit.
+  /// Imagens de fundo (city*) vivem em `assets/images/` (padrão do app); o resto
+  /// (selos/logo) fica nos assets do DS.
   static const Map<String, String> registry = {
-    'city': '$_base/city-cyberpunk.webp',
-    'city-fresh': '$_base/city-skyline-fresh.png',
+    'city': 'assets/images/city-cyberpunk.webp',
+    'city-fresh': 'assets/images/city-skyline-fresh.png',
     'quantum-seal': '$_base/quantum-seal.png',
     'quantum-seal-failed': '$_base/quantum-seal-failed.png',
     'logo': '$_base/bold-logo.webp',

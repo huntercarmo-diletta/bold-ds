@@ -52,8 +52,9 @@ class BoldBackground extends StatelessWidget {
   final BoldBackdrop? style;
 
   /// Asset path — keep in sync with the pubspec declaration.
+  /// Imagens de fundo vivem em `assets/images/` (padrão do app), não no DS.
   static const String skylineAsset =
-      'lib/design_system/assets/city-cyberpunk.webp';
+      'assets/images/city-cyberpunk.webp';
 
   // brand glow colours (same in both themes)
   static const _pink = Color(0xFFFE3976);

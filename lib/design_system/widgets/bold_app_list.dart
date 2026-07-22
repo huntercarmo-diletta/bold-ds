@@ -189,6 +189,7 @@ sealed class BoldMiddleAccessory extends StatelessWidget {
     Key? key,
     required String title,
     bool disabled,
+    int maxLines,
   }) = _MiddleTitle;
 
   const factory BoldMiddleAccessory.titleSubtitle({
@@ -196,6 +197,7 @@ sealed class BoldMiddleAccessory extends StatelessWidget {
     required String title,
     String? subtitle,
     bool disabled,
+    int subtitleMaxLines,
   }) = _MiddleTitleSubtitle;
 
   /// título + `subtitle • accessorySubtitle` inline (extrato).
@@ -281,23 +283,37 @@ TextStyle _mEyebrow(BoldScheme c) =>
     BoldType.bodySmall.copyWith(fontSize: 12, color: c.textSecondary);
 
 class _MiddleTitle extends BoldMiddleAccessory {
-  const _MiddleTitle({super.key, required this.title, this.disabled = false});
+  const _MiddleTitle(
+      {super.key, required this.title, this.disabled = false, this.maxLines = 1});
   final String title;
   final bool disabled;
+
+  /// Nº de linhas antes de reticenciar. Default 1 (linha única, comportamento
+  /// antigo); use 2 quando o rótulo for longo e não deva truncar.
+  final int maxLines;
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
-    return Text(title, maxLines: 1, overflow: TextOverflow.ellipsis,
+    return Text(title, maxLines: maxLines, overflow: TextOverflow.ellipsis,
         style: _mTitle(c, disabled));
   }
 }
 
 class _MiddleTitleSubtitle extends BoldMiddleAccessory {
   const _MiddleTitleSubtitle(
-      {super.key, required this.title, this.subtitle, this.disabled = false});
+      {super.key,
+      required this.title,
+      this.subtitle,
+      this.disabled = false,
+      this.subtitleMaxLines = 2});
   final String title;
   final String? subtitle;
   final bool disabled;
+
+  /// Linhas do subtítulo — default 2 (evita truncar textos curtos tipo "Login
+  /// sem senha, resistente a phishing"). Passe 1 pra forçar linha única.
+  final int subtitleMaxLines;
+
   @override
   Widget build(BuildContext context) {
     final c = BoldColors.of(context);
@@ -309,7 +325,9 @@ class _MiddleTitleSubtitle extends BoldMiddleAccessory {
             style: _mTitle(c, disabled)),
         if (subtitle != null) ...[
           const SizedBox(height: 2),
-          Text(subtitle!, maxLines: 1, overflow: TextOverflow.ellipsis,
+          Text(subtitle!,
+              maxLines: subtitleMaxLines,
+              overflow: TextOverflow.ellipsis,
               style: _mSub(c, disabled)),
         ],
       ],
@@ -809,8 +827,10 @@ class _RightRadio extends BoldRightAccessory {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
+          // Inativo em textSecondary (não no border/hairline, que some no dark).
           border: Border.all(
-              color: selected ? BoldColors.primary04 : c.border, width: 1.5),
+              color: selected ? BoldColors.primary04 : c.textSecondary,
+              width: selected ? 1.5 : 2),
         ),
         child: selected
             ? Container(
@@ -1036,10 +1056,17 @@ class BoldAppListGroup extends StatelessWidget {
 /// rows. Padrão do Histórico/Extrato.
 class BoldAppListDayGroup extends StatelessWidget {
   const BoldAppListDayGroup(
-      {super.key, required this.label, required this.children});
+      {super.key,
+      required this.label,
+      required this.children,
+      this.trailing});
 
   final String label;
   final List<Widget> children;
+
+  /// Conteúdo opcional na MESMA linha do label, alinhado à direita — ex.: saldo
+  /// consolidado do dia no extrato.
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -1050,10 +1077,13 @@ class BoldAppListDayGroup extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 4),
-          child: Text(label,
-              style: BoldType.bodySmall
-                  .copyWith(fontSize: 12, color: c.textMuted)),
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(children: [
+            Text(label,
+                style: BoldType.bodySmall
+                    .copyWith(fontSize: 12, color: c.textMuted)),
+            if (trailing != null) ...[const Spacer(), trailing!],
+          ]),
         ),
         const SizedBox(height: 4),
         for (var i = 0; i < children.length; i++) ...[
