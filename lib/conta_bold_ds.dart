@@ -14,6 +14,11 @@ library;
 import 'design_system/bold_design_system.dart';
 export 'design_system/bold_design_system.dart';
 
+// Camada de compat (tokens/widgets legados App*: AppColors, AppTextStyles,
+// AppSpacing, AppRadius, AppButton, appIcon, AtmosphericBackground…). Absorvida
+// no package pra o app consumir tudo via ds.X sem mudar render.
+export 'ds_compat/conta_bold_theme.dart';
+
 // ── Aliases curtos (ds.X) — gerados a partir dos tipos públicos Bold* ─────────
 typedef Accordion = BoldAccordion;
 typedef AccountPill = BoldAccountPill;
