@@ -247,8 +247,11 @@ class _BottomNav<T> extends StatelessWidget {
     return Center(
       child: Container(
         margin: const EdgeInsets.only(bottom: 16),
-        decoration:
-            BoxDecoration(borderRadius: radius, boxShadow: BoldGlass.shadow(c)),
+        // Elevação da nav flutuante (token do DS, effect do CPF Seguro DS).
+        // Fica no container EXTERNO (fora do ClipRRect do BackdropFilter), então
+        // a sombra não é reamostrada pelo blur (não vira halo — ver BoldGlass).
+        decoration: BoxDecoration(
+            borderRadius: radius, boxShadow: BoldElevation.nav(dark: c.isDark)),
         child: ClipRRect(
           borderRadius: radius,
           clipBehavior: BoldGlass.frosted ? BoldGlass.clip : Clip.antiAlias,
