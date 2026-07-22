@@ -5,9 +5,6 @@ import 'bold_icon.dart';
 
 /// Peso visual do [BoldIconButton] (mesmas opções do BoldButton em espírito).
 enum BoldIconButtonType {
-  /// Sólido primário (rosa), glyph branco.
-  primary,
-
   /// Bg branco + border neutra, glyph neutro.
   secondary,
 
@@ -16,9 +13,6 @@ enum BoldIconButtonType {
 
   /// Ghost neutro (sem bg até pressionar).
   tertiary,
-
-  /// Ghost primário.
-  tertiaryPrimary,
 }
 
 /// Tamanho canônico — sm(32) · md(40) · lg(56).
@@ -206,19 +200,13 @@ _Style _resolveStyle(BoldIconButtonType type, BoldIconButtonState state, _S s,
     final isSecondary = type == BoldIconButtonType.secondary ||
         type == BoldIconButtonType.secondaryPrimary;
     return _Style(
-      bg: type == BoldIconButtonType.primary
-          ? BoldColors.neutral08
-          : isSecondary
-              ? BoldColors.white
-              : BoldColors.transparent,
+      bg: isSecondary ? BoldColors.white : BoldColors.transparent,
       color: BoldColors.neutral05,
       border: isSecondary ? BoldColors.neutral08 : null,
     );
   }
 
   switch (type) {
-    case BoldIconButtonType.primary:
-      return _Style(bg: s == _S.pressed ? p.pressed : p.base, color: p.onBase);
     case BoldIconButtonType.secondary:
       // Sem fill (spec do Figma): só o anel + glyph. Erro = vermelho (dark 05
       // claro, light 03 profundo); senão ink do tema (branco translúcido no
@@ -280,11 +268,6 @@ _Style _resolveStyle(BoldIconButtonType type, BoldIconButtonState state, _S s,
             ? (onDark ? BoldColors.whiteAlpha24 : BoldColors.neutral09)
             : BoldColors.transparent,
         color: onDark ? BoldColors.white : BoldColors.neutral01,
-      );
-    case BoldIconButtonType.tertiaryPrimary:
-      return _Style(
-        bg: s == _S.pressed ? p.ghostPressed : BoldColors.transparent,
-        color: p.base,
       );
   }
 }
