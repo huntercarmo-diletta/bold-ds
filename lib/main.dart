@@ -16,6 +16,7 @@
 // Deploy: Vercel serve build/web (vercel.json → outputDirectory).
 import 'package:conta_bold_ds/design_system/bold_design_system.dart';
 import 'ds_tree_screen.dart';
+import 'integration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -150,7 +151,9 @@ class _CatalogHomeState extends State<_CatalogHome> {
                   widget.onMode(c.isDark ? ThemeMode.light : ThemeMode.dark),
             ),
             Expanded(
-              child: _dest == -2
+              child: _dest == -3
+                  ? const IntegrationScreen()
+                  : _dest == -2
                   ? const _BlueprintsView()
                   : _dest == -1
                       ? _DesignSystemView(
@@ -269,6 +272,11 @@ class _SidebarState extends State<_Sidebar> {
                           _collapsed = false;
                           _flowsOpen = true;
                         })),
+                _railItem(context,
+                    icon: 'chart-line-light',
+                    tooltip: 'Integração',
+                    selected: dest == -3,
+                    onTap: () => widget.onSelect(-3)),
               ],
             ),
           ),
