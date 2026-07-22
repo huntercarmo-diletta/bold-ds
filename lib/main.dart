@@ -150,13 +150,15 @@ class _CatalogHomeState extends State<_CatalogHome> {
                   widget.onMode(c.isDark ? ThemeMode.light : ThemeMode.dark),
             ),
             Expanded(
-              child: _dest == -1
-                  ? _DesignSystemView(
-                      tab: _dsTab,
-                      onTab: (t) => setState(() => _dsTab = t),
-                      tier: _dsTier,
-                    )
-                  : _FlowchartView(flow: kFlows[_dest]),
+              child: _dest == -2
+                  ? const _BlueprintsView()
+                  : _dest == -1
+                      ? _DesignSystemView(
+                          tab: _dsTab,
+                          onTab: (t) => setState(() => _dsTab = t),
+                          tier: _dsTier,
+                        )
+                      : _FlowchartView(flow: kFlows[_dest]),
             ),
           ],
         ),
@@ -255,6 +257,11 @@ class _SidebarState extends State<_Sidebar> {
                   child: Divider(height: 1, color: c.border),
                 ),
                 _railItem(context,
+                    icon: 'clipboard-list-check-light',
+                    tooltip: 'Blueprints',
+                    selected: dest == -2,
+                    onTap: () => widget.onSelect(-2)),
+                _railItem(context,
                     icon: 'table-tree-light',
                     tooltip: 'Fluxogramas',
                     selected: dest >= 0,
@@ -334,6 +341,13 @@ class _SidebarState extends State<_Sidebar> {
                         onTap: () => onSelectTier(ti)),
                   ),
               ],
+              const SizedBox(height: 6),
+              // Blueprints — service blueprint (camadas) dos fluxos + matriz.
+              _navItem(context,
+                  icon: 'clipboard-list-check-light',
+                  label: 'Blueprints',
+                  selected: dest == -2,
+                  onTap: () => onSelect(-2)),
               const SizedBox(height: 6),
               // Accordion FLUXOGRAMAS — engloba TODOS os fluxos do app,
               // agrupados por área (Conta, PIX, Pagamentos…) como subgrupos.
@@ -1889,6 +1903,546 @@ class _FlowLegend extends StatelessWidget {
           style: BoldType.labelSm.copyWith(color: c.textSecondary, fontSize: 11)),
     ]);
   }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// BLUEPRINTS — service blueprint (camadas) de cada fluxo + matriz consolidada.
+// Reusa kFlows e a paleta _roleStyle (mesma semântica dos fluxogramas): colunas
+// = passos · linhas = camadas (usuário → frontstage → [visibilidade] →
+// backstage → suporte). Dados das telas reais (fix/pix-cobrar + catálogo).
+// ═══════════════════════════════════════════════════════════════════════════
+const double _bpColW = 176;
+const double _bpLabelW = 148;
+
+// Swimlane de um passo, a partir do tipo.
+String _bpLane(FlowStep s) {
+  final t = s.type;
+  if (t == StepType.systemAction || t == StepType.systemDecision) return 'sys';
+  if (t == StepType.end) return 'evi';
+  if (t == StepType.io) {
+    return RegExp('^Exibe|andamento', caseSensitive: false).hasMatch(s.label)
+        ? 'evi'
+        : 'usr';
+  }
+  return 'usr'; // start · userAction · userDecision
+}
+
+String _bpKind(StepType? t) {
+  switch (t) {
+    case StepType.start:
+      return 'Início';
+    case StepType.end:
+      return 'Fim';
+    case StepType.io:
+      return 'I/O';
+    case StepType.userDecision:
+    case StepType.systemDecision:
+      return 'Decisão';
+    case StepType.systemAction:
+      return 'Sistema';
+    case StepType.userAction:
+    case StepType.systemError:
+    case null:
+      return 'Ação';
+  }
+}
+
+// Sistema de suporte acionado por um passo de backstage (representativo).
+String _bpSupport(String l) {
+  const r = <List<String>>[
+    ['DICT|destinat|encontrada no DICT', 'DICT · Bacen'],
+    ['Efetiva o Pix', 'SPI · Bacen'],
+    ['Gera (o|a) (QR|cobran)', 'Gateway · BR Code'],
+    ['Registra a chave', 'DICT · Bacen'],
+    ['Envia código OTP', 'Servidor de OTP'],
+    ['Registra a autoriza', 'Pix Automático · Bacen'],
+    ['Registra e gera protocolo|Elegível ao MED', 'MED · Bacen'],
+    ['Cancela a cobran', 'Gateway de cobrança'],
+    ['Saldo e limite', 'Antifraude · limites'],
+    ['Autenticação válida', 'Auth · biometria'],
+    ['Código válido', 'OTP · DICT'],
+    ['Autorização aceita', 'Regras Pix Autom.'],
+  ];
+  for (final e in r) {
+    if (RegExp(e[0], caseSensitive: false).hasMatch(l)) return e[1];
+  }
+  return '';
+}
+
+class _BlueprintsView extends StatelessWidget {
+  const _BlueprintsView();
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    final groups = <String, List<AppFlow>>{};
+    for (final f in kFlows) {
+      (groups[f.group] ??= <AppFlow>[]).add(f);
+    }
+    Widget sectionTitle(String t) => Text(t.toUpperCase(),
+        style: BoldType.labelMd.copyWith(
+            color: c.textMuted,
+            letterSpacing: 1.4,
+            fontWeight: FontWeight.w700,
+            fontSize: 12));
+    return Column(children: [
+      Container(
+        padding: const EdgeInsets.fromLTRB(24, 16, 24, 16),
+        decoration: BoxDecoration(
+          border: Border(bottom: BorderSide(color: c.border)),
+        ),
+        child: Row(children: [
+          BoldIcon('clipboard-list-check-light',
+              size: 24, color: BoldColors.primary04),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Blueprints',
+                    style: BoldType.title.copyWith(color: c.textPrimary)),
+                Text(
+                    'Service blueprint por fluxo + matriz consolidada — '
+                    'usuário · frontstage · backstage · suporte',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: BoldType.labelSm.copyWith(color: c.textMuted)),
+              ],
+            ),
+          ),
+        ]),
+      ),
+      Expanded(
+        child: ListView(
+          padding: const EdgeInsets.fromLTRB(24, 24, 24, 96),
+          children: [
+            Text(
+                'Cada fluxo em camadas. A linha de visibilidade separa o que a '
+                'pessoa vê (frontstage) do que roda nos bastidores '
+                '(backstage/sistema). Cores seguem o padrão dos fluxogramas.',
+                style: BoldType.bodySmall.copyWith(color: c.textSecondary)),
+            const SizedBox(height: 18),
+            const _FlowLegend(),
+            const SizedBox(height: 26),
+            sectionTitle('1 · Matriz consolidada'),
+            const SizedBox(height: 12),
+            _ConsolidatedMatrix(groups: groups),
+            const SizedBox(height: 30),
+            sectionTitle('2 · Blueprint por fluxo'),
+            for (final g in groups.entries) ...[
+              Padding(
+                padding: const EdgeInsets.fromLTRB(2, 22, 0, 2),
+                child: Text(g.key.toUpperCase(),
+                    style: BoldType.labelSm.copyWith(
+                        color: BoldColors.primary04,
+                        letterSpacing: 1.2,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 11)),
+              ),
+              for (final f in g.value) _FlowBlueprint(flow: f),
+            ],
+          ],
+        ),
+      ),
+    ]);
+  }
+}
+
+class _ConsolidatedMatrix extends StatelessWidget {
+  const _ConsolidatedMatrix({required this.groups});
+  final Map<String, List<AppFlow>> groups;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    const headers = ['Passos', 'Usuário', 'I/O', 'Decisões', 'Backstage', 'Erros'];
+    Widget hcell(String t) => Container(
+          width: 92,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          alignment: Alignment.center,
+          child: Text(t.toUpperCase(),
+              style: BoldType.labelSm.copyWith(
+                  color: c.textMuted,
+                  fontSize: 10,
+                  letterSpacing: .6,
+                  fontWeight: FontWeight.w700)),
+        );
+    Widget num(int v, {Color? color, bool strong = false}) => Container(
+          width: 92,
+          alignment: Alignment.center,
+          child: Text('$v',
+              style: BoldType.labelMd.copyWith(
+                  color: color ?? (strong ? c.textPrimary : c.textSecondary),
+                  fontFeatures: const [FontFeature.tabularFigures()],
+                  fontWeight: strong ? FontWeight.w700 : FontWeight.w500)),
+        );
+    final children = <Widget>[
+      Container(
+        color: c.isDark ? c.surface : BoldColors.neutral10,
+        child: Row(children: [
+          Container(
+              width: 230,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              child: Text('FLUXO',
+                  style: BoldType.labelSm.copyWith(
+                      color: c.textMuted,
+                      fontSize: 10,
+                      letterSpacing: .6,
+                      fontWeight: FontWeight.w700))),
+          for (final h in headers) hcell(h),
+        ]),
+      ),
+    ];
+    groups.forEach((group, flows) {
+      children.add(Container(
+        width: double.infinity,
+        padding: const EdgeInsets.fromLTRB(12, 13, 12, 5),
+        child: Text(group.toUpperCase(),
+            style: BoldType.labelSm.copyWith(
+                color: BoldColors.primary04,
+                letterSpacing: 1,
+                fontSize: 10,
+                fontWeight: FontWeight.w700)),
+      ));
+      for (final f in flows) {
+        final st = f.steps;
+        final usuario = st
+            .where((s) =>
+                s.type == StepType.userAction ||
+                s.type == StepType.userDecision ||
+                (s.type == StepType.io && _bpLane(s) == 'usr'))
+            .length;
+        final io = st.where((s) => s.type == StepType.io).length;
+        final dec = st
+            .where((s) =>
+                s.type == StepType.userDecision ||
+                s.type == StepType.systemDecision)
+            .length;
+        final sys = st
+            .where((s) =>
+                s.type == StepType.systemAction ||
+                s.type == StepType.systemDecision)
+            .length;
+        final err = f.errors.length;
+        children.add(Container(
+          decoration:
+              BoxDecoration(border: Border(top: BorderSide(color: c.border))),
+          child: Row(children: [
+            Container(
+              width: 230,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(f.name,
+                        style: BoldType.labelMd.copyWith(
+                            color: c.textPrimary,
+                            fontWeight: FontWeight.w600)),
+                    Text(f.route,
+                        style: BoldType.labelSm.copyWith(
+                            color: c.textMuted, fontSize: 10.5)),
+                  ]),
+            ),
+            Container(
+                height: 46,
+                alignment: Alignment.center,
+                child: num(st.length, strong: true)),
+            num(usuario),
+            num(io, color: io > 0 ? c.info : null),
+            num(dec),
+            num(sys),
+            num(err, color: err > 0 ? c.danger : null, strong: err > 0),
+          ]),
+        ));
+      }
+    });
+    return Container(
+      decoration: BoxDecoration(
+        color: c.isDark ? c.surface : BoldColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: c.border),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start, children: children),
+      ),
+    );
+  }
+}
+
+class _FlowBlueprint extends StatelessWidget {
+  const _FlowBlueprint({required this.flow});
+  final AppFlow flow;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    final steps = flow.steps;
+    final n = steps.length;
+
+    Widget laneLabel(String label, String? sub) => Container(
+          width: _bpLabelW,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+            border: Border(right: BorderSide(color: c.borderStrong)),
+          ),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(label.toUpperCase(),
+                    style: BoldType.labelSm.copyWith(
+                        color: c.textMuted,
+                        fontSize: 10,
+                        letterSpacing: .6,
+                        fontWeight: FontWeight.w700)),
+                if (sub != null)
+                  Text(sub,
+                      style: BoldType.labelSm.copyWith(
+                          color: c.textMuted,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400)),
+              ]),
+        );
+
+    Widget laneRow(String label, String? sub, String key) => IntrinsicHeight(
+          child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                laneLabel(label, sub),
+                for (final s in steps)
+                  Container(
+                    width: _bpColW,
+                    padding: const EdgeInsets.all(6),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      border: Border(bottom: BorderSide(color: c.border)),
+                    ),
+                    child: _bpLane(s) == key
+                        ? _NodeChip(step: s)
+                        : const SizedBox.shrink(),
+                  ),
+              ]),
+        );
+
+    Widget supportRow() => IntrinsicHeight(
+          child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                laneLabel('Suporte', 'dados'),
+                for (final s in steps)
+                  Container(
+                    width: _bpColW,
+                    padding: const EdgeInsets.all(8),
+                    alignment: Alignment.centerLeft,
+                    child: () {
+                      final v = (s.type == StepType.systemAction ||
+                              s.type == StepType.systemDecision)
+                          ? _bpSupport(s.label)
+                          : '';
+                      if (v.isEmpty) {
+                        return Text('·',
+                            style: BoldType.labelSm
+                                .copyWith(color: c.textMuted));
+                      }
+                      return _bpTag(context, v);
+                    }(),
+                  ),
+              ]),
+        );
+
+    final headerRow = Row(children: [
+      const SizedBox(width: _bpLabelW),
+      for (var i = 0; i < n; i++)
+        Container(
+          width: _bpColW,
+          padding: const EdgeInsets.symmetric(vertical: 8),
+          alignment: Alignment.center,
+          child: Text((i + 1).toString().padLeft(2, '0'),
+              style: BoldType.labelSm.copyWith(
+                  color: c.textMuted,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w700,
+                  fontFeatures: const [FontFeature.tabularFigures()])),
+        ),
+    ]);
+
+    final visLine = Container(
+      color: c.isDark ? c.surface : BoldColors.neutral10,
+      child: Row(children: [
+        Container(
+          width: _bpLabelW,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          decoration: BoxDecoration(
+            border: Border(right: BorderSide(color: c.borderStrong)),
+          ),
+          child: Text('VISIBILIDADE',
+              style: BoldType.labelSm.copyWith(
+                  color: c.textMuted,
+                  fontSize: 9.5,
+                  letterSpacing: .8,
+                  fontWeight: FontWeight.w700)),
+        ),
+        Container(
+          width: _bpColW * n,
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+          decoration: BoxDecoration(
+            border: Border.symmetric(
+                horizontal: BorderSide(color: c.borderStrong)),
+          ),
+          child: Text('— linha de visibilidade —',
+              style: BoldType.labelSm.copyWith(
+                  color: c.textMuted, fontSize: 10.5)),
+        ),
+      ]),
+    );
+
+    return Container(
+      margin: const EdgeInsets.only(top: 14),
+      decoration: BoxDecoration(
+        color: c.isDark ? c.surface : BoldColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: c.border),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(18, 16, 18, 14),
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(children: [
+                  Expanded(
+                    child: Text(flow.name,
+                        style: BoldType.title
+                            .copyWith(color: c.textPrimary, fontSize: 16)),
+                  ),
+                  const SizedBox(width: 10),
+                  Text(flow.route,
+                      style: BoldType.labelSm.copyWith(
+                          color: c.textMuted,
+                          fontFeatures: const [FontFeature.tabularFigures()])),
+                ]),
+                const SizedBox(height: 4),
+                Text(flow.description,
+                    style:
+                        BoldType.bodySmall.copyWith(color: c.textSecondary)),
+              ]),
+        ),
+        Divider(height: 1, color: c.border),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                headerRow,
+                laneRow('Ação do usuário', 'frontstage', 'usr'),
+                laneRow('Frontstage', 'tela', 'evi'),
+                visLine,
+                laneRow('Backstage', 'sistema', 'sys'),
+                supportRow(),
+              ]),
+        ),
+        if (flow.errors.isNotEmpty)
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.fromLTRB(18, 12, 18, 14),
+            decoration: BoxDecoration(
+              border: Border(top: BorderSide(color: c.border)),
+            ),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Icon(Icons.close, size: 14, color: c.danger),
+              const SizedBox(width: 8),
+              Expanded(
+                child: Text(
+                    'Casos de erro: '
+                    '${flow.errors.map((e) => e.label).join(' · ')}',
+                    style: BoldType.bodySmall.copyWith(color: c.danger)),
+              ),
+            ]),
+          ),
+      ]),
+    );
+  }
+}
+
+class _NodeChip extends StatelessWidget {
+  const _NodeChip({required this.step});
+  final FlowStep step;
+  @override
+  Widget build(BuildContext context) {
+    final c = BoldColors.of(context);
+    final s = _roleStyle(step.type, c);
+    final isTerm = step.type == StepType.start || step.type == StepType.end;
+    final kindColor = (step.type == StepType.userAction ||
+            step.type == StepType.systemAction)
+        ? c.textMuted
+        : s.stroke;
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 8),
+      decoration: BoxDecoration(
+        color: s.fill,
+        borderRadius: BorderRadius.circular(isTerm ? 999 : 9),
+        border: Border.all(color: s.stroke, width: 1.4),
+      ),
+      child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(_bpKind(step.type).toUpperCase(),
+                style: BoldType.labelSm.copyWith(
+                    color: kindColor,
+                    fontSize: 9,
+                    letterSpacing: .5,
+                    fontWeight: FontWeight.w700)),
+            const SizedBox(height: 2),
+            Text(step.label,
+                style: BoldType.labelSm.copyWith(
+                    color: s.text,
+                    fontSize: 11.5,
+                    fontWeight: FontWeight.w600,
+                    height: 1.2)),
+            if (step.note != null) ...[
+              const SizedBox(height: 2),
+              Text(step.note!,
+                  style: BoldType.labelSm.copyWith(
+                      color: c.textSecondary,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                      height: 1.15)),
+            ],
+            if (step.branches.isNotEmpty) ...[
+              const SizedBox(height: 3),
+              Text(step.branches.join(' · '),
+                  style: BoldType.labelSm.copyWith(
+                      color: c.textSecondary,
+                      fontSize: 9.5,
+                      fontWeight: FontWeight.w400,
+                      height: 1.15)),
+            ],
+          ]),
+    );
+  }
+}
+
+Widget _bpTag(BuildContext context, String v) {
+  final c = BoldColors.of(context);
+  return Container(
+    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 4),
+    decoration: BoxDecoration(
+      color: c.isDark ? c.surface : BoldColors.neutral10,
+      borderRadius: BorderRadius.circular(6),
+      border: Border.all(color: c.borderStrong),
+    ),
+    child: Text(v,
+        style: BoldType.labelSm
+            .copyWith(color: c.textSecondary, fontSize: 10, height: 1.2)),
+  );
 }
 
 // ═══════════════════════════════════════════════════════════════════════════
