@@ -21,6 +21,7 @@ export 'src/theme/app_theme.dart';
 export 'src/widgets/app_button.dart';
 export 'src/widgets/app_text_field.dart'; // AppCurrencyField (campo de valor)
 export 'src/widgets/app_card.dart';
+export 'src/widgets/bold_logo.dart';  // BoldLogoMark (símbolo/anel legado; wordmark é o BoldLogo do design_system)
 export 'src/widgets/atmospheric_background.dart';
 export 'src/widgets/app_icon.dart';   // appIcon(IconData) → BoldIcon SVG (fallback Material)
 

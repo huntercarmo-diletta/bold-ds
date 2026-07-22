@@ -10,11 +10,11 @@ import '../theme/app_colors.dart';
 /// canto superior-direito).
 ///
 /// ```dart
-/// const BoldLogo(size: 64)                 // só o símbolo
-/// const BoldLogo(size: 40, wordmark: true) // símbolo + "BOLD"
+/// const BoldLogoMark(size: 64)                 // só o símbolo
+/// const BoldLogoMark(size: 40, wordmark: true) // símbolo + "BOLD"
 /// ```
-class BoldLogo extends StatelessWidget {
-  const BoldLogo({
+class BoldLogoMark extends StatelessWidget {
+  const BoldLogoMark({
     super.key,
     this.size = 56,
     this.wordmark = false,
