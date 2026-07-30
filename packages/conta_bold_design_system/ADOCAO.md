@@ -381,3 +381,44 @@ que depende de download é fonte que às vezes não é a da marca — no primeir
 na rede do cliente. É também o que o primeiro filho faz.
 
 Este é o ÚNICO asset que o filho declara. Ícone e ilustração são vocabulário e vêm do pai.
+
+---
+
+## Gradiente — fechado em 2026-07-30, em DOIS
+
+Regra do dono do produto: no máximo dois, `primary` e `accent`, e o resto se modula neles.
+
+Ela saiu de graça, o que é raro numa consolidação de 10 pra 2. A medição de uso mostrou que
+**sete dos dez tinham ZERO uso** — `pay`, `ted`, `statement`, `receive` e `charge` (azul, âmbar,
+verde, azul claro e roxo, uma cor por tipo de transação), mais `balanceCard` e o alias
+`primaryButton`. Cinco matizes estrangeiros numa marca rosa que ninguém consumia: token morto,
+não decisão de desenho a rediscutir.
+
+Os três que sobravam já eram os dois:
+
+| antigo | usos | vira |
+|---|---|---|
+| `brand` | 6 | `primary` — o pôr do sol de 3 paradas (rosa → coral → amarelo), do anel do "O" |
+| `pix` | 4 | `accent` — o corte de 2 (rosa → laranja) |
+| `primaryButtonShort` | 1 | `accent` (mesmas duas cores do `pix`) |
+
+Então a consolidação renomeia dois e apaga sete. Gate: `dois_gradientes_e_so_test` — a regra é
+contagem, não convenção, porque foi assim que dez apareceram (um por tela, nenhum por decisão).
+
+**Um defeito que a medição achou.** O produto tinha `onGradient = white` e, no mesmo arquivo, um
+comentário admitindo que "o branco lava no amarelo". Medido, branco sobre as três paradas:
+**3.46 · 2.56 · 1.21**. Nenhuma passa AA de texto e a última é invisível. O ink escuro resolve o
+outro lado (9.43 no amarelo, 4.45 no coral) e afunda no rosa (3.29).
+
+Não existe tinta legível ao longo do pôr do sol inteiro — é propriedade de um gradiente que
+atravessa rosa e amarelo, não erro de escolha. Daí a regra que ficou escrita no token:
+**gradiente de marca é decorativo; texto sobre ele só em glifo ou rótulo grande, com o ink
+escuro.** `onGradient` passa a ser `neutral01`.
+
+Onde isso dói hoje, e é conserto de adoção: as iniciais do `avatar_stack` e do `avatar_row` são
+brancas sobre o meio do gradiente, a 2.56:1.
+
+**O que continua pendente do pai:** as três formas de gradiente dele derivam a própria cor
+(`primary03 → primary05`, cravado), então não há fenda de material — nem os meus dois cabem lá.
+Enquanto isso, `bold_gradients.dart` carrega forma E material; quando a fenda existir, a forma
+sai e sobram as cores.
