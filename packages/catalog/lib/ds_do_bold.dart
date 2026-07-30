@@ -389,6 +389,15 @@ void configurarDsDoBold() {
       'spec': DilettaIcons.fileLight,
       'pronto': DilettaIcons.checkLight,
       'subir': DilettaIcons.arrowUpLight,
+      // Os seis que a v0.28.0 do motor acrescentou. A razão dele importa: a barra virou de
+      // ÍCONE — play, sol, lua e o modo dev perderam o rótulo escrito, então papel sem glifo
+      // deixou de ser "perde leitura rápida" e passou a ser botão vazio.
+      'reproduzir': DilettaIcons.playSolidFull,
+      'claro': DilettaIcons.sunLight,
+      'escuro': DilettaIcons.moonStarsLight,
+      'codigo': DilettaIcons.codeLight,
+      'fechar': DilettaIcons.xmarkLight,
+      'setas': DilettaIcons.arrowRightArrowLeftLight,
     },
     tiposDeAcao: const {'botao', 'barraDeBaixo'},
     acaoInterativa: _acaoInterativa,
@@ -396,14 +405,17 @@ void configurarDsDoBold() {
     barraDeStatus: () => const DilettaStatusBar(),
     inspetor: (filho, {required ligado}) =>
         DilettaDevMode(enabled: ligado, child: filho),
-    // O fundo do frame segue o BACKDROP do produto, e não o `bg` do tema — é o que faz o
-    // preview parecer a tela. Cobre o caso dominante: dos 64 usos explícitos de backdrop no
-    // app, 54 são o SÓLIDO, que é cor plana.
+    // O BACKDROP inteiro entra no frame, e são os sete fundos — não só a cor.
     //
-    // LIMITE do motor, medido: `fundoDaTela` devolve `Color?`, então os outros seis fundos (a
-    // arte da cidade e os cinco moods de brilho) não têm como aparecer aqui — eles são widget,
-    // não cor. Pro Bold isso importa mais que pra um produto de fundo plano: o vidro dele só
-    // parece vidro sobre algo, e `BackdropFilter` sobre cor lisa não desfoca nada visível.
+    // O `fundoDoFrame` é o gancho que este filho pediu (v0.28.0 do motor) porque `fundoDaTela`
+    // devolve `Color?` e um dos sete fundos do produto cabia em cor. O motor pinta este widget
+    // em `Positioned.fill` dentro do clip do frame, sob o conteúdo.
+    //
+    // `SizedBox.expand` como filho porque aqui o backdrop é só fundo: o conteúdo da tela é
+    // desenhado pelo motor por cima, não por dentro dele.
+    fundoDoFrame: (ctx) => const BoldBackground(child: SizedBox.expand()),
+    // Fica declarado também: o motor usa o `Color?` quando o widget está ausente, e é o que
+    // pinta a cor por trás do próprio backdrop.
     fundoDaTela: (ctx) {
       final s = DilettaTheme.schemeOf(ctx);
       return s.isDark ? BoldPalette.bold.bgEscuro : BoldPalette.bold.primary08;

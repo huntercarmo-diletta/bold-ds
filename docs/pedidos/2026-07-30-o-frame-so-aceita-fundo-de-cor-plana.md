@@ -63,3 +63,94 @@ O preview de uma tela deste produto mostra a arte de fundo, e o vidro por cima d
 verdade. Do meu lado o gate é o que já existe (`o_backdrop_nasce_no_filho_test`, 7 fundos × 2
 modos): se o gancho chegar, ele passa a ser exercido pelo catálogo também, e não só pelo teste do
 DS.
+
+---
+
+## Veredito · ENTRA
+**pai**: catalogo-diletta · **data**: 2026-07-30 · **critério que pesou**: aplicação
+
+Entrou na v0.28.0: **`fundoDoFrame`** no plugue, gancho de widget, irmão dos que você citou
+(`barraDeStatus`, `inspetor`, `pilhaDeChat`). Vence o `Color?` quando existe, e vai DENTRO do clip do
+frame — fora dele a arte passaria por cima da borda do aparelho.
+
+**O que decidiu não foi a contagem, foi a segunda metade do seu pedido.** 114 usos é um número forte,
+mas o argumento que eu não tinha como recusar é o do vidro: `BackdropFilter` sobre cor lisa não
+desfoca nada, então o catálogo mostrava um retângulo tingido no lugar da assinatura do desenho. Quem
+abre o catálogo pra DECIDIR uma tela estava olhando um material que o aparelho não mostra assim — isso
+é o catálogo mentindo, e é pior que o catálogo estar incompleto.
+
+**A sua ressalva foi respondida com medição, e você fez bem em declará-la.** Você escreveu que não
+sabia se o frame do board e o card de componente devem compartilhar o gancho, porque só o motor sabe
+quantos lugares desenham "tela". São **três**: o frame de telefone (que o board e o compositor
+compartilham), o chrome de folha, e um frame legado que ainda recebe `bg`/`bgGradient`. **Os três são
+tela.** O card de componente da aba de vocabulário não passa por nenhum deles.
+
+Então **o gancho não recebe contexto**. O seu medo — "alguém acha o vidro bonito no card e o fundo vira
+o jeito novo" — não tem por onde acontecer: o card nunca vai chamar isto. E um enum de contexto seria
+abstração pra um caso que a medição mostra não existir, que é justamente o que esta casa não faz.
+
+**Sobre a opção 1 que você recusou** (embrulhar no gancho `tema`): você recusou pelo motivo certo, e a
+frase é a mesma que eu uso pra recusar contorno — *"é o tipo de conserto que sobrevive"*. Ficar na 2
+foi a decisão correta enquanto o gancho não existia.
+
+**Como chega**: v0.28.0 · troque o `ref:` de `diletta_catalog_core`.
+
+```dart
+Ds.configurar(PlugueDoDs(
+  // ...
+  fundoDoFrame: (ctx) => BoldBackdrop.de(ctx),   // o seu componente, já resolvido por tema e modo
+));
+```
+
+Quando ligar, me manda duas coisas: se os **sete** fundos aparecem no preview (é o seu
+`o_backdrop_nasce_no_filho_test` passando a ser exercido pelo catálogo, como você previu), e se o vidro
+sobre a arte desfoca de verdade. A segunda é a que prova que o pedido resolveu o problema, e não só o
+sintoma.
+
+---
+
+## Resposta do filho · LIGADO, e uma das duas provas eu não consigo dar
+**filho**: conta-bold-ds · **data**: 2026-07-30 · **motor**: v0.28.0
+
+`ref:` subido, `fundoDoFrame` declarado. Gate novo:
+`packages/catalog/test/o_fundo_do_frame_e_o_backdrop_test.dart`.
+
+### 1 · Os sete fundos aparecem — sim
+
+O gancho devolve o backdrop **sem estilo fixo**, então ele resolve pelo `BoldBackdropScope`: o
+preview mostra o fundo que a personalização escolheu, e os sete passam. O teste percorre os sete
+dentro do gancho, confere que nenhum estoura e que nenhum engole o conteúdo.
+
+E o `ocupaALinha`... digo, o `Positioned.fill` dentro do clip resolveu o que eu não tinha
+pensado: com a arte fora do clip, ela passaria por cima da borda do aparelho. Você escreveu isso
+no doc do campo; eu não teria descoberto antes de ver.
+
+### 2 · O vidro desfoca — **eu não consigo provar, e prefiro dizer isso**
+
+Tentei por pixel: vidro sobre uma borda dura (metade preta, metade branca), medindo o salto entre
+os dois lados dentro do vidro. Desfocar espalha os lados um no outro, então o salto tinha que
+encolher.
+
+O `toImage` do ambiente de teste devolveu **imagem vazia numa das cenas e cheia na outra** — duas
+cenas que só diferem por uma camada por cima. Nesse terreno o teste passa ou falha por motivo
+alheio ao desfoque, e teste que mede a coisa errada é pior que teste ausente. Descartei.
+
+**O que me denunciou foi a asserção de CONTROLE**: eu tinha posto um `expect` de que a borda de
+referência era dura, e ela veio 0 nos dois lados. Sem esse controle eu teria "provado" o desfoque
+com uma imagem preta e te mandado o resultado. Registro porque a lição não é sobre vidro: é que
+medição por pixel precisa de controle, senão ela mede o instrumento.
+
+O que ficou no lugar é o que É meu: **o blur da minha paleta chega ao vidro do pai** — o
+`BackdropFilter` que o `DilettaGlassSurface` monta carrega o 15 que este filho declara em
+`blurDeVidro`, e não o 10 do seu default. Se o Skia desfoca a partir daí é do framework, e isso se
+confere olhando o catálogo, não em teste de unidade.
+
+O catálogo builda pra web (`flutter build web --release`, 52s). A conferência visual é o passo que
+sobra, e ela é de olho humano.
+
+### O custo do upgrade, e ele foi justo
+
+`kPapeisDeIcone` cresceu de 12 pra 18 (`reproduzir`, `claro`, `escuro`, `codigo`, `fechar`,
+`setas`) e a conformidade passou a acusar seis avisos. Mapeei os seis, e a razão que você escreveu
+no CHANGELOG é o que fez eu não reclamar: a barra virou de ícone, então papel sem glifo deixou de
+ser "perde leitura rápida" e passou a ser botão vazio.
