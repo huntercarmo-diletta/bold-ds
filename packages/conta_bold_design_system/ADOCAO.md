@@ -398,25 +398,48 @@ Os três que sobravam já eram os dois:
 
 | antigo | usos | vira |
 |---|---|---|
-| `brand` | 6 | `primary` — o pôr do sol de 3 paradas (rosa → coral → amarelo), do anel do "O" |
-| `pix` | 4 | `accent` — o corte de 2 (rosa → laranja) |
-| `primaryButtonShort` | 1 | `accent` (mesmas duas cores do `pix`) |
+| `brand` (pôr do sol de 3 paradas) | 6 | `primary` |
+| `pix` | 4 | `accent` |
+| `primaryButtonShort` | 1 | `accent` |
+
+E os dois foram MODULADOS, o que resolveu dois problemas de uma vez:
+
+| | antes | agora | ganho |
+|---|---|---|---|
+| `primary` | rosa → coral → amarelo | **`primary04` → `warning03`** | branco vai de 1.21 (invisível) a 3.37 na pior parada |
+| `accent` | rosa → laranja literal | **`warning03` → `warning02`** | pior parada 3.37, outra 6.54 |
+
+**O ganho principal é que sobrou ZERO literal de cor.** O coral, o amarelo e o laranja eram três
+valores de marca morando no arquivo de gradiente, porque a paleta não tem campo pra parada de
+gradiente — três valores que um rebrand não alcança. Modulando dentro das rampas que já existem,
+as quatro paradas passam a ser degraus da paleta, e há gate pra isso.
+
+O laranja vir da rampa `warning` não foi conveniência: quando a rampa `accent` coral foi
+descontinuada em 2026-07-16, o próprio produto registrou que os usos decorativos dela migravam
+pra `warning`.
 
 Então a consolidação renomeia dois e apaga sete. Gate: `dois_gradientes_e_so_test` — a regra é
 contagem, não convenção, porque foi assim que dez apareceram (um por tela, nenhum por decisão).
 
-**Um defeito que a medição achou.** O produto tinha `onGradient = white` e, no mesmo arquivo, um
-comentário admitindo que "o branco lava no amarelo". Medido, branco sobre as três paradas:
-**3.46 · 2.56 · 1.21**. Nenhuma passa AA de texto e a última é invisível. O ink escuro resolve o
-outro lado (9.43 no amarelo, 4.45 no coral) e afunda no rosa (3.29).
+**O defeito de acessibilidade que a medição achou, e que a modulação consertou.** O produto tinha
+`onGradient = white` e, no mesmo arquivo, um comentário admitindo que "o branco lava no amarelo".
+Branco sobre as três paradas antigas: **3.46 · 2.56 · 1.21** — a última invisível. E o ink escuro
+não resolvia: ele salvava o amarelo (9.43) e afundava no rosa (3.29). Não existia tinta legível
+ao longo do pôr do sol inteiro, e isso era propriedade de um gradiente que atravessa rosa e
+amarelo.
 
-Não existe tinta legível ao longo do pôr do sol inteiro — é propriedade de um gradiente que
-atravessa rosa e amarelo, não erro de escolha. Daí a regra que ficou escrita no token:
-**gradiente de marca é decorativo; texto sobre ele só em glifo ou rótulo grande, com o ink
-escuro.** `onGradient` passa a ser `neutral01`.
+Com a modulação, branco passa em toda parada dos dois (mínimo **3.37**), então `onGradient` volta
+a ser branco — agora por medição. A escolha se justifica pelo PIOR caso e não parada a parada: no
+`warning03` o ink ganha por 0.01, que é empate, e o que decide é o `warning02`, onde o ink desaba
+pra 1.74 contra 6.54 do branco. (Eu havia escrito que o branco ganhava "em todas as paradas"; o
+gate me pegou.)
 
-Onde isso dói hoje, e é conserto de adoção: as iniciais do `avatar_stack` e do `avatar_row` são
-brancas sobre o meio do gradiente, a 2.56:1.
+**A regra de uso que os números impõem:** 3.37 passa AA-grande (3.0) e não passa AA de texto
+(4.5). Sobre gradiente vale glifo e rótulo a partir de 18.7px em peso 600 — rótulo de botão a
+15px usa o `primary` SÓLIDO do scheme, onde a conformidade do pai já garante o par.
+
+Conserto que fica pra adoção: as iniciais do `avatar_stack` e do `avatar_row` são brancas sobre o
+meio do gradiente antigo, a 2.56:1. Com o primary novo elas vão a 3.37.
 
 **O que continua pendente do pai:** as três formas de gradiente dele derivam a própria cor
 (`primary03 → primary05`, cravado), então não há fenda de material — nem os meus dois cabem lá.

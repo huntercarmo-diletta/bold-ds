@@ -19,45 +19,77 @@ void main() {
             'não se modula, é pedido ao pai ou decisão de desenho, não token novo aqui');
   });
 
-  test('os dois PARTEM da paleta, senão o gradiente congela a identidade', () {
-    // A cor de partida sai de `primary04`. É o que faz o gradiente acompanhar a marca em vez
-    // de virar um par de hexes que ninguém troca — a mesma razão pela qual o pai converteu os
-    // gradientes dele em função da paleta.
+  test('o primary parte da cor de AÇÃO; o accent vive na rampa de laranja', () {
+    // O primary começa em `primary04` porque é o gradiente que representa a marca — se ele não
+    // parte da cor de ação, ele deixa de acompanhar a identidade. O accent não: ele é o laranja
+    // inteiro, então as duas paradas dele são da mesma rampa.
+    expect(BoldGradients.primary.colors.first, BoldPalette.bold.primary04);
+    expect(BoldGradients.accent.colors,
+        everyElement(isIn([BoldPalette.bold.warning03, BoldPalette.bold.warning02])));
+  });
+
+  test('os dois são de DUAS paradas, e as quatro saem de rampa', () {
+    // Duas paradas por modulação, não por gosto: a terceira (o amarelo do logo) era o que
+    // tornava o gradiente ilegível e o que obrigava a ter literal de marca neste arquivo.
+    const p = BoldPalette.bold;
+    expect(BoldGradients.primary.colors, [p.primary04, p.warning03]);
+    expect(BoldGradients.accent.colors, [p.warning03, p.warning02]);
+  });
+
+  test('ZERO literal de cor: as quatro paradas são degraus da paleta', () {
+    // É o ganho principal da modulação. Enquanto o coral e o amarelo estavam no gradiente, três
+    // valores de marca moravam fora da paleta — e valor fora da paleta é valor que o rebrand
+    // não alcança.
+    final degraus = {
+      BoldPalette.bold.primary04,
+      BoldPalette.bold.warning03,
+      BoldPalette.bold.warning02,
+    };
     for (final g in BoldGradients.todos.entries) {
-      expect(g.value.colors.first, BoldPalette.bold.primary04,
-          reason: 'o gradiente "${g.key}" não começa na cor de ação da paleta');
+      for (final c in g.value.colors) {
+        expect(degraus, contains(c),
+            reason: 'o gradiente "${g.key}" tem uma parada que não é degrau da paleta');
+      }
     }
   });
 
-  test('primary é o pôr do sol de três paradas; accent é o corte de duas', () {
-    expect(BoldGradients.primary.colors, hasLength(3));
-    expect(BoldGradients.primary.stops, [0.0, 0.5, 1.0]);
-    expect(BoldGradients.accent.colors, hasLength(2));
-  });
-
-  test('o conteúdo sobre gradiente é o INK, e o branco seria ilegível', () {
-    // Medido, branco sobre as três paradas do primary: 3.46 · 2.56 · 1.21. Nenhuma passa AA de
-    // texto, e o amarelo é invisível. O produto antigo tinha `onGradient = white` com um
-    // comentário no mesmo arquivo admitindo que o branco lava no amarelo.
+  test('o BRANCO passa AA-grande em toda parada, e ganha do ink no pior caso', () {
+    // A modulação existe por causa deste teste. Na versão de três paradas, branco chegava a
+    // 1.21:1 no amarelo — invisível — e nenhuma tinta servia no gradiente inteiro.
     //
-    // Este teste fixa a escolha e mede a razão dela, pra ninguém "consertar" de volta pro
-    // branco olhando só o rosa — que é o único lugar onde o branco quase funciona.
-    expect(BoldGradients.onGradient, BoldPalette.bold.neutral01);
-
+    // Agora: branco em toda parada acima de 3.0 (AA-grande), o que autoriza glifo e rótulo
+    // grande. O piso NÃO é 4.5, e é por isso que a regra escrita no token diz "rótulo de botão
+    // a 15px usa o sólido, não o gradiente" — o número decide o uso, não o contrário.
     double contraste(Color a, Color b) {
       final la = a.computeLuminance(), lb = b.computeLuminance();
       final (hi, lo) = la > lb ? (la, lb) : (lb, la);
       return (hi + 0.05) / (lo + 0.05);
     }
 
-    final paradas = BoldGradients.primary.colors;
-    // O ink ganha do branco na parada onde a diferença importa: a mais clara.
-    final maisClara = paradas.reduce(
-        (a, b) => a.computeLuminance() > b.computeLuminance() ? a : b);
-    expect(contraste(BoldGradients.onGradient, maisClara),
-        greaterThan(contraste(BoldPalette.bold.white, maisClara)),
-        reason: 'na parada mais clara o ink tem que ler melhor que o branco');
-    expect(contraste(BoldPalette.bold.white, maisClara), lessThan(1.5),
-        reason: 'se isto subiu, a parada clara mudou — e a regra de conteúdo muda com ela');
+    expect(BoldGradients.onGradient, BoldPalette.bold.white);
+
+    for (final g in BoldGradients.todos.entries) {
+      for (final parada in g.value.colors) {
+        final branco = contraste(BoldPalette.bold.white, parada);
+        expect(branco, greaterThanOrEqualTo(3.0),
+            reason: 'branco reprova em AA-grande numa parada de "${g.key}": '
+                '${branco.toStringAsFixed(2)}:1');
+      }
+    }
+
+    // A comparação que decide `onGradient` é o PIOR caso, não parada a parada: escolhe-se UMA
+    // tinta pro gradiente inteiro, e ela é julgada onde ela é mais fraca.
+    //
+    // Escrevi antes que o branco ganhava "em todas as paradas", e o gate me pegou: no
+    // `warning03` o ink dá 3.38 contra 3.37 do branco — empate técnico de 0.01. O que sustenta
+    // a escolha é o outro extremo, onde o ink desaba: `warning02` dá 1.74 pro ink e 6.54 pro
+    // branco.
+    double pior(Color tinta) => BoldGradients.todos.values
+        .expand((g) => g.colors)
+        .map((p) => contraste(tinta, p))
+        .reduce((a, b) => a < b ? a : b);
+
+    expect(pior(BoldPalette.bold.white), greaterThan(pior(BoldPalette.bold.neutral01)),
+        reason: 'no pior caso o branco tem que ler melhor que o ink, senão `onGradient` muda');
   });
 }
