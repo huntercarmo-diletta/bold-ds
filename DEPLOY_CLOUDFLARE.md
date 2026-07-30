@@ -54,13 +54,28 @@ bash build_web.sh
 
 Saída em `packages/catalog/build/web` (~49 MB, quase tudo CanvasKit). Leva 1-2 minutos.
 
-### 3 · Autenticar no Cloudflare (uma vez por máquina)
+### 3 · Autenticar no Cloudflare — **confira a CONTA antes de publicar**
 
 ```bash
-npx wrangler login
+npx wrangler login     # interativo: rode você, não o agente
+npx wrangler whoami    # e confirme o e-mail e a conta que apareceram
 ```
 
-Abre o navegador e pede autorização na conta Cloudflare. É interativo — rode você, não o agente.
+**A armadilha, medida em 2026-07-30:** o `wrangler login` usa a sessão do Cloudflare que já está aberta
+no navegador. Se você estiver logado na conta PESSOAL, ele autoriza a pessoal sem perguntar nada — e o
+`deploy` publica lá, num subdomínio `workers.dev` que não é o do time. Foi o que aconteceu no primeiro
+deploy deste catálogo: ele subiu inteiro na conta pessoal, **aberto**, e teve que ser apagado.
+
+Pra trocar de conta:
+
+```bash
+npx wrangler logout
+```
+
+…**e sair do Cloudflare no navegador** (ou usar uma janela privada) antes do `login` de novo. Sem isso, a
+sessão antiga é reaproveitada e você reautoriza a mesma conta errada.
+
+O `whoami` no fim não é zelo: é a única coisa que distingue as duas contas antes de o site existir.
 
 ### 4 · Publicar
 
@@ -68,11 +83,8 @@ Abre o navegador e pede autorização na conta Cloudflare. É interativo — rod
 npx wrangler deploy
 ```
 
-No fim ele imprime a URL. Publicado em 2026-07-30:
-
-```
-https://conta-bold-ds.hunter-soares-c.workers.dev
-```
+No fim ele imprime a URL, no formato `https://conta-bold-ds.<subdomínio-da-conta>.workers.dev`. O
+subdomínio é da CONTA — é por ele que se percebe conta errada depois do fato.
 
 **Espere uns segundos antes de conferir.** No primeiro deploy o `/` respondeu 404 por alguns instantes e
 depois passou a 200 — é propagação, não erro de configuração. Conferir cedo demais faz procurar defeito
@@ -133,6 +145,11 @@ Depois, no navegador: a URL pede e-mail + PIN, e só então carrega o catálogo.
   ensina errado.
 
 ## Histórico
+
+**2026-07-30 · o primeiro deploy foi na conta ERRADA.** O `wrangler login` pegou a sessão pessoal aberta
+no navegador e publicou o catálogo inteiro em `conta-bold-ds.hunter-soares-c.workers.dev`, sem Access.
+Consertado na sequência: `wrangler delete --force` na conta pessoal, confirmado por `curl` até a URL
+devolver 404, e `wrangler logout`. Por isso o passo 3 agora manda rodar `whoami` **antes** do deploy.
 
 Este repo publicava na **Vercel** até 2026-07-30, e o que ela construía era o app antigo da raiz — um
 catálogo que desenhava um fork parado do design system. O app e o fork foram apagados (medição no
