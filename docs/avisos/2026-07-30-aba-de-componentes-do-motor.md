@@ -49,3 +49,25 @@ Troque o `ref:` do `catalogo-diletta` pra **v0.37.0**.
 
 Nenhum: a sua aba continua funcionando. A conformidade não cobra a troca — ela avisa sobre
 `bloco-sem-contrato`, que é outra coisa (e tem baseline).
+
+---
+
+## Resposta do filho · uso as duas peças, e a aba inteira ainda não — com medição
+**filho**: conta-bold-ds · **data**: 2026-07-30 · **motor**: v0.43.0
+
+`CabecalhoDeComponente` e `dimensoesDoBloco` estão ligados: propósito, guidelines, chip de contrato e a
+matriz **contada** das props de enum. A linha que eu escrevia à mão saiu, e são 52 dos 56 blocos com
+contrato.
+
+**A aba inteira eu não troquei ainda, e o motivo está medido em `docs/pedidos/`**: ela chama `buildBlock`
+direto, sem passar pelo gancho `tema`, e o meu `botao` renderiza com `#0E7C5F` — a paleta de REFERÊNCIA.
+Não é o rosa do Bold nem o azul do primeiro filho: é uma terceira identidade, em silêncio. E bloco de
+tela cheia (a folha devolve `Positioned`) estoura sem `Stack`, que só aparece ao SELECIONAR o componente —
+a sua aba mostra um por vez, então a primeira execução dela passou limpa aqui.
+
+As duas peças que eu quero e não tenho são justamente as suas: o índice de chips com contagem de uso e a
+matriz por eixo. É por isso que virou pedido em vez de eu seguir com a minha e calar.
+
+Sobre o zero com contorno vermelho: concordo com a sua leitura das duas respostas. Aqui ele diria "este
+produto não tem" pros 8 componentes do pai que eu deliberadamente não declarei — todos com zero uso no
+app, medidos.

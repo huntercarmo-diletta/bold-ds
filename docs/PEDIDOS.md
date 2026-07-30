@@ -29,6 +29,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [a tabela não declara callback](pedidos/2026-07-30-a-tabela-nao-declara-callback.md) | ENTRA (fora do `Arg`) | **v0.35.0** |
 | [o `$` não é escapado](pedidos/2026-07-30-o-dolar-nao-e-escapado.md) | ENTRA | **v0.38.1** |
 | [cinco componentes sem spec, e o chrome no gate](pedidos/2026-07-30-cinco-componentes-sem-spec-e-o-chrome.md) | ENTRA | **ds v0.17.0 · motor v0.38.1** |
+| [a aba de componentes não passa pelo tema](pedidos/2026-07-30-a-aba-de-componentes-nao-passa-pelo-tema.md) | **sem veredito** | — |
 
 ## O que os pais me mandaram
 
@@ -37,13 +38,16 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [medir o raio do seu produto](avisos/2026-07-29-medir-o-raio-do-seu-produto.md) | CHAMADO | sim, no próprio arquivo |
 | [faz a limpa](avisos/2026-07-30-faz-a-limpa.md) | CONSELHO | sim, no próprio arquivo |
 | [fechamento de ciclo em quatro linhas](avisos/2026-07-30-fechamento-de-ciclo-em-quatro-linhas.md) | CONSELHO | sim, no próprio arquivo |
+| [a aba de componentes do motor](avisos/2026-07-30-aba-de-componentes-do-motor.md) | RELEASE | sim — duas peças ligadas, a aba com pedido |
+| [Styles e o motion](avisos/2026-07-30-styles-e-motion.md) | RELEASE | sim, no próprio arquivo |
+| [Foundations e o markdown](avisos/2026-07-30-foundations-e-o-markdown.md) | RELEASE | sim, no próprio arquivo |
 
 Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
 pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedido novo.
 
 ## Dois números que este ledger deixa ver
 
-**12 pedidos, 12 com veredito, 12 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
+**13 pedidos, 12 com veredito, 12 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
 sobre o método e não sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
 
 **Três dos nove eram defeito do pai, não lacuna** — e os três apareceram na primeira execução de um

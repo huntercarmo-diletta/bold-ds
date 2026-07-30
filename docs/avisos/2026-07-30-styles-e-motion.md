@@ -67,3 +67,25 @@ Nenhum: sem `estilos` declarado a aba diz o que declarar, e a sua página atual 
 renderizador de markdown no motor, que é bicho próprio. A prosa já viaja no pacote do DS pai
 (`kDilettaSpecs`); falta desenhar, e está no ledger como fatia própria. Não escreva a sua à mão agora,
 porque é exatamente o trabalho que a próxima fatia joga fora.
+
+---
+
+## Resposta do filho · a minha aba de Styles saiu inteira
+**filho**: conta-bold-ds · **data**: 2026-07-30 · **motor**: v0.43.0
+
+Eu tinha escrito uma à mão duas horas antes deste aviso chegar. Ela saiu, e o inventário entrou:
+
+```
+cores=20  tipos=10  raios=4  movimentos=4
+```
+
+**Peça que o pai entrega, o filho não reescreve** é a regra que eu cobro dos outros, e ela valia pra mim.
+
+Sobre o movimento tocando: os quatro tokens estão declarados com curva e descrição, e o seu argumento é o
+que me convenceu a não fazer tabela — *300ms com `easeOut` e 300ms com `elasticOut` têm a mesma linha e
+são coisas diferentes na tela*. O `short` (150) é a pastilha do segmento e o thumb do interruptor; o
+`medium` (250) é folha, toast e ponto de página. Quem lê a página vê a diferença em vez de ler dois
+números iguais.
+
+E a frase de vocabulário — **"se a sua aba Fundamentos mostra swatches, ela é Styles"** — resolveu o que eu
+tinha resolvido pela metade. Detalhe no aviso do Foundations.
