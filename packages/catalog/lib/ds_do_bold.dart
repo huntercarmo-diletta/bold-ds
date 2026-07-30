@@ -532,6 +532,98 @@ BlockDef _resumoDaTransacao() => BlockDef(
           ', estado: ds.BoldEstadoDaTransacao.${p['estado']})',
     );
 
+/// A escada de alçadas. Os degraus vêm como TEXTO de uma linha por faixa (`5.000 | 0` …), pelo mesmo
+/// motivo das abas: é o controle que o editor tem pra lista curta, e a alternativa (slot com bloco de
+/// degrau) seria um bloco que nunca é usado sozinho. A lista de verdade tem 2 ou 3 itens.
+BlockDef _escadaDeAlcadas() => BlockDef(
+      type: 'escadaDeAlcadas',
+      label: 'Escada de alçadas',
+      props: const {
+        'degraus': PropDef('multiline'),
+        'densa': PropDef('bool'),
+      },
+      defaults: () => {
+        'degraus': 'R\$ 5.000,00 | 0\n| 2 master',
+        'densa': true,
+      },
+      build: (p) => BoldEscadaDeAlcadas(
+        degraus: _degraus(p['degraus']),
+        densa: p['densa'] == true,
+      ),
+      codegen: (p) => 'ds.BoldEscadaDeAlcadas(degraus: degrausDaAlcada'
+          '${p['densa'] == true ? ', densa: true' : ''})',
+    );
+
+/// Uma linha por degrau: `<teto> | <aprovações> [master]`. Teto vazio = faixa terminal.
+List<BoldDegrauDeAlcada> _degraus(Object? v) {
+  final saida = <BoldDegrauDeAlcada>[];
+  for (final linha in '$v'.split('\n')) {
+    if (linha.trim().isEmpty) continue;
+    final partes = linha.split('|');
+    final teto = partes.first.trim();
+    final direita = partes.length > 1 ? partes[1].trim() : '0';
+    saida.add(BoldDegrauDeAlcada(
+      ate: teto.isEmpty ? null : teto,
+      aprovacoes: int.tryParse(direita.split(' ').first) ?? 0,
+      exigeMaster: direita.contains('master'),
+    ));
+  }
+  return saida;
+}
+
+BlockDef _progressoDeAprovacao() => BlockDef(
+      type: 'progressoDeAprovacao',
+      ctor: 'ds.BoldProgressoDeAprovacao',
+      args: const {
+        'colhidas': Arg.numero('colhidas'),
+        'exigidas': Arg.numero('exigidas'),
+        'exigeMaster': Arg.bool('exigeMaster'),
+        'compacto': Arg.bool('compacto'),
+      },
+      label: 'Progresso de aprovação',
+      props: const {
+        'colhidas': PropDef('number', bindable: true, dartType: 'int'),
+        'exigidas': PropDef('number', bindable: true, dartType: 'int'),
+        'exigeMaster': PropDef('bool'),
+        'compacto': PropDef('bool'),
+      },
+      defaults: () => {'colhidas': '1', 'exigidas': '2', 'exigeMaster': false, 'compacto': false},
+      build: (p) => BoldProgressoDeAprovacao(
+        colhidas: int.tryParse('${p['colhidas']}') ?? 0,
+        exigidas: int.tryParse('${p['exigidas']}') ?? 0,
+        exigeMaster: p['exigeMaster'] == true,
+        compacto: p['compacto'] == true,
+      ),
+      codegen: (p) => 'ds.BoldProgressoDeAprovacao(colhidas: ${p['colhidas']}'
+          ', exigidas: ${p['exigidas']})',
+    );
+
+/// O prazo. `restante` é `Duration`, e `Arg` não tem kind de duração — então o bloco declara as HORAS
+/// e o codegen monta o `Duration`. Fora da tabela por isso, com entrada no leitor.
+BlockDef _prazoDaPendencia() => BlockDef(
+      type: 'prazoDaPendencia',
+      label: 'Prazo da pendência',
+      props: const {
+        'horas': PropDef('number'),
+        'idade': PropDef('text', bindable: true, dartType: 'String'),
+      },
+      defaults: () => {'horas': '3', 'idade': ''},
+      build: (p) => BoldPrazoDaPendencia(
+        restante: _horas(p['horas']),
+        idade: _vazio(p['idade']) ? null : '${p['idade']}',
+      ),
+      codegen: (p) => _horas(p['horas']) == null
+          ? 'ds.BoldPrazoDaPendencia(idade: ${_str(p['idade'])})'
+          : 'ds.BoldPrazoDaPendencia(restante: '
+              'Duration(hours: ${int.tryParse('${p['horas']}') ?? 0}))',
+    );
+
+/// Horas como `Duration`; vazio ou não-número ⇒ nulo, que é "o servidor não informou prazo".
+Duration? _horas(Object? v) {
+  final n = int.tryParse('$v'.trim());
+  return n == null ? null : Duration(hours: n);
+}
+
 BlockDef _visorDeCodigo() => BlockDef(
       type: 'visorDeCodigo',
       // Só `ctor`, sem `args`: os props deste bloco são de PREVIEW — no código gerado, alvo e fase
@@ -706,6 +798,9 @@ void configurarDsDoBold() {
       'linha': _linha(),
       'linhaDeValor': _linhaDeValor(),
       'resumoDaTransacao': _resumoDaTransacao(),
+      'escadaDeAlcadas': _escadaDeAlcadas(),
+      'progressoDeAprovacao': _progressoDeAprovacao(),
+      'prazoDaPendencia': _prazoDaPendencia(),
     },
     // TODO tipo precisa estar num grupo: a paleta do editor sai daqui, então bloco sem
     // grupo existe e ninguém acha. A conformidade do pai cobra.
@@ -719,6 +814,8 @@ void configurarDsDoBold() {
       // linguagem, e peça de marca não se mistura com vocabulário herdado.
       'Marca do Bold': ['seloQuantico', 'saldo', 'cabecalhoDaHome', 'resumoDaTransacao'],
       'Do Bold': ['copiar', 'abas'],
+      // As três peças da conta PJ: quem pode mandar quanto, falta quanto, e até quando.
+      'Alçadas': ['escadaDeAlcadas', 'progressoDeAprovacao', 'prazoDaPendencia'],
       'Leitor de código': ['visorDeCodigo'],
       'Entrada': ['campo'],
       'Ação': ['botao', 'barraDeBaixo'],

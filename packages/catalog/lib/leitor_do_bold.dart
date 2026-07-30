@@ -4,18 +4,21 @@
 /// `ctor` + `args` no registro, e o motor emite e lê com a mesma declaração: a volta deixou de
 /// ser artefato, porque é a ida invertida.
 ///
-/// **Sobraram DUAS entradas**, e as duas são a mesma razão: ANINHAMENTO, que a tabela não cobre por
-/// decisão do motor.
+/// **Sobraram QUATRO entradas**, e o que elas têm em comum é uma coisa só: o dado do bloco não cabe em
+/// argumento literal, que é o que a tabela sabe fazer.
 ///
 /// - `barraDeBaixo` aninha três níveis (`BottomApp(button: NavigationButton(primary:
 ///   NavigationAction(label:)))`) — o rótulo mora lá embaixo;
 /// - `lista` tem FILHOS em vez de props, e é a única que recursa: cada item volta por `_bloco`, então a
-///   linha de menu e a linha de valor são lidas pela tabela, de graça.
+///   linha de menu e a linha de valor são lidas pela tabela, de graça;
+/// - `escadaDeAlcadas` recebe uma LISTA de degraus, que no código vira variável da tela;
+/// - `prazoDaPendencia` recebe um `Duration`, e não há kind de duração no `Arg`.
 ///
-/// Chegaram a ser quatro por um defeito do motor — `texto` e `ritmo` recebem o conteúdo POSICIONAL e a
+/// Chegaram a ser SEIS por um defeito do motor — `texto` e `ritmo` recebem o conteúdo POSICIONAL e a
 /// tabela só sabia emitir `nome: valor`. A v0.33.1 trouxe `Arg.textoPosicional`, e os dois voltaram.
 ///
-/// Antes: 15 entradas à mão, 60 linhas de `if`. Agora: a tabela mais dois casos de aninhamento.
+/// Antes: 15 entradas à mão, 60 linhas de `if`. Agora: a tabela cobre 20 de 24 blocos, e as quatro que
+/// sobram são as que ela não tem como cobrir.
 library;
 
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
@@ -40,7 +43,7 @@ var _id = 0;
 String _novoId() => 'lido-${_id++}';
 
 Block _bloco(String expr) {
-  // 1 · A TABELA primeiro: 15 dos 17 blocos declaram `ctor` + `args`, e o motor lê os dois lados
+  // 1 · A TABELA primeiro: 20 dos 24 blocos declaram `ctor` + `args`, e o motor lê os dois lados
   // com a mesma declaração — inclusive aceitando o construtor sem o prefixo `ds.`, que é como
   // código colado por alguém costuma chegar.
   final daTabela = leBlocoDaTabela(expr, Ds.blocos, novoId: _novoId);
@@ -68,7 +71,27 @@ Block _bloco(String expr) {
     );
   }
 
-  // 3 · A forma irregular, que fica fora da tabela por decisão do motor: o rótulo mora três níveis
+  // 3 · Os dois blocos cujo DADO não cabe em argumento literal:
+  //
+  // - a escada recebe uma lista de degraus, que no código gerado é uma variável da tela (`degrausDaAlcada`).
+  //   Ler de volta devolve o bloco com os degraus de exemplo — o mesmo contrato do visor de código, e o
+  //   motor sabe disso: prop de PREVIEW não é prop de código;
+  // - o prazo recebe `Duration`, e `Arg` não tem kind de duração. O bloco declara HORAS e o codegen monta
+  //   o `Duration`, então a volta desmonta.
+  if (ehCtor(expr, 'ds.BoldEscadaDeAlcadas') || ehCtor(expr, 'BoldEscadaDeAlcadas')) {
+    return Block(id: _novoId(), type: 'escadaDeAlcadas', props: {
+      ...Ds.blocos['escadaDeAlcadas']!.defaults(),
+      'densa': argBool(expr, 'densa') ?? false,
+    });
+  }
+  if (ehCtor(expr, 'ds.BoldPrazoDaPendencia') || ehCtor(expr, 'BoldPrazoDaPendencia')) {
+    return Block(id: _novoId(), type: 'prazoDaPendencia', props: {
+      'horas': argNumeroComoTexto(expr, 'hours') ?? '',
+      'idade': argString(expr, 'idade') ?? '',
+    });
+  }
+
+  // 4 · A forma irregular, que fica fora da tabela por decisão do motor: o rótulo mora três níveis
   // abaixo do construtor, e é o próprio pai que diz que tabela não cobre aninhamento.
   if (ehCtor(expr, 'ds.DilettaBottomApp.button') ||
       ehCtor(expr, 'DilettaBottomApp.button')) {
@@ -78,7 +101,7 @@ Block _bloco(String expr) {
     });
   }
 
-  // 4 · Desconhecido: bloco cru com o código dentro. A tela aparece, e o pedaço que ninguém
+  // 5 · Desconhecido: bloco cru com o código dentro. A tela aparece, e o pedaço que ninguém
   // declarou fica VISÍVEL como código à mão — que é o sinal certo pra declarar o bloco que falta,
   // em vez de o pedaço desaparecer em silêncio.
   return Block(id: _novoId(), type: 'cru', props: {'codigo': expr});

@@ -13,7 +13,7 @@ de bloco é aqui.
 ## O gate
 
 ```bash
-(cd packages/conta_bold_design_system && flutter analyze && flutter test)   # 68
+(cd packages/conta_bold_design_system && flutter analyze && flutter test)   # 87
 (cd packages/catalog && flutter analyze && flutter test)                    # 17
 ```
 

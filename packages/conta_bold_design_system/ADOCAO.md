@@ -463,8 +463,9 @@ dez estavam mortos, e portar código morto é o pior tipo de trabalho — parece
 | `BoldCabecalhoDaHome` | 3 | **nasceu** — e é CASCA, não acessório |
 | `BoldVisorDeCodigo` | 1 (e é o diferencial) | **nasceu** — sem plugin de câmera |
 | `BoldResumoDaTransacao` (era o topo de `BoldTransactionSummary`) | **3** | **nasceu** — e só o CONTEÚDO |
-| `BoldRuleLadder` | 2 | a fazer |
-| `BoldApprovalProgress` · `BoldSlaChip` · `BoldPageDots` · `BoldPixMark` · `BoldSecondaryBackground` | 1 cada | a fazer |
+| `BoldEscadaDeAlcadas` (era `BoldRuleLadder`) | 2 | **nasceu** — e o texto estava abaixo de AA |
+| `BoldProgressoDeAprovacao` · `BoldPrazoDaPendencia` | 1 cada | **nasceram** — o par da pendência |
+| `BoldPageDots` · `BoldPixMark` · `BoldSecondaryBackground` | 1 cada | a fazer |
 | `BoldHomeBackground` · `BoldTabBar` · `BoldAccountPill` · `BoldAccountSwitcher` | **0** | **não portar** |
 
 **O `BoldTransactionSummary` foi o terceiro achado de classificação, e o mais útil:** ele não é
