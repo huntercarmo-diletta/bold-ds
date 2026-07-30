@@ -27,8 +27,8 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [a tabela omite argumento igual ao default](pedidos/2026-07-30-a-tabela-omite-argumento-igual-ao-default.md) | ENTRA | **v0.32.1** |
 | [a tabela não declara argumento posicional](pedidos/2026-07-30-a-tabela-nao-declara-argumento-posicional.md) | ENTRA | **v0.33.1** |
 | [a tabela não declara callback](pedidos/2026-07-30-a-tabela-nao-declara-callback.md) | ENTRA (fora do `Arg`) | **v0.35.0** |
-| [o `$` não é escapado](pedidos/2026-07-30-o-dolar-nao-e-escapado.md) | **sem veredito** | — |
-| [cinco componentes sem spec, e o chrome no gate](pedidos/2026-07-30-cinco-componentes-sem-spec-e-o-chrome.md) | **sem veredito** | — |
+| [o `$` não é escapado](pedidos/2026-07-30-o-dolar-nao-e-escapado.md) | ENTRA | **v0.38.1** |
+| [cinco componentes sem spec, e o chrome no gate](pedidos/2026-07-30-cinco-componentes-sem-spec-e-o-chrome.md) | ENTRA | **ds v0.17.0 · motor v0.38.1** |
 
 ## O que os pais me mandaram
 
@@ -43,7 +43,7 @@ pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedid
 
 ## Dois números que este ledger deixa ver
 
-**12 pedidos, 10 com veredito, 10 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
+**12 pedidos, 12 com veredito, 12 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
 sobre o método e não sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
 
 **Três dos nove eram defeito do pai, não lacuna** — e os três apareceram na primeira execução de um

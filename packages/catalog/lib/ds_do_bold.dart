@@ -1405,6 +1405,53 @@ void configurarDsDoBold() {
       final s = DilettaTheme.schemeOf(ctx);
       return s.isDark ? s.bg : null;
     },
+    // O INVENTÁRIO DE ESTILO (v0.39.0 do motor) — e a aba de Styles deixa de ser escrita à mão.
+    //
+    // Eu tinha escrito a minha, com tipografia, gradiente e vidro. O motor passou a entregar a página
+    // derivada deste inventário, então a minha saiu: **peça que o pai entrega, o filho não reescreve** —
+    // é a regra que este repo cobra dos outros e que valia pra mim.
+    //
+    // O que ficou em Fundamentos é o que o próprio pai diz que é de lá: a DECISÃO (rampa com razão,
+    // papéis nos dois modos, os dois gradientes modulados, a receita do vidro, o relatório de adoção).
+    // Styles é o inventário que se CONSULTA; Fundamentos é o que se lê uma vez.
+    //
+    // O movimento entra porque a página TOCA: tabela de duração não é motion — 300ms com `easeOut` e
+    // 300ms com `elasticOut` têm a mesma linha na tabela e são coisas diferentes na tela.
+    estilos: InventarioDeEstilo(
+      cores: _coresDaMarca(),
+      tipos: const {
+        'displaySm': DilettaType.displaySm,
+        'headlineLg': DilettaType.headlineLg,
+        'headlineSm': DilettaType.headlineSm,
+        'titleMd': DilettaType.titleMd,
+        'subheading': DilettaType.subheading,
+        'bodyMd': DilettaType.bodyMd,
+        'bodySm': DilettaType.bodySm,
+        'label': DilettaType.label,
+        'labelSm': DilettaType.labelSm,
+        'numeric': DilettaType.numeric,
+      },
+      raios: {
+        'all8': DilettaRadius.all8.topLeft.x,
+        'all16': DilettaRadius.all16.topLeft.x,
+        'all24': DilettaRadius.all24.topLeft.x,
+        'pillAll': DilettaRadius.pillAll.topLeft.x,
+      },
+      movimentos: const {
+        'micro (120ms)': MotionDaTransicao(
+            duracao: DilettaMotion.micro, curva: DilettaMotion.enter, token: 'DilettaMotion.micro',
+            descricao: 'hover e troca de cor'),
+        'short (150ms)': MotionDaTransicao(
+            duracao: DilettaMotion.short, curva: DilettaMotion.enter, token: 'DilettaMotion.short',
+            descricao: 'pastilha do segmento, thumb do interruptor'),
+        'medium (250ms)': MotionDaTransicao(
+            duracao: DilettaMotion.medium, curva: DilettaMotion.enter, token: 'DilettaMotion.medium',
+            descricao: 'folha, toast, ponto de página'),
+        'slow (400ms)': MotionDaTransicao(
+            duracao: DilettaMotion.slow, curva: DilettaMotion.standard, token: 'DilettaMotion.slow',
+            descricao: 'transição de página'),
+      },
+    ),
     // OS CONTRATOS (v0.36.0 do motor) — guideline é parte do contrato do COMPONENTE, não do catálogo
     // que o mostra. Pro componente do PAI o markdown vem do pacote dele (`kDilettaSpecs`), e o mapa
     // abaixo é DERIVADO do `ctor` de cada bloco: escrever a correspondência à mão com 43 blocos e 64
@@ -1521,6 +1568,9 @@ Map<String, String> _contratosDosBlocos(Map<String, BlockDef> blocos) {
   // `indicadorDeHome` não têm `ctor` (o primeiro aninha três níveis, o segundo é chrome de aparelho),
   // então a derivação não os alcança.
   const excecoes = {
+    // `DilettaIllustrationAccessory` → a spec é da ILUSTRAÇÃO (`design-system-illustration`, que o pai
+    // escreveu na v0.17.0): o acessório é o invólucro de tamanho, e o contrato é da arte.
+    'ilustracao': 'design-system-illustration',
     'lista': 'design-system-app-list',
     'linha': 'design-system-app-list',
     'linhaDeValor': 'design-system-app-list',
@@ -1533,6 +1583,24 @@ Map<String, String> _contratosDosBlocos(Map<String, BlockDef> blocos) {
     if (md != null) mapa[tipo] = md;
   });
   return mapa;
+}
+
+/// As cores da marca como inventário: nome do token → cor.
+///
+/// Só as RAMPAS, e não os ~51 papéis: papel é derivado e muda com o modo, então mostrá-lo numa lista sem
+/// dizer o modo é meia informação. Papel nos dois modos é Fundamentos, que é a página da decisão.
+Map<String, Color> _coresDaMarca() {
+  const p = BoldPalette.bold;
+  return {
+    'primary01': p.primary01, 'primary02': p.primary02, 'primary03': p.primary03,
+    'primary04': p.primary04, 'primary05': p.primary05, 'primary06': p.primary06,
+    'primary07': p.primary07, 'primary08': p.primary08, 'primary09': p.primary09,
+    'success03': p.success03, 'success04': p.success04,
+    'warning03': p.warning03, 'warning04': p.warning04,
+    'error03': p.error03, 'error04': p.error04,
+    'vinho.marca': BoldVinho.marca, 'vinho.ink': BoldVinho.ink,
+    'neutral01': p.neutral01, 'neutral05': p.neutral05, 'neutral10': p.neutral10,
+  };
 }
 
 bool _vazio(Object? v) => v == null || '$v'.isEmpty;

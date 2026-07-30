@@ -71,25 +71,12 @@ void main() {
         .where((l) => l.contains('error') && l.contains('.dart:'))
         .toList();
 
-    // A DÍVIDA DECLARADA: `docs/pedidos/2026-07-30-o-dolar-nao-e-escapado.md`.
-    //
-    // O `_escapa` do motor cobre `\\` e `'` e não cobre `\$`. Em Dart, `'R\$ 1.240,00'` é tentativa de
-    // interpolação — `\$ ` não é identificador —, então TODA string de dinheiro emitida por tabela é erro
-    // de sintaxe. Num produto bancário é o literal mais comum que existe.
-    //
-    // Os 8 são `missing_identifier`/`invalid_constant` nas quatro strings com `R\$` (valor, saldo, linha
-    // de valor, resumo). Qualquer erro de OUTRA classe reprova o gate — é isso que mantém ele vivo
-    // enquanto a dívida existe, em vez de virar `isEmpty` comentado.
-    final doDolar = erros
-        .where((e) => e.contains('missing_identifier') || e.contains('invalid_constant'))
-        .toList();
-    final outros = erros.where((e) => !doDolar.contains(e)).toList();
-
-    expect(outros, isEmpty,
-        reason: 'o código gerado NÃO compila, e não é o defeito do \$:\n${outros.join('\n')}\n\n'
+    // A dívida do `$` MORREU na v0.38.1 do motor: `_escapa` passou a cobrir barra, apóstrofe e dólar,
+    // na ordem que o pedido indicou. Este gate voltou a exigir ZERO erro de qualquer classe, que é onde
+    // ele deveria estar desde o começo — e foi o próprio gate que mediu o conserto.
+    expect(erros, isEmpty,
+        reason: 'o código gerado NÃO compila:\n${erros.join('\n')}\n\n'
             'emitido:\n${emitidos.entries.map((e) => '${e.key}: ${e.value}').join('\n')}');
-    expect(doDolar, hasLength(8),
-        reason: 'mudou o número de erros do \$ — se zerou, o pai consertou e esta dívida sai daqui');
   }, timeout: const Timeout(Duration(minutes: 3)));
 
   test('e o gate SABE falhar — controle com código inválido de propósito', () async {

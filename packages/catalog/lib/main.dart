@@ -45,9 +45,8 @@ CatalogoConfig configDoCatalogoDoBold() => CatalogoConfig(
           label: 'Fundamentos',
           constroi: (_) => const AbaDeFundamentos(),
         ),
-        // STYLES entre fundamentos e componentes, porque é a ordem da derivação: material cru →
-        // material composto → peça montada. O dono do produto corrigiu a fusão das duas primeiras:
-        // "styles e foundations são coisas diferentes".
+        // STYLES é do MOTOR desde a v0.39.0, derivada do `InventarioDeEstilo` que o plugue declara. A
+        // minha versão escrita à mão saiu no mesmo commit: peça que o pai entrega, o filho não reescreve.
         AbaDoCatalogo(
           id: 'styles',
           label: 'Styles',

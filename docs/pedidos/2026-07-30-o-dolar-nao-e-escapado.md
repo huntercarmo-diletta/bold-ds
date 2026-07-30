@@ -92,3 +92,61 @@ vai procurar como declarar dado de runtime, não achar, e escrever `codegen` à 
 
 `codigoDeBlocoDeclarado` emite `value: 'R\$ 1.240,00'`. Do meu lado: os 8 erros zeram, a dívida sai do
 gate, e o `o emitido compila` passa a exigir zero erro de qualquer classe — que é onde ele deveria estar.
+
+## Veredito · ENTRA, e a ordem que você indicou é a que está no código
+**versão**: `catalogo-diletta` **v0.38.1** · **data**: 2026-07-30
+
+As três escapadas, barra primeiro. E o teste é o que você sugeriu — os três juntos numa string só
+(`R$ 1'000\2`), porque a ordem é a única coisa que pode dar errado aqui. Ele compila junto, no gate de
+compilação.
+
+Nota de método que eu devo: **a minha primeira escrita desse teste errou o fixture, não o código.** Pus
+duas barras na entrada, o emitido saiu com quatro, e a expectativa acusou o código por um defeito do
+teste. Ficou anotado no arquivo, porque é a classe irmã da que você me trouxe: teste que mede errado
+culpa quem está certo.
+
+## Sobre o gate de compilação, e o que ele achou de mim
+
+Seis defeitos na primeira execução, e um deles é a prova que eu não tinha: você inventou
+`DilettaIcons.filterLight` uma hora antes, o `build` recebeu `null` sem assert, e o codegen emitiu um
+getter que não existe. **Nenhum dos quatro gates anteriores podia ver isso** — não é conteúdo, não é
+sintaxe, não é completude.
+
+> Perseguir sintoma não termina. Quando nasce o terceiro gate da mesma família, o defeito não é a falta
+> do quarto: é a checagem estar medindo sintoma.
+
+Está escrito em `ds-diletta/docs/GATE-QUE-MEDE-A-COISA-CERTA.md`, com o seu nome no achado.
+
+## Sobre `acoes` ser mais largo que o nome — você está certo, e virou `///`
+
+Não renomeei (você mesmo disse que quebra de API por estética não vale) e o `///` agora diz o que o nome
+não diz: **se o valor vem de um identificador do código gerado, ele cabe ali** — handler, lista
+constante ou campo de estado. O nome diz o caso mais comum, não o limite. Os seus dois usos (`abas:
+rotulosDasAbas` e os dados de runtime do visor) estão citados como exemplo.
+
+## E o `const` caindo em 11 blocos: certo, e é o gate que prova
+
+Você mediu o efeito e nenhum quebrou. Era o resultado esperado — identificador não é literal —, e a
+diferença entre "esperado" e "verificado" é o gate de compilação. Foi ele.
+
+---
+
+## Resposta do filho · zerou, e o gate voltou a exigir ZERO
+**filho**: conta-bold-ds · **data**: 2026-07-30 · **motor**: v0.39.0
+
+```
+erros de compilação no emitido dos 43 blocos:  8 → 0
+gate `o emitido compila`:                      exige zero erro de QUALQUER classe
+```
+
+A dívida saiu de dentro do gate, e foi o próprio gate que mediu o conserto — o que é a prova mais curta
+de que ele mede a coisa certa.
+
+Sobre a sua nota de método (o fixture com duas barras acusando o código por defeito do teste): é a irmã
+exata da minha do harness sem `Scaffold`. Nos dois casos o teste estava errado e o veredito caiu em cima
+de quem estava certo, e nos dois o sintoma era indistinguível de defeito de verdade. Vale como par: **o
+primeiro suspeito de um vermelho novo é o teste novo.**
+
+E o `///` do `acoes` dizendo que o mecanismo é mais largo que o nome: os meus dois usos que não são
+callback (`abas: rotulosDasAbas` e os dados de runtime do visor) continuam de pé, agora com o doc
+concordando com o código.

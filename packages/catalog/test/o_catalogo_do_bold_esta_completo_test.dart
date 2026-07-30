@@ -19,47 +19,7 @@ void main() {
       ? codigoDeBlocoDeclarado(def, def.defaults())
       : def.codegen(def.defaults());
 
-  /// A BASELINE de 2026-07-30, e ela é dívida datada — não licença.
-  ///
-  /// A v0.36.0 do motor trouxe `bloco-sem-contrato`: guideline é parte do contrato do COMPONENTE, e bloco
-  /// sem contrato desenha nome e matriz e para ali. O gate acusa **18 blocos**, e ele reporta os cinco
-  /// primeiros nominalmente mais uma linha de resumo — então a baseline tem SEIS chaves, não dezoito.
-  ///
-  /// Os 18 se separam em três grupos com donos diferentes:
-  ///
-  /// - ~~**12 componentes NASCIDOS aqui**~~ — **ESCRITOS** no mesmo dia (`kBoldSpecs`, no pacote do DS).
-  ///   Eram dívida minha, e saíram no dia em que a regra passou a existir. Medido depois: **37 dos 43
-  ///   blocos com contrato, 13 com guidelines**;
-  /// - **5 componentes do PAI sem spec no conjunto dele** (`DilettaText`, `DilettaIcon`, `DilettaGap`,
-  ///   `DilettaDivider`, `DilettaIllustrationAccessory`): as 64 specs cobrem 64 dos ~127 componentes, e
-  ///   estes cinco ficaram fora. Não é coisa que eu conserte — pedido escrito;
-  /// - **1 chrome de aparelho** (`barraDeStatus`), que por contrato não emite código nem entra em tela
-  ///   montada. Cobrar contrato dele é o MESMO falso positivo que o `bloco-sem-leitura` tinha na v0.30.0,
-  ///   e está no mesmo pedido.
-  ///
-  /// A primeira versão desta baseline tinha 18 chaves inventadas por mim a partir do formato que eu
-  /// SUPUS. Treze eram fantasma, e quem disse foi o teste abaixo — terceira vez no dia que uma asserção
-  /// de controle me impede de declarar dívida que não existe.
-  const baselineDeContratos = {
-    "bloco-sem-contrato|PlugueDoDs.contratos['barraDeStatus']",
-    "bloco-sem-contrato|PlugueDoDs.contratos['texto']",
-    "bloco-sem-contrato|PlugueDoDs.contratos['icone']",
-    "bloco-sem-contrato|PlugueDoDs.contratos['ritmo']",
-    "bloco-sem-contrato|PlugueDoDs.contratos['divisor']",
-    'bloco-sem-contrato|PlugueDoDs.contratos',
-  };
-
-  test('a baseline NÃO tem fantasma — item que já não acusa sai daqui', () {
-    // Sem isto a baseline sobrevive ao conserto: o pai escreve a spec, o gate para de acusar, e a linha
-    // fica aqui pra sempre parecendo dívida. Foi o que aconteceu com a baseline anterior deste repo, e
-    // ela durou uma hora porque este teste existia.
-    final semBaseline = violacoesDoFilho().map(chaveDaViolacao).toSet();
-    final fantasmas = baselineDeContratos.difference(semBaseline);
-    expect(fantasmas, isEmpty,
-        reason: 'na baseline e já consertado — apague estas linhas: $fantasmas');
-  });
-
-  test('o catálogo do Bold está completo — só a baseline de contratos', () {
+  test('o catálogo do Bold está completo — baseline VAZIA de novo', () {
     // Voltou a ser vazia na v0.30.1 do motor. Ela existiu por menos de uma hora, com quatro itens
     // que eram todos do pai: o `ehCtor` que não lia construtor nomeado (regressão da v0.30.0) e
     // dois falsos positivos do gate, que cobrava leitura de chrome de aparelho — o que por
@@ -67,7 +27,7 @@ void main() {
     //
     // Filho nasce sem dívida, e este está sem. Se ficar vermelho, o conserto é aqui — não na
     // baseline.
-    final v = violacoesDoFilho(baseline: baselineDeContratos);
+    final v = violacoesDoFilho();
     expect(v, isEmpty, reason: v.map((e) => '\n$e').join());
   });
 
@@ -237,7 +197,11 @@ void main() {
           final valor = '${padroes[prop] ?? ''}';
           // Texto vazio e `false` não têm conteúdo pra levar — omitir ali é acerto, não perda.
           if (valor.isEmpty || valor == 'false') continue;
-          if (!codigo.contains(valor)) semConteudo.add('${def.type}.$prop');
+          // O `\$` chega ESCAPADO desde a v0.38.1 (`'R\$ 90,00'`), que é o conserto do defeito que
+          // fazia toda string de dinheiro ser erro de sintaxe. A comparação precisa escapar também —
+          // senão este gate acusa o conserto.
+          final esperado = valor.replaceAll(r'$', r'\$');
+          if (!codigo.contains(esperado)) semConteudo.add('${def.type}.$prop');
         }
       }
       expect(semConteudo, isEmpty,
@@ -288,7 +252,8 @@ void main() {
       expect(codigo, startsWith('ds.DilettaAppList.carded('));
       expect(codigo, contains("title: 'Ajuda'"));
       expect(codigo, contains('ds.DilettaAppListRow.menuItem('));
-      expect(codigo, contains(r"amount: 'R$ 90,00'"));
+      // Escapado, e é o certo: `'R$ 90,00'` em Dart é interpolação. O pai consertou na v0.38.1.
+      expect(codigo, contains(r"amount: 'R\$ 90,00'"));
 
       final volta = ler(codigo).blocks.single;
       expect(volta.type, 'lista');

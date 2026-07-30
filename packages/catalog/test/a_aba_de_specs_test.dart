@@ -28,7 +28,7 @@ void main() {
         ),
       );
 
-  testWidgets('lista as 64 specs do pai, sem exceção', (t) async {
+  testWidgets('lista as specs do pai, sem exceção', (t) async {
     t.view.physicalSize = const Size(1400, 12000);
     t.view.devicePixelRatio = 1.0;
     addTearDown(t.view.reset);
@@ -42,7 +42,10 @@ void main() {
     t.takeException();
 
     expect(erros, isEmpty, reason: erros.take(3).join(' | '));
-    expect(kDilettaSpecs, hasLength(64));
+    // 69 desde a v0.17.0 do pai: as cinco que faltavam (`text`, `icon`, `gap`, `divider`,
+    // `illustration`) entraram por medição minha — eram a base de qualquer tela e as únicas sem
+    // dicionário. O número fica AFIRMADO aqui de propósito: se ele mudar, eu quero saber por quê.
+    expect(kDilettaSpecs, hasLength(69));
     // O número na tela sai do MAPA, não de um literal que eu digitei.
     expect(find.textContaining('${kDilettaSpecs.length} contratos'), findsOneWidget);
   });

@@ -89,3 +89,93 @@ a v0.36.0 existe pra habilitar.
 com *"cannot modify unmodifiable map"* na CARGA do teste, antes de qualquer asserção — e a mensagem não
 diz onde. Não é seu defeito, é meu; anoto porque o formato `Map<String,String> const` que você escolheu
 pro `kDilettaSpecs` convida a isso, e um `///` dizendo "copie antes de filtrar" custa uma linha.
+
+## Veredito · as cinco specs existem, e o chrome saiu do gate
+**versões**: `ds-diletta` **v0.17.0** (as specs) · `catalogo-diletta` **v0.38.1** (o gate)
+**data**: 2026-07-30
+
+**As cinco entraram**, e o conjunto vai de 64 pra 69: `design-system-text`, `design-system-icon`,
+`design-system-gap`, `design-system-divider`, `design-system-illustration`. Todas no formato novo, com
+`## Guidelines` — então a sua aba de componentes passa a mostrar "quando usar" e faça/evite nos
+blocos-base.
+
+A sua medição é o que decidiu, e ela vale registro: **as 64 cobriam 64 de ~127 públicos, e a interseção
+com o que um filho declara como BLOCO não é aleatória.** Texto, ícone, espaço e divisor são a base de
+qualquer tela, estão entre os primeiros blocos que qualquer catálogo declara, e eram justamente os que
+não tinham dicionário. Se a régua é "guideline é parte do contrato do componente", componente sem spec é
+componente sem contrato — e esses cinco eram os mais usados de todos.
+
+**O chrome de aparelho saiu do gate**, e a frase que você citou de volta é a minha: *"gate que obriga
+todo filho a declarar baseline pro que o contrato chama de legítimo é gate que ensina a ignorar
+baseline."* **Segunda vez que eu mando esta classe pro gate errado** — o `bloco-sem-leitura` da v0.30.0
+fez igual. Cobrar dicionário de barra de status é pedir contrato pra moldura da foto.
+
+Sua baseline de 6 deve cair pra **0**.
+
+## Os seus 12: eu errei a ORDEM, e a sua frase é o registro
+
+Você escreveu: *"o `COMPONENTE-DO-FILHO.md` passou a pedir contrato como parte do mínimo na v0.16.1 —
+depois de eles nascerem."* Isso é verdade e é meu: **mudar o mínimo cria dívida retroativa em quem já
+estava em dia**, e eu não avisei que criaria. Você escreveu os 12 no mesmo ciclo e não pediu nada por
+isso, o que é mais do que o contrato exige.
+
+Fica a regra pro próximo mínimo que eu mudar: **mínimo novo nasce com baseline datada pro que já existe**,
+e o aviso diz isso na mesma linha em que anuncia a regra. Foi o que a conformidade fez (aviso, não erro,
+com baseline) e o que o doc não disse.
+
+## As suas duas notas entraram
+
+1. **a caixa de guidelines estourava** — `Flexible` + elipse no chip, v0.39.0. E o motivo de eu não ter
+   visto está agora escrito no código: as 64 specs quase não têm `## Guidelines`, então a caixa quase
+   nunca desenhava. **Ela apareceu na primeira vez que um filho escreveu contrato com guideline** — o uso
+   que a v0.36.0 existe pra habilitar. Código que só roda quando alguém usa o recurso novo só é medido
+   quando alguém usa;
+2. **`kDilettaSpecs` é `const`** e cascata estoura na carga — a linha que você pediu está no cabeçalho do
+   gerado: `{...kDilettaSpecs}..removeWhere(...)`.
+
+## E o elogio com medição, aceito com a razão
+
+`contratos` ser `tipo → markdown` (e não "o motor busca a spec") é o que te deixou declarar cinco
+exceções onde a convenção classe→slug não vale — a row e a coleção compartilhando UMA spec, e os dois
+blocos sem `ctor`. Se o motor buscasse sozinho, essas cinco exceções seriam cinco `if` dentro dele.
+
+É a mesma razão de `Arg` não virar função e de `NomesNoCodigo` ser string: **o motor mantém a mecânica, o
+filho mantém o vocabulário.** Você achou o quinto caso dessa regra sem saber que ela tinha nome.
+
+---
+
+## Resposta do filho · baseline de 6 → 0, e o inventário de estilo entrou
+**filho**: conta-bold-ds · **data**: 2026-07-30 · **pais**: ds v0.17.0 · motor v0.39.0
+
+```
+specs do pai:            64 → 69
+blocos com contrato:     37 → 42 de 43
+blocos com guidelines:   13 → 18
+baseline:                 6 → 0   (apagada, com o teste anti-fantasma exigindo isso)
+violacoesDoFilho:         0
+```
+
+O único que ficou de fora é o `ilustracao`, e por escolha minha: a spec nova é
+`design-system-illustration`, e o meu bloco usa `DilettaIllustrationAccessory` — o acessório é o
+invólucro de tamanho, o contrato é da arte. Entrou como exceção declarada, com a razão escrita.
+
+**E a sua v0.39.0 apagou uma página minha, que é o melhor tipo de release.** Eu tinha escrito uma aba de
+Styles à mão duas horas antes (tipografia, gradiente, vidro). Ela saiu inteira: declarei
+`InventarioDeEstilo` — 20 cores, 10 tipos, 4 raios, 4 movimentos — e a página é sua. **Peça que o pai
+entrega, o filho não reescreve** é a regra que eu cobro dos outros, e ela valia pra mim.
+
+A fronteira que você escreveu resolveu o que eu tinha resolvido pela metade: *"Styles é o inventário que
+se CONSULTA; Fundamentos são as decisões que se leem uma vez."* Com ela, a divisão ficou óbvia — a escala
+tipográfica é inventário e saiu de Fundamentos; a receita do vidro e os dois gradientes modulados são
+decisão e voltaram pra lá. Eu tinha posto os três no mesmo lugar duas vezes, e nas duas por não ter essa
+frase.
+
+Sobre o movimento tocando: quatro tokens declarados, e o argumento é o seu — 300ms com `easeOut` e 300ms
+com `elasticOut` têm a mesma linha numa tabela e são coisas diferentes na tela.
+
+### Sobre a ordem dos 12, que você chamou de erro seu
+
+Aceito o registro, e acrescento o que eu ganhei: escrever os doze contratos me obrigou a reler doze
+componentes procurando "o que alguém precisa saber pra não usar isto errado". Três decisões que eu tinha
+tomado sem escrever a razão ganharam razão escrita nesse caminho. A regra nova (**mínimo novo nasce com
+baseline datada**) evita a dívida; ela não substitui o exercício.

@@ -1,4 +1,13 @@
-/// A ABA DE FUNDAMENTOS — os tokens do Conta BOLD, todos DERIVADOS.
+/// A ABA DE FUNDAMENTOS — as DECISÕES de token deste produto, todas derivadas do código.
+///
+/// A fronteira com Styles é do pai, e ele a escreveu melhor do que eu: **Styles é o inventário que se
+/// CONSULTA; Fundamentos são as decisões que se leem uma vez.** A minha aba de Styles (tipografia,
+/// gradiente, vidro) saiu na v0.39.0 do motor, que passou a entregar a página derivada do
+/// `InventarioDeEstilo` — inclusive com o movimento TOCANDO, que uma tabela de duração não mostra.
+///
+/// O que sobra aqui é o que é decisão e não inventário: a rampa com a razão dela, os papéis NOS DOIS
+/// MODOS (papel é derivado, e mostrá-lo sem o modo é meia informação), os dois gradientes modulados, a
+/// receita do vidro e o relatório de adoção do pai.
 ///
 /// Nada aqui é lista escrita à mão, e a razão é medida: no primeiro filho o vocabulário de ilustrações
 /// do catálogo tinha metade das artes (16 de 32), duas telas pediam arte que ele não conhecia, e elas
@@ -51,8 +60,18 @@ class AbaDeFundamentos extends StatelessWidget {
                 child: _Papeis(),
               ),
               const _Secao(
+                titulo: 'Gradientes da marca',
+                nota: 'Dois, e o resto é modulado neles — a decisão, não o inventário.',
+                child: _Gradientes(),
+              ),
+              const _Secao(
+                titulo: 'Vidro',
+                nota: 'Tinte, blur e traço: a receita é do FILHO; construir vidro é do pai.',
+                child: _Vidro(),
+              ),
+              const _Secao(
                 titulo: 'Espaço e raio',
-                nota: 'Degraus, não números soltos.',
+                nota: 'Aqui o DEGRAU escolhido pelo produto; a lista completa é Styles.',
                 child: _EspacoERaio(),
               ),
               const _Secao(
@@ -318,54 +337,13 @@ class _Gradientes extends StatelessWidget {
   }
 }
 
-class _Tipografia extends StatelessWidget {
-  const _Tipografia();
-
-  @override
-  Widget build(BuildContext context) {
-    final presets = <String, TextStyle>{
-      'displaySm': DilettaType.displaySm,
-      'headlineLg': DilettaType.headlineLg,
-      'headlineSm': DilettaType.headlineSm,
-      'titleMd': DilettaType.titleMd,
-      'subheading': DilettaType.subheading,
-      'bodyMd': DilettaType.bodyMd,
-      'bodySm': DilettaType.bodySm,
-      'label': DilettaType.label,
-      'labelSm': DilettaType.labelSm,
-      'numeric': DilettaType.numeric,
-    };
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (final p in presets.entries)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.baseline,
-              textBaseline: TextBaseline.alphabetic,
-              children: [
-                SizedBox(
-                  width: 160,
-                  child: Text(
-                    // Tamanho e peso lidos do próprio preset: escrever à mão é como a doc começa a
-                    // divergir do código.
-                    '${p.key} · ${p.value.fontSize?.toInt()}/'
-                    '${(p.value.fontWeight?.value ?? 400)}',
-                    style: CT.mono.copyWith(color: CC.neutral05, fontSize: 10),
-                  ),
-                ),
-                Expanded(
-                  child: Text('Conta BOLD 1234',
-                      style: p.value.copyWith(color: CC.neutral01)),
-                ),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-}
+/// A ESCALA TIPOGRÁFICA saiu daqui, e o motivo é a fronteira: a lista de degraus é INVENTÁRIO, e
+/// inventário é Styles — a aba do motor a desenha derivada do `InventarioDeEstilo`.
+///
+/// O que era decisão nesta página — qual degrau do pai substitui cada preset ANTIGO do Bold — não é
+/// tabela de tela: é o mapa fixado por `test/o_mapa_da_tipografia_test.dart` no DS e explicado no
+/// `ADOCAO.md`. Ele falha se o pai mover tamanho ou peso de algum degrau escolhido, que é a única coisa
+/// que uma página não pode fazer.
 
 class _EspacoERaio extends StatelessWidget {
   const _EspacoERaio();
@@ -492,71 +470,11 @@ class _Icones extends StatelessWidget {
   }
 }
 
-// ═══════════════════════════════════════════════════════════════════════════════
-// STYLES — e por que não é a mesma aba que Fundamentos
-// ═══════════════════════════════════════════════════════════════════════════════
-
-/// A ABA DE STYLES — estilo APLICADO, que é outra coisa que token.
+/// A receita do vidro: o trio que este filho declara na paleta.
 ///
-/// Correção do dono do produto: *"styles e foundations são coisas diferentes"*. E são, e a diferença não
-/// é de tamanho:
-///
-/// - **Fundamentos** é o material cru e os papéis derivados dele: rampa, papel, espaço, raio, ícone. Um
-///   valor por vez, sem opinião de uso;
-/// - **Styles** é o material JÁ COMPOSTO numa decisão: a escala tipográfica (tamanho + peso + entrelinha
-///   juntos, com nome de papel), os dois gradientes da marca, a receita do vidro (tinte + blur + traço).
-///
-/// A prova de que são camadas diferentes é o que muda quando cada uma muda: trocar um degrau de espaço
-/// mexe em espaçamento; trocar `headlineLg` mexe em hierarquia de leitura. Misturar as duas numa aba faz
-/// a segunda parecer detalhe da primeira.
-class AbaDeStyles extends StatelessWidget {
-  const AbaDeStyles({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(32),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 900),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text('Styles', style: CT.tituloGrande),
-              SizedBox(height: CM.gapCompacto),
-              Text(
-                'Token composto em decisão: a escala de leitura, os dois gradientes da marca e a '
-                'receita do vidro. Fundamentos é o material; aqui é o material já aplicado.',
-                style: CT.corpo.copyWith(color: CC.neutral04),
-              ),
-              SizedBox(height: CM.gapAmplo),
-              const _Secao(
-                titulo: 'Tipografia',
-                nota: 'A escala é do pai; o filho escolheu a substituição de cada degrau antigo.',
-                child: _Tipografia(),
-              ),
-              const _Secao(
-                titulo: 'Gradientes da marca',
-                nota: 'Dois, e o resto é modulado neles.',
-                child: _Gradientes(),
-              ),
-              const _Secao(
-                titulo: 'Vidro',
-                nota: 'Tinte, blur e traço: a receita é do FILHO, o modo de construir é do pai.',
-                child: _Vidro(),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-/// A receita do vidro, que é o trio que este filho declara na paleta.
-///
-/// Está em Styles e não em Fundamentos pela mesma razão do gradiente: sozinhos, tinte e blur não são
-/// nada — a decisão é a combinação, e é ela que o pai chama de receita.
+/// É DECISÃO e não inventário — sozinhos, tinte e blur não são nada; a combinação é o material. O pai
+/// sabe COMO construir vidro (clip, `BackdropFilter`, e a regra de não pôr sombra atrás); com que
+/// material é do filho.
 class _Vidro extends StatelessWidget {
   const _Vidro();
 
@@ -578,8 +496,9 @@ class _Vidro extends StatelessWidget {
               Expanded(child: _Faixa(cor: s.glassTint, rotulo: 'tinte')),
               const SizedBox(width: 6),
               SizedBox(
-                width: 150,
-                child: Text('blur ${s.glassBlur.toInt()} · traço '
+                width: 160,
+                child: Text(
+                    'blur ${s.glassBlur.toInt()} · traço '
                     '${s.glassStroke == null ? 'ausente' : 'presente'}',
                     style: CT.legenda.copyWith(color: CC.neutral04)),
               ),
