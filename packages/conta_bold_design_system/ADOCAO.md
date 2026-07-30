@@ -461,9 +461,18 @@ dez estavam mortos, e portar código morto é o pior tipo de trabalho — parece
 | `BoldSaldo` (era `BoldBalance`) | 3 | **nasceu** |
 | `BoldCopiar` (era `BoldCopyButton`) · `BoldAbas` (era `BoldTabs`) | 3 cada | **nasceram** |
 | `BoldCabecalhoDaHome` | 3 | **nasceu** — e é CASCA, não acessório |
-| `BoldRuleLadder` · `BoldTransactionSummary` | 2 cada | a fazer |
+| `BoldVisorDeCodigo` | 1 (e é o diferencial) | **nasceu** — sem plugin de câmera |
+| `BoldResumoDaTransacao` (era o topo de `BoldTransactionSummary`) | **3** | **nasceu** — e só o CONTEÚDO |
+| `BoldRuleLadder` | 2 | a fazer |
 | `BoldApprovalProgress` · `BoldSlaChip` · `BoldPageDots` · `BoldPixMark` · `BoldSecondaryBackground` | 1 cada | a fazer |
 | `BoldHomeBackground` · `BoldTabBar` · `BoldAccountPill` · `BoldAccountSwitcher` | **0** | **não portar** |
+
+**O `BoldTransactionSummary` foi o terceiro achado de classificação, e o mais útil:** ele não é
+componente, é a TELA do comprovante (`Scaffold` + fundo + barra + cabeçalho + seções + CTA). Das seis
+peças, cinco já existiam na linguagem — o que faltava era só o cabeçalho, e ele nasceu como
+`BoldResumoDaTransacao`. A medição que justifica: **três telas de comprovante** (Pix, boleto, TED)
+escrevem esse cabeçalho, e a TED escreve à mão com o valor a 34 contra 32 das outras duas. Bloco que
+já é a tela não compõe com nada no catálogo; cabeçalho compõe com os cinco.
 
 Dois achados de classificação no caminho:
 

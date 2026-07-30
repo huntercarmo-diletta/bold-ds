@@ -85,3 +85,43 @@ código gerado.
 `codigoDeBlocoDeclarado(def, def.defaults())` emite os argumentos, e o gerado de todo bloco COMPILA
 com os defaults. E o gate de ida-e-volta ganha um par: além de "volta como o mesmo tipo", "o emitido
 contém o conteúdo" — porque foi essa a propriedade que faltava medir.
+
+---
+
+## Veredito · ENTRA (defeito meu, e a sua análise é melhor que o meu gate)
+**pai**: catalogo-diletta · **data**: 2026-07-30 · **critério que pesou**: robustez
+
+Saiu na v0.32.1. **O critério deixou de ser "igual ao default" e passou a ser "tem conteúdo"**:
+argumento com valor sai sempre; só valor vazio ou nulo fica fora, porque `label: ''` é ruído e não há
+conteúdo pra apagar ali.
+
+Não fui pela sua proposta por kind (`bool` omite, os outros emitem) por um motivo que é o seu próprio
+argumento levado um passo: **o motor não sabe o que é obrigatório no construtor, e isso vale pro `bool`
+também.** Um `required bool` quebraria igual. Uma regra é mais simples e mais segura que três, e o custo
+— gerado mais verboso — é o que eu escolho pagar contra código que não compila.
+
+E não fui pela declaração de "qual argumento é obrigatório" pela razão que **você** deu: mais uma
+declaração pra manter, com ganho de estética. Se algum dia a verbosidade doer de verdade, é esse o
+caminho, e ele fica registrado aqui.
+
+### A parte mais importante do seu pedido não era o defeito
+
+> *"O gate não estava frouxo, ele estava medindo a propriedade errada. Ida-e-volta prova que o par
+> emite/lê é consistente; não prova que o emitido é código válido."*
+
+Isso está certo e eu não tinha visto. O defeito era **simétrico**: a emissão omitia o default e a leitura
+repõe o default antes de aplicar o que achou, então `const ds.X()` voltava como o MESMO bloco. As duas
+pontas fechavam perfeitamente em cima de código que não compila — **17 de 17 passando com 14 blocos
+gerando erro de compilação.**
+
+Entrou `emitido-perde-conteudo`: pra cada bloco com tabela, todo argumento cujo default tem conteúdo
+precisa aparecer no gerado. É ortogonal à ida-e-volta, e a frase virou comentário no código porque é a
+explicação mais curta de por que duas checagens que parecem a mesma não são.
+
+**Sobre o teste que você deixou** (`o motor OMITE argumento igual ao default`, fixando a dívida pra ela
+não sobreviver ao conserto): pode apagar — ele vai falhar agora, e é isso que você queria que
+acontecesse. Foi a decisão certa: dívida declarada em teste é dívida que não vira permanente.
+
+**Como chega**: v0.32.1 · troque o `ref:`. Depois, confira dois números: `bloco-sem-leitura` zerando com
+os 17, e `emitido-perde-conteudo` zerando também. Se o segundo acusar algo, é bloco cujo `defaults` tem
+conteúdo que o gerador ainda não leva — e aí eu quero ver qual.

@@ -1,7 +1,20 @@
 # Paridade DS — app-newbold (base) × conta-bold-ds (catálogo)
 
+> **NOTA DE SUPERAÇÃO · 2026-07-30.** Este documento é HISTÓRIA, e os números dele descrevem o mundo de
+> antes: ele comparava o DS do app com o DS antigo deste repo, quando a direção era "o app é a base,
+> enriquecido pelo catálogo". **A arquitetura mudou**: hoje a linguagem mora nos dois pais
+> (`ds-diletta`, `catalogo-diletta`) e este repo é filho dos dois — o app não é base de nada, ele é
+> quem adota.
+>
+> O que está vivo mora em [`packages/conta_bold_design_system/ADOCAO.md`](packages/conta_bold_design_system/ADOCAO.md):
+> a classificação atual (rename puro · variante do filho · só do Bold), o que já nasceu e com quantos
+> usos medidos.
+>
+> Fica aqui, e não apagado, porque a auditoria explica POR QUE algumas escolhas foram feitas — e quem
+> reescreve histórico perde o registro da decisão.
+
 Auditoria da task 1 do change `bold-ds-package-e-adocao`.
-Direção confirmada: **app é a base**, enriquecido pelo catálogo e pela CPF.
+Direção confirmada na época: **app é a base**, enriquecido pelo catálogo e pela CPF.
 
 ## Widgets (base app: 64 | catálogo: 59)
 

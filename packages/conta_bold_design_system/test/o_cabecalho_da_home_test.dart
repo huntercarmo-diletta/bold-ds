@@ -38,6 +38,11 @@ void main() {
     await t.pump(const Duration(milliseconds: 50));
 
     expect(t.takeException(), isNull, reason: 'estourou o layout de novo');
+    // A CASCA é do pai desde a v0.11.0 (`DilettaTopAppBar.comConteudo`): antes eu copiava a gramática
+    // dela aqui — vidro, status bar, coluna e o respiro do fim. Este `expect` é o que impede a cópia
+    // de voltar: se alguém remontar à mão, os outros testes continuam verdes e este não.
+    expect(find.byType(DilettaTopAppBar), findsOneWidget,
+        reason: 'a casca voltou a ser composta à mão aqui dentro');
     // A barra do pai é usada por dentro, e a linha de conta vai no acessório livre dela.
     expect(find.byType(DilettaNavigationTopBar), findsOneWidget);
     expect(find.byType(DilettaStatusBar), findsOneWidget);

@@ -178,30 +178,97 @@ void main() {
           reason: 'blocos sem entrada no leitor (abrem como código à mão): $semLeitor');
     });
 
-    test('o motor OMITE argumento igual ao default — defeito COM pedido escrito', () {
+    test('o emitido LEVA o conteúdo — a dívida da tabela morreu na v0.32.1', () {
       // `docs/pedidos/2026-07-30-a-tabela-omite-argumento-igual-ao-default.md`
       //
-      // A regra de omissão do motor descarta qualquer argumento cujo valor seja igual ao default do
-      // bloco. Pra `bool` está certo e documentado; pra texto e enum o default É conteúdo, e omitir
-      // gera código que NÃO COMPILA (`const ds.DilettaPageTitle()` com `title` obrigatório).
+      // Aqui morava a dívida declarada: o motor omitia todo argumento igual ao default do bloco, e
+      // **18 dos meus 20 blocos com tabela emitiam `const ds.X()` puro** — que não compila quando o
+      // construtor tem `required`. O teste antigo fixava esse número pra a dívida não sobreviver ao
+      // conserto, e foi o que aconteceu: na v0.32.1 ele passou a medir 0 e caiu.
       //
-      // 14 dos meus 16 blocos com tabela emitem sem argumento nenhum nesse caminho.
-      //
-      // Este teste fixa o comportamento ATUAL de propósito: quando o pai consertar, ele falha, e é
-      // isso que impede a dívida de sobreviver ao conserto.
-      final vazios = Ds.blocos.values
-          .where(temTabela)
-          .where((d) => d.args.isNotEmpty && emite(d).endsWith('()'))
-          .map((d) => d.type)
-          .toList();
-      expect(vazios, hasLength(14),
-          reason: 'mudou o número de blocos que emitem vazio — se caiu, o pai consertou e este '
-              'teste sai junto com a dívida');
+      // O que fica no lugar é a propriedade que faltava, e ela não é a de ida-e-volta: **ida-e-volta
+      // prova que o par emite/lê é consistente; não prova que o emitido é código válido.** As duas
+      // pontas fechavam perfeitamente em cima de código que não compila.
+      final semConteudo = <String>[];
+      for (final def in Ds.blocos.values.where(temTabela)) {
+        final padroes = def.defaults();
+        final codigo = emite(def);
+        for (final prop in def.args.keys) {
+          final valor = '${padroes[prop] ?? ''}';
+          // Texto vazio e `false` não têm conteúdo pra levar — omitir ali é acerto, não perda.
+          if (valor.isEmpty || valor == 'false') continue;
+          if (!codigo.contains(valor)) semConteudo.add('${def.type}.$prop');
+        }
+      }
+      expect(semConteudo, isEmpty,
+          reason: 'argumento com conteúdo no default que não aparece no gerado: $semConteudo');
+    });
 
-      // E a prova de que não é problema do meu lado: com valor diferente do default, emite certo.
-      final t = Ds.blocos['tituloDaPagina']!;
-      expect(codigoDeBlocoDeclarado(t, {'titulo': 'Outro', 'subtitulo': ''}),
-          contains("title: 'Outro'"));
+    test('o emitido é Dart VÁLIDO — nenhum argumento sem nome', () {
+      // `docs/pedidos/2026-07-30-a-tabela-nao-declara-argumento-posicional.md`
+      //
+      // Este gate nasceu de um defeito que apareceu ao consertar OUTRO: a v0.32.1 passou a emitir todo
+      // argumento com conteúdo, e com isso apareceu o que a omissão escondia — os dois blocos cujo
+      // conteúdo é POSICIONAL (`ds.DilettaText('oi')`, `ds.DilettaGap.h(s4)`) emitiam `(: 'oi')`.
+      //
+      // E o motivo de ele existir SEPARADO dos outros dois: `emitido-perde-conteudo` estava verde
+      // (o conteúdo estava lá) e ida-e-volta também (a leitura de enum e de posicional ignora o nome
+      // do argumento). Duas checagens verdes sobre código que não compila, de novo — só que agora um
+      // nível abaixo. A propriedade que faltava é a mais boba: **é sintaxe válida?**
+      for (final def in Ds.blocos.values) {
+        if (Ds.ehChromeDeDispositivo(def.type)) continue;
+        final codigo = emite(def);
+        expect(codigo, isNot(anyOf(contains('(: '), contains(', : '))),
+            reason: 'o bloco "${def.type}" emite argumento sem nome: $codigo');
+      }
+    });
+
+    test('a LISTA vai e volta com os FILHOS — o primeiro bloco de slot deste filho', () {
+      // O gate `TODO bloco declarado tem entrada no leitor` mede o `codegen`, e o da lista é o caso
+      // vazio (`children: const []`). O caminho de verdade é outro — `slotsCodegen` —, então sem este
+      // teste a capacidade nova ficaria sem medida nenhuma: a lista passaria o gate emitindo o card
+      // vazio e perderia todo item no código gerado, sem uma linha vermelha.
+      final lista = Block(
+        id: 'l',
+        type: 'lista',
+        props: {'titulo': 'Ajuda', 'idioma': 'carded'},
+        slots: {
+          'itens': [
+            Block(id: 'a', type: 'linha', props: Ds.blocos['linha']!.defaults()),
+            Block(
+              id: 'b',
+              type: 'linhaDeValor',
+              props: {...Ds.blocos['linhaDeValor']!.defaults(), 'valor': 'R\$ 90,00'},
+            ),
+          ],
+        },
+      );
+
+      final codigo = codigoDoBloco(lista);
+      expect(codigo, startsWith('ds.DilettaAppList.carded('));
+      expect(codigo, contains("title: 'Ajuda'"));
+      expect(codigo, contains('ds.DilettaAppListRow.menuItem('));
+      expect(codigo, contains(r"amount: 'R$ 90,00'"));
+
+      final volta = ler(codigo).blocks.single;
+      expect(volta.type, 'lista');
+      expect(volta.props['titulo'], 'Ajuda');
+      expect(volta.props['idioma'], 'carded');
+      // A recursão é o ponto: os itens voltam pela TABELA, cada um com o próprio tipo e props.
+      expect(volta.slots['itens']!.map((b) => b.type), ['linha', 'linhaDeValor']);
+      expect(volta.slots['itens']![1].props['valor'], r'R$ 90,00');
+      expect(volta.slots['itens']![0].props['icone'], 'userLight');
+    });
+
+    test('lista de outro idioma volta com o idioma certo, não com o default', () {
+      // `plain` e `menu` diferem só pelo construtor nomeado, e o `carded` é o default do bloco: ler
+      // qualquer um como `carded` daria uma tela que compila com o separador errado — a classe de
+      // defeito mais difícil de ver numa revisão.
+      final spec = ler('ds.DilettaAppList.menu(children: [\n'
+          "  ds.DilettaAppListRow.menuItem(icon: ds.DilettaIcons.bellLight, title: 'Avisos'),\n"
+          '])');
+      expect(spec.blocks.single.props['idioma'], 'menu');
+      expect(spec.blocks.single.slots['itens'], hasLength(1));
     });
 
     test('IDA e VOLTA fecham: codegen → leitor → mesmas props', () {

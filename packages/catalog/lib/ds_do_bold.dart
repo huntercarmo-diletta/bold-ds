@@ -41,10 +41,15 @@ TextStyle _estiloDe(String preset) => switch (preset) {
       _ => DilettaType.bodyMd,
     };
 
+/// FORA DA TABELA por defeito do motor, e com pedido escrito:
+/// `docs/pedidos/2026-07-30-a-tabela-nao-declara-argumento-posicional.md`.
+///
+/// O conteúdo deste componente é POSICIONAL (`ds.DilettaText('oi')`), e `Arg` só sabe emitir
+/// `nome: valor`. Declarar o nome vazio — que é o que eu fazia — emite `ds.DilettaText(: 'oi')`, que
+/// não compila. Enquanto não houver `Arg` posicional, o `codegen` à mão emite certo e o leitor tem a
+/// entrada correspondente.
 BlockDef _texto() => BlockDef(
       type: 'texto',
-      ctor: 'ds.DilettaText',
-      args: const {'conteudo': Arg.texto(''), 'preset': Arg.enumeracao('style', 'ds.DilettaType')},
       label: 'Texto',
       props: const {
         'conteudo': PropDef('multiline', bindable: true, dartType: 'String'),
@@ -226,10 +231,10 @@ BlockDef _aviso() => BlockDef(
           ', illustration: ds.DilettaIllustration.${p['ilustracao']})',
     );
 
+/// FORA DA TABELA pelo mesmo defeito do `texto`: o espaço do pai recebe o token POSICIONAL
+/// (`ds.DilettaGap.h(ds.DilettaSpacing.s4)`), e a tabela emitiria `.h(: ds.DilettaSpacing.s4)`.
 BlockDef _ritmo() => BlockDef(
       type: 'ritmo',
-      ctor: 'ds.DilettaGap.h',
-      args: const {'tamanho': Arg.enumeracao('', 'ds.DilettaSpacing')},
       label: 'Espaço',
       props: const {'tamanho': PropDef('spacingToken', options: ['s2', 's3', 's4', 's6', 's8'])},
       defaults: () => {'tamanho': 's4'},
@@ -246,6 +251,152 @@ BlockDef _divisor() => BlockDef(
       build: (p) => const DilettaDivider(),
       codegen: (p) => 'ds.DilettaDivider()',
     );
+
+BlockDef _cabecalhoDeSecao() => BlockDef(
+      type: 'cabecalhoDeSecao',
+      ctor: 'ds.DilettaSectionHeader',
+      args: const {'rotulo': Arg.texto('label')},
+      label: 'Cabeçalho de seção',
+      props: const {'rotulo': PropDef('text', bindable: true, dartType: 'String')},
+      defaults: () => {'rotulo': 'DETALHES'},
+      build: (p) => DilettaSectionHeader(label: '${p['rotulo']}'),
+      codegen: (p) => 'ds.DilettaSectionHeader(label: ${_str(p['rotulo'])})',
+    );
+
+/// A LINHA de menu — o `preset` mais comum deste app, medido: `spotIcon + titleSubtitle + chevron`
+/// aparece 109 vezes nas telas, e 39 delas já usam a fábrica direto.
+///
+/// Bloco de tabela, não de `if`: os três argumentos são literais, então o motor emite e lê com a
+/// mesma declaração. O `icone` sai como `ds.DilettaIcons.x` porque a constante do pai É o nome do
+/// arquivo — a mesma forma do bloco `icone`.
+BlockDef _linha() => BlockDef(
+      type: 'linha',
+      ctor: 'ds.DilettaAppListRow.menuItem',
+      args: const {
+        'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
+        'titulo': Arg.texto('title'),
+        'subtitulo': Arg.texto('subtitle'),
+      },
+      label: 'Linha de menu',
+      props: {
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+        'titulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'subtitulo': const PropDef('text', bindable: true, dartType: 'String'),
+      },
+      defaults: () => {
+        'icone': 'userLight',
+        'titulo': 'Dados pessoais',
+        'subtitulo': 'Nome, CPF e contato',
+      },
+      build: (p) => DilettaAppListRow.menuItem(
+        icon: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
+        title: '${p['titulo']}',
+        subtitle: _vazio(p['subtitulo']) ? null : '${p['subtitulo']}',
+        onTap: () {},
+      ),
+      codegen: (p) => 'ds.DilettaAppListRow.menuItem('
+          'icon: ds.DilettaIcons.${p['icone']}'
+          ', title: ${_str(p['titulo'])}'
+          '${_vazio(p['subtitulo']) ? '' : ', subtitle: ${_str(p['subtitulo'])}'}'
+          ', onTap: aoTocarNaLinha)',
+    );
+
+/// A LINHA DE VALOR — a do extrato e a do comprovante: ícone, título, origem, hora e o valor com
+/// sinal. Separada da linha de menu porque o acessório da direita é outro (valor, não seta), e o pai
+/// já expõe as duas como fábricas distintas.
+BlockDef _linhaDeValor() => BlockDef(
+      type: 'linhaDeValor',
+      ctor: 'ds.DilettaAppListRow.transactionItem',
+      args: const {
+        'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
+        'titulo': Arg.texto('title'),
+        'origem': Arg.texto('source'),
+        'hora': Arg.texto('time'),
+        'valor': Arg.texto('amount'),
+        'saida': Arg.bool('negative'),
+      },
+      label: 'Linha de valor',
+      props: {
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+        'titulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'origem': const PropDef('text', bindable: true, dartType: 'String'),
+        'hora': const PropDef('text', bindable: true, dartType: 'String'),
+        'valor': const PropDef('text', bindable: true, dartType: 'String'),
+        'saida': const PropDef('bool'),
+      },
+      defaults: () => {
+        'icone': 'pixLight',
+        'titulo': 'Ana Maria Silva',
+        'origem': 'Pix enviado',
+        'hora': '14:32',
+        'valor': 'R\$ 120,00',
+        'saida': true,
+      },
+      build: (p) => DilettaAppListRow.transactionItem(
+        icon: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
+        title: '${p['titulo']}',
+        source: '${p['origem']}',
+        time: '${p['hora']}',
+        amount: '${p['valor']}',
+        negative: p['saida'] == true,
+        onTap: () {},
+      ),
+      codegen: (p) => 'ds.DilettaAppListRow.transactionItem('
+          'icon: ds.DilettaIcons.${p['icone']}'
+          ', title: ${_str(p['titulo'])}'
+          ', source: ${_str(p['origem'])}'
+          ', time: ${_str(p['hora'])}'
+          ', amount: ${_str(p['valor'])}'
+          '${p['saida'] == true ? '' : ', negative: false'}'
+          ', onTap: aoTocarNaLinha)',
+    );
+
+const _idiomasDeLista = ['carded', 'plain', 'menu'];
+
+/// A LISTA — o bloco mais usado deste app (172 linhas em 87 grupos) e o primeiro deste filho com
+/// SLOT: as linhas são blocos filhos de verdade, não texto separado por vírgula.
+///
+/// A escolha do slot em vez de um campo de texto é medida contra o `abas`: lá são três rótulos e um
+/// controle de lista seria motor novo pra um caso; aqui cada item tem cinco props, é vinculável a
+/// dado, e a lista É o que se edita numa tela. Slot também é o que o motor já oferece
+/// (`slotsBuild`/`slotsCodegen`), então não é peça nova — é gancho que estava sem uso neste filho.
+///
+/// A coleção é dona ÚNICA do separador (regra do pai), então o `idioma` é o que muda: `carded` tem
+/// stroke externo, `plain` não, `menu` põe divisor sob cada linha.
+BlockDef _lista() => BlockDef(
+      type: 'lista',
+      label: 'Lista',
+      props: const {
+        'titulo': PropDef('text'),
+        'idioma': PropDef('enum', options: _idiomasDeLista),
+      },
+      defaults: () => {'titulo': '', 'idioma': 'carded'},
+      slots: const {
+        'itens': SlotDef(list: true, accepts: ['linha', 'linhaDeValor']),
+      },
+      build: (p) => _listaWidget(p, const []),
+      slotsBuild: (p, filhos) => _listaWidget(p, filhos['itens'] ?? const []),
+      slotsCodegen: (p, codigos) {
+        final itens = codigos['itens'] ?? const [];
+        return 'ds.DilettaAppList.${p['idioma']}('
+            '${_vazio(p['titulo']) ? '' : 'title: ${_str(p['titulo'])}, '}'
+            'children: [${itens.join(', ')}])';
+      },
+      // Nunca chamado (o motor prefere `slotsCodegen` quando ele existe), e declarado porque o
+      // contrato exige: uma lista sem item nenhum é o card vazio, que é o que o preview mostra.
+      codegen: (p) => 'ds.DilettaAppList.${p['idioma']}(children: const [])',
+    );
+
+Widget _listaWidget(Map<String, dynamic> p, List<Widget> itens) {
+  final titulo = _vazio(p['titulo']) ? null : '${p['titulo']}';
+  return switch (p['idioma']) {
+    'plain' => DilettaAppList.plain(title: titulo, children: itens),
+    'menu' => DilettaAppList.menu(title: titulo, children: itens),
+    // Sem `_ =>`: o idioma é fechado e enum novo tem que aparecer aqui. O default fica explícito.
+    'carded' => DilettaAppList.carded(title: titulo, children: itens),
+    _ => throw ArgumentError('idioma de lista desconhecido: ${p['idioma']}'),
+  };
+}
 
 BlockDef _icone() => BlockDef(
       type: 'icone',
@@ -337,6 +488,43 @@ BlockDef _cabecalhoDaHome() => BlockDef(
         ],
       ),
       codegen: (p) => '',
+    );
+
+/// O resumo do comprovante. Ele é CONTEÚDO e não tela: o organismo do app era o `Scaffold` inteiro,
+/// e bloco que já é a tela não compõe com nada no compositor.
+BlockDef _resumoDaTransacao() => BlockDef(
+      type: 'resumoDaTransacao',
+      ctor: 'ds.BoldResumoDaTransacao',
+      args: const {
+        'titulo': Arg.texto('titulo'),
+        'valor': Arg.texto('valor'),
+        'quando': Arg.texto('quando'),
+        'estado': Arg.enumeracao('estado', 'ds.BoldEstadoDaTransacao'),
+      },
+      label: 'Resumo da transação',
+      props: {
+        'titulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'valor': const PropDef('text', bindable: true, dartType: 'String'),
+        'quando': const PropDef('text', bindable: true, dartType: 'String'),
+        'estado': PropDef('enum',
+            options: BoldEstadoDaTransacao.values.map((e) => e.name).toList()),
+      },
+      defaults: () => {
+        'titulo': 'Pix enviado',
+        'valor': 'R\$ 120,00',
+        'quando': '30 de julho · 14:32',
+        'estado': 'concluida',
+      },
+      build: (p) => BoldResumoDaTransacao(
+        titulo: '${p['titulo']}',
+        valor: '${p['valor']}',
+        quando: '${p['quando']}',
+        estado: BoldEstadoDaTransacao.values.firstWhere((e) => e.name == p['estado']),
+      ),
+      codegen: (p) => 'ds.BoldResumoDaTransacao(titulo: ${_str(p['titulo'])}'
+          ', valor: ${_str(p['valor'])}'
+          ', quando: ${_str(p['quando'])}'
+          ', estado: ds.BoldEstadoDaTransacao.${p['estado']})',
     );
 
 BlockDef _visorDeCodigo() => BlockDef(
@@ -508,15 +696,23 @@ void configurarDsDoBold() {
       'visorDeCodigo': _visorDeCodigo(),
       'cabecalhoDaHome': _cabecalhoDaHome(),
       'indicadorDeHome': _indicadorDeHome(),
+      'cabecalhoDeSecao': _cabecalhoDeSecao(),
+      'lista': _lista(),
+      'linha': _linha(),
+      'linhaDeValor': _linhaDeValor(),
+      'resumoDaTransacao': _resumoDaTransacao(),
     },
     // TODO tipo precisa estar num grupo: a paleta do editor sai daqui, então bloco sem
     // grupo existe e ninguém acha. A conformidade do pai cobra.
     grupos: const {
       'Estrutura': ['barraDeStatus', 'tituloDaPagina', 'indicadorDeHome'],
-      'Conteúdo': ['texto', 'valor', 'selo', 'aviso', 'icone'],
+      'Conteúdo': ['texto', 'valor', 'selo', 'aviso', 'icone', 'cabecalhoDeSecao'],
+      // A lista e as duas linhas ficam juntas porque é assim que se usam: a coleção é dona do
+      // separador, e linha fora de lista é linha sem vizinhança.
+      'Lista': ['lista', 'linha', 'linhaDeValor'],
       // Grupo próprio porque é o que só o Bold tem: a vizinhança na paleta é decisão de
       // linguagem, e peça de marca não se mistura com vocabulário herdado.
-      'Marca do Bold': ['seloQuantico', 'saldo', 'cabecalhoDaHome'],
+      'Marca do Bold': ['seloQuantico', 'saldo', 'cabecalhoDaHome', 'resumoDaTransacao'],
       'Do Bold': ['copiar', 'abas'],
       'Leitor de código': ['visorDeCodigo'],
       'Entrada': ['campo'],

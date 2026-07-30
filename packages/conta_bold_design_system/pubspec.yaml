@@ -26,7 +26,7 @@ dependencies:
   diletta_design_system:
     git:
       url: git@bitbucket.org:diletta/ds-diletta.git
-      ref: v0.8.0
+      ref: v0.11.0
       path: packages/diletta_design_system
 
 dev_dependencies:

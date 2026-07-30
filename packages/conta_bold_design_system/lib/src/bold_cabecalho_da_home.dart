@@ -13,13 +13,17 @@
 /// precisa de 40 livres pro clip do pill não virar oval), e este cabeçalho tem **duas linhas**: o
 /// botão de conta (28) + gap (16) + o avatar (40) = 84.
 ///
-/// Então ele não é conteúdo da barra: ele é uma casca de topo, do mesmo tipo que a variante
-/// `.stepper` do pai — que empilha status bar + barra + stepper numa `Column` dentro do vidro.
+/// Então ele não é conteúdo da barra: ele é a SEGUNDA LINHA de uma casca de topo, do mesmo tipo que a
+/// variante `.stepper` do pai.
 ///
-/// Como a casca do pai só se monta por variante FECHADA, aqui eu componho as peças PÚBLICAS dele
-/// (`DilettaStatusBar`, `DilettaGlassSurface`, `DilettaNavigationTopBar`), que é a primeira opção
-/// da ordem de preferência do contrato. Pedido escrito pra a casca aceitar conteúdo do filho; se
-/// ele entrar, as cinco linhas de composição daqui saem.
+/// **E ele é a segunda linha de verdade desde a v0.11.0**: eu compunha `GlassSurface + StatusBar +
+/// NavigationTopBar + a minha linha` porque a casca do pai só se montava por variante FECHADA, e o
+/// pedido entrou como `DilettaTopAppBar.comConteudo(navBar:, conteudo:)`. As cinco linhas que
+/// copiavam a gramática da casca (vidro, status bar, coluna, o respiro do fim) saíram — inclusive o
+/// respiro, que agora é o do pai e não o meu.
+///
+/// A observação que fez o pedido entrar foi a que vale reter: **era o mesmo pedido do acessório livre,
+/// um nível acima.** Quando uma camada abre e a de cima não, a abertura para na linha de baixo.
 ///
 /// A linha de cima USA o acessório livre da v0.4.0 — ela é o botão de conta, que cabe nos 52.
 ///
@@ -115,43 +119,36 @@ class BoldCabecalhoDaHome extends StatelessWidget {
         'foto': foto == null ? 'inicial' : 'imagem',
       },
       tokens: const ['scheme.fg', 'scheme.primary', 'type.titleMd'],
-      child: DilettaGlassSurface(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const DilettaStatusBar(),
-            // Linha 1: a barra do PAI, com a conta à esquerda no acessório livre e os ícones à
-            // direita no acessório dele. Cabe nos 52 — o botão de conta tem 28.
-            DilettaNavigationTopBar(
-              left: conta == null
-                  ? null
-                  : DilettaNavigationLeftAccessory.livre(
-                      child: _BotaoDeConta(
-                        rotulo: conta!,
-                        carregando: carregandoConta,
-                        aoTocar: aoTrocarConta,
-                      ),
-                    ),
-              right: icones.isEmpty
-                  ? null
-                  : DilettaNavigationRightAccessory.icons(
-                      icons: icones.map((i) => i.paraOPai).toList(),
-                    ),
-            ),
-            // Linha 2: avatar e saudação. É ela que não cabe na barra, e por isso o cabeçalho é
-            // casca e não acessório.
-            Padding(
-              padding: EdgeInsets.fromLTRB(DilettaSpacing.s6, 0, DilettaSpacing.s6,
-                  DilettaSpacing.s4),
-              child: Row(children: [
-                _AvatarComSaudacao(
-                  nome: nome,
-                  foto: foto,
-                  aoAbrirPerfil: aoAbrirPerfil,
+      child: DilettaTopAppBar.comConteudo(
+        // Linha 1: a barra do PAI, com a conta à esquerda no acessório livre e os ícones à direita no
+        // acessório dele. Cabe nos 52 — o botão de conta tem 28.
+        navBar: DilettaNavigationTopBar(
+          left: conta == null
+              ? null
+              : DilettaNavigationLeftAccessory.livre(
+                  child: _BotaoDeConta(
+                    rotulo: conta!,
+                    carregando: carregandoConta,
+                    aoTocar: aoTrocarConta,
+                  ),
                 ),
-              ]),
+          right: icones.isEmpty
+              ? null
+              : DilettaNavigationRightAccessory.icons(
+                  icons: icones.map((i) => i.paraOPai).toList(),
+                ),
+        ),
+        // Linha 2: avatar e saudação. É ela que não cabe na barra, e é por isso que este componente
+        // é a segunda linha de uma casca do pai, e não um acessório dentro da barra.
+        conteudo: Padding(
+          padding: EdgeInsets.symmetric(horizontal: DilettaSpacing.s6),
+          child: Row(children: [
+            _AvatarComSaudacao(
+              nome: nome,
+              foto: foto,
+              aoAbrirPerfil: aoAbrirPerfil,
             ),
-          ],
+          ]),
         ),
       ),
     );

@@ -4,11 +4,21 @@
 /// `ctor` + `args` no registro, e o motor emite e lê com a mesma declaração: a volta deixou de
 /// ser artefato, porque é a ida invertida.
 ///
-/// **Sobrou UM `if`**, e ele é o caso que o próprio motor excluiu de propósito: forma irregular.
-/// O `barraDeBaixo` aninha três níveis (`BottomApp(button: NavigationButton(primary:
-/// NavigationAction(label:)))`), e tabela não cobre aninhamento — forçar cobriria mal.
+/// **Sobraram QUATRO entradas**, e elas se dividem em duas razões — uma é decisão do motor, a outra é
+/// defeito dele com pedido escrito:
 ///
-/// Antes: 15 entradas à mão, 60 linhas de `if`. Agora: a tabela mais um caso.
+/// Por DECISÃO (aninhamento, que a tabela não cobre):
+/// - `barraDeBaixo` aninha três níveis (`BottomApp(button: NavigationButton(primary:
+///   NavigationAction(label:)))`) — o rótulo mora lá embaixo;
+/// - `lista` tem FILHOS em vez de props, e é a única que recursa: cada item volta por `_bloco`, então a
+///   linha de menu e a linha de valor são lidas pela tabela, de graça.
+///
+/// Por DEFEITO (`docs/pedidos/2026-07-30-a-tabela-nao-declara-argumento-posicional.md`):
+/// - `texto` e `ritmo` recebem o conteúdo POSICIONAL, e `Arg` só sabe emitir `nome: valor`. Eles
+///   estavam na tabela e voltaram pra cá.
+///
+/// Antes: 15 entradas à mão, 60 linhas de `if`. Agora: a tabela mais quatro casos — e dois deles saem
+/// quando o pai souber declarar argumento posicional.
 library;
 
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
@@ -39,7 +49,44 @@ Block _bloco(String expr) {
   final daTabela = leBlocoDaTabela(expr, Ds.blocos, novoId: _novoId);
   if (daTabela != null) return daTabela;
 
-  // 2 · A forma irregular, que fica fora da tabela por decisão do motor: o rótulo mora três níveis
+  // 2 · A LISTA: aninhamento de verdade, e o único caso deste leitor que RECURSA. A coleção não cabe
+  // na tabela (ela não tem prop nenhuma no código — tem filhos), então quem lê os itens é a mesma
+  // função que lê a tela: cada item volta por `_bloco`, inclusive pela tabela.
+  for (final idioma in const ['carded', 'plain', 'menu']) {
+    if (!ehCtor(expr, 'ds.DilettaAppList.$idioma') &&
+        !ehCtor(expr, 'DilettaAppList.$idioma')) {
+      continue;
+    }
+    final itens = primeiraListaDeChildren(expr);
+    return Block(
+      id: _novoId(),
+      type: 'lista',
+      props: {'titulo': argString(expr, 'title') ?? '', 'idioma': idioma},
+      slots: {
+        'itens': [
+          for (final item in separaNoTopo(itens ?? ''))
+            if (semConst(item.trim()).isNotEmpty) _bloco(semConst(item.trim())),
+        ],
+      },
+    );
+  }
+
+  // 3 · Os dois de argumento POSICIONAL, que saíram da tabela por defeito do motor (pedido
+  // `2026-07-30-a-tabela-nao-declara-argumento-posicional.md`): `Arg` só emite `nome: valor`, e o
+  // conteúdo destes dois é posicional. Voltam pra tabela quando o pai souber declarar posicional.
+  if (ehCtor(expr, 'ds.DilettaGap.h') || ehCtor(expr, 'DilettaGap.h')) {
+    return Block(id: _novoId(), type: 'ritmo', props: {
+      'tamanho': membroDeEnum(expr, 'ds.DilettaSpacing') ?? 's4',
+    });
+  }
+  if (ehCtor(expr, 'ds.DilettaText') || ehCtor(expr, 'DilettaText')) {
+    return Block(id: _novoId(), type: 'texto', props: {
+      'conteudo': primeiraStringPosicional(expr) ?? '',
+      'preset': membroDeEnum(expr, 'ds.DilettaType') ?? 'bodyMd',
+    });
+  }
+
+  // 4 · A forma irregular, que fica fora da tabela por decisão do motor: o rótulo mora três níveis
   // abaixo do construtor, e é o próprio pai que diz que tabela não cobre aninhamento.
   if (ehCtor(expr, 'ds.DilettaBottomApp.button') ||
       ehCtor(expr, 'DilettaBottomApp.button')) {
@@ -49,7 +96,7 @@ Block _bloco(String expr) {
     });
   }
 
-  // 3 · Desconhecido: bloco cru com o código dentro. A tela aparece, e o pedaço que ninguém
+  // 5 · Desconhecido: bloco cru com o código dentro. A tela aparece, e o pedaço que ninguém
   // declarou fica VISÍVEL como código à mão — que é o sinal certo pra declarar o bloco que falta,
   // em vez de o pedaço desaparecer em silêncio.
   return Block(id: _novoId(), type: 'cru', props: {'codigo': expr});

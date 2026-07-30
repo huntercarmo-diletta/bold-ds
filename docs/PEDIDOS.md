@@ -1,0 +1,46 @@
+# PEDIDOS — o que este filho pediu aos pais, e o que voltou
+
+Um pedido é um arquivo em [`pedidos/`](pedidos/), no formato do contrato
+(`ds-diletta/docs/PEDIDO-DO-FILHO.md`). Este índice existe pra uma pergunta que não deveria custar uma
+busca: **o que ainda está aberto?**
+
+Os quatro vereditos são do pai: **ENTRA** · **ENTRA COMO FORMA** (o pai dá o gancho, o componente
+nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
+
+## Ao pai da LINGUAGEM (`ds-diletta`)
+
+| pedido | veredito | chegou em |
+|---|---|---|
+| [a barra de topo não aceita cabeçalho do filho](pedidos/2026-07-29-barra-de-topo-nao-aceita-cabecalho-do-filho.md) | ENTRA | v0.4.0 |
+| [o vidro tem blur e traço cravados](pedidos/2026-07-29-vidro-tem-blur-e-traco-cravados.md) | ENTRA COMO FORMA | v0.4.0 |
+| [falta o glifo de assistente no conjunto](pedidos/2026-07-29-falta-o-glifo-de-assistente-no-conjunto.md) | ENTRA | v0.5.0 |
+| [a casca de topo não aceita conteúdo do filho](pedidos/2026-07-30-a-casca-de-topo-nao-aceita-conteudo-do-filho.md) | ENTRA | **v0.11.0** |
+| [resposta ao chamado do raio](pedidos/2026-07-30-resposta-ao-chamado-do-raio.md) | RESPOSTA ACEITA | — |
+
+## Ao pai da FERRAMENTA (`catalogo-diletta`)
+
+| pedido | veredito | chegou em |
+|---|---|---|
+| [o frame só aceita fundo de cor plana](pedidos/2026-07-30-o-frame-so-aceita-fundo-de-cor-plana.md) | ENTRA | v0.28.0 |
+| [a VOLTA não tem estrutura, só primitivos](pedidos/2026-07-30-a-volta-nao-tem-estrutura-so-primitivos.md) | ENTRA (menor que o pedido) | v0.30.0 |
+| [`ehCtor` não reconhece construtor nomeado](pedidos/2026-07-30-ehctor-nao-reconhece-construtor-nomeado.md) | ENTRA (regressão do pai) | v0.30.1 |
+| [a tabela omite argumento igual ao default](pedidos/2026-07-30-a-tabela-omite-argumento-igual-ao-default.md) | ENTRA | **v0.32.1** |
+| [a tabela não declara argumento posicional](pedidos/2026-07-30-a-tabela-nao-declara-argumento-posicional.md) | **sem veredito** | — |
+
+## O que os pais me mandaram
+
+| aviso | tipo | respondido? |
+|---|---|---|
+| [medir o raio do seu produto](avisos/2026-07-29-medir-o-raio-do-seu-produto.md) | CHAMADO | sim, no próprio arquivo |
+| [faz a limpa](avisos/2026-07-30-faz-a-limpa.md) | CONSELHO | sim, no próprio arquivo |
+| [fechamento de ciclo em quatro linhas](avisos/2026-07-30-fechamento-de-ciclo-em-quatro-linhas.md) | CONSELHO | sim, no próprio arquivo |
+
+Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
+pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedido novo.
+
+## Dois números que este ledger deixa ver
+
+**9 pedidos, 8 com veredito, 8 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS" até agora, e isso é
+informação sobre o método e não sobre a sorte: o que se mede antes de pedir tende a ser lacuna de
+verdade. Dois dos oito eram **regressão do próprio pai**, achada na primeira execução do gate dele
+contra um filho de verdade.

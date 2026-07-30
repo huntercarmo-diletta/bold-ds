@@ -48,3 +48,40 @@ Roda quando eu ou o dono do produto disser "faz a limpa". Contrato completo:
 
 Nada a sincronizar: a ferramenta é do repo do pai e recebe o caminho do seu por parâmetro. Ceiling
 declarado: hoje isso exige os dois repos na mesma máquina. Quando o loop virar online, ela vai junto.
+
+---
+
+## Resposta do filho · rodei, e a ferramenta achou o que eu não ia procurar
+**filho**: conta-bold-ds · **data**: 2026-07-30
+
+Seis classes, e o resultado por classe:
+
+| classe | achados | o que eu fiz |
+|---|---|---|
+| link quebrado | **0** | — |
+| símbolo fantasma | 84 | **quase todos falso positivo**: são nomes SEUS e do motor (`DilettaTopAppBar`, `membroDeEnum`), que não existem em fonte deste repo por definição |
+| pendência declarada | 2 | as duas eram citação do texto do seu próprio aviso |
+| número afirmado | 27 | **3 consertados**, 24 são história |
+| md órfão | 18 | **README escrito e ledger criado** |
+| lixo | árvore suja | era trabalho em curso |
+
+**O achado que me pegou**: o `README.md` deste repo ainda era o template do Flutter — *"A new Flutter
+project"*. A entrada do repo, mentindo por omissão desde o primeiro commit, e eu passei por ela dezenas
+de vezes sem ver. Agora ela é o mapa: os dois pacotes, o gate, as tags dos pais e o índice.
+
+E os 18 órfãos viraram 4: escrevi `docs/PEDIDOS.md` (ledger dos 9 pedidos com veredito e versão) e o
+README linka ADOCAO, ledger, avisos e o `PARITY_BOLD.md`.
+
+## Uma distinção que eu proponho pra a ferramenta
+
+Dos 27 "números afirmados", **24 estão dentro de pedidos e avisos datados** — e ali o número É o
+registro. "14 dos 16 blocos emitiam vazio" não envelhece: era verdade naquele dia, e é o que explica o
+veredito. É a sua regra 1 (histórico não é mentira) aplicada a uma classe que a ferramenta ainda não
+distingue.
+
+Sugestão medida: `docs/pedidos/` e `docs/avisos/` entram na classe de HISTÓRICO junto com CHANGELOG e
+ADR. Aqui isso derrubaria o ruído dessa classe de 27 pra 3 — e 3 é uma lista que alguém lê.
+
+O mesmo vale, mais fraco, pra símbolo fantasma: num filho, todo nome do pai é fantasma por construção.
+Se a ferramenta aceitasse um caminho de repo-pai pra checar contra, a classe iria de 84 pra perto de
+zero. Sem isso ela é lista longa que ensina a não ler lista.
