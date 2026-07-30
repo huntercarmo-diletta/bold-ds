@@ -20,19 +20,17 @@
 /// MaterialApp(theme: ThemeData(fontFamily: BoldFonts.family), …)
 /// ```
 ///
-/// ## Os arquivos ainda não estão aqui, e isto é o registro disso
+/// ## Os arquivos viajam aqui
 ///
-/// [family] usa o prefixo `packages/<pkg>/<família>`, que é a forma do Flutter resolver
-/// fonte que vem de um pacote — e só funciona depois de os `.ttf` entrarem em
-/// `assets/fonts/` e serem declarados no `pubspec`. Declarar no `pubspec` antes de ter os
-/// arquivos quebra o build, então a ordem é: arquivos, `pubspec`, e aí [empacotada] vira
-/// `true`.
+/// [family] usa o prefixo `packages/<pkg>/<família>`, que é a forma do Flutter resolver fonte
+/// que vem de um pacote. Cinco pesos empacotados — 400 · 500 · 600 · 700 · 800 — que são os
+/// degraus que o mapa da tipografia usa (`test/o_mapa_da_tipografia_test.dart`).
 ///
-/// Enquanto [empacotada] for `false`, quem usa [family] recebe o fallback da plataforma —
-/// que é exatamente o que o app já faz hoje, então não há regressão. O que há é o registro
-/// de uma pendência que estava invisível.
+/// **Inter v4.0**, sob SIL Open Font License 1.1. A licença viaja em `assets/fonts/OFL.txt`,
+/// como ela mesma exige.
 ///
-/// Pesos necessários (os mesmos que o Nunito ocupa hoje): 400 · 500 · 600 · 700 · 800.
+/// Empacotada em vez de resolvida por `google_fonts`: fonte de marca que depende de download é
+/// fonte que às vezes não é a da marca — no primeiro launch, no avião, na rede do cliente.
 abstract final class BoldFonts {
   static const String package = 'conta_bold_design_system';
 
@@ -42,11 +40,11 @@ abstract final class BoldFonts {
   /// Família qualificada, pra `ThemeData.fontFamily` no app consumidor.
   static const String family = 'packages/$package/$familyRaw';
 
-  /// `true` quando os arquivos da fonte viajam neste pacote.
+  /// `true` quando os arquivos da fonte viajam neste pacote — e agora viajam.
   ///
-  /// Existe pra a pendência ser LEGÍVEL por código em vez de virar folclore: o catálogo
-  /// mostra o estado, e um teste pode cobrar. Mentira uniforme é pior que ausência.
-  static const bool empacotada = false;
+  /// Nasceu `false` pra a pendência ser legível por código em vez de virar folclore, e durou
+  /// um dia. Fica como campo porque o catálogo mostra o estado, e um teste cobra.
+  static const bool empacotada = true;
 
   /// A família monoespaçada que o Bold já empacota no app (JetBrains Mono).
   ///

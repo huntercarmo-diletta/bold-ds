@@ -32,9 +32,36 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  # Só pro gate da fonte: ele lê o próprio `pubspec` pra conferir que todo peso declarado tem
+  # arquivo. Ler a declaração em vez de repetir a lista é o que impede o teste de concordar
+  # com um erro que ele deveria pegar.
+  yaml: ^3.1.2
 
 flutter:
   # O pai declara `uses-material-design: true` (ele usa ícone do Material em fallback), e
   # sem a chave aqui o `flutter test` avisa em toda execução. Ruído em toda run é ruído que
   # se aprende a ignorar, e aí o aviso seguinte também passa batido.
   uses-material-design: true
+
+  # A FONTE DA MARCA viaja neste pacote, e é o único asset que ele declara: ícone e
+  # ilustração são vocabulário e vêm do pai (medido: 310 dos 354 nomes já eram os mesmos).
+  #
+  # Empacotada em vez de resolvida por `google_fonts` de propósito: fonte de marca que
+  # depende de download é fonte que às vezes não é a da marca — no primeiro launch, no
+  # avião, na rede do cliente. É o que o primeiro filho faz com a dele.
+  #
+  # Inter v4.0, SIL Open Font License 1.1 (`assets/fonts/OFL.txt` viaja junto, como a
+  # licença exige). Os cinco pesos são os mesmos degraus que o mapa da tipografia usa.
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter-ExtraBold.ttf
+          weight: 800

@@ -371,7 +371,13 @@ display 46 · h1 30 · h2 22, e o pai tem displayMd 45 · headlineLg 32 · title
 degrau a degrau preserva a proporção entre eles, que é o que o olho lê — escolher cada um pelo
 vizinho achataria a hierarquia.
 
-**O que sobra da tipografia:** os `.ttf` da Inter (5 pesos) em `assets/fonts/` mais o bloco no
-`pubspec`, e `BoldFonts.empacotada` vira `true`. Enquanto isso não acontece, o produto renderiza
-no fallback da plataforma — o que ele já fazia antes, porque pedia uma família que não estava
-empacotada.
+**A fonte está empacotada** (2026-07-30): Inter v4.0, cinco pesos (400/500/600/700/800) em
+`assets/fonts/`, sob SIL Open Font License 1.1 — a licença viaja em `OFL.txt`, como ela exige.
+`BoldFonts.empacotada` é `true`, e `a_fonte_da_marca_viaja_test` cobra os quatro jeitos disso
+ser mentira.
+
+Empacotada em vez de resolvida por `google_fonts`, e a razão não é preferência: fonte de marca
+que depende de download é fonte que às vezes não é a da marca — no primeiro launch, no avião,
+na rede do cliente. É também o que o primeiro filho faz.
+
+Este é o ÚNICO asset que o filho declara. Ícone e ilustração são vocabulário e vêm do pai.
