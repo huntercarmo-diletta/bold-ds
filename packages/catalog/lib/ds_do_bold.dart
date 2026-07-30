@@ -22,6 +22,8 @@ import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/widgets.dart';
 
+import 'leitor_do_bold.dart';
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // 1 · OS BLOCOS
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -290,6 +292,49 @@ Widget _barraDeBaixoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) =>
 /// O selo quântico — o primeiro bloco que vem de um componente NASCIDO no filho, e não da
 /// linguagem do pai. Declarar é publicar: ele aparece na paleta do compositor sem ninguém tocar
 /// no catálogo.
+BlockDef _copiar() => BlockDef(
+      type: 'copiar',
+      label: 'Copiar',
+      props: const {
+        'texto': PropDef('text', bindable: true, dartType: 'String'),
+        'rotulo': PropDef('text'),
+      },
+      defaults: () => {'texto': 'chave-pix-exemplo', 'rotulo': 'Copiar chave'},
+      build: (p) => BoldCopiar(
+        texto: '${p['texto']}',
+        rotuloDeAcessibilidade: '${p['rotulo']}',
+      ),
+      codegen: (p) => 'ds.BoldCopiar(texto: ${_str(p['texto'])}'
+          ', rotuloDeAcessibilidade: ${_str(p['rotulo'])})',
+    );
+
+BlockDef _abas() => BlockDef(
+      type: 'abas',
+      label: 'Abas',
+      props: const {
+        'abas': PropDef('text'),
+        'selecionada': PropDef('number'),
+      },
+      defaults: () => {'abas': 'Tudo, Entradas, Saídas', 'selecionada': '0'},
+      build: (p) => BoldAbas(
+        abas: _listaDeAbas(p['abas']),
+        indiceSelecionado: int.tryParse('${p['selecionada']}') ?? 0,
+        aoTrocar: (_) {},
+      ),
+      codegen: (p) => 'ds.BoldAbas(abas: const ['
+          '${_listaDeAbas(p['abas']).map((a) => "'$a'").join(', ')}]'
+          ', indiceSelecionado: ${int.tryParse('${p['selecionada']}') ?? 0}'
+          ', aoTrocar: aoTrocarAba)',
+    );
+
+/// As abas vêm como texto separado por vírgula: é o controle que o editor tem pra lista curta, e
+/// inventar um controle de lista pra três rótulos seria motor novo pra um caso.
+List<String> _listaDeAbas(Object? v) => '$v'
+    .split(',')
+    .map((e) => e.trim())
+    .where((e) => e.isNotEmpty)
+    .toList();
+
 BlockDef _saldo() => BlockDef(
       type: 'saldo',
       label: 'Saldo (home)',
@@ -371,6 +416,8 @@ void configurarDsDoBold() {
       'barraDeBaixo': _barraDeBaixo(),
       'seloQuantico': _seloQuantico(),
       'saldo': _saldo(),
+      'copiar': _copiar(),
+      'abas': _abas(),
       'indicadorDeHome': _indicadorDeHome(),
     },
     // TODO tipo precisa estar num grupo: a paleta do editor sai daqui, então bloco sem
@@ -381,6 +428,7 @@ void configurarDsDoBold() {
       // Grupo próprio porque é o que só o Bold tem: a vizinhança na paleta é decisão de
       // linguagem, e peça de marca não se mistura com vocabulário herdado.
       'Marca do Bold': ['seloQuantico', 'saldo'],
+      'Do Bold': ['copiar', 'abas'],
       'Entrada': ['campo'],
       'Ação': ['botao', 'barraDeBaixo'],
       'Ritmo': ['ritmo', 'divisor'],
@@ -457,6 +505,9 @@ void configurarDsDoBold() {
       final s = DilettaTheme.schemeOf(ctx);
       return s.isDark ? s.bg : null;
     },
+    // A VOLTA: sem isto, tela que só existe como código aparece como código, sem preview — e quem
+    // monta tela perde a metade que importa, que é abrir o que já existe.
+    leCodigoComoSpec: lerTelaDoBold,
     importNoCodigo:
         "import 'package:conta_bold_design_system/conta_bold_design_system.dart' as ds;",
     nomesNoCodigo: const NomesNoCodigo(

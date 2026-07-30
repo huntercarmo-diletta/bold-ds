@@ -38,6 +38,8 @@ export 'src/bold_gradients.dart';
 /// Componentes que só o Bold tem, nascidos aqui compondo as peças do pai.
 export 'src/bold_background.dart';
 export 'src/bold_dinheiro.dart';
+export 'src/bold_abas.dart';
+export 'src/bold_copiar.dart';
 export 'src/bold_saldo.dart';
 export 'src/bold_selo_quantico.dart';
 

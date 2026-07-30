@@ -105,4 +105,57 @@ void main() {
     expect(c.abas.map((a) => a.id), contains(c.abaInicial));
     expect(c.abas.length, greaterThan(1));
   });
+
+  group('a VOLTA — o leitor de código', () {
+    // A quarta fiação do contrato. Sem ela, tela que só existe como código aparece como código,
+    // sem preview: quem monta tela perde a metade de abrir o que já existe.
+    ScreenSpec ler(String corpo) => Ds.leCodigoComoSpec(
+        'ds.DilettaFrame.column(children: [$corpo])', 'tela')!;
+
+    test('reconhece os blocos da linguagem', () {
+      final spec = ler('''
+        ds.DilettaPageTitle(title: 'Abrir conta', subtitle: 'Rápido'),
+        ds.DilettaText('Olá', style: ds.DilettaType.bodyMd),
+        ds.DilettaButton(label: 'Continuar', onPressed: onX, fullWidth: true),
+      ''');
+      expect(spec.blocks.map((b) => b.type),
+          ['tituloDaPagina', 'texto', 'botao']);
+      expect(spec.blocks[0].props['titulo'], 'Abrir conta');
+      expect(spec.blocks[2].props['larguraTotal'], isTrue);
+    });
+
+    test('reconhece os blocos que nasceram NESTE filho', () {
+      final spec = ler('''
+        ds.BoldSaldo(valor: 'dez reais', oculto: true, aoAbrirExtrato: abrir),
+        ds.BoldSeloQuantico(estado: ds.BoldSeloEstado.negado, tamanho: 120),
+        ds.BoldCopiar(texto: 'chave', rotuloDeAcessibilidade: 'Copiar'),
+      ''');
+      expect(spec.blocks.map((b) => b.type), ['saldo', 'seloQuantico', 'copiar']);
+      expect(spec.blocks[0].props['oculto'], isTrue);
+      expect(spec.blocks[1].props['estado'], 'negado');
+      expect(spec.blocks[0].props['valor'], 'dez reais');
+      expect(spec.blocks[2].props['texto'], 'chave');
+    });
+
+    test('o que ele NÃO conhece vira bloco cru, e fica visível', () {
+      // Preview que adivinha é pior que preview que declara o que não entendeu: o pedaço
+      // desconhecido aparece como código à mão, que é o sinal pra alguém declarar o bloco.
+      final spec = ler("MeuWidgetQueNaoExiste(x: 1)");
+      expect(spec.blocks.single.type, 'cru');
+      expect(spec.blocks.single.props['codigo'], contains('MeuWidgetQueNaoExiste'));
+    });
+
+    test('IDA e VOLTA fecham: codegen → leitor → mesmas props', () {
+      // O par que garante que as duas metades falam a mesma língua. Sem ele, o codegen pode emitir
+      // um nome de argumento que o leitor não procura, e ninguém descobre até alguém reabrir uma
+      // tela e ver o bloco virar cru.
+      for (final tipo in ['texto', 'botao', 'selo', 'campo', 'saldo', 'copiar']) {
+        final def = Ds.blocos[tipo]!;
+        final codigo = def.codegen(def.defaults());
+        final lido = ler(codigo).blocks.single;
+        expect(lido.type, tipo,
+            reason: 'o codegen de "$tipo" emite algo que o leitor não reconhece: $codigo');
+      }
+    });
+  });
 }

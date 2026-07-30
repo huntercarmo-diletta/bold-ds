@@ -459,7 +459,7 @@ dez estavam mortos, e portar código morto é o pior tipo de trabalho — parece
 | `BoldSeloQuantico` (era `BoldQuantumSeal`) | 9 | **nasceu** — e tinha 3 defeitos |
 | `BoldDinheiro` (era `BoldMoneyInputFormatter`) | 8 | **nasceu** — e o teto deslizava |
 | `BoldSaldo` (era `BoldBalance`) | 3 | **nasceu** |
-| `BoldCopyButton` · `BoldTabs` | 3 cada | a fazer |
+| `BoldCopiar` (era `BoldCopyButton`) · `BoldAbas` (era `BoldTabs`) | 3 cada | **nasceram** |
 | cabeçalho da home (via `BoldTopBar.home`) | 3 | a fazer — destravado pelo `.livre` na v0.4.0 |
 | `BoldRuleLadder` · `BoldTransactionSummary` | 2 cada | a fazer |
 | `BoldApprovalProgress` · `BoldSlaChip` · `BoldPageDots` · `BoldPixMark` · `BoldSecondaryBackground` | 1 cada | a fazer |
