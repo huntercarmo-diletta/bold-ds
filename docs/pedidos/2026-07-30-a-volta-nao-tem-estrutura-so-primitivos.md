@@ -55,21 +55,54 @@ lugares (registro e leitor) sem nada ligando os dois além do gate que eu mesmo 
 
 ## Onde eu ACHO que mora
 
-No motor, como estrutura declarativa em cima dos primitivos que já existem. Algo em que eu
-declare a MESMA coisa que já declaro no `BlockDef` — construtor, tipo, e o mapa prop ← argumento —
-e o motor faça a varredura, o prefixo `ds.`, o default por tipo de prop e o bloco `cru` de
-fallback.
+No motor — e o argumento mais forte não é meu, é o que você já escreveu no `NomesNoCodigo`:
 
-Se for por aí, duas coisas que a medição sugere e a decisão é sua:
+> *"Strings e não funções de propósito: o motor mantém a FORMATAÇÃO porque isso é decisão do
+> gerador; o DS só diz como suas peças se chamam. Knob de função aqui devolveria ao DS a
+> responsabilidade de formatar código, e aí cada DS formataria diferente."*
 
-- o **gate** vem junto, senão a estrutura organiza o mapa e deixa o buraco aberto;
-- talvez isto nem seja um campo novo: o `BlockDef` já declara `props` com `kind`, e o `codegen` já
-  sabe qual argumento recebe qual prop. Se a ida já está declarada, a volta pode ser derivada —
-  e aí "adicionar componente" volta a ser um lugar só.
+O `BlockDef.codegen` é exatamente o knob de função que essa frase recusa, um nível abaixo: cada
+filho escreve o próprio gerador de string por bloco. E o `leCodigoComoSpec` é o mesmo knob na volta.
+Então hoje **cada filho formata diferente E lê diferente**, o que é o problema que a frase existe
+pra impedir.
 
-A ressalva que o formato pede: eu não sei o custo disso pro motor, e a segunda possibilidade acima
-pode ser bem maior do que parece de fora — derivar a volta da ida exige que o `codegen` deixe de
-ser uma função livre de string.
+A saída que a sua própria regra sugere: o bloco declara a CORRESPONDÊNCIA, não o código.
+
+```dart
+BlockDef(
+  type: 'botao',
+  ctor: 'ds.DilettaButton',            // como a peça se chama
+  args: {                              // prop ← argumento
+    'label': Arg.texto('label'),
+    'larguraTotal': Arg.bool('fullWidth'),
+    'tipo': Arg.enumeracao('type', 'ds.DilettaButtonType'),
+  },
+)
+```
+
+Com isso o motor emite (mantendo indentação, ordem e quebras — decisão dele) e **lê de volta**, com
+a mesma tabela. A volta deixa de ser artefato: ela é a ida invertida. E "cada filho lê de um jeito"
+deixa de ser possível — todo filho lê do mesmo jeito, com vocabulário diferente.
+
+Duas coisas que ficam de fora e devem ficar, senão isto vira motor que conhece produto:
+
+- **bloco de forma irregular** continua com escape de função. O meu `barraDeBaixo` aninha
+  (`BottomApp(button: NavigationButton(primary: NavigationAction(label:)))`) porque o rótulo mora
+  três níveis abaixo — tabela declarativa não cobre isso, e forçar cobriria mal;
+- **o nome do bloco e das props** seguem meus. É vocabulário, e é o que o pai não pode saber.
+
+E o **gate** vem junto, senão a estrutura organiza o mapa e deixa aberto o buraco que ela deveria
+fechar: bloco declarado sem leitura não falha em lugar nenhum.
+
+### O que eu peço se a saída acima for caro demais
+
+A versão menor: a estrutura declarativa só pra VOLTA (tabela `ctor → tipo + args`), mantendo o
+`codegen` como está. Ganho parcial — a mecânica para de ser copiada, mas continuo declarando a
+mesma correspondência em dois lugares, e a divergência entre ida e volta continua possível (só
+detectável pelo gate).
+
+A ressalva declarada: eu não sei o custo do caminho grande pro motor, e ele é uma quebra de formato
+do `BlockDef` — o que pelo ADR-002 pede migrador.
 
 ## Como o pai vai saber que funcionou
 
