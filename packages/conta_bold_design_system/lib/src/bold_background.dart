@@ -19,10 +19,11 @@
 /// de `warning03`/`warning04` — a mesma modulação que os gradientes levaram, e pelo mesmo motivo
 /// (valor fora da paleta é valor que o rebrand não alcança).
 ///
-/// Sobra **um**: o violeta. Ele não é degrau de nenhuma rampa deste produto, e os dois moods
-/// frios (`vidroFrio`, `aurora`) dependem dele. Está declarado em [BoldBackdropTints] com a
-/// razão escrita, e é decisão aberta — ou ele entra na paleta como cor de marca, ou os dois moods
-/// frios saem.
+/// **E o quarto morreu também.** O violeta `#7B3FF2` sustentava os dois moods frios e não
+/// pertencia a rampa nenhuma deste produto. O dono do produto resolveu com o VINHO, que faz o
+/// mesmo trabalho — dar um polo frio e profundo contra o rosa — com cor que é da marca. Então
+/// este componente passou a ter **zero** valor de cor solto: tudo sai da paleta ou de
+/// [BoldVinho].
 ///
 /// **3 · Os sete moods continuam sete.** Medi antes de cortar: `BoldBackdrop.values` alimenta a
 /// tela de personalização, então os cinco de gradiente são FEATURE (o usuário escolhe o fundo), e
@@ -34,21 +35,7 @@ import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
 import 'bold_palette.dart';
-
-/// O único valor de cor deste componente que não sai da paleta.
-abstract final class BoldBackdropTints {
-  /// O violeta dos moods frios (`vidroFrio` e `aurora`).
-  ///
-  /// **Decisão aberta.** Ele não pertence a nenhuma rampa do Bold — não é o `partnerPrimary`
-  /// (vinho), não é a marca (rosa), não é `warning` (laranja). Ficou aqui, isolado e nomeado, em
-  /// vez de espalhado como literal em três lugares: um valor com nome é um valor que alguém
-  /// consegue decidir depois; três literais idênticos em arquivos diferentes não.
-  ///
-  /// As duas saídas, e a escolha é de marca: ou o violeta entra na paleta (e aí os moods frios
-  /// passam a ser derivados como todo o resto), ou os dois moods saem e o produto oferece cinco
-  /// fundos em vez de sete.
-  static const Color violeta = Color(0xFF7B3FF2);
-}
+import 'bold_vinho.dart';
 
 /// Os sete fundos que o produto oferece.
 ///
@@ -65,10 +52,10 @@ enum BoldBackdrop {
   /// Um brilho rosa sobre base limpa. Mínimo.
   brilhoRosa,
 
-  /// Violeta + rosa. Mais frio.
+  /// Vinho + rosa. Mais frio, e o vinho é o polo profundo da marca.
   vidroFrio,
 
-  /// Rosa + laranja + violeta. Vívido, usa a paleta inteira.
+  /// Rosa + laranja + vinho. Vívido, usa os dois eixos da marca.
   aurora,
 
   /// O pôr do sol da marca sangrando de um canto. Quente — e depois da modulação dos gradientes,
@@ -183,7 +170,7 @@ class BoldBackground extends StatelessWidget {
         ],
       BoldBackdrop.vidroFrio => [
           _brilho(const Alignment(-0.5, -1), 1.2,
-              BoldBackdropTints.violeta.withValues(alpha: 0.34 * k)),
+              BoldVinho.marca.withValues(alpha: 0.34 * k)),
           _brilho(const Alignment(0.95, -0.6), 1.0,
               p.primary04.withValues(alpha: 0.30 * k)),
         ],
@@ -193,7 +180,7 @@ class BoldBackground extends StatelessWidget {
           _brilho(const Alignment(0.85, -0.9), 0.85,
               p.warning03.withValues(alpha: 0.30 * k)),
           _brilho(const Alignment(0.5, 0.95), 1.0,
-              BoldBackdropTints.violeta.withValues(alpha: 0.32 * k)),
+              BoldVinho.marca.withValues(alpha: 0.32 * k)),
         ],
       BoldBackdrop.porDoSol => [
           _brilho(const Alignment(1, -1), 1.1, p.warning04.withValues(alpha: 0.22 * k)),

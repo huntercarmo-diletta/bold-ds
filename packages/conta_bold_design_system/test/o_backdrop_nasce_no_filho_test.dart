@@ -94,20 +94,47 @@ void main() {
         reason: 'navy do primeiro filho no fundo do Bold');
   });
 
-  test('o violeta é o ÚNICO valor fora da paleta, e está isolado', () {
+  testWidgets('ZERO valor de cor solto: os fundos frios são VINHO, não violeta', (t) async {
     // O componente antigo tinha quatro literais de cor. Três eram rampa (rosa, coral, amarelo) e
-    // foram modulados; o violeta não pertence a rampa nenhuma deste produto.
+    // foram modulados na adoção; o quarto era um violeta `#7B3FF2` que não pertencia a rampa
+    // nenhuma deste produto — e era o último valor solto no componente mais usado do app.
     //
-    // Este teste existe pra a dívida ser UMA e ter nome. Se um segundo valor aparecer aqui, ou
-    // ele é rampa e se modula, ou a decisão de marca sobre cor fria precisa ser tomada.
-    expect(BoldBackdropTints.violeta, const Color(0xFF7B3FF2));
-    final rampas = {
-      BoldPalette.bold.primary04,
-      BoldPalette.bold.warning03,
-      BoldPalette.bold.warning04,
-      BoldPalette.bold.primary08,
-    };
-    expect(rampas, isNot(contains(BoldBackdropTints.violeta)),
-        reason: 'se o violeta virou degrau de rampa, ele sai daqui');
+    // O dono do produto resolveu com o vinho, que faz o mesmo trabalho (polo frio e profundo
+    // contra o rosa) com cor que é da marca. Este teste é o que impede o violeta de voltar.
+    for (final fundo in [BoldBackdrop.vidroFrio, BoldBackdrop.aurora]) {
+      await t.pumpWidget(montar(
+        BoldBackground(estilo: fundo, child: const SizedBox()),
+        escuro: true,
+      ));
+      await t.pump(const Duration(milliseconds: 50));
+
+      final matizes = <int>{};
+      for (final w in t.allWidgets) {
+        for (final prop in w.toDiagnosticsNode().getProperties()) {
+          if (prop.value case final BoxDecoration d) {
+            if (d.gradient case final RadialGradient g) {
+              for (final c in g.colors) {
+                if (c.a > 0) matizes.add(c.withValues(alpha: 1).toARGB32());
+              }
+            }
+          }
+        }
+      }
+      expect(matizes, isNot(contains(0xFF7B3FF2)),
+          reason: 'o violeta voltou no fundo "${fundo.name}"');
+      expect(matizes, contains(BoldVinho.marca.toARGB32()),
+          reason: 'o fundo frio "${fundo.name}" precisa do polo vinho');
+    }
+  });
+
+  test('o vinho tem NOME, e a paleta empresta dele em vez de repetir o hex', () {
+    // O vinho aparecia em quatro lugares do produto antigo com quatro nomes (`brandPrincipal`,
+    // `glassFill`, `secondaryFlow` e o violeta dos fundos). Agora tem casa: o slot de parceiro e
+    // o tinte de vidro escuro leem de lá, então trocar o parceiro um dia não move o vidro.
+    expect(BoldPalette.bold.partnerPrimary, BoldVinho.marca);
+    expect(BoldPalette.bold.partnerSurface, BoldVinho.ink);
+    expect(BoldPalette.bold.tinteDeVidroEscuro!.withValues(alpha: 1).toARGB32(),
+        BoldVinho.ink.toARGB32(),
+        reason: 'o tinte de vidro escuro é o vinho-tinta a 50%');
   });
 }

@@ -457,7 +457,7 @@ dez estavam mortos, e portar código morto é o pior tipo de trabalho — parece
 |---|---|---|
 | `BoldBackground` (+ scope, + enum de 7 fundos) | **114** | **nasceu** |
 | `BoldQuantumSeal` | 9 | a fazer — marca, fica no filho |
-| `BoldMoneyInputFormatter` | 8 | a fazer — é formatter, não widget: o mais barato |
+| `BoldDinheiro` (era `BoldMoneyInputFormatter`) | 8 | **nasceu** — e o teto deslizava |
 | `BoldBalance` · `BoldCopyButton` · `BoldTabs` | 3 cada | a fazer |
 | cabeçalho da home (via `BoldTopBar.home`) | 3 | a fazer — destravado pelo `.livre` na v0.4.0 |
 | `BoldRuleLadder` · `BoldTransactionSummary` | 2 cada | a fazer |
@@ -487,9 +487,21 @@ do pai pra marca ausente.
 (`vidroFrio`, `aurora`). Está isolado e nomeado em `BoldBackdropTints`, com gate que falha se
 aparecer um segundo valor fora da paleta.
 
-**Decisão aberta, e é de marca:** ou o violeta entra na paleta (e os moods frios passam a ser
-derivados como todo o resto), ou os dois moods saem e o produto oferece cinco fundos em vez de
-sete.
+**Resolvido em 2026-07-30, e a saída foi melhor que as duas que eu tinha proposto.** Decisão do
+dono do produto: um token de cor de vidro pro **vinho**. Ele faz o mesmo trabalho que o violeta
+fazia — dar um polo frio e profundo contra o rosa — com cor que é da marca.
+
+Nasceu `BoldVinho`, com dois degraus (`marca` #90093A e `ink` #16060A) e não uma rampa, porque
+degrau nasce quando um caso pede. O vinho aparecia em QUATRO lugares do produto antigo com quatro
+nomes diferentes — `brandPrincipal`, `glassFill`, `secondaryFlow` e o violeta dos fundos — e nenhum
+era token de marca. Agora tem casa, e três coisas passaram a ler de lá:
+
+- os dois fundos frios (`vidroFrio`, `aurora`), que perderam o violeta;
+- o `tinteDeVidroEscuro` da paleta, que era um hex solto e agora diz que é o vinho-tinta a 50%;
+- o slot de parceiro, que **empresta** o vinho em vez de ser a casa dele — eu tinha posto o valor
+  ali como fallback com um "REVISAR" escrito, e agora trocar o parceiro um dia não move o vidro.
+
+Com isso o backdrop tem **zero valor de cor solto**, e há gate que impede o violeta de voltar.
 
 ### Um limite do motor do catálogo, medido
 

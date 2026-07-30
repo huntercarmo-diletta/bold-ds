@@ -8,6 +8,8 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/painting.dart';
 
+import 'bold_vinho.dart';
+
 /// A paleta do Conta BOLD: rosa da marca, vinho como profundidade.
 class BoldPalette {
   BoldPalette._();
@@ -32,13 +34,16 @@ class BoldPalette {
     primaryStateHover: Color(0xFFFFEDF2),
     onPrimary: Color(0xFFFFFFFF),
 
-    // PARCEIRO — o Bold não tem cobrand hoje, então o slot recebe o vinho da marca
-    // (`brandPrincipal`) e a superfície wine-ink do glass escuro. Assim nada cai no
-    // laranja de REFERÊNCIA do pai, que não é marca de ninguém.
-    // REVISAR quando existir um parceiro de verdade: esta é escolha de fallback.
-    partnerPrimary: Color(0xFF90093A),
+    // PARCEIRO — o Bold não tem cobrand hoje, então o slot EMPRESTA o vinho da marca. Sem
+    // valor aqui, o componente cobranded cairia no laranja de REFERÊNCIA do pai, que não é
+    // marca de ninguém.
+    //
+    // Empresta, e não mora: a casa do vinho é `BoldVinho`, e é de lá que o vidro, o fundo e o
+    // ladrilho de ícone leem. Quando existir parceiro de verdade, trocar aqui não move mais
+    // nada — que é o ponto de o valor ter nome próprio.
+    partnerPrimary: BoldVinho.marca,
     partnerOnPrimary: Color(0xFFFFFFFF),
-    partnerSurface: Color(0xFF16060A),
+    partnerSurface: BoldVinho.ink,
 
     // NEUTROS
     neutral01: Color(0xFF3D3939),
@@ -114,6 +119,8 @@ class BoldPalette {
     //   sobre fundo claro, então o traço claro é o rosa lavado do 08. É o mesmo caso que
     //   a regra `traco-de-vidro-visivel` do pai passou a cobrar.
     tinteDeVidroClaro: Color(0x80FFFFFF),
+    // `BoldVinho.ink` a 50% — o vidro escuro é vinho-tinta, não preto: preto puro sobre a arte
+    // de fundo dá cinza morto, e o matiz é o que mantém o painel dialogando com o rosa.
     tinteDeVidroEscuro: Color(0x8016060A),
     blurDeVidro: 15,
     tracoDeVidroClaro: Color(0xFFFFEDF3), // primary08

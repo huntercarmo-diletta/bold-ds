@@ -31,11 +31,13 @@ export 'package:diletta_design_system/diletta_design_system.dart';
 
 /// A identidade deste filho: paleta, fonte e os dois gradientes.
 export 'src/bold_palette.dart';
+export 'src/bold_vinho.dart';
 export 'src/bold_fonts.dart';
 export 'src/bold_gradients.dart';
 
 /// Componentes que só o Bold tem, nascidos aqui compondo as peças do pai.
 export 'src/bold_background.dart';
+export 'src/bold_dinheiro.dart';
 
 /// Os temas do Bold — claro e escuro, com a paleta acima.
 ///
