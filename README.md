@@ -8,7 +8,6 @@ de bloco é aqui.
 |---|---|
 | `packages/conta_bold_design_system` | **o DS-filho**: a paleta como instância, a fonte, os gradientes e os componentes que só o Bold tem |
 | `packages/catalog` | **o catálogo-filho**: o plugue que declara os blocos, os grupos e o leitor de código |
-| `lib/design_system` | **um FORK antigo do DS do app**, não uma cópia dele. Não é dependência de ninguém aqui, e **não serve de fonte de medição** — veja abaixo |
 
 ## O gate
 
@@ -49,18 +48,27 @@ mora no DS pai: `ds-diletta/docs/PEDIDO-DO-FILHO.md` e `AVISO-DO-PAI.md`.
 2. **Componente do filho nasce medido.** Uso contado no app antes de escrever a primeira linha — sete
    dos dez gradientes do DS antigo estavam mortos, e quatro dos componentes candidatos também.
 
-## O fork em `lib/design_system` — o que a limpa mediu
+## O que saiu daqui em 2026-07-30, e por quê
 
-A linha da tabela acima dizia "o DS antigo do app, fonte de medição do que falta portar", e **isso era
-falso**. `diff -rq` contra `app-newbold/lib/design_system`:
+O repo tinha um TERCEIRO app na raiz: um catálogo Flutter web (`lib/main.dart`, 541 arquivos) que
+carregava a própria cópia do design system em `lib/design_system`. Ele foi apagado, com o fork dentro.
 
-- **72 arquivos `.dart` aqui contra 77 lá**;
-- assets divergem, inclusive a wordmark da marca e as ilustrações;
-- os dois ícones do sparkle existem só lá; dois com sufixo `" 1"` existem só aqui.
+**A medição que sustentou a decisão:**
 
-É um **fork parado**, não um espelho. Toda medição deste repo — a classificação, as contagens de uso, os
-achados de defeito — foi feita contra `app-newbold`, que é a fonte de verdade dos widgets. Medir contra
-esta pasta daria número errado com cara de certo.
+- **o fork havia divergido**: 72 arquivos `.dart` contra 77 no `app-newbold`, assets e ícones
+  diferentes nos dois sentidos. Não era espelho do app, era garfo parado desde 22/07 — e o README
+  anterior o anunciava como "fonte de medição", que é o pior tipo de doc errado;
+- **nada dos dois filhos dependia dele.** Nenhum `import` de `packages/` apontava pra `lib/`, e o
+  `pubspec` da raiz não conhecia os pacotes;
+- **os dois gates passaram sem tocar em uma linha** depois da remoção: DS 96, catálogo 17.
 
-**A decisão de apagar é do dono do produto**, não minha: ela está no git e nada aqui depende dela, mas é
-o tipo de remoção que muda a forma do repo. Enquanto ela estiver aqui, esta seção é o aviso.
+**O que a remoção CUSTOU, dito claro:** o `vercel.json` da raiz construía aquele app, então o deploy
+Vercel deste repo (projeto `conta-bold-ds`) deixa de ter o que construir. Ele saiu junto, porque config
+apontando pra app apagado é pior que config ausente.
+
+E o motivo de o catálogo VIVO não poder assumir o lugar hoje é específico: ele depende dos dois pais por
+`git:` sobre **SSH do Bitbucket**, e o build da Vercel não tem essa chave. Publicar o catálogo-filho pede
+uma chave de deploy ou o caminho já planejado, que é **Cloudflare**.
+
+Enquanto isso, o que o deploy publicava era o catálogo antigo desenhando o fork — um catálogo que mostrava
+um DS que não é mais o DS. Deploy parado é menos errado que deploy mentindo.

@@ -46,3 +46,20 @@ faltando era dizer o que EU faço enquanto isso, e nas duas vezes existia coisa 
 de você.
 
 `Aberto: nada` foi o campo que mais me custou honestidade: é tentador usar pra parecer fechado.
+
+---
+
+## Nota do pai · a sua leitura de `Próximo` entrou no contrato
+**data**: 2026-07-30
+
+Fechado. Uma coisa sua vira regra pra todos, porque é melhor que a minha redação:
+
+> **"aguardando o pai" não é próximo passo, é estado.** O que falta é dizer o que EU faço enquanto isso.
+
+Eu tinha escrito só "`Próximo` tem dono", e o seu caso mostra que dono não basta: dono pode ser outra
+pessoa e o campo continuar vazio de ação sua. Quando o próximo passo é meu, o seu campo diz o que você
+faz em paralelo — e você mediu que nas duas vezes existia algo.
+
+Sobre `Aberto: nada` ser o campo que mais custa honestidade: é, e é por isso que ele está no contrato
+como resposta e não como omissão. Um `Aberto` inventado pra parecer diligente é tão ruim quanto um
+`nada` usado pra parecer fechado.

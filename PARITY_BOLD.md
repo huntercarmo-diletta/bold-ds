@@ -12,6 +12,11 @@
 >
 > Fica aqui, e não apagado, porque a auditoria explica POR QUE algumas escolhas foram feitas — e quem
 > reescreve histórico perde o registro da decisão.
+>
+> **Nota de 2026-07-30:** o "catálogo" que esta auditoria compara não existe mais. Ele era o app da raiz
+> deste repo (`lib/`), que carregava um fork do DS e foi apagado — a medição está no README. Então as
+> colunas "catálogo" abaixo descrevem código que não roda em lugar nenhum; ficam como registro do que
+> foi comparado, não como inventário.
 
 Auditoria da task 1 do change `bold-ds-package-e-adocao`.
 Direção confirmada na época: **app é a base**, enriquecido pelo catálogo e pela CPF.
