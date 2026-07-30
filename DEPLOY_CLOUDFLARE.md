@@ -68,7 +68,15 @@ Abre o navegador e pede autorização na conta Cloudflare. É interativo — rod
 npx wrangler deploy
 ```
 
-No fim ele imprime a URL: `https://conta-bold-ds.<subdomínio>.workers.dev`.
+No fim ele imprime a URL. Publicado em 2026-07-30:
+
+```
+https://conta-bold-ds.hunter-soares-c.workers.dev
+```
+
+**Espere uns segundos antes de conferir.** No primeiro deploy o `/` respondeu 404 por alguns instantes e
+depois passou a 200 — é propagação, não erro de configuração. Conferir cedo demais faz procurar defeito
+onde não tem.
 
 **Publicar de novo é repetir 2 e 4.** Não há deploy automático no push, e isso é escolha: o catálogo
 publica quando alguém decide publicar.
@@ -87,6 +95,21 @@ No dashboard, e só clicando:
 5. **Next** → em **Authentication**, deixe **One-time PIN** ligado. Quem entra recebe um código por
    e-mail, sem precisar de conta em lugar nenhum;
 6. **Add application**.
+
+### 5.5 · O que foi medido no primeiro deploy
+
+459 arquivos, 8s de upload. Servindo certo:
+
+| caminho | esperado | medido |
+|---|---|---|
+| `/` | index | **200** |
+| `/main.dart.js` | 2.99 MB | **200** |
+| `/flutter.js` · `/flutter_bootstrap.js` | loader | **200** |
+| `/rota-que-nao-existe` | index (fallback SPA) | **200** |
+| `/robots.txt` | `Disallow: /` | **200** |
+
+O fallback SPA é o que precisava ser conferido, e passou: rota inventada devolve o index em vez de 404,
+então recarregar numa subrota do catálogo funciona.
 
 ### 6 · Verificar que trancou
 
