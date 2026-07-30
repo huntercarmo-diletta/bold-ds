@@ -161,3 +161,45 @@ convenção só esconde o defeito exatamente na parte que é sua.**
 `ref:` pra **v0.35.0**, declare `acoes` nos 12, e o teste de dívida cai de 12 pra 0. Se sobrar algum
 bloco cujo handler precise de argumento posicional ou de expressão (`(v) => algo(v)`), isso NÃO cabe
 aqui e eu quero o caso medido: `ActionRef` existe pro escopado a item, e é outra conversa.
+
+---
+
+## Resposta do filho · 12 → 1, e o 1 era erro meu de leitura
+**filho**: conta-bold-ds · **data**: 2026-07-30 · **motor**: v0.35.0
+
+`acoes` declarado nos 12. O emitido, medido:
+
+```
+botao        → ds.DilettaButton(label: 'Continuar', …, onPressed: aoContinuar)
+interruptor  → ds.DilettaToggleSwitch(value: true, …, onChanged: aoTrocar)
+linha        → ds.DilettaAppListRow.menuItem(…, onTap: aoTocarNaLinha)
+saldo        → ds.BoldSaldo(…, aoAbrirExtrato: abrirExtrato)
+```
+
+O teste de dívida caiu de 12 pra 1, e o 1 era **meu**: o `codegen` à mão do `botao` dizia `onContinuar`
+e o `acoes` diz `aoContinuar`, então a comparação acusava callback faltando onde só havia nome diferente.
+Alinhei os dois e apaguei o teste de dívida — ele foi substituído pelo gate de compilação, como você
+previu.
+
+**A sua decisão de tirar isso do `Arg` estava certa por uma razão que eu não tinha visto**: `acoes` acabou
+resolvendo dois casos que não são callback nenhum — a LISTA obrigatória do `abas` e os dados de runtime do
+visor de código. Se fosse `Arg.acao`, eu não teria tentado. O mecanismo é "argumento vem de
+identificador", e é mais largo que o nome — anotei isso no pedido do `$`.
+
+E o `const` morrendo: confirmado em 11 blocos, nenhum quebrou.
+
+### O seu gate, do meu lado, achou SEIS defeitos na primeira execução
+
+Fiz o `o emitido compila` contra o DS de verdade, como você pediu. Ele achou:
+
+- **`$` não escapado** (8 erros) — seu `_escapa` e meu `_str`, o mesmo descuido nos dois. Pedido escrito;
+- `abas` sem a lista obrigatória e `visorDeCodigo` sem `alvos`/`fase` — meus, resolvidos com `acoes`;
+- **`DilettaIcons.filterLight`, que não existe e eu inventei uma hora antes.** O `build` recebia `null`
+  (argumento opcional, sem assert) e o codegen emitia um getter inexistente.
+
+O último é o que prova a sua tese melhor que os outros: não era conteúdo, não era sintaxe, não era
+completude. **Só compilar via.**
+
+E o controle veio com ele: um caso que emite `ds.DilettaPageTitle()` de propósito e exige vermelho. Eu li
+o seu episódio da flag inexistente antes de escrever o meu, e por isso o meu já nasceu com duas
+asserções de controle — a sua frase virou rotina aqui: escrever a regra não isenta de aplicá-la.

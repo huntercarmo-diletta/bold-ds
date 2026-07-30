@@ -84,6 +84,7 @@ BlockDef _tituloDaPagina() => BlockDef(
 
 BlockDef _botao() => BlockDef(
       type: 'botao',
+      acoes: const {'onPressed': 'aoContinuar'},
       ctor: 'ds.DilettaButton',
       args: const {'label': Arg.texto('label'), 'tipo': Arg.enumeracao('type', 'ds.DilettaButtonType'), 'tamanho': Arg.enumeracao('size', 'ds.DilettaButtonSize'), 'larguraTotal': Arg.bool('fullWidth')},
       label: 'Botão',
@@ -96,7 +97,7 @@ BlockDef _botao() => BlockDef(
       defaults: () =>
           {'label': 'Continuar', 'tipo': 'primary', 'tamanho': 'lg', 'larguraTotal': true},
       build: (p) => _botaoWidget(p, aoTocar: null),
-      codegen: (p) => 'ds.DilettaButton(label: ${_str(p['label'])}, onPressed: onContinuar'
+      codegen: (p) => 'ds.DilettaButton(label: ${_str(p['label'])}, onPressed: aoContinuar'
           ', type: ds.DilettaButtonType.${p['tipo']}'
           ', size: ds.DilettaButtonSize.${p['tamanho']}'
           '${p['larguraTotal'] == true ? ', fullWidth: true' : ''})',
@@ -276,6 +277,7 @@ BlockDef _cabecalhoDeSecao() => BlockDef(
 /// arquivo — a mesma forma do bloco `icone`.
 BlockDef _linha() => BlockDef(
       type: 'linha',
+      acoes: const {'onTap': 'aoTocarNaLinha'},
       ctor: 'ds.DilettaAppListRow.menuItem',
       args: const {
         'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
@@ -311,6 +313,7 @@ BlockDef _linha() => BlockDef(
 /// já expõe as duas como fábricas distintas.
 BlockDef _linhaDeValor() => BlockDef(
       type: 'linhaDeValor',
+      acoes: const {'onTap': 'aoTocarNaLinha'},
       ctor: 'ds.DilettaAppListRow.transactionItem',
       args: const {
         'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
@@ -689,6 +692,7 @@ BlockDef _esqueleto() => BlockDef(
 
 BlockDef _botaoDeIcone() => BlockDef(
       type: 'botaoDeIcone',
+      acoes: const {'onPressed': 'aoTocar'},
       ctor: 'ds.DilettaIconButton',
       args: const {
         'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
@@ -761,6 +765,7 @@ BlockDef _avatar() => BlockDef(
 
 BlockDef _interruptor() => BlockDef(
       type: 'interruptor',
+      acoes: const {'onChanged': 'aoTrocar'},
       ctor: 'ds.DilettaToggleSwitch',
       args: const {
         'ligado': Arg.bool('value'),
@@ -798,6 +803,7 @@ BlockDef _interruptor() => BlockDef(
 
 BlockDef _campoDeBusca() => BlockDef(
       type: 'campoDeBusca',
+      acoes: const {'onChanged': 'aoBuscar'},
       ctor: 'ds.DilettaSearchInput',
       args: const {'placeholder': Arg.texto('placeholder')},
       label: 'Campo de busca',
@@ -850,6 +856,7 @@ BlockDef _ilustracao() => BlockDef(
 
 BlockDef _estadoVazio() => BlockDef(
       type: 'estadoVazio',
+      acoes: const {'onAction': 'aoTocar'},
       ctor: 'ds.DilettaEmptyState',
       args: const {
         'titulo': Arg.texto('title'),
@@ -934,6 +941,7 @@ BlockDef _chipDeInfo() => BlockDef(
 
 BlockDef _chipDeEntrada() => BlockDef(
       type: 'chipDeEntrada',
+      acoes: const {'onTap': 'aoFiltrar'},
       ctor: 'ds.DilettaInputChip',
       args: const {
         'label': Arg.texto('label'),
@@ -946,7 +954,11 @@ BlockDef _chipDeEntrada() => BlockDef(
         'preenchido': const PropDef('bool'),
         'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
       },
-      defaults: () => {'label': 'Entradas', 'preenchido': true, 'icone': 'filterLight'},
+      // `barsFilterLight` e não `filterLight`: o segundo não existe no conjunto do pai, e eu o inventei
+      // ao escrever o bloco. Nenhum gate viu — o `build` recebia `null` (sem assert, porque o argumento
+      // é opcional) e o codegen emitia `ds.DilettaIcons.filterLight`, que não compila. Achado pelo gate
+      // de compilação.
+      defaults: () => {'label': 'Entradas', 'preenchido': true, 'icone': 'barsFilterLight'},
       build: (p) => DilettaInputChip(
         label: '${p['label']}',
         filled: p['preenchido'] == true,
@@ -961,6 +973,7 @@ BlockDef _chipDeEntrada() => BlockDef(
 
 BlockDef _cartaoDeAcesso() => BlockDef(
       type: 'cartaoDeAcesso',
+      acoes: const {'onTap': 'aoTocar'},
       ctor: 'ds.DilettaQuickAccessCard',
       args: const {
         'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
@@ -990,6 +1003,7 @@ BlockDef _cartaoDeAcesso() => BlockDef(
 
 BlockDef _caixaDeSelecao() => BlockDef(
       type: 'caixaDeSelecao',
+      acoes: const {'onChanged': 'aoMarcar'},
       ctor: 'ds.DilettaCheckbox',
       args: const {
         'marcado': Arg.bool('checked'),
@@ -1032,6 +1046,14 @@ BlockDef _visorDeCodigo() => BlockDef(
       // vêm de dado em tempo de execução. Bloco sem prop declarada continua legível pelo
       // construtor, e foi um dos três defeitos que o gate do pai achou no próprio pai.
       ctor: 'ds.BoldVisorDeCodigo',
+      // Os três argumentos deste bloco vêm de RUNTIME (a câmera), e dois são obrigatórios. Sem isto a
+      // tabela emitia `const ds.BoldVisorDeCodigo()` — que não compila, e era o que o `codegen` à mão
+      // já resolvia antes de a tabela passar a vencer.
+      acoes: const {
+        'alvos': 'alvosDetectados',
+        'fase': 'faseDaVarredura',
+        'tamanhoDaImagem': 'tamanhoDoFrame',
+      },
       label: 'Visor de código',
       props: {
         'estado': PropDef('enum',
@@ -1078,6 +1100,10 @@ BlockDef _copiar() => BlockDef(
 
 BlockDef _abas() => BlockDef(
       type: 'abas',
+      // `abas` é uma LISTA obrigatória, que a tabela não declara — e `acoes` resolve, porque
+      // mecanicamente ele é "argumento → identificador", não só "argumento → handler". O nome do campo
+      // é mais estreito que o mecanismo, e isso está anotado no pedido.
+      acoes: const {'abas': 'rotulosDasAbas', 'aoTrocar': 'aoTrocarAba'},
       ctor: 'ds.BoldAbas',
       args: const {'selecionada': Arg.numero('indiceSelecionado')},
       label: 'Abas',
@@ -1149,6 +1175,7 @@ BlockDef _pontosDePagina() => BlockDef(
 
 BlockDef _saldo() => BlockDef(
       type: 'saldo',
+      acoes: const {'aoAbrirExtrato': 'abrirExtrato'},
       ctor: 'ds.BoldSaldo',
       args: const {'valor': Arg.texto('valor'), 'entradas': Arg.texto('entradas'), 'saidas': Arg.texto('saidas'), 'oculto': Arg.bool('oculto')},
       label: 'Saldo (home)',
@@ -1459,4 +1486,10 @@ T _daOpcao<T>(Object? valor, Map<String, T> opcoes, T padrao) {
 /// Literal Dart de uma string, ou o IDENTIFICADOR quando a prop está vinculada a um
 /// campo da tela gerada. Sem isto, uma prop vinculada sairia como `'nomeDoCampo'` — uma
 /// string com o nome da variável, que compila e mostra o texto errado.
-String _str(Object? v) => v is BoundRef ? v.field : "'${v.toString().replaceAll("'", r"\'")}'";
+String _str(Object? v) => v is BoundRef
+    ? v.field
+    // `\$` ESCAPADO, e isto é o achado do gate de compilação: `'R\$ 1.240,00'` em Dart é tentativa de
+    // interpolação (`\$ ` não é identificador), então toda string de dinheiro emitida virava erro de
+    // sintaxe. Num produto bancário isso é o literal mais comum que existe. O motor tem o mesmo furo no
+    // `_escapa` dele — pedido escrito.
+    : "'${v.toString().replaceAll(r'\', r'\\').replaceAll("'", r"\'").replaceAll(r'$', r'\$')}'";
