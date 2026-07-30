@@ -12,11 +12,12 @@ library;
 
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 
 import 'chrome_do_bold.dart';
 import 'conteudo_do_bold.dart';
 import 'ds_do_bold.dart';
+import 'fundamentos_do_bold.dart';
 
 void main() {
   configurarChromeDoBold();
@@ -33,8 +34,16 @@ void main() {
 CatalogoConfig configDoCatalogoDoBold() => CatalogoConfig(
       titulo: 'Conta BOLD · DS Catalog',
       marca: 'BOLD · Design System',
-      abaInicial: 'componentes',
+      abaInicial: 'fundamentos',
       abas: [
+        // FUNDAMENTOS antes de componentes, e a ordem é a da leitura: a identidade deste produto é a
+        // paleta, e todo componente daqui é ela derivada. Quem abre o catálogo pela primeira vez
+        // precisa ver de onde a cor vem antes de ver o que ela pinta.
+        AbaDoCatalogo(
+          id: 'fundamentos',
+          label: 'Fundamentos',
+          constroi: (_) => const AbaDeFundamentos(),
+        ),
         AbaDoCatalogo(
           id: 'componentes',
           label: 'Componentes',
@@ -143,9 +152,22 @@ class _CardDeBloco extends StatelessWidget {
               Builder(
                 builder: (ctx) => ColoredBox(
                   color: DilettaTheme.schemeOf(ctx).bg,
-                  child: Padding(
-                    padding: EdgeInsets.all(CM.gapPadrao),
-                    child: def.build(props),
+                  // MATERIAL AMBIENTE, e não é decoração: componente com tinta (o campo usa
+                  // `InkWell`) exige um `Material` acima, e sem ele o card virava caixa de erro
+                  // — "No Material widget found". Numa tela de verdade o `Scaffold` fornece;
+                  // este card documenta componente FORA de tela, então fornece aqui.
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: Padding(
+                      padding: EdgeInsets.all(CM.gapPadrao),
+                      // Bloco de TELA CHEIA quer o frame inteiro (é overlay), e numa coluna de
+                      // scroll isso é altura INFINITA: estourava o layout e chegava a pintar com
+                      // `NaN`. Quem sabe quais são é o plugue (`tiposDeTelaCheia`), então o card
+                      // pergunta em vez de adivinhar, e dá a ele a proporção de um aparelho.
+                      child: Ds.atual.ehTelaCheia(tipo)
+                          ? AspectRatio(aspectRatio: 9 / 16, child: def.build(props))
+                          : def.build(props),
+                    ),
                   ),
                 ),
               ),
