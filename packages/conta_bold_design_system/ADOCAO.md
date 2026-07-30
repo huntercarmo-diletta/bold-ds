@@ -27,13 +27,18 @@ passa por decisão de design. Herdar elimina a classe inteira e custa zero linha
 
 ---
 
-## Caixa 1 · Rename puro — 44 componentes
+## Caixa 1 · Rename puro — 47 ARQUIVOS de widget
 
 O pai cobre o conceito com superfície igual ou maior. A adoção é trocar `BoldX` por
 `ds.DilettaY`, sem criar nada.
 
 Alguns são idênticos até nos enums, o que era esperado: o DS do Bold nasceu se integrando
 com o do primeiro filho.
+
+> **O número dizia 44, e a limpa de 2026-07-30 mediu 47.** A unidade é ARQUIVO
+> (`app-newbold/lib/design_system/widgets/*.dart`): **31 na tabela abaixo + 16 na lista de prosa**. Está
+> escrito aqui porque contagem sem unidade declarada não se confere — quem recontou por CLASSE achou 51,
+> e nenhum dos dois números estava errado, faltava dizer o que se contava.
 
 | componente do Bold | vira | evidência |
 |---|---|---|
@@ -50,19 +55,19 @@ com o do primeiro filho.
 | `BoldIllustration` | `DilettaIllustration` | pai 293L ⊃ Bold 54L, com `IllustrationSize` |
 | `BoldAccordion` | `DilettaExpansionTile` | mesmo tamanho, mesmo papel |
 | `BoldAlert` | `DilettaToast` | 4 estados nos dois |
-| `BoldChip` | `DilettaInfoChip` | pai tem `Tone`, Bold não |
+| `BoldStatusBadge` (3 usos) · `BoldFilterChip` (10) | `DilettaInfoChip` · `DilettaInputChip` | os dois moram em `bold_chip.dart`, e são coisas diferentes: um informa, o outro filtra |
 | `BoldInputChip` | `DilettaInputChip` | o input chip é **primário e sem tom** — os 5 tons do `BoldInputChipTone` são trabalho do status tag, e a conflação se desfaz na adoção |
 | `BoldTopBar` | `DilettaTopAppBar` + `DilettaNavigationTopBar` | mesma decomposição: as variantes `back`/`close`/`home`/`icons` do Bold **são** as fábricas de acessório do pai |
 | `BoldBottomApp` | `DilettaBottomApp` | inclusive o `.child`: os 4 usos reais colocam UM `BoldButton` dentro, o que o `.button` do pai cobre com `NavigationButton(primary:)` |
-| `BoldContextBanner` | `DilettaStatusBanner` | — |
-| `BoldControls` | `DilettaToggleSwitch` | pai tem `ToggleSize` |
+| `BoldOperatingStrip` (2 usos) · `BoldOperatingSlot` (2) | `DilettaStatusBanner` | `BoldOperatingContext` tem **zero uso** — não portar |
+| `BoldSwitch` (9 usos) | `DilettaToggleSwitch` | pai tem `ToggleSize` |
 | `BoldKeypad` | `DilettaKeyboard` | — |
 | `BoldDatePicker` | `DilettaCalendar` | — |
 | `BoldSheet` | `DilettaSheetOverlay` | — |
 | `BoldNoticeRow` | `DilettaNoticeBanner` | — |
 | `BoldPermissionGroup` | `DilettaCriteriaList` | — |
 | `BoldPromoCard` | `DilettaFeatureCard` | — |
-| `BoldQuickCard` / `BoldQuickAction` | `DilettaQuickAccessCard` | pai tem `QuickAccessState` |
+| `BoldMenuTile` (8 usos) / `BoldQuickAction` | `DilettaQuickAccessCard` | pai tem `QuickAccessState` |
 | `BoldNavTopBar` | `DilettaNavigationTopBar` | — |
 | `BoldNavigationButton` | `DilettaNavigationButton` | — |
 | `BoldGlassAvatar` / `BoldAvatarStack` | `DilettaAvatar` | composição; pai tem `AvatarVariant` |
@@ -88,6 +93,21 @@ leitura errada minha, um era escopo que não precisa crescer.**
 | `BoldSpotTone` | a quantidade de tons do `SpotIcon` do pai está boa, não precisa crescer |
 | `BoldBottomApp.child` | desnecessário: dá pra passar a própria peça na variante que já existe. Medido nos 4 usos reais, todos são um botão só |
 | `BoldTopBar` (8 variantes) | `bold_app_bar.dart` não é uma segunda barra: são os ACESSÓRIOS (`CircleButton`, `Avatar`, `AccountPill`, `AccountSwitcher`) que entram dentro da barra. O pai decompõe igual |
+
+### O que a limpa de 2026-07-30 acrescentou aqui — um rename ERRADO
+
+**`BoldSegmentedControl` (3 usos) não é `DilettaToggleSwitch`.** A linha antiga dizia
+`BoldControls → DilettaToggleSwitch`, nomeando o ARQUIVO (`bold_controls.dart`) em vez das classes: ele
+declara DUAS, e só uma é um switch. Um switch é binário; um segmented control é escolha entre N — mapear
+um no outro é perder o componente na adoção.
+
+E o pai **não tem** segmented control: `grep` em `lib/src/widgets` não acha nenhum. O parente mais
+próximo é o `BoldAbas`, que nasceu aqui — mesma API (`List<String>` + índice + `onChanged`) e outro
+idioma visual (sublinhado contra pílula preenchida). Então o caminho provável é **variante do
+`BoldAbas`**, não componente novo — e é decisão pra o próximo ciclo, com os 3 usos medidos.
+
+Isto é a armadilha que a abertura deste documento descreve — *"casar por nome engana"* — aplicada ao
+próprio documento, em quatro linhas dele. As outras três eram só nome trocado; esta mudava o destino.
 
 ### O que resta
 
@@ -310,9 +330,11 @@ tem**, aplicado na ordem em que ele morde.
 7. **O filho apaga a versão local no sync seguinte** — e o gate de drift garante que ela
    não sobreviva escondida.
 
-O passo 4 é o que falta com mais força hoje: a Aurora renderiza 4 dos 100 componentes, e
-promover 10 componentes sem ampliar essa cobertura é aumentar a superfície não medida do
-pai na mesma proporção.
+O passo 4 é o que falta com mais força hoje: a Aurora renderiza 4 dos componentes do pai — que em
+2026-07-30 são **101 arquivos e 127 classes públicas** em `ds-diletta/packages/diletta_design_system/lib/src/widgets`
+— e promover componente sem ampliar essa cobertura é aumentar a superfície não medida do pai na mesma
+proporção. (A contagem antiga vinha sem unidade declarada; arquivo e classe não são a mesma coisa, e a
+diferença entre as duas é 26.)
 
 ---
 
@@ -466,6 +488,8 @@ dez estavam mortos, e portar código morto é o pior tipo de trabalho — parece
 | `BoldEscadaDeAlcadas` (era `BoldRuleLadder`) | 2 | **nasceu** — e o texto estava abaixo de AA |
 | `BoldProgressoDeAprovacao` · `BoldPrazoDaPendencia` | 1 cada | **nasceram** — o par da pendência |
 | `BoldPageDots` · `BoldPixMark` · `BoldSecondaryBackground` | 1 cada | a fazer |
+| `BoldSegmentedControl` | 3 | a fazer — provável VARIANTE do `BoldAbas` (ver caixa 2) |
+| `BoldFilterChip` (10) · `BoldSwitch` (9) · `BoldMenuTile` (8) · `BoldStatusBadge` (3) | rename | do pai — não nascem aqui |
 | `BoldHomeBackground` · `BoldTabBar` · `BoldAccountPill` · `BoldAccountSwitcher` | **0** | **não portar** |
 
 **O `BoldTransactionSummary` foi o terceiro achado de classificação, e o mais útil:** ele não é
@@ -477,7 +501,7 @@ já é a tela não compõe com nada no catálogo; cabeçalho compõe com os cinc
 
 Dois achados de classificação no caminho:
 
-- **`BoldQuantumPairingScreen` (712 linhas) não é componente, é TELA** — o consumidor é
+- **`BoldQuantumPairingScreen` não é componente, é TELA** (712 linhas em `bold_quantum_pairing.dart`) — o consumidor é
   `pairing_gate_screen.dart`. Tela é conteúdo (catálogo ou app), não DS. O corte é
   `BoldQuantumCore` (a peça animada) pra cá, e a tela pra fora;
 - o `AccountPill` e o `AccountSwitcher` que eu citei no pedido da barra de topo têm **zero uso**:
@@ -559,7 +583,7 @@ catálogo.
 Nenhum outro filho lê código. Este lê **QR e código de barras**, classifica pelo conteúdo e roteia:
 Pix por EMV, boleto por linha digitável, autorização de transação por QR próprio.
 
-**O corte é a decisão que importa.** A tela de scanner tem 603 linhas e depende de
+**O corte é a decisão que importa.** A tela de scanner (`lib/shared/widgets/unified_scanner_screen.dart`) tem 603 linhas e depende de
 `mobile_scanner`, `permission_handler`, roteador e estado. Nada disso entrou: um DS que arrasta
 plugin de câmera obriga todo consumidor a carregar câmera, inclusive o catálogo, que só quer
 desenhar.

@@ -85,3 +85,64 @@ ADR. Aqui isso derrubaria o ruído dessa classe de 27 pra 3 — e 3 é uma lista
 O mesmo vale, mais fraco, pra símbolo fantasma: num filho, todo nome do pai é fantasma por construção.
 Se a ferramenta aceitasse um caminho de repo-pai pra checar contra, a classe iria de 84 pra perto de
 zero. Sem isso ela é lista longa que ensina a não ler lista.
+
+---
+
+## Segunda rodada · o dono do produto pediu "faz a limpa" de novo, e ela achou coisa melhor
+**filho**: conta-bold-ds · **data**: 2026-07-30
+
+| classe | achados | o que era |
+|---|---|---|
+| link quebrado | **0** | — |
+| símbolo fantasma | 44 | **3 eram de verdade**, e num lugar que importa (ver abaixo) |
+| pendência declarada | 8 | todas citação de texto, inclusive do seu aviso |
+| número afirmado | 29 | **3 consertados**, 24 são história datada, 2 agora verificáveis |
+| md órfão | 4 → 0 | **e o zero não é confiável** (ver abaixo) |
+| lixo | 0 | — |
+
+### O achado que valeu a rodada: o documento caiu na própria armadilha
+
+A `ADOCAO.md` abre dizendo *"casar por nome engana, nos dois sentidos"* — e a tabela de rename dela
+nomeava **quatro linhas pelo ARQUIVO em vez das classes**. Os arquivos declaram outras coisas, e nem
+sempre uma:
+
+| a linha dizia | o arquivo declara de verdade |
+|---|---|
+| `BoldChip` | `BoldStatusBadge` (3 usos) **e** `BoldFilterChip` (10) — informar e filtrar são dois papéis |
+| `BoldContextBanner` | `BoldOperatingStrip` (2) · `BoldOperatingSlot` (2) · `BoldOperatingContext` (**0 usos**) |
+| `BoldControls` | `BoldSwitch` (9) **e** `BoldSegmentedControl` (3) |
+| `BoldQuickCard` | `BoldMenuTile` (8) |
+
+Três eram só nome trocado. **A quarta mudava o destino:** `BoldSegmentedControl` estava mapeado pra
+`DilettaToggleSwitch`, e switch é binário enquanto segmented control é escolha entre N. O pai não tem
+segmented control nenhum — o parente é o `BoldAbas`, que nasceu aqui. Se alguém tivesse adotado seguindo
+a tabela, o componente desaparecia na troca.
+
+Isto não sai por nenhuma das seis classes: a ferramenta achou `BoldChip` como **símbolo fantasma**, e foi
+seguir o fantasma que revelou o resto. Vale como argumento pra classe 2 continuar existindo mesmo com 90%
+de falso positivo — o sinal estava no meio do ruído, e era o achado mais caro do dia.
+
+### Duas coisas sobre a ferramenta, medidas
+
+**1 · O "órfão zero" é falso, e eu sei por quê.** A checagem trata pasta citada em backtick como índice
+(a decisão das 64 specs). Só que ela aceita a citação **de qualquer md, inclusive o próprio**: os quatro
+MDs do fork em `lib/design_system` saíram da lista porque os docs DE DENTRO do fork citam
+`lib/design_system/widgets/` e `theme/`. **Doc órfão pode se desorfanar sozinho.** O conserto que eu
+sugiro é uma linha: ao coletar pastas linkadas, ignorar as citadas por md que já está dentro delas.
+
+**2 · Contagem sem unidade não se confere, e isso não é a mesma coisa que estar velha.** "44 componentes"
+não estava errado nem certo: por arquivo são 47, por classe 51. Reconferi três números e em dois deles eu
+quase "consertei" um número correto — o de 603 linhas era exato, eu tinha grepado o arquivo errado.
+Passei a escrever a unidade e o caminho junto do número (`712 linhas em bold_quantum_pairing.dart`), e aí
+a verificação é um comando em vez de um palpite.
+
+Sugestão que sai daí: a classe 4 ganharia muito se cobrasse **número sem fonte** em vez de número velho.
+Número com caminho ao lado se confere em um segundo; número solto exige arqueologia.
+
+### O que eu consertei
+
+`README.md` — a linha que EU escrevi na primeira rodada estava errada: chamei `lib/design_system` de "o
+DS antigo do app, fonte de medição". `diff -rq` contra o `app-newbold`: **72 arquivos `.dart` aqui contra
+77 lá**, assets divergentes, ícones diferentes nos dois sentidos. É um **fork parado**, e medir contra ele
+daria número errado com cara de certo. Está escrito no README, com a ressalva de que apagar é decisão do
+dono do produto, não minha.
