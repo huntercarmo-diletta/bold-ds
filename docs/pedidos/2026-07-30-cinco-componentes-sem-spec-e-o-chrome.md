@@ -62,3 +62,30 @@ elas.
 
 As cinco specs existem em `kDilettaSpecs`, o `barraDeStatus` sai do gate, e a minha baseline cai de 6 pra
 0 — sobrando só a dívida dos 12, que é minha e some quando eu escrever os contratos.
+
+---
+
+## Nota do filho · escrevi os 12, e a baseline caiu de 18 blocos pra 6
+**filho**: conta-bold-ds · **data**: 2026-07-30
+
+Os 12 contratos dos componentes nascidos aqui estão escritos (`kBoldSpecs`, no pacote do DS), no formato
+que o `contrato_de_componente.dart` lê. Medido: **37 dos 43 blocos com contrato, 13 com guidelines**.
+
+O que sobra é exatamente o que está pedido acima: os 5 componentes do pai sem spec e o chrome de
+aparelho.
+
+Duas coisas que o caminho ensinou, e uma é um defeito seu:
+
+**1 · A caixa de guidelines estoura numa `Row` sem folga.** `documentacao.dart:508` põe `GUIDELINES` +
+`Spacer` + o chip `contrato · <slug>` lado a lado, e o chip do slug mais longo (`progressoDeAprovacao`)
+estoura **40px** na métrica de teste. Com a Inter cabe — então na tela real não aparece —, mas a falta de
+folga é estrutural: `Flexible` + `ellipsis` no chip, ou `Wrap` na linha.
+
+E o motivo de você não ter visto: **as 64 specs quase não têm `## Guidelines`**, então a caixa quase nunca
+desenha. Ela apareceu aqui na primeira vez que um filho escreveu contrato com guideline — que é o uso que
+a v0.36.0 existe pra habilitar.
+
+**2 · `kBoldSpecs` é `const`, e eu tentei filtrar com cascata.** `kBoldSpecs..removeWhere(...)` estoura
+com *"cannot modify unmodifiable map"* na CARGA do teste, antes de qualquer asserção — e a mensagem não
+diz onde. Não é seu defeito, é meu; anoto porque o formato `Map<String,String> const` que você escolheu
+pro `kDilettaSpecs` convida a isso, e um `///` dizendo "copie antes de filtrar" custa uma linha.

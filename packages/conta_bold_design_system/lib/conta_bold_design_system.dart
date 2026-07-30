@@ -42,6 +42,7 @@ export 'src/bold_background.dart';
 export 'src/bold_dinheiro.dart';
 export 'src/bold_abas.dart';
 export 'src/bold_cabecalho_da_home.dart';
+export 'src/bold_contratos.dart';
 export 'src/bold_copiar.dart';
 export 'src/bold_escada_de_alcadas.dart';
 export 'src/bold_resumo_da_transacao.dart';

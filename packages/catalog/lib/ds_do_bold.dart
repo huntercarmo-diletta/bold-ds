@@ -1505,6 +1505,15 @@ Map<String, String> _contratosDosBlocos(Map<String, BlockDef> blocos) {
     final md = kDilettaSpecs['design-system-$kebab'];
     if (md != null) mapa[def.type] = md;
   }
+  // OS CONTRATOS DESTE FILHO: os 12 componentes nascidos aqui, escritos no pacote do DS. O pai não tem
+  // como saber deles — `contratos` é `tipo → markdown`, e o markdown do que é meu vem de mim.
+  // Filtra sem MUTAR: `kBoldSpecs` é `const`, e `..removeWhere` nele estoura com "cannot modify
+  // unmodifiable map" — na carga do teste, antes de qualquer asserção. Cascata em const é armadilha
+  // silenciosa até não ser.
+  for (final e in kBoldSpecs.entries) {
+    if (blocos.containsKey(e.key)) mapa[e.key] = e.value;
+  }
+
   // As EXCEÇÕES, e cada uma tem razão: a convenção classe→slug não cobre quem não é 1:1.
   //
   // A row e a coleção do pai compartilham UMA spec (`app-list`), e é correto — o contrato dele fala da
