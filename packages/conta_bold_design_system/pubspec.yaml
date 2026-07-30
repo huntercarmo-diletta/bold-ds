@@ -1,0 +1,24 @@
+name: conta_bold_design_system
+description: >-
+  O DS-FILHO do Conta BOLD. Fornece a paleta da marca (rosa → vinho) e recebe a
+  linguagem inteira do ds-diletta: ~50 papéis derivados, dark mode sem escrever cor,
+  354 ícones herdados. O que é só do Bold mora aqui; o que é linguagem mora no pai.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # UM só, e por PATH: a cópia da linguagem é código deste repo (ADR-003, sync não
+  # dependência). O filho não conhece irmão nenhum.
+  diletta_design_system:
+    path: ../diletta_design_system
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  crypto: ^3.0.3
