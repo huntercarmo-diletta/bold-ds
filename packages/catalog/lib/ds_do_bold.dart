@@ -313,6 +313,32 @@ Widget _barraDeBaixoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) =>
 /// no catálogo.
 /// O visor do leitor de código. Bloco de TELA CHEIA: ele é overlay, então no canvas ele ocupa a
 /// área inteira em vez de entrar na coluna como um item.
+BlockDef _cabecalhoDaHome() => BlockDef(
+      type: 'cabecalhoDaHome',
+      ctor: 'ds.BoldCabecalhoDaHome',
+      args: const {
+        'nome': Arg.texto('nome'),
+        'conta': Arg.texto('conta'),
+      },
+      label: 'Cabeçalho da home',
+      props: const {
+        'nome': PropDef('text', bindable: true, dartType: 'String'),
+        'conta': PropDef('text', bindable: true, dartType: 'String'),
+      },
+      defaults: () => {'nome': 'Ana', 'conta': 'Conta PF'},
+      build: (p) => BoldCabecalhoDaHome(
+        nome: '${p['nome']}',
+        conta: _vazio(p['conta']) ? null : '${p['conta']}',
+        aoAbrirPerfil: () {},
+        aoTrocarConta: () {},
+        icones: const [
+          BoldIconeDoCabecalho(
+              icone: DilettaIcons.bellLight, rotulo: 'Notificações', marcador: true),
+        ],
+      ),
+      codegen: (p) => '',
+    );
+
 BlockDef _visorDeCodigo() => BlockDef(
       type: 'visorDeCodigo',
       // Só `ctor`, sem `args`: os props deste bloco são de PREVIEW — no código gerado, alvo e fase
@@ -480,6 +506,7 @@ void configurarDsDoBold() {
       'copiar': _copiar(),
       'abas': _abas(),
       'visorDeCodigo': _visorDeCodigo(),
+      'cabecalhoDaHome': _cabecalhoDaHome(),
       'indicadorDeHome': _indicadorDeHome(),
     },
     // TODO tipo precisa estar num grupo: a paleta do editor sai daqui, então bloco sem
@@ -489,7 +516,7 @@ void configurarDsDoBold() {
       'Conteúdo': ['texto', 'valor', 'selo', 'aviso', 'icone'],
       // Grupo próprio porque é o que só o Bold tem: a vizinhança na paleta é decisão de
       // linguagem, e peça de marca não se mistura com vocabulário herdado.
-      'Marca do Bold': ['seloQuantico', 'saldo'],
+      'Marca do Bold': ['seloQuantico', 'saldo', 'cabecalhoDaHome'],
       'Do Bold': ['copiar', 'abas'],
       'Leitor de código': ['visorDeCodigo'],
       'Entrada': ['campo'],

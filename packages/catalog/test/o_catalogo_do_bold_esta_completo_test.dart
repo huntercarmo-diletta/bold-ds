@@ -9,6 +9,16 @@ import 'package:flutter_test/flutter_test.dart';
 /// A conformidade é entregue pelo PAI: ele não audita o filho, ele dá a checagem e o
 /// filho roda no próprio CI. Cada violação diz onde, o quê, e qual erro aquilo evita.
 void main() {
+  /// Emite como o MOTOR emite, e não como o bloco declara.
+  ///
+  /// Desde a tabela (v0.30.0), bloco com `ctor` tem o código gerado pelo motor e o `codegen` fica
+  /// vestigial — ele segue obrigatório no contrato por compatibilidade. Testar `def.codegen` direto
+  /// passou a medir a peça errada: um bloco com tabela e `codegen: (p) => ''` parecia não emitir
+  /// nada. Foi o que aconteceu com o `cabecalhoDaHome`, e dois testes meus estavam medindo isso.
+  String emite(BlockDef def) => temTabela(def)
+      ? codigoDeBlocoDeclarado(def, def.defaults())
+      : def.codegen(def.defaults());
+
   test('o catálogo do Bold está completo — baseline VAZIA', () {
     // Voltou a ser vazia na v0.30.1 do motor. Ela existiu por menos de uma hora, com quatro itens
     // que eram todos do pai: o `ehCtor` que não lia construtor nomeado (regressão da v0.30.0) e
@@ -48,8 +58,10 @@ void main() {
     for (final def in Ds.blocos.values) {
       // Chrome de aparelho não vai pro código gerado, de propósito.
       if (Ds.ehChromeDeDispositivo(def.type)) continue;
-      expect(def.codegen(def.defaults()), startsWith('ds.'),
-          reason: 'o codegen de "${def.type}" não emite componente do DS');
+      // `const ` na frente é do motor: ele marca bloco literal. O que importa é que o construtor
+      // seja do DS, não Flutter puro.
+      expect(emite(def).replaceFirst('const ', ''), startsWith('ds.'),
+          reason: 'o bloco "${def.type}" não emite componente do DS');
     }
   });
 
@@ -157,7 +169,7 @@ void main() {
       final semLeitor = <String>[];
       for (final def in Ds.blocos.values) {
         if (Ds.ehChromeDeDispositivo(def.type)) continue; // não vai pro código, por contrato
-        final codigo = def.codegen(def.defaults());
+        final codigo = emite(def);
         if (codigo.isEmpty) continue;
         final lido = ler(codigo).blocks;
         if (lido.length != 1 || lido.single.type != def.type) semLeitor.add(def.type);
@@ -166,10 +178,36 @@ void main() {
           reason: 'blocos sem entrada no leitor (abrem como código à mão): $semLeitor');
     });
 
+    test('o motor OMITE argumento igual ao default — defeito COM pedido escrito', () {
+      // `docs/pedidos/2026-07-30-a-tabela-omite-argumento-igual-ao-default.md`
+      //
+      // A regra de omissão do motor descarta qualquer argumento cujo valor seja igual ao default do
+      // bloco. Pra `bool` está certo e documentado; pra texto e enum o default É conteúdo, e omitir
+      // gera código que NÃO COMPILA (`const ds.DilettaPageTitle()` com `title` obrigatório).
+      //
+      // 14 dos meus 16 blocos com tabela emitem sem argumento nenhum nesse caminho.
+      //
+      // Este teste fixa o comportamento ATUAL de propósito: quando o pai consertar, ele falha, e é
+      // isso que impede a dívida de sobreviver ao conserto.
+      final vazios = Ds.blocos.values
+          .where(temTabela)
+          .where((d) => d.args.isNotEmpty && emite(d).endsWith('()'))
+          .map((d) => d.type)
+          .toList();
+      expect(vazios, hasLength(14),
+          reason: 'mudou o número de blocos que emitem vazio — se caiu, o pai consertou e este '
+              'teste sai junto com a dívida');
+
+      // E a prova de que não é problema do meu lado: com valor diferente do default, emite certo.
+      final t = Ds.blocos['tituloDaPagina']!;
+      expect(codigoDeBlocoDeclarado(t, {'titulo': 'Outro', 'subtitulo': ''}),
+          contains("title: 'Outro'"));
+    });
+
     test('IDA e VOLTA fecham: codegen → leitor → mesmas props', () {
       for (final tipo in ['texto', 'botao', 'selo', 'campo', 'saldo', 'copiar']) {
         final def = Ds.blocos[tipo]!;
-        final codigo = def.codegen(def.defaults());
+        final codigo = emite(def);
         final lido = ler(codigo).blocks.single;
         expect(lido.type, tipo,
             reason: 'o codegen de "$tipo" emite algo que o leitor não reconhece: $codigo');

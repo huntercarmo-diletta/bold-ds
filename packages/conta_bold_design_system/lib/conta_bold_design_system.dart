@@ -39,6 +39,7 @@ export 'src/bold_gradients.dart';
 export 'src/bold_background.dart';
 export 'src/bold_dinheiro.dart';
 export 'src/bold_abas.dart';
+export 'src/bold_cabecalho_da_home.dart';
 export 'src/bold_copiar.dart';
 export 'src/bold_saldo.dart';
 export 'src/bold_selo_quantico.dart';

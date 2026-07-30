@@ -460,7 +460,7 @@ dez estavam mortos, e portar código morto é o pior tipo de trabalho — parece
 | `BoldDinheiro` (era `BoldMoneyInputFormatter`) | 8 | **nasceu** — e o teto deslizava |
 | `BoldSaldo` (era `BoldBalance`) | 3 | **nasceu** |
 | `BoldCopiar` (era `BoldCopyButton`) · `BoldAbas` (era `BoldTabs`) | 3 cada | **nasceram** |
-| cabeçalho da home (via `BoldTopBar.home`) | 3 | a fazer — destravado pelo `.livre` na v0.4.0 |
+| `BoldCabecalhoDaHome` | 3 | **nasceu** — e é CASCA, não acessório |
 | `BoldRuleLadder` · `BoldTransactionSummary` | 2 cada | a fazer |
 | `BoldApprovalProgress` · `BoldSlaChip` · `BoldPageDots` · `BoldPixMark` · `BoldSecondaryBackground` | 1 cada | a fazer |
 | `BoldHomeBackground` · `BoldTabBar` · `BoldAccountPill` · `BoldAccountSwitcher` | **0** | **não portar** |
