@@ -1303,6 +1303,118 @@ BlockDef _cartaoDeDestaque() => BlockDef(
           ', brandColor: corDaMarca, onTap: aoTocar)',
     );
 
+// ── os cinco que a medição apontou como FALTANDO com uso real ────────────────────
+//
+// Pergunta do dono do produto: "o catálogo já tem todos os itens do pai que você usa?" A medição disse
+// NÃO — cinco componentes com uso no app não tinham bloco, e a casca de topo é o maior buraco do
+// vocabulário inteiro: **109 usos**. Os outros oito que faltam têm ZERO uso, e continuam de fora.
+
+/// A CASCA DE TOPO genérica — o bloco de 109 usos.
+///
+/// O `cabecalhoDaHome` já usa a variante `.comConteudo` por dentro, mas ele é a home. Toda OUTRA tela
+/// deste produto usa a casca com barra de navegação simples: voltar (ou fechar) e título.
+BlockDef _cascaDeTopo() => BlockDef(
+      type: 'cascaDeTopo',
+      label: 'Casca de topo',
+      props: const {
+        'titulo': PropDef('text', bindable: true, dartType: 'String'),
+        'esquerda': PropDef('enum', options: ['voltar', 'fechar', 'nada']),
+      },
+      defaults: () => {'titulo': 'Enviar Pix', 'esquerda': 'voltar'},
+      build: (p) => DilettaTopAppBar.defaultVariant(
+        navBar: DilettaNavigationTopBar(
+          title: _vazio(p['titulo']) ? null : '${p['titulo']}',
+          left: switch (p['esquerda']) {
+            'fechar' => DilettaNavigationLeftAccessory.close(onPressed: () {}),
+            'nada' => null,
+            // Sem `_ =>`: o default é EXPLÍCITO, e opção nova aparece aqui em vez de virar "voltar".
+            'voltar' => DilettaNavigationLeftAccessory.back(onPressed: () {}),
+            _ => throw ArgumentError('acessório esquerdo desconhecido: ${p['esquerda']}'),
+          },
+        ),
+      ),
+      // Aninha dois níveis (casca → barra → acessório), então fica fora da tabela por decisão do motor,
+      // com entrada no leitor.
+      codegen: (p) => 'ds.DilettaTopAppBar.defaultVariant(navBar: ds.DilettaNavigationTopBar('
+          '${_vazio(p['titulo']) ? '' : 'title: ${_str(p['titulo'])}, '}'
+          'left: ${switch (p['esquerda']) {
+            'fechar' => 'ds.DilettaNavigationLeftAccessory.close(onPressed: aoFechar)',
+            'nada' => 'null',
+            _ => 'ds.DilettaNavigationLeftAccessory.back(onPressed: aoVoltar)',
+          }}))',
+    );
+
+/// A BARRA DE NAVEGAÇÃO sozinha — 13 usos, e existe separada porque ela também entra em folha e em
+/// cabeçalho, onde a casca de topo não vai.
+BlockDef _barraDeNavegacao() => BlockDef(
+      type: 'barraDeNavegacao',
+      ctor: 'ds.DilettaNavigationTopBar',
+      args: const {'titulo': Arg.texto('title')},
+      label: 'Barra de navegação',
+      props: const {'titulo': PropDef('text', bindable: true, dartType: 'String')},
+      defaults: () => {'titulo': 'Minhas chaves'},
+      build: (p) => DilettaNavigationTopBar(
+        title: '${p['titulo']}',
+        left: DilettaNavigationLeftAccessory.back(onPressed: () {}),
+      ),
+      codegen: (p) => 'ds.DilettaNavigationTopBar(title: ${_str(p['titulo'])})',
+    );
+
+BlockDef _bannerDeStatus() => BlockDef(
+      type: 'bannerDeStatus',
+      ctor: 'ds.DilettaStatusBanner',
+      args: const {
+        'sobrescrito': Arg.texto('eyebrow'),
+        'titulo': Arg.texto('title'),
+        'subtitulo': Arg.texto('subtitle'),
+        'nota': Arg.texto('footnote'),
+      },
+      label: 'Banner de status',
+      props: const {
+        'sobrescrito': PropDef('text'),
+        'titulo': PropDef('text', bindable: true, dartType: 'String'),
+        'subtitulo': PropDef('text', bindable: true, dartType: 'String'),
+        'nota': PropDef('text'),
+      },
+      defaults: () => {
+        'sobrescrito': 'CONTA PJ',
+        'titulo': 'Operando como Diletta Solutions',
+        'subtitulo': 'CNPJ 12.345.678/0001-90',
+        'nota': '',
+      },
+      build: (p) => DilettaStatusBanner(
+        eyebrow: _vazio(p['sobrescrito']) ? null : '${p['sobrescrito']}',
+        title: _vazio(p['titulo']) ? null : '${p['titulo']}',
+        subtitle: _vazio(p['subtitulo']) ? null : '${p['subtitulo']}',
+        footnote: _vazio(p['nota']) ? null : '${p['nota']}',
+      ),
+      codegen: (p) => 'ds.DilettaStatusBanner(title: ${_str(p['titulo'])}'
+          ', subtitle: ${_str(p['subtitulo'])})',
+    );
+
+BlockDef _calendario() => BlockDef(
+      type: 'calendario',
+      ctor: 'ds.DilettaCalendar',
+      acoes: const {'onDateSelected': 'aoEscolherData', 'selectedDate': 'dataEscolhida'},
+      label: 'Calendário',
+      props: const {},
+      defaults: () => {},
+      build: (p) => DilettaCalendar(onDateSelected: (_) {}),
+      codegen: (p) =>
+          'ds.DilettaCalendar(onDateSelected: aoEscolherData, selectedDate: dataEscolhida)',
+    );
+
+BlockDef _teclado() => BlockDef(
+      type: 'teclado',
+      ctor: 'ds.DilettaKeyboard',
+      acoes: const {'onKey': 'aoTeclar', 'onBackspace': 'aoApagar'},
+      label: 'Teclado numérico',
+      props: const {},
+      defaults: () => {},
+      build: (p) => DilettaKeyboard(onKey: (_) {}, onBackspace: () {}),
+      codegen: (p) => 'ds.DilettaKeyboard(onKey: aoTeclar, onBackspace: aoApagar)',
+    );
+
 BlockDef _visorDeCodigo() => BlockDef(
       type: 'visorDeCodigo',
       // Só `ctor`, sem `args`: os props deste bloco são de PREVIEW — no código gerado, alvo e fase
@@ -1576,6 +1688,12 @@ void configurarDsDoBold() {
       'dropdown': _dropdown(),
       'expansivel': _expansivel(),
       'cartaoDeDestaque': _cartaoDeDestaque(),
+      // Os cinco que faltavam com uso real, medidos a pedido do dono do produto.
+      'cascaDeTopo': _cascaDeTopo(),
+      'barraDeNavegacao': _barraDeNavegacao(),
+      'bannerDeStatus': _bannerDeStatus(),
+      'calendario': _calendario(),
+      'teclado': _teclado(),
   };
 
   Ds.configurar(PlugueDoDs(
@@ -1583,10 +1701,11 @@ void configurarDsDoBold() {
     // TODO tipo precisa estar num grupo: a paleta do editor sai daqui, então bloco sem
     // grupo existe e ninguém acha. A conformidade do pai cobra.
     grupos: const {
-      'Estrutura': ['barraDeStatus', 'tituloDaPagina', 'indicadorDeHome'],
+      'Estrutura': ['barraDeStatus', 'cascaDeTopo', 'barraDeNavegacao', 'tituloDaPagina',
+        'indicadorDeHome'],
       'Conteúdo': ['texto', 'valor', 'selo', 'aviso', 'icone', 'cabecalhoDeSecao',
         'ilustracao', 'logo', 'chipDeInfo', 'estadoVazio', 'avatar', 'criterios', 'expansivel',
-        'cartaoDeDestaque', 'comprovante'],
+        'cartaoDeDestaque', 'comprovante', 'bannerDeStatus'],
       // A lista e as duas linhas ficam juntas porque é assim que se usam: a coleção é dona do
       // separador, e linha fora de lista é linha sem vizinhança.
       'Lista': ['lista', 'linha', 'linhaDeValor'],
@@ -1602,7 +1721,7 @@ void configurarDsDoBold() {
       'Alçadas': ['escadaDeAlcadas', 'progressoDeAprovacao', 'prazoDaPendencia'],
       'Leitor de código': ['visorDeCodigo'],
       'Entrada': ['campo', 'campoDeBusca', 'interruptor', 'caixaDeSelecao', 'chipDeEntrada',
-        'dropdown', 'listaDeRadio'],
+        'dropdown', 'listaDeRadio', 'calendario', 'teclado'],
       'Ação': ['botao', 'barraDeBaixo', 'botaoDeIcone', 'cartaoDeAcesso'],
       'Ritmo': ['ritmo', 'divisor'],
     },
@@ -1850,6 +1969,8 @@ Map<String, String> _contratosDosBlocos(Map<String, BlockDef> blocos) {
     // `DilettaIllustrationAccessory` → a spec é da ILUSTRAÇÃO (`design-system-illustration`, que o pai
     // escreveu na v0.17.0): o acessório é o invólucro de tamanho, e o contrato é da arte.
     'ilustracao': 'design-system-illustration',
+    // A casca de topo não tem `ctor` (aninha três níveis), então a derivação não a alcança.
+    'cascaDeTopo': 'design-system-top-app-bar',
     'lista': 'design-system-app-list',
     'linha': 'design-system-app-list',
     'linhaDeValor': 'design-system-app-list',

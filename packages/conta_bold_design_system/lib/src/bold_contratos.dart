@@ -100,6 +100,9 @@ Só na home, uma vez. Saldo repetido em duas telas cria duas fontes de verdade v
 - recalcular a largura do valor a cada troca: a largura é RESERVADA de propósito, pra mascarar não
   deslocar o resto da tela
 - pôr o botão de ocultar aqui — ele mora na barra de topo, porque é ação de tela e não de card
+- usar onde bastaria o `valor` (`DilettaAmountDisplay`): aquele é UM número entre hairlines, e serve
+  detalhe de transação e header de extrato. Este é o organismo da home, com modo oculto, entradas e
+  saídas e o atalho do extrato. Se a tela mostra um número e nada mais, o certo é o outro
 
 ## Compõe
 
@@ -174,7 +177,8 @@ Quando a tela mostra conjuntos alternativos do mesmo tipo de conteúdo — "Ativ
 
 ### Evite
 - usar pra escolher um PARÂMETRO do que já está na tela — isso é `segmentos`, e a forma diferente é o
-  que ensina o que vai acontecer
+  que ensina o que vai acontecer. `pix_meus_qr_flow.dart` usa os dois seis linhas um do outro, e é a
+  prova de que a distinção é do produto e não minha
 - deixar a seleção só na cor
 
 ## Compõe
@@ -365,6 +369,10 @@ No topo de qualquer comprovante: Pix, boleto, TED, recarga.
 - montar a tela inteira dentro deste componente: fundo, barra e CTA são blocos, e um bloco que já é a
   tela não compõe com nada
 - cortar o valor com reticências: `R$ 1.234...` lê como um valor menor do que é
+- confundir com o `comprovante` (`DilettaReceipt`): **este é o CABEÇALHO DA TELA, aquele é o DOCUMENTO
+  compartilhável.** Aqui o valor é herói e o spot tem tom semântico; lá o ícone é neutro e centralizado,
+  as linhas são label/valor, e existe rodapé com ID da transação e logo. As duas coexistem no mesmo
+  fluxo — o comprovante abre pelo CTA desta tela
 
 ## Compõe
 

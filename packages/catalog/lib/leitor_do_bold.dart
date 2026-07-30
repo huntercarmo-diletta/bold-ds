@@ -102,6 +102,19 @@ Block _bloco(String expr) {
     });
   }
 
+  // A CASCA DE TOPO: aninha casca → barra → acessório, e a tabela não cobre aninhamento. O acessório
+  // esquerdo volta pelo NOME do construtor dele, que é o único sinal disponível no código.
+  if (ehCtor(expr, 'ds.DilettaTopAppBar.defaultVariant')) {
+    return Block(id: _novoId(), type: 'cascaDeTopo', props: {
+      'titulo': argString(expr, 'title') ?? '',
+      'esquerda': expr.contains('LeftAccessory.close')
+          ? 'fechar'
+          : expr.contains('LeftAccessory.back')
+              ? 'voltar'
+              : 'nada',
+    });
+  }
+
   // 4 · A forma irregular, que fica fora da tabela por decisão do motor: o rótulo mora três níveis
   // abaixo do construtor, e é o próprio pai que diz que tabela não cobre aninhamento.
   if (ehCtor(expr, 'ds.DilettaBottomApp.button')) {

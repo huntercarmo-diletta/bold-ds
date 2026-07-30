@@ -28,6 +28,8 @@ void main() {
   const baselineDeSpecsQueFaltam = {
     "bloco-sem-contrato|PlugueDoDs.contratos['dialogo']",
     "bloco-sem-contrato|PlugueDoDs.contratos['expansivel']",
+    // O teclado entrou na terceira medição de cobertura: `DilettaKeyboard` também não tem spec nas 69.
+    "bloco-sem-contrato|PlugueDoDs.contratos['teclado']",
   };
 
   test('a baseline NÃO tem fantasma', () {

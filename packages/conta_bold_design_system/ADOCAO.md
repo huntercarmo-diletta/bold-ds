@@ -29,6 +29,23 @@ passa por decisão de design. Herdar elimina a classe inteira e custa zero linha
 
 ## Caixa 1 · Rename puro — 47 ARQUIVOS de widget
 
+> **COBERTURA NO CATÁLOGO, medida em 2026-07-30 a pedido do dono do produto** ("o catálogo já tem todos
+> os itens do pai que você usa?"). A resposta era NÃO, e o buraco maior era o maior componente:
+>
+> | componente do pai sem bloco | usos no app |
+> |---|---|
+> | `DilettaTopAppBar` | **109** |
+> | `DilettaNavigationTopBar` | 13 |
+> | `DilettaStatusBanner` · `DilettaCalendar` | 4 cada |
+> | `DilettaKeyboard` | 2 |
+>
+> Os cinco entraram no mesmo ciclo. **Agora todo componente do pai com uso medido no app tem bloco** — 56
+> blocos, 48 por tabela, 52 com contrato.
+>
+> Os 8 que continuam sem bloco têm **zero uso** (`tooltip`, `stepper`, `bannerPromo`, `barraDeProgresso`,
+> `folhaDeSenha`, `otp`, `linhaDeDetalhe`, `glassSurface` direto), e ficam de fora pela mesma razão dos
+> sete gradientes mortos: declarar o que ninguém usa parece progresso.
+
 > **Quanto disso está no catálogo (2026-07-30):** dos 47, **27 já são bloco** — o resto entra por
 > medição, e **8 estão fora de propósito por terem ZERO uso no app** (`tooltip`, `stepper`,
 > `bannerPromo`, `barraDeProgresso`, `folhaDeSenha`, `otp`, `linhaDeDetalhe`, `glassSurface` direto).
@@ -473,6 +490,36 @@ meio do gradiente antigo, a 2.56:1. Com o primary novo elas vão a 3.37.
 (`primary03 → primary05`, cravado), então não há fenda de material — nem os meus dois cabem lá.
 Enquanto isso, `bold_gradients.dart` carrega forma E material; quando a fenda existir, a forma
 sai e sobram as cores.
+
+---
+
+## Revisão de DUPLICAÇÃO — 2026-07-30
+
+Segunda pergunta do dono do produto: *"já revisou o que tem hoje no Bold pra saber se não está duplicando
+componente?"* Revisei os 56 blocos por três eixos, e **nenhum componente está duplicado**. O que existe é
+ADJACÊNCIA, e ela virou doc — porque a pergunta que ele fez é a que qualquer pessoa faz ao ver os dois
+cards lado a lado.
+
+| eixo | achado |
+|---|---|
+| dois blocos sobre a MESMA classe do pai | 1: `linha` e `linhaDeValor`, os dois `DilettaAppListRow`. É intencional — são as duas fábricas do pai (`menuItem` com 109 usos no app, `transactionItem` pra linha de dinheiro), e a spec `app-list` cobre as duas |
+| componente do filho duplicando um do pai | 0 |
+| componente do filho duplicando outro do filho | 0 |
+
+**Os três pares adjacentes, e o que separa cada um** (agora escrito no `Evite` de cada contrato):
+
+- **`resumoDaTransacao` × `comprovante`**: o primeiro é o CABEÇALHO da tela (valor herói, spot com tom
+  semântico); o segundo é o DOCUMENTO compartilhável (ícone neutro centralizado, linhas label/valor,
+  rodapé com ID e logo). Coexistem no mesmo fluxo: o comprovante abre pelo CTA da tela de resumo;
+- **`saldo` × `valor`**: `valor` é UM número entre hairlines (detalhe de transação, header de extrato);
+  `saldo` é o organismo da home com modo oculto, entradas/saídas e atalho do extrato. Tela que mostra um
+  número e nada mais usa o primeiro;
+- **`abas` × `segmentos`**: aba troca a LISTA, segmento troca um PARÂMETRO. A prova é do produto, não
+  minha: `pix_meus_qr_flow.dart` usa os dois seis linhas um do outro.
+
+E dois que PARECIAM duplicação e a medição descartou: `copiar` não tem equivalente no pai (nenhum
+componente dele copia pra área de transferência), e `pontosDePagina` também não (o pai não tem indicador
+de página).
 
 ---
 

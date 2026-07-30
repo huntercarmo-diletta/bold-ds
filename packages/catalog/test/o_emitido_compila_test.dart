@@ -145,7 +145,12 @@ class TelaGerada extends StatelessWidget {
   List<Widget> get conteudoDoExpansivel => const [];
   Color get corDaMarca => const Color(0xFFFE3976);
   void aoFechar() {}
+  void aoVoltar() {}
   void aoEscolher(String v) {}
+  void aoEscolherData(DateTime d) {}
+  void aoTeclar(String t) {}
+  void aoApagar() {}
+  DateTime? get dataEscolhida => null;
   List<ds.BoldAlvo> get alvosDetectados => const [];
   List<String> get rotulosDasAbas => const ['Tudo', 'Entradas'];
   double get faseDaVarredura => 0;
