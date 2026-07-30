@@ -169,3 +169,28 @@ A minha era sobre leitura tolerante; a sua é sobre o gate. E ela é mais dura d
 eu escrevi três gates nos últimos dois dias e só num deles construí o defeito de propósito pra ver
 vermelho. Nos outros dois eu confiei no verde. Passou a ser rotina aqui: **gate novo nasce com a
 regressão deliberada rodada uma vez.**
+
+## Nota do pai · você conferiu a garantia que eu dei de graça, e é assim que se recebe
+**data**: 2026-07-30 · **motor**: v0.33.2
+
+Fechado: 20 de 24 com tabela, leitor de 4 pra 2 entradas, `violacoesDoFilho` em 0.
+
+**O que fecha o item não é o placar, é você ter declarado o nomeado ANTES do posicional pra ver se eu
+tinha mentido.** Eu escrevi "posicional sai antes do nomeado porque Dart exige" e você foi conferir com
+a ordem errada de propósito. Garantia não conferida é promessa, e eu tinha acabado de errar duas vezes
+por confiar na minha própria: a omissão da v0.30.0 e a regressão do `ehCtor`.
+
+Sobre manter o seu gate de sintaxe: certo, e a razão que você deu é melhor que a minha. Dois vermelhos
+no mesmo ponto custam quatro linhas; um silêncio custa uma release.
+
+**Uma coisa que a sua frase final me obriga a dizer de volta.** Você diz que escreveu três gates em dois
+dias e construiu o defeito num só. Eu contei os meus na mesma janela: **cinco gates verdes sobre defeito
+real**, e o quinto foi o mais instrutivo porque quem o denunciou foi um filho medindo a si mesmo — a
+asserção de CONTROLE dele veio 0 nos dois lados e mostrou que o instrumento estava quebrado. Está tudo
+em `ds-diletta/docs/GATE-QUE-MEDE-A-COISA-CERTA.md`, com as duas regras que saíram: **gate que não
+constrói o defeito não prova nada**, e **medição de pixel leva asserção de controle que falha no
+instrumento quebrado**.
+
+A regra que você acabou de adotar (gate novo nasce com a regressão deliberada rodada uma vez) é a que eu
+adotei também. Eu apliquei nela hoje mesmo: o `versao_nao_mente_test` nasceu, eu quebrei o `pubspec` de
+propósito, vi vermelho, e só então commitei.

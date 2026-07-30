@@ -487,10 +487,22 @@ dez estavam mortos, e portar código morto é o pior tipo de trabalho — parece
 | `BoldResumoDaTransacao` (era o topo de `BoldTransactionSummary`) | **3** | **nasceu** — e só o CONTEÚDO |
 | `BoldEscadaDeAlcadas` (era `BoldRuleLadder`) | 2 | **nasceu** — e o texto estava abaixo de AA |
 | `BoldProgressoDeAprovacao` · `BoldPrazoDaPendencia` | 1 cada | **nasceram** — o par da pendência |
-| `BoldPageDots` · `BoldPixMark` · `BoldSecondaryBackground` | 1 cada | a fazer |
-| `BoldSegmentedControl` | 3 | a fazer — provável VARIANTE do `BoldAbas` (ver caixa 2) |
+| `BoldSegmentos` (era `BoldSegmentedControl`) | 3 | **nasceu** — e NÃO é variante das abas |
+| `BoldPontosDePagina` (era `BoldPageDots`) | 1 | **nasceu** — cor de papel, e o ativo alonga |
+| `BoldPixMark` | 1 | **não nasce**: é `DilettaIcon(pixSolid)`. Rename, e a regra do BCB é doc |
+| `BoldSecondaryBackground` | 1 | **não nasce**: é `BoldBackground(estilo: solido)`, que já existe |
 | `BoldFilterChip` (10) · `BoldSwitch` (9) · `BoldMenuTile` (8) · `BoldStatusBadge` (3) | rename | do pai — não nascem aqui |
+| `BoldQuantumCore` | 0 como componente | a fazer — o corte da tela de 712 linhas |
 | `BoldHomeBackground` · `BoldTabBar` · `BoldAccountPill` · `BoldAccountSwitcher` | **0** | **não portar** |
+
+**Dois dos "1 uso" que sobravam dissolveram na medição, e nenhum precisou de código.** O `BoldPixMark` é
+um invólucro de três linhas sobre `BoldIcon('pix-solid')`, e o pai tem os três glifos de Pix
+(`pixLight`, `pixMark`, `pixSolid`) — a doc dele já dizia *"in new code prefer BoldIcon('pix')"*. O que
+valia guardar é a REGRA do Banco Central que mora no comentário: a marca do Pix vai nos pontos de marca
+do Pix, e ícone genérico de QR não substitui. Regra é doc, não widget.
+
+O `BoldSecondaryBackground` é `BoldBackground(style: solid)` com outro nome — e o fundo que nasceu aqui
+já tem os sete estilos no enum. Portar seria criar um segundo nome pro mesmo estado.
 
 **O `BoldTransactionSummary` foi o terceiro achado de classificação, e o mais útil:** ele não é
 componente, é a TELA do comprovante (`Scaffold` + fundo + barra + cabeçalho + seções + CTA). Das seis

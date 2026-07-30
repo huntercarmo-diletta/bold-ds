@@ -91,6 +91,15 @@ Block _bloco(String expr) {
     });
   }
 
+  // Os segmentos: lista curta de rótulos, que a tabela não declara (mesmo caso das abas). O bloco lê
+  // os rótulos de volta do próprio literal.
+  if (ehCtor(expr, 'ds.BoldSegmentos') || ehCtor(expr, 'BoldSegmentos')) {
+    return Block(id: _novoId(), type: 'segmentos', props: {
+      'segmentos': _rotulos(expr),
+      'selecionado': argNumeroComoTexto(expr, 'indiceSelecionado') ?? '0',
+    });
+  }
+
   // 4 · A forma irregular, que fica fora da tabela por decisão do motor: o rótulo mora três níveis
   // abaixo do construtor, e é o próprio pai que diz que tabela não cobre aninhamento.
   if (ehCtor(expr, 'ds.DilettaBottomApp.button') ||
@@ -105,4 +114,14 @@ Block _bloco(String expr) {
   // declarou fica VISÍVEL como código à mão — que é o sinal certo pra declarar o bloco que falta,
   // em vez de o pedaço desaparecer em silêncio.
   return Block(id: _novoId(), type: 'cru', props: {'codigo': expr});
+}
+
+/// Os rótulos de uma lista curta (`const ['a', 'b']`) de volta como texto separado por vírgula, que é
+/// como o editor guarda. Vale pras abas e pros segmentos.
+String _rotulos(String expr) {
+  final lista = RegExp(r'\[(.*?)\]', dotAll: true).firstMatch(expr)?.group(1) ?? '';
+  return RegExp(r"'([^']*)'")
+      .allMatches(lista)
+      .map((m) => m.group(1)!)
+      .join(', ');
 }

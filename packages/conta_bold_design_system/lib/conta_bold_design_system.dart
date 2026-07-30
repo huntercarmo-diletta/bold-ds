@@ -31,6 +31,7 @@ export 'package:diletta_design_system/diletta_design_system.dart';
 
 /// A identidade deste filho: paleta, fonte e os dois gradientes.
 export 'src/bold_palette.dart';
+export 'src/bold_pontos_de_pagina.dart';
 export 'src/bold_vinho.dart';
 export 'src/bold_fonts.dart';
 export 'src/bold_gradients.dart';
@@ -45,6 +46,7 @@ export 'src/bold_copiar.dart';
 export 'src/bold_escada_de_alcadas.dart';
 export 'src/bold_resumo_da_transacao.dart';
 export 'src/bold_saldo.dart';
+export 'src/bold_segmentos.dart';
 export 'src/bold_selo_quantico.dart';
 export 'src/bold_visor_de_codigo.dart';
 

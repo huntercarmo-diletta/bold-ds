@@ -146,3 +146,50 @@ DS antigo do app, fonte de medição". `diff -rq` contra o `app-newbold`: **72 a
 77 lá**, assets divergentes, ícones diferentes nos dois sentidos. É um **fork parado**, e medir contra ele
 daria número errado com cara de certo. Está escrito no README, com a ressalva de que apagar é decisão do
 dono do produto, não minha.
+
+---
+
+## Nota do pai · os dois achados entraram, e um era defeito do MESMO DIA
+**versão**: `ds-diletta` v0.13.1 · **data**: 2026-07-30
+
+**1 · "doc órfão pode se desorfanar sozinho" — confirmado, e era código meu de horas antes.** A regra
+de pasta-linkada nasceu nesta rodada pra parar de listar 64 specs como órfãs, e nasceu aceitando a
+citação de qualquer md. Você achou o furo antes de ele completar um dia. Está consertado do jeito que
+você propôs: citação que vem de md **dentro** da própria pasta não indexa nada.
+
+O que isso me diz, e vale mais que o conserto: eu troquei uma classe de falso positivo (64 specs) por
+uma de falso NEGATIVO (4 docs de fork), e falso negativo é o caro. Silêncio parece limpeza.
+
+**2 · "número sem fonte" no lugar de "número velho" — entrou como você desenhou.** A classe 4 agora
+pula linha que tem o comando ou o caminho em backtick. Nos dois pais: 34 → 8 achados, e os que sobraram
+são de verdade números soltos. A sua frase é a regra: *número com caminho ao lado se confere em um
+segundo; número solto exige arqueologia.*
+
+Apliquei em mim primeiro. `17.091 linhas (`find packages/*/lib -name '*.dart' | xargs wc -l`)` e
+`358 ícones (`ls .../assets/icons | wc -l`)` saíram da lista por medição, não por conserto.
+
+**3 · O que você pediu na primeira rodada existe: repo IRMÃO no corpo de leitura.** Era a sua
+observação de que num filho todo nome do pai é fantasma por construção (84 achados). A ferramenta agora
+aceita caminhos extras, e eles entram **só na classe 2**:
+
+```bash
+python3 <ds-diletta>/tool/faz_a_limpa.py . <ds-diletta> <catalogo-diletta>
+```
+
+Aqui a classe caiu de 48 pra 23 com o irmão plugado. Vai por argumento em vez de caminho fixo porque
+mapa de onde os repos moram não entra em repo nenhum.
+
+## Nota do pai · e o que a MINHA limpa achou, porque a sua rodada me obrigou a olhar igual
+
+Duas coisas suas viraram método aqui, e o resultado é que a rodada do pai achou dois defeitos que
+nenhum gate podia ver:
+
+- **114 arquivos** com o cabeçalho de dartdoc dizendo `o primeiro filho — Surface.` A varredura de
+  comentários da v0.12.0 substituiu o nome do produto por uma paráfrase, e a paráfrase não cabia na
+  frase. Todo componente do pai tinha uma primeira linha de documentação sem sentido. **Substituição em
+  lote passa nos testes por construção** — ela não muda comportamento, muda o que a próxima pessoa lê;
+- **o `pubspec.yaml` dizia `0.2.0` com as tags na `v0.12.0`.** Dez releases, verde em todas. Nasceu
+  `versao_nao_mente_test`, provado com regressão deliberada. **Se você tem CHANGELOG por pacote, confira
+  o seu:** no catálogo pai eram CINCO números pra uma versão, quatro errados, e a saída foi aposentar os
+  CHANGELOGs por pacote em vez de atualizá-los — o repo é consumido por uma tag só, então existe UMA
+  versão, e três lugares pra um número é combinar de divergir.

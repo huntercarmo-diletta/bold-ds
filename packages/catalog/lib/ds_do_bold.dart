@@ -703,6 +703,48 @@ List<String> _listaDeAbas(Object? v) => '$v'
     .where((e) => e.isNotEmpty)
     .toList();
 
+/// Os segmentos. Mesmo controle de lista curta das abas (texto separado por vírgula), e pelo mesmo
+/// motivo: são dois ou três rótulos.
+BlockDef _segmentos() => BlockDef(
+      type: 'segmentos',
+      label: 'Segmentos',
+      props: const {
+        'segmentos': PropDef('text'),
+        'selecionado': PropDef('number'),
+      },
+      defaults: () => {'segmentos': 'Claro, Escuro, Sistema', 'selecionado': '0'},
+      build: (p) => BoldSegmentos(
+        segmentos: _listaDeAbas(p['segmentos']),
+        indiceSelecionado: int.tryParse('${p['selecionado']}') ?? 0,
+        aoTrocar: (_) {},
+      ),
+      codegen: (p) => 'ds.BoldSegmentos(segmentos: const ['
+          '${_listaDeAbas(p['segmentos']).map((a) => "'$a'").join(', ')}]'
+          ', indiceSelecionado: ${int.tryParse('${p['selecionado']}') ?? 0}'
+          ', aoTrocar: aoTrocarSegmento)',
+    );
+
+BlockDef _pontosDePagina() => BlockDef(
+      type: 'pontosDePagina',
+      ctor: 'ds.BoldPontosDePagina',
+      args: const {
+        'total': Arg.numero('total'),
+        'ativo': Arg.numero('indiceAtivo'),
+      },
+      label: 'Pontos de página',
+      props: const {
+        'total': PropDef('number'),
+        'ativo': PropDef('number', bindable: true, dartType: 'int'),
+      },
+      defaults: () => {'total': '4', 'ativo': '0'},
+      build: (p) => BoldPontosDePagina(
+        total: int.tryParse('${p['total']}') ?? 0,
+        indiceAtivo: int.tryParse('${p['ativo']}') ?? 0,
+      ),
+      codegen: (p) => 'ds.BoldPontosDePagina(total: ${p['total']}'
+          ', indiceAtivo: ${p['ativo']})',
+    );
+
 BlockDef _saldo() => BlockDef(
       type: 'saldo',
       ctor: 'ds.BoldSaldo',
@@ -801,6 +843,8 @@ void configurarDsDoBold() {
       'escadaDeAlcadas': _escadaDeAlcadas(),
       'progressoDeAprovacao': _progressoDeAprovacao(),
       'prazoDaPendencia': _prazoDaPendencia(),
+      'segmentos': _segmentos(),
+      'pontosDePagina': _pontosDePagina(),
     },
     // TODO tipo precisa estar num grupo: a paleta do editor sai daqui, então bloco sem
     // grupo existe e ninguém acha. A conformidade do pai cobra.
@@ -813,7 +857,7 @@ void configurarDsDoBold() {
       // Grupo próprio porque é o que só o Bold tem: a vizinhança na paleta é decisão de
       // linguagem, e peça de marca não se mistura com vocabulário herdado.
       'Marca do Bold': ['seloQuantico', 'saldo', 'cabecalhoDaHome', 'resumoDaTransacao'],
-      'Do Bold': ['copiar', 'abas'],
+      'Do Bold': ['copiar', 'abas', 'segmentos', 'pontosDePagina'],
       // As três peças da conta PJ: quem pode mandar quanto, falta quanto, e até quando.
       'Alçadas': ['escadaDeAlcadas', 'progressoDeAprovacao', 'prazoDaPendencia'],
       'Leitor de código': ['visorDeCodigo'],

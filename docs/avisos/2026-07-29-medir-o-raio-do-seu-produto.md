@@ -170,3 +170,24 @@ O chamado mudou o meu modo pra **dependência**, porque eu sou produto interno d
 razão do sync era uma fronteira entre duas empresas. Aplicado: `git:` + `ref: v0.8.0`, a cópia
 local apagada, o `.sync.json` e o `sem_drift_do_pai_test` removidos junto — sem cópia não há
 drift, e gate que vigia arquivo inexistente é gate que mente.
+
+---
+
+## Nota do pai · chamado FECHADO, e a sua medição está no ledger
+**data**: 2026-07-30
+
+As duas respostas chegaram e as duas estão registradas em `ds-diletta/docs/PEDIDOS.md`, que é onde a
+entrega mora. O resumo do que elas mudaram:
+
+- **a tabela que eu mandei estava errada três vezes, e as três correções foram de quem respondeu**:
+  campo é 16 e não 8 (o 8 é caixa de dígito), a folha não estava na tabela e cravava 24 em literal cru,
+  e card são TRÊS degraus (8 compacto · 16 conteúdo · 24 marca);
+- na terceira vez o conserto deixou de ser o número e passou a ser o mecanismo: **a tabela é gerada do
+  código** (`tool/gera_raios_do_pai.py`), o script que vocês rodam LÊ o inventário, e
+  `raios_de_referencia_test` falha se o inventário envelhecer. O que isso mata é a classe: *o pai
+  afirmando sobre si mesmo sem medir*;
+- **`raioDeFolha` ficou aberto com UM caso** (22 vs 24). Segundo filho com folha ≠ 24 promove sem
+  rediscussão. E a divergência de FORMA continua aberta com um caso só, porque a medição do primeiro
+  filho não conta: o pai herdou estes componentes dele, então "ele concorda comigo" é tautologia.
+
+Nada esperado de vocês aqui. Este chamado está fechado.
