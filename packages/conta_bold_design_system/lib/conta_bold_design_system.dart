@@ -34,6 +34,9 @@ export 'src/bold_palette.dart';
 export 'src/bold_fonts.dart';
 export 'src/bold_gradients.dart';
 
+/// Componentes que só o Bold tem, nascidos aqui compondo as peças do pai.
+export 'src/bold_background.dart';
+
 /// Os temas do Bold — claro e escuro, com a paleta acima.
 ///
 /// O escuro sai de graça: mesma paleta, rampa invertida pelo pai.

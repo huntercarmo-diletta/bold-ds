@@ -445,3 +445,58 @@ meio do gradiente antigo, a 2.56:1. Com o primary novo elas vão a 3.37.
 (`primary03 → primary05`, cravado), então não há fenda de material — nem os meus dois cabem lá.
 Enquanto isso, `bold_gradients.dart` carrega forma E material; quando a fenda existir, a forma
 sai e sobram as cores.
+
+---
+
+## Componentes — o primeiro nasceu em 2026-07-30
+
+Ordem por USO medido no app, não por tamanho de arquivo. A lição vem dos gradientes: sete dos
+dez estavam mortos, e portar código morto é o pior tipo de trabalho — parece progresso.
+
+| componente | usos | estado |
+|---|---|---|
+| `BoldBackground` (+ scope, + enum de 7 fundos) | **114** | **nasceu** |
+| `BoldQuantumSeal` | 9 | a fazer — marca, fica no filho |
+| `BoldMoneyInputFormatter` | 8 | a fazer — é formatter, não widget: o mais barato |
+| `BoldBalance` · `BoldCopyButton` · `BoldTabs` | 3 cada | a fazer |
+| cabeçalho da home (via `BoldTopBar.home`) | 3 | a fazer — destravado pelo `.livre` na v0.4.0 |
+| `BoldRuleLadder` · `BoldTransactionSummary` | 2 cada | a fazer |
+| `BoldApprovalProgress` · `BoldSlaChip` · `BoldPageDots` · `BoldPixMark` · `BoldSecondaryBackground` | 1 cada | a fazer |
+| `BoldHomeBackground` · `BoldTabBar` · `BoldAccountPill` · `BoldAccountSwitcher` | **0** | **não portar** |
+
+Dois achados de classificação no caminho:
+
+- **`BoldQuantumPairingScreen` (712 linhas) não é componente, é TELA** — o consumidor é
+  `pairing_gate_screen.dart`. Tela é conteúdo (catálogo ou app), não DS. O corte é
+  `BoldQuantumCore` (a peça animada) pra cá, e a tela pra fora;
+- o `AccountPill` e o `AccountSwitcher` que eu citei no pedido da barra de topo têm **zero uso**:
+  o cabeçalho da home monta a própria coisa por dentro. O pedido estava certo, a justificativa
+  não.
+
+### O que a adaptação do backdrop mudou
+
+**A arte saiu do widget.** A versão antiga cravava `assets/images/bg_city_*.jpg` dentro do
+componente — caminho de asset do app dentro do DS, o que faz o componente não renderizar fora do
+app. Agora a arte entra pelo `BoldBackdropScope` (que o app já declarava pro estilo), e sem arte o
+fundo de imagem DEGRADA pro brilho da marca em vez de mostrar retângulo vazio. É o mesmo desenho
+do pai pra marca ausente.
+
+**Quatro literais de cor viraram um.** Rosa, coral e amarelo eram rampa e foram modulados
+(`primary04`, `warning03`, `warning04`) — a mesma modulação dos gradientes. Sobrou o **violeta**
+(`#7B3FF2`), que não pertence a rampa nenhuma deste produto e sustenta os dois moods frios
+(`vidroFrio`, `aurora`). Está isolado e nomeado em `BoldBackdropTints`, com gate que falha se
+aparecer um segundo valor fora da paleta.
+
+**Decisão aberta, e é de marca:** ou o violeta entra na paleta (e os moods frios passam a ser
+derivados como todo o resto), ou os dois moods saem e o produto oferece cinco fundos em vez de
+sete.
+
+### Um limite do motor do catálogo, medido
+
+`fundoDaTela` do plugue devolve `Color?`. Então dos sete fundos, só o **sólido** aparece no
+preview — os outros seis são widget (arte e brilhos radiais), não cor. Pro Bold isso pesa mais que
+pra um produto de fundo plano: o vidro dele só parece vidro sobre algo, e `BackdropFilter` sobre
+cor lisa não desfoca nada visível.
+
+Wired o que dá: o frame agora usa a base do backdrop (`bgEscuro` no escuro, `primary08` no claro),
+que cobre 54 dos 64 usos explícitos. O resto é pedido ao catálogo pai, quando valer a pena.

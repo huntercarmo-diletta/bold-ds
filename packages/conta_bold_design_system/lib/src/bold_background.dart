@@ -1,0 +1,294 @@
+/// CONTA BOLD — o BACKDROP das telas, e o componente mais usado do produto.
+///
+/// 114 chamadas no app antigo, contra 9 do segundo colocado. Ele é o que faz o vidro do Bold
+/// parecer vidro: sem algo atrás, `BackdropFilter` desfoca o nada.
+///
+/// ## O que mudou na adaptação, e por quê
+///
+/// **1 · A arte deixou de morar aqui.** A versão antiga cravava `assets/images/bg_city_*.jpg`
+/// dentro do widget — caminho de asset do APP dentro do DS. Isso faz o componente não renderizar
+/// fora do app: o catálogo mostraria um retângulo vazio, e outro consumidor teria que replicar a
+/// pasta. Agora a arte entra pelo [BoldBackdropScope], que o app já declara uma vez.
+///
+/// Sem arte declarada, o backdrop de imagem **degrada** pro fundo do tema com o brilho da marca
+/// em vez de quebrar — é o mesmo desenho que o pai usa pra marca ausente (um filho sem logo
+/// simplesmente não desenha o logo).
+///
+/// **2 · Quatro literais de cor viraram um.** Os brilhos eram `#FE3976`, `#FE7B5E`, `#FEED35` e
+/// `#7B3FF2` cravados. Os três primeiros são rampa: rosa é `primary04`, e coral e amarelo saem
+/// de `warning03`/`warning04` — a mesma modulação que os gradientes levaram, e pelo mesmo motivo
+/// (valor fora da paleta é valor que o rebrand não alcança).
+///
+/// Sobra **um**: o violeta. Ele não é degrau de nenhuma rampa deste produto, e os dois moods
+/// frios (`vidroFrio`, `aurora`) dependem dele. Está declarado em [BoldBackdropTints] com a
+/// razão escrita, e é decisão aberta — ou ele entra na paleta como cor de marca, ou os dois moods
+/// frios saem.
+///
+/// **3 · Os sete moods continuam sete.** Medi antes de cortar: `BoldBackdrop.values` alimenta a
+/// tela de personalização, então os cinco de gradiente são FEATURE (o usuário escolhe o fundo), e
+/// não código morto como foram os sete gradientes. O uso confirma: `solid` 54 referências,
+/// `image` 10, os cinco moods 11.
+library;
+
+import 'package:diletta_design_system/diletta_design_system.dart';
+import 'package:flutter/widgets.dart';
+
+import 'bold_palette.dart';
+
+/// O único valor de cor deste componente que não sai da paleta.
+abstract final class BoldBackdropTints {
+  /// O violeta dos moods frios (`vidroFrio` e `aurora`).
+  ///
+  /// **Decisão aberta.** Ele não pertence a nenhuma rampa do Bold — não é o `partnerPrimary`
+  /// (vinho), não é a marca (rosa), não é `warning` (laranja). Ficou aqui, isolado e nomeado, em
+  /// vez de espalhado como literal em três lugares: um valor com nome é um valor que alguém
+  /// consegue decidir depois; três literais idênticos em arquivos diferentes não.
+  ///
+  /// As duas saídas, e a escolha é de marca: ou o violeta entra na paleta (e aí os moods frios
+  /// passam a ser derivados como todo o resto), ou os dois moods saem e o produto oferece cinco
+  /// fundos em vez de sete.
+  static const Color violeta = Color(0xFF7B3FF2);
+}
+
+/// Os sete fundos que o produto oferece.
+///
+/// Enum FECHADO e `switch` exaustivo sem `_ =>` de propósito (exigência 7 do contrato de
+/// componente): com o default genérico, um valor novo se disfarçaria de valor antigo e o fundo
+/// errado apareceria em silêncio. Sem ele, o compilador aponta o lugar exato que falta tratar.
+enum BoldBackdrop {
+  /// Arte de fundo + véu + brilho da marca. O mais literalmente "vidro". É o default.
+  imagem,
+
+  /// Cor sólida plana + brilho sutil — os FLUXOS SECUNDÁRIOS (telas empurradas). O mais usado.
+  solido,
+
+  /// Um brilho rosa sobre base limpa. Mínimo.
+  brilhoRosa,
+
+  /// Violeta + rosa. Mais frio.
+  vidroFrio,
+
+  /// Rosa + laranja + violeta. Vívido, usa a paleta inteira.
+  aurora,
+
+  /// O pôr do sol da marca sangrando de um canto. Quente — e depois da modulação dos gradientes,
+  /// é o mood que carrega o que era o gradiente de três paradas.
+  porDoSol,
+
+  /// Grade técnica sutil + brilho rosa.
+  gradeTech,
+}
+
+/// Carrega, pela árvore, o fundo escolhido e a ARTE que o desenha.
+///
+/// O app declara uma vez (é o que ele já fazia com o estilo); o DS não sabe onde a arte mora,
+/// só que ela existe ou não.
+class BoldBackdropScope extends InheritedWidget {
+  const BoldBackdropScope({
+    super.key,
+    required this.estilo,
+    this.arteClara,
+    this.arteEscura,
+    required super.child,
+  });
+
+  final BoldBackdrop estilo;
+
+  /// A arte de cada modo. `null` ⇒ o fundo de imagem degrada pro fundo do tema com brilho, em
+  /// vez de mostrar um retângulo vazio.
+  final ImageProvider? arteClara;
+  final ImageProvider? arteEscura;
+
+  static BoldBackdropScope? of(BuildContext ctx) =>
+      ctx.dependOnInheritedWidgetOfExactType<BoldBackdropScope>();
+
+  @override
+  bool updateShouldNotify(BoldBackdropScope old) =>
+      old.estilo != estilo ||
+      old.arteClara != arteClara ||
+      old.arteEscura != arteEscura;
+}
+
+/// O backdrop. Envolve o corpo de uma tela.
+///
+/// ```dart
+/// BoldBackground(child: conteudo)                              // segue a personalização
+/// BoldBackground(estilo: BoldBackdrop.solido, child: conteudo)  // fixa
+/// ```
+class BoldBackground extends StatelessWidget {
+  const BoldBackground({super.key, required this.child, this.estilo});
+
+  final Widget child;
+
+  /// `null` ⇒ resolve pelo [BoldBackdropScope]; sem scope, cai em [BoldBackdrop.imagem]. Passar
+  /// valor explícito é pra tela que precisa FIXAR o fundo.
+  final BoldBackdrop? estilo;
+
+  /// O véu sobre a arte. Claro: branco a 20% — a arte é diurna e o ink escuro precisa ler por
+  /// cima. Escuro: preto a 8%, porque a arte noturna já é escura.
+  ///
+  /// Alpha de branco e de preto não é identidade (é ausência e presença de luz), então não é
+  /// dívida de paleta — é a mesma leitura que o pai faz dos alphas dele.
+  static Color _veu(DilettaScheme s) => s.isDark
+      ? BoldPalette.bold.black.withValues(alpha: 0.08)
+      : BoldPalette.bold.white.withValues(alpha: 0.20);
+
+  @override
+  Widget build(BuildContext context) {
+    final s = DilettaTheme.schemeOf(context);
+    final scope = BoldBackdropScope.of(context);
+    final fundo = estilo ?? scope?.estilo ?? BoldBackdrop.imagem;
+
+    // No claro, mood de gradiente e sólido ganham base `primary08`: sobre o quase-branco do tema
+    // os brilhos desbotavam e mesclavam com o conteúdo.
+    final ehMood = fundo != BoldBackdrop.imagem && fundo != BoldBackdrop.solido;
+    final base = switch (fundo) {
+      BoldBackdrop.solido =>
+        s.isDark ? BoldPalette.bold.bgEscuro! : BoldPalette.bold.primary08,
+      _ => !s.isDark && ehMood ? BoldPalette.bold.primary08 : s.bg,
+    };
+
+    return DilettaDevInfo(
+      component: 'background',
+      props: {
+        'estilo': fundo.name,
+        'arte': scope?.arteClara == null ? 'ausente' : 'declarada',
+      },
+      tokens: [
+        fundo == BoldBackdrop.solido ? 'palette.bgEscuro' : 'scheme.bg',
+        if (ehMood) 'palette.primary08',
+      ],
+      child: ColoredBox(
+        color: base,
+        child: Stack(children: [..._camadas(s, fundo, scope), child]),
+      ),
+    );
+  }
+
+  List<Widget> _camadas(
+      DilettaScheme s, BoldBackdrop fundo, BoldBackdropScope? scope) {
+    final p = BoldPalette.bold;
+
+    // Saturação dos brilhos. No claro SOBE, porque sobre a base `primary08` eles precisam de
+    // mais corpo pra não mesclar com o conteúdo.
+    final k = s.isDark ? 1.0 : 1.3;
+
+    return switch (fundo) {
+      BoldBackdrop.imagem => _camadasDeArte(s, scope),
+      BoldBackdrop.solido => [
+          _brilho(const Alignment(0, -1), 1.0, p.primary04.withValues(alpha: 0.10 * k)),
+        ],
+      BoldBackdrop.brilhoRosa => [
+          _brilho(const Alignment(0, -1), 1.15, p.primary04.withValues(alpha: 0.34 * k)),
+        ],
+      BoldBackdrop.vidroFrio => [
+          _brilho(const Alignment(-0.5, -1), 1.2,
+              BoldBackdropTints.violeta.withValues(alpha: 0.34 * k)),
+          _brilho(const Alignment(0.95, -0.6), 1.0,
+              p.primary04.withValues(alpha: 0.30 * k)),
+        ],
+      BoldBackdrop.aurora => [
+          _brilho(const Alignment(-0.7, -0.8), 0.9,
+              p.primary04.withValues(alpha: 0.32 * k)),
+          _brilho(const Alignment(0.85, -0.9), 0.85,
+              p.warning03.withValues(alpha: 0.30 * k)),
+          _brilho(const Alignment(0.5, 0.95), 1.0,
+              BoldBackdropTints.violeta.withValues(alpha: 0.32 * k)),
+        ],
+      BoldBackdrop.porDoSol => [
+          _brilho(const Alignment(1, -1), 1.1, p.warning04.withValues(alpha: 0.22 * k)),
+          _brilho(const Alignment(0.7, -0.85), 0.9,
+              p.warning03.withValues(alpha: 0.26 * k)),
+          _brilho(const Alignment(-1, 1), 1.0, p.primary04.withValues(alpha: 0.30 * k)),
+        ],
+      BoldBackdrop.gradeTech => [
+          Positioned.fill(
+            child: CustomPaint(
+              painter: _Grade(s.border.withValues(alpha: s.isDark ? 0.6 : 1)),
+            ),
+          ),
+          _brilho(const Alignment(0, -1), 1.1, p.primary04.withValues(alpha: 0.32 * k)),
+        ],
+    };
+  }
+
+  /// A arte do modo atual, com o véu por cima. Sem arte declarada, cai no brilho de marca — o
+  /// fundo fica pobre e a tela funciona, que é a degradação certa.
+  List<Widget> _camadasDeArte(DilettaScheme s, BoldBackdropScope? scope) {
+    final arte = s.isDark ? scope?.arteEscura : scope?.arteClara;
+    if (arte == null) {
+      return [
+        _brilho(const Alignment(0, -1), 1.15,
+            BoldPalette.bold.primary04.withValues(alpha: s.isDark ? 0.22 : 0.28)),
+      ];
+    }
+    return [
+      Positioned.fill(
+        child: Image(
+          image: arte,
+          alignment: Alignment.topCenter,
+          fit: BoxFit.cover,
+          // A arte costuma vir no tamanho LÓGICO da tela; num aparelho 3x isso é upscale de 3×,
+          // e o bilinear padrão vira ruído na borda dos prédios. Cúbico segura melhor.
+          // Atenua, não resolve: interpolação não inventa detalhe.
+          filterQuality: FilterQuality.high,
+          errorBuilder: (_, __, ___) => const SizedBox.shrink(),
+        ),
+      ),
+      Positioned.fill(child: ColoredBox(color: _veu(s))),
+    ];
+  }
+
+  Widget _brilho(Alignment centro, double escala, Color cor) => Positioned.fill(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: RadialGradient(
+              center: centro,
+              radius: escala,
+              colors: [cor, cor.withValues(alpha: 0)],
+            ),
+          ),
+        ),
+      );
+
+  /// Repinta o backdrop recortado à faixa da status bar, pra mascarar o conteúdo que rola por
+  /// baixo do notch. Segue o fundo escolhido, então a pintura bate com o que está atrás mesmo
+  /// quando o usuário troca de fundo na personalização.
+  static Widget veuDaStatusBar(BuildContext context) {
+    final altura = MediaQuery.sizeOf(context).height;
+    return ClipRect(
+      child: OverflowBox(
+        alignment: Alignment.topCenter,
+        minHeight: altura,
+        maxHeight: altura,
+        child: const BoldBackground(child: SizedBox.expand()),
+      ),
+    );
+  }
+}
+
+class _Grade extends CustomPainter {
+  const _Grade(this.cor);
+
+  final Color cor;
+
+  /// Passo da grade. Único número geométrico do componente, e ele é a arte — não é espaçamento
+  /// de layout, então não sai da escala de spacing.
+  static const double _passo = 28;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final tinta = Paint()
+      ..color = cor
+      ..strokeWidth = 0.5;
+    for (var x = 0.0; x < size.width; x += _passo) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), tinta);
+    }
+    for (var y = 0.0; y < size.height; y += _passo) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), tinta);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_Grade old) => old.cor != cor;
+}

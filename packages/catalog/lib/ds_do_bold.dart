@@ -368,7 +368,18 @@ void configurarDsDoBold() {
     barraDeStatus: () => const DilettaStatusBar(),
     inspetor: (filho, {required ligado}) =>
         DilettaDevMode(enabled: ligado, child: filho),
-    fundoDaTela: (ctx) => DilettaTheme.schemeOf(ctx).bg,
+    // O fundo do frame segue o BACKDROP do produto, e não o `bg` do tema — é o que faz o
+    // preview parecer a tela. Cobre o caso dominante: dos 64 usos explícitos de backdrop no
+    // app, 54 são o SÓLIDO, que é cor plana.
+    //
+    // LIMITE do motor, medido: `fundoDaTela` devolve `Color?`, então os outros seis fundos (a
+    // arte da cidade e os cinco moods de brilho) não têm como aparecer aqui — eles são widget,
+    // não cor. Pro Bold isso importa mais que pra um produto de fundo plano: o vidro dele só
+    // parece vidro sobre algo, e `BackdropFilter` sobre cor lisa não desfoca nada visível.
+    fundoDaTela: (ctx) {
+      final s = DilettaTheme.schemeOf(ctx);
+      return s.isDark ? BoldPalette.bold.bgEscuro : BoldPalette.bold.primary08;
+    },
     superficieDaTela: (ctx) => DilettaTheme.schemeOf(ctx).surface,
     // No claro a tela declara o próprio fundo; no escuro o tema manda, senão cada tela
     // precisaria declarar duas cores.
