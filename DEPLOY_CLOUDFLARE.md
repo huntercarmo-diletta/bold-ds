@@ -61,8 +61,19 @@ npx wrangler login     # interativo
 npx wrangler whoami    # e confirme o e-mail e a conta que apareceram
 ```
 
-**Pra cair na conta certa sem depender de qual sessão está aberta**, o `login` aceita não abrir navegador
-nenhum, e aí a URL vai pro perfil que você escolher:
+**A sessão que decide é a da CLOUDFLARE, não a do Google.** Isso custou três tentativas: o perfil do
+Chrome estava logado no Google como `@dilettasolutions.com` e na Cloudflare como a conta pessoal, então o
+"Allow" autorizava a pessoal. O perfil escolhe a sessão do Google; a da Cloudflare é independente.
+
+Então a ordem que funciona é **trocar a sessão ANTES de disparar o login** — a URL de autorização expira
+em ~2 minutos, e fazer logout/login dentro dessa janela estoura o prazo:
+
+```bash
+open -na "Google Chrome" --args --profile-directory="Profile 19" "https://dash.cloudflare.com/logout"
+# entra com a conta do trabalho, e SÓ DEPOIS:
+```
+
+Pra cair no perfil certo, o `login` aceita não abrir navegador nenhum:
 
 ```bash
 npx wrangler login --browser=false          # imprime a URL e espera o callback
