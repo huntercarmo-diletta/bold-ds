@@ -332,3 +332,46 @@ pai na mesma proporção.
    vocabulário e não de utilitário.
 5. ~~A barra de topo~~ — **ENTROU na v0.4.0**, e era o único bloqueante. Os 113 usos podem
    entrar na linguagem. O pai pediu a medição do que sobrar fora dela quando isso acontecer.
+
+---
+
+## Tipografia — fechada em 2026-07-30
+
+A escala é linguagem (ADR-003), então o filho não declara degrau: decide a SUBSTITUIÇÃO, uma
+vez. A fonte de verdade é `test/o_mapa_da_tipografia_test.dart`, que fixa os 19 degraus
+escolhidos e falha se o pai mover tamanho ou peso de algum deles.
+
+Medido: 19 presets no produto antigo contra 23 do pai. **Sete idênticos** em tamanho e peso.
+Nos outros doze a regra foi **papel primeiro, métrica depois** — quando o pai tinha a métrica
+exata no papel errado (`titleSm` 14/500 contra `labelLg` 14/600), escolhi o papel, porque nome
+de papel é o que o próximo dev lê.
+
+| antigo | vira | muda |
+|---|---|---|
+| `headlineMd` `headlineSm` `titleMd` `labelMd` `labelSm` `bodySm` `bodyLg` | o degrau de mesmo nome | nada |
+| `labelLg` | `labelLg` | peso 500 → 600 |
+| `button` | `button` | peso 700 → 600 |
+| `label` | `label` | peso 700 → 600 |
+| `h2` 22/700 | `title` | peso → 600 |
+| `display` 46/800 | `displayMd` | 45/600 — o 46 era 1px de drift |
+| `title` 17/700 | `heading` | 16/600 — idem |
+| `tileLabel` 10/500 | `labelSm` | 11/500 — abaixo de 11 o pai não tem, e pedir um degrau de 10 seria a linguagem descendo pra caber num arredondamento meu |
+| `h1` 30/800 | `headlineLg` | 32/600 |
+| `body` 15/500 | `bodyMd` | 14/400 |
+| `bodySmall` 13/500 | `bodySm` | 12/400 |
+| `mono` 13/400 | `numericSm` | 13/500 **tabular** |
+| `monoCaption` 11/400 | `numericXs` | 11/500 **tabular** |
+
+Os dois últimos fecham um ciclo: o `mono` do produto nunca foi monoespaçado — era a fonte da
+marca com dígitos tabulares, que é a resposta certa pra CPF, chave e valor. O pai só tinha o
+degrau de 22, e os de 13 e 11 entraram na v0.1.9 por este pedido mais o de outro filho.
+
+`h1` e `body` eu resolvi pela LADEIRA e não pelo vizinho mais próximo: o produto tinha
+display 46 · h1 30 · h2 22, e o pai tem displayMd 45 · headlineLg 32 · titleLg 22. Mapear
+degrau a degrau preserva a proporção entre eles, que é o que o olho lê — escolher cada um pelo
+vizinho achataria a hierarquia.
+
+**O que sobra da tipografia:** os `.ttf` da Inter (5 pesos) em `assets/fonts/` mais o bloco no
+`pubspec`, e `BoldFonts.empacotada` vira `true`. Enquanto isso não acontece, o produto renderiza
+no fallback da plataforma — o que ele já fazia antes, porque pedia uma família que não estava
+empacotada.

@@ -32,3 +32,9 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+flutter:
+  # O pai declara `uses-material-design: true` (ele usa ícone do Material em fallback), e
+  # sem a chave aqui o `flutter test` avisa em toda execução. Ruído em toda run é ruído que
+  # se aprende a ignorar, e aí o aviso seguinte também passa batido.
+  uses-material-design: true
