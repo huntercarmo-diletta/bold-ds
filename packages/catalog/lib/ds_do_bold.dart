@@ -43,6 +43,8 @@ TextStyle _estiloDe(String preset) => switch (preset) {
 
 BlockDef _texto() => BlockDef(
       type: 'texto',
+      ctor: 'ds.DilettaText',
+      args: const {'conteudo': Arg.texto(''), 'preset': Arg.enumeracao('style', 'ds.DilettaType')},
       label: 'Texto',
       props: const {
         'conteudo': PropDef('multiline', bindable: true, dartType: 'String'),
@@ -56,6 +58,8 @@ BlockDef _texto() => BlockDef(
 
 BlockDef _tituloDaPagina() => BlockDef(
       type: 'tituloDaPagina',
+      ctor: 'ds.DilettaPageTitle',
+      args: const {'titulo': Arg.texto('title'), 'subtitulo': Arg.texto('subtitle')},
       label: 'Título da página',
       props: const {
         'titulo': PropDef('text', bindable: true, dartType: 'String'),
@@ -72,6 +76,8 @@ BlockDef _tituloDaPagina() => BlockDef(
 
 BlockDef _botao() => BlockDef(
       type: 'botao',
+      ctor: 'ds.DilettaButton',
+      args: const {'label': Arg.texto('label'), 'tipo': Arg.enumeracao('type', 'ds.DilettaButtonType'), 'tamanho': Arg.enumeracao('size', 'ds.DilettaButtonSize'), 'larguraTotal': Arg.bool('fullWidth')},
       label: 'Botão',
       props: const {
         'label': PropDef('text', bindable: true, dartType: 'String'),
@@ -106,6 +112,8 @@ Widget _botaoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) => DilettaB
 
 BlockDef _campo() => BlockDef(
       type: 'campo',
+      ctor: 'ds.DilettaInput',
+      args: const {'rotulo': Arg.texto('label'), 'placeholder': Arg.texto('placeholder'), 'ajuda': Arg.texto('helper'), 'erro': Arg.texto('error'), 'desabilitado': Arg.bool('disabled')},
       label: 'Campo de texto',
       props: const {
         'rotulo': PropDef('text'),
@@ -137,6 +145,8 @@ BlockDef _campo() => BlockDef(
 
 BlockDef _valor() => BlockDef(
       type: 'valor',
+      ctor: 'ds.DilettaAmountDisplay',
+      args: const {'valor': Arg.texto('value'), 'rotulo': Arg.texto('label'), 'carimbo': Arg.texto('timestamp'), 'heroi': Arg.bool('hero')},
       label: 'Valor (saldo)',
       props: const {
         'valor': PropDef('text', bindable: true, dartType: 'String'),
@@ -175,6 +185,8 @@ DilettaStatusTone _tomDe(String t) => switch (t) {
 
 BlockDef _selo() => BlockDef(
       type: 'selo',
+      ctor: 'ds.DilettaStatusTag',
+      args: const {'label': Arg.texto('label'), 'tom': Arg.enumeracao('tone', 'ds.DilettaStatusTone')},
       label: 'Selo de status',
       props: const {
         'label': PropDef('text', bindable: true, dartType: 'String'),
@@ -188,6 +200,8 @@ BlockDef _selo() => BlockDef(
 
 BlockDef _aviso() => BlockDef(
       type: 'aviso',
+      ctor: 'ds.DilettaNoticeBanner',
+      args: const {'titulo': Arg.texto('title'), 'descricao': Arg.texto('description'), 'ilustracao': Arg.enumeracao('illustration', 'ds.DilettaIllustration')},
       label: 'Aviso com ilustração',
       props: {
         'titulo': const PropDef('text', bindable: true, dartType: 'String'),
@@ -214,6 +228,8 @@ BlockDef _aviso() => BlockDef(
 
 BlockDef _ritmo() => BlockDef(
       type: 'ritmo',
+      ctor: 'ds.DilettaGap.h',
+      args: const {'tamanho': Arg.enumeracao('', 'ds.DilettaSpacing')},
       label: 'Espaço',
       props: const {'tamanho': PropDef('spacingToken', options: ['s2', 's3', 's4', 's6', 's8'])},
       defaults: () => {'tamanho': 's4'},
@@ -223,6 +239,7 @@ BlockDef _ritmo() => BlockDef(
 
 BlockDef _divisor() => BlockDef(
       type: 'divisor',
+      ctor: 'ds.DilettaDivider',
       label: 'Divisor',
       props: const {},
       defaults: () => {},
@@ -232,6 +249,8 @@ BlockDef _divisor() => BlockDef(
 
 BlockDef _icone() => BlockDef(
       type: 'icone',
+      ctor: 'ds.DilettaIcon',
+      args: const {'nome': Arg.enumeracao('name', 'ds.DilettaIcons'), 'tamanho': Arg.numero('size')},
       label: 'Ícone',
       props: {
         'nome': PropDef('enum', options: DilettaIcons.all.keys.toList()),
@@ -296,6 +315,10 @@ Widget _barraDeBaixoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) =>
 /// área inteira em vez de entrar na coluna como um item.
 BlockDef _visorDeCodigo() => BlockDef(
       type: 'visorDeCodigo',
+      // Só `ctor`, sem `args`: os props deste bloco são de PREVIEW — no código gerado, alvo e fase
+      // vêm de dado em tempo de execução. Bloco sem prop declarada continua legível pelo
+      // construtor, e foi um dos três defeitos que o gate do pai achou no próprio pai.
+      ctor: 'ds.BoldVisorDeCodigo',
       label: 'Visor de código',
       props: {
         'estado': PropDef('enum',
@@ -324,6 +347,8 @@ BlockDef _visorDeCodigo() => BlockDef(
 
 BlockDef _copiar() => BlockDef(
       type: 'copiar',
+      ctor: 'ds.BoldCopiar',
+      args: const {'texto': Arg.texto('texto'), 'rotulo': Arg.texto('rotuloDeAcessibilidade')},
       label: 'Copiar',
       props: const {
         'texto': PropDef('text', bindable: true, dartType: 'String'),
@@ -340,6 +365,8 @@ BlockDef _copiar() => BlockDef(
 
 BlockDef _abas() => BlockDef(
       type: 'abas',
+      ctor: 'ds.BoldAbas',
+      args: const {'selecionada': Arg.numero('indiceSelecionado')},
       label: 'Abas',
       props: const {
         'abas': PropDef('text'),
@@ -367,6 +394,8 @@ List<String> _listaDeAbas(Object? v) => '$v'
 
 BlockDef _saldo() => BlockDef(
       type: 'saldo',
+      ctor: 'ds.BoldSaldo',
+      args: const {'valor': Arg.texto('valor'), 'entradas': Arg.texto('entradas'), 'saidas': Arg.texto('saidas'), 'oculto': Arg.bool('oculto')},
       label: 'Saldo (home)',
       props: const {
         'valor': PropDef('text', bindable: true, dartType: 'String'),
@@ -396,6 +425,8 @@ BlockDef _saldo() => BlockDef(
 
 BlockDef _seloQuantico() => BlockDef(
       type: 'seloQuantico',
+      ctor: 'ds.BoldSeloQuantico',
+      args: const {'estado': Arg.enumeracao('estado', 'ds.BoldSeloEstado'), 'tamanho': Arg.numero('tamanho'), 'rotulo': Arg.bool('mostrarRotulo')},
       label: 'Selo quântico',
       props: {
         'estado': PropDef('enum',

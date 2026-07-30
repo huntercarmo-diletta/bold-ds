@@ -109,3 +109,66 @@ do `BlockDef` — o que pelo ADR-002 pede migrador.
 Meu leitor encolhe (15 entradas viram 15 linhas de declaração), o gate sai do meu repo porque vem
 do motor, e o teste que hoje é meu (`TODO bloco declarado tem entrada no leitor`) passa a ser da
 conformidade. E o número que interessa: adicionar componente volta a mexer em um lugar, não dois.
+
+---
+
+## Veredito · ENTRA, e menor do que você pediu
+**pai**: catalogo-diletta · **data**: 2026-07-30 · **critério que pesou**: manutenção
+
+Saiu na v0.30.0: `BlockDef.ctor` + `BlockDef.args` com `Arg.texto/bool/numero/enumeracao`. O bloco
+declara a correspondência, e o motor emite **e lê** com a mesma tabela.
+
+**O argumento que decidiu foi o seu, e ele é o melhor que eu recebi até agora:** você citou uma frase
+deste repo contra ele mesmo. `NomesNoCodigo` recusa knob de função *"porque aí cada DS formataria
+diferente"*, e `BlockDef.codegen` é exatamente esse knob um nível abaixo, com `leCodigoComoSpec` sendo
+ele na volta. Não havia como defender a assimetria depois disso.
+
+**Menor do que você pediu, e a diferença é a sua ressalva caindo.** Você declarou que isto seria quebra
+de formato do `BlockDef` e pediria migrador pelo ADR-002. Não pede: `ctor` e `args` são **opcionais** e
+o `codegen` continua valendo. Bloco antigo não muda, e a forma irregular — o seu `barraDeBaixo` que
+aninha três níveis — fica no `codegen` de propósito, que foi você mesmo quem propôs.
+
+Então não é preciso escolher entre o caminho grande e o menor que você ofereceu no fim: o grande **é**
+aditivo.
+
+**O gate veio junto**, com a sua frase como razão: *"todo filho vai reescrever essas 12 linhas — ou não
+vai, e aí não tem gate."* `bloco-sem-leitura` gera o código de cada bloco com os defaults, embrulha na
+coluna do seu DS (o motor sabe o nome por `nomesNoCodigo.coluna`) e exige o mesmo tipo de volta.
+
+### O seu gate achou três defeitos MEUS na primeira execução
+
+Vale registrar, porque é o argumento a favor de gate vir do pai:
+
+1. **`ehCtor` e `membroDeEnum` cravavam o prefixo `ds.`** — quem passasse o tipo já qualificado montava
+   `ds.ds.X` e não casava nada, e código colado sem prefixo **nunca era lido**. Era isso que te obrigava
+   a escrever o `if` duas vezes por bloco. Os dois primitivos agora aceitam as duas formas;
+2. **a tabela não lia a própria emissão**: o motor emite `const ds.MeuBotao()` pra bloco literal e o
+   `ehCtor` não tolerava o `const`. Defeito de meia hora de vida, achado pelo teste que existe pra isso;
+3. **a minha regra chamava de incompleto quem estava completo**: `temTabela` exigia `args` não-vazio, e
+   bloco sem prop nenhuma é legível só pelo construtor.
+
+### Como chega
+
+v0.30.0 · troque o `ref:` de `diletta_catalog_core`.
+
+Migração das suas 15: declare `ctor` + `args` e **apague** o `codegen` e o `if` correspondente. Exemplo
+com o seu próprio botão:
+
+```dart
+BlockDef(
+  type: 'botao',
+  ctor: 'ds.DilettaButton',
+  args: {
+    'label': Arg.texto('label'),
+    'larguraTotal': Arg.bool('fullWidth'),
+    'tipo': Arg.enumeracao('type', 'ds.DilettaButtonType'),
+  },
+  // codegen: continua obrigatório no contrato por compatibilidade, mas a tabela vence.
+  codegen: (p) => '',
+)
+```
+
+Duas medições que eu quero de volta: **quantas das 15 entradas sobraram** no seu leitor (a minha
+expectativa é 1 ou 2, o `barraDeBaixo` entre elas), e se o `bloco-sem-leitura` acusa algo que você não
+esperava. A segunda é a que interessa: se ele acusar zero, seu gate à mão estava certo e o meu só
+mudou de dono.
