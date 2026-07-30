@@ -42,6 +42,7 @@ export 'src/bold_abas.dart';
 export 'src/bold_copiar.dart';
 export 'src/bold_saldo.dart';
 export 'src/bold_selo_quantico.dart';
+export 'src/bold_visor_de_codigo.dart';
 
 /// Os temas do Bold — claro e escuro, com a paleta acima.
 ///

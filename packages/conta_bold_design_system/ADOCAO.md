@@ -541,3 +541,33 @@ gate que lista os sete e falha se algum voltar.
 Bold"): vizinhança na paleta é decisão de linguagem, e peça de marca não se mistura com
 vocabulário herdado. Declarar é publicar — ele apareceu no compositor sem ninguém tocar no
 catálogo.
+
+---
+
+## O leitor de código — o diferencial deste filho (2026-07-30)
+
+Nenhum outro filho lê código. Este lê **QR e código de barras**, classifica pelo conteúdo e roteia:
+Pix por EMV, boleto por linha digitável, autorização de transação por QR próprio.
+
+**O corte é a decisão que importa.** A tela de scanner tem 603 linhas e depende de
+`mobile_scanner`, `permission_handler`, roteador e estado. Nada disso entrou: um DS que arrasta
+plugin de câmera obriga todo consumidor a carregar câmera, inclusive o catálogo, que só quer
+desenhar.
+
+Entrou o que é desenho e o que é conhecimento:
+
+| peça | o que é |
+|---|---|
+| `BoldVisorDeCodigo` | o overlay: cantos em colchete, varredura com rastro, segundo quadro em saltos de câmera, rótulo com linha de chamada, alvos fantasma. `CustomPainter` puro, zero dependência |
+| `BoldFormatosDeCodigo` | a lista de formatos, com o motivo escrito. É a peça de conhecimento mais fácil de perder, e já custou bug de QA: o default da plataforma **não habilita 1D**, e o boleto brasileiro é ITF de 44 dígitos |
+
+Quatro literais de cor viraram zero. **A que se vê: o verde neon `#39FF14` virou `success05`** — era
+estética de visão de máquina, e a alternativa seria um quinto valor de marca fora da rampa. Fica
+registrado como escolha.
+
+E a fonte do rótulo era `'monospace'` cravada; agora é `numericXs`, o degrau de dado técnico que
+este filho pediu na v0.1.9 — que existe exatamente pra número em coluna, que é o caso de um código
+lido.
+
+No catálogo o visor é bloco de **tela cheia** (`tiposDeTelaCheia`): sem isso o motor daria a ele o
+padding e o scroll do frame, e o retículo apareceria deslocado do centro da câmera.

@@ -134,6 +134,12 @@ Block _bloco(String expr) {
       'rotulo': argString(expr, 'rotuloDeAcessibilidade') ?? '',
     });
   }
+  if (ehCtor(expr, 'ds.BoldVisorDeCodigo') || ehCtor(expr, 'BoldVisorDeCodigo')) {
+    // Os props deste bloco são de PREVIEW: no código gerado, alvo e fase vêm de dado em tempo de
+    // execução (`alvosDetectados`, `faseDaVarredura`), não de literal. Então a volta reconhece o
+    // bloco e devolve o estado neutro — o que é honesto, porque o valor real não está no código.
+    return _mk('visorDeCodigo', {'estado': 'analisando', 'rotulo': ''});
+  }
   if (ehCtor(expr, 'ds.BoldAbas') || ehCtor(expr, 'BoldAbas')) {
     return _mk('abas', {
       'abas': linhasDeStrings(expr, 'abas')?.replaceAll('\n', ', ') ?? '',

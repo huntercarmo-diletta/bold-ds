@@ -292,6 +292,36 @@ Widget _barraDeBaixoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) =>
 /// O selo quântico — o primeiro bloco que vem de um componente NASCIDO no filho, e não da
 /// linguagem do pai. Declarar é publicar: ele aparece na paleta do compositor sem ninguém tocar
 /// no catálogo.
+/// O visor do leitor de código. Bloco de TELA CHEIA: ele é overlay, então no canvas ele ocupa a
+/// área inteira em vez de entrar na coluna como um item.
+BlockDef _visorDeCodigo() => BlockDef(
+      type: 'visorDeCodigo',
+      label: 'Visor de código',
+      props: {
+        'estado': PropDef('enum',
+            options: BoldAlvoEstado.values.map((e) => e.name).toList()),
+        'rotulo': const PropDef('text'),
+      },
+      defaults: () => {'estado': 'analisando', 'rotulo': 'LENDO CÓDIGO'},
+      build: (p) => BoldVisorDeCodigo(
+        alvos: [
+          BoldAlvo(
+            area: const Rect.fromLTWH(80, 120, 140, 140),
+            estado: BoldAlvoEstado.values
+                .firstWhere((e) => e.name == p['estado']),
+            rotulo: '${p['rotulo']}',
+            centralizado: true,
+          ),
+        ],
+        // Fase fixa no preview: o visor não anima sozinho (quem anima é o app), e um preview
+        // parado num ponto legível mostra o rastro melhor que um parado no zero.
+        fase: 0.45,
+      ),
+      codegen: (p) => 'ds.BoldVisorDeCodigo(alvos: alvosDetectados'
+          ', fase: faseDaVarredura'
+          ', tamanhoDaImagem: tamanhoDoFrame)',
+    );
+
 BlockDef _copiar() => BlockDef(
       type: 'copiar',
       label: 'Copiar',
@@ -418,6 +448,7 @@ void configurarDsDoBold() {
       'saldo': _saldo(),
       'copiar': _copiar(),
       'abas': _abas(),
+      'visorDeCodigo': _visorDeCodigo(),
       'indicadorDeHome': _indicadorDeHome(),
     },
     // TODO tipo precisa estar num grupo: a paleta do editor sai daqui, então bloco sem
@@ -429,6 +460,7 @@ void configurarDsDoBold() {
       // linguagem, e peça de marca não se mistura com vocabulário herdado.
       'Marca do Bold': ['seloQuantico', 'saldo'],
       'Do Bold': ['copiar', 'abas'],
+      'Leitor de código': ['visorDeCodigo'],
       'Entrada': ['campo'],
       'Ação': ['botao', 'barraDeBaixo'],
       'Ritmo': ['ritmo', 'divisor'],
@@ -480,6 +512,9 @@ void configurarDsDoBold() {
     tiposDeAcao: const {'botao', 'barraDeBaixo'},
     acaoInterativa: _acaoInterativa,
     tiposDeChromeDeDispositivo: const {'barraDeStatus', 'indicadorDeHome'},
+    // O visor é overlay de tela cheia: sem isto o motor daria a ele o padding e o scroll do
+    // frame, e o retículo apareceria deslocado do centro da câmera.
+    tiposDeTelaCheia: const {'visorDeCodigo'},
     barraDeStatus: () => const DilettaStatusBar(),
     inspetor: (filho, {required ligado}) =>
         DilettaDevMode(enabled: ligado, child: filho),
