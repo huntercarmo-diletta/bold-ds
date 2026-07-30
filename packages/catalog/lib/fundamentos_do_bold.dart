@@ -51,16 +51,6 @@ class AbaDeFundamentos extends StatelessWidget {
                 child: _Papeis(),
               ),
               const _Secao(
-                titulo: 'Gradientes',
-                nota: 'Dois, e o resto é modulado neles.',
-                child: _Gradientes(),
-              ),
-              const _Secao(
-                titulo: 'Tipografia',
-                nota: 'A escala é do pai; o filho escolheu a substituição de cada degrau antigo.',
-                child: _Tipografia(),
-              ),
-              const _Secao(
                 titulo: 'Espaço e raio',
                 nota: 'Degraus, não números soltos.',
                 child: _EspacoERaio(),
@@ -497,6 +487,104 @@ class _Icones extends StatelessWidget {
               DilettaIcon(name: nome, size: 22, color: CC.neutral02),
           ],
         ),
+      ],
+    );
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// STYLES — e por que não é a mesma aba que Fundamentos
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/// A ABA DE STYLES — estilo APLICADO, que é outra coisa que token.
+///
+/// Correção do dono do produto: *"styles e foundations são coisas diferentes"*. E são, e a diferença não
+/// é de tamanho:
+///
+/// - **Fundamentos** é o material cru e os papéis derivados dele: rampa, papel, espaço, raio, ícone. Um
+///   valor por vez, sem opinião de uso;
+/// - **Styles** é o material JÁ COMPOSTO numa decisão: a escala tipográfica (tamanho + peso + entrelinha
+///   juntos, com nome de papel), os dois gradientes da marca, a receita do vidro (tinte + blur + traço).
+///
+/// A prova de que são camadas diferentes é o que muda quando cada uma muda: trocar um degrau de espaço
+/// mexe em espaçamento; trocar `headlineLg` mexe em hierarquia de leitura. Misturar as duas numa aba faz
+/// a segunda parecer detalhe da primeira.
+class AbaDeStyles extends StatelessWidget {
+  const AbaDeStyles({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(32),
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 900),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text('Styles', style: CT.tituloGrande),
+              SizedBox(height: CM.gapCompacto),
+              Text(
+                'Token composto em decisão: a escala de leitura, os dois gradientes da marca e a '
+                'receita do vidro. Fundamentos é o material; aqui é o material já aplicado.',
+                style: CT.corpo.copyWith(color: CC.neutral04),
+              ),
+              SizedBox(height: CM.gapAmplo),
+              const _Secao(
+                titulo: 'Tipografia',
+                nota: 'A escala é do pai; o filho escolheu a substituição de cada degrau antigo.',
+                child: _Tipografia(),
+              ),
+              const _Secao(
+                titulo: 'Gradientes da marca',
+                nota: 'Dois, e o resto é modulado neles.',
+                child: _Gradientes(),
+              ),
+              const _Secao(
+                titulo: 'Vidro',
+                nota: 'Tinte, blur e traço: a receita é do FILHO, o modo de construir é do pai.',
+                child: _Vidro(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// A receita do vidro, que é o trio que este filho declara na paleta.
+///
+/// Está em Styles e não em Fundamentos pela mesma razão do gradiente: sozinhos, tinte e blur não são
+/// nada — a decisão é a combinação, e é ela que o pai chama de receita.
+class _Vidro extends StatelessWidget {
+  const _Vidro();
+
+  @override
+  Widget build(BuildContext context) {
+    final claro = DilettaScheme.light(BoldPalette.bold);
+    final escuro = DilettaScheme.dark(BoldPalette.bold);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final (nome, s) in [('claro', claro), ('escuro', escuro)])
+          Padding(
+            padding: const EdgeInsets.only(bottom: 6),
+            child: Row(children: [
+              SizedBox(
+                width: 80,
+                child: Text(nome, style: CT.mono.copyWith(color: CC.neutral05, fontSize: 10)),
+              ),
+              Expanded(child: _Faixa(cor: s.glassTint, rotulo: 'tinte')),
+              const SizedBox(width: 6),
+              SizedBox(
+                width: 150,
+                child: Text('blur ${s.glassBlur.toInt()} · traço '
+                    '${s.glassStroke == null ? 'ausente' : 'presente'}',
+                    style: CT.legenda.copyWith(color: CC.neutral04)),
+              ),
+            ]),
+          ),
       ],
     );
   }

@@ -95,8 +95,11 @@ void main() {
     expect(erros, isEmpty, reason: '${erros.length} exceção(ões): ${erros.take(5).join(' | ')}');
 
     // E o outro lado: a aba mostra o vocabulário INTEIRO, não uma parte que caiba na tela.
+    //
+    // MAIÚSCULA porque o cabeçalho do motor (v0.36.0) desenha `nome.toUpperCase()` — a aba deixou de
+    // escrever o próprio título, e o teste seguiu a casca em vez de fixar a minha formatação antiga.
     for (final def in Ds.blocos.values) {
-      expect(find.text(def.label), findsWidgets,
+      expect(find.text(def.label.toUpperCase()), findsWidgets,
           reason: 'o bloco "${def.type}" não aparece na aba de componentes');
     }
   });

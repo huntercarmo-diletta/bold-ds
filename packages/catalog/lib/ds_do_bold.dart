@@ -1243,8 +1243,23 @@ BlockDef _indicadorDeHome() => BlockDef(
 
 /// O segundo dos quatro plugues.
 void configurarDsDoBold() {
-  Ds.configurar(PlugueDoDs(
-    blocos: {
+  // O mapa de blocos sai pra uma variável porque os CONTRATOS derivam dele. Ler `Ds.blocos` aqui seria
+  // o ovo antes da galinha — e o motor falha alto nisso, com a mensagem certa: "nenhum design system
+  // plugado". Melhor assim que um mapa vazio em silêncio.
+  // ONDE OS ASSETS DO PAI MORAM — uma linha, e sem ela nenhum ícone aparece.
+  //
+  // `DilettaAssets.assetPackage` nasce `null`, que significa "assets na raiz do bundle". Num app que
+  // CONSOME o pacote eles moram em `packages/diletta_design_system/…`, então o `AssetBytesLoader`
+  // procurava no lugar errado — e `VectorGraphic` com asset ausente não estoura: desenha uma caixa
+  // vazia. Os 358 ícones do catálogo estavam invisíveis por causa disto, e nenhum teste viu porque
+  // widget na árvore não é pixel na tela.
+  //
+  // Fica aqui, no plugue, e não no `main`: é quem liga o DS que sabe onde o DS guarda coisa — e assim
+  // todo teste que configura o plugue herda a resolução. O primeiro filho seta no `main` do catálogo
+  // dele, e por isso o teste dele não cobre este caso.
+  DilettaAssets.assetPackage = DilettaAssets.package;
+
+  final blocos = <String, BlockDef>{
       'barraDeStatus': _barraDeStatusBloco(),
       'tituloDaPagina': _tituloDaPagina(),
       'texto': _texto(),
@@ -1289,7 +1304,10 @@ void configurarDsDoBold() {
       'chipDeEntrada': _chipDeEntrada(),
       'cartaoDeAcesso': _cartaoDeAcesso(),
       'caixaDeSelecao': _caixaDeSelecao(),
-    },
+  };
+
+  Ds.configurar(PlugueDoDs(
+    blocos: blocos,
     // TODO tipo precisa estar num grupo: a paleta do editor sai daqui, então bloco sem
     // grupo existe e ninguém acha. A conformidade do pai cobra.
     grupos: const {
@@ -1387,6 +1405,11 @@ void configurarDsDoBold() {
       final s = DilettaTheme.schemeOf(ctx);
       return s.isDark ? s.bg : null;
     },
+    // OS CONTRATOS (v0.36.0 do motor) — guideline é parte do contrato do COMPONENTE, não do catálogo
+    // que o mostra. Pro componente do PAI o markdown vem do pacote dele (`kDilettaSpecs`), e o mapa
+    // abaixo é DERIVADO do `ctor` de cada bloco: escrever a correspondência à mão com 43 blocos e 64
+    // specs erra, e o sintoma (bloco sem contrato) é indistinguível de spec que não existe.
+    contratos: _contratosDosBlocos(blocos),
     // A VOLTA: sem isto, tela que só existe como código aparece como código, sem preview — e quem
     // monta tela perde a metade que importa, que é abrir o que já existe.
     leCodigoComoSpec: lerTelaDoBold,
@@ -1455,6 +1478,53 @@ double _espaco(String token) => _daOpcao(token, const {
       's6': DilettaSpacing.s6,
       's8': DilettaSpacing.s8,
     }, DilettaSpacing.s4);
+
+/// `tipo do bloco → markdown da spec`, derivado do construtor.
+///
+/// `ds.DilettaIconButton` → `design-system-icon-button` no `kDilettaSpecs` do pai. Bloco de componente
+/// nascido AQUI não tem spec do pai e fica de fora — e o cabeçalho degrada pro nome, que é a regra do
+/// motor: ausência degrada, não quebra.
+///
+/// Derivado e não escrito: com 43 blocos e 64 specs, tabela à mão erra e o sintoma (bloco sem contrato)
+/// é indistinguível de spec que não existe.
+///
+/// Os componentes NASCIDOS aqui ainda não têm contrato escrito, e essa dívida é minha: o
+/// `COMPONENTE-DO-FILHO.md` do pai passou a pedir contrato como parte do mínimo na v0.16.1.
+Map<String, String> _contratosDosBlocos(Map<String, BlockDef> blocos) {
+  final mapa = <String, String>{};
+  for (final def in blocos.values) {
+    final ctor = def.ctor;
+    if (ctor == null || !ctor.contains('Diletta')) continue;
+    final classe =
+        ctor.split('.').firstWhere((p) => p.startsWith('Diletta'), orElse: () => '');
+    if (classe.isEmpty) continue;
+    final kebab = classe
+        .replaceFirst('Diletta', '')
+        .replaceAllMapped(RegExp(r'[A-Z]'), (m) => '-${m.group(0)!.toLowerCase()}')
+        .replaceFirst(RegExp(r'^-'), '');
+    final md = kDilettaSpecs['design-system-$kebab'];
+    if (md != null) mapa[def.type] = md;
+  }
+  // As EXCEÇÕES, e cada uma tem razão: a convenção classe→slug não cobre quem não é 1:1.
+  //
+  // A row e a coleção do pai compartilham UMA spec (`app-list`), e é correto — o contrato dele fala da
+  // coleção e da linha juntas, porque a coleção é dona do separador. Já `barraDeBaixo` e
+  // `indicadorDeHome` não têm `ctor` (o primeiro aninha três níveis, o segundo é chrome de aparelho),
+  // então a derivação não os alcança.
+  const excecoes = {
+    'lista': 'design-system-app-list',
+    'linha': 'design-system-app-list',
+    'linhaDeValor': 'design-system-app-list',
+    'barraDeBaixo': 'design-system-bottom-app',
+    'indicadorDeHome': 'design-system-bottom-home-indicator',
+  };
+  excecoes.forEach((tipo, slug) {
+    if (!blocos.containsKey(tipo)) return;
+    final md = kDilettaSpecs[slug];
+    if (md != null) mapa[tipo] = md;
+  });
+  return mapa;
+}
 
 bool _vazio(Object? v) => v == null || '$v'.isEmpty;
 

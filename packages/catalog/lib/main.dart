@@ -45,6 +45,14 @@ CatalogoConfig configDoCatalogoDoBold() => CatalogoConfig(
           label: 'Fundamentos',
           constroi: (_) => const AbaDeFundamentos(),
         ),
+        // STYLES entre fundamentos e componentes, porque é a ordem da derivação: material cru →
+        // material composto → peça montada. O dono do produto corrigiu a fusão das duas primeiras:
+        // "styles e foundations são coisas diferentes".
+        AbaDoCatalogo(
+          id: 'styles',
+          label: 'Styles',
+          constroi: (_) => const AbaDeStyles(),
+        ),
         AbaDoCatalogo(
           id: 'componentes',
           label: 'Componentes',
@@ -138,14 +146,24 @@ class _CardDeBloco extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // O CABEÇALHO É DO MOTOR (v0.36.0), e antes era três linhas escritas aqui: nome e tipo.
+          //
+          // Ele desenha propósito, guidelines (faça/evite), chip de contrato e chips de `compõe` — tudo
+          // vindo da SPEC do componente, porque guideline é parte do contrato do componente e não da
+          // página que o mostra. O que não existe não aparece: spec sem `## Guidelines` rende só o nome
+          // e o propósito.
           Padding(
             padding: EdgeInsets.fromLTRB(
-                CM.gapPadrao, CM.gapCompacto, CM.gapPadrao, CM.gapCompacto),
+                CM.gapPadrao, CM.gapPadrao, CM.gapPadrao, CM.gapCompacto),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Text(def.label,
-                      style: CT.rotulo.copyWith(color: CC.neutral02)),
+                  child: CabecalhoDeComponente(
+                    nome: def.label,
+                    dimensoes: _dimensoesDe(def),
+                    contrato: Ds.contratoDe(tipo),
+                  ),
                 ),
                 Text(tipo, style: CT.mono.copyWith(color: CC.neutral05)),
               ],
@@ -262,4 +280,19 @@ class _CardDeViolacao extends StatelessWidget {
       ),
     );
   }
+}
+
+/// A MATRIZ do bloco em uma linha (`3 tipo × 3 tamanho`), CONTADA do registro.
+///
+/// Contada e não escrita: um filho mantinha essa linha à mão por componente, e linha à mão sobre
+/// contagem envelhece na primeira variante nova. Aqui ela sai das props de enum do próprio `BlockDef`,
+/// então variante nova aparece sozinha.
+String _dimensoesDe(BlockDef def) {
+  final partes = <String>[];
+  def.props.forEach((nome, prop) {
+    final opcoes = prop.options;
+    if (prop.kind != 'enum' || opcoes == null || opcoes.length < 2) return;
+    partes.add('${opcoes.length} $nome');
+  });
+  return partes.join(' × ');
 }
