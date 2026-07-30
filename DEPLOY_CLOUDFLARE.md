@@ -124,9 +124,30 @@ No dashboard, e só clicando:
    - **Policy name**: `time Diletta`
    - **Action**: `Allow`
    - **Include**: `Emails ending in` → `@dilettasolutions.com` (ou `Emails` com a lista nominal);
-5. **Next** → em **Authentication**, deixe **One-time PIN** ligado. Quem entra recebe um código por
-   e-mail, sem precisar de conta em lugar nenhum;
+5. **Next** → em **Authentication**, escolha **One-time PIN** (ver abaixo: ele precisa existir na CONTA
+   antes). Quem entra recebe um código por e-mail, sem precisar de conta em lugar nenhum;
 6. **Add application**.
+
+#### O One-time PIN é da CONTA, não da aplicação — e não vem ligado
+
+Eu escrevi "deixe o One-time PIN ligado" na primeira versão deste doc e estava errado. A doc da
+Cloudflare é explícita: *"OTP is no longer added automatically, but you can set it up at any time."*
+
+Onde ele se liga: **Zero Trust → Integrations → Identity providers → Add new → One-time PIN**. (No
+dashboard antigo: Settings → Authentication → Login methods.) É configuração de CONTA — vale pra todas as
+aplicações; quem decide por aplicação é a política de e-mails.
+
+No painel **Authentication** da aplicação, então, duas saídas:
+
+- **`Accept all available identity providers` ligado** (o default): o OTP passa a ser aceito assim que
+  existir na conta. Funciona, e o custo é que qualquer IdP adicionado à conta depois entra nesta
+  aplicação **sem ninguém decidir**;
+- **desligar o toggle e escolher `One-time PIN` na lista**: a autenticação deste catálogo fica explícita.
+  É o que este repo usa.
+
+E uma ordem que evita ficar de fora do próprio catálogo: **adicione o OTP na conta ANTES de conferir a
+aplicação.** Aplicação salva sem nenhum identity provider na conta não deixa ninguém entrar — inclusive
+você.
 
 ### 5.5 · O que foi medido no primeiro deploy
 
