@@ -129,6 +129,11 @@ class BoldBackground extends StatelessWidget {
     // No claro, mood de gradiente e sólido ganham base `primary08`: sobre o quase-branco do tema
     // os brilhos desbotavam e mesclavam com o conteúdo.
     final ehMood = fundo != BoldBackdrop.imagem && fundo != BoldBackdrop.solido;
+    // O `_ =>` aqui é o único deste pacote, e ele é seguro POR CONSTRUÇÃO — não por descuido. A
+    // auditoria de arquitetura cobra `_ =>` porque tipo novo se disfarça de tipo antigo; aqui um estilo
+    // novo cai no ramo de mood, e `ehMood` o classifica por EXCLUSÃO (`!= imagem && != solido`), que é
+    // o tratamento certo pra qualquer mood futuro. Escrever os sete casos duplicaria a mesma expressão
+    // seis vezes, e aí o risco passa a ser esquecer de mudar uma delas.
     final base = switch (fundo) {
       BoldBackdrop.solido =>
         s.isDark ? BoldPalette.bold.bgEscuro! : BoldPalette.bold.primary08,

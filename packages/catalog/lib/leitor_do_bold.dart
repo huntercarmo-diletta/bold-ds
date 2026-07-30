@@ -17,8 +17,13 @@
 /// Chegaram a ser SEIS por um defeito do motor — `texto` e `ritmo` recebem o conteúdo POSICIONAL e a
 /// tabela só sabia emitir `nome: valor`. A v0.33.1 trouxe `Arg.textoPosicional`, e os dois voltaram.
 ///
-/// Antes: 15 entradas à mão, 60 linhas de `if`. Agora: a tabela cobre 20 de 24 blocos, e as quatro que
-/// sobram são as que ela não tem como cobrir.
+/// Antes: 15 entradas à mão, 60 linhas de `if`. Agora: a tabela cobre 22 de 29 blocos, e as que sobram
+/// são as que ela não tem como cobrir.
+///
+/// **Cada `if` aqui era DUAS chamadas** (`ehCtor(expr, 'ds.X') || ehCtor(expr, 'X')`), porque a versão
+/// antiga do `ehCtor` cravava o prefixo. Desde a v0.30.1 ele aceita as duas formas sozinho — medido nas
+/// quatro combinações — e as cinco duplicatas saíram. A auditoria de arquitetura foi quem apontou: este
+/// arquivo era o único com cadeia de decisão por tipo, com 10 comparações.
 library;
 
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
@@ -53,10 +58,7 @@ Block _bloco(String expr) {
   // na tabela (ela não tem prop nenhuma no código — tem filhos), então quem lê os itens é a mesma
   // função que lê a tela: cada item volta por `_bloco`, inclusive pela tabela.
   for (final idioma in const ['carded', 'plain', 'menu']) {
-    if (!ehCtor(expr, 'ds.DilettaAppList.$idioma') &&
-        !ehCtor(expr, 'DilettaAppList.$idioma')) {
-      continue;
-    }
+    if (!ehCtor(expr, 'ds.DilettaAppList.$idioma')) continue;
     final itens = primeiraListaDeChildren(expr);
     return Block(
       id: _novoId(),
@@ -78,13 +80,13 @@ Block _bloco(String expr) {
   //   motor sabe disso: prop de PREVIEW não é prop de código;
   // - o prazo recebe `Duration`, e `Arg` não tem kind de duração. O bloco declara HORAS e o codegen monta
   //   o `Duration`, então a volta desmonta.
-  if (ehCtor(expr, 'ds.BoldEscadaDeAlcadas') || ehCtor(expr, 'BoldEscadaDeAlcadas')) {
+  if (ehCtor(expr, 'ds.BoldEscadaDeAlcadas')) {
     return Block(id: _novoId(), type: 'escadaDeAlcadas', props: {
       ...Ds.blocos['escadaDeAlcadas']!.defaults(),
       'densa': argBool(expr, 'densa') ?? false,
     });
   }
-  if (ehCtor(expr, 'ds.BoldPrazoDaPendencia') || ehCtor(expr, 'BoldPrazoDaPendencia')) {
+  if (ehCtor(expr, 'ds.BoldPrazoDaPendencia')) {
     return Block(id: _novoId(), type: 'prazoDaPendencia', props: {
       'horas': argNumeroComoTexto(expr, 'hours') ?? '',
       'idade': argString(expr, 'idade') ?? '',
@@ -93,7 +95,7 @@ Block _bloco(String expr) {
 
   // Os segmentos: lista curta de rótulos, que a tabela não declara (mesmo caso das abas). O bloco lê
   // os rótulos de volta do próprio literal.
-  if (ehCtor(expr, 'ds.BoldSegmentos') || ehCtor(expr, 'BoldSegmentos')) {
+  if (ehCtor(expr, 'ds.BoldSegmentos')) {
     return Block(id: _novoId(), type: 'segmentos', props: {
       'segmentos': _rotulos(expr),
       'selecionado': argNumeroComoTexto(expr, 'indiceSelecionado') ?? '0',
@@ -102,8 +104,7 @@ Block _bloco(String expr) {
 
   // 4 · A forma irregular, que fica fora da tabela por decisão do motor: o rótulo mora três níveis
   // abaixo do construtor, e é o próprio pai que diz que tabela não cobre aninhamento.
-  if (ehCtor(expr, 'ds.DilettaBottomApp.button') ||
-      ehCtor(expr, 'DilettaBottomApp.button')) {
+  if (ehCtor(expr, 'ds.DilettaBottomApp.button')) {
     return Block(id: _novoId(), type: 'barraDeBaixo', props: {
       'label': argStringEm(expr, 'DilettaNavigationAction', 'label') ?? '',
       'labelSecundario': '',

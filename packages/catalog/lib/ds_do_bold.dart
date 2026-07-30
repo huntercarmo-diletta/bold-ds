@@ -32,14 +32,14 @@ import 'leitor_do_bold.dart';
 /// oferecer 28 estilos num seletor é oferecer nenhum.
 const _presetsDeTexto = ['displaySm', 'headlineSm', 'titleMd', 'bodyMd', 'bodySm', 'label'];
 
-TextStyle _estiloDe(String preset) => switch (preset) {
-      'displaySm' => DilettaType.displaySm,
-      'headlineSm' => DilettaType.headlineSm,
-      'titleMd' => DilettaType.titleMd,
-      'bodySm' => DilettaType.bodySm,
-      'label' => DilettaType.label,
-      _ => DilettaType.bodyMd,
-    };
+TextStyle _estiloDe(String preset) => _daOpcao(preset, const {
+      'displaySm': DilettaType.displaySm,
+      'headlineSm': DilettaType.headlineSm,
+      'titleMd': DilettaType.titleMd,
+      'bodyMd': DilettaType.bodyMd,
+      'bodySm': DilettaType.bodySm,
+      'label': DilettaType.label,
+    }, DilettaType.bodyMd);
 
 /// O conteúdo deste componente é POSICIONAL (`ds.DilettaText('oi')`), e isso saiu da tabela e voltou:
 /// declarar o nome vazio emitia `ds.DilettaText(: 'oi')`, que não compila. A v0.33.1 do motor trouxe
@@ -105,16 +105,16 @@ BlockDef _botao() => BlockDef(
 Widget _botaoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) => DilettaButton(
       label: '${p['label']}',
       onPressed: aoTocar ?? () {},
-      type: switch (p['tipo']) {
-        'secondary' => DilettaButtonType.secondary,
-        'tertiary' => DilettaButtonType.tertiary,
-        _ => DilettaButtonType.primary,
-      },
-      size: switch (p['tamanho']) {
-        'md' => DilettaButtonSize.md,
-        'sm' => DilettaButtonSize.sm,
-        _ => DilettaButtonSize.lg,
-      },
+      type: _daOpcao(p['tipo'], const {
+        'primary': DilettaButtonType.primary,
+        'secondary': DilettaButtonType.secondary,
+        'tertiary': DilettaButtonType.tertiary,
+      }, DilettaButtonType.primary),
+      size: _daOpcao(p['tamanho'], const {
+        'lg': DilettaButtonSize.lg,
+        'md': DilettaButtonSize.md,
+        'sm': DilettaButtonSize.sm,
+      }, DilettaButtonSize.lg),
       fullWidth: p['larguraTotal'] == true,
     );
 
@@ -182,14 +182,14 @@ BlockDef _valor() => BlockDef(
 
 const _tons = ['neutral', 'primary', 'success', 'warning', 'danger', 'secure'];
 
-DilettaStatusTone _tomDe(String t) => switch (t) {
-      'primary' => DilettaStatusTone.primary,
-      'success' => DilettaStatusTone.success,
-      'warning' => DilettaStatusTone.warning,
-      'danger' => DilettaStatusTone.danger,
-      'secure' => DilettaStatusTone.secure,
-      _ => DilettaStatusTone.neutral,
-    };
+DilettaStatusTone _tomDe(String t) => _daOpcao(t, const {
+      'neutral': DilettaStatusTone.neutral,
+      'primary': DilettaStatusTone.primary,
+      'success': DilettaStatusTone.success,
+      'warning': DilettaStatusTone.warning,
+      'danger': DilettaStatusTone.danger,
+      'secure': DilettaStatusTone.secure,
+    }, DilettaStatusTone.neutral);
 
 BlockDef _selo() => BlockDef(
       type: 'selo',
@@ -1001,15 +1001,33 @@ final List<String> _nomesDeIlustracao =
 DilettaIllustration _ilustracaoDe(String nome) =>
     DilettaIllustration.all.firstWhere((i) => i.nome == nome);
 
-double _espaco(String token) => switch (token) {
-      's2' => DilettaSpacing.s2,
-      's3' => DilettaSpacing.s3,
-      's6' => DilettaSpacing.s6,
-      's8' => DilettaSpacing.s8,
-      _ => DilettaSpacing.s4,
-    };
+double _espaco(String token) => _daOpcao(token, const {
+      's2': DilettaSpacing.s2,
+      's3': DilettaSpacing.s3,
+      's4': DilettaSpacing.s4,
+      's6': DilettaSpacing.s6,
+      's8': DilettaSpacing.s8,
+    }, DilettaSpacing.s4);
 
 bool _vazio(Object? v) => v == null || '$v'.isEmpty;
+
+/// Traduz o valor de uma prop de ENUM (que chega como String) no membro do DS.
+///
+/// Existe pra matar o `_ =>` das quatro traduções que havia aqui, e a razão é a que a auditoria de
+/// arquitetura cobra: **default silencioso faz opção nova se disfarçar de opção antiga.** As opções são
+/// declaradas em `PropDef.options`, então valor fora do mapa é erro de declaração — falha no `assert`
+/// em debug, e em release cai no [padrao] em vez de deixar o bloco sem desenhar.
+///
+/// A lição vem do ícone: sem o `assert`, doze papéis desenharam o mesmo boneco e passou por decisão de
+/// design.
+T _daOpcao<T>(Object? valor, Map<String, T> opcoes, T padrao) {
+  final achado = opcoes['$valor'];
+  assert(
+    achado != null || '$valor' == 'null',
+    'valor fora das opções declaradas: "$valor" (conhecidas: ${opcoes.keys.join(', ')})',
+  );
+  return achado ?? padrao;
+}
 
 /// Literal Dart de uma string, ou o IDENTIFICADOR quando a prop está vinculada a um
 /// campo da tela gerada. Sem isto, uma prop vinculada sairia como `'nomeDoCampo'` — uma
