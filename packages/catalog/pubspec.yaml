@@ -1,0 +1,39 @@
+name: conta_bold_catalog
+description: >-
+  Catálogo do DS do Conta BOLD. É CONSUMIDOR do design system, igual ao app — não tem
+  componente próprio. O motor (barra, board, compositor, codegen) vem do pai por tag.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # A identidade e a linguagem. Por PATH porque catálogo e DS versionam juntos dentro
+  # deste repo — a entrega pro app do cliente é outra coisa (ver tool/sincroniza_pai_ds.py).
+  conta_bold_design_system:
+    path: ../conta_bold_design_system
+
+  # O pai FERRAMENTA, por TAG. Subir de versão é trocar o `ref` aqui, de propósito:
+  # upgrade é escolha do filho.
+  #
+  # UM só: o motor reexporta o contrato. Declarar os dois dá conflito de resolução —
+  # o `path:` interno do monorepo do pai resolve como COMMIT, e o pub trata tag e
+  # commit como descrições diferentes.
+  diletta_catalog_core:
+    git:
+      url: git@bitbucket.org:diletta/catalogo-diletta.git
+      ref: v0.22.0
+      path: packages/diletta_catalog_core
+
+dev_dependencies:
+  flutter_lints: ^4.0.0
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
