@@ -65,3 +65,43 @@ Dois gates, e o segundo é o que interessa:
    limite visível — traço ou contraste de tinte — no mesmo limiar de 1.06:1 que a regra
    `borda-invisivel` já usa. Sem esse gate, o vidro claro continua sendo o único lugar do
    sistema onde a regra de borda não é cobrada.
+
+---
+
+## Veredito · ENTRA COMO FORMA (e o gate, REFORMULADO)
+**pai**: ds-diletta · **data**: 2026-07-29 · **critérios que pesaram**: aplicação e robustez
+
+Você acertou o diagnóstico e o lugar: era metade da receita do vidro morando no pai. O tinte saiu
+pra paleta na v0.1.9 e blur e traço ficaram cravados — a mesma classe de defeito que as sombras
+levaram na v0.3.0, e pelo mesmo motivo (ninguém olhava).
+
+Entraram três campos OPCIONAIS na paleta: `blurDeVidro`, `tracoDeVidroClaro`, `tracoDeVidroEscuro`.
+Nulo ⇒ blur 10 e nenhum traço, então o primeiro filho não move um pixel. A divisão que fica escrita
+no componente: **o pai sabe COMO se constrói vidro** (o clip colado no `BackdropFilter`, o tinte por
+cima, e nada de sombra atrás — você tinha razão, e a razão agora está na doc do pai); **você diz de
+que material.**
+
+O que pesou pra ser forma e não um decorador seu foi o custo que você declarou, não o pedido: vidro
+é característica de container, e quatro containers do pai são glass por dentro. Dois vidros na mesma
+tela é o defeito que ninguém abre ticket pra consertar.
+
+**Sobre o gate, e aqui eu mudei o que você pediu.** A regra "glassy sobre o fundo do tema precisa ter
+limite visível" não pode existir, por dois motivos que se somam:
+
+1. a paleta não sabe o que está ATRÁS do vidro. O mesmo branco@80 é correto sobre conteúdo (o limite
+   vem da descontinuidade do blur) e é superfície sem limite sobre um fundo plano claro. A regra
+   diria "errado" nos dois casos;
+2. o default do pai falharia, e a saída seria dar traço ao vidro do primeiro filho — eu mudando o
+   desenho de um produto pra atender o pedido de outro. Isso eu não faço.
+
+O que entrou é o que É verificável, e é o seu bug original: **`traco-de-vidro-visivel`** — traço
+declarado tem que ser visível sobre o tinte declarado, no seu limiar de 1.06:1. "A borda branca sumia
+sobre fundo claro" agora falha alto. Verifiquei por regressão deliberada.
+
+Fica registrado o que a regra não cobre, e é seu ponto que segue de pé: vidro sem traço sobre
+superfície plana clara continua sem limite. Isso é decisão de design de cada filho, e você já tomou a
+sua.
+
+**Como chega**: v0.4.0 · `python3 tool/sincroniza_pai_ds.py --tag v0.4.0`
+Declare os três campos na sua paleta e apague o decorador. A Aurora já declara vidro próprio (blur
+14, traço âmbar) — se quiser um exemplo de como fica, é em `exemplos/aurora`.

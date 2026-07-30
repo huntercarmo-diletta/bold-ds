@@ -98,10 +98,29 @@ detalhes que são dele — largura do valor RESERVADA (mascarar não desloca nad
 ocultar morando no top bar, não no card. Composição de peças públicas do pai é a primeira
 opção da ordem de preferência da governança, e é esta.
 
-**2 · O stroke e o glow do vidro** — ver a seção própria abaixo.
+**2 · ~~O stroke e o glow do vidro~~ — RESOLVIDO na v0.4.0 do pai.** A receita do vidro
+virou do filho: `blurDeVidro`, `tracoDeVidroClaro` e `tracoDeVidroEscuro` na paleta, com
+default que não move um pixel do primeiro filho. Este filho já declara os três, e o gate
+`traco-de-vidro-visivel` que veio junto foi medido por regressão deliberada: com o traço
+branco no claro ele acusa 1.00:1, que é exatamente o bug que originou o pedido.
 
-**3 · Os acessórios de conta (`AccountPill`, `AccountSwitcher`) batem numa fronteira
-FECHADA.**
+**3 · ~~Os acessórios de conta batem numa fronteira FECHADA~~ — ABERTA na v0.4.0.**
+
+O pai adicionou `DilettaNavigationLeftAccessory.livre(child:, ocupaALinha:)`, e as fábricas
+tipadas seguem iguais — os 110 usos de rename não mudam de forma. O `ocupaALinha` ele
+acrescentou sem eu pedir, e a razão é boa: sem ele o cabeçalho ficaria na largura natural e o
+centro da barra comeria o resto, então a abertura teria teto.
+
+Duas coisas do pedido que não precisaram de nada, e ele mediu antes de responder: ícone à
+direita com badge já existia (`DilettaNavRightIcon.badge`), e o seletor de conta ficou
+registrado como PRIMEIRO pedido no ledger — troca de conta provavelmente é linguagem, mas um
+caso é gosto local até um segundo filho medir.
+
+Gate deste lado: `test/a_home_cabe_na_barra_do_pai_test.dart`. O cabeçalho ali é esqueleto de
+propósito (o de verdade precisa de avatar, conta com carregando e troca de conta, que ainda
+não nasceram aqui) — o que ele prova é o mecanismo, e que a identidade atravessa.
+
+### O texto original do caso, mantido porque a razão continua valendo
 
 Os slots do pai são tipados como `sealed class`:
 
@@ -302,13 +321,13 @@ pai na mesma proporção.
    depois do sync: `brandSoftDe` e `navGlowDe` saem `#FE3976`, o rosa daqui. O pai ainda
    acrescentou `navGlowDe` a 35%, que é mais perto dos 45–65% que este produto usava do que
    os 18% do `brandSoft` antigo. O `dialog.glow` deixou de ser um caso.
-2. **Blur e traço do vidro** — pedido escrito em `docs/pedidos/2026-07-29-vidro-tem-blur-e-traco-cravados.md`.
-   Destrava 18 leituras de vidro em 7 componentes, sem componente novo.
+2. ~~Blur e traço do vidro~~ — **ENTROU COMO FORMA na v0.4.0.** Os três campos estão
+   declarados; as 18 leituras de vidro em 7 componentes passam a ser o
+   `DilettaGlassSurface` do pai, sem componente novo aqui.
 3. **Nascer no filho** `QuantumSeal` e `QuantumPairing`, que não dependem de decisão
    nenhuma.
 4. **Subir os 10**, um por vez, com o processo acima — começando pelos dois que são par
    (`ApprovalProgress` + `RuleLadder`), porque eles medem o processo com um caso real de
    vocabulário e não de utilitário.
-5. **A barra de topo** — pedido escrito em
-   `docs/pedidos/2026-07-29-barra-de-topo-nao-aceita-cabecalho-do-filho.md`, e é o único
-   BLOQUEANTE: 110 dos 113 usos são rename e ficam presos por causa de 3.
+5. ~~A barra de topo~~ — **ENTROU na v0.4.0**, e era o único bloqueante. Os 113 usos podem
+   entrar na linguagem. O pai pediu a medição do que sobrar fora dela quando isso acontecer.

@@ -76,3 +76,44 @@ Este filho monta a home com a barra do pai, e o teste que já existe aqui (`nenh
 primeiro filho no preview, e a cor de ação é a minha`) continua verde. Se a saída for acessório
 novo no pai, o gate extra é o de sempre: ele entra na Aurora, senão não está provado que outra
 marca o usa.
+
+---
+
+## Veredito · ENTRA
+**pai**: ds-diletta · **data**: 2026-07-29 · **critério que pesou**: escalabilidade
+
+Bloqueante confirmado, e pela razão que você deu: `sealed` sem saída não é "falta a peça", é a
+hierarquia não aceitar mais nenhuma — então a resposta que eu daria normalmente ("compõe com o que
+existe") não estava disponível. Um pai que fecha a porta e depois manda compor está errado, não o
+pedido.
+
+Entrou `DilettaNavigationLeftAccessory.livre(child:, ocupaALinha:)`. As fábricas tipadas seguem
+iguais: os seus 110 usos de rename direto não mudam de forma.
+
+**Um item do seu pedido não precisou de nada.** Ícones à direita com badge já existem:
+`DilettaNavRightIcon` tem `badge`, e `.icons` o repassa. Medi antes de responder pra não te entregar
+duas vezes a mesma coisa — sobraram três coisas de verdade (avatar, rótulo de conta com carregando,
+trocar de conta), e as três são o cabeçalho, que agora é seu.
+
+**Sobre as duas saídas que você ofereceu:** fui pela abertura, não pelo seleção-de-conta-como-
+acessório. A sua própria ressalva decidiu — o acessório resolve UM caso e deixa a porta fechada pro
+próximo. Extensibilidade aqui vem de o pai EXPOR as peças; foi a mesma decisão do `DilettaSheetOverlay`
+na v0.1.5, que entrou por um pedido seu.
+
+O seletor de conta **não morreu**: está no ledger do pai como PRIMEIRO pedido. Troca de conta
+provavelmente é linguagem — mas um caso é gosto local até prova em contrário, e a prova é um segundo
+filho medindo. Se aparecer, sobe sem rediscussão de mérito.
+
+`ocupaALinha` eu adicionei sem você pedir, e digo por quê: sem ele o cabeçalho ficaria na largura
+natural e o centro da barra comeria o resto — a abertura teria teto e você voltaria aqui na semana
+seguinte. Com ele o cabeçalho recebe a linha inteira e o título sai (cabeçalho de home não convive com
+título centralizado). É o único lugar em que a barra olha qual acessório recebeu, e é layout: ela não
+sabe o que o seu cabeçalho é, só que ele pediu a linha.
+
+**Uma ressalva minha, declarada:** `Expanded` precisa ser filho direto da `Row`, então quem embrulha é
+a barra. Se você devolver `Expanded` de dentro do seu widget, dá erro de ParentData — passe o conteúdo
+e deixe o `ocupaALinha` fazer isso.
+
+**Como chega**: v0.4.0 · `python3 tool/sincroniza_pai_ds.py --tag v0.4.0`
+Depois disso a home é sua e os 113 usos entram na linguagem. Quando entrarem, me manda a medição do
+que sobrou fora dela — é o tipo de número que costuma achar o próximo pedido.

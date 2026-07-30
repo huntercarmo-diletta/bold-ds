@@ -38,6 +38,42 @@ sealed class DilettaNavigationLeftAccessory extends StatelessWidget {
     required String firstName,
     VoidCallback? onOpenProfile,
   }) = _NavLeftHome;
+
+  /// Cabeçalho que o pai NÃO conhece, montado pelo filho com as peças do pai.
+  ///
+  /// Entrou por um pedido bloqueante, e o "bloqueante" era literal: a hierarquia é `sealed`, então
+  /// não havia caminho de composição — a resposta de sempre ("compõe com o que existe") não estava
+  /// disponível. O filho tinha a barra inteira própria e media **113 usos, 110 deles rename
+  /// direto**: ele carregava a barra fora da linguagem por causa de 3 telas, porque barra é peça
+  /// só e não se troca pela metade.
+  ///
+  /// O que ele precisava e o pai não tinha: avatar, rótulo de conta ativa com estado de carregando,
+  /// e ação de trocar de conta. (Os ícones à direita com badge ele já tinha — `.icons` aceita
+  /// `badge: true` desde sempre, e essa parte do pedido não precisou de nada.)
+  ///
+  /// **Por que uma abertura e não um acessório de "trocar conta" no pai:** o acessório resolveria
+  /// UM caso e deixaria a porta fechada pro próximo. Extensibilidade neste DS vem de o pai EXPOR
+  /// as peças — foi a mesma decisão do `DilettaSheetOverlay` na v0.1.5. Seletor de conta pode
+  /// mesmo ser linguagem, e sobe no dia em que um SEGUNDO filho medir a necessidade.
+  ///
+  /// [ocupaALinha] existe porque sem ele a abertura tem teto: o cabeçalho ficaria na largura
+  /// natural e o centro da barra comeria o resto. Com ele, o cabeçalho recebe a linha inteira e o
+  /// título sai (um cabeçalho de home não convive com título centralizado).
+  const factory DilettaNavigationLeftAccessory.livre({
+    Key? key,
+    required Widget child,
+    bool ocupaALinha,
+  }) = _NavLeftLivre;
+}
+
+class _NavLeftLivre extends DilettaNavigationLeftAccessory {
+  const _NavLeftLivre({super.key, required this.child, this.ocupaALinha = false});
+
+  final Widget child;
+  final bool ocupaALinha;
+
+  @override
+  Widget build(BuildContext context) => child;
 }
 
 class _NavLeftBack extends DilettaNavigationLeftAccessory {
@@ -258,6 +294,12 @@ class DilettaNavigationTopBar extends StatelessWidget {
   final Widget? titleWidget;
   final TextAlign centerAlign;
 
+  /// Só o acessório `.livre(ocupaALinha: true)` toma a linha inteira. É o único lugar em que a
+  /// barra olha QUAL acessório recebeu — e é layout, não vocabulário: ela não sabe o que o
+  /// cabeçalho é, só que ele pediu a linha.
+  bool get esquerdaOcupaALinha =>
+      left is _NavLeftLivre && (left! as _NavLeftLivre).ocupaALinha;
+
   @override
   Widget build(BuildContext context) {
     final s = DilettaTheme.schemeOf(context);
@@ -284,16 +326,26 @@ class DilettaNavigationTopBar extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (left != null) left! else const SizedBox(width: 40),
-          if (centerAlign == TextAlign.center)
-            Expanded(child: Center(child: centerContent ?? const SizedBox()))
+          // Um acessório livre que pede a linha vira o Expanded da Row — e aí o centro sai. Dois
+          // Expanded dividiriam o espaço, e o cabeçalho ficaria com metade da barra.
+          // `Expanded` tem que ser filho DIRETO da Row, então quem embrulha é a barra: o
+          // acessório devolvendo Expanded do próprio build dispararia erro de ParentData.
+          if (esquerdaOcupaALinha)
+            Expanded(child: left!)
+          else if (left != null)
+            left!
           else
-            Expanded(
-              child: Align(
-                alignment: Alignment.centerLeft,
-                child: centerContent,
+            const SizedBox(width: 40),
+          if (!esquerdaOcupaALinha)
+            if (centerAlign == TextAlign.center)
+              Expanded(child: Center(child: centerContent ?? const SizedBox()))
+            else
+              Expanded(
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: centerContent,
+                ),
               ),
-            ),
           if (right != null) right! else const SizedBox(width: 40),
         ],
       ),

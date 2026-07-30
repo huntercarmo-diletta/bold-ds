@@ -2,12 +2,26 @@ import 'dart:ui';
 import 'package:flutter/widgets.dart';
 import '../theme/cpf_seguro_theme.dart';
 
-/// CPF SEGURO — GlassSurface.
+/// GlassSurface.
 ///
-/// Superfície glassy única do DS. Encapsula a spec exata do glass effect:
-/// **white @ 80% opacity + blur uniforme 10** (sigmaX=10, sigmaY=10).
+/// Superfície glassy única do DS. Encapsula **como** se constrói vidro — o clip
+/// colado no `BackdropFilter`, o tinte por cima, e a regra de não pôr sombra
+/// atrás (sombra atrás de vidro é reamostrada pelo filtro e vira halo sujo).
 ///
-/// Se um dia mudar a spec do glass no DS, muda aqui — propaga automático
+/// **A receita é do FILHO, a construção é do pai.** Os três valores saem da
+/// paleta e chegam pelo scheme:
+///
+/// | | de onde | nulo ⇒ |
+/// |---|---|---|
+/// | tinte | `tinteDeVidroClaro/Escuro` (v0.1.9) | branco@80 · `neutral01`@80 |
+/// | blur | `blurDeVidro` (v0.4.0) | 10 |
+/// | traço | `tracoDeVidroClaro/Escuro` (v0.4.0) | sem traço |
+///
+/// O blur e o traço entraram por medição de um segundo filho: 18 leituras de
+/// vidro em 7 componentes dele, com blur 15 e traço de 1px — e a razão do traço
+/// escrita no código dele, "a borda branca sumia sobre fundo claro".
+///
+/// Se um dia mudar a CONSTRUÇÃO do glass, muda aqui — propaga automático
 /// pra TopAppBar, BottomChatBar, BottomActionBar, ChatTopBar, Toast, Sheet.
 ///
 /// Glass é **característica** de containers, não de elementos. Se um elemento
@@ -30,17 +44,25 @@ class DilettaGlassSurface extends StatelessWidget {
   /// por isso o radius é param daqui e não um ClipRRect por fora.
   final BorderRadius? borderRadius;
 
-  /// Blur uniforme aplicado à superfície. Spec do DS = 10.
-  static const double _blur = 10;
-
   @override
   Widget build(BuildContext context) {
-    // Tint vem do scheme (light = white@80, dark = tint escuro).
-    final tint = DilettaTheme.schemeOf(context).glassTint;
-    final surface = BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: _blur, sigmaY: _blur),
-      child: ColoredBox(color: tint, child: child),
+    final s = DilettaTheme.schemeOf(context);
+    Widget surface = BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: s.glassBlur, sigmaY: s.glassBlur),
+      child: ColoredBox(color: s.glassTint, child: child),
     );
+    // O traço vai como `foregroundDecoration`: pinta POR CIMA do vidro sem entrar no layout, e
+    // com o mesmo radius do clip. Borda por fora do clip ficaria meio pixel deslocada do
+    // arredondamento — e é o arredondamento que denuncia.
+    if (s.glassStroke != null) {
+      surface = Container(
+        foregroundDecoration: BoxDecoration(
+          border: Border.all(color: s.glassStroke!, width: 1),
+          borderRadius: borderRadius,
+        ),
+        child: surface,
+      );
+    }
     if (borderRadius != null) {
       return ClipRRect(borderRadius: borderRadius!, child: surface);
     }

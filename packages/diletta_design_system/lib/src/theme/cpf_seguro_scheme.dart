@@ -42,6 +42,8 @@ class DilettaScheme {
     required this.divider,
     // Glass (tint da superfície glassy — muda com o modo)
     required this.glassTint,
+    this.glassBlur = 10,
+    this.glassStroke,
     // Brand
     required this.primary,
     required this.onPrimary,
@@ -143,6 +145,16 @@ class DilettaScheme {
   /// dark = tint escuro. Consumido por DilettaGlassSurface.
   final Color glassTint;
 
+  /// Blur do vidro, em sigma. Sai de `blurDeVidro` da paleta; nulo ⇒ 10.
+  final double glassBlur;
+
+  /// Traço de 1px sobre o vidro. Nulo ⇒ sem traço. Sai de `tracoDeVidroClaro/Escuro`.
+  ///
+  /// O trio (tinte · blur · traço) é a receita do vidro, e ela é do FILHO: o pai sabe COMO se
+  /// constrói vidro (clip, `BackdropFilter`, e a regra de não pôr sombra atrás), não com que
+  /// material.
+  final Color? glassStroke;
+
   final Color primary, onPrimary, primaryHover, primaryPressed;
 
   /// Fundo suave da marca (accent bg — ex: spot de ícone azul).
@@ -228,6 +240,8 @@ class DilettaScheme {
         primaryTrack: p.primary07,
         divider: p.neutral09,
         glassTint: p.tinteDeVidroClaro ?? p.white.withValues(alpha: 0.8),
+        glassBlur: p.blurDeVidro ?? 10,
+        glassStroke: p.tracoDeVidroClaro,
 
         primary: p.primary04,
         onPrimary: p.onPrimary,
@@ -309,6 +323,8 @@ class DilettaScheme {
         // O tinte do vidro também é da marca: o do segundo filho é tingido de vinho, e com o
         // literal daqui saía neutro sem conserto possível do lado do filho.
         glassTint: p.tinteDeVidroEscuro ?? p.neutral01.withValues(alpha: 0.8),
+        glassBlur: p.blurDeVidro ?? 10,
+        glassStroke: p.tracoDeVidroEscuro,
 
         // primary-05 (vivo) em vez do primary-06 (lavado) — a marca precisa
         // pulsar no dark. onPrimary = branco (lê bem sobre o azul).

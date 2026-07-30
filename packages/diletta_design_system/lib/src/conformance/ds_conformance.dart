@@ -82,6 +82,7 @@ List<ViolacaoDeConformidade> violacoesDeConformidade(
       ..._superficiesDistintas(palette),
       ..._bordaVisivel(palette),
       ..._textoSobrePreenchimentoSutil(palette),
+      ..._tracoDeVidroVisivel(palette),
     ].where((v) => !baseline.contains(chaveDeViolacao(v))).toList();
 
 /// TODAS as violações, sem aplicar baseline — pra relatório e pra saber o
@@ -223,6 +224,51 @@ List<ViolacaoDeConformidade> _textoSobrePreenchimentoSutil(DilettaPalette p) {
           porQue: 'banner e chip do role ficam com texto da mesma cor do fundo',
         ));
       }
+    }
+  }
+  return out;
+}
+
+/// 6 · Traço de vidro DECLARADO tem que ser visível sobre o tinte dele.
+///
+/// Entrou por pedido de um segundo filho, e entrou **reformulada** — vale registrar a diferença,
+/// porque ela é sobre o que um gate pode saber.
+///
+/// O pedido era: "superfície glassy sobre o fundo do tema precisa ter limite visível, no mesmo
+/// limiar de 1.06:1 da `borda-visivel`". A regra não pode ser essa, por dois motivos que se
+/// somam:
+///
+/// 1. **a paleta não sabe o que está ATRÁS do vidro.** O mesmo branco@80 é correto sobre conteúdo
+///    (o limite vem da descontinuidade do blur) e é superfície sem limite sobre um fundo plano
+///    claro. Uma regra estática diria "errado" nos dois casos;
+/// 2. **o default do pai falharia**, e a saída seria dar traço ao vidro do primeiro filho — o pai
+///    mudando o desenho de um produto pra resolver o pedido de outro.
+///
+/// O que É verificável: se o filho DECLAROU traço, ele tem que aparecer sobre o tinte que ele
+/// mesmo declarou. É exatamente o bug que fez o pedido nascer — "a borda branca sumia sobre fundo
+/// claro" — e agora ele falha alto em vez de aparecer no aparelho de alguém.
+///
+/// Fica registrado o que a regra NÃO cobre: vidro sem traço sobre superfície plana clara continua
+/// sem limite, e isso é decisão de design de cada filho.
+List<ViolacaoDeConformidade> _tracoDeVidroVisivel(DilettaPalette p) {
+  final out = <ViolacaoDeConformidade>[];
+  for (final entry in _schemes(p).entries) {
+    final s = entry.value;
+    final traco = s.glassStroke;
+    if (traco == null) continue;
+    // Traço e tinte quase sempre têm alpha: compõe os dois antes de medir, senão mede cor pura e
+    // mente. É a mesma correção que a `borda-visivel` já carregava.
+    final fundo = Color.alphaBlend(s.glassTint, s.surface);
+    final linha = Color.alphaBlend(traco, fundo);
+    final r = _contraste(linha, fundo);
+    if (r < 1.06) {
+      out.add(ViolacaoDeConformidade(
+        regra: 'traco-de-vidro-visivel',
+        onde: 'tracoDeVidro/tinte (${entry.key})',
+        detalhe: 'contraste de ${r.toStringAsFixed(2)}:1',
+        porQue: 'traço declarado e invisível é vidro sem limite com a aparência '
+            'de ter limite — foi assim que a borda branca sumia sobre fundo claro',
+      ));
     }
   }
   return out;

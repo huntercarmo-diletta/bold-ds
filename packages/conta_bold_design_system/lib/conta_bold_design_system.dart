@@ -124,10 +124,22 @@ class BoldPalette {
     surfaceEscura: Color(0xFF14151F),
     surfaceMutedEscura: Color(0xFF1E1F2D),
 
-    // O VIDRO — o glass do Bold é tingido de vinho por decisão de design (era
-    // impossível de expressar antes da v0.1.9). No claro fica o frost branco.
-    tinteDeVidroClaro: Color(0xCCFFFFFF),
+    // O VIDRO — a receita inteira, que virou do filho na v0.4.0 do pai.
+    //
+    // O pai sabe COMO se constrói vidro (o clip colado no filtro, o tinte por cima, e
+    // nada de sombra atrás — sombra atrás de vidro é reamostrada e vira halo sujo). O
+    // filho diz de que MATERIAL, e o material do Bold é:
+    //
+    // - fill a 50% nos dois modos: vinho-ink no escuro, branco no claro;
+    // - blur 15, uniforme em todo vidro do app;
+    // - traço de 1px, e ele existe por um defeito medido: no claro a borda BRANCA sumia
+    //   sobre fundo claro, então o traço claro é o rosa lavado do 08. É o mesmo caso que
+    //   a regra `traco-de-vidro-visivel` do pai passou a cobrar.
+    tinteDeVidroClaro: Color(0x80FFFFFF),
     tinteDeVidroEscuro: Color(0x8016060A),
+    blurDeVidro: 15,
+    tracoDeVidroClaro: Color(0xFFFFEDF3), // primary08
+    tracoDeVidroEscuro: Color(0x4DFF9898), // rosa claro @ 30%
 
     // SEGURO (o selo) — ouro fosco do Bold. O 02 e o 08 não existiam no app: o pai
     // pede os dois degraus extremos, e eles foram derivados da rampa que já havia.

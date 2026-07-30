@@ -61,6 +61,9 @@ class DilettaPalette {
     this.surfaceMutedEscura,
     this.tinteDeVidroClaro,
     this.tinteDeVidroEscuro,
+    this.blurDeVidro,
+    this.tracoDeVidroClaro,
+    this.tracoDeVidroEscuro,
     // Warning
     required this.warning01,
     required this.warning02,
@@ -148,6 +151,25 @@ class DilettaPalette {
   /// saía neutro, e não havia como corrigir do lado do filho.
   final Color? tinteDeVidroClaro;
   final Color? tinteDeVidroEscuro;
+
+  /// Blur do VIDRO, em sigma. Nulo ⇒ 10, que é a spec com que o vidro nasceu.
+  ///
+  /// Entrou junto do traço, e pelo mesmo pedido: o tinte tinha saído pra paleta na v0.1.9 e o
+  /// blur ficou cravado dentro do componente — metade da receita do vidro era do filho e a outra
+  /// metade era do pai. Um segundo filho mediu 18 leituras de vidro em 7 componentes dele com
+  /// blur 15, e não havia caminho do lado dele que não fosse reimplementar o `BackdropFilter`.
+  final double? blurDeVidro;
+
+  /// Traço de 1px sobre o vidro. Nulo ⇒ **sem traço**, que é como o vidro nasceu.
+  ///
+  /// A razão medida por quem pediu: "a borda branca sumia sobre fundo claro". Vidro branco a 80%
+  /// sobre superfície plana clara é superfície sem limite visível — e limite visível já é regra
+  /// deste pai (`borda-visivel`), só não era cobrada no vidro.
+  ///
+  /// Default nulo de propósito: dar traço ao vidro do primeiro filho seria o pai mudando o
+  /// desenho de um produto pra resolver o pedido de outro.
+  final Color? tracoDeVidroClaro;
+  final Color? tracoDeVidroEscuro;
   final Color warning01, warning02, warning03, warning04, warning05, warning06, warning07;
   final Color success01, success02, success03, success04, success05, success06, success07;
   final Color secure02, secure03, secure04, secure05, secure07, secure08;
