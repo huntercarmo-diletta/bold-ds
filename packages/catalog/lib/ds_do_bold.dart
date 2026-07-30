@@ -290,6 +290,35 @@ Widget _barraDeBaixoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) =>
 /// O selo quântico — o primeiro bloco que vem de um componente NASCIDO no filho, e não da
 /// linguagem do pai. Declarar é publicar: ele aparece na paleta do compositor sem ninguém tocar
 /// no catálogo.
+BlockDef _saldo() => BlockDef(
+      type: 'saldo',
+      label: 'Saldo (home)',
+      props: const {
+        'valor': PropDef('text', bindable: true, dartType: 'String'),
+        'entradas': PropDef('text', bindable: true, dartType: 'String'),
+        'saidas': PropDef('text', bindable: true, dartType: 'String'),
+        'oculto': PropDef('bool'),
+      },
+      defaults: () => {
+        'valor': 'R\$ 2.912,47',
+        'entradas': 'R\$ 300,00',
+        'saidas': 'R\$ 120,00',
+        'oculto': false,
+      },
+      build: (p) => BoldSaldo(
+        valor: '${p['valor']}',
+        entradas: _vazio(p['entradas']) ? null : '${p['entradas']}',
+        saidas: _vazio(p['saidas']) ? null : '${p['saidas']}',
+        oculto: p['oculto'] == true,
+        aoAbrirExtrato: () {},
+      ),
+      codegen: (p) => 'ds.BoldSaldo(valor: ${_str(p['valor'])}'
+          '${_vazio(p['entradas']) ? '' : ', entradas: ${_str(p['entradas'])}'}'
+          '${_vazio(p['saidas']) ? '' : ', saidas: ${_str(p['saidas'])}'}'
+          '${p['oculto'] == true ? ', oculto: true' : ''}'
+          ', aoAbrirExtrato: abrirExtrato)',
+    );
+
 BlockDef _seloQuantico() => BlockDef(
       type: 'seloQuantico',
       label: 'Selo quântico',
@@ -341,6 +370,7 @@ void configurarDsDoBold() {
       'botao': _botao(),
       'barraDeBaixo': _barraDeBaixo(),
       'seloQuantico': _seloQuantico(),
+      'saldo': _saldo(),
       'indicadorDeHome': _indicadorDeHome(),
     },
     // TODO tipo precisa estar num grupo: a paleta do editor sai daqui, então bloco sem
@@ -350,7 +380,7 @@ void configurarDsDoBold() {
       'Conteúdo': ['texto', 'valor', 'selo', 'aviso', 'icone'],
       // Grupo próprio porque é o que só o Bold tem: a vizinhança na paleta é decisão de
       // linguagem, e peça de marca não se mistura com vocabulário herdado.
-      'Marca do Bold': ['seloQuantico'],
+      'Marca do Bold': ['seloQuantico', 'saldo'],
       'Entrada': ['campo'],
       'Ação': ['botao', 'barraDeBaixo'],
       'Ritmo': ['ritmo', 'divisor'],
