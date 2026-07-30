@@ -131,6 +131,21 @@ class TelaGerada extends StatelessWidget {
   void onX() {}
 
   // dados de runtime
+  //
+  // Cada linha aqui é uma coisa que o catálogo ASSUME da tela que recebe o código — e foi o gate que
+  // obrigou a declarar, uma por uma, com o TIPO certo. `rows: linhasDoComprovante` sendo
+  // `List<DilettaReceiptRow>` é contrato; se eu declarasse `List<Widget>` o analisador acusaria.
+  List<ds.DilettaReceiptRow> get linhasDoComprovante => const [];
+  List<ds.DilettaReceiptSection> get secoesDoComprovante => const [];
+  Widget get conteudoDaFolha => const SizedBox.shrink();
+  List<Widget> get acoesDoDialogo => const [];
+  List<ds.DilettaRadioOption> get opcoesDoRadio => const [];
+  List<ds.DilettaCriteriaItem> get criteriosDaSenha => const [];
+  List<String> get opcoesDoCampo => const [];
+  List<Widget> get conteudoDoExpansivel => const [];
+  Color get corDaMarca => const Color(0xFFFE3976);
+  void aoFechar() {}
+  void aoEscolher(String v) {}
   List<ds.BoldAlvo> get alvosDetectados => const [];
   List<String> get rotulosDasAbas => const ['Tudo', 'Entradas'];
   double get faseDaVarredura => 0;

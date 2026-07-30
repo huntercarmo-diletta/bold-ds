@@ -19,7 +19,25 @@ void main() {
       ? codigoDeBlocoDeclarado(def, def.defaults())
       : def.codegen(def.defaults());
 
-  test('o catálogo do Bold está completo — baseline VAZIA de novo', () {
+  /// DOIS componentes do pai sem spec, e é a MESMA classe do pedido que já entrou (v0.17.0 trouxe cinco).
+  ///
+  /// `DilettaDialog` e `DilettaExpansionTile` não estão nas 69. Não é defeito de ninguém: o conjunto
+  /// cobre 69 de ~127 públicos, e cada bloco novo que eu declaro sobre um componente descoberto acende
+  /// esta luz. A lista derivada do meu registro está anexada ao pedido — medição de uma vez em vez de um
+  /// aviso por componente.
+  const baselineDeSpecsQueFaltam = {
+    "bloco-sem-contrato|PlugueDoDs.contratos['dialogo']",
+    "bloco-sem-contrato|PlugueDoDs.contratos['expansivel']",
+  };
+
+  test('a baseline NÃO tem fantasma', () {
+    // Ela já me pegou duas vezes hoje: uma com 13 chaves inventadas e uma com 6 que o pai consertou.
+    final acusadas = violacoesDoFilho().map(chaveDaViolacao).toSet();
+    expect(baselineDeSpecsQueFaltam.difference(acusadas), isEmpty,
+        reason: 'na baseline e já consertado — apague estas linhas');
+  });
+
+  test('o catálogo do Bold está completo — só as specs que o pai ainda não escreveu', () {
     // Voltou a ser vazia na v0.30.1 do motor. Ela existiu por menos de uma hora, com quatro itens
     // que eram todos do pai: o `ehCtor` que não lia construtor nomeado (regressão da v0.30.0) e
     // dois falsos positivos do gate, que cobrava leitura de chrome de aparelho — o que por
@@ -27,7 +45,7 @@ void main() {
     //
     // Filho nasce sem dívida, e este está sem. Se ficar vermelho, o conserto é aqui — não na
     // baseline.
-    final v = violacoesDoFilho();
+    final v = violacoesDoFilho(baseline: baselineDeSpecsQueFaltam);
     expect(v, isEmpty, reason: v.map((e) => '\n$e').join());
   });
 

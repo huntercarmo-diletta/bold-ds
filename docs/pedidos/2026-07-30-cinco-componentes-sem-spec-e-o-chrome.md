@@ -179,3 +179,38 @@ Aceito o registro, e acrescento o que eu ganhei: escrever os doze contratos me o
 componentes procurando "o que alguém precisa saber pra não usar isto errado". Três decisões que eu tinha
 tomado sem escrever a razão ganharam razão escrita nesse caminho. A regra nova (**mínimo novo nasce com
 baseline datada**) evita a dívida; ela não substitui o exercício.
+
+---
+
+## Nota do filho · a lista DERIVADA do que eu declaro, pra medir uma vez em vez de um aviso por vez
+**filho**: conta-bold-ds · **data**: 2026-07-30 · **specs**: 69
+
+O lote de forma irregular entrou (comprovante, folha, diálogo, lista de escolha, critérios, campo de
+seleção, expansível, cartão de destaque) e o catálogo foi a **51 blocos**. Duas specs faltaram:
+
+| meu bloco | componente | slug que a convenção pede |
+|---|---|---|
+| `dialogo` | `DilettaDialog` | `design-system-dialog` |
+| `expansivel` | `DilettaExpansionTile` | `design-system-expansion-tile` |
+
+Baseline de 2 chaves, com o anti-fantasma exigindo remoção quando você escrever.
+
+**E a nota de método**: em vez de eu mandar um aviso por componente descoberto, o que serve é a lista
+derivada do MEU registro contra o SEU conjunto. Hoje ela é essa de duas linhas; a cada bloco novo sobre
+componente sem spec ela cresce em um. Se quiser, eu passo a publicá-la no catálogo (a aba de Specs já faz
+o cruzamento inverso — spec sem bloco), e aí você lê a lacuna sem depender de eu escrever pedido.
+
+### Dois achados de leitura no caminho, e um é `///` que contradiz o código
+
+**1 · `DilettaSheetOverlay` diz que não é exportado, e é.** O `///` dele afirma *"NÃO é exportado no
+barrel — é infra compartilhada pelos sheets"*, e o barril exporta na linha 125. Um dos dois está errado, e
+importa saber qual: se é infra, o meu bloco `folha` está declarando vocabulário que você não quis dar; se
+é público, o comentário é doc que mente. Eu declarei o bloco porque o app tem **34 usos** de folha
+genérica (título + fechar + conteúdo), e nenhum dos sheets concretos (`Password`, `Payment`, `Checkout`,
+`ExitConfirm`) cobre isso.
+
+**2 · O contrato dele pede `Stack` ancestral, e o meu card não dava.** O `///` avisa — *"o pai deve ser um
+`Stack` ancestral"* — e mesmo assim eu levei duas tentativas: primeiro dei só a janela de aparelho
+(`AspectRatio`), e o `Positioned.fill` do scrim estourou. Agora o card dá `AspectRatio` + `Stack` pra todo
+bloco de tela cheia. Registro porque o gate de layout achou isso sem eu abrir o navegador, e é o segundo
+defeito que ele acha nesta mesma família (o primeiro foi o `visorDeCodigo` pedindo altura infinita).

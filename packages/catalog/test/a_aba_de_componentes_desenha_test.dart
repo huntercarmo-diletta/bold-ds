@@ -52,7 +52,10 @@ void main() {
                 builder: (ctx) => ColoredBox(
                   color: DilettaTheme.schemeOf(ctx).bg,
                   child: Ds.atual.ehTelaCheia(def.type)
-                      ? AspectRatio(aspectRatio: 9 / 16, child: def.build(def.defaults()))
+                      ? AspectRatio(
+                          aspectRatio: 9 / 16,
+                          child: Stack(children: [def.build(def.defaults())]),
+                        )
                       : def.build(def.defaults()),
                 ),
               )),

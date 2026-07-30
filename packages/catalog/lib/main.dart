@@ -188,8 +188,15 @@ class _CardDeBloco extends StatelessWidget {
                       // scroll isso é altura INFINITA: estourava o layout e chegava a pintar com
                       // `NaN`. Quem sabe quais são é o plugue (`tiposDeTelaCheia`), então o card
                       // pergunta em vez de adivinhar, e dá a ele a proporção de um aparelho.
+                    // E um `Stack`, porque overlay devolve `Positioned` (a folha faz isso) e
+                    // `Positioned` fora de `Stack` estoura com "Incorrect use of ParentDataWidget".
+                    // No frame de verdade quem provê o `Stack` é o motor; o card documenta o
+                    // componente FORA do frame, então provê aqui.
                     child: Ds.atual.ehTelaCheia(tipo)
-                        ? AspectRatio(aspectRatio: 9 / 16, child: def.build(props))
+                        ? AspectRatio(
+                            aspectRatio: 9 / 16,
+                            child: Stack(children: [def.build(props)]),
+                          )
                         : def.build(props),
                   ),
                 ),

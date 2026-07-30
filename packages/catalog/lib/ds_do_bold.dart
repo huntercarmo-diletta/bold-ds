@@ -1040,6 +1040,269 @@ BlockDef _caixaDeSelecao() => BlockDef(
           ', onChanged: aoMarcar)',
     );
 
+// ── o lote de FORMA IRREGULAR: quem recebe lista, widget ou runtime ──────────────
+//
+// Estes não caberiam na tabela antes da v0.35.0 (`acoes`), e é ela que os traz: o argumento vem de um
+// IDENTIFICADOR do código gerado, não de um literal. Sem isso, cada um seria `codegen` à mão mais uma
+// entrada no leitor — e o leitor voltaria de 2 pra 10 entradas.
+
+BlockDef _comprovante() => BlockDef(
+      type: 'comprovante',
+      ctor: 'ds.DilettaReceipt',
+      args: const {
+        'titulo': Arg.texto('title'),
+        'carimbo': Arg.texto('timestamp'),
+        'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
+        'idDaTransacao': Arg.texto('transactionId'),
+      },
+      // As linhas e as seções vêm de dado: um comprovante é o que o backend devolveu.
+      acoes: const {'rows': 'linhasDoComprovante', 'sections': 'secoesDoComprovante'},
+      label: 'Comprovante',
+      props: {
+        'titulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'carimbo': const PropDef('text', bindable: true, dartType: 'String'),
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+        'idDaTransacao': const PropDef('text', bindable: true, dartType: 'String'),
+      },
+      defaults: () => {
+        'titulo': 'Comprovante de pagamento',
+        'carimbo': '30/07/2026 às 14:32',
+        'icone': 'circleCheckLight',
+        'idDaTransacao': 'E1234567890',
+      },
+      build: (p) => DilettaReceipt(
+        title: '${p['titulo']}',
+        timestamp: '${p['carimbo']}',
+        icon: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
+        transactionId: _vazio(p['idDaTransacao']) ? null : '${p['idDaTransacao']}',
+        rows: const [
+          DilettaReceiptRow(label: 'Valor', value: 'R\$ 120,00'),
+          DilettaReceiptRow(label: 'Para', value: 'Ana Maria Silva'),
+        ],
+        sections: const [
+          DilettaReceiptSection(
+            icon: 'clipboardListCheckLight',
+            title: 'Origem',
+            rows: [DilettaReceiptRow(label: 'Instituição', value: 'Conta BOLD')],
+          ),
+        ],
+      ),
+      codegen: (p) => 'ds.DilettaReceipt(title: ${_str(p['titulo'])}'
+          ', timestamp: ${_str(p['carimbo'])}'
+          ', rows: linhasDoComprovante, sections: secoesDoComprovante)',
+    );
+
+BlockDef _folha() => BlockDef(
+      type: 'folha',
+      ctor: 'ds.DilettaSheetOverlay',
+      args: const {'aberta': Arg.bool('open')},
+      acoes: const {'onScrimTap': 'aoFechar', 'child': 'conteudoDaFolha'},
+      label: 'Folha (overlay)',
+      props: const {'aberta': PropDef('bool')},
+      defaults: () => {'aberta': true},
+      build: (p) => DilettaSheetOverlay(
+        open: p['aberta'] == true,
+        onScrimTap: () {},
+        child: DilettaFrame.column(
+          padding: const EdgeInsets.all(DilettaSpacing.s5),
+          gap: DilettaSpacing.s3,
+          children: [
+            const DilettaPageTitle(title: 'Confirmar envio', subtitle: 'Revise antes de enviar.'),
+            DilettaButton(label: 'Confirmar', onPressed: () {}, fullWidth: true),
+          ],
+        ),
+      ),
+      codegen: (p) => 'ds.DilettaSheetOverlay(open: ${p['aberta'] == true}'
+          ', onScrimTap: aoFechar, child: conteudoDaFolha)',
+    );
+
+BlockDef _dialogo() => BlockDef(
+      type: 'dialogo',
+      ctor: 'ds.DilettaDialog',
+      args: const {'titulo': Arg.texto('title'), 'mensagem': Arg.texto('message')},
+      acoes: const {'actions': 'acoesDoDialogo'},
+      label: 'Diálogo',
+      props: const {
+        'titulo': PropDef('text', bindable: true, dartType: 'String'),
+        'mensagem': PropDef('multiline', bindable: true, dartType: 'String'),
+      },
+      defaults: () => {
+        'titulo': 'Encerrar a conta?',
+        'mensagem': 'Isso não pode ser desfeito, e o saldo precisa estar zerado.',
+      },
+      build: (p) => DilettaDialog(
+        title: '${p['titulo']}',
+        message: _vazio(p['mensagem']) ? null : '${p['mensagem']}',
+        actions: [
+          DilettaButton(label: 'Cancelar', onPressed: () {}, type: DilettaButtonType.secondary),
+          DilettaButton(label: 'Encerrar', onPressed: () {}),
+        ],
+      ),
+      codegen: (p) => 'ds.DilettaDialog(title: ${_str(p['titulo'])}'
+          ', message: ${_str(p['mensagem'])}, actions: acoesDoDialogo)',
+    );
+
+BlockDef _listaDeRadio() => BlockDef(
+      type: 'listaDeRadio',
+      ctor: 'ds.DilettaRadioList',
+      args: const {'titulo': Arg.texto('title'), 'escolhido': Arg.texto('value')},
+      acoes: const {'options': 'opcoesDoRadio', 'onChanged': 'aoEscolher'},
+      label: 'Lista de escolha',
+      props: const {
+        'titulo': PropDef('text'),
+        'opcoes': PropDef('text'),
+        'escolhido': PropDef('text'),
+      },
+      defaults: () => {
+        'titulo': 'Tipo de conta',
+        'opcoes': 'Corrente, Poupança',
+        'escolhido': 'Corrente',
+      },
+      build: (p) => DilettaRadioList(
+        title: _vazio(p['titulo']) ? null : '${p['titulo']}',
+        options: [
+          for (final o in _listaDeAbas(p['opcoes']))
+            DilettaRadioOption(value: o, label: o),
+        ],
+        value: '${p['escolhido']}',
+        onChanged: (_) {},
+      ),
+      codegen: (p) => 'ds.DilettaRadioList(options: opcoesDoRadio'
+          ', value: ${_str(p['escolhido'])}, onChanged: aoEscolher'
+          '${_vazio(p['titulo']) ? '' : ', title: ${_str(p['titulo'])}'})',
+    );
+
+BlockDef _criterios() => BlockDef(
+      type: 'criterios',
+      ctor: 'ds.DilettaCriteriaList',
+      acoes: const {'items': 'criteriosDaSenha'},
+      label: 'Critérios',
+      props: const {'itens': PropDef('multiline')},
+      defaults: () => {
+        'itens': 'ok | Mínimo 8 caracteres\nok | Uma letra maiúscula\npending | Um número',
+      },
+      build: (p) => DilettaCriteriaList(items: _criteriosDe(p['itens'])),
+      codegen: (p) => 'ds.DilettaCriteriaList(items: criteriosDaSenha)',
+    );
+
+/// Uma linha por critério: `<estado> | <texto>`. Estado desconhecido cai em `pending` com assert.
+List<DilettaCriteriaItem> _criteriosDe(Object? v) {
+  final saida = <DilettaCriteriaItem>[];
+  for (final linha in '$v'.split('\n')) {
+    if (linha.trim().isEmpty) continue;
+    final partes = linha.split('|');
+    final estado = partes.first.trim();
+    saida.add(DilettaCriteriaItem(
+      label: partes.length > 1 ? partes[1].trim() : estado,
+      status: _daOpcao(estado, _porNome(DilettaCriteriaStatus.values),
+          DilettaCriteriaStatus.pending),
+    ));
+  }
+  return saida;
+}
+
+BlockDef _dropdown() => BlockDef(
+      type: 'dropdown',
+      ctor: 'ds.DilettaDropdown',
+      args: const {
+        'rotulo': Arg.texto('label'),
+        'placeholder': Arg.texto('placeholder'),
+        'escolhido': Arg.texto('value'),
+        'erro': Arg.texto('error'),
+      },
+      acoes: const {'items': 'opcoesDoCampo', 'onChanged': 'aoEscolher'},
+      label: 'Campo de seleção',
+      props: const {
+        'rotulo': PropDef('text'),
+        'placeholder': PropDef('text'),
+        'opcoes': PropDef('text'),
+        'escolhido': PropDef('text'),
+        'erro': PropDef('text'),
+      },
+      defaults: () => {
+        'rotulo': 'Banco',
+        'placeholder': 'Escolha o banco',
+        'opcoes': 'Conta BOLD, Itaú, Nubank',
+        'escolhido': '',
+        'erro': '',
+      },
+      build: (p) => DilettaDropdown(
+        label: _vazio(p['rotulo']) ? null : '${p['rotulo']}',
+        placeholder: _vazio(p['placeholder']) ? null : '${p['placeholder']}',
+        items: _listaDeAbas(p['opcoes']),
+        value: _vazio(p['escolhido']) ? null : '${p['escolhido']}',
+        error: _vazio(p['erro']) ? null : '${p['erro']}',
+        onChanged: (_) {},
+      ),
+      codegen: (p) => 'ds.DilettaDropdown(items: opcoesDoCampo, onChanged: aoEscolher'
+          '${_vazio(p['rotulo']) ? '' : ', label: ${_str(p['rotulo'])}'})',
+    );
+
+BlockDef _expansivel() => BlockDef(
+      type: 'expansivel',
+      ctor: 'ds.DilettaExpansionTile',
+      args: const {'titulo': Arg.texto('title'), 'aberto': Arg.bool('initiallyExpanded')},
+      acoes: const {'children': 'conteudoDoExpansivel'},
+      label: 'Expansível',
+      props: const {
+        'titulo': PropDef('text'),
+        'conteudo': PropDef('multiline'),
+        'aberto': PropDef('bool'),
+      },
+      defaults: () => {
+        'titulo': 'Como funciona a alçada?',
+        'conteudo': 'Cada faixa de valor exige um número de assinaturas.',
+        'aberto': true,
+      },
+      build: (p) => DilettaExpansionTile(
+        title: '${p['titulo']}',
+        initiallyExpanded: p['aberto'] == true,
+        children: [
+          DilettaText('${p['conteudo']}', style: DilettaType.bodySm),
+        ],
+      ),
+      codegen: (p) => 'ds.DilettaExpansionTile(title: ${_str(p['titulo'])}'
+          ', children: conteudoDoExpansivel'
+          '${p['aberto'] == true ? ', initiallyExpanded: true' : ''})',
+    );
+
+BlockDef _cartaoDeDestaque() => BlockDef(
+      type: 'cartaoDeDestaque',
+      ctor: 'ds.DilettaFeatureCard',
+      args: const {
+        'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
+        'titulo': Arg.texto('title'),
+        'descricao': Arg.texto('description'),
+        'acao': Arg.texto('actionLabel'),
+      },
+      // A cor da marca do cartão é do PRODUTO, e vem como identificador do tema no código gerado.
+      acoes: const {'brandColor': 'corDaMarca'},
+      label: 'Cartão de destaque',
+      props: {
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+        'titulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'descricao': const PropDef('multiline', bindable: true, dartType: 'String'),
+        'acao': const PropDef('text'),
+      },
+      defaults: () => {
+        'icone': 'piggyBankLight',
+        'titulo': 'Conta PJ',
+        'descricao': 'Alçadas, operadores e aprovação em duas mãos.',
+        'acao': 'Conhecer',
+      },
+      build: (p) => DilettaFeatureCard(
+        icon: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
+        title: '${p['titulo']}',
+        description: '${p['descricao']}',
+        brandColor: BoldPalette.bold.primary04,
+        actionLabel: _vazio(p['acao']) ? null : '${p['acao']}',
+        onTap: () {},
+      ),
+      codegen: (p) => 'ds.DilettaFeatureCard(icon: ds.DilettaIcons.${p['icone']}'
+          ', title: ${_str(p['titulo'])}, description: ${_str(p['descricao'])}'
+          ', brandColor: corDaMarca, onTap: aoTocar)',
+    );
+
 BlockDef _visorDeCodigo() => BlockDef(
       type: 'visorDeCodigo',
       // Só `ctor`, sem `args`: os props deste bloco são de PREVIEW — no código gerado, alvo e fase
@@ -1304,6 +1567,15 @@ void configurarDsDoBold() {
       'chipDeEntrada': _chipDeEntrada(),
       'cartaoDeAcesso': _cartaoDeAcesso(),
       'caixaDeSelecao': _caixaDeSelecao(),
+      // O lote de forma irregular, que a v0.35.0 (`acoes`) tornou declarável.
+      'comprovante': _comprovante(),
+      'folha': _folha(),
+      'dialogo': _dialogo(),
+      'listaDeRadio': _listaDeRadio(),
+      'criterios': _criterios(),
+      'dropdown': _dropdown(),
+      'expansivel': _expansivel(),
+      'cartaoDeDestaque': _cartaoDeDestaque(),
   };
 
   Ds.configurar(PlugueDoDs(
@@ -1313,12 +1585,15 @@ void configurarDsDoBold() {
     grupos: const {
       'Estrutura': ['barraDeStatus', 'tituloDaPagina', 'indicadorDeHome'],
       'Conteúdo': ['texto', 'valor', 'selo', 'aviso', 'icone', 'cabecalhoDeSecao',
-        'ilustracao', 'logo', 'chipDeInfo', 'estadoVazio', 'avatar'],
+        'ilustracao', 'logo', 'chipDeInfo', 'estadoVazio', 'avatar', 'criterios', 'expansivel',
+        'cartaoDeDestaque', 'comprovante'],
       // A lista e as duas linhas ficam juntas porque é assim que se usam: a coleção é dona do
       // separador, e linha fora de lista é linha sem vizinhança.
       'Lista': ['lista', 'linha', 'linhaDeValor'],
       // Retorno de sistema: o que a tela diz enquanto ou depois de algo acontecer.
       'Retorno': ['toast', 'esqueleto', 'girando'],
+      // Camada: o que aparece POR CIMA da tela.
+      'Camada': ['folha', 'dialogo'],
       // Grupo próprio porque é o que só o Bold tem: a vizinhança na paleta é decisão de
       // linguagem, e peça de marca não se mistura com vocabulário herdado.
       'Marca do Bold': ['seloQuantico', 'saldo', 'cabecalhoDaHome', 'resumoDaTransacao'],
@@ -1326,7 +1601,8 @@ void configurarDsDoBold() {
       // As três peças da conta PJ: quem pode mandar quanto, falta quanto, e até quando.
       'Alçadas': ['escadaDeAlcadas', 'progressoDeAprovacao', 'prazoDaPendencia'],
       'Leitor de código': ['visorDeCodigo'],
-      'Entrada': ['campo', 'campoDeBusca', 'interruptor', 'caixaDeSelecao', 'chipDeEntrada'],
+      'Entrada': ['campo', 'campoDeBusca', 'interruptor', 'caixaDeSelecao', 'chipDeEntrada',
+        'dropdown', 'listaDeRadio'],
       'Ação': ['botao', 'barraDeBaixo', 'botaoDeIcone', 'cartaoDeAcesso'],
       'Ritmo': ['ritmo', 'divisor'],
     },
@@ -1379,7 +1655,10 @@ void configurarDsDoBold() {
     tiposDeChromeDeDispositivo: const {'barraDeStatus', 'indicadorDeHome'},
     // O visor é overlay de tela cheia: sem isto o motor daria a ele o padding e o scroll do
     // frame, e o retículo apareceria deslocado do centro da câmera.
-    tiposDeTelaCheia: const {'visorDeCodigo'},
+    // TELA CHEIA: quem é OVERLAY. O visor é retículo de câmera; a folha e o diálogo cobrem a tela com
+    // scrim. Sem isto o card do catálogo os põe numa coluna de scroll — e a folha, que devolve um
+    // `Positioned`, estoura com "Incorrect use of ParentDataWidget" (achado pelo gate de layout).
+    tiposDeTelaCheia: const {'visorDeCodigo', 'folha', 'dialogo'},
     barraDeStatus: () => const DilettaStatusBar(),
     inspetor: (filho, {required ligado}) =>
         DilettaDevMode(enabled: ligado, child: filho),
