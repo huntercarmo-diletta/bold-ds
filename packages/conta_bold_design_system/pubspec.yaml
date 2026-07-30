@@ -13,12 +13,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  # UM só, e por PATH: a cópia da linguagem é código deste repo (ADR-003, sync não
-  # dependência). O filho não conhece irmão nenhum.
+  # UM só, e por TAG. O modo mudou na v0.8.0 do pai, e a razão é a fronteira e não o
+  # artefato: o sync existia porque o build do app de um CLIENTE não pode depender da infra
+  # do fornecedor. O Conta BOLD é produto interno da Diletta, então essa razão não se aplica
+  # — não há quebra dentro da empresa.
+  #
+  # O que isso apaga: o passo de sync, o `.sync.json`, e a classe inteira de defeito "editei
+  # a cópia" (sem cópia local não há drift). Subir de versão é trocar o `ref:`.
+  #
+  # O que isso NÃO muda: receber o pai mais barato não dá direito de editá-lo. Conserto vai
+  # pro pai, sai numa tag, e volta no `ref:`.
   diletta_design_system:
-    path: ../diletta_design_system
+    git:
+      url: git@bitbucket.org:diletta/ds-diletta.git
+      ref: v0.8.0
+      path: packages/diletta_design_system
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  crypto: ^3.0.3

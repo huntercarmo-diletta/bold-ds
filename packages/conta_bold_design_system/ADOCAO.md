@@ -1,6 +1,7 @@
 # Adoção do DS do Bold — o que é rename, o que é variante, o que sobe pro pai
 
-Medido em 2026-07-29 contra `ds-diletta v0.2.0`. Fonte dos componentes do Bold:
+Medido em 2026-07-29 contra `ds-diletta v0.2.0`, revisado contra a **v0.8.0** (que mudou o
+modo de consumo deste filho de sync pra dependência — ver o pedido do raio). Fonte dos componentes do Bold:
 `app-newbold/lib/design_system/widgets` (69 arquivos). O método foi extrair a API dos dois
 lados — classes, construtores nomeados, enums — e comparar, em vez de casar por nome.
 
