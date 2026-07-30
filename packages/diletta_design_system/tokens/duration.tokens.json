@@ -1,0 +1,12 @@
+{
+  "duration": {
+    "$type": "duration",
+    "micro": { "$value": 120 },
+    "short": { "$value": 150 },
+    "medium": { "$value": 250 },
+    "slow": { "$value": 400 },
+    "deliberate": { "$value": 600 },
+    "spinner": { "$value": 700 },
+    "shimmer": { "$value": 1500 }
+  }
+}

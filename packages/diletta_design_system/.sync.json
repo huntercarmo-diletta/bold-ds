@@ -1,0 +1,7 @@
+{
+  "origem": "git@bitbucket.org:diletta/ds-diletta.git",
+  "tag": "v0.3.0",
+  "commit": "700d215a262f50cc3c9a66a5de32e235ac055532",
+  "impressaoDigital": "a7b74140df2c5fdb6475e0c83ac205f2983c439ea69e93ef044afbc355843282",
+  "comoRegerar": "python3 tool/sincroniza_pai_ds.py --tag <tag>"
+}

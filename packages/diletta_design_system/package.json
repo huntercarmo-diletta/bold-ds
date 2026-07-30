@@ -1,0 +1,9 @@
+{
+  "name": "diletta-design-system-tokens",
+  "private": true,
+  "type": "module",
+  "description": "Pipeline de design tokens (DTCG) -> Dart + CSS via Style Dictionary. N\u00e3o faz parte do build Flutter/Vercel; roda em dev/CI.",
+  "scripts": {
+    "tokens": "style-dictionary build --config sd.config.mjs"
+  }
+}

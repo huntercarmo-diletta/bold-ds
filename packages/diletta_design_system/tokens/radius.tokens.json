@@ -1,0 +1,15 @@
+{
+  "radius": {
+    "$type": "number",
+    "r0": { "$value": 0 },
+    "r2": { "$value": 2 },
+    "r4": { "$value": 4 },
+    "r8": { "$value": 8 },
+    "r16": { "$value": 16 },
+    "r24": { "$value": 24 },
+    "r32": { "$value": 32 },
+    "r40": { "$value": 40 },
+    "r56": { "$value": 56 },
+    "r200": { "$value": 200 }
+  }
+}

@@ -1,0 +1,109 @@
+{
+  "$description": "ABSOLUTOS — cores que nenhuma marca é dona, e por isso são do PAI. Raiz própria (`absolute`) justamente pra separar do que é identidade de filho: um filho troca o azul, não troca o branco. Sombra e scrim entram aqui porque são luz bloqueada, não marca.",
+  "absolute": {
+    "white": {
+      "$type": "color",
+      "$value": "#FFFFFF",
+      "$description": "Branco puro."
+    },
+    "black": {
+      "$type": "color",
+      "$value": "#000000",
+      "$description": "Preto puro."
+    },
+    "transparent": {
+      "$type": "color",
+      "$value": "#00000000",
+      "$description": "Ausência de cor. Não pinta."
+    },
+
+    "whiteAlpha24": {
+      "$type": "color",
+      "$value": "#FFFFFF3D",
+      "$description": "white @ 24% — bg de chip de banner, sobre gradiente da marca."
+    },
+    "whiteAlpha32": {
+      "$type": "color",
+      "$value": "#FFFFFF52",
+      "$description": "white @ 32% — divisor tracejado de banner."
+    },
+    "whiteAlpha38": {
+      "$type": "color",
+      "$value": "#FFFFFF61",
+      "$description": "white @ 38% — borda de chip, ponto inativo de progresso."
+    },
+    "whiteAlpha80": {
+      "$type": "color",
+      "$value": "#FFFFFFCC",
+      "$description": "white @ 80% — superfície de vidro (TopAppBar, BottomNav, Toast, sticky)."
+    },
+    "whiteAlpha90": {
+      "$type": "color",
+      "$value": "#FFFFFFE6",
+      "$description": "white @ 90% — véu de folha / scrim claro."
+    },
+
+    "blackAlpha8": {
+      "$type": "color",
+      "$value": "#00000014",
+      "$description": "black @ 8% — sombra de toast."
+    },
+    "blackAlpha13": {
+      "$type": "color",
+      "$value": "#00000021",
+      "$description": "black @ 13% — sombra de card, bottom nav e barra de chat."
+    },
+    "blackAlpha18": {
+      "$type": "color",
+      "$value": "#0000002D",
+      "$description": "black @ 18% — sombra de tecla pressionada do numpad."
+    },
+    "blackAlpha20": {
+      "$type": "color",
+      "$value": "#00000033",
+      "$description": "black @ 20% — sombra de tooltip."
+    },
+    "blackAlpha40": {
+      "$type": "color",
+      "$value": "#00000066",
+      "$description": "black @ 40% — scrim padrão de bottomsheet."
+    },
+    "blackAlpha85": {
+      "$type": "color",
+      "$value": "#000000D9",
+      "$description": "black @ 85% — overlay de tela cheia (biometria)."
+    },
+
+    "slateAlpha10": {
+      "$type": "color",
+      "$value": "#1018281A",
+      "$description": "slate #101828 @ 10% — camada externa da sombra do knob do ToggleSwitch. Fica nos absolutos apesar de não ser preto puro: é sombra, e o leve navy só a deixa menos suja sobre cinza."
+    },
+    "slateAlpha6": {
+      "$type": "color",
+      "$value": "#1018280F",
+      "$description": "slate #101828 @ 6% — camada interna da mesma sombra."
+    },
+
+    "debugRuler": {
+      "$type": "color",
+      "$value": "#E91E632E",
+      "$description": "Tinta de DEPURAÇÃO — a listra que marca espaçamento no inspetor. Magenta @ 18%, cor que nenhum design system usa em componente. Era a cor da marca do CPF, o que dava dois problemas: num filho azul a régua virava a própria marca, e num filho de baixo contraste desaparecia."
+    },
+    "debugAccent": {
+      "$type": "color",
+      "$value": "#E91E63",
+      "$description": "Magenta cheio — contorno do componente sob o cursor e as linhas de token no painel do inspetor. Mesma família da régua, então o inspetor lê como UMA ferramenta."
+    },
+    "debugSurface": {
+      "$type": "color",
+      "$value": "#16161A",
+      "$description": "Superfície do painel do inspetor. Quase preto neutro de propósito: painel de ferramenta não é superfície de produto, e escuro fixo é o que mantém o texto legível sobre qualquer marca (é o que o próprio inspetor do Flutter faz)."
+    },
+    "debugMuted": {
+      "$type": "color",
+      "$value": "#C9C9CF",
+      "$description": "Texto secundário do painel do inspetor (pares prop: valor), sobre debugSurface."
+    }
+  }
+}

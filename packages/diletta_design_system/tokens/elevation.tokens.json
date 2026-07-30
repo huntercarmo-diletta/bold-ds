@@ -1,0 +1,14 @@
+{
+  "elevation": {
+    "$type": "shadow",
+    "low": { "$value": { "color": "#00000021", "offsetX": 0, "offsetY": 2, "blur": 8, "spread": 0 } },
+    "medium": { "$value": { "color": "#00000021", "offsetX": 5, "offsetY": 4, "blur": 20, "spread": 0 } },
+    "soft": { "$value": { "color": "#00000014", "offsetX": 0, "offsetY": 4, "blur": 10, "spread": 0 } },
+    "overlay": { "$value": { "color": "#00000033", "offsetX": 0, "offsetY": 4, "blur": 12, "spread": 0 } },
+    "overlayLg": { "$value": { "color": "#00000033", "offsetX": 0, "offsetY": 4, "blur": 16, "spread": 0 } },
+    "keyPress": { "$value": { "color": "#0000002D", "offsetX": 0, "offsetY": 1, "blur": 0, "spread": 0 } },
+    "subtle": { "$value": { "color": "#00000005", "offsetX": 0, "offsetY": 2, "blur": 5, "spread": 0 } },
+    "input": { "$value": { "color": "#0000001A", "offsetX": 5, "offsetY": 4, "blur": 20, "spread": 0 } },
+    "heavy": { "$value": { "color": "#00000080", "offsetX": 0, "offsetY": 4, "blur": 10, "spread": 0 } }
+  }
+}

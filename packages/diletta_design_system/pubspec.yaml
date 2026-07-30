@@ -1,0 +1,32 @@
+name: diletta_design_system
+description: >-
+  A linguagem visual Diletta — paleta como TIPO, papéis semânticos, componentes.
+  Não contém a identidade de nenhum produto: um filho fornece a paleta e recebe a
+  linguagem inteira com a marca dele.
+version: 0.2.0
+publish_to: none
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_svg: ^2.0.10
+  vector_graphics: ^1.2.2
+
+dev_dependencies:
+  flutter_lints: ^4.0.0
+  flutter_test:
+    sdk: flutter
+  vector_graphics_compiler: ^1.2.6
+
+flutter:
+  uses-material-design: true
+  # Ícones e ilustrações são o conjunto HERDÁVEL: um filho usa estes ou fornece os
+  # dele respeitando o formato (`.svg.vec` monocromático). Logo e fonte NÃO estão
+  # aqui — são identidade, e moram no filho.
+  assets:
+    - assets/icons/
+    - assets/illustrations/

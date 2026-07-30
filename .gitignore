@@ -43,3 +43,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Sub-pacotes (packages/*): build e lock de library nao viajam.
+build/
+packages/*/pubspec.lock
