@@ -57,9 +57,21 @@ Saída em `packages/catalog/build/web` (~49 MB, quase tudo CanvasKit). Leva 1-2 
 ### 3 · Autenticar no Cloudflare — **confira a CONTA antes de publicar**
 
 ```bash
-npx wrangler login     # interativo: rode você, não o agente
+npx wrangler login     # interativo
 npx wrangler whoami    # e confirme o e-mail e a conta que apareceram
 ```
+
+**Pra cair na conta certa sem depender de qual sessão está aberta**, o `login` aceita não abrir navegador
+nenhum, e aí a URL vai pro perfil que você escolher:
+
+```bash
+npx wrangler login --browser=false          # imprime a URL e espera o callback
+open -na "Google Chrome" --args --profile-directory="Profile 19" "<a URL impressa>"
+```
+
+`Profile 19` é o perfil do Chrome logado em `huntercarmo@dilettasolutions.com` nesta máquina. Os perfis e
+seus e-mails saem de `~/Library/Application Support/Google/Chrome/Local State`
+(`profile.info_cache`).
 
 **A armadilha, medida em 2026-07-30:** o `wrangler login` usa a sessão do Cloudflare que já está aberta
 no navegador. Se você estiver logado na conta PESSOAL, ele autoriza a pessoal sem perguntar nada — e o
@@ -86,9 +98,17 @@ npx wrangler deploy
 No fim ele imprime a URL, no formato `https://conta-bold-ds.<subdomínio-da-conta>.workers.dev`. O
 subdomínio é da CONTA — é por ele que se percebe conta errada depois do fato.
 
-**Espere uns segundos antes de conferir.** No primeiro deploy o `/` respondeu 404 por alguns instantes e
-depois passou a 200 — é propagação, não erro de configuração. Conferir cedo demais faz procurar defeito
-onde não tem.
+No ar desde 2026-07-30, na conta `huntercarmo@dilettasolutions.com`:
+
+```
+https://conta-bold-ds.huntercarmo.workers.dev
+```
+
+**Espere uns segundos antes de conferir, e confira MAIS DE UM caminho.** A propagação é irregular: nos
+dois deploys deste catálogo, a raiz começou em 404 e virou 200 em segundos, e no segundo deploy
+`/main.dart.js` e o fallback SPA ainda respondiam 404 depois de a raiz já estar 200 — normalizaram ~1
+minuto depois. Conferir cedo demais, ou conferir só a raiz, faz procurar defeito de configuração onde só
+tem tempo.
 
 **Publicar de novo é repetir 2 e 4.** Não há deploy automático no push, e isso é escolha: o catálogo
 publica quando alguém decide publicar.
