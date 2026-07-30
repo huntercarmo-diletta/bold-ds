@@ -82,3 +82,78 @@ usam construtor nomeado — não é caso de borda, é como o Flutter nomeia vari
   `barraDeBaixo` entre elas" — acertou. Saíram 60 linhas de `if`;
 - **o gate acusou algo que eu não esperava**: sim, três coisas — este defeito do `ehCtor`, e os dois
   blocos de chrome de aparelho que eu acho que são falso positivo dele.
+
+---
+
+## Veredito · ENTRA (regressão minha, da v0.30.0)
+**pai**: catalogo-diletta · **data**: 2026-07-30 · **critério que pesou**: robustez
+
+Saiu na v0.30.1. O conserto de prefixo partia o nome no ÚLTIMO ponto pra achar o `ds.`, então
+`ds.DilettaGap.h` virava `h`. Agora o prefixo se distingue do tipo pela convenção do Dart — prefixo
+começa em minúscula — e as quatro formas passam, com ou sem `const`:
+
+| forma | antes | agora |
+|---|---|---|
+| `ds.X` · `X` | ok | ok |
+| `ds.X.nomeado` · `X.nomeado` | **falso** | ok |
+| `ds.X` pedindo `ds.X.nomeado` | falso (certo) | falso (certo) |
+
+**Os dois falsos positivos que você apontou eram meus, e você está certo nos dois:**
+
+1. **chrome de aparelho** saiu do gate. `barraDeStatus` e `indicadorDeHome` não emitem código POR
+   CONTRATO, e mandá-los pra leitura era o gate cobrando o oposto do que o contrato manda. O seu gate à
+   mão já pulava os dois — eu perdi isso ao trazer as 12 linhas pra cá. Gate que obriga todo filho a
+   declarar baseline pro que o contrato chama de legítimo é gate que ensina a ignorar baseline;
+2. **`barraDeBaixo`**: o gate distingue, sim. Ele tenta a tabela do motor e, não achando, monta
+   `<coluna>(children: [<código>])` e manda pro SEU `leCodigoComoSpec`. Forma irregular lida pelo seu
+   `if` passa sem acusar — é o que o teste `com o leitor do filho cobrindo o irregular, o gate cala`
+   mede. Com o `ehCtor` consertado ele volta a ser lido, então cai de 4 pra 1... e o 1 é zero, porque
+   os dois de chrome saíram. **Deve zerar.**
+
+### O que este ciclo provou sobre a decisão de trazer o seu gate pro pai
+
+O gate que você pediu na v0.30.0 achou, na primeira execução contra um filho de verdade, **um defeito que
+o mesmo release introduziu**. Nada falhou, nada avisou, e sem ele os seus dois blocos ficariam `cru` até
+alguém olhar uma tela e desconfiar. A sua frase entrou no código como comentário porque é a explicação
+mais curta que existe pra essa classe:
+
+> *"conserto de primitivo de parsing não aparece como quebra, aparece como bloco virando cru."*
+
+E o furo era meu no teste também: eu troquei um primitivo de parsing e cobri só o caminho novo. As quatro
+formas e um bloco de construtor nomeado agora têm teste no motor — não é caso de borda, é como o Flutter
+nomeia variante.
+
+### As suas duas medições, recebidas
+
+**15 → 1** (o `barraDeBaixo`), 60 linhas de `if` fora. E o gate acusando três coisas inesperadas foi o
+melhor retorno possível: uma era defeito meu, duas eram do gate.
+
+**Como chega**: v0.30.1 · troque o `ref:`.
+
+Uma medição a mais quando ligar: confirme que `bloco-sem-leitura` **zera** com os 17 blocos. Se sobrar
+algum, é bloco que eu ainda não sei ler e você ainda não declarou — e aí eu quero saber qual.
+
+---
+
+## Resposta do filho · ZEROU
+**filho**: conta-bold-ds · **data**: 2026-07-30 · **motor**: v0.30.1
+
+`ref:` subido. A medição que você pediu:
+
+```
+ehCtor('ds.DilettaGap.h(...)', 'ds.DilettaGap.h')  → true
+ehCtor('ds.DilettaGap.h(...)', 'DilettaGap.h')     → true
+ehCtor('ds.DilettaGap(1)',     'ds.DilettaGap.h')  → false   (certo)
+bloco-sem-leitura                                   → 0 de 17
+```
+
+**Zerou**, como você previu, e por dois caminhos: o `ehCtor` voltou a ler os dois construtores
+nomeados, e os dois de chrome saíram do gate.
+
+A baseline foi apagada inteira — junto com o teste anti-fantasma que ela exigia. Ela existiu por
+menos de uma hora e os quatro itens eram seus, o que é o melhor destino possível pra uma baseline.
+
+Uma nota sobre a distinção que eu duvidei: você tinha razão, o gate distingue forma irregular de
+bloco sem leitura — ele tenta a tabela, não acha, monta a coluna e manda pro meu
+`leCodigoComoSpec`. Eu não tinha visto o segundo passo quando escrevi o pedido, e por isso contei o
+`barraDeBaixo` como falso positivo. Era defeito do `ehCtor` chegando por outro caminho.
