@@ -4,21 +4,18 @@
 /// `ctor` + `args` no registro, e o motor emite e lê com a mesma declaração: a volta deixou de
 /// ser artefato, porque é a ida invertida.
 ///
-/// **Sobraram QUATRO entradas**, e elas se dividem em duas razões — uma é decisão do motor, a outra é
-/// defeito dele com pedido escrito:
+/// **Sobraram DUAS entradas**, e as duas são a mesma razão: ANINHAMENTO, que a tabela não cobre por
+/// decisão do motor.
 ///
-/// Por DECISÃO (aninhamento, que a tabela não cobre):
 /// - `barraDeBaixo` aninha três níveis (`BottomApp(button: NavigationButton(primary:
 ///   NavigationAction(label:)))`) — o rótulo mora lá embaixo;
 /// - `lista` tem FILHOS em vez de props, e é a única que recursa: cada item volta por `_bloco`, então a
 ///   linha de menu e a linha de valor são lidas pela tabela, de graça.
 ///
-/// Por DEFEITO (`docs/pedidos/2026-07-30-a-tabela-nao-declara-argumento-posicional.md`):
-/// - `texto` e `ritmo` recebem o conteúdo POSICIONAL, e `Arg` só sabe emitir `nome: valor`. Eles
-///   estavam na tabela e voltaram pra cá.
+/// Chegaram a ser quatro por um defeito do motor — `texto` e `ritmo` recebem o conteúdo POSICIONAL e a
+/// tabela só sabia emitir `nome: valor`. A v0.33.1 trouxe `Arg.textoPosicional`, e os dois voltaram.
 ///
-/// Antes: 15 entradas à mão, 60 linhas de `if`. Agora: a tabela mais quatro casos — e dois deles saem
-/// quando o pai souber declarar argumento posicional.
+/// Antes: 15 entradas à mão, 60 linhas de `if`. Agora: a tabela mais dois casos de aninhamento.
 library;
 
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
@@ -71,22 +68,7 @@ Block _bloco(String expr) {
     );
   }
 
-  // 3 · Os dois de argumento POSICIONAL, que saíram da tabela por defeito do motor (pedido
-  // `2026-07-30-a-tabela-nao-declara-argumento-posicional.md`): `Arg` só emite `nome: valor`, e o
-  // conteúdo destes dois é posicional. Voltam pra tabela quando o pai souber declarar posicional.
-  if (ehCtor(expr, 'ds.DilettaGap.h') || ehCtor(expr, 'DilettaGap.h')) {
-    return Block(id: _novoId(), type: 'ritmo', props: {
-      'tamanho': membroDeEnum(expr, 'ds.DilettaSpacing') ?? 's4',
-    });
-  }
-  if (ehCtor(expr, 'ds.DilettaText') || ehCtor(expr, 'DilettaText')) {
-    return Block(id: _novoId(), type: 'texto', props: {
-      'conteudo': primeiraStringPosicional(expr) ?? '',
-      'preset': membroDeEnum(expr, 'ds.DilettaType') ?? 'bodyMd',
-    });
-  }
-
-  // 4 · A forma irregular, que fica fora da tabela por decisão do motor: o rótulo mora três níveis
+  // 3 · A forma irregular, que fica fora da tabela por decisão do motor: o rótulo mora três níveis
   // abaixo do construtor, e é o próprio pai que diz que tabela não cobre aninhamento.
   if (ehCtor(expr, 'ds.DilettaBottomApp.button') ||
       ehCtor(expr, 'DilettaBottomApp.button')) {
@@ -96,7 +78,7 @@ Block _bloco(String expr) {
     });
   }
 
-  // 5 · Desconhecido: bloco cru com o código dentro. A tela aparece, e o pedaço que ninguém
+  // 4 · Desconhecido: bloco cru com o código dentro. A tela aparece, e o pedaço que ninguém
   // declarou fica VISÍVEL como código à mão — que é o sinal certo pra declarar o bloco que falta,
   // em vez de o pedaço desaparecer em silêncio.
   return Block(id: _novoId(), type: 'cru', props: {'codigo': expr});

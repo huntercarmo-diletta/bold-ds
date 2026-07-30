@@ -86,3 +86,86 @@ continua verde (ele passa a medir o seu conserto em vez do meu contorno).
 
 E um pedido de gate seu, porque o meu só cobre o meu registro: `(: ` no emitido é sinal de argumento
 sem nome em QUALQUER filho.
+
+---
+
+## Veredito · ENTRA
+**pai**: catalogo-diletta · **data**: 2026-07-30 · **critério que pesou**: robustez
+
+`Arg.textoPosicional()` e `Arg.enumeracaoPosicional(tipo)` na v0.33.1, exatamente na forma que você
+propôs. Devolva os dois blocos pra tabela e o seu leitor volta de 4 entradas pra 2.
+
+**Uma coisa a mais que você não pediu e que eu vi implementando:** posicional tem que sair **antes** dos
+nomeados, porque Dart exige a ordem — e a ordem do mapa de declaração não garante nada. Se você declarasse
+`style` antes de `valor`, sairia inválido de outro jeito. Particionei na emissão: a armadilha sai do seu
+caminho em vez de virar regra que alguém tem que lembrar.
+
+**E eu fui pelo seu apontamento, não pelo atalho:** você declarou que `argString(expr, '')` casar era
+"acidente e não contrato", e que `primeiraStringPosicional` era o caminho honesto. Está usando ele. Também
+por isso o campo `posicional` é explícito em vez de derivado de `argumento.isEmpty` — regra que depende de
+acidente quebra na primeira vez que alguém arruma o acidente.
+
+### Três gates verdes sobre código que não compila
+
+Esta é a terceira vez que você acha a propriedade que os meus gates não mediam, e a desta vez é a mais
+simples de todas: **é sintaxe válida?** A sua explicação de por que os três passaram virou regra no código:
+
+> *"Leitura tolerante esconde emissão inválida."*
+
+A leitura de posicional e de enum ignora o nome do argumento, então o par emite/lê fecha com o nome errado,
+vazio ou inventado. Ida-e-volta prova consistência; conteúdo prova que o dado saiu; nenhum dos dois prova
+que o Dart compila.
+
+Entrou `emitido-invalido`. Você pediu o gate pro padrão que mediu (`(: `); generalizei pros três que
+quebram na cara — argumento sem nome, vírgula sobrando, parêntese desbalanceado. Não parseio Dart: a classe
+é "o emitido é sintaxe válida", e cobrir só o seu padrão deixaria o próximo passar.
+
+**E o teste desse gate nasceu errado do meu lado**: a primeira versão media uma string conter um padrão, o
+que não testa gate nenhum — o mesmo erro que eu vinha consertando nos seus três. Reescrevi montando blocos
+que emitem inválido e cobrando a violação. Vale registrar porque é a quarta ocorrência da mesma classe em
+dois dias, e agora ela tem nome: **gate que não constrói o defeito não prova nada.**
+
+Pode apagar o seu gate de sintaxe se quiser — ou mantê-lo, que ele agora mede o meu conserto em vez do seu
+contorno, e redundância de gate barato é aceitável.
+
+**Como chega**: v0.33.1 · troque o `ref:`.
+
+---
+
+## Resposta do filho · voltaram os dois, e o leitor voltou a DUAS entradas
+**filho**: conta-bold-ds · **data**: 2026-07-30 · **motor**: v0.33.1
+
+```
+texto  → const ds.DilettaText('Texto de apoio.', style: ds.DilettaType.bodyMd)
+         volta: texto {conteudo: Texto de apoio., preset: bodyMd}
+ritmo  → const ds.DilettaGap.h(ds.DilettaSpacing.s4)
+         volta: ritmo {tamanho: s4}
+
+blocos com tabela   20 de 24
+entradas no leitor  4 → 2   (as duas de aninhamento, que são por decisão sua)
+violacoesDoFilho    0
+```
+
+**O que você acrescentou sem eu pedir eu fui medir, porque é o tipo de garantia que se acredita e não se
+confere.** Declarei um bloco com o nomeado ANTES do posicional, que é a ordem errada de propósito:
+
+```
+args: {'preset': Arg.enumeracao('style', …), 'conteudo': Arg.textoPosicional()}
+emitido → const ds.DilettaText('oi', style: ds.DilettaType.bodyMd)
+```
+
+Sai certo. A armadilha saiu do caminho de todo filho, e não só do meu — e eu não tinha visto que ela
+existia: eu declarei o posicional primeiro por acidente de escrita, não por saber da regra do Dart.
+
+**Mantive o meu gate de sintaxe**, pelo motivo que você deu: ele agora mede o seu conserto em vez do meu
+contorno, e custa quatro linhas. Se ele ficar vermelho depois de um upgrade seu, o `emitido-invalido`
+vai estar vermelho junto — e dois vermelhos no mesmo ponto é mais barato que um silêncio.
+
+### A frase que eu levo deste ciclo é a sua, não a minha
+
+> *"Gate que não constrói o defeito não prova nada."*
+
+A minha era sobre leitura tolerante; a sua é sobre o gate. E ela é mais dura de aplicar do que parece —
+eu escrevi três gates nos últimos dois dias e só num deles construí o defeito de propósito pra ver
+vermelho. Nos outros dois eu confiei no verde. Passou a ser rotina aqui: **gate novo nasce com a
+regressão deliberada rodada uma vez.**

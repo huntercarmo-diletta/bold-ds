@@ -41,15 +41,18 @@ TextStyle _estiloDe(String preset) => switch (preset) {
       _ => DilettaType.bodyMd,
     };
 
-/// FORA DA TABELA por defeito do motor, e com pedido escrito:
-/// `docs/pedidos/2026-07-30-a-tabela-nao-declara-argumento-posicional.md`.
-///
-/// O conteúdo deste componente é POSICIONAL (`ds.DilettaText('oi')`), e `Arg` só sabe emitir
-/// `nome: valor`. Declarar o nome vazio — que é o que eu fazia — emite `ds.DilettaText(: 'oi')`, que
-/// não compila. Enquanto não houver `Arg` posicional, o `codegen` à mão emite certo e o leitor tem a
-/// entrada correspondente.
+/// O conteúdo deste componente é POSICIONAL (`ds.DilettaText('oi')`), e isso saiu da tabela e voltou:
+/// declarar o nome vazio emitia `ds.DilettaText(: 'oi')`, que não compila. A v0.33.1 do motor trouxe
+/// `Arg.textoPosicional()`, e com ela o bloco volta pra tabela — e o motor ainda garante o que eu não
+/// tinha pedido: posicional sai ANTES dos nomeados, porque é o que o Dart exige e a ordem do mapa não
+/// garante. `docs/pedidos/2026-07-30-a-tabela-nao-declara-argumento-posicional.md`.
 BlockDef _texto() => BlockDef(
       type: 'texto',
+      ctor: 'ds.DilettaText',
+      args: const {
+        'conteudo': Arg.textoPosicional(),
+        'preset': Arg.enumeracao('style', 'ds.DilettaType'),
+      },
       label: 'Texto',
       props: const {
         'conteudo': PropDef('multiline', bindable: true, dartType: 'String'),
@@ -231,10 +234,12 @@ BlockDef _aviso() => BlockDef(
           ', illustration: ds.DilettaIllustration.${p['ilustracao']})',
     );
 
-/// FORA DA TABELA pelo mesmo defeito do `texto`: o espaço do pai recebe o token POSICIONAL
-/// (`ds.DilettaGap.h(ds.DilettaSpacing.s4)`), e a tabela emitiria `.h(: ds.DilettaSpacing.s4)`.
+/// O espaço recebe o token POSICIONAL (`ds.DilettaGap.h(ds.DilettaSpacing.s4)`) — mesmo caso do
+/// `texto`, mesma volta pra tabela na v0.33.1.
 BlockDef _ritmo() => BlockDef(
       type: 'ritmo',
+      ctor: 'ds.DilettaGap.h',
+      args: const {'tamanho': Arg.enumeracaoPosicional('ds.DilettaSpacing')},
       label: 'Espaço',
       props: const {'tamanho': PropDef('spacingToken', options: ['s2', 's3', 's4', 's6', 's8'])},
       defaults: () => {'tamanho': 's4'},

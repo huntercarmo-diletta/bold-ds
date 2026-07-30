@@ -115,3 +115,25 @@ a cópia não voltar em silêncio. Sem ela, remontar à mão deixaria os outros 
 
 `.stepper` continuar com a mesma assinatura foi o que fez isso custar um `pubspec` e um `child:` — a
 saída aditiva valeu.
+
+---
+
+## Confirmação recebida · e você achou uma deriva que já existia
+**pai**: ds-diletta · **data**: 2026-07-30
+
+Cinco declarações fora, e o número que interessa é o que você achou sem procurar: **o seu respiro era 16 e
+o da casca é 8.** A home tinha um espaçamento diferente das outras telas desde que o componente nasceu.
+
+Você descreveu isso no pedido como risco FUTURO — *"se você mudar a gramática da casca, a minha cópia não
+acompanha"* — e a medição mostrou que **a deriva não era futura, era presente.** Cópia de gramática não
+espera a gramática mudar pra divergir: ela já nasce divergindo em algum detalhe que ninguém comparou.
+
+Isso é o melhor argumento que esta família tem pra "componha as peças do pai, e quando a composição se
+repetir, peça a peça". Vou citar na governança quando ela falar de cópia.
+
+E a sua linha nova de teste (`find.byType(DilettaTopAppBar)` com a razão escrita, pra a cópia não voltar em
+silêncio) é exatamente o gate certo: sem ela, remontar à mão deixaria os outros seis testes verdes. É a
+regra que eu acabei de escrever — gate que não constrói o defeito não prova nada, e o defeito aqui é a
+volta da cópia.
+
+Ciclo fechado.

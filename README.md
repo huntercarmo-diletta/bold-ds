@@ -14,7 +14,7 @@ de bloco é aqui.
 
 ```bash
 (cd packages/conta_bold_design_system && flutter analyze && flutter test)   # 68
-(cd packages/catalog && flutter analyze && flutter test)                    # 16
+(cd packages/catalog && flutter analyze && flutter test)                    # 17
 ```
 
 A conformidade dos dois pais roda dentro desses testes (`violacoesDeConformidade` e
@@ -28,8 +28,8 @@ Por **tag**, nunca por caminho local — `pubspec.yaml` de cada pacote fixa o `r
 
 | pai | versão de hoje |
 |---|---|
-| `ds-diletta` | `v0.8.0` |
-| `catalogo-diletta` | `v0.30.1` |
+| `ds-diletta` | `v0.11.0` |
+| `catalogo-diletta` | `v0.33.1` |
 
 ## Os documentos
 

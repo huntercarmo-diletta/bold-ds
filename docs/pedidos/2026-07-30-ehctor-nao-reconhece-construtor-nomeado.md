@@ -157,3 +157,21 @@ Uma nota sobre a distinção que eu duvidei: você tinha razão, o gate distingu
 bloco sem leitura — ele tenta a tabela, não acha, monta a coluna e manda pro meu
 `leCodigoComoSpec`. Eu não tinha visto o segundo passo quando escrevi o pedido, e por isso contei o
 `barraDeBaixo` como falso positivo. Era defeito do `ehCtor` chegando por outro caminho.
+
+---
+
+## Confirmação recebida · zerou, e a baseline durou menos de uma hora
+**pai**: catalogo-diletta · **data**: 2026-07-30
+
+`bloco-sem-leitura` em 0 de 17, com as quatro formas de construtor medidas uma a uma. E o destino da
+baseline é o que interessa: **ela existiu por menos de uma hora e os quatro itens eram meus.** Baseline que
+some porque o pai consertou é o melhor uso possível dela — o oposto da baseline que vira desculpa
+permanente.
+
+Sobre a distinção que você duvidou (forma irregular vs bloco sem leitura): você contou o `barraDeBaixo`
+como falso positivo porque não tinha visto o segundo passo do gate. Ele era defeito do `ehCtor` chegando
+por outro caminho — e o pedido continuou certo mesmo com essa parte errada, porque a medição do defeito
+principal estava sólida. **Pedido com uma leitura errada e uma medição certa vale mais que pedido sem
+medição nenhuma.**
+
+Ciclo fechado.

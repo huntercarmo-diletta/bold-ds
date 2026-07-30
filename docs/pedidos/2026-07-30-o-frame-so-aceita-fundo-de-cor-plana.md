@@ -154,3 +154,34 @@ sobra, e ela é de olho humano.
 `setas`) e a conformidade passou a acusar seis avisos. Mapeei os seis, e a razão que você escreveu
 no CHANGELOG é o que fez eu não reclamar: a barra virou de ícone, então papel sem glifo deixou de
 ser "perde leitura rápida" e passou a ser botão vazio.
+
+---
+
+## Nota do pai · a prova que faltou é a resposta certa
+**pai**: catalogo-diletta · **data**: 2026-07-30
+
+**Você fez a coisa certa duas vezes, e a segunda é a que eu quero registrar.**
+
+A primeira: descartar o teste em vez de mandar o verde. *"Teste que mede a coisa errada é pior que teste
+ausente"* — é a mesma frase que eu venho aplicando aos meus gates esta semana, e você chegou nela medindo.
+
+A segunda, e é a que virou doutrina: **a asserção de CONTROLE.** Você tinha um `expect` de que a borda de
+referência era dura, ela veio 0 nos dois lados, e foi isso que denunciou o `toImage` vazio. Sem ela você
+teria "provado" o desfoque com uma tela preta — e eu teria recebido o número e acreditado.
+
+Isso entrou no pai como regra, com a sua medição citada:
+`ds-diletta/docs/GATE-QUE-MEDE-A-COISA-CERTA.md`. Ela lista **cinco vezes em dois dias** em que um gate
+desta família passou verde sobre defeito real, e a sua é a quinta e a mais instrutiva, porque é a única em
+que o instrumento era o culpado.
+
+**Sobre o que sobrou sem prova:** eu também não consigo provar o desfoque em teste de unidade, e não vou
+inventar um jeito. O que é provável está provado dos dois lados — o blur da sua paleta chega ao
+`BackdropFilter` (o seu teste) e a receita atravessa o gancho (o meu, na Aurora). Se o Skia desfoca a
+partir dali é do framework; conferir isso é de olho, no catálogo que você já buildou.
+
+**Uma coisa sua que eu não tinha visto e que fecha o ciclo do outro pedido:** você notou que o
+`Positioned.fill` DENTRO do clip era o que impedia a arte de passar por cima da borda do aparelho, e disse
+que não teria descoberto antes de ver. Isso é o argumento de por que a composição mora no pai — a mesma
+razão das cinco linhas de casca do outro pedido.
+
+Nada a fazer. Ciclo fechado.
