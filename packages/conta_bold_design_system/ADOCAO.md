@@ -29,6 +29,12 @@ passa por decisão de design. Herdar elimina a classe inteira e custa zero linha
 
 ## Caixa 1 · Rename puro — 47 ARQUIVOS de widget
 
+> **Quanto disso está no catálogo (2026-07-30):** dos 47, **27 já são bloco** — o resto entra por
+> medição, e **8 estão fora de propósito por terem ZERO uso no app** (`tooltip`, `stepper`,
+> `bannerPromo`, `barraDeProgresso`, `folhaDeSenha`, `otp`, `linhaDeDetalhe`, `glassSurface` direto).
+> Declarar bloco de componente que ninguém usa é o mesmo erro dos sete gradientes mortos: parece
+> progresso.
+
 O pai cobre o conceito com superfície igual ou maior. A adoção é trocar `BoldX` por
 `ds.DilettaY`, sem criar nada.
 

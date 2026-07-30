@@ -26,6 +26,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [`ehCtor` não reconhece construtor nomeado](pedidos/2026-07-30-ehctor-nao-reconhece-construtor-nomeado.md) | ENTRA (regressão do pai) | v0.30.1 |
 | [a tabela omite argumento igual ao default](pedidos/2026-07-30-a-tabela-omite-argumento-igual-ao-default.md) | ENTRA | **v0.32.1** |
 | [a tabela não declara argumento posicional](pedidos/2026-07-30-a-tabela-nao-declara-argumento-posicional.md) | ENTRA | **v0.33.1** |
+| [a tabela não declara callback](pedidos/2026-07-30-a-tabela-nao-declara-callback.md) | **sem veredito** | — |
 
 ## O que os pais me mandaram
 
@@ -40,7 +41,7 @@ pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedid
 
 ## Dois números que este ledger deixa ver
 
-**9 pedidos, 9 com veredito, 9 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
+**10 pedidos, 9 com veredito, 9 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
 sobre o método e não sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
 
 **Três dos nove eram defeito do pai, não lacuna** — e os três apareceram na primeira execução de um

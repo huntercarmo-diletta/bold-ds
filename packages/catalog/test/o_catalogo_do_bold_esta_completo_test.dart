@@ -271,6 +271,42 @@ void main() {
       expect(spec.blocks.single.slots['itens'], hasLength(1));
     });
 
+    test('a tabela PERDE o callback — dívida COM pedido escrito', () {
+      // `docs/pedidos/2026-07-30-a-tabela-nao-declara-callback.md`
+      //
+      // `Arg` tem quatro kinds — texto, bool, número, enum — e nenhum emite IDENTIFICADOR. Callback é
+      // identificador (`onPressed: aoTocar`), então todo bloco de tabela cujo componente recebe um sai
+      // sem ele.
+      //
+      // Duas consequências, e a segunda é a pior:
+      //
+      // - **2 blocos não compilam**: `DilettaButton.onPressed` e `DilettaToggleSwitch.onChanged` são
+      //   `required`. O `botao` é o bloco mais comum de qualquer tela;
+      // - **9 blocos compilam INERTES**: botão de ícone que não responde, chip que não filtra, busca
+      //   que não busca. Isso não falha em lugar nenhum — é a classe de defeito que este catálogo
+      //   existe pra não produzir.
+      //
+      // Fixa o número ATUAL de propósito: quando o pai consertar, este teste falha e sai junto com a
+      // dívida.
+      final perdem = <String>[];
+      for (final def in Ds.blocos.values.where(temTabela)) {
+        final daTabela = codigoDeBlocoDeclarado(def, def.defaults());
+        final aMao = def.codegen(def.defaults());
+        // As DUAS convenções: o pai nomeia `onPressed`, este filho nomeia `aoTrocar`. Contar só a
+        // do pai dá 10 em vez de 12, e os dois que somem são blocos nascidos AQUI (`saldo`, `abas`) —
+        // ou seja, medir uma convenção só esconderia o defeito justamente no que é meu.
+        final callbacks = RegExp(r'\b((?:on|ao)[A-Z]\w*)\b')
+            .allMatches(aMao)
+            .map((m) => m.group(1)!)
+            .toSet();
+        if (callbacks.any((c) => !daTabela.contains(c))) perdem.add(def.type);
+      }
+      expect(perdem, hasLength(12),
+          reason: 'mudou o número de blocos que perdem callback — se caiu, o pai consertou: $perdem');
+      expect(perdem, containsAll(['botao', 'interruptor']),
+          reason: 'os dois que NÃO COMPILAM têm que estar na lista');
+    });
+
     test('IDA e VOLTA fecham: codegen → leitor → mesmas props', () {
       for (final tipo in ['texto', 'botao', 'selo', 'campo', 'saldo', 'copiar']) {
         final def = Ds.blocos[tipo]!;

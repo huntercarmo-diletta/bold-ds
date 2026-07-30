@@ -624,6 +624,408 @@ Duration? _horas(Object? v) {
   return n == null ? null : Duration(hours: n);
 }
 
+// ═══════════════════════════════════════════════════════════════════════════════
+// 1b · OS RENAMES — componentes do PAI que o app do Bold usa
+//
+// Estes não nascem aqui: são a linguagem, e o bloco só declara COMO o compositor os oferece.
+// A ordem em que entraram é a de USO MEDIDO no app, não a de facilidade: o toast tem 174
+// ocorrências, a casca de topo 109, o comprovante 69. Os que têm ZERO uso ficaram de fora —
+// `tooltip`, `stepper`, `bannerPromo`, `barraDeProgresso`, `folhaDeSenha`, `otp`, `linhaDeDetalhe`
+// —, pela mesma razão que sete dos dez gradientes não foram portados: declarar código morto
+// parece progresso e não é.
+// ═══════════════════════════════════════════════════════════════════════════════
+
+BlockDef _toast() => BlockDef(
+      type: 'toast',
+      ctor: 'ds.DilettaToast',
+      args: const {
+        'titulo': Arg.texto('title'),
+        'subtitulo': Arg.texto('subtitle'),
+        'estado': Arg.enumeracao('state', 'ds.DilettaToastState'),
+        'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
+      },
+      label: 'Toast',
+      props: {
+        'titulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'subtitulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'estado': PropDef('enum',
+            options: DilettaToastState.values.map((e) => e.name).toList()),
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+      },
+      defaults: () => {
+        'titulo': 'Pix enviado',
+        'subtitulo': 'O comprovante está no extrato.',
+        'estado': 'success',
+        'icone': 'circleCheckLight',
+      },
+      build: (p) => DilettaToast(
+        title: '${p['titulo']}',
+        subtitle: _vazio(p['subtitulo']) ? null : '${p['subtitulo']}',
+        state: _daOpcao(p['estado'], _porNome(DilettaToastState.values), DilettaToastState.normal),
+        icon: DilettaIcons.all['${p['icone']}'],
+      ),
+      codegen: (p) => 'ds.DilettaToast(title: ${_str(p['titulo'])}'
+          '${_vazio(p['subtitulo']) ? '' : ', subtitle: ${_str(p['subtitulo'])}'}'
+          ', state: ds.DilettaToastState.${p['estado']}'
+          ', icon: ds.DilettaIcons.${p['icone']})',
+    );
+
+BlockDef _esqueleto() => BlockDef(
+      type: 'esqueleto',
+      ctor: 'ds.DilettaSkeleton.box',
+      args: const {'largura': Arg.numero('width'), 'altura': Arg.numero('height')},
+      label: 'Esqueleto',
+      props: const {
+        'largura': PropDef('number'),
+        'altura': PropDef('number'),
+      },
+      defaults: () => {'largura': '180', 'altura': '16'},
+      build: (p) => DilettaSkeleton.box(
+        width: double.tryParse('${p['largura']}'),
+        height: double.tryParse('${p['altura']}'),
+      ),
+      codegen: (p) => 'ds.DilettaSkeleton.box(width: ${p['largura']}, height: ${p['altura']})',
+    );
+
+BlockDef _botaoDeIcone() => BlockDef(
+      type: 'botaoDeIcone',
+      ctor: 'ds.DilettaIconButton',
+      args: const {
+        'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
+        'rotulo': Arg.texto('semanticLabel'),
+        'tipo': Arg.enumeracao('type', 'ds.DilettaIconButtonType'),
+        'tamanho': Arg.enumeracao('size', 'ds.DilettaIconButtonSize'),
+        'marcador': Arg.bool('badge'),
+      },
+      label: 'Botão de ícone',
+      props: {
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+        'rotulo': const PropDef('text'),
+        'tipo': PropDef('enum',
+            options: DilettaIconButtonType.values.map((e) => e.name).toList()),
+        'tamanho': PropDef('enum',
+            options: DilettaIconButtonSize.values.map((e) => e.name).toList()),
+        'marcador': const PropDef('bool'),
+      },
+      defaults: () => {
+        'icone': 'bellLight',
+        'rotulo': 'Notificações',
+        'tipo': 'secondary',
+        'tamanho': 'md',
+        'marcador': false,
+      },
+      build: (p) => DilettaIconButton(
+        icon: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
+        semanticLabel: '${p['rotulo']}',
+        type: _daOpcao(p['tipo'], _porNome(DilettaIconButtonType.values),
+            DilettaIconButtonType.secondary),
+        size: _daOpcao(p['tamanho'], _porNome(DilettaIconButtonSize.values),
+            DilettaIconButtonSize.md),
+        badge: p['marcador'] == true,
+        onPressed: () {},
+      ),
+      codegen: (p) => 'ds.DilettaIconButton(icon: ds.DilettaIcons.${p['icone']}'
+          ', semanticLabel: ${_str(p['rotulo'])}'
+          ', type: ds.DilettaIconButtonType.${p['tipo']}'
+          ', size: ds.DilettaIconButtonSize.${p['tamanho']}'
+          '${p['marcador'] == true ? ', badge: true' : ''}'
+          ', onPressed: aoTocar)',
+    );
+
+BlockDef _avatar() => BlockDef(
+      type: 'avatar',
+      ctor: 'ds.DilettaAvatar',
+      args: const {
+        'iniciais': Arg.texto('initials'),
+        'variante': Arg.enumeracao('variant', 'ds.DilettaAvatarVariant'),
+        'tamanho': Arg.numero('size'),
+      },
+      label: 'Avatar',
+      props: {
+        'iniciais': const PropDef('text', bindable: true, dartType: 'String'),
+        'variante': PropDef('enum',
+            options: DilettaAvatarVariant.values.map((e) => e.name).toList()),
+        'tamanho': const PropDef('enum', options: ['32', '40', '56']),
+      },
+      defaults: () => {'iniciais': 'AM', 'variante': 'outlined', 'tamanho': '40'},
+      build: (p) => DilettaAvatar(
+        initials: '${p['iniciais']}',
+        variant: _daOpcao(p['variante'], _porNome(DilettaAvatarVariant.values),
+            DilettaAvatarVariant.outlined),
+        size: double.tryParse('${p['tamanho']}') ?? 40,
+      ),
+      codegen: (p) => 'ds.DilettaAvatar(initials: ${_str(p['iniciais'])}'
+          ', variant: ds.DilettaAvatarVariant.${p['variante']}'
+          ', size: ${p['tamanho']})',
+    );
+
+BlockDef _interruptor() => BlockDef(
+      type: 'interruptor',
+      ctor: 'ds.DilettaToggleSwitch',
+      args: const {
+        'ligado': Arg.bool('value'),
+        'tamanho': Arg.enumeracao('size', 'ds.DilettaToggleSize'),
+        'desabilitado': Arg.bool('disabled'),
+        'rotulo': Arg.texto('semanticLabel'),
+      },
+      label: 'Interruptor',
+      props: {
+        'ligado': const PropDef('bool'),
+        'tamanho': PropDef('enum',
+            options: DilettaToggleSize.values.map((e) => e.name).toList()),
+        'desabilitado': const PropDef('bool'),
+        'rotulo': const PropDef('text'),
+      },
+      defaults: () => {
+        'ligado': true,
+        'tamanho': 'md',
+        'desabilitado': false,
+        'rotulo': 'Notificações por push',
+      },
+      build: (p) => DilettaToggleSwitch(
+        value: p['ligado'] == true,
+        onChanged: (_) {},
+        size: _daOpcao(p['tamanho'], _porNome(DilettaToggleSize.values), DilettaToggleSize.md),
+        disabled: p['desabilitado'] == true,
+        semanticLabel: '${p['rotulo']}',
+      ),
+      codegen: (p) => 'ds.DilettaToggleSwitch(value: ${p['ligado'] == true}'
+          ', onChanged: aoTrocar'
+          ', size: ds.DilettaToggleSize.${p['tamanho']}'
+          '${p['desabilitado'] == true ? ', disabled: true' : ''}'
+          ', semanticLabel: ${_str(p['rotulo'])})',
+    );
+
+BlockDef _campoDeBusca() => BlockDef(
+      type: 'campoDeBusca',
+      ctor: 'ds.DilettaSearchInput',
+      args: const {'placeholder': Arg.texto('placeholder')},
+      label: 'Campo de busca',
+      props: const {'placeholder': PropDef('text')},
+      defaults: () => {'placeholder': 'Buscar contato ou chave'},
+      build: (p) => DilettaSearchInput(placeholder: '${p['placeholder']}'),
+      codegen: (p) => 'ds.DilettaSearchInput(placeholder: ${_str(p['placeholder'])}'
+          ', onChanged: aoBuscar)',
+    );
+
+BlockDef _girando() => BlockDef(
+      type: 'girando',
+      ctor: 'ds.DilettaLoadingSpinner',
+      args: const {'tamanho': Arg.enumeracao('size', 'ds.DilettaSpinnerSize')},
+      label: 'Carregando',
+      props: {
+        'tamanho': PropDef('enum',
+            options: DilettaSpinnerSize.values.map((e) => e.name).toList()),
+      },
+      defaults: () => {'tamanho': 'md'},
+      build: (p) => DilettaLoadingSpinner(
+        size: _daOpcao(p['tamanho'], _porNome(DilettaSpinnerSize.values), DilettaSpinnerSize.md),
+      ),
+      codegen: (p) => 'ds.DilettaLoadingSpinner(size: ds.DilettaSpinnerSize.${p['tamanho']})',
+    );
+
+BlockDef _ilustracao() => BlockDef(
+      type: 'ilustracao',
+      ctor: 'ds.DilettaIllustrationAccessory',
+      args: const {
+        'arte': Arg.enumeracao('illustration', 'ds.DilettaIllustration'),
+        'tamanho': Arg.enumeracao('size', 'ds.DilettaIllustrationSize'),
+      },
+      label: 'Ilustração',
+      props: {
+        'arte': PropDef('enum', options: _nomesDeIlustracao),
+        'tamanho': PropDef('enum',
+            options: DilettaIllustrationSize.values.map((e) => e.name).toList()),
+      },
+      defaults: () => {'arte': _nomesDeIlustracao.first, 'tamanho': 'md'},
+      build: (p) => DilettaIllustrationAccessory(
+        illustration: _ilustracaoDe('${p['arte']}'),
+        size: _daOpcao(p['tamanho'], _porNome(DilettaIllustrationSize.values),
+            DilettaIllustrationSize.md),
+      ),
+      codegen: (p) => 'ds.DilettaIllustrationAccessory('
+          'illustration: ds.DilettaIllustration.${p['arte']}'
+          ', size: ds.DilettaIllustrationSize.${p['tamanho']})',
+    );
+
+BlockDef _estadoVazio() => BlockDef(
+      type: 'estadoVazio',
+      ctor: 'ds.DilettaEmptyState',
+      args: const {
+        'titulo': Arg.texto('title'),
+        'legenda': Arg.texto('caption'),
+        'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
+        'acao': Arg.texto('actionLabel'),
+      },
+      label: 'Estado vazio',
+      props: {
+        'titulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'legenda': const PropDef('multiline', bindable: true, dartType: 'String'),
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+        'acao': const PropDef('text'),
+      },
+      defaults: () => {
+        'titulo': 'Nenhuma transação por aqui',
+        'legenda': 'Quando você movimentar a conta, o extrato aparece aqui.',
+        'icone': 'arrowRotateLeftLight',
+        'acao': 'Atualizar',
+      },
+      build: (p) => DilettaEmptyState(
+        title: '${p['titulo']}',
+        caption: '${p['legenda']}',
+        icon: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
+        actionLabel: _vazio(p['acao']) ? null : '${p['acao']}',
+        onAction: _vazio(p['acao']) ? null : () {},
+      ),
+      codegen: (p) => 'ds.DilettaEmptyState(title: ${_str(p['titulo'])}'
+          ', caption: ${_str(p['legenda'])}'
+          ', icon: ds.DilettaIcons.${p['icone']}'
+          '${_vazio(p['acao']) ? '' : ', actionLabel: ${_str(p['acao'])}, onAction: aoTocar'})',
+    );
+
+BlockDef _logo() => BlockDef(
+      type: 'logo',
+      ctor: 'ds.DilettaLogo',
+      args: const {
+        'variante': Arg.enumeracao('variant', 'ds.DilettaLogoVariant'),
+        'tamanho': Arg.numero('size'),
+      },
+      label: 'Logo',
+      props: {
+        'variante': PropDef('enum',
+            options: DilettaLogoVariant.values.map((e) => e.name).toList()),
+        'tamanho': const PropDef('enum', options: ['24', '40', '64']),
+      },
+      defaults: () => {'variante': 'full', 'tamanho': '40'},
+      build: (p) => DilettaLogo(
+        variant: _daOpcao(p['variante'], _porNome(DilettaLogoVariant.values),
+            DilettaLogoVariant.mark),
+        size: double.tryParse('${p['tamanho']}') ?? 40,
+      ),
+      codegen: (p) => 'ds.DilettaLogo(variant: ds.DilettaLogoVariant.${p['variante']}'
+          ', size: ${p['tamanho']})',
+    );
+
+BlockDef _chipDeInfo() => BlockDef(
+      type: 'chipDeInfo',
+      ctor: 'ds.DilettaInfoChip',
+      args: const {
+        'label': Arg.texto('label'),
+        'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
+        'tom': Arg.enumeracao('tone', 'ds.DilettaInfoChipTone'),
+      },
+      label: 'Chip de informação',
+      props: {
+        'label': const PropDef('text', bindable: true, dartType: 'String'),
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+        'tom': PropDef('enum',
+            options: DilettaInfoChipTone.values.map((e) => e.name).toList()),
+      },
+      defaults: () => {'label': 'Conta PJ', 'icone': 'piggyBankLight', 'tom': 'light'},
+      build: (p) => DilettaInfoChip(
+        label: '${p['label']}',
+        icon: DilettaIcons.all['${p['icone']}'],
+        tone: _daOpcao(p['tom'], _porNome(DilettaInfoChipTone.values), DilettaInfoChipTone.light),
+      ),
+      codegen: (p) => 'ds.DilettaInfoChip(label: ${_str(p['label'])}'
+          ', icon: ds.DilettaIcons.${p['icone']}'
+          ', tone: ds.DilettaInfoChipTone.${p['tom']})',
+    );
+
+BlockDef _chipDeEntrada() => BlockDef(
+      type: 'chipDeEntrada',
+      ctor: 'ds.DilettaInputChip',
+      args: const {
+        'label': Arg.texto('label'),
+        'preenchido': Arg.bool('filled'),
+        'icone': Arg.enumeracao('leadIcon', 'ds.DilettaIcons'),
+      },
+      label: 'Chip de filtro',
+      props: {
+        'label': const PropDef('text', bindable: true, dartType: 'String'),
+        'preenchido': const PropDef('bool'),
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+      },
+      defaults: () => {'label': 'Entradas', 'preenchido': true, 'icone': 'filterLight'},
+      build: (p) => DilettaInputChip(
+        label: '${p['label']}',
+        filled: p['preenchido'] == true,
+        leadIcon: DilettaIcons.all['${p['icone']}'],
+        onTap: () {},
+      ),
+      codegen: (p) => 'ds.DilettaInputChip(label: ${_str(p['label'])}'
+          '${p['preenchido'] == true ? ', filled: true' : ''}'
+          ', leadIcon: ds.DilettaIcons.${p['icone']}'
+          ', onTap: aoFiltrar)',
+    );
+
+BlockDef _cartaoDeAcesso() => BlockDef(
+      type: 'cartaoDeAcesso',
+      ctor: 'ds.DilettaQuickAccessCard',
+      args: const {
+        'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
+        'label': Arg.texto('label'),
+        'estado': Arg.enumeracao('state', 'ds.DilettaQuickAccessState'),
+      },
+      label: 'Cartão de acesso rápido',
+      props: {
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+        'label': const PropDef('text', bindable: true, dartType: 'String'),
+        'estado': PropDef('enum',
+            options: DilettaQuickAccessState.values.map((e) => e.name).toList()),
+      },
+      defaults: () => {'icone': 'pixLight', 'label': 'Área Pix', 'estado': 'active'},
+      build: (p) => DilettaQuickAccessCard(
+        icon: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
+        label: '${p['label']}',
+        state: _daOpcao(p['estado'], _porNome(DilettaQuickAccessState.values),
+            DilettaQuickAccessState.active),
+        onTap: () {},
+      ),
+      codegen: (p) => 'ds.DilettaQuickAccessCard(icon: ds.DilettaIcons.${p['icone']}'
+          ', label: ${_str(p['label'])}'
+          ', state: ds.DilettaQuickAccessState.${p['estado']}'
+          ', onTap: aoTocar)',
+    );
+
+BlockDef _caixaDeSelecao() => BlockDef(
+      type: 'caixaDeSelecao',
+      ctor: 'ds.DilettaCheckbox',
+      args: const {
+        'marcado': Arg.bool('checked'),
+        'label': Arg.texto('label'),
+        'descricao': Arg.texto('description'),
+        'variante': Arg.enumeracao('variant', 'ds.DilettaCheckboxVariant'),
+      },
+      label: 'Caixa de seleção',
+      props: {
+        'marcado': const PropDef('bool'),
+        'label': const PropDef('text'),
+        'descricao': const PropDef('text'),
+        'variante': PropDef('enum',
+            options: DilettaCheckboxVariant.values.map((e) => e.name).toList()),
+      },
+      defaults: () => {
+        'marcado': true,
+        'label': 'Li e aceito os termos',
+        'descricao': '',
+        'variante': 'primary',
+      },
+      build: (p) => DilettaCheckbox(
+        checked: p['marcado'] == true,
+        label: _vazio(p['label']) ? null : '${p['label']}',
+        description: _vazio(p['descricao']) ? null : '${p['descricao']}',
+        variant: _daOpcao(p['variante'], _porNome(DilettaCheckboxVariant.values),
+            DilettaCheckboxVariant.primary),
+        onChanged: (_) {},
+      ),
+      codegen: (p) => 'ds.DilettaCheckbox(checked: ${p['marcado'] == true}'
+          '${_vazio(p['label']) ? '' : ', label: ${_str(p['label'])}'}'
+          '${_vazio(p['descricao']) ? '' : ', description: ${_str(p['descricao'])}'}'
+          ', variant: ds.DilettaCheckboxVariant.${p['variante']}'
+          ', onChanged: aoMarcar)',
+    );
+
 BlockDef _visorDeCodigo() => BlockDef(
       type: 'visorDeCodigo',
       // Só `ctor`, sem `args`: os props deste bloco são de PREVIEW — no código gerado, alvo e fase
@@ -845,15 +1247,33 @@ void configurarDsDoBold() {
       'prazoDaPendencia': _prazoDaPendencia(),
       'segmentos': _segmentos(),
       'pontosDePagina': _pontosDePagina(),
+      // Os renames, em ordem de uso medido no app.
+      'toast': _toast(),
+      'esqueleto': _esqueleto(),
+      'botaoDeIcone': _botaoDeIcone(),
+      'avatar': _avatar(),
+      'interruptor': _interruptor(),
+      'campoDeBusca': _campoDeBusca(),
+      'girando': _girando(),
+      'ilustracao': _ilustracao(),
+      'estadoVazio': _estadoVazio(),
+      'logo': _logo(),
+      'chipDeInfo': _chipDeInfo(),
+      'chipDeEntrada': _chipDeEntrada(),
+      'cartaoDeAcesso': _cartaoDeAcesso(),
+      'caixaDeSelecao': _caixaDeSelecao(),
     },
     // TODO tipo precisa estar num grupo: a paleta do editor sai daqui, então bloco sem
     // grupo existe e ninguém acha. A conformidade do pai cobra.
     grupos: const {
       'Estrutura': ['barraDeStatus', 'tituloDaPagina', 'indicadorDeHome'],
-      'Conteúdo': ['texto', 'valor', 'selo', 'aviso', 'icone', 'cabecalhoDeSecao'],
+      'Conteúdo': ['texto', 'valor', 'selo', 'aviso', 'icone', 'cabecalhoDeSecao',
+        'ilustracao', 'logo', 'chipDeInfo', 'estadoVazio', 'avatar'],
       // A lista e as duas linhas ficam juntas porque é assim que se usam: a coleção é dona do
       // separador, e linha fora de lista é linha sem vizinhança.
       'Lista': ['lista', 'linha', 'linhaDeValor'],
+      // Retorno de sistema: o que a tela diz enquanto ou depois de algo acontecer.
+      'Retorno': ['toast', 'esqueleto', 'girando'],
       // Grupo próprio porque é o que só o Bold tem: a vizinhança na paleta é decisão de
       // linguagem, e peça de marca não se mistura com vocabulário herdado.
       'Marca do Bold': ['seloQuantico', 'saldo', 'cabecalhoDaHome', 'resumoDaTransacao'],
@@ -861,8 +1281,8 @@ void configurarDsDoBold() {
       // As três peças da conta PJ: quem pode mandar quanto, falta quanto, e até quando.
       'Alçadas': ['escadaDeAlcadas', 'progressoDeAprovacao', 'prazoDaPendencia'],
       'Leitor de código': ['visorDeCodigo'],
-      'Entrada': ['campo'],
-      'Ação': ['botao', 'barraDeBaixo'],
+      'Entrada': ['campo', 'campoDeBusca', 'interruptor', 'caixaDeSelecao', 'chipDeEntrada'],
+      'Ação': ['botao', 'barraDeBaixo', 'botaoDeIcone', 'cartaoDeAcesso'],
       'Ritmo': ['ritmo', 'divisor'],
     },
     tema: (filho, {required escuro}) => DilettaThemeScope(
@@ -1010,6 +1430,13 @@ double _espaco(String token) => _daOpcao(token, const {
     }, DilettaSpacing.s4);
 
 bool _vazio(Object? v) => v == null || '$v'.isEmpty;
+
+/// Um enum do pai como mapa nome → valor, pra casar com o que a prop guarda (String).
+///
+/// Derivado de `values` e não escrito à mão: enum que ganha membro no pai aparece aqui sozinho, e
+/// membro que ele remove vira erro de compilação em vez de opção fantasma no editor.
+Map<String, T> _porNome<T extends Enum>(List<T> valores) =>
+    {for (final v in valores) v.name: v};
 
 /// Traduz o valor de uma prop de ENUM (que chega como String) no membro do DS.
 ///
