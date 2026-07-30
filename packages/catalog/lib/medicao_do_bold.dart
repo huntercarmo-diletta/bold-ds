@@ -1,4 +1,11 @@
-/// A ABA DE FUNDAMENTOS — as DECISÕES de token deste produto, todas derivadas do código.
+/// A MEDIÇÃO DESTE FILHO — papéis nos dois modos e o relatório de adoção do pai.
+///
+/// Isto era a minha aba de Fundamentos, e ela saiu: a v0.43.0 do motor entrega Fundamentos como a PROSA
+/// que ensina (índice + markdown), e a prosa deste produto virou `kBoldFundamentos` no pacote do DS.
+///
+/// O que sobrou aqui não é prosa nem inventário: é **medição deste filho**. Papel nos dois modos é o que
+/// prova que o escuro sai de graça; o relatório de adoção é o que diz quais famílias de token eu declarei
+/// e quais estou herdando. Os dois moram na aba de conformidade, que é onde medição deste filho mora.
 ///
 /// A fronteira com Styles é do pai, e ele a escreveu melhor do que eu: **Styles é o inventário que se
 /// CONSULTA; Fundamentos são as decisões que se leem uma vez.** A minha aba de Styles (tipografia,
@@ -28,8 +35,8 @@ import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 
-class AbaDeFundamentos extends StatelessWidget {
-  const AbaDeFundamentos({super.key});
+class PainelDeMedicao extends StatelessWidget {
+  const PainelDeMedicao({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,48 +48,24 @@ class AbaDeFundamentos extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Text('Fundamentos', style: CT.tituloGrande),
+              Text('Medição deste filho', style: CT.tituloGrande),
               SizedBox(height: CM.gapCompacto),
               Text(
-                'A identidade deste produto é a PALETA; todo o resto é derivado dela pelo pai. '
-                'Os papéis não são escolhidos aqui, e é isso que faz o modo escuro sair de graça.',
+                'As decisões estão em Fundamentos e os valores em Styles. Aqui ficam as duas coisas '
+                'que só se medem NESTE repo: o papel derivado nos dois modos, e o que eu declarei '
+                'contra o que estou herdando do pai.',
                 style: CT.corpo.copyWith(color: CC.neutral04),
               ),
               SizedBox(height: CM.gapAmplo),
-              const _Secao(
-                titulo: 'Rampas da marca',
-                nota: 'As cores cruas. É o único lugar onde este filho escreve hexadecimal.',
-                child: _Rampas(),
-              ),
               const _Secao(
                 titulo: 'Papéis, nos dois modos',
                 nota: 'Derivados da paleta. Componente nenhum lê rampa: lê papel.',
                 child: _Papeis(),
               ),
               const _Secao(
-                titulo: 'Gradientes da marca',
-                nota: 'Dois, e o resto é modulado neles — a decisão, não o inventário.',
-                child: _Gradientes(),
-              ),
-              const _Secao(
-                titulo: 'Vidro',
-                nota: 'Tinte, blur e traço: a receita é do FILHO; construir vidro é do pai.',
-                child: _Vidro(),
-              ),
-              const _Secao(
-                titulo: 'Espaço e raio',
-                nota: 'Aqui o DEGRAU escolhido pelo produto; a lista completa é Styles.',
-                child: _EspacoERaio(),
-              ),
-              const _Secao(
                 titulo: 'Adoção dos tokens — o relatório do PAI',
                 nota: 'Herdado quer dizer: confira contra o produto antigo antes de aceitar.',
                 child: _Adocao(),
-              ),
-              const _Secao(
-                titulo: 'Ícones',
-                nota: 'Herdados do pai, sem exceção — este filho não declara asset próprio.',
-                child: _Icones(),
               ),
             ],
           ),
@@ -127,99 +110,6 @@ class _Secao extends StatelessWidget {
 // ═══════════════════════════════════════════════════════════════════════════════
 // Rampas
 // ═══════════════════════════════════════════════════════════════════════════════
-
-/// As rampas, por família. Cada valor sai do campo da paleta — não há hex repetido aqui.
-Map<String, List<(String, Color)>> _rampasDaMarca() {
-  const p = BoldPalette.bold;
-  return {
-    'primary (rosa)': [
-      ('01', p.primary01), ('02', p.primary02), ('03', p.primary03), ('04', p.primary04),
-      ('05', p.primary05), ('06', p.primary06), ('07', p.primary07), ('08', p.primary08),
-      ('09', p.primary09),
-    ],
-    'neutral': [
-      ('01', p.neutral01), ('02', p.neutral02), ('03', p.neutral03), ('04', p.neutral04),
-      ('05', p.neutral05), ('06', p.neutral06), ('07', p.neutral07), ('08', p.neutral08),
-      ('09', p.neutral09), ('10', p.neutral10),
-    ],
-    'success': [
-      ('01', p.success01), ('02', p.success02), ('03', p.success03), ('04', p.success04),
-      ('05', p.success05), ('06', p.success06), ('07', p.success07),
-    ],
-    'warning': [
-      ('01', p.warning01), ('02', p.warning02), ('03', p.warning03), ('04', p.warning04),
-      ('05', p.warning05), ('06', p.warning06), ('07', p.warning07),
-    ],
-    'error': [
-      ('01', p.error01), ('02', p.error02), ('03', p.error03), ('04', p.error04),
-      ('05', p.error05), ('06', p.error06), ('07', p.error07),
-    ],
-    'vinho (o polo profundo)': [
-      ('marca', BoldVinho.marca), ('ink', BoldVinho.ink),
-    ],
-  };
-}
-
-class _Rampas extends StatelessWidget {
-  const _Rampas();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (final familia in _rampasDaMarca().entries) ...[
-          Text(familia.key, style: CT.rotuloPequeno.copyWith(color: CC.neutral03)),
-          const SizedBox(height: 4),
-          Row(
-            children: [
-              for (final (nome, cor) in familia.value)
-                Expanded(
-                  child: _Amostra(
-                    cor: cor,
-                    rotulo: nome,
-                    hex: '#${cor.toARGB32().toRadixString(16).substring(2).toUpperCase()}',
-                  ),
-                ),
-            ],
-          ),
-          SizedBox(height: CM.gapCompacto),
-        ],
-      ],
-    );
-  }
-}
-
-class _Amostra extends StatelessWidget {
-  const _Amostra({required this.cor, required this.rotulo, required this.hex});
-
-  final Color cor;
-  final String rotulo;
-  final String hex;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 4),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: 44,
-            decoration: BoxDecoration(
-              color: cor,
-              borderRadius: CM.raioBotao,
-              border: Border.all(color: CC.neutral09),
-            ),
-          ),
-          const SizedBox(height: 2),
-          Text(rotulo, style: CT.legenda.copyWith(color: CC.neutral04)),
-          Text(hex, style: CT.mono.copyWith(color: CC.neutral06, fontSize: 9)),
-        ],
-      ),
-    );
-  }
-}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // Papéis
@@ -312,31 +202,6 @@ class _Faixa extends StatelessWidget {
 // Gradientes · tipografia · espaço · raio · adoção · ícones
 // ═══════════════════════════════════════════════════════════════════════════════
 
-class _Gradientes extends StatelessWidget {
-  const _Gradientes();
-
-  @override
-  Widget build(BuildContext context) {
-    final gradientes = {
-      'primary — rosa indo pro laranja': BoldGradients.primary,
-      'accent — só laranja': BoldGradients.accent,
-    };
-    return Column(
-      children: [
-        for (final g in gradientes.entries)
-          Container(
-            height: 56,
-            margin: const EdgeInsets.only(bottom: 6),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(gradient: g.value, borderRadius: CM.raioBotao),
-            child: Text(g.key,
-                style: CT.rotulo.copyWith(color: BoldGradients.onGradient)),
-          ),
-      ],
-    );
-  }
-}
-
 /// A ESCALA TIPOGRÁFICA saiu daqui, e o motivo é a fronteira: a lista de degraus é INVENTÁRIO, e
 /// inventário é Styles — a aba do motor a desenha derivada do `InventarioDeEstilo`.
 ///
@@ -344,60 +209,6 @@ class _Gradientes extends StatelessWidget {
 /// tabela de tela: é o mapa fixado por `test/o_mapa_da_tipografia_test.dart` no DS e explicado no
 /// `ADOCAO.md`. Ele falha se o pai mover tamanho ou peso de algum degrau escolhido, que é a única coisa
 /// que uma página não pode fazer.
-
-class _EspacoERaio extends StatelessWidget {
-  const _EspacoERaio();
-
-  @override
-  Widget build(BuildContext context) {
-    final espacos = <String, double>{
-      's1': DilettaSpacing.s1, 's2': DilettaSpacing.s2, 's3': DilettaSpacing.s3,
-      's4': DilettaSpacing.s4, 's5': DilettaSpacing.s5, 's6': DilettaSpacing.s6,
-      's8': DilettaSpacing.s8, 's10': DilettaSpacing.s10, 's12': DilettaSpacing.s12,
-    };
-    final raios = <String, BorderRadius>{
-      'all8': DilettaRadius.all8, 'all16': DilettaRadius.all16,
-      'all24': DilettaRadius.all24, 'pillAll': DilettaRadius.pillAll,
-    };
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (final e in espacos.entries)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 3),
-            child: Row(children: [
-              SizedBox(
-                width: 80,
-                child: Text('${e.key} · ${e.value.toInt()}',
-                    style: CT.mono.copyWith(color: CC.neutral05, fontSize: 10)),
-              ),
-              Container(width: e.value, height: 12, color: CC.primary04),
-            ]),
-          ),
-        SizedBox(height: CM.gapCompacto),
-        Row(children: [
-          for (final r in raios.entries)
-            Padding(
-              padding: const EdgeInsets.only(right: 8),
-              child: Column(children: [
-                Container(
-                  width: 56,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: CC.neutral10,
-                    borderRadius: r.value,
-                    border: Border.all(color: CC.neutral08),
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(r.key, style: CT.mono.copyWith(color: CC.neutral05, fontSize: 9)),
-              ]),
-            ),
-        ]),
-      ],
-    );
-  }
-}
 
 class _Adocao extends StatelessWidget {
   const _Adocao();
@@ -438,73 +249,5 @@ class _Adocao extends StatelessWidget {
   }
 }
 
-class _Icones extends StatelessWidget {
-  const _Icones();
-
-  @override
-  Widget build(BuildContext context) {
-    // Uma amostra dos que os componentes deste produto usam, e a CONTAGEM do conjunto inteiro —
-    // desenhar 358 ícones numa aba é peso sem informação.
-    const amostra = [
-      DilettaIcons.circleCheckLight, DilettaIcons.calendarLight, DilettaIcons.stampLight,
-      DilettaIcons.clockLight, DilettaIcons.pixLight, DilettaIcons.bellLight,
-      DilettaIcons.userLight, DilettaIcons.eyeLight, DilettaIcons.eyeSlashLightFull,
-      DilettaIcons.piggyBankLight, DilettaIcons.angleDownLight, DilettaIcons.sparklesLightFull,
-    ];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('${DilettaIcons.all.length} glifos no conjunto do pai',
-            style: CT.corpoPequeno.copyWith(color: CC.neutral04)),
-        SizedBox(height: CM.gapCompacto),
-        Wrap(
-          spacing: 12,
-          runSpacing: 12,
-          children: [
-            for (final nome in amostra)
-              DilettaIcon(name: nome, size: 22, color: CC.neutral02),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
 /// A receita do vidro: o trio que este filho declara na paleta.
 ///
-/// É DECISÃO e não inventário — sozinhos, tinte e blur não são nada; a combinação é o material. O pai
-/// sabe COMO construir vidro (clip, `BackdropFilter`, e a regra de não pôr sombra atrás); com que
-/// material é do filho.
-class _Vidro extends StatelessWidget {
-  const _Vidro();
-
-  @override
-  Widget build(BuildContext context) {
-    final claro = DilettaScheme.light(BoldPalette.bold);
-    final escuro = DilettaScheme.dark(BoldPalette.bold);
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        for (final (nome, s) in [('claro', claro), ('escuro', escuro)])
-          Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: Row(children: [
-              SizedBox(
-                width: 80,
-                child: Text(nome, style: CT.mono.copyWith(color: CC.neutral05, fontSize: 10)),
-              ),
-              Expanded(child: _Faixa(cor: s.glassTint, rotulo: 'tinte')),
-              const SizedBox(width: 6),
-              SizedBox(
-                width: 160,
-                child: Text(
-                    'blur ${s.glassBlur.toInt()} · traço '
-                    '${s.glassStroke == null ? 'ausente' : 'presente'}',
-                    style: CT.legenda.copyWith(color: CC.neutral04)),
-              ),
-            ]),
-          ),
-      ],
-    );
-  }
-}

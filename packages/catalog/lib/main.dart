@@ -17,7 +17,7 @@ import 'package:flutter/material.dart';
 import 'chrome_do_bold.dart';
 import 'conteudo_do_bold.dart';
 import 'ds_do_bold.dart';
-import 'fundamentos_do_bold.dart';
+import 'medicao_do_bold.dart';
 import 'specs_do_bold.dart';
 
 void main() {
@@ -40,6 +40,10 @@ CatalogoConfig configDoCatalogoDoBold() => CatalogoConfig(
         // FUNDAMENTOS antes de componentes, e a ordem é a da leitura: a identidade deste produto é a
         // paleta, e todo componente daqui é ela derivada. Quem abre o catálogo pela primeira vez
         // precisa ver de onde a cor vem antes de ver o que ela pinta.
+        // FUNDAMENTOS é do MOTOR desde a v0.43.0: a prosa que ensina, com índice e renderizador de
+        // markdown de bloco (tabela inclusive). A minha página visual saiu, e o que era medição dela —
+        // papéis nos dois modos e o relatório de adoção — foi pra aba de conformidade, que é onde
+        // medição deste filho mora.
         AbaDoCatalogo(
           id: 'fundamentos',
           label: 'Fundamentos',
@@ -248,6 +252,11 @@ class _AbaConformidade extends StatelessWidget {
               ),
               SizedBox(height: CM.gapAmplo),
               for (final x in v) _CardDeViolacao(v: x),
+              SizedBox(height: CM.gapAmplo),
+              // A MEDIÇÃO deste filho, embaixo da conformidade: papel nos dois modos e o relatório de
+              // adoção do pai. Estava na minha aba de Fundamentos, que saiu quando o motor passou a
+              // entregar Fundamentos como prosa.
+              const PainelDeMedicao(),
             ],
           ),
         ),

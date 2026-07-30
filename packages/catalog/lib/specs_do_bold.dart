@@ -1,4 +1,14 @@
-/// A ABA DE SPECS — o dicionário da linguagem, que passou a viajar na v0.16.0 do pai.
+/// A ABA DE SPECS — o dicionário da linguagem: o do PAI e o DESTE FILHO, na mesma página.
+///
+/// **Ela listava só as do pai, e isso era um defeito meu.** Relatado duas vezes pelo dono do produto
+/// ("suas specs não renderizam"), e na primeira eu respondi que os componentes do Bold não tinham
+/// contrato — o que era verdade naquele momento. Escrevi os doze, e continuou não aparecendo: **a aba
+/// percorria `kDilettaSpecs.keys` e nada mais.** Os contratos existiam, alimentavam o cabeçalho da aba de
+/// componentes, e nunca entraram no dicionário.
+///
+/// A lição é a de sempre nesta sessão, e desta vez foi contra mim duas vezes seguidas: **a primeira
+/// explicação plausível não é a medição.** Eu tinha o teste da aba passando com 69 cards e ele nunca
+/// perguntou "e os meus doze?".
 ///
 /// As 64 specs moravam em `specs/` na RAIZ do repo do pai, e o que viaja é o pacote — então elas nunca
 /// chegavam. Agora chegam como `kDilettaSpecs` (mapa `slug → markdown`), Dart gerado e não asset: asset
@@ -53,8 +63,9 @@ class AbaDeSpecs extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final porSpec = _blocosPorSpec();
-    final slugs = kDilettaSpecs.keys.toList()..sort();
-    final comBloco = slugs.where((s) => porSpec.containsKey(s)).toList();
+    final doPai = kDilettaSpecs.keys.toList()..sort();
+    final doFilho = kBoldSpecs.keys.toList()..sort();
+    final comBloco = doPai.where((s) => porSpec.containsKey(s)).toList();
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(32),
@@ -67,12 +78,28 @@ class AbaDeSpecs extends StatelessWidget {
               Text('Specs da linguagem', style: CT.tituloGrande),
               SizedBox(height: CM.gapCompacto),
               Text(
-                '${kDilettaSpecs.length} contratos, escritos pelo pai e lidos daqui — nenhum copiado. '
-                'Deste vocabulário, ${comBloco.length} já têm bloco no Conta BOLD.',
+                '${kDilettaSpecs.length} contratos do PAI (lidos do pacote, nenhum copiado) e '
+                '${kBoldSpecs.length} escritos NESTE filho, pros componentes que só o Bold tem. '
+                'Do vocabulário do pai, ${comBloco.length} já têm bloco aqui.',
                 style: CT.corpo.copyWith(color: CC.neutral04),
               ),
               SizedBox(height: CM.gapAmplo),
-              for (final slug in slugs)
+              // OS DESTE FILHO PRIMEIRO, e não por vaidade: são os que ninguém mais tem, e são os que
+              // alguém abre o catálogo do Bold pra ler. O dicionário do pai é consulta; este é decisão
+              // deste produto.
+              Text('DESTE PRODUTO', style: CT.sobrescrito.copyWith(color: CC.primary04)),
+              SizedBox(height: CM.gapCompacto),
+              for (final tipo in doFilho)
+                _CardDeSpec(
+                  slug: tipo,
+                  markdown: kBoldSpecs[tipo]!,
+                  blocos: Ds.blocos.containsKey(tipo) ? [tipo] : const [],
+                  doFilho: true,
+                ),
+              SizedBox(height: CM.gapAmplo),
+              Text('DA LINGUAGEM', style: CT.sobrescrito.copyWith(color: CC.neutral05)),
+              SizedBox(height: CM.gapCompacto),
+              for (final slug in doPai)
                 _CardDeSpec(
                   slug: slug,
                   markdown: kDilettaSpecs[slug]!,
@@ -87,11 +114,20 @@ class AbaDeSpecs extends StatelessWidget {
 }
 
 class _CardDeSpec extends StatefulWidget {
-  const _CardDeSpec({required this.slug, required this.markdown, required this.blocos});
+  const _CardDeSpec({
+    required this.slug,
+    required this.markdown,
+    required this.blocos,
+    this.doFilho = false,
+  });
 
   final String slug;
   final String markdown;
   final List<String> blocos;
+
+  /// Contrato escrito NESTE repo. Muda o chip: o do pai é "tem bloco aqui?"; o do filho é sempre sim (ele
+  /// existe porque o componente existe), então o chip diz de onde vem.
+  final bool doFilho;
 
   @override
   State<_CardDeSpec> createState() => _CardDeSpecState();
@@ -144,13 +180,19 @@ class _CardDeSpecState extends State<_CardDeSpec> {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     decoration: BoxDecoration(
-                      color: temBloco ? CC.success07 : CC.neutral10,
+                      color: widget.doFilho
+                          ? CC.primary08
+                          : (temBloco ? CC.success07 : CC.neutral10),
                       borderRadius: CM.raioBotao,
                     ),
                     child: Text(
-                      temBloco ? widget.blocos.join(' · ') : 'sem bloco aqui',
+                      widget.doFilho
+                          ? 'nasceu aqui'
+                          : (temBloco ? widget.blocos.join(' · ') : 'sem bloco aqui'),
                       style: CT.rotuloPequeno.copyWith(
-                          color: temBloco ? CC.success04 : CC.neutral05),
+                          color: widget.doFilho
+                              ? CC.primary04
+                              : (temBloco ? CC.success04 : CC.neutral05)),
                     ),
                   ),
                   SizedBox(width: CM.gapCompacto),

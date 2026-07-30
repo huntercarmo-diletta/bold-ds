@@ -34,6 +34,7 @@ export 'src/bold_palette.dart';
 export 'src/bold_pontos_de_pagina.dart';
 export 'src/bold_vinho.dart';
 export 'src/bold_fonts.dart';
+export 'src/bold_fundamentos.dart';
 export 'src/bold_gradients.dart';
 
 /// Componentes que só o Bold tem, nascidos aqui compondo as peças do pai.

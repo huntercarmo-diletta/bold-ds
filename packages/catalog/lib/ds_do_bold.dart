@@ -1803,6 +1803,16 @@ void configurarDsDoBold() {
       final s = DilettaTheme.schemeOf(ctx);
       return s.isDark ? s.bg : null;
     },
+    // OS FUNDAMENTOS (v0.43.0 do motor) — a prosa que ENSINA, e a segunda página minha que ele apaga.
+    //
+    // A do pai viaja no pacote dele (`kDilettaLinguagem`), então o catálogo plunga a linguagem inteira
+    // sem copiar uma linha — e copiar era o que faria a prosa envelhecer em dois lugares. As quatro
+    // seções deste produto (paleta, gradientes, vidro, tipografia) são as decisões que eu tomei medindo,
+    // com os números que as sustentam.
+    fundamentos: const {
+      'A linguagem (do pai)': kDilettaLinguagem,
+      ...kBoldFundamentos,
+    },
     // O INVENTÁRIO DE ESTILO (v0.39.0 do motor) — e a aba de Styles deixa de ser escrita à mão.
     //
     // Eu tinha escrito a minha, com tipografia, gradiente e vidro. O motor passou a entregar a página
