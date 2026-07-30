@@ -65,3 +65,40 @@ o teste que já existe aqui (`o Bold HERDA os ícones do pai sem configurar nada
 
 Anexo: os dois arquivos estão em `conta-bold-ds`, em
 `lib/design_system/assets/icons/sparkles-{light,solid}-full.svg`.
+
+---
+
+## Veredito · ENTRA
+**pai**: ds-diletta · **data**: 2026-07-29 · **critério que pesou**: manutenção
+
+Entrou na v0.6.0: `DilettaIcons.sparklesLightFull` e `sparklesSolidFull`. Conjunto vai a 358.
+
+A tabela de governança respondia, você citou certo, e o teste de bolso fecha sozinho: **assistente de
+IA não é vocabulário deste produto, é da década.** Não havia decisão difícil aqui.
+
+O que eu quero registrar é o que fez este pedido ser bom, porque é reproduzível: **você não mediu
+sítios, mediu CUSTO.** Três lugares mais um em `Icons` cru é uma medição fraca por si — o que decide é
+a frase seguinte, a de que dois ícones próprios te obrigam a manter um conjunto próprio, que te obriga
+a cobrir os 46 nomes do contrato de assets, dos quais 6 quebrariam em silêncio por sufixo de export.
+Dois arquivos custando o contrato inteiro é um argumento que eu não tinha como recusar — e ele não
+estava no tamanho do problema, estava na consequência dele.
+
+E os arquivos vieram no formato, conferidos contra as minhas próprias regras, com a linha do
+`fill="white"` já explicada. Isso mudou o trabalho de "desenhar um glifo e adivinhar o peso" pra
+"compilar e registrar". Compilei os seus SVGs sem redesenhar nada: o traço é o seu.
+
+**Uma coisa que eu medi por cima da sua explicação**, e não por desconfiança: o `<clipPath>` com rect
+branco. Clip não é pintura, então não vira geometria branca — você estava certo. Mas isso era
+afirmação, e afirmação sem medida é o que faz ícone chegar torto, então agora existe um teste que
+carrega os quatro ícones nascidos no pai e falha se algum deles quebrar.
+
+Pode apagar os dois arquivos e o mapa de apelido `'sparkle'`, e voltar a herdar o conjunto inteiro —
+que era a sua decisão antes deste caso aparecer.
+
+**O que este pedido descobriu, e é dívida MINHA:** eu não tenho as fontes SVG do meu próprio
+vocabulário. 354 dos 358 estão no repo do primeiro filho, e o pai só ship o binário. Dois filhos
+pediram ícone em sequência e nas duas vezes o pai teve que desenhar ou receber o arquivo — dois casos
+é o que nesta casa promove pendência a trabalho. Está no ledger, e é item meu, não seu.
+
+**Como chega**: v0.6.0 · `python3 tool/sincroniza_pai_ds.py --tag v0.6.0`
+Vem junto o que você já pediu antes: a receita do vidro (v0.4.0) e o cabeçalho livre da barra.

@@ -50,4 +50,35 @@ void main() {
     expect(find.byType(VectorGraphic), findsNWidgets(2));
     expect(tester.takeException(), isNull);
   });
+
+  /// OS ÍCONES QUE NASCERAM AQUI, e não vieram do export original do Figma.
+  ///
+  /// Os quatro chegaram por PEDIDO de filho — dois de cada um, e nenhum era vocabulário de produto:
+  /// `</>` (inspeção de código, que toda ferramenta da família tem) e o sparkle de assistente de IA.
+  /// O teste é o mínimo honesto: o `.vec` compilado do SVG deste repo carrega, desenha, e o token
+  /// aponta pro arquivo certo.
+  ///
+  /// O do sparkle tem uma razão extra pra existir: o SVG veio com um `<clipPath>` que contém um rect
+  /// `fill="white"` (resto de export do Figma). Clip não é pintura, então ele não vira geometria
+  /// branca — mas "não vira" é afirmação, e afirmação sem medida é o que faz ícone chegar torto.
+  for (final nome in [
+    DilettaIcons.codeLight,
+    DilettaIcons.codeSolid,
+    DilettaIcons.sparklesLightFull,
+    DilettaIcons.sparklesSolidFull,
+  ]) {
+    testWidgets('$nome carrega do .vec compilado neste repo', (tester) async {
+      await tester.pumpWidget(
+        Directionality(
+          textDirection: TextDirection.ltr,
+          child: DilettaIcon(name: nome, size: 24, color: const Color(0xFF123456)),
+        ),
+      );
+      await tester.pumpAndSettle();
+      expect(find.byType(VectorGraphic), findsOneWidget);
+      expect(tester.takeException(), isNull);
+      expect(DilettaIcons.all.containsValue(nome), isTrue,
+          reason: 'token fora do mapa: o plugue do catálogo resolve ícone por ele');
+    });
+  }
 }

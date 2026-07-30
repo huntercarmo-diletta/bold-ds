@@ -16,7 +16,7 @@ decomposição antes de chamar de divergência.
 | assunto | decisão |
 |---|---|
 | fonte da marca | **Inter**. Registrada em `BoldFonts`; os `.ttf` ainda não estão no pacote (ver `bold_fonts.dart`) |
-| família de ícones | **herda o pai**. Medido: pai 354, Bold 354, **310 com o mesmo nome** — é a mesma família. Os 44 "só do Bold" são o mesmo arquivo com sufixo `" 1"`, resto de export do Figma |
+| família de ícones | **herda o pai**, e agora sem exceção. Medido: pai 354, Bold 354, **310 com o mesmo nome** — é a mesma família; os 44 "só do Bold" são duplicata com sufixo `" 1"` do export. Os dois glifos que faltavam (o sparkle da assistente) subiram pro pai na v0.6.0, então o conjunto vai a **358** e este filho não declara asset próprio nenhum |
 | componentes exclusivos | **sobem pra linguagem**, exceto os dois de marca (ver caixa 3) |
 
 O detalhe dos ícones não é curiosidade: os componentes do pai referenciam **46 nomes** (não

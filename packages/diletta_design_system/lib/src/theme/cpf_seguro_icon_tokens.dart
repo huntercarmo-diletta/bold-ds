@@ -1,9 +1,16 @@
-// GERADO de svg_src/icons/*.svg — NÃO editar à mão.
-// Rode a geração de novo quando a pasta mudar. Valores = nome do
-// arquivo (nomes do DS/Figma, estáveis). 7 exports crus do Figma
-// (Cover, Vector*, Proximity profile, Wallet-solid) ficaram de fora.
-// O source SVG mora em svg_src/icons/ (não vai no bundle); o bundle
-// ship o binário assets/icons/<name>.svg.vec (tool/gen_icons_vec.sh).
+// Valores = nome do arquivo em assets/icons/ (nomes do DS/Figma, estáveis).
+// 7 exports crus do Figma (Cover, Vector*, Proximity profile, Wallet-solid)
+// ficaram de fora.
+//
+// ESTE ARQUIVO É MANTIDO À MÃO — e o cabeçalho antes dizia "GERADO … NÃO editar
+// à mão", apontando pra uma geração que não existe em nenhum dos dois repos
+// (procurado em 2026-07-29, respondendo um pedido de ícone novo). Banner que
+// mente é pior que banner ausente: ele faz a próxima pessoa procurar um script
+// por meia hora, ou editar com medo. Ícone novo = 2 consts + 2 linhas no mapa,
+// e o `.vec` compilado por tool/gen_icons_vec.sh.
+//
+// A dívida de verdade está escrita nesse script: as 354 fontes SVG moram no
+// PRIMEIRO FILHO, e o pai só tem o binário.
 
 /// CPF SEGURO — tokens de ícone.
 ///
@@ -145,6 +152,8 @@ class DilettaIcons {
   static const String cloneSolid = 'clone-solid';
   static const String cloudSunLight = 'cloud-sun-light';
   static const String cloudSunSolid = 'cloud-sun-solid';
+  static const String codeLight = 'code-light';
+  static const String codeSolid = 'code-solid';
   static const String coinsLight = 'coins-light';
   static const String coinsSolid = 'coins-solid';
   static const String creditCardLight = 'credit-card-light';
@@ -307,6 +316,9 @@ class DilettaIcons {
   static const String sirenSolid = 'siren-solid';
   static const String slidersLight = 'sliders-light';
   static const String slidersSolid = 'sliders-solid';
+  /// ASSISTENTE DE IA. O glifo é o convencional da década, não de um produto.
+  static const String sparklesLightFull = 'sparkles-light-full';
+  static const String sparklesSolidFull = 'sparkles-solid-full';
   static const String squareFacebook = 'square-facebook';
   static const String squareInstagram = 'square-instagram';
   static const String squareTwitter = 'square-twitter';
@@ -500,6 +512,8 @@ class DilettaIcons {
     'cloneSolid': cloneSolid,
     'cloudSunLight': cloudSunLight,
     'cloudSunSolid': cloudSunSolid,
+    'codeLight': codeLight,
+    'codeSolid': codeSolid,
     'coinsLight': coinsLight,
     'coinsSolid': coinsSolid,
     'creditCardLight': creditCardLight,
@@ -662,6 +676,8 @@ class DilettaIcons {
     'sirenSolid': sirenSolid,
     'slidersLight': slidersLight,
     'slidersSolid': slidersSolid,
+    'sparklesLightFull': sparklesLightFull,
+    'sparklesSolidFull': sparklesSolidFull,
     'squareFacebook': squareFacebook,
     'squareInstagram': squareInstagram,
     'squareTwitter': squareTwitter,

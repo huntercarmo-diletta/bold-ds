@@ -95,7 +95,15 @@ class DilettaChatBubble extends StatelessWidget {
                       horizontal: DilettaChatTokens.px,
                       vertical: DilettaChatTokens.py,
                     ),
-                    child: DefaultTextStyle(
+                    // `.merge` e não `DefaultTextStyle(style:)`: o construtor direto SUBSTITUI o
+                    // estilo herdado, e os `TextStyle` de `DilettaType` não fixam família de
+                    // propósito — a fonte vem do tema do app, uma vez. Substituindo, a família
+                    // morria aqui e todo texto dentro de bolha saía na fonte do SISTEMA.
+                    //
+                    // Achado pelo primeiro filho gerando um print de teste: no navegador a fonte
+                    // de sistema é parecida o bastante pra ninguém apontar; no print, onde não há
+                    // fonte de sistema, o texto virava caixa preta. 57 bolhas em 16 telas dele.
+                    child: DefaultTextStyle.merge(
                       style: DilettaType.chatBody.copyWith(color: textColor),
                       child: child,
                     ),

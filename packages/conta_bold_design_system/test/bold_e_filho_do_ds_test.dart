@@ -124,4 +124,35 @@ void main() {
     await t.pump(const Duration(milliseconds: 100));
     expect(t.takeException(), isNull);
   });
+
+  testWidgets('o glifo de assistente vem do PAI, e não de asset próprio', (t) async {
+    // Este é o gate que eu prometi no pedido do sparkle
+    // (`docs/pedidos/2026-07-29-falta-o-glifo-de-assistente-no-conjunto.md`, veredito ENTRA
+    // na v0.6.0). Ele mede a AUSÊNCIA de conjunto próprio, que é o que estava em jogo: dois
+    // arquivos locais obrigariam este filho a manter um conjunto inteiro e cobrir os 46
+    // nomes que os componentes do pai referenciam — 6 dos quais quebrariam em silêncio por
+    // sufixo de export.
+    for (final nome in ['sparklesLightFull', 'sparklesSolidFull']) {
+      expect(DilettaIcons.all, contains(nome),
+          reason: 'o glifo $nome não está no conjunto do pai');
+    }
+
+    await t.pumpWidget(MaterialApp(
+      home: DilettaThemeScope(
+        theme: BoldTheme.light,
+        child: Scaffold(
+          body: DilettaFrame.row(
+            gap: DilettaSpacing.s2,
+            children: [
+              DilettaIcon(name: DilettaIcons.sparklesLightFull, size: 20),
+              DilettaIcon(name: DilettaIcons.sparklesSolidFull, size: 20),
+            ],
+          ),
+        ),
+      ),
+    ));
+    await t.pump(const Duration(milliseconds: 100));
+    expect(t.takeException(), isNull,
+        reason: 'o .vec compilado do pai não carregou');
+  });
 }
