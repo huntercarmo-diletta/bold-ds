@@ -287,6 +287,30 @@ Widget _barraDeBaixoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) =>
       ),
     );
 
+/// O selo quântico — o primeiro bloco que vem de um componente NASCIDO no filho, e não da
+/// linguagem do pai. Declarar é publicar: ele aparece na paleta do compositor sem ninguém tocar
+/// no catálogo.
+BlockDef _seloQuantico() => BlockDef(
+      type: 'seloQuantico',
+      label: 'Selo quântico',
+      props: {
+        'estado': PropDef('enum',
+            options: BoldSeloEstado.values.map((e) => e.name).toList()),
+        'tamanho': const PropDef('enum', options: ['120', '160', '200']),
+        'rotulo': const PropDef('bool'),
+      },
+      defaults: () => {'estado': 'autorizado', 'tamanho': '160', 'rotulo': true},
+      build: (p) => BoldSeloQuantico(
+        estado: BoldSeloEstado.values.firstWhere((e) => e.name == p['estado']),
+        tamanho: double.parse('${p['tamanho']}'),
+        mostrarRotulo: p['rotulo'] == true,
+      ),
+      codegen: (p) => 'ds.BoldSeloQuantico('
+          'estado: ds.BoldSeloEstado.${p['estado']}'
+          ', tamanho: ${p['tamanho']}'
+          '${p['rotulo'] == true ? '' : ', mostrarRotulo: false'})',
+    );
+
 BlockDef _indicadorDeHome() => BlockDef(
       type: 'indicadorDeHome',
       label: 'Home indicator',
@@ -316,6 +340,7 @@ void configurarDsDoBold() {
       'divisor': _divisor(),
       'botao': _botao(),
       'barraDeBaixo': _barraDeBaixo(),
+      'seloQuantico': _seloQuantico(),
       'indicadorDeHome': _indicadorDeHome(),
     },
     // TODO tipo precisa estar num grupo: a paleta do editor sai daqui, então bloco sem
@@ -323,6 +348,9 @@ void configurarDsDoBold() {
     grupos: const {
       'Estrutura': ['barraDeStatus', 'tituloDaPagina', 'indicadorDeHome'],
       'Conteúdo': ['texto', 'valor', 'selo', 'aviso', 'icone'],
+      // Grupo próprio porque é o que só o Bold tem: a vizinhança na paleta é decisão de
+      // linguagem, e peça de marca não se mistura com vocabulário herdado.
+      'Marca do Bold': ['seloQuantico'],
       'Entrada': ['campo'],
       'Ação': ['botao', 'barraDeBaixo'],
       'Ritmo': ['ritmo', 'divisor'],

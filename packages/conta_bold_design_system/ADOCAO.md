@@ -456,7 +456,7 @@ dez estavam mortos, e portar código morto é o pior tipo de trabalho — parece
 | componente | usos | estado |
 |---|---|---|
 | `BoldBackground` (+ scope, + enum de 7 fundos) | **114** | **nasceu** |
-| `BoldQuantumSeal` | 9 | a fazer — marca, fica no filho |
+| `BoldSeloQuantico` (era `BoldQuantumSeal`) | 9 | **nasceu** — e tinha 3 defeitos |
 | `BoldDinheiro` (era `BoldMoneyInputFormatter`) | 8 | **nasceu** — e o teto deslizava |
 | `BoldBalance` · `BoldCopyButton` · `BoldTabs` | 3 cada | a fazer |
 | cabeçalho da home (via `BoldTopBar.home`) | 3 | a fazer — destravado pelo `.livre` na v0.4.0 |
@@ -512,3 +512,31 @@ cor lisa não desfoca nada visível.
 
 Wired o que dá: o frame agora usa a base do backdrop (`bgEscuro` no escuro, `primary08` no claro),
 que cobre 54 dos 64 usos explícitos. O resto é pedido ao catálogo pai, quando valer a pena.
+
+### O selo quântico, e os três defeitos que a adaptação achou
+
+**1 · Três estados eram dois booleanos.** `waiting` + `failed` dá quatro combinações pra três
+estados, e a quarta (`waiting: true, failed: true`) não tinha significado — o selo mostrava o loop
+e ignorava o `failed`. Virou `BoldSeloEstado`, enum de três. É a exigência 7 do contrato pelo
+motivo exato: estado impossível que se disfarça de válido, em vez de nem compilar.
+
+**2 · O selo era só-escuro.** `Colors.white` cravado no rótulo e no trilho do anel: sobre o
+backdrop claro do produto o texto desaparecia. Agora sai de papel (`s.fg`), e os dois modos
+renderizam.
+
+**3 · A tipografia estava presa num estático.** `BoldType.fontFamily` era lido DENTRO do
+`CustomPainter`, e painter não vê tema — então a família não acompanhava o `ThemeData`. É o mesmo
+defeito que o pai consertou na v0.5.0 (um `DefaultTextStyle` substituído em vez de mesclado).
+Agora o estilo é resolvido no widget e entregue pronto; o painter deixou de saber que fontes
+existem.
+
+E nove literais de cor viraram zero: dois eram exatamente a paleta (`#2FD27A` é `success05`,
+`#FF4D5E` é `error05`) e os outros sete não tinham casa — violeta, roxo, laranja claro, dois
+rótulos e dois pares de tinta escura. O polo profundo agora é o vinho, o claro é o rosa, o acento
+é a rampa de laranja, e as tintas escuras são o degrau 01 do estado aprofundado por função. Há
+gate que lista os sete e falha se algum voltar.
+
+**Primeiro bloco do catálogo que vem de componente do FILHO**, em grupo próprio ("Marca do
+Bold"): vizinhança na paleta é decisão de linguagem, e peça de marca não se mistura com
+vocabulário herdado. Declarar é publicar — ele apareceu no compositor sem ninguém tocar no
+catálogo.
