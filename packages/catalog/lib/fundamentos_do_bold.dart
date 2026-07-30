@@ -290,7 +290,7 @@ class _Faixa extends StatelessWidget {
           fontSize: 9,
           // Tinta escolhida pelo contraste com a própria amostra: rótulo ilegível em cima da cor é
           // exatamente o defeito que este catálogo existe pra mostrar.
-          color: cpfSeguroContrastRatio(CC.neutral01, cor) >= 4.5
+          color: dilettaContrastRatio(CC.neutral01, cor) >= 4.5
               ? CC.neutral01
               : CC.white,
         ),

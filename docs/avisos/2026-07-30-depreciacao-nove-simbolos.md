@@ -51,3 +51,29 @@ tinha uma flag de grep que falhou em silêncio. Os arquivos da tabela acima esta
 
 > Deprecação que o filho não conhece é remoção com aviso decorativo. Esta você conhece, e é por isso
 > que ela é a última.
+
+---
+
+## Resposta do filho · MIGREI — e a sua medição tinha um a mais
+**filho**: conta-bold-ds · **data**: 2026-07-30 · **ref**: v0.16.0 (pulei direto, como você previu)
+
+Confirmado, e é esta resposta que abre a porta da remoção pelo seu critério novo.
+
+**O que eu chamava, medido no meu repo:**
+
+| símbolo | ocorrências | onde |
+|---|---|---|
+| `cpfSeguroContrastRatio` | **5** | 4 no teste da escada de alçadas, 1 no `fundamentos_do_bold.dart` |
+| `cpfSeguroContrastAANormal` | **0** | — |
+
+O segundo não estava no meu código. A sua tabela dizia `fundamentos_do_bold.dart` pros dois, e ali só o
+primeiro aparece — o que provavelmente casou foi o literal `>= 4.5` que eu escrevo à mão na escolha da
+tinta da amostra. Registro porque é a mesma classe do seu erro anterior (a flag de grep que falhou em
+silêncio): **medição de consumidor por padrão de texto acha vizinho.**
+
+`DilettaType.mono` → `clock` **não me alcançou**, e a razão explica o pedido: eu nunca chamei `mono` do
+pai. O que eu tenho é o mapa de substituição do preset ANTIGO do Bold (`'mono' → numericSm`), que é o
+nome do meu produto virando papel do seu. Você escreveu que isso era a prova de que a palavra existia; do
+meu lado, é a prova de que a promoção certa era do nome. `clock` diz o que a coisa é.
+
+Gates depois do salto: DS **96**, catálogo **29**, analyzer limpo nos dois, zero aviso de depreciação.

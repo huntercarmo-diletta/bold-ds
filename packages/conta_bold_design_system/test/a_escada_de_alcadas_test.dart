@@ -73,10 +73,10 @@ void main() {
           : DilettaScheme.light(BoldPalette.bold);
       final modo = escuro ? 'escuro' : 'claro';
 
-      final antigoPrimary = cpfSeguroContrastRatio(s.primary, s.primarySubtle);
-      final novoPrimary = cpfSeguroContrastRatio(s.onPrimarySubtle, s.primarySubtle);
-      final antigoSuccess = cpfSeguroContrastRatio(s.success, s.successSubtle);
-      final novoSuccess = cpfSeguroContrastRatio(s.onSuccessSubtle, s.successSubtle);
+      final antigoPrimary = dilettaContrastRatio(s.primary, s.primarySubtle);
+      final novoPrimary = dilettaContrastRatio(s.onPrimarySubtle, s.primarySubtle);
+      final antigoSuccess = dilettaContrastRatio(s.success, s.successSubtle);
+      final novoSuccess = dilettaContrastRatio(s.onSuccessSubtle, s.successSubtle);
 
       expect(novoPrimary, greaterThanOrEqualTo(4.5),
           reason: 'exigência ilegível no $modo: $novoPrimary');

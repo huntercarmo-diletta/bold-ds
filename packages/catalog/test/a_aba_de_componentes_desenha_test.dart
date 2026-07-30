@@ -41,21 +41,23 @@ void main() {
       FlutterError.onError = (d) => erros.add(d.exceptionAsString().split('\n').first);
 
       // O MESMO contexto do card: coluna sem altura, dentro de scroll, com o tema do produto.
+      // `Scaffold` porque é o que a CASCA DO PAI monta, e Material vem dele. Sem isto o teste
+      // acusava "No Material widget found" e eu tratei como defeito do card — não era. Harness que
+      // não espelha a casca mede um app que não existe.
       await t.pumpWidget(MaterialApp(
-        home: SingleChildScrollView(
-          child: Column(children: [
-            Ds.tema(Builder(
-              builder: (ctx) => ColoredBox(
-                color: DilettaTheme.schemeOf(ctx).bg,
-                child: Material(
-                  type: MaterialType.transparency,
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: Column(children: [
+              Ds.tema(Builder(
+                builder: (ctx) => ColoredBox(
+                  color: DilettaTheme.schemeOf(ctx).bg,
                   child: Ds.atual.ehTelaCheia(def.type)
                       ? AspectRatio(aspectRatio: 9 / 16, child: def.build(def.defaults()))
                       : def.build(def.defaults()),
                 ),
-              ),
-            )),
-          ]),
+              )),
+            ]),
+          ),
         ),
       ));
       await t.pump(const Duration(milliseconds: 100));
@@ -84,7 +86,7 @@ void main() {
     // verdade e não era o defeito. `first` é lugar; `id` é contrato (ele está na URL).
     final aba = configDoCatalogoDoBold().abas.firstWhere((a) => a.id == 'componentes');
     await t.pumpWidget(MaterialApp(
-      home: Builder(builder: (ctx) => aba.constroi(ctx)),
+      home: Scaffold(body: Builder(builder: (ctx) => aba.constroi(ctx))),
     ));
     await t.pump(const Duration(milliseconds: 300));
 

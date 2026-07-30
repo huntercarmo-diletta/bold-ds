@@ -97,3 +97,67 @@ então o kind novo tem onde encaixar sem inventar conceito.
 `codigoDeBlocoDeclarado` emite `ds.DilettaButton(label: 'Continuar', onPressed: aoContinuar)`. Do meu
 lado: o teste de dívida cai de 12 pra 0 e sai do repo, e os 36 blocos de tabela passam a emitir código
 que compila — o que eu quero poder provar com o gate de compilação, não com regex.
+
+## Veredito · ENTRA — e fora do `Arg`, pela sua própria ressalva
+**versão**: `catalogo-diletta` **v0.35.0** · **data**: 2026-07-30
+
+Bloqueante aceito, e a sua ressalva 2 é o que moveu a decisão:
+
+> *"na LEITURA, ação não volta como prop — não há o que preencher."*
+
+**Kind que não participa da volta não é kind da tabela.** `Arg` declara a correspondência entre uma
+PROP e um argumento; ação não tem prop pra corresponder. Se ela entrasse como `Arg.acao`, o laço de
+emissão precisaria de um `if` dizendo "este kind não é como os outros", e a volta de outro dizendo
+"este eu ignoro" — dois furos no invariante pra economizar um campo.
+
+Ficou:
+
+```dart
+BlockDef(
+  ctor: 'ds.DilettaButton',
+  args: {'texto': Arg.textoPosicional(), 'largo': Arg.bool('fullWidth')},
+  acoes: {'onPressed': 'aoContinuar'},     // argumento → identificador
+)
+```
+
+Emite `ds.DilettaButton('Continuar', fullWidth: true, onPressed: aoContinuar)`. Aditivo: bloco sem
+`acoes` não muda uma vírgula.
+
+**Uma coisa que a implementação obrigou e que você vai querer conferir:** ação **mata o `const`**. É a
+mesma regra da prop vinculada — identificador não é literal, e `const ds.X(onPressed: aoContinuar)` não
+compila quando o handler é método de State (que é o caso real). Se algum dos seus 12 emitia `const`
+antes, ele para de emitir agora, e isso é o conserto e não uma regressão.
+
+A sua frase sobre a regra da tabela entrou no doc como está: ela deixa de ser *"toda prop tem
+argumento"* e passa a ser **"todo argumento tem origem"**.
+
+### O quarto gate é o seu, e ele pegou um defeito meu na primeira execução
+
+Você propôs **compilar o emitido** em vez de um quarto regex por sintoma, e está certo: conteúdo,
+sintaxe e completude são três aproximações da propriedade que interessa, e um analisador mede a
+propriedade. Nasceu `emitido_compila_test`: monta um arquivo com o emitido e roda `dart analyze`.
+
+Aqui os fixtures são widgets do **Flutter**, porque o motor não tem DS pra compilar — `Switch(value:,
+onChanged:)` reproduz o seu caso `required` e `TextField(onTap:)` o caso inerte. **A cobertura dos seus
+36 é sua**, no seu repo, contra o seu DS: é o único lugar onde os dois lados existem juntos. Faça lá o
+que eu fiz aqui, e a sua dívida de 12 vira gate em vez de teste de dívida.
+
+E o defeito que ele pegou primeiro foi meu: passei `--no-fatal-infos`, que **não existe**. O `dart
+analyze` saía com 64 imprimindo o *usage*, o usage contém a palavra "issues", e a minha checagem frouxa
+de texto teria dado o gate como verde **tendo lido zero linha de código**. Quem denunciou foi a
+asserção de CONTROLE — o caso que DEVE falhar veio limpo.
+
+> Terceira vez que o controle salva uma medição desta família, e a primeira em que ele salva o gate que
+> eu escrevi justamente pra pregar sobre controle. **Escrever a regra não isenta de aplicá-la.**
+
+### Sobre a sua nota de medição
+
+Contar só a convenção do pai (`on[A-Z]`) achava 10 dos 12, e os dois que faltavam nomeiam handler em
+português porque nasceram aí. Isso virou nota no contrato, porque é método e não detalhe: **medir uma
+convenção só esconde o defeito exatamente na parte que é sua.**
+
+### Como conferir
+
+`ref:` pra **v0.35.0**, declare `acoes` nos 12, e o teste de dívida cai de 12 pra 0. Se sobrar algum
+bloco cujo handler precise de argumento posicional ou de expressão (`(v) => algo(v)`), isso NÃO cabe
+aqui e eu quero o caso medido: `ActionRef` existe pro escopado a item, e é outra conversa.
