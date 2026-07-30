@@ -145,10 +145,23 @@ void main() {
       expect(spec.blocks.single.props['codigo'], contains('MeuWidgetQueNaoExiste'));
     });
 
+    test('TODO bloco declarado tem entrada no leitor', () {
+      // O buraco silencioso desta fiação: bloco que existe no registro e não existe no leitor não
+      // falha em lugar nenhum — a tela abre e ele vira `cru`, como se alguém tivesse escrito código
+      // à mão ali. Este gate percorre o registro INTEIRO, não uma amostra.
+      final semLeitor = <String>[];
+      for (final def in Ds.blocos.values) {
+        if (Ds.ehChromeDeDispositivo(def.type)) continue; // não vai pro código, por contrato
+        final codigo = def.codegen(def.defaults());
+        if (codigo.isEmpty) continue;
+        final lido = ler(codigo).blocks;
+        if (lido.length != 1 || lido.single.type != def.type) semLeitor.add(def.type);
+      }
+      expect(semLeitor, isEmpty,
+          reason: 'blocos sem entrada no leitor (abrem como código à mão): $semLeitor');
+    });
+
     test('IDA e VOLTA fecham: codegen → leitor → mesmas props', () {
-      // O par que garante que as duas metades falam a mesma língua. Sem ele, o codegen pode emitir
-      // um nome de argumento que o leitor não procura, e ninguém descobre até alguém reabrir uma
-      // tela e ver o bloco virar cru.
       for (final tipo in ['texto', 'botao', 'selo', 'campo', 'saldo', 'copiar']) {
         final def = Ds.blocos[tipo]!;
         final codigo = def.codegen(def.defaults());
