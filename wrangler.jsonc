@@ -1,0 +1,21 @@
+{
+  // Cloudflare Workers (static assets) — serve o catálogo Flutter web sem uma linha de
+  // código de Worker: o `assets.directory` é o site.
+  //
+  //   build:   bash build_web.sh
+  //   publica: npx wrangler deploy
+  //
+  // O acesso é trancado À PARTE, no Cloudflare Access (Zero Trust). Deploy e Access são
+  // duas coisas: este arquivo publica, o Access decide quem entra. Ver DEPLOY_CLOUDFLARE.md.
+  "name": "conta-bold-ds",
+  "compatibility_date": "2026-07-30",
+  "assets": {
+    "directory": "./packages/catalog/build/web",
+    // Flutter web é single-page: rota desconhecida tem que cair no index.html, senão
+    // recarregar a página numa subrota dá 404.
+    //
+    // NÃO usar `_redirects` com `/* /index.html 200` aqui — o validador do Workers Assets
+    // rejeita a regra catch-all como loop infinito. Foi o que o primeiro filho mediu.
+    "not_found_handling": "single-page-application"
+  }
+}

@@ -37,6 +37,7 @@ Por **tag**, nunca por caminho local — `pubspec.yaml` de cada pacote fixa o `r
 | **adotar isto no app** (token primeiro, componente depois) e ver o que já nasceu | [packages/conta_bold_design_system/ADOCAO.md](packages/conta_bold_design_system/ADOCAO.md) |
 | o que eu já pedi aos pais, e o veredito de cada um | [docs/PEDIDOS.md](docs/PEDIDOS.md) |
 | o que os pais me mandaram | [docs/avisos/](docs/avisos/) |
+| **publicar o catálogo** (Cloudflare Worker + Access) | [DEPLOY_CLOUDFLARE.md](DEPLOY_CLOUDFLARE.md) |
 | a auditoria que precedeu esta arquitetura (histórico) | [PARITY_BOLD.md](PARITY_BOLD.md) |
 
 O protocolo de conversa com os pais (formato do pedido, os quatro vereditos, como o pai responde)
@@ -70,5 +71,9 @@ E o motivo de o catálogo VIVO não poder assumir o lugar hoje é específico: e
 `git:` sobre **SSH do Bitbucket**, e o build da Vercel não tem essa chave. Publicar o catálogo-filho pede
 uma chave de deploy ou o caminho já planejado, que é **Cloudflare**.
 
-Enquanto isso, o que o deploy publicava era o catálogo antigo desenhando o fork — um catálogo que mostrava
-um DS que não é mais o DS. Deploy parado é menos errado que deploy mentindo.
+O que o deploy publicava era o catálogo antigo desenhando o fork — um catálogo que mostrava um DS que não
+é mais o DS. Deploy parado é menos errado que deploy mentindo.
+
+**O destino ficou decidido: Cloudflare.** Worker de assets + Access, build local pelo
+[`build_web.sh`](build_web.sh). O passo a passo, e a razão de o build NÃO rodar no CI, estão em
+[DEPLOY_CLOUDFLARE.md](DEPLOY_CLOUDFLARE.md).
