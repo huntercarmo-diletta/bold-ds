@@ -10,7 +10,6 @@
 /// macros declaradas.
 library;
 
-import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 
@@ -18,7 +17,6 @@ import 'chrome_do_bold.dart';
 import 'conteudo_do_bold.dart';
 import 'ds_do_bold.dart';
 import 'medicao_do_bold.dart';
-import 'specs_do_bold.dart';
 
 void main() {
   configurarChromeDoBold();
@@ -56,10 +54,14 @@ CatalogoConfig configDoCatalogoDoBold() => CatalogoConfig(
           label: 'Styles',
           constroi: (_) => const AbaDeStyles(),
         ),
+        // COMPONENTES é do MOTOR desde a v0.44.0, quando o `previaDeComponente` passou a envolver no
+        // gancho `tema` e a dar `Stack` pro bloco de tela cheia — os dois defeitos que me faziam ficar
+        // com a minha. Ela traz o que eu não tinha: índice de chips com contagem de uso e a matriz por
+        // eixo. Terceira página minha que um release apaga, e a quarta é a de Specs, logo abaixo.
         AbaDoCatalogo(
           id: 'componentes',
           label: 'Componentes',
-          constroi: (_) => const _AbaComponentes(),
+          constroi: (_) => const AbaDeComponentes(),
         ),
         // O compositor é do PAI e entra como um widget. É o que dispensa o filho de
         // escrever editor de tela — e é a diferença entre "catálogo" e "ferramenta".
@@ -70,6 +72,9 @@ CatalogoConfig configDoCatalogoDoBold() => CatalogoConfig(
         ),
         // O DICIONÁRIO. Ele só existe desde a v0.16.0 do pai, quando as 64 specs passaram a viajar
         // com o pacote — antes moravam na raiz do repo dele e não chegavam a filho nenhum.
+        // SPECS é do MOTOR desde a v0.45.0, e ela mede o que a minha media MAIS a outra ponta: contrato
+        // sem bloco, que **não é dívida**. Eu tinha feito só o sentido "spec tem bloco?" e chamei a outra
+        // metade de "sem bloco aqui" — que é a mesma informação com nome de culpa.
         AbaDoCatalogo(
           id: 'specs',
           label: 'Specs',
@@ -84,134 +89,19 @@ CatalogoConfig configDoCatalogoDoBold() => CatalogoConfig(
     );
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// A aba de componentes — desenha cada bloco pelo `build` do próprio DS
+// A aba de COMPONENTES e a de SPECS não moram mais aqui
+//
+// As duas eram escritas à mão neste arquivo, e as duas foram absorvidas pelo motor (v0.44.0 e v0.45.0) —
+// junto com Styles (v0.39.0) e Foundations (v0.43.0). Quatro páginas apagadas por release em um dia, e
+// todas as quatro eu tinha escrito à mão horas antes.
+//
+// Não é desperdício: escrever a minha é o que produziu a medição que o pai usou. A de componentes só pôde
+// ser trocada depois de eu medir que a dele desenhava com `#0E7C5F` (a paleta de referência) em vez do
+// rosa do Bold, e depois de ele consertar. **A página que o filho escreve é o pedido em forma de código.**
+//
+// O que continua meu neste arquivo: a config das abas e a aba de conformidade — que é medição DESTE filho,
+// e por isso não é derivável de plugue nenhum.
 // ═══════════════════════════════════════════════════════════════════════════════
-
-/// Lista o vocabulário plugado, grupo por grupo.
-///
-/// Nenhum componente é redesenhado aqui: cada card chama `BlockDef.build` com os
-/// defaults do próprio bloco. É o que garante que o catálogo não vire uma segunda
-/// implementação do DS — e é o mesmo caminho que o editor e o codegen usam, então o que
-/// se vê nesta aba é o que o app recebe.
-class _AbaComponentes extends StatelessWidget {
-  const _AbaComponentes();
-
-  @override
-  Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(32),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 760),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text('O vocabulário do Conta BOLD', style: CT.tituloGrande),
-              SizedBox(height: CM.gapCompacto),
-              Text(
-                'Os componentes são da linguagem (ds-diletta); a cor vem da paleta do '
-                'Bold; a ferramenta é do catalogo-diletta. Nenhuma das três coisas foi '
-                'escrita aqui.',
-                style: CT.corpo.copyWith(color: CC.neutral04),
-              ),
-              SizedBox(height: CM.gapAmplo),
-              for (final grupo in Ds.grupos.entries) ...[
-                Text(grupo.key.toUpperCase(),
-                    style: CT.sobrescrito.copyWith(color: CC.neutral05)),
-                SizedBox(height: CM.gapCompacto),
-                for (final tipo in grupo.value) _CardDeBloco(tipo: tipo),
-                SizedBox(height: CM.gapPadrao),
-              ],
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _CardDeBloco extends StatelessWidget {
-  const _CardDeBloco({required this.tipo});
-
-  final String tipo;
-
-  @override
-  Widget build(BuildContext context) {
-    final def = Ds.blocos[tipo]!;
-    final props = def.defaults();
-    return Container(
-      margin: EdgeInsets.only(bottom: CM.gapPadrao),
-      decoration: BoxDecoration(
-        color: CC.white,
-        borderRadius: CM.raioPainel,
-        border: Border.all(color: CC.neutral09),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // O CABEÇALHO É DO MOTOR (v0.36.0), e antes era três linhas escritas aqui: nome e tipo.
-          //
-          // Ele desenha propósito, guidelines (faça/evite), chip de contrato e chips de `compõe` — tudo
-          // vindo da SPEC do componente, porque guideline é parte do contrato do componente e não da
-          // página que o mostra. O que não existe não aparece: spec sem `## Guidelines` rende só o nome
-          // e o propósito.
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-                CM.gapPadrao, CM.gapPadrao, CM.gapPadrao, CM.gapCompacto),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: CabecalhoDeComponente(
-                    nome: def.label,
-                    dimensoes: _dimensoesDe(def),
-                    contrato: Ds.contratoDe(tipo),
-                  ),
-                ),
-                Text(tipo, style: CT.mono.copyWith(color: CC.neutral05)),
-              ],
-            ),
-          ),
-          Container(height: 1, color: CC.neutral09),
-          // O preview vai no TEMA DO PRODUTO, que é o gancho `tema` do plugue. Sem
-          // isso o modo noite da ferramenta escorreria pra dentro da tela documentada.
-          Padding(
-            padding: EdgeInsets.all(CM.gapAmplo),
-            child: Ds.tema(
-              Builder(
-                builder: (ctx) => ColoredBox(
-                  color: DilettaTheme.schemeOf(ctx).bg,
-                  // NÃO há `Material` embrulhando aqui, e a razão é uma correção de leitura minha: eu
-                  // vi "No Material widget found" ao pumpar esta aba num teste e tratei como defeito
-                  // do card. Não era — **a casca do pai monta um `Scaffold`**, então tinta funciona
-                  // na tela de verdade. O que faltava era o meu harness, que pumpava a aba solta.
-                  // Embrulhar aqui seria carregar peça pra sempre por causa de um teste mal montado.
-                  child: Padding(
-                      padding: EdgeInsets.all(CM.gapPadrao),
-                      // Bloco de TELA CHEIA quer o frame inteiro (é overlay), e numa coluna de
-                      // scroll isso é altura INFINITA: estourava o layout e chegava a pintar com
-                      // `NaN`. Quem sabe quais são é o plugue (`tiposDeTelaCheia`), então o card
-                      // pergunta em vez de adivinhar, e dá a ele a proporção de um aparelho.
-                    // E um `Stack`, porque overlay devolve `Positioned` (a folha faz isso) e
-                    // `Positioned` fora de `Stack` estoura com "Incorrect use of ParentDataWidget".
-                    // No frame de verdade quem provê o `Stack` é o motor; o card documenta o
-                    // componente FORA do frame, então provê aqui.
-                    child: Ds.atual.ehTelaCheia(tipo)
-                        ? AspectRatio(
-                            aspectRatio: 9 / 16,
-                            child: Stack(children: [def.build(props)]),
-                          )
-                        : def.build(props),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // A aba de conformidade — a checagem do pai rodando contra este filho
@@ -295,19 +185,4 @@ class _CardDeViolacao extends StatelessWidget {
       ),
     );
   }
-}
-
-/// A MATRIZ do bloco em uma linha (`3 tipo × 3 tamanho`), CONTADA do registro.
-///
-/// Contada e não escrita: um filho mantinha essa linha à mão por componente, e linha à mão sobre
-/// contagem envelhece na primeira variante nova. Aqui ela sai das props de enum do próprio `BlockDef`,
-/// então variante nova aparece sozinha.
-String _dimensoesDe(BlockDef def) {
-  final partes = <String>[];
-  def.props.forEach((nome, prop) {
-    final opcoes = prop.options;
-    if (prop.kind != 'enum' || opcoes == null || opcoes.length < 2) return;
-    partes.add('${opcoes.length} $nome');
-  });
-  return partes.join(' × ');
 }

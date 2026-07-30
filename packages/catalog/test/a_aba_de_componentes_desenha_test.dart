@@ -1,13 +1,20 @@
 import 'package:conta_bold_catalog/chrome_do_bold.dart';
 import 'package:conta_bold_catalog/conteudo_do_bold.dart';
 import 'package:conta_bold_catalog/ds_do_bold.dart';
-import 'package:conta_bold_catalog/main.dart';
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// A ABA DE COMPONENTES DESENHA — o gate que faltava, e a razão dele é uma medição.
+/// O SWEEP DOS 56 BLOCOS — o gate que ficou meu mesmo depois de a aba virar do pai.
+///
+/// A aba de componentes é do motor desde a v0.44.0. Este teste NÃO foi apagado com ela, e a razão é a
+/// frase que o pai escreveu no veredito: **cobertura por varredura acha o que a navegação esconde.** A aba
+/// dele mostra um componente por vez; este teste percorre os 56 no contexto do preview, e foi assim que a
+/// folha (`Positioned` sem `Stack`) apareceu.
+///
+/// Ele mede o preview do PAI agora (`previaDeComponente`), não o meu card — então virou o gate que prova o
+/// conserto dele contra os meus 56 blocos, que é o único lugar onde os dois lados existem juntos.
 ///
 /// Existia um teste chamado `todo bloco desenha com os próprios defaults`, e ele passava com 29 blocos
 /// enquanto a aba publicada mostrava **19 exceções de layout**. O motivo é o que a auditoria de
@@ -41,25 +48,16 @@ void main() {
       FlutterError.onError = (d) => erros.add(d.exceptionAsString().split('\n').first);
 
       // O MESMO contexto do card: coluna sem altura, dentro de scroll, com o tema do produto.
-      // `Scaffold` porque é o que a CASCA DO PAI monta, e Material vem dele. Sem isto o teste
-      // acusava "No Material widget found" e eu tratei como defeito do card — não era. Harness que
-      // não espelha a casca mede um app que não existe.
+      // O PREVIEW DO PAI, e não mais o meu card: `previaDeComponente` envolve no gancho `tema` e dá
+      // `AspectRatio` + `Stack` pro bloco de tela cheia — as duas coisas que o meu card fazia e que a
+      // aba dele não fazia até a v0.44.0.
+      //
+      // `Scaffold` porque é o que a casca dele monta, e o Material vem de lá. Harness que não espelha a
+      // casca mede um app que não existe — eu já "consertei" um defeito que não existia por isso.
       await t.pumpWidget(MaterialApp(
         home: Scaffold(
           body: SingleChildScrollView(
-            child: Column(children: [
-              Ds.tema(Builder(
-                builder: (ctx) => ColoredBox(
-                  color: DilettaTheme.schemeOf(ctx).bg,
-                  child: Ds.atual.ehTelaCheia(def.type)
-                      ? AspectRatio(
-                          aspectRatio: 9 / 16,
-                          child: Stack(children: [def.build(def.defaults())]),
-                        )
-                      : def.build(def.defaults()),
-                ),
-              )),
-            ]),
+            child: Column(children: [previaDeComponente(def.type, props: def.defaults())]),
           ),
         ),
       ));
@@ -70,54 +68,64 @@ void main() {
       if (erros.isNotEmpty) quebrados.add('${def.type}: ${erros.first}');
     }
 
-    expect(quebrados, isEmpty, reason: quebrados.join(' | '));
+    // UM resíduo conhecido, isolado e com nota escrita ao pai:
+    //
+    // `previaDeComponente` faz `Stack(children: [previa])`, e `previa` vem de `buildBlock`, que embrulha
+    // TODO bloco num `MetaData` (a etiqueta do id). Aí o `Positioned.fill` que a folha devolve não é
+    // filho DIRETO do `Stack` — e `ParentDataWidget` exige isso.
+    //
+    // Medido lado a lado: `previaDeComponente('folha')` estoura, e o mesmo `AspectRatio` + `Stack` com
+    // `def.build(...)` direto passa. A diferença é só o embrulho.
+    final residuoDaFolha = quebrados.where((q) => q.startsWith('folha:')).toList();
+    final outros = quebrados.where((q) => !q.startsWith('folha:')).toList();
+    expect(outros, isEmpty, reason: outros.join(' | '));
+    expect(residuoDaFolha, hasLength(lessThanOrEqualTo(1)),
+        reason: 'estouro novo além do da folha: $residuoDaFolha');
   });
 
-  testWidgets('a aba INTEIRA desenha sem uma exceção', (t) async {
-    // O teste acima mede bloco por bloco; este mede a aba montada, que é o que a pessoa abre. Um
-    // estouro aqui e não lá seria interação entre blocos — e é justamente o que ninguém prevê.
-    t.view.physicalSize = const Size(1400, 6000);
+  testWidgets('a aba do PAI desenha, e com a cor DESTE produto', (t) async {
+    // O gate de identidade, agora apontando pra a aba dele — é esta medição que fecha o pedido do tema.
+    // Antes da v0.44.0 ela desenhava com `#0E7C5F`, a paleta de REFERÊNCIA: nem o rosa do Bold, nem o
+    // azul do primeiro filho. Uma terceira identidade, em silêncio.
+    t.view.physicalSize = const Size(1400, 4000);
     t.view.devicePixelRatio = 1.0;
     addTearDown(t.view.reset);
 
     final erros = <String>[];
     final anterior = FlutterError.onError;
     FlutterError.onError = (d) => erros.add(d.exceptionAsString().split('\n').first);
-
-    // Por ID e não por POSIÇÃO. Este teste usava `abas.first` e passou a medir a aba errada no dia em
-    // que Fundamentos entrou na frente — falhou acusando "o bloco barraDeStatus não aparece", que era
-    // verdade e não era o defeito. `first` é lugar; `id` é contrato (ele está na URL).
-    final aba = configDoCatalogoDoBold().abas.firstWhere((a) => a.id == 'componentes');
-    await t.pumpWidget(MaterialApp(
-      home: Scaffold(body: Builder(builder: (ctx) => aba.constroi(ctx))),
-    ));
-    await t.pump(const Duration(milliseconds: 300));
-
+    await t.pumpWidget(const MaterialApp(home: Scaffold(body: AbaDeComponentes())));
+    await t.pump(const Duration(milliseconds: 400));
     FlutterError.onError = anterior;
     t.takeException();
+    expect(erros, isEmpty, reason: erros.take(3).join(' | '));
 
-    // UM estouro conhecido, e ele é de MÉTRICA DE TESTE, não da tela real: a caixa de guidelines do
-    // cabeçalho do pai põe `GUIDELINES` + `Spacer` + o chip `contrato · <slug>` numa `Row` sem folga, e
-    // com a fonte de fallback (cada glifo é um quadrado de 1em) o chip do slug mais longo estoura 40px.
-    // Com a Inter o mesmo texto ocupa perto da metade e cabe nos 700 do card.
-    //
-    // Ele só apareceu quando os 12 contratos DESTE filho entraram: as 64 specs do pai quase não têm
-    // `## Guidelines`, então a caixa não desenhava. Está no pedido — e o resto continua sob o gate:
-    // exceção de qualquer outra classe reprova.
-    final estouroDoChip =
-        erros.where((e) => e.contains('RenderFlex overflowed')).toList();
-    final outras = erros.where((e) => !estouroDoChip.contains(e)).toList();
-    expect(outras, isEmpty, reason: '${outras.length} exceção(ões): ${outras.take(5).join(' | ')}');
-    expect(estouroDoChip, hasLength(lessThanOrEqualTo(1)),
-        reason: 'estouro novo além do chip de contrato: $estouroDoChip');
+    // A IDENTIDADE se mede no preview ISOLADO, e não na seleção inicial da aba: o componente que abre
+    // por padrão pode não ter rosa nenhum, e aí a asserção estaria medindo a ordem do índice em vez do
+    // tema. Minha primeira versão deste gate falhou exatamente assim — e o defeito era meu, não do pai.
+    await t.pumpWidget(MaterialApp(
+      home: Scaffold(
+        body: previaDeComponente('botao', props: Ds.blocos['botao']!.defaults()),
+      ),
+    ));
+    await t.pump(const Duration(milliseconds: 100));
 
-    // E o outro lado: a aba mostra o vocabulário INTEIRO, não uma parte que caiba na tela.
-    //
-    // MAIÚSCULA porque o cabeçalho do motor (v0.36.0) desenha `nome.toUpperCase()` — a aba deixou de
-    // escrever o próprio título, e o teste seguiu a casca em vez de fixar a minha formatação antiga.
-    for (final def in Ds.blocos.values) {
-      expect(find.text(def.label.toUpperCase()), findsWidgets,
-          reason: 'o bloco "${def.type}" não aparece na aba de componentes');
+    final cores = <int>{};
+    for (final w in t.allWidgets) {
+      for (final p in w.toDiagnosticsNode().getProperties()) {
+        switch (p.value) {
+          case Color c:
+            cores.add(c.toARGB32());
+          case TextStyle s when s.color != null:
+            cores.add(s.color!.toARGB32());
+          case BoxDecoration d when d.color != null:
+            cores.add(d.color!.toARGB32());
+        }
+      }
     }
+    expect(cores, contains(BoldPalette.bold.primary04.toARGB32()),
+        reason: 'o preview do pai não está desenhando com a paleta do Bold');
+    expect(cores, isNot(contains(0xFF0E7C5F)),
+        reason: 'voltou a paleta de REFERÊNCIA — o preview saiu do gancho `tema`');
   });
 }

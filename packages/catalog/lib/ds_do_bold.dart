@@ -1865,6 +1865,11 @@ void configurarDsDoBold() {
     // abaixo é DERIVADO do `ctor` de cada bloco: escrever a correspondência à mão com 43 blocos e 64
     // specs erra, e o sintoma (bloco sem contrato) é indistinguível de spec que não existe.
     contratos: _contratosDosBlocos(blocos),
+    // O CONJUNTO DISPONÍVEL (v0.45.0) — sem ele a aba de Specs só mede metade: "bloco sem contrato".
+    // Com ele mede a outra ponta, "contrato sem bloco", que **não é dívida** — é o vocabulário que existe
+    // e este produto não usou. Um pai com 71 palavras e um filho com 56 blocos tem palavras de sobra, e
+    // isso é o normal: o filho pega o que precisa.
+    contratosDisponiveis: const {...kDilettaSpecs, ...kBoldSpecs},
     // A VOLTA: sem isto, tela que só existe como código aparece como código, sem preview — e quem
     // monta tela perde a metade que importa, que é abrir o que já existe.
     leCodigoComoSpec: lerTelaDoBold,

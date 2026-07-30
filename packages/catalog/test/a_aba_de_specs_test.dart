@@ -1,12 +1,19 @@
 import 'package:conta_bold_catalog/chrome_do_bold.dart';
 import 'package:conta_bold_catalog/conteudo_do_bold.dart';
 import 'package:conta_bold_catalog/ds_do_bold.dart';
-import 'package:conta_bold_catalog/main.dart';
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
-import 'package:flutter/material.dart';
+import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// A ABA DE SPECS — o dicionário do pai, LIDO e não copiado.
+/// A ABA DE SPECS é do MOTOR desde a v0.45.0, e este teste passou a medir o que é MEU nela: a
+/// declaração.
+///
+/// A minha versão media um sentido — "esta spec tem bloco?" — e chamava a outra metade de "sem bloco
+/// aqui", que é a mesma informação com nome de culpa. A dele mede os dois e diz na tela que **contrato sem
+/// bloco não é dívida**: é vocabulário que existe e este produto não usou.
+///
+/// O que sobra pra mim medir: que o conjunto declarado (`contratos` + `contratosDisponiveis`) chega
+/// completo, e que nenhuma spec é copiada — a do pai é a string do pacote dele.
 void main() {
   setUpAll(() {
     configurarChromeDoBold();
@@ -17,80 +24,27 @@ void main() {
   /// `Scaffold` porque é o que a casca do pai monta — e é dele que vem o `Material` que a tinta do
   /// card exige. Harness que não espelha a casca acusa defeito que a tela real não tem: foi assim que
   /// eu quase carreguei um `Material` pra sempre dentro do card de componentes.
-  Widget aba() => MaterialApp(
-        home: Scaffold(
-          body: Builder(
-            builder: (ctx) => configDoCatalogoDoBold()
-                .abas
-                .firstWhere((a) => a.id == 'specs')
-                .constroi(ctx),
-          ),
-        ),
-      );
+  test('a DECLARAÇÃO chega inteira — é o que é meu nesta aba', () {
+    // 56 blocos, e a cobertura de contrato é o número que a aba mostra no topo.
+    final comContrato = Ds.blocos.keys.where((t) => Ds.contratoDe(t) != null).length;
+    expect(comContrato, greaterThanOrEqualTo(52),
+        reason: 'a cobertura de contrato caiu: $comContrato de ${Ds.blocos.length}');
 
-  testWidgets('lista as specs do pai, sem exceção', (t) async {
-    t.view.physicalSize = const Size(1400, 12000);
-    t.view.devicePixelRatio = 1.0;
-    addTearDown(t.view.reset);
-
-    final erros = <String>[];
-    final anterior = FlutterError.onError;
-    FlutterError.onError = (d) => erros.add(d.exceptionAsString().split('\n').first);
-    await t.pumpWidget(aba());
-    await t.pump(const Duration(milliseconds: 300));
-    FlutterError.onError = anterior;
-    t.takeException();
-
-    expect(erros, isEmpty, reason: erros.take(3).join(' | '));
-    // 69 desde a v0.17.0 do pai: as cinco que faltavam (`text`, `icon`, `gap`, `divider`,
-    // `illustration`) entraram por medição minha — eram a base de qualquer tela e as únicas sem
-    // dicionário. O número fica AFIRMADO aqui de propósito: se ele mudar, eu quero saber por quê.
-    expect(kDilettaSpecs, hasLength(69));
-    // O número na tela sai do MAPA, não de um literal que eu digitei.
-    expect(find.textContaining('${kDilettaSpecs.length} contratos'), findsOneWidget);
+    // O conjunto DISPONÍVEL é o que permite a outra ponta ("contrato sem bloco"). Sem ele declarado, a
+    // aba diz explicitamente que não pode medir essa metade — e mostrar zero não-usados seria afirmar
+    // "você usa tudo", que é o que o motor não sabe.
+    expect(Ds.atual.contratosDisponiveis, hasLength(kDilettaSpecs.length + kBoldSpecs.length));
+    for (final k in kBoldSpecs.keys) {
+      expect(Ds.atual.contratosDisponiveis, contains(k),
+          reason: 'o contrato "$k" deste filho não entrou no conjunto disponível');
+    }
   });
 
-  testWidgets('NÃO copia spec: o markdown vem do pacote do pai', (t) async {
-    // A garantia é estrutural e vale escrever: se algum dia alguém colar o markdown aqui, este teste
-    // continua passando — mas o `faz_a_limpa` acusa md órfão, e o pai avisou por quê: cópia de
-    // dicionário envelhece calada. O que ESTE teste prova é que a fonte é o pacote.
-    expect(kDilettaSpecs['design-system-button'], contains('DilettaButton'));
+  test('NÃO copia spec: a do pai é a string do PACOTE dele', () {
+    // A garantia é de identidade, não de conteúdo: `same()` prova que é o mesmo objeto, então não há
+    // cópia envelhecendo em dois lugares.
+    expect(Ds.atual.contratosDisponiveis['design-system-button'],
+        same(kDilettaSpecs['design-system-button']));
     expect(kDilettaSpecs['design-system-button'], contains('SHALL'));
-  });
-
-  testWidgets('cruza spec com BLOCO — o que só o filho sabe fazer', (t) async {
-    // O pai não sabe quais componentes este produto declarou. Este cruzamento é o que transforma 64
-    // documentos numa medida de cobertura, e o slug é DERIVADO do nome da classe: tabela à mão com 64
-    // linhas erra e a spec só "aparece sem bloco".
-    t.view.physicalSize = const Size(1400, 12000);
-    t.view.devicePixelRatio = 1.0;
-    addTearDown(t.view.reset);
-
-    await t.pumpWidget(aba());
-    await t.pump(const Duration(milliseconds: 300));
-    t.takeException();
-
-    // O botão tem bloco (`botao`), então a spec dele mostra o bloco em vez de "sem bloco aqui".
-    expect(find.text('botao'), findsWidgets,
-        reason: 'a spec do button não achou o bloco que a implementa');
-    // E uma que o Bold não usa continua marcada como não usada — a aba não finge cobertura.
-    expect(find.text('sem bloco aqui'), findsWidgets);
-  });
-
-  testWidgets('o corpo da spec abre no toque, e não antes', (t) async {
-    // 64 specs abertas de uma vez é uma parede de texto. Fechado por padrão é decisão, não economia.
-    t.view.physicalSize = const Size(1400, 12000);
-    t.view.devicePixelRatio = 1.0;
-    addTearDown(t.view.reset);
-
-    await t.pumpWidget(aba());
-    await t.pump(const Duration(milliseconds: 300));
-    expect(find.textContaining('SHALL'), findsNothing);
-
-    await t.tap(find.text('button'));
-    await t.pump(const Duration(milliseconds: 300));
-    t.takeException();
-    expect(find.textContaining('SHALL'), findsWidgets,
-        reason: 'abriu e não mostrou requisito nenhum');
   });
 }
