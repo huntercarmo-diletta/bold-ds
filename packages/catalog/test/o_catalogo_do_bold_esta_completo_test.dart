@@ -27,10 +27,9 @@ void main() {
   ///
   /// Os 18 se separam em três grupos com donos diferentes:
   ///
-  /// - **12 componentes NASCIDOS aqui** (selo quântico, saldo, copiar, abas, visor, cabeçalho da home,
-  ///   resumo da transação, escada de alçadas, progresso, prazo, segmentos, pontos de página). Dívida
-  ///   MINHA: o `COMPONENTE-DO-FILHO.md` do pai passou a pedir contrato como parte do mínimo na v0.16.1,
-  ///   e os doze nasceram antes. Doze specs é trabalho de ciclo, não de linha;
+  /// - ~~**12 componentes NASCIDOS aqui**~~ — **ESCRITOS** no mesmo dia (`kBoldSpecs`, no pacote do DS).
+  ///   Eram dívida minha, e saíram no dia em que a regra passou a existir. Medido depois: **37 dos 43
+  ///   blocos com contrato, 13 com guidelines**;
   /// - **5 componentes do PAI sem spec no conjunto dele** (`DilettaText`, `DilettaIcon`, `DilettaGap`,
   ///   `DilettaDivider`, `DilettaIllustrationAccessory`): as 64 specs cobrem 64 dos ~127 componentes, e
   ///   estes cinco ficaram fora. Não é coisa que eu conserte — pedido escrito;
