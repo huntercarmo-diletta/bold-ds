@@ -115,35 +115,44 @@ void main() {
     }
   });
 
-  test('os PARES que reprovam em AA são exatamente os quatro medidos', () {
-    // Este gate não protege o catálogo, protege a MEDIÇÃO: ele fixa os quatro pares que reprovam hoje,
-    // com o número. Se um conserto do pai subir o `primary` de 3,46:1, este teste falha e me obriga a
-    // atualizar o pedido — que é o oposto de um pedido que envelhece dizendo um número velho.
+  test('NENHUM par declarado reprova em AA — e o gate mudou de lado', () {
+    // Este gate nasceu fixando os QUATRO pares que reprovavam, com o número, pra me obrigar a atualizar o
+    // pedido em vez de deixar um número velho lá. Ele fez exatamente isso: subi o `ref` pra v0.22.0 e ele
+    // reprovou dizendo "a medição de AA mudou".
     //
-    // Só o modo CLARO, que é onde o app vive e onde os quatro estão juntos.
+    // Agora ele guarda o conserto em vez do defeito, e as duas metades são o que mudou:
+    //
+    // 1. `primary × onPrimary` passou de 3,46 e 2,73 pra **6,06 e 7,70** — o pai derivou a TINTA em vez do
+    //    preenchimento, então o rosa da marca continua sendo a superfície de ação;
+    // 2. `success`/`warning`/`error` perderam o `tinta:` porque a medição dele mostrou ZERO consumidor pra
+    //    `onSuccess`/`onWarning`/`onError` — eu tinha declarado um par que o DS não pinta.
     final papeis = Ds.estilos.papeis;
     final reprovam = <String, String>{};
     papeis.forEach((nome, papel) {
       if (papel.tinta == null) return;
       final tinta = papeis[papel.tinta]!;
-      final razao = Contraste.razao(tinta.claro, papel.claro);
-      if (razao < 4.5) reprovam[nome] = razao.toStringAsFixed(2);
+      for (final (modo, fundo, cor) in [
+        ('claro', papel.claro, tinta.claro),
+        ('escuro', papel.escuro, tinta.escuro),
+      ]) {
+        final razao = Contraste.razao(cor, fundo);
+        if (razao < 4.5) reprovam['$nome ($modo)'] = razao.toStringAsFixed(2);
+      }
     });
 
-    expect(reprovam, {
-      'primary': '3.46',
-      'success': '4.04',
-      'warning': '2.08',
-      'error': '3.68',
-    }, reason: 'a medição de AA mudou — atualize o pedido ao pai do DS com os números novos');
+    expect(reprovam, isEmpty,
+        reason: 'par declarado abaixo de AA: $reprovam — ou é conserto, ou o `tinta:` declara um par que '
+            'este DS não desenha');
 
-    // E a metade que PASSA, porque foi conserto meu de ontem: os pares `onXSubtle`.
-    for (final nome in ['primarySubtle', 'successSubtle']) {
-      final papel = papeis[nome]!;
-      final razao = Contraste.razao(papeis[papel.tinta]!.claro, papel.claro);
-      expect(razao, greaterThanOrEqualTo(4.5),
-          reason: '$nome caiu abaixo de AA — era 7,13:1 e 5,19:1');
-    }
+    // O PAR QUE IMPORTA, com o número: o rótulo do botão primário nos dois modos.
+    final primary = papeis['primary']!;
+    final onPrimary = papeis[primary.tinta]!;
+    expect(Contraste.razao(onPrimary.claro, primary.claro), greaterThan(6.0));
+    expect(Contraste.razao(onPrimary.escuro, primary.escuro), greaterThan(7.0));
+
+    // E o rosa da marca CONTINUA sendo a superfície de ação — era o meu critério de pronto no pedido.
+    expect(primary.claro.toARGB32(), BoldPalette.bold.primary04.toARGB32(),
+        reason: 'o conserto mexeu no preenchimento; ele era pra ser só na tinta');
   });
 
   testWidgets('o relatório de adoção do PAI aparece inteiro', (t) async {

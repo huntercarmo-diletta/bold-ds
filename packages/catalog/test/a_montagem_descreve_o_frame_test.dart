@@ -1,6 +1,7 @@
 import 'package:conta_bold_catalog/chrome_do_bold.dart';
 import 'package:conta_bold_catalog/conteudo_do_bold.dart';
 import 'package:conta_bold_catalog/ds_do_bold.dart';
+import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -86,7 +87,7 @@ void main() {
     final spec = telaComposta();
     final c = leContratoDaTela(spec);
 
-    await t.pumpWidget(MaterialApp(
+    await t.pumpWidget(MaterialApp(theme: ThemeData(fontFamily: BoldFonts.familyRaw), 
       home: Ds.tema(Scaffold(body: buildScreenLayout(spec, leaf: buildBlock))),
     ));
     await t.pump(const Duration(milliseconds: 200));
@@ -147,7 +148,7 @@ void main() {
       ],
     );
 
-    await t.pumpWidget(MaterialApp(
+    await t.pumpWidget(MaterialApp(theme: ThemeData(fontFamily: BoldFonts.familyRaw), 
       home: Ds.tema(Scaffold(body: buildScreenLayout(invertida, leaf: buildBlock))),
     ));
     await t.pump(const Duration(milliseconds: 200));

@@ -2124,23 +2124,33 @@ bool _vazio(Object? v) => v == null || '$v'.isEmpty;
 /// contraste do pai (WCAG 2.2 SC 1.4.3). Declarado e não adivinhado por nome, que é a regra que o pai
 /// escreveu: **convenção não é contrato.**
 ///
-/// ## Quatro pares REPROVAM em AA, e o número está no `docs/pedidos/`
+/// ## O par que importava REPROVAVA, e o conserto veio da tinta
 ///
-/// A medição foi a primeira coisa que este gancho me deu, e ela é achado de a11y de verdade:
+/// A medição foi a primeira coisa que este gancho me deu, e ela virou pedido no mesmo dia:
 ///
-/// | par | claro | escuro |
-/// |---|---|---|
-/// | `primary` × `onPrimary` | **3,46:1** | **2,73:1** |
-/// | `success` × `onSuccess` | **4,04:1** | 6,07:1 |
-/// | `warning` × `onWarning` | **2,08:1** | 6,03:1 |
-/// | `error` × `onError` | **3,68:1** | **4,49:1** |
+/// | par | antes (claro) | antes (escuro) | agora |
+/// |---|---|---|---|
+/// | `primary` × `onPrimary` | **3,46:1** ✕ | **2,73:1** ✕✕ | **6,06** e **7,70** ✓ |
 ///
-/// Os pares `onXSubtle` passam todos — e isso não é sorte: foi o conserto que a escada de alçadas me
-/// obrigou a fazer ontem, quando `primarySubtle` com `primaryTrack` dava 3,08:1.
+/// O conserto é do pai (`ds-diletta` v0.22.0) e não foi pelo caminho que eu propus. Eu pedi que a paleta
+/// declarasse o degrau de AÇÃO por modo; ele derivou a **TINTA** em vez do preenchimento, com o argumento
+/// que eu não tinha: *razão-com-branco × razão-com-preto ≈ 21 pra qualquer cor*, então quando o branco
+/// reprova existe tinta escura que passa — **sem mexer no rosa da marca.**
 ///
-/// **Eu declaro o que reprova em vez de esconder**, porque a página existe pra dizer isso. O conserto não
-/// é meu: `primary` é derivado pelo esquema do pai (`primary04` no claro, `primary05` no escuro), e o app
-/// resolve exatamente este caso usando o degrau PROFUNDO no claro. Pedido escrito.
+/// > **Tinta é consequência de legibilidade; preenchimento é decisão de marca.**
+///
+/// E a medição dele mostrou que o caso não era meu: **dois de três** produtos da família reprovavam (o rosa
+/// daqui e o âmbar de referência), o que fez a correção subir pra linguagem em vez de virar exceção deste
+/// filho.
+///
+/// ## Três pares que eu declarei e o DS não desenha
+///
+/// `success`/`warning`/`error` × `onX` ficaram SEM `tinta:`, e a razão é a medição que o pai fez a meu
+/// pedido: `onWarning`, `onError` e `onSuccess` têm **zero consumidores** no `lib/src` dele. Eu tinha
+/// declarado um par que ninguém pinta, e o resultado eram três ✕ na página sobre desenho que não existe —
+/// o falso positivo permanente que ensina a ignorar o vermelho.
+///
+/// Quem recebe texto em cima é o `subtle` de cada estado, e esses três passam (5,19 · 6,09 · 6,05).
 Map<String, PapelNosDoisModos> _papeisDoBold() {
   final c = DilettaScheme.light(BoldPalette.bold);
   final e = DilettaScheme.dark(BoldPalette.bold);
@@ -2168,20 +2178,20 @@ Map<String, PapelNosDoisModos> _papeisDoBold() {
         tinta: 'onPrimarySubtle'),
     'onPrimarySubtle': p((s) => s.onPrimarySubtle, significado: 'Tinta sobre o destaque da marca.'),
     'primaryTrack': p((s) => s.primaryTrack, significado: 'Traço e trilho no tom da marca.'),
-    'success': p((s) => s.success, significado: 'Concluído, aprovado.', tinta: 'onSuccess'),
-    // As TRÊS tintas de estado, e declará-las foi o que fez a medição aparecer.
-    //
-    // `tinta:` nomeia uma CHAVE deste mapa, e o pai resolve com `papeis[nome]` — nome que não existe vira
-    // `null`, e `null` significa "sem medição". Eu tinha escrito `tinta: 'onSuccess'` sem declarar o
-    // papel, e as três faixas ficaram sem contraste **sem nada falhar**. Achado escrito ao pai.
-    'onSuccess': p((s) => s.onSuccess, significado: 'Tinta sobre o estado concluído.'),
-    'onWarning': p((s) => s.onWarning, significado: 'Tinta sobre o estado pendente.'),
-    'onError': p((s) => s.onError, significado: 'Tinta sobre o estado de falha.'),
+    'success': p((s) => s.success, significado: 'Concluído, aprovado.'),
+    // As três tintas de estado seguem DECLARADAS como papel (elas existem no esquema e alguém pode
+    // procurá-las), mas nenhum estado as aponta em `tinta:` — ver a nota acima. O achado que sobrou dessa
+    // volta é do pai e está no anexo do pedido: `tinta:` apontando pra papel inexistente vira `null`, e
+    // `null` quer dizer "sem medição" — eu passei dez minutos com as três faixas sem contraste e nada
+    // falhando.
+    'onSuccess': p((s) => s.onSuccess, significado: 'Tinta sobre o estado concluído (não usada hoje).'),
+    'onWarning': p((s) => s.onWarning, significado: 'Tinta sobre o estado pendente (não usada hoje).'),
+    'onError': p((s) => s.onError, significado: 'Tinta sobre o estado de falha (não usada hoje).'),
     'successSubtle': p((s) => s.successSubtle,
         significado: 'Fundo de estado concluído.', tinta: 'onSuccessSubtle'),
     'onSuccessSubtle': p((s) => s.onSuccessSubtle, significado: 'Tinta sobre o fundo concluído.'),
-    'warning': p((s) => s.warning, significado: 'Pendente, atenção.', tinta: 'onWarning'),
-    'error': p((s) => s.error, significado: 'Falha, destrutivo.', tinta: 'onError'),
+    'warning': p((s) => s.warning, significado: 'Pendente, atenção.'),
+    'error': p((s) => s.error, significado: 'Falha, destrutivo.'),
     'glassTint': p((s) => s.glassTint, significado: 'O véu do vidro — é a única cor com alfa.'),
   };
 }

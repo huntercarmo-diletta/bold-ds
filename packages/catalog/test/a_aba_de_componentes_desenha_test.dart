@@ -54,7 +54,7 @@ void main() {
       //
       // `Scaffold` porque é o que a casca dele monta, e o Material vem de lá. Harness que não espelha a
       // casca mede um app que não existe — eu já "consertei" um defeito que não existia por isso.
-      await t.pumpWidget(MaterialApp(
+      await t.pumpWidget(MaterialApp(theme: ThemeData(fontFamily: BoldFonts.familyRaw), 
         home: Scaffold(
           body: SingleChildScrollView(
             child: Column(children: [previaDeComponente(def.type, props: def.defaults())]),
@@ -101,7 +101,7 @@ void main() {
       final erros = <String>[];
       final anterior = FlutterError.onError;
       FlutterError.onError = (d) => erros.add(d.exceptionAsString().split('\n').first);
-      await t.pumpWidget(MaterialApp(
+      await t.pumpWidget(MaterialApp(theme: ThemeData(fontFamily: BoldFonts.familyRaw), 
         home: Scaffold(
           body: SingleChildScrollView(
             child: Column(children: [previaDeComponente(def.type, props: def.defaults())]),
@@ -128,7 +128,9 @@ void main() {
     final erros = <String>[];
     final anterior = FlutterError.onError;
     FlutterError.onError = (d) => erros.add(d.exceptionAsString().split('\n').first);
-    await t.pumpWidget(const MaterialApp(home: Scaffold(body: AbaDeComponentes())));
+    await t.pumpWidget(MaterialApp(
+        theme: ThemeData(fontFamily: BoldFonts.familyRaw),
+        home: const Scaffold(body: AbaDeComponentes())));
     await t.pump(const Duration(milliseconds: 400));
     FlutterError.onError = anterior;
     t.takeException();
@@ -137,7 +139,7 @@ void main() {
     // A IDENTIDADE se mede no preview ISOLADO, e não na seleção inicial da aba: o componente que abre
     // por padrão pode não ter rosa nenhum, e aí a asserção estaria medindo a ordem do índice em vez do
     // tema. Minha primeira versão deste gate falhou exatamente assim — e o defeito era meu, não do pai.
-    await t.pumpWidget(MaterialApp(
+    await t.pumpWidget(MaterialApp(theme: ThemeData(fontFamily: BoldFonts.familyRaw), 
       home: Scaffold(
         body: previaDeComponente('botao', props: Ds.blocos['botao']!.defaults()),
       ),

@@ -1,15 +1,26 @@
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// OS DOIS SELETORES — segmentos (troca um parâmetro) e pontos de página (diz onde você está).
 void main() {
-  Widget naTela(Widget filho, {bool escuro = false}) => Directionality(
-        textDirection: TextDirection.ltr,
-        child: DilettaThemeScope(
+  /// O harness espelha o app hospedeiro, e a FONTE é parte disso.
+  ///
+  /// Sem `ThemeData(fontFamily:)` o texto sai na fonte quadrada do `flutter_test`, que é 76% mais larga que
+  /// o Inter — e foi assim que eu reportei ao pai um estouro de 22px que na fonte real é outro número.
+  Widget naTela(Widget filho, {bool escuro = false}) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(fontFamily: BoldFonts.familyRaw),
+        home: DilettaThemeScope(
           theme: escuro ? BoldTheme.dark : BoldTheme.light,
-          child: Align(alignment: Alignment.topLeft, child: filho),
+          // `Scaffold` não é enfeite: a família da fonte chega no texto pelo `DefaultTextStyle`, e quem o
+          // fornece é o Material. Sem ele o `ThemeData(fontFamily:)` não alcança nada, e o teste mede na
+          // fonte quadrada com o tema declarado do lado — verde, e medindo outra coisa.
+          child: Scaffold(
+            backgroundColor: const Color(0x00000000),
+            body: Align(alignment: Alignment.topLeft, child: filho),
+          ),
         ),
       );
 
@@ -98,17 +109,21 @@ void main() {
       expect(selecionados, ['30 dias']);
     });
 
-    // A LARGURA — o defeito que a unha do catálogo achou, e que estava vivo no app.
+    // A LARGURA — e o gate agora mede o caso que EXISTE.
     //
-    // `Row(mainAxisSize: min)` pede a largura natural dos rótulos e ignora quanto o pai tem. Com os
-    // rótulos da tela de aparência do app (`Claro, Escuro, Sistema`) a pílula pede 372px: estoura na
-    // unha de 320 do catálogo E no telefone de 390 com padding de tela.
+    // A primeira versão media os rótulos do app (`Claro, Escuro, Sistema`) a 312 e 358 e reprovava sem o
+    // `FittedBox`. Com a fonte do produto carregada, **ela passa nas duas larguras** — o estouro de 22px
+    // que eu reportei ao pai era da fonte quadrada do `flutter_test`, 76% mais larga que o Inter.
     //
-    // Mede as duas coisas juntas, porque uma sem a outra passa com o defeito de pé: **não vazar** e
-    // **não perder palavra**. Só "não vazar" passaria com `ellipsis`, que corta `Sistema` em `Sistem…`
-    // por um caractere; só "não perder palavra" passa com o estouro, que é o estado anterior.
-    for (final largura in [312.0, 358.0]) {
-      testWidgets('cabe em $largura sem vazar e sem perder palavra', (t) async {
+    // O caso que existe é conjunto de rótulo mais LONGO: `Aprovados · Rejeitados · Em análise` vaza 65px a
+    // 280 e 33px a 312. É esse que o gate mede, porque é esse que o componente tem que aguentar — e ele é
+    // um filtro plausível numa tela de autorizações deste produto.
+    //
+    // Mede as duas coisas juntas, porque uma sem a outra passa com o defeito de pé: **não vazar** e **não
+    // perder palavra**. Só "não vazar" passaria com `ellipsis`, que corta `Rejeitados` em `Rejeita…`.
+    const rotulosLongos = ['Aprovados', 'Rejeitados', 'Em análise'];
+    for (final largura in [280.0, 312.0]) {
+      testWidgets('rótulo longo cabe em $largura sem vazar e sem perder palavra', (t) async {
         final erros = <String>[];
         final anterior = FlutterError.onError;
         FlutterError.onError = (d) => erros.add(d.exceptionAsString().split('\n').first);
@@ -116,7 +131,7 @@ void main() {
         await t.pumpWidget(naTela(SizedBox(
           width: largura,
           child: BoldSegmentos(
-            segmentos: const ['Claro', 'Escuro', 'Sistema'],
+            segmentos: rotulosLongos,
             indiceSelecionado: 0,
             aoTrocar: (_) {},
           ),
@@ -128,7 +143,7 @@ void main() {
         expect(erros, isEmpty, reason: erros.join(' | '));
 
         // Palavra inteira: o `RenderParagraph` não elidiu nenhum dos três.
-        for (final rotulo in ['Claro', 'Escuro', 'Sistema']) {
+        for (final rotulo in rotulosLongos) {
           final p = t.renderObject<RenderParagraph>(find.text(rotulo));
           expect(p.didExceedMaxLines, isFalse, reason: '"$rotulo" está cortado em $largura');
         }

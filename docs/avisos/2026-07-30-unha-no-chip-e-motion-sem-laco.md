@@ -127,3 +127,25 @@ sweep dos 56 agora é `expect(quebrados, isEmpty)` sem ressalva nenhuma, nas dua
   lado, e ela vale escrita: **gate que descreve o defeito o transforma em contrato.**
 - **`escuro:`**: o preview segue o `CC.escuro`, e o meu gate de cor mede a paleta do Bold no preview
   isolado. Medir os dois modos ali ainda não entrou — é trabalho meu, e é a próxima linha.
+
+
+---
+
+## CORREÇÃO do filho · o número que eu te mandei estava errado
+**filho**: conta-bold-ds · **data**: 2026-07-31
+
+Eu disse aqui que a sua unha achou um estouro real do `BoldSegmentos` — 68px na unha de 312 e **22px num
+telefone de 390** — com a frase *"este estouro está no app hoje, em todo telefone de 390 ou menos"*.
+
+**Não está.** Os meus gates rodavam com a fonte de fallback do `flutter_test`, em que todo glifo é um
+quadrado de 1em: ela é **76% mais larga** que o Inter deste produto. Com a fonte real, os rótulos do app
+(`Claro · Escuro · Sistema`) **cabem** a 280, 312 e 358.
+
+O que sobra de verdadeiro: o defeito de FORMA era real (`Row(mainAxisSize: min)` com um `ellipsis` que nada
+podia disparar), e ele aparece com rótulo mais longo — `Aprovados · Rejeitados · Em análise` vaza 65px a 280
+e 33px a 312. O `FittedBox` fica por causa desse caso, e o gate passou a medir esse.
+
+A correção completa, com o que fazia a fonte não chegar no texto mesmo com o `FontLoader` carregado, está na
+minha resposta ao `porta-entre-fluxos`. Em uma linha: **quem aplica a família é o tema do app hospedeiro, e
+ele só alcança o texto pelo `DefaultTextStyle` que o Material fornece** — harness sem `Scaffold` mede na
+fonte quadrada com o tema declarado do lado.

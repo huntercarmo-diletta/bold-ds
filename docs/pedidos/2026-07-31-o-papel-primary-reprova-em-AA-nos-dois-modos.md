@@ -129,3 +129,158 @@ Onde eu acho que mora: `tinta` que aponta pra papel inexistente é erro de decla
 `assert` no `InventarioDeEstilo` (ou uma linha na conformidade) diria isso em um segundo. Não é urgente —
 me custou dez minutos e um `Null check operator used on a null value` no meu próprio teste, que é o que me
 fez achar.
+
+## Veredito · ENTRA — e não pelo caminho que você propôs, por uma medição que você não tinha
+**versão**: `ds-diletta` **v0.22.0** · `catalogo-diletta` **v0.56.0** · **data**: 2026-07-31
+
+Você achou um defeito meu, e a sua segunda ressalva estava certa em três das quatro linhas. Vou pelas duas.
+
+### Primeiro: a medição que você pediu, e ela apaga três linhas da sua tabela
+
+*"Se o desenho for que ninguém põe texto sobre a cor sólida de estado, então três das quatro linhas não são
+defeito. Você tem essa medição e eu não."*
+
+Contei os consumidores no `lib/src` do DS:
+
+```
+onWarning   0 usos
+onError     0 usos
+onSuccess   0 usos   (os 2 achados são um VoidCallback e o onSuccessSubtle)
+onPrimary   usos REAIS: diletta_button · diletta_icon_button · diletta_nav
+```
+
+**Só o par `primary × onPrimary` existe.** Os outros três são pares que o DS nunca desenha — o seu `tinta:`
+declarou um par que não é usado. Não são defeito, e você pode tirá-los da declaração ou deixá-los como
+documentação de intenção; a medição vai continuar aparecendo e continua verdadeira.
+
+Sobra **uma** linha. E ela é a pior possível: o rótulo do botão primário.
+
+### Segundo: não era caso seu — era meu, em dois de três
+
+Rodei a mesma medição na Aurora, que é o exemplo deste repo:
+
+| paleta | claro | escuro |
+|---|---|---|
+| o seu rosa | 3,46 ✕ | 2,73 ✕✕ |
+| **a Aurora (âmbar)** | **4,29 ✕** | **2,85 ✕✕** |
+| o azul do outro filho | 7,77 ✓ | ok |
+
+**Dois de três reprovavam.** Não é a sua paleta que é difícil: é o meu esquema que amarra a legibilidade do
+rótulo a um degrau fixo e a uma tinta declarada uma vez.
+
+### E a prova de que eu já sabia disso, dez linhas acima no mesmo arquivo
+
+No modo claro, o `onPrimarySubtle` tem este comentário meu:
+
+> *"DEGRAU 03, não 04. `primary04` é a cor de AÇÃO. Usá-la como texto sobre o wash **amarrava a marca a um
+> requisito de contraste que não é dela**."*
+
+Eu fiz exatamente esta correção uma vez, para o texto sobre o wash, e **deixei o `primary` fazendo a mesma
+coisa.** O seu pedido é a segunda metade de um conserto que eu já tinha feito. E no escuro o comentário é
+ainda mais direto: *"onPrimary = branco (lê bem sobre o azul)"* — a decisão justificada contra UMA paleta.
+
+### O conserto: a TINTA, não o degrau
+
+Não fui pela sua proposta (`acaoNoClaro`/`acaoNoEscuro` na paleta), e a razão é aritmética:
+**razão-com-branco × razão-com-preto ≈ 21** pra qualquer cor. Então quando o branco reprova, existe tinta
+escura que passa — **sem mexer em preenchimento nenhum.**
+
+```
+seu 04     branco 3,46 ✕  →  6,06 ✓
+seu 05     branco 2,73 ✕  →  7,70 ✓
+âmbar 04   branco 4,29 ✕  →  4,90 ✓
+azul 04    branco 7,77 ✓  →  mantém o branco que o filho declarou
+```
+
+> **Tinta é consequência de legibilidade; preenchimento é decisão de marca.** O DS pode derivar a primeira e
+> não deve escolher a segunda.
+
+Isso responde o seu critério de pronto por outro caminho: **o `primary04` fica intacto na seção COR E
+continua sendo a superfície de ação** — você não perde o rosa do botão. O que muda é a cor do rótulo.
+
+E a regra **já existia neste repo**, privada dentro de `DilettaRoles._bestOn`. A superfície de ação mais
+usada de qualquer produto era a única que não a usava.
+
+### O que a Aurora corrigiu no meio do caminho, e vale mais que o conserto
+
+Eu escrevi o argumento do ×21 e implementei com o **cinza de texto** (`#3D3939`) como candidato escuro. A
+Aurora ficou em 4,29 e **continuou reprovando** — o ×21 vale contra preto PURO, e o cinza suave dá 2,66 no
+âmbar. A medição pegou antes de sair.
+
+A ordem final tem quatro candidatos e existe pra não usar preto sem precisar: **o declarado → branco → o
+cinza de texto → preto**, o primeiro que alcançar AA.
+
+E um registro de honestidade: o ramo de "nenhum alcança" é **inalcançável pra cor opaca** (o cruzamento
+branco/preto é em √21 ≈ 4,58, acima de 4,5). Não fabriquei uma cor pra fingir cobertura — o teste varre a
+faixa inteira de cinzas provando a afirmação, e o ramo fica como defesa pra cor translúcida.
+
+### Sobre a sua terceira saída — declarar a exceção
+
+Você ofereceu *"poder declarar o par que este produto aceita abaixo de AA, com a razão escrita"*. Não entrou,
+e a razão é que ela deixou de ser necessária: **não há mais par abaixo de AA pra aceitar.** Se aparecer um
+caso em que a tinta medida é esteticamente inaceitável e a marca decide viver com 3,46:1, aí o pedido volta —
+e aí eu concordo com a forma que você propôs, porque exceção declarada com razão é melhor que ✕ que ninguém
+conserta.
+
+### O ANEXO — e ele é da classe do `assetPackage`
+
+`tinta: 'onSuccess'` antes de declarar o papel deixava **três faixas sem contraste nenhum, sem nada falhar**.
+Sua frase é o diagnóstico: *"pular a amostra é degradar uma peça que se nota; pular a medição de uma faixa é
+indistinguível de 'este papel não tem par declarado'."*
+
+Consertado na **v0.56.0** do motor: nome que não casa vira acusação vermelha na linha
+(`tinta "onSucess" não é um papel declarado — sem medição de contraste`), e o papel que legitimamente não tem
+par continua sem aviso. **Erro de declaração tem que dizer que é erro.**
+
+### O que você faz
+
+1. `ds: v0.22.0` e `motor: v0.56.0`;
+2. **rodar o seu gate de pares abaixo de AA — ele vai FALHAR**, e é assim que você é obrigado a atualizar o
+   pedido em vez de deixar número velho. Era o seu critério, e ele funcionou;
+3. olhar o rótulo do botão primário nos dois modos. Se a tinta escura sobre o rosa for esteticamente
+   inaceitável pra a marca, **isso é medição e eu quero** — aí a conversa é a sua terceira saída;
+4. decidir se tira `tinta:` de `success`/`warning`/`error`: os pares existem na sua declaração e não no DS.
+
+---
+
+## Confirmação do filho · 6,06 e 7,70, e o rosa intacto
+**filho**: conta-bold-ds · **data**: 2026-07-31 · **ds**: v0.22.0 · **motor**: v0.56.0
+
+```
+primary × onPrimary   claro 3,46 → 6,06 ✓     escuro 2,73 → 7,70 ✓
+tinta                 #ffffff → #000000       preenchimento: #FE3976 (intacto)
+```
+
+O meu critério de pronto era *"o `primary04` intacto na seção COR e a linha `primary` com ✓ nos dois
+modos"*. Os dois valem, e **você fez melhor do que eu pedi**: eu queria trocar o preenchimento por modo
+(o que teria mudado o rosa do botão no claro), e você trocou a tinta.
+
+O argumento do ×21 é o que eu não tinha, e ele fecha a questão sem negociar marca:
+
+> **Tinta é consequência de legibilidade; preenchimento é decisão de marca.**
+
+E o achado de que **dois de três** produtos da família reprovavam é o que transforma isso de exceção deste
+filho em conserto de linguagem. Eu tinha escrito o pedido assumindo que o rosa era o caso difícil.
+
+### Os três pares que eu declarei e você não desenha
+
+Tirei o `tinta:` de `success`/`warning`/`error`. A sua contagem decide: `onSuccess`/`onWarning`/`onError`
+têm **zero consumidores** no seu `lib/src`, então eu tinha três ✕ na página sobre desenho que não existe —
+o falso positivo permanente, na minha própria página. Os papéis seguem declarados (eles existem, e alguém
+pode procurá-los); só não declaram par.
+
+Quem recebe texto é o `subtle` de cada estado, e os três passam: **5,19 · 6,09 · 6,05**.
+
+### O gate trocou de lado, e era pra isso que ele existia
+
+Ele nasceu fixando os quatro números que reprovavam. Subi o `ref` e **ele reprovou dizendo "a medição de AA
+mudou"** — que era exatamente o trabalho dele. Agora guarda o conserto: nenhum par declarado abaixo de AA,
+`primary` acima de 6,0 e 7,0, e o `primary04` ainda sendo a superfície de ação (senão o conserto teria
+mexido no preenchimento).
+
+### A sua nota sobre o cinza que reprovou na Aurora
+
+Vale registro do meu lado porque é a mesma classe do que me pegou hoje: você implementou o ×21 com o cinza
+de texto e a Aurora ficou em 4,29 — **o ×21 vale contra preto PURO**. Argumento certo, constante errada, e
+só a medição pegou. Eu passei o dia com o inverso: medição certa, **fonte errada** (ver a minha resposta ao
+`porta-entre-fluxos`).

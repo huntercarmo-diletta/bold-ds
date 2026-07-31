@@ -35,30 +35,33 @@
 /// E uma que entrou: **cada segmento anuncia o estado de seleção.** Sem isso o leitor de tela lê três
 /// botões idênticos e não diz qual está ativo — que é a única informação que o componente carrega.
 ///
-/// ## O estouro que a UNHA do catálogo achou, e que estava vivo no app
+/// ## A largura, e a CORREÇÃO de um número que eu reportei errado
 ///
-/// A pílula tem `Row(mainAxisSize: min)`, então ela pede a largura NATURAL dos três rótulos e ignora
-/// quanto o pai tem pra dar. Com os rótulos do app (`Claro, Escuro, Sistema`) ela pede **380px**:
+/// A pílula tem `Row(mainAxisSize: min)`, então ela pede a largura NATURAL dos rótulos e ignora quanto o
+/// pai tem pra dar. O `overflow: ellipsis` do rótulo era **código morto**: numa Row de tamanho mínimo o
+/// filho recebe largura infinita, e nada nunca apertava o texto.
 ///
-/// | onde | largura útil | resultado antes |
-/// |---|---|---|
-/// | unha de 320 do catálogo | 312 | estoura 68px |
-/// | telefone de 390 com padding s4 | 358 | estoura 22px |
+/// **O defeito é esse, e ele é real. Os números que eu publiquei não eram.** Eu medi com a fonte do
+/// `flutter_test`, em que todo glifo é um quadrado de 1em — e reportei ao pai que os rótulos do app
+/// (`Claro, Escuro, Sistema`) vazavam 22px num telefone de 390. Medindo com **Inter**, que é a fonte deste
+/// produto:
 ///
-/// A segunda linha é a que importa: **este estouro está no app hoje**, na tela de aparência, em todo
-/// telefone de 390 ou menos. O catálogo não criou o defeito — ele o pôs num lugar onde alguém olha.
+/// | rótulos | 280 | 312 | 358 |
+/// |---|---|---|---|
+/// | os do app (`Claro · Escuro · Sistema`) | **cabe** | **cabe** | **cabe** |
+/// | três longos (`Aprovados · Rejeitados · Em análise`) | vaza 65px | vaza 33px | cabe |
 ///
-/// O `overflow: ellipsis` do rótulo era **código morto**: nada nunca apertava o texto, porque numa Row
-/// de tamanho mínimo o filho recebe largura infinita. Encurtar também não era o certo aqui — cortar
-/// `Sistema` em `Sistem…` por um caractere é pior que o texto um grau menor.
-///
-/// A pílula agora vai num `FittedBox(scaleDown)`: cabendo, ela ENCOLHE pro tamanho natural e nada muda;
-/// não cabendo, ela reduz a escala e os três rótulos continuam inteiros (0,94 no telefone de 390 —
-/// 13,2px em vez de 14). É o mesmo recurso que o dinheiro do recibo usa, e por isso é o desta família.
+/// Então: **não havia estouro no app.** O que existe é fragilidade pra conjunto de rótulo mais longo, e é
+/// isso que o `FittedBox(scaleDown)` cobre — cabendo, nada muda; não cabendo, a escala cai e os rótulos
+/// continuam inteiros. Encurtar seria pior: cortar `Rejeitados` em `Rejeita…` perde a palavra.
 ///
 /// Não usei `Flexible` por causa da direção que ninguém mede: flex com largura infinita **estoura
-/// asserção** em vez de estourar layout, e trocar um aviso amarelo por um crash na primeira pílula que
-/// alguém puser numa faixa que rola não é robustez.
+/// asserção** em vez de estourar layout, e trocar aviso amarelo por crash na primeira pílula que alguém
+/// puser numa faixa que rola não é robustez.
+///
+/// > **Gate de layout que roda na fonte de teste mede uma tela que não existe.** A fonte quadrada é 76%
+/// > mais larga que o Inter, e o número que ela produz é um teto — não o produto.
+///
 library;
 
 import 'package:diletta_design_system/diletta_design_system.dart';
