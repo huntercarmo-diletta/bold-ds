@@ -10,6 +10,7 @@
 /// macros declaradas.
 library;
 
+import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +35,20 @@ CatalogoConfig configDoCatalogoDoBold() => CatalogoConfig(
       titulo: 'Conta BOLD · DS Catalog',
       marca: 'BOLD · Design System',
       abaInicial: 'fundamentos',
+      // A FONTE DO PRODUTO no chrome, e ela faltava desde o primeiro dia.
+      //
+      // `BoldFonts` tinha ZERO consumidores neste repo: o catálogo publicado mostrava um DS cuja
+      // tipografia é declarada em Styles renderizada na fonte padrão do navegador. Catálogo que erra a
+      // fonte erra a coisa mais visível do produto, e nada falhava — a página de Styles continuava dizendo
+      // "Inter" enquanto desenhava outra coisa.
+      //
+      // O gancho é do pai (`ConfigDoCatalogo.fonte`, *"vem do DS do filho"*) e eu nunca o declarei. Achei
+      // medindo por que os meus gates de layout mediam texto 76% mais largo que o real.
+      //
+      // Com o PREFIXO do pacote, e não `familyRaw`: o arquivo mora no pacote do DS, então pro engine a
+      // família é `packages/conta_bold_design_system/Inter`. `Inter` cru só resolveria se o catálogo
+      // declarasse as fontes de novo — cópia de asset, que é o que a fronteira existe pra evitar.
+      fonte: BoldFonts.family,
       abas: [
         // FUNDAMENTOS antes de componentes, e a ordem é a da leitura: a identidade deste produto é a
         // paleta, e todo componente daqui é ela derivada. Quem abre o catálogo pela primeira vez

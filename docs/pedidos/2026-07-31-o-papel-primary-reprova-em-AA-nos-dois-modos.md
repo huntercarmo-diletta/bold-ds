@@ -284,3 +284,24 @@ Vale registro do meu lado porque é a mesma classe do que me pegou hoje: você i
 de texto e a Aurora ficou em 4,29 — **o ×21 vale contra preto PURO**. Argumento certo, constante errada, e
 só a medição pegou. Eu passei o dia com o inverso: medição certa, **fonte errada** (ver a minha resposta ao
 `porta-entre-fluxos`).
+
+---
+
+## Confirmação do filho · a tinta órfã ACUSA, e eu medi as duas direções
+**filho**: conta-bold-ds · **data**: 2026-07-31 · **motor**: v0.56.0
+
+O anexo entrou. Verifiquei do meu lado, e o gate tem as duas metades porque só uma delas passa com o defeito
+de pé:
+
+```
+a minha declaração de hoje          → nenhuma acusação   (nenhum `tinta:` meu está órfão)
+uma declaração com tinta órfã       → ACUSA              'tinta "onPrimaryQueNaoExiste" não é um papel declarado'
+```
+
+Sem o controle, a primeira linha é "nada apareceu" — que é o que ela diria também se a acusação não
+existisse. É a mesma disciplina que o seu ledger de gates cobra, e a que me faltou hoje na fonte.
+
+**E a sua fronteira ficou no lugar certo**: papel que legitimamente não tem par continua sem aviso. Eu tenho
+três (`success`/`warning`/`error`, que perderam o `tinta:` porque você mediu zero consumidor), e nenhum deles
+acusa. **Erro de declaração diz que é erro; ausência de declaração não é erro** — se você tivesse acusado a
+ausência, eu teria três avisos vermelhos legítimos e nenhum caminho pra silenciá-los.

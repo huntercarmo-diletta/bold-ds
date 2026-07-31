@@ -155,6 +155,55 @@ void main() {
         reason: 'o conserto mexeu no preenchimento; ele era pra ser só na tinta');
   });
 
+  testWidgets('e a tinta ÓRFÃ acusa — o conserto do pai, medido daqui', (t) async {
+    // O anexo do meu pedido: `tinta:` apontando pra papel inexistente virava `null`, e `null` quer dizer
+    // "sem medição". Passei dez minutos com três faixas sem contraste e nada falhando. Entrou na v0.56.0.
+    //
+    // Este gate mede as DUAS direções, porque só uma delas passa com o defeito de pé:
+    //
+    //   1. a minha declaração de hoje NÃO acusa — nenhum `tinta:` meu está órfão;
+    //   2. uma declaração com tinta órfã ACUSA — senão o item 1 é "nada apareceu", que é o que ele diria
+    //      também se a acusação não existisse.
+    t.view.physicalSize = const Size(1400, 12000);
+    t.view.devicePixelRatio = 1.0;
+    addTearDown(t.view.reset);
+
+    const frase = 'não é um papel declarado';
+
+    await t.pumpWidget(MaterialApp(
+      theme: ThemeData(fontFamily: BoldFonts.familyRaw),
+      home: Scaffold(body: Builder(
+        builder: (ctx) =>
+            configDoCatalogoDoBold().abas.firstWhere((a) => a.id == 'styles').constroi(ctx),
+      )),
+    ));
+    await t.pump(const Duration(milliseconds: 300));
+    t.takeException();
+    expect(find.textContaining(frase), findsNothing,
+        reason: 'algum `tinta:` deste plugue aponta pra papel que eu não declarei');
+
+    // O CONTROLE: a mesma página com um papel de tinta órfã declarado de propósito.
+    final comOrfa = InventarioDeEstilo(
+      papeis: {
+        'primary': PapelNosDoisModos(
+          BoldPalette.bold.primary04,
+          BoldPalette.bold.primary04,
+          tinta: 'onPrimaryQueNaoExiste',
+        ),
+      },
+    );
+    await t.pumpWidget(MaterialApp(
+      theme: ThemeData(fontFamily: BoldFonts.familyRaw),
+      home: Scaffold(
+        body: SingleChildScrollView(child: Column(children: SecoesDeEstilo.de(comOrfa))),
+      ),
+    ));
+    await t.pump(const Duration(milliseconds: 300));
+    t.takeException();
+    expect(find.textContaining(frase), findsWidgets,
+        reason: 'tinta órfã não acusou — o conserto da v0.56.0 não está de pé');
+  });
+
   testWidgets('o relatório de adoção do PAI aparece inteiro', (t) async {
     // Ele é a parte que não é decorativa: diz quais famílias de token este filho DECLAROU e quais
     // está herdando. Herdado sem conferir é como a estética do pai escorrega pro produto.
