@@ -1116,35 +1116,72 @@ BlockDef _comprovante() => BlockDef(
           ', rows: linhasDoComprovante, sections: secoesDoComprovante)',
     );
 
+/// A FOLHA, e ela deixou de receber o conteúdo como DADO DE RUNTIME.
+///
+/// O `codegen` emitia `child: conteudoDaFolha` — um campo que a tela gerada tem que fornecer. Funcionava
+/// pra integrar e **não dava pra montar**: no compositor ninguém conseguia pôr blocos dentro de uma folha,
+/// e era por isso que a caixa âmbar da Gramática tinha 54 de 56 (a resposta que eu dei ao pai).
+///
+/// Slot agora, com o mesmo raciocínio que decidiu o slot da `lista`: **o conteúdo de uma folha É o que se
+/// edita.** Uma folha de confirmação é título + linhas + botão, e cada um deles já é bloco deste registro.
+///
+/// `list: true` e `accepts` aberto: uma folha aceita qualquer bloco de conteúdo, e restringir aqui seria
+/// gramática inventada — eu não tenho medição de "que blocos podem estar numa folha". O que eu tenho é a
+/// medição do app: 34 folhas genéricas, com conteúdo variado.
 BlockDef _folha() => BlockDef(
       type: 'folha',
+      // `ctor` e `args` FICAM, e a razão veio de dois testes vermelhos: eles não servem só pra emitir.
+      //
+      // O mapa de contratos é DERIVADO do `ctor` (`_contratosDosBlocos`), e o leitor de código usa a tabela
+      // pra fazer a VOLTA. Tirando os dois, a folha perdeu o contrato e passou a abrir como código à mão —
+      // duas regressões que o `slotsCodegen` não compensa, porque ele só cobre a ida.
+      //
+      // O que SAIU foi o `acoes: {'child': 'conteudoDaFolha'}`: o filho agora vem do slot, e declarar as
+      // duas coisas faria o emitido ter conteúdo por dois caminhos.
       ctor: 'ds.DilettaSheetOverlay',
       args: const {'aberta': Arg.bool('open')},
-      acoes: const {'onScrimTap': 'aoFechar', 'child': 'conteudoDaFolha'},
+      acoes: const {'onScrimTap': 'aoFechar'},
       label: 'Folha (overlay)',
       props: const {'aberta': PropDef('bool')},
       defaults: () => {'aberta': true},
-      build: (p) => DilettaSheetOverlay(
-        open: p['aberta'] == true,
-        onScrimTap: () {},
-        child: DilettaFrame.column(
-          padding: const EdgeInsets.all(DilettaSpacing.s5),
-          gap: DilettaSpacing.s3,
-          children: [
-            const DilettaPageTitle(title: 'Confirmar envio', subtitle: 'Revise antes de enviar.'),
-            DilettaButton(label: 'Confirmar', onPressed: () {}, fullWidth: true),
-          ],
-        ),
-      ),
+      slots: const {'conteudo': SlotDef(list: true)},
+      build: (p) => _folhaWidget(p, const []),
+      slotsBuild: (p, filhos) => _folhaWidget(p, filhos['conteudo'] ?? const []),
+      slotsCodegen: (p, codigos) {
+        final filhos = codigos['conteudo'] ?? const [];
+        return 'ds.DilettaSheetOverlay(open: ${p['aberta'] == true}, onScrimTap: aoFechar'
+            ', child: ds.DilettaFrame.column(children: [${filhos.join(', ')}]))';
+      },
+      // Nunca chamado (o motor prefere `slotsCodegen`), e obrigatório pelo contrato: folha sem filho é a
+      // casca vazia, que é o que o preview de um slot recém-arrastado mostra.
       codegen: (p) => 'ds.DilettaSheetOverlay(open: ${p['aberta'] == true}'
-          ', onScrimTap: aoFechar, child: conteudoDaFolha)',
+          ', onScrimTap: aoFechar, child: const ds.DilettaFrame.column(children: []))',
+    );
+
+/// A folha com os filhos que o slot deu — ou o exemplo, quando ela está vazia.
+///
+/// O exemplo NÃO é decoração: folha vazia é um retângulo cinza no catálogo, e quem arrasta o bloco pela
+/// primeira vez não descobre o que ele é. Com filho no slot o exemplo sai.
+Widget _folhaWidget(Map<String, dynamic> p, List<Widget> filhos) => DilettaSheetOverlay(
+      open: p['aberta'] == true,
+      onScrimTap: () {},
+      child: DilettaFrame.column(
+        padding: const EdgeInsets.all(DilettaSpacing.s5),
+        gap: DilettaSpacing.s3,
+        children: filhos.isNotEmpty
+            ? filhos
+            : [
+                const DilettaPageTitle(
+                    title: 'Confirmar envio', subtitle: 'Revise antes de enviar.'),
+                DilettaButton(label: 'Confirmar', onPressed: () {}, fullWidth: true),
+              ],
+      ),
     );
 
 BlockDef _dialogo() => BlockDef(
       type: 'dialogo',
       ctor: 'ds.DilettaDialog',
       args: const {'titulo': Arg.texto('title'), 'mensagem': Arg.texto('message')},
-      acoes: const {'actions': 'acoesDoDialogo'},
       label: 'Diálogo',
       props: const {
         'titulo': PropDef('text', bindable: true, dartType: 'String'),
@@ -1154,16 +1191,34 @@ BlockDef _dialogo() => BlockDef(
         'titulo': 'Encerrar a conta?',
         'mensagem': 'Isso não pode ser desfeito, e o saldo precisa estar zerado.',
       },
-      build: (p) => DilettaDialog(
-        title: '${p['titulo']}',
-        message: _vazio(p['mensagem']) ? null : '${p['mensagem']}',
-        actions: [
-          DilettaButton(label: 'Cancelar', onPressed: () {}, type: DilettaButtonType.secondary),
-          DilettaButton(label: 'Encerrar', onPressed: () {}),
-        ],
-      ),
+      // As AÇÕES são blocos, e o slot aceita só `botao`: aqui a gramática existe de verdade — um diálogo
+      // tem botões no rodapé, e nada mais. É o oposto do slot da folha, que é aberto porque o conteúdo
+      // dela varia.
+      slots: const {'acoes': SlotDef(list: true, accepts: ['botao'])},
+      build: (p) => _dialogoWidget(p, const []),
+      slotsBuild: (p, filhos) => _dialogoWidget(p, filhos['acoes'] ?? const []),
+      slotsCodegen: (p, codigos) {
+        final acoes = codigos['acoes'] ?? const [];
+        return 'ds.DilettaDialog(title: ${_str(p['titulo'])}'
+            '${_vazio(p['mensagem']) ? '' : ', message: ${_str(p['mensagem'])}'}'
+            ', actions: [${acoes.join(', ')}])';
+      },
       codegen: (p) => 'ds.DilettaDialog(title: ${_str(p['titulo'])}'
-          ', message: ${_str(p['mensagem'])}, actions: acoesDoDialogo)',
+          '${_vazio(p['mensagem']) ? '' : ', message: ${_str(p['mensagem'])}'}'
+          ', actions: const [])',
+    );
+
+/// O diálogo com as ações do slot — ou o par canônico, quando ele está vazio.
+Widget _dialogoWidget(Map<String, dynamic> p, List<Widget> acoes) => DilettaDialog(
+      title: '${p['titulo']}',
+      message: _vazio(p['mensagem']) ? null : '${p['mensagem']}',
+      actions: acoes.isNotEmpty
+          ? acoes
+          : [
+              DilettaButton(
+                  label: 'Cancelar', onPressed: () {}, type: DilettaButtonType.secondary),
+              DilettaButton(label: 'Encerrar', onPressed: () {}),
+            ],
     );
 
 BlockDef _listaDeRadio() => BlockDef(
@@ -1266,7 +1321,6 @@ BlockDef _expansivel() => BlockDef(
       type: 'expansivel',
       ctor: 'ds.DilettaExpansionTile',
       args: const {'titulo': Arg.texto('title'), 'aberto': Arg.bool('initiallyExpanded')},
-      acoes: const {'children': 'conteudoDoExpansivel'},
       label: 'Expansível',
       props: const {
         'titulo': PropDef('text'),
@@ -1278,16 +1332,31 @@ BlockDef _expansivel() => BlockDef(
         'conteudo': 'Cada faixa de valor exige um número de assinaturas.',
         'aberto': true,
       },
-      build: (p) => DilettaExpansionTile(
-        title: '${p['titulo']}',
-        initiallyExpanded: p['aberto'] == true,
-        children: [
-          DilettaText('${p['conteudo']}', style: DilettaType.bodySm),
-        ],
-      ),
+      slots: const {'conteudo': SlotDef(list: true)},
+      build: (p) => _expansivelWidget(p, const []),
+      slotsBuild: (p, filhos) => _expansivelWidget(p, filhos['conteudo'] ?? const []),
+      slotsCodegen: (p, codigos) {
+        final filhos = codigos['conteudo'] ?? const [];
+        return 'ds.DilettaExpansionTile(title: ${_str(p['titulo'])}'
+            ', children: [${filhos.join(', ')}]'
+            '${p['aberto'] == true ? ', initiallyExpanded: true' : ''})';
+      },
       codegen: (p) => 'ds.DilettaExpansionTile(title: ${_str(p['titulo'])}'
-          ', children: conteudoDoExpansivel'
+          ', children: const []'
           '${p['aberto'] == true ? ', initiallyExpanded: true' : ''})',
+    );
+
+/// O expansível com os filhos do slot — ou o texto da prop `conteudo`, que é o caso simples.
+///
+/// A prop `conteudo` FICA, e não é redundância com o slot: a pergunta "como funciona a alçada?" tem uma
+/// resposta de um parágrafo, e obrigar a arrastar um bloco de texto pra dentro pra escrever uma frase é
+/// atrito sem ganho. Slot vazio ⇒ o parágrafo; slot com filho ⇒ os filhos.
+Widget _expansivelWidget(Map<String, dynamic> p, List<Widget> filhos) => DilettaExpansionTile(
+      title: '${p['titulo']}',
+      initiallyExpanded: p['aberto'] == true,
+      children: filhos.isNotEmpty
+          ? filhos
+          : [DilettaText('${p['conteudo']}', style: DilettaType.bodySm)],
     );
 
 BlockDef _cartaoDeDestaque() => BlockDef(

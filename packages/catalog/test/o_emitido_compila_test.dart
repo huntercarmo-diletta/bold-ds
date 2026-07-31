@@ -45,12 +45,18 @@ void main() {
   });
 
   test('todo bloco emite código que o analisador aceita', () async {
+    // Pelo `codigoDoBloco` DO MOTOR, e não pelas peças de baixo.
+    //
+    // A primeira versão fazia `temTabela(def) ? codigoDeBlocoDeclarado(def, props) : def.codegen(props)` —
+    // uma cópia da precedência dele. E a precedência tem mais degraus do que eu sabia: `slotsCodegen`
+    // **vence a tabela**, e `repeatCodegen` vence os dois. No dia em que um bloco meu com tabela ganhasse
+    // slot, o gate mediria o caminho que o motor não usa, e verde aqui significaria nada.
+    //
+    // Regra que eu já tinha aprendido do outro lado hoje, na fonte: **medir pelo caminho do PRODUTOR.**
     final emitidos = <String, String>{};
     for (final def in Ds.blocos.values) {
       if (Ds.ehChromeDeDispositivo(def.type)) continue; // não emite código, por contrato
-      final codigo = temTabela(def)
-          ? codigoDeBlocoDeclarado(def, def.defaults())
-          : def.codegen(def.defaults());
+      final codigo = codigoDoBloco(_blocoDe(def, def.defaults()));
       if (codigo.trim().isEmpty) continue;
       emitidos[def.type] = codigo;
     }
@@ -105,8 +111,7 @@ void main() {
         final padrao = '${def.defaults()[nome]}';
         for (final opcao in prop.options!.where((o) => o != padrao)) {
           final props = {...def.defaults(), nome: opcao};
-          final codigo =
-              temTabela(def) ? codigoDeBlocoDeclarado(def, props) : def.codegen(props);
+          final codigo = codigoDoBloco(_blocoDe(def, props));
           if (codigo.trim().isEmpty) continue;
           emitidos['${def.type}·$nome=$opcao'] = codigo;
           variacoes++;
@@ -150,6 +155,26 @@ void main() {
         reason: 'o analisador aceitou `ds.DilettaPageTitle()` sem `title` — então este gate '
             'não estava medindo nada');
   }, timeout: const Timeout(Duration(minutes: 3)));
+}
+
+/// O `Block` que o motor espera, com os SLOTS preenchidos pelo primeiro tipo que cada um aceita.
+///
+/// Slot vazio não é o caso de uso: bloco de container existe pra ter filho, e emitir com a lista vazia
+/// mediria o container e não a composição. Um filho por slot já exercita o caminho inteiro (o código do
+/// filho, o embrulho do pai e o `collection-if` de visibilidade quando o slot é de lista).
+Block _blocoDe(BlockDef def, Map<String, dynamic> props) {
+  final slots = <String, List<Block>>{};
+  def.slots.forEach((nome, slot) {
+    // Slot ABERTO (`accepts` vazio) recebe um bloco qualquer — e essa linha é o conserto de um furo que eu
+    // ia deixar: `accepts.firstOrNull` num slot aberto dá `null`, então os dois slots abertos deste registro
+    // (`folha.conteudo` e `expansivel.conteudo`) ficariam **sem filho** e o gate mediria a casca vazia.
+    // Verde, e sem exercitar a composição — que é justamente o que a conversão pra slot introduziu.
+    final tipo = slot.accepts.isEmpty ? 'botao' : slot.accepts.first;
+    final filho = Ds.blocos[tipo];
+    if (filho == null) return;
+    slots[nome] = [Block(id: 'filho-$nome', type: tipo, props: filho.defaults())];
+  });
+  return Block(id: 'bloco-${def.type}', type: def.type, props: props, slots: slots);
 }
 
 /// O arquivo que vai ao analisador: os stubs que a tela gerada precisa ter, e o emitido dentro deles.

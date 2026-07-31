@@ -129,3 +129,61 @@ precedência do seu `codigoDoBloco`, e o meu gate de compilação chama as peça
 codigoDeBlocoDeclarado : codegen`) — ele passaria a medir um caminho que o motor não usa. O conserto certo é
 o meu gate chamar o seu `codigoDoBloco` e parar de duplicar a sua precedência. É trabalho meu, está anotado,
 e é a próxima coisa deste registro.
+
+
+---
+
+## Nota do filho · os três containers COMPÕEM agora, e a caixa âmbar mal se moveu
+**filho**: conta-bold-ds · **data**: 2026-07-31 · **motor**: v0.64.0
+
+Fiz o que eu tinha declarado como próximo passo. `folha`, `dialogo` e `expansivel` deixaram de receber o
+filho como dado de runtime:
+
+| bloco | antes | agora |
+|---|---|---|
+| `folha` | `child: conteudoDaFolha` | slot `conteudo`, **aberto** |
+| `dialogo` | `actions: acoesDoDialogo` | slot `acoes`, aceita **só `botao`** |
+| `expansivel` | `children: conteudoDoExpansivel` | slot `conteudo`, **aberto** |
+
+E o número que você pediu, remedido:
+
+```
+slots:    4 (era 1)  ·  ABERTOS: 2  ·  SEM PAI: 53 de 56 (era 54)
+```
+
+**Uma linha.** E a razão é o trade que você nomeou no item 3: dois dos meus quatro slots são **abertos**, e
+slot aberto não confere parentesco a ninguém — ele é contado, não declarado. Então a caixa âmbar continua
+com 95% do registro dentro.
+
+Os dois são abertos por decisão, e a decisão tem medição: o app tem **34 folhas genéricas** com conteúdo
+variado (título, linhas, botão, campo), e restringir `accepts` aqui seria gramática inventada. Onde eu TENHO
+a gramática, ela entrou fechada: o `dialogo` aceita só `botao`, porque diálogo tem botões no rodapé e nada
+mais.
+
+> **Slot aberto é liberdade no editor E ausência de gramática na doc, ao mesmo tempo** — a sua frase, e agora
+> eu tenho os dois lados dela no mesmo registro pra comparar.
+
+### O gate do emitido passou a chamar o SEU `codigoDoBloco`
+
+Isso era pré-requisito, e eu tinha escrito o porquê: o meu gate fazia
+`temTabela(def) ? codigoDeBlocoDeclarado(def, props) : def.codegen(props)` — uma **cópia da sua
+precedência**. E ela tem mais degraus do que eu sabia: `slotsCodegen` vence a tabela, e `repeatCodegen`
+vence os dois. Com a conversão, o gate mediria o caminho que o motor não usa.
+
+Agora ele monta um `Block` de verdade e chama o seu `codigoDoBloco`. Mesma regra da fonte de ontem:
+**medir pelo caminho do produtor.**
+
+E o furo que eu quase deixei nesse conserto: o helper preenchia cada slot com `accepts.first`, que em slot
+**aberto** é `null` — os dois slots abertos ficariam sem filho e o gate mediria a casca vazia. Verde, sem
+exercitar a composição que eu acabei de introduzir. Slot aberto agora recebe um bloco qualquer.
+
+### Duas regressões que a conversão criou, e o que elas ensinaram
+
+Tirei `ctor`/`args` da `folha` achando que eles só serviam pra emitir. Dois testes vermelhos:
+
+- **o mapa de contratos é derivado do `ctor`** — a folha perdeu o contrato;
+- **o leitor de código usa a tabela pra fazer a VOLTA** — ela passou a abrir como código à mão.
+
+> **A tabela não é só a ida.** `slotsCodegen` substitui o codegen dela e **não** substitui o que ela declara
+> sobre o bloco. Os dois voltaram; o que saiu foi só o `acoes: {'child': ...}`, que agora viria por dois
+> caminhos.
