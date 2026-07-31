@@ -17,6 +17,7 @@ import 'chrome_do_bold.dart';
 import 'conteudo_do_bold.dart';
 import 'ds_do_bold.dart';
 import 'medicao_do_bold.dart';
+import 'styles_do_bold.dart';
 
 void main() {
   configurarChromeDoBold();
@@ -40,19 +41,21 @@ CatalogoConfig configDoCatalogoDoBold() => CatalogoConfig(
         // precisa ver de onde a cor vem antes de ver o que ela pinta.
         // FUNDAMENTOS é do MOTOR desde a v0.43.0: a prosa que ensina, com índice e renderizador de
         // markdown de bloco (tabela inclusive). A minha página visual saiu, e o que era medição dela —
-        // papéis nos dois modos e o relatório de adoção — foi pra aba de conformidade, que é onde
-        // medição deste filho mora.
+        // o relatório de adoção — foi pra aba de conformidade, e o papel semântico nos dois modos foi
+        // pra Styles quando a v0.48.0 deixou compor a página.
         AbaDoCatalogo(
           id: 'fundamentos',
           label: 'Fundamentos',
           constroi: (_) => const AbaDeFundamentos(),
         ),
-        // STYLES é do MOTOR desde a v0.39.0, derivada do `InventarioDeEstilo` que o plugue declara. A
-        // minha versão escrita à mão saiu no mesmo commit: peça que o pai entrega, o filho não reescreve.
+        // STYLES é do MOTOR desde a v0.39.0 (derivada do `InventarioDeEstilo`) e COMPOSTA desde a
+        // v0.48.0: `SecoesDeEstilo.de()` devolve as famílias sem casca, então a minha seção de papel
+        // semântico entra no meio delas em vez de morar noutra aba. A casca é minha porque a página
+        // inteira é minha — a regra do pai é "o motor entrega o que ele DERIVA".
         AbaDoCatalogo(
           id: 'styles',
           label: 'Styles',
-          constroi: (_) => const AbaDeStyles(),
+          constroi: (_) => const AbaDeStylesDoBold(),
         ),
         // COMPONENTES é do MOTOR desde a v0.44.0, quando o `previaDeComponente` passou a envolver no
         // gancho `tema` e a dar `Stack` pro bloco de tela cheia — os dois defeitos que me faziam ficar

@@ -29,7 +29,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [a tabela não declara callback](pedidos/2026-07-30-a-tabela-nao-declara-callback.md) | ENTRA (fora do `Arg`) | **v0.35.0** |
 | [o `$` não é escapado](pedidos/2026-07-30-o-dolar-nao-e-escapado.md) | ENTRA | **v0.38.1** |
 | [cinco componentes sem spec, e o chrome no gate](pedidos/2026-07-30-cinco-componentes-sem-spec-e-o-chrome.md) | ENTRA | **ds v0.17.0 · motor v0.38.1** |
-| [a aba de componentes não passa pelo tema](pedidos/2026-07-30-a-aba-de-componentes-nao-passa-pelo-tema.md) | **sem veredito** | — |
+| [a aba de componentes não passa pelo tema](pedidos/2026-07-30-a-aba-de-componentes-nao-passa-pelo-tema.md) | ENTRA (2 rodadas, 4 defeitos) | **v0.44.0 · v0.46.1** |
 
 ## O que os pais me mandaram
 
@@ -41,15 +41,24 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [a aba de componentes do motor](avisos/2026-07-30-aba-de-componentes-do-motor.md) | RELEASE | sim — duas peças ligadas, a aba com pedido |
 | [Styles e o motion](avisos/2026-07-30-styles-e-motion.md) | RELEASE | sim, no próprio arquivo |
 | [Foundations e o markdown](avisos/2026-07-30-foundations-e-o-markdown.md) | RELEASE | sim, no próprio arquivo |
+| [as specs viajam](avisos/2026-07-30-as-specs-viajam.md) | RELEASE | sim, no próprio arquivo |
+| [depreciação de nove símbolos](avisos/2026-07-30-depreciacao-nove-simbolos.md) | DEPRECIAÇÃO | sim, no próprio arquivo |
+| [o gate que trava o Cloudflare em zero](avisos/2026-07-30-nunca-pagar.md) | CONSELHO | sim — virou linha do `build_web.sh` |
+| [a unha no chip, o motion sem laço](avisos/2026-07-30-unha-no-chip-e-motion-sem-laco.md) | RELEASE | sim — o sweep achou defeito MEU |
+| [o contrato de tela monta a tela](avisos/2026-07-30-contrato-de-tela-monta-a-tela.md) | RELEASE | sim — Styles virou página composta |
 
 Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
 pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedido novo.
 
 ## Dois números que este ledger deixa ver
 
-**13 pedidos, 12 com veredito, 12 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
+**13 pedidos, 13 com veredito, 13 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
 sobre o método e não sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
 
 **Três dos nove eram defeito do pai, não lacuna** — e os três apareceram na primeira execução de um
 gate dele contra um filho de verdade. Um deles só existiu porque o pai consertou outro: o conserto
 removeu a cobertura que escondia o de baixo.
+
+**E a mão inverteu uma vez.** O último RELEASE do pai pediu que eu rodasse o meu sweep dos 56 contra a
+peça nova dele, e o que o sweep achou foi **defeito meu** — uma pílula que vazava 22px no telefone do app.
+Um canal em que só um lado acha defeito do outro estaria medindo a direção, não a qualidade.

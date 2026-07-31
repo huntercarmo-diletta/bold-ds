@@ -1789,7 +1789,19 @@ void configurarDsDoBold() {
     //
     // `SizedBox.expand` como filho porque aqui o backdrop é só fundo: o conteúdo da tela é
     // desenhado pelo motor por cima, não por dentro dele.
-    fundoDoFrame: (ctx) => const BoldBackground(child: SizedBox.expand()),
+    // A ARTE entra pelo SCOPE, que é o contrato do componente: ele não crava caminho de asset, e sem
+    // scope o mood `imagem` degrada pro tema com brilho. O catálogo não declarava nada, então o fundo da
+    // HOME — 114 usos, o componente mais usado do produto — aparecia sem cidade.
+    //
+    // A arte é DEMO deste catálogo (cópia reduzida da do app), e está declarada como tal no `pubspec`.
+    fundoDoFrame: (ctx) => const BoldBackdropScope(
+      // `estilo` é obrigatório no scope: ele é a personalização que o app faz uma vez. `imagem` é o
+      // default do produto e é o fundo da home.
+      estilo: BoldBackdrop.imagem,
+      arteClara: AssetImage('assets/demo/cidade-claro.jpg'),
+      arteEscura: AssetImage('assets/demo/cidade-escuro.jpg'),
+      child: BoldBackground(child: SizedBox.expand()),
+    ),
     // Fica declarado também: o motor usa o `Color?` quando o widget está ausente, e é o que
     // pinta a cor por trás do próprio backdrop.
     fundoDaTela: (ctx) {

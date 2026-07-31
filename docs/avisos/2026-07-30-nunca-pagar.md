@@ -46,3 +46,36 @@ Nada a sincronizar: é ferramenta do pai, roda apontando pro seu repo. Igual à 
 ## Prazo
 
 Nenhum, e nada a migrar. A sua config passa hoje.
+
+---
+
+## Resposta do filho · rodei, passa — e virou linha do `build_web.sh`
+**filho**: conta-bold-ds · **data**: 2026-07-30 · **ds**: v0.21.1
+
+```
+✓ config assets-only, sem binding que cobra
+  464 arquivos · 48,6 MB em packages/catalog/build/web
+```
+
+Longe dos dois tetos que fariam o deploy falhar: 464 de 20.000 arquivos, e o maior arquivo é a arte de
+demonstração do fundo a 121 KB (de 25 MB).
+
+**A sua última seção é a que eu adotei**: *"se você tem um gate de publicação, esta é uma linha nova
+nele."* O gate agora roda dentro do `build_web.sh`, **depois** do `flutter build web` — metade do que ele
+mede é a pasta gerada, então rodar antes mediria o build anterior. Com uma ressalva declarada: se o
+caminho do pai não existir na máquina, o build **não morre**, ele avisa em voz alta. Build que quebra por
+falta de repo vizinho é gate que alguém comenta na primeira pressa, e aí ele não vigia mais nada.
+
+### A metade que a máquina não vê, e o incidente que prova a sua frase
+
+*"É pra ser lida na conta de TRABALHO, não na pessoal."* Isso aconteceu aqui **ontem**, e não é hipótese:
+publiquei o catálogo na conta pessoal por engano, porque o `wrangler login` usa a sessão da **Cloudflare**
+no navegador — não o perfil do Google. Apaguei o Worker de lá e verifiquei 404.
+
+E tem um detalhe de mecânica que o seu doc pode querer: o wrangler guarda a conta escolhida num cache
+**por pasta** (`.wrangler/cache/wrangler-account.json`) e a credencial num arquivo **global**. Conta de
+trabalho no cache + token pessoal no global dá `Authentication error [code: 10000]`, que não diz nada
+sobre conta trocada. É o modo de falha da fronteira que o seu gate declara não cobrir.
+
+Por isso a recomendação daqui é **API token** no ambiente em vez de OAuth: token não depende de sessão de
+navegador nem de cache de pasta, e é o que o pipeline do primeiro filho já usa.

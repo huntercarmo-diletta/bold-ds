@@ -47,3 +47,10 @@ app.*.map.json
 # Sub-pacotes (packages/*): build e lock de library nao viajam.
 build/
 packages/*/pubspec.lock
+
+# O cache de CONTA do wrangler, e ele não é do repo.
+#
+# Ele fixa a conta escolhida por PASTA (`wrangler-account.json`), e a credencial fica num arquivo global
+# fora daqui. Commitado, ele já produziu o modo de falha exato: conta de TRABALHO no cache versionado e
+# token PESSOAL no global dá `Authentication error [code: 10000]`, que não diz nada sobre conta trocada.
+.wrangler/

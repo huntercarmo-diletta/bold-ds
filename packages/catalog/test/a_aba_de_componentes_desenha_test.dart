@@ -68,19 +68,53 @@ void main() {
       if (erros.isNotEmpty) quebrados.add('${def.type}: ${erros.first}');
     }
 
-    // UM resíduo conhecido, isolado e com nota escrita ao pai:
+    // ZERO resíduo. Havia UM, e ele fechou na v0.46.1 do motor:
     //
-    // `previaDeComponente` faz `Stack(children: [previa])`, e `previa` vem de `buildBlock`, que embrulha
-    // TODO bloco num `MetaData` (a etiqueta do id). Aí o `Positioned.fill` que a folha devolve não é
-    // filho DIRETO do `Stack` — e `ParentDataWidget` exige isso.
+    // `previaDeComponente` fazia `Stack(children: [previa])` com `previa` vindo de `buildBlock`, que
+    // embrulha todo bloco num `MetaData` (a etiqueta do id) — então o `Positioned.fill` da folha não era
+    // filho DIRETO do `Stack`, e `ParentDataWidget` exige isso. Eu isolei lado a lado (o mesmo
+    // `AspectRatio` + `Stack` com `def.build` direto passava), o pai mediu que quem lê a etiqueta são os
+    // dois hit-tests do canvas, e a prévia passou a jogá-la fora com `unwrapBlockTag`.
     //
-    // Medido lado a lado: `previaDeComponente('folha')` estoura, e o mesmo `AspectRatio` + `Stack` com
-    // `def.build(...)` direto passa. A diferença é só o embrulho.
-    final residuoDaFolha = quebrados.where((q) => q.startsWith('folha:')).toList();
-    final outros = quebrados.where((q) => !q.startsWith('folha:')).toList();
-    expect(outros, isEmpty, reason: outros.join(' | '));
-    expect(residuoDaFolha, hasLength(lessThanOrEqualTo(1)),
-        reason: 'estouro novo além do da folha: $residuoDaFolha');
+    // A exceção pro `folha` SAIU junto com o conserto. Baseline que sobrevive ao conserto é a coisa que
+    // o teste anti-fantasma existe pra cobrar, e aqui ela era uma linha de código.
+    expect(quebrados, isEmpty, reason: quebrados.join(' | '));
+  });
+
+  testWidgets('TODO bloco sobrevive à largura de TELEFONE, e não só à de mesa', (t) async {
+    // O SEGUNDO sweep, e ele nasceu de um vermelho que a v0.47.0 do motor acendeu.
+    //
+    // A unha do chip renderiza o componente numa caixa de ~312, e ali o `segmentos` vazou 68px. O sweep
+    // de cima roda a 900 e passava: **a largura da mesa não exercita o requisito do produto**, que é um
+    // app de telefone. Era a mesma classe de fixture fraca que os pais catalogaram sete vezes — o
+    // harness não carregava a restrição do caso.
+    //
+    // 320 porque é o menor aparelho que o app suporta, e porque é a largura em que a unha do catálogo
+    // mediu. Bloco de tela cheia continua em 9/16 pelo `previaDeComponente`, então ele também é medido
+    // no aperto real e não numa caixa larga.
+    t.view.physicalSize = const Size(320, 3000);
+    t.view.devicePixelRatio = 1.0;
+    addTearDown(t.view.reset);
+
+    final quebrados = <String>[];
+    for (final def in Ds.blocos.values) {
+      final erros = <String>[];
+      final anterior = FlutterError.onError;
+      FlutterError.onError = (d) => erros.add(d.exceptionAsString().split('\n').first);
+      await t.pumpWidget(MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: Column(children: [previaDeComponente(def.type, props: def.defaults())]),
+          ),
+        ),
+      ));
+      await t.pump(const Duration(milliseconds: 100));
+      FlutterError.onError = anterior;
+      t.takeException();
+      if (erros.isNotEmpty) quebrados.add('${def.type}: ${erros.first}');
+    }
+
+    expect(quebrados, isEmpty, reason: quebrados.join(' | '));
   });
 
   testWidgets('a aba do PAI desenha, e com a cor DESTE produto', (t) async {

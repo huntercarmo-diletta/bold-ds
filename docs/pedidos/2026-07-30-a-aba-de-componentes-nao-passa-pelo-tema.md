@@ -156,3 +156,63 @@ enquanto a tela ao redor é escura.
 É a mesma classe do tema errado, um grau abaixo: não é identidade de outro produto, é o modo errado do
 produto certo. E o meu DS tem 96 testes cobrindo os DOIS modos, então o preview claro esconde metade do
 que eu garanto.
+
+---
+
+## Veredito · ENTRA (os dois), e a sua hipótese era a certa nas duas
+**versão**: `catalogo-diletta` **v0.46.1** · **data**: 2026-07-30
+
+Reproduzi os dois com a sua isolação, e os dois eram meus:
+
+```
+previaDeComponente('folha')  → Incorrect use of ParentDataWidget   ← antes
+preview no modo noite        → tema-do-produto-CLARO               ← antes
+```
+
+**O `MetaData`.** A sua primeira hipótese é a que entrou, e a sua ressalva pedia a medição que eu tinha:
+*"eu não sei se a etiqueta serve pra algo NA página."* Não serve — quem lê `BlockTag` são os **dois
+hit-tests** (`board_canvas.dart` e `compositor_canvas.dart`), e nenhum dos dois desenha componente solto.
+Então a página joga a etiqueta fora, e nem precisou de peça nova: `unwrapBlockTag` já existia pro slot
+tipado. Uma linha:
+
+```dart
+final previa = unwrapBlockTag(buildBlock(Block(id: 'previa-$tipo', ...)));
+```
+
+Não fui pelo seu segundo caminho (`buildBlock` ganhar um jeito de não etiquetar) exatamente pela razão
+que você declarou: ele mexe no caminho do compositor por causa de uma página.
+
+**O `escuro:`.** Entrou, e o padrão agora é `null` = segue `CC.escuro`. Passar `true`/`false` explícito
+continua forçando, porque a conformidade precisa medir os dois modos sem virar o chrome.
+
+### O que a sua medição me obrigou a consertar duas vezes
+
+A primeira escrita foi `escuro ?? CC.escuro.value` — e funcionava numa direção só. **Ler `.value` sem
+assinar** deixava a prévia dependendo de um ancestral que ela não declara: no teste isolado ela travava
+no modo em que abriu. Agora a prévia assina o notificador:
+
+> **Leitura de estado sem assinatura é degradação silenciosa com cara de conserto.** Funciona enquanto
+> alguém por fora reconstrói, e para de funcionar quando esse alguém muda.
+
+### E o meu teste de tela cheia estava verde com o seu defeito de pé
+
+Isto é o achado que vale mais que os dois consertos. O teste que eu escrevi no veredito anterior media
+`AspectRatio` presente e `takeException()` nulo — **e a minha fixture de bloco de tela cheia era um
+`Text`.** Qualquer widget cabe num `Stack`. Quem exige ser filho DIRETO é o `ParentDataWidget`, e eu
+nunca construí um.
+
+A fixture agora devolve `Positioned.fill`, como a sua folha. Provado com regressão deliberada: tirando o
+`unwrapBlockTag`, o teste reprova com a sua frase (`Incorrect use of ParentDataWidget`).
+
+**Sétima vez desta classe na família, e a terceira em que o teste era meu e nasceu DEPOIS de eu escrever a
+regra.** Está no ledger de doutrina do DS, com a tabela que separa as duas fixtures — e a regra nova é
+irmã da que a matriz gerou:
+
+> **Fixture que não carrega o REQUISITO do caso não testa o caso.** A asserção estava certa; faltava
+> alguém capaz de estourar.
+
+### O que você ganha
+
+`(cd packages/diletta_catalog_core && flutter test)` → **350 testes**, e o filho mínimo verde. Sincronize
+a v0.46.1 e o resíduo declarado do seu sweep dos 56 fecha: `folha` para de estourar, e o preview segue a
+sua barra. O seu gate de cor pode passar a medir os dois modos, que é o que ele não alcançava.

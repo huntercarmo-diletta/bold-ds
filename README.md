@@ -12,8 +12,8 @@ de bloco é aqui.
 ## O gate
 
 ```bash
-(cd packages/conta_bold_design_system && flutter analyze && flutter test)   # 96
-(cd packages/catalog && flutter analyze && flutter test)                    # 33
+(cd packages/conta_bold_design_system && flutter analyze && flutter test)   # 99
+(cd packages/catalog && flutter analyze && flutter test)                    # 40
 ```
 
 A conformidade dos dois pais roda dentro desses testes (`violacoesDeConformidade` e
@@ -27,13 +27,14 @@ Por **tag**, nunca por caminho local — `pubspec.yaml` de cada pacote fixa o `r
 
 | pai | versão de hoje |
 |---|---|
-| `ds-diletta` | `v0.18.1` |
-| `catalogo-diletta` | `v0.45.0` |
+| `ds-diletta` | `v0.21.1` |
+| `catalogo-diletta` | `v0.48.0` |
 
 ## Os documentos
 
 | Preciso… | Leia |
 |---|---|
+| **o que muda ao subir de versão** deste pacote | [CHANGELOG.md](CHANGELOG.md) |
 | **adotar isto no app** (token primeiro, componente depois) e ver o que já nasceu | [packages/conta_bold_design_system/ADOCAO.md](packages/conta_bold_design_system/ADOCAO.md) |
 | o que eu já pedi aos pais, e o veredito de cada um | [docs/PEDIDOS.md](docs/PEDIDOS.md) |
 | o que os pais me mandaram | [docs/avisos/](docs/avisos/) |

@@ -6,10 +6,15 @@
 ///
 /// ## O que mudou
 ///
-/// **Rótulo longo não estoura mais o layout, ele encurta.** Já havia `ellipsis`, mas com
-/// `Expanded` igual pra todas: quatro abas com rótulos de tamanhos diferentes cortavam a maior
-/// enquanto a menor sobrava espaço. Agora o `Expanded` sai quando cabem todas na largura, e o
-/// corte só acontece quando não cabe — exigência 10 do contrato (texto longo não estoura).
+/// **Rótulo longo não estoura mais o layout, ele encurta.** O `ellipsis` já estava lá e era código
+/// morto: sem `Expanded`, cada aba recebia largura infinita e nada nunca apertava o texto. Agora o
+/// `Expanded` é de todas — exigência 10 do contrato (texto longo não estoura).
+///
+/// **Fatia igual é escolha, e o custo é declarado:** a aba de rótulo comprido corta enquanto a curta
+/// sobra espaço. É o certo AQUI porque barra de navegação ocupa a largura toda por contrato, e fatia
+/// desigual faz o alvo de toque mudar de tamanho a cada troca de tela. Quem hoje HUGA é a pílula dos
+/// `BoldSegmentos`, que mora ao lado de um rótulo — e por isso ela resolve largura de outro jeito
+/// (`FittedBox`, e a razão está escrita lá).
 ///
 /// **A área de toque é a da ABA, não a do texto.** O `InkWell` estava dentro do `Expanded` e o
 /// padding era do container interno, então a faixa vertical acima e abaixo do rótulo não

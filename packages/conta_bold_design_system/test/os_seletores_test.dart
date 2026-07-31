@@ -1,4 +1,5 @@
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -95,6 +96,64 @@ void main() {
           .map((w) => w.properties.label)
           .toList();
       expect(selecionados, ['30 dias']);
+    });
+
+    // A LARGURA — o defeito que a unha do catálogo achou, e que estava vivo no app.
+    //
+    // `Row(mainAxisSize: min)` pede a largura natural dos rótulos e ignora quanto o pai tem. Com os
+    // rótulos da tela de aparência do app (`Claro, Escuro, Sistema`) a pílula pede 372px: estoura na
+    // unha de 320 do catálogo E no telefone de 390 com padding de tela.
+    //
+    // Mede as duas coisas juntas, porque uma sem a outra passa com o defeito de pé: **não vazar** e
+    // **não perder palavra**. Só "não vazar" passaria com `ellipsis`, que corta `Sistema` em `Sistem…`
+    // por um caractere; só "não perder palavra" passa com o estouro, que é o estado anterior.
+    for (final largura in [312.0, 358.0]) {
+      testWidgets('cabe em $largura sem vazar e sem perder palavra', (t) async {
+        final erros = <String>[];
+        final anterior = FlutterError.onError;
+        FlutterError.onError = (d) => erros.add(d.exceptionAsString().split('\n').first);
+
+        await t.pumpWidget(naTela(SizedBox(
+          width: largura,
+          child: BoldSegmentos(
+            segmentos: const ['Claro', 'Escuro', 'Sistema'],
+            indiceSelecionado: 0,
+            aoTrocar: (_) {},
+          ),
+        )));
+        await t.pump(const Duration(milliseconds: 200));
+
+        FlutterError.onError = anterior;
+        t.takeException();
+        expect(erros, isEmpty, reason: erros.join(' | '));
+
+        // Palavra inteira: o `RenderParagraph` não elidiu nenhum dos três.
+        for (final rotulo in ['Claro', 'Escuro', 'Sistema']) {
+          final p = t.renderObject<RenderParagraph>(find.text(rotulo));
+          expect(p.didExceedMaxLines, isFalse, reason: '"$rotulo" está cortado em $largura');
+        }
+      });
+    }
+
+    testWidgets('e o gate SABE ver estouro — controle que vaza de propósito', (t) async {
+      // Sem este controle, o teste acima é "nenhum erro aconteceu", que é o que ele diria também se
+      // ninguém estivesse escutando. Esta Row vaza 60px, o mesmo número do defeito real.
+      final erros = <String>[];
+      final anterior = FlutterError.onError;
+      FlutterError.onError = (d) => erros.add(d.exceptionAsString().split('\n').first);
+
+      await t.pumpWidget(naTela(SizedBox(
+        width: 312,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: List.filled(3, const SizedBox(width: 124, height: 36)),
+        ),
+      )));
+      await t.pump();
+
+      FlutterError.onError = anterior;
+      t.takeException();
+      expect(erros.join(), contains('overflowed by 60 pixels'));
     });
 
     testWidgets('lista vazia não desenha trilho vazio', (t) async {

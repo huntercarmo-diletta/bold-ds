@@ -34,6 +34,31 @@
 ///
 /// E uma que entrou: **cada segmento anuncia o estado de seleção.** Sem isso o leitor de tela lê três
 /// botões idênticos e não diz qual está ativo — que é a única informação que o componente carrega.
+///
+/// ## O estouro que a UNHA do catálogo achou, e que estava vivo no app
+///
+/// A pílula tem `Row(mainAxisSize: min)`, então ela pede a largura NATURAL dos três rótulos e ignora
+/// quanto o pai tem pra dar. Com os rótulos do app (`Claro, Escuro, Sistema`) ela pede **380px**:
+///
+/// | onde | largura útil | resultado antes |
+/// |---|---|---|
+/// | unha de 320 do catálogo | 312 | estoura 68px |
+/// | telefone de 390 com padding s4 | 358 | estoura 22px |
+///
+/// A segunda linha é a que importa: **este estouro está no app hoje**, na tela de aparência, em todo
+/// telefone de 390 ou menos. O catálogo não criou o defeito — ele o pôs num lugar onde alguém olha.
+///
+/// O `overflow: ellipsis` do rótulo era **código morto**: nada nunca apertava o texto, porque numa Row
+/// de tamanho mínimo o filho recebe largura infinita. Encurtar também não era o certo aqui — cortar
+/// `Sistema` em `Sistem…` por um caractere é pior que o texto um grau menor.
+///
+/// A pílula agora vai num `FittedBox(scaleDown)`: cabendo, ela ENCOLHE pro tamanho natural e nada muda;
+/// não cabendo, ela reduz a escala e os três rótulos continuam inteiros (0,94 no telefone de 390 —
+/// 13,2px em vez de 14). É o mesmo recurso que o dinheiro do recibo usa, e por isso é o desta família.
+///
+/// Não usei `Flexible` por causa da direção que ninguém mede: flex com largura infinita **estoura
+/// asserção** em vez de estourar layout, e trocar um aviso amarelo por um crash na primeira pílula que
+/// alguém puser numa faixa que rola não é robustez.
 library;
 
 import 'package:diletta_design_system/diletta_design_system.dart';
@@ -70,18 +95,24 @@ class BoldSegmentos extends StatelessWidget {
         'trilho: surfaceMuted · pastilha: surface · texto ativo: fg',
         'subheading 14/600 · padding s5/s2',
       ],
-      child: DilettaBox(
-        color: s.surfaceMuted,
-        radius: DilettaRadius.pillAll,
-        padding: EdgeInsets.all(DilettaSpacing.s1),
-        child: Row(mainAxisSize: MainAxisSize.min, children: [
-          for (var i = 0; i < segmentos.length; i++)
-            _Segmento(
-              rotulo: segmentos[i],
-              selecionado: i == indiceSelecionado,
-              aoTocar: () => aoTrocar(i),
-            ),
-        ]),
+      // A pílula pede a largura natural dos rótulos; quando o pai não tem tanto, ela reduz a ESCALA em
+      // vez de vazar. `centerLeft` porque ela mora ao lado de um rótulo de seção, alinhada à esquerda.
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
+        child: DilettaBox(
+          color: s.surfaceMuted,
+          radius: DilettaRadius.pillAll,
+          padding: EdgeInsets.all(DilettaSpacing.s1),
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            for (var i = 0; i < segmentos.length; i++)
+              _Segmento(
+                rotulo: segmentos[i],
+                selecionado: i == indiceSelecionado,
+                aoTocar: () => aoTrocar(i),
+              ),
+          ]),
+        ),
       ),
     );
   }

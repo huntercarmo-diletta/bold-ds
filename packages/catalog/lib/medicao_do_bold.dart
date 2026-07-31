@@ -1,11 +1,15 @@
-/// A MEDIÇÃO DESTE FILHO — papéis nos dois modos e o relatório de adoção do pai.
+/// A MEDIÇÃO DESTE FILHO — o relatório de adoção do pai.
 ///
 /// Isto era a minha aba de Fundamentos, e ela saiu: a v0.43.0 do motor entrega Fundamentos como a PROSA
 /// que ensina (índice + markdown), e a prosa deste produto virou `kBoldFundamentos` no pacote do DS.
 ///
-/// O que sobrou aqui não é prosa nem inventário: é **medição deste filho**. Papel nos dois modos é o que
-/// prova que o escuro sai de graça; o relatório de adoção é o que diz quais famílias de token eu declarei
-/// e quais estou herdando. Os dois moram na aba de conformidade, que é onde medição deste filho mora.
+/// O que sobrou aqui não é prosa nem inventário: é **conformidade**. O relatório de adoção diz, família
+/// por família, se este filho DECLAROU o token ou está herdando o valor de referência do pai.
+///
+/// **O papel semântico nos dois modos SAIU daqui na v0.48.0 do motor**, quando `SecoesDeEstilo` passou a
+/// deixar compor a página de Styles. Ele estava aqui por uma razão que eu tinha escrito e que não
+/// resistia à pergunta certa: *"é medição deste filho"* é verdade, e quem quer saber de que cor é a
+/// superfície no escuro procura em **Styles**. Ver `styles_do_bold.dart`.
 ///
 /// A fronteira com Styles é do pai, e ele a escreveu melhor do que eu: **Styles é o inventário que se
 /// CONSULTA; Fundamentos são as decisões que se leem uma vez.** A minha aba de Styles (tipografia,
@@ -31,6 +35,7 @@
 ///   ninguém ver, e não é coisa que o filho deva escrever sozinho.
 library;
 
+import 'package:conta_bold_catalog/styles_do_bold.dart';
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
@@ -51,147 +56,18 @@ class PainelDeMedicao extends StatelessWidget {
               Text('Medição deste filho', style: CT.tituloGrande),
               SizedBox(height: CM.gapCompacto),
               Text(
-                'As decisões estão em Fundamentos e os valores em Styles. Aqui ficam as duas coisas '
-                'que só se medem NESTE repo: o papel derivado nos dois modos, e o que eu declarei '
-                'contra o que estou herdando do pai.',
+                'As decisões estão em Fundamentos, os valores e os papéis em Styles. Aqui fica o que '
+                'só é conformidade: o que eu declarei contra o que estou herdando do pai.',
                 style: CT.corpo.copyWith(color: CC.neutral04),
               ),
               SizedBox(height: CM.gapAmplo),
-              const _Secao(
-                titulo: 'Papéis, nos dois modos',
-                nota: 'Derivados da paleta. Componente nenhum lê rampa: lê papel.',
-                child: _Papeis(),
-              ),
-              const _Secao(
+              const SecaoDoBold(
                 titulo: 'Adoção dos tokens — o relatório do PAI',
                 nota: 'Herdado quer dizer: confira contra o produto antigo antes de aceitar.',
                 child: _Adocao(),
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _Secao extends StatelessWidget {
-  const _Secao({required this.titulo, required this.nota, required this.child});
-
-  final String titulo;
-  final String nota;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: CM.gapAmplo),
-      padding: EdgeInsets.all(CM.gapPadrao),
-      decoration: BoxDecoration(
-        color: CC.white,
-        borderRadius: CM.raioPainel,
-        border: Border.all(color: CC.neutral09),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(titulo.toUpperCase(),
-              style: CT.sobrescrito.copyWith(color: CC.neutral05)),
-          const SizedBox(height: 2),
-          Text(nota, style: CT.legenda.copyWith(color: CC.neutral05)),
-          SizedBox(height: CM.gapPadrao),
-          child,
-        ],
-      ),
-    );
-  }
-}
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// Rampas
-// ═══════════════════════════════════════════════════════════════════════════════
-
-// ═══════════════════════════════════════════════════════════════════════════════
-// Papéis
-// ═══════════════════════════════════════════════════════════════════════════════
-
-/// Os papéis que uma tela usa de verdade, nos dois modos. Não são todos os ~51: são os que aparecem
-/// em componente deste produto — lista longa em catálogo é lista que ninguém lê.
-List<(String, Color Function(DilettaScheme))> get _papeis => [
-      ('bg', (s) => s.bg),
-      ('surface', (s) => s.surface),
-      ('surfaceMuted', (s) => s.surfaceMuted),
-      ('fg', (s) => s.fg),
-      ('textSecondary', (s) => s.textSecondary),
-      ('border', (s) => s.border),
-      ('divider', (s) => s.divider),
-      ('primary', (s) => s.primary),
-      ('primarySubtle', (s) => s.primarySubtle),
-      ('onPrimarySubtle', (s) => s.onPrimarySubtle),
-      ('primaryTrack', (s) => s.primaryTrack),
-      ('success', (s) => s.success),
-      ('successSubtle', (s) => s.successSubtle),
-      ('onSuccessSubtle', (s) => s.onSuccessSubtle),
-      ('warning', (s) => s.warning),
-      ('error', (s) => s.error),
-      ('glassTint', (s) => s.glassTint),
-    ];
-
-class _Papeis extends StatelessWidget {
-  const _Papeis();
-
-  @override
-  Widget build(BuildContext context) {
-    final claro = DilettaScheme.light(BoldPalette.bold);
-    final escuro = DilettaScheme.dark(BoldPalette.bold);
-    return Column(
-      children: [
-        for (final (nome, ler) in _papeis)
-          Padding(
-            padding: const EdgeInsets.only(bottom: 4),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 160,
-                  child: Text(nome, style: CT.mono.copyWith(color: CC.neutral03)),
-                ),
-                Expanded(child: _Faixa(cor: ler(claro), rotulo: 'claro')),
-                const SizedBox(width: 6),
-                Expanded(child: _Faixa(cor: ler(escuro), rotulo: 'escuro')),
-              ],
-            ),
-          ),
-      ],
-    );
-  }
-}
-
-class _Faixa extends StatelessWidget {
-  const _Faixa({required this.cor, required this.rotulo});
-
-  final Color cor;
-  final String rotulo;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 26,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      alignment: Alignment.centerLeft,
-      decoration: BoxDecoration(
-        color: cor,
-        borderRadius: CM.raioBotao,
-        border: Border.all(color: CC.neutral09),
-      ),
-      child: Text(
-        '$rotulo · #${cor.toARGB32().toRadixString(16).substring(2).toUpperCase()}',
-        style: CT.mono.copyWith(
-          fontSize: 9,
-          // Tinta escolhida pelo contraste com a própria amostra: rótulo ilegível em cima da cor é
-          // exatamente o defeito que este catálogo existe pra mostrar.
-          color: dilettaContrastRatio(CC.neutral01, cor) >= 4.5
-              ? CC.neutral01
-              : CC.white,
         ),
       ),
     );

@@ -35,6 +35,25 @@ flutter pub get
 # ferramenta interna atrás do Access: custo zero pra quem usa, diferença enorme pra quem conserta.
 flutter build web --release --source-maps
 
+# O GATE DO CUSTO, e ele roda DEPOIS do build porque metade do que ele mede é a pasta gerada.
+#
+# A trava é estrutural: a `wrangler.jsonc` é assets-only (`assets.directory`, sem `main`), e servir
+# asset estático não é invocação de Worker. O gate vigia a linha que quebraria isso — um commit que
+# acrescente `main`, binding de armazenamento ou produto pago publica sem o wrangler reclamar.
+#
+# E mede o que faria o DEPLOY falhar: o teto de 20.000 arquivos do Workers Assets e arquivo acima de
+# 25 MB. Hoje: 464 arquivos, 48,6 MB.
+#
+# Ferramenta do pai, roda apontando pra cá — igual à limpa e à auditoria. Se o caminho não existir na
+# máquina, o build não morre: o gate avisa e quem publica decide.
+cd ../..
+PAI_DS="${PAI_DS:-../ds-diletta}"
+if [ -f "$PAI_DS/tool/nunca_pagar.py" ]; then
+  python3 "$PAI_DS/tool/nunca_pagar.py" .
+else
+  echo "AVISO: nunca_pagar.py não encontrado em $PAI_DS — o gate de custo NÃO rodou."
+fi
+
 echo
 echo "pronto: packages/catalog/build/web"
 echo "publica com: npx wrangler deploy   (da raiz do repo)"

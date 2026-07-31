@@ -27,7 +27,7 @@ dependencies:
   diletta_catalog_core:
     git:
       url: git@bitbucket.org:diletta/catalogo-diletta.git
-      ref: v0.45.0
+      ref: v0.48.0
       path: packages/diletta_catalog_core
 
 dev_dependencies:
@@ -37,3 +37,15 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    # A ARTE DE DEMONSTRAÇÃO do fundo de imagem, e ela mora AQUI de propósito.
+    #
+    # O `BoldBackground` recebe a arte pelo `BoldBackdropScope` justamente pra não cravar caminho de
+    # asset do app dentro do DS — sem isso o componente não renderiza fora do app. Mas o catálogo
+    # também é um consumidor, e ele não declarava nada: o mood `imagem`, que é o fundo da HOME, aparecia
+    # degradado (véu + brilho, sem cidade).
+    #
+    # Estas duas são CÓPIA REDUZIDA da arte do app (1 MB → ~120 KB, `sips -Z 1000`), e o nome diz que são
+    # demo. A arte de produção é do app e continua lá; se ela mudar, esta fica velha — e é por isso que
+    # ela é demo e não "a arte".
+    - assets/demo/

@@ -19,16 +19,16 @@ void main() {
       ? codigoDeBlocoDeclarado(def, def.defaults())
       : def.codegen(def.defaults());
 
-  /// DOIS componentes do pai sem spec, e é a MESMA classe do pedido que já entrou (v0.17.0 trouxe cinco).
+  /// UM componente do pai sem spec, e a baseline encolheu porque o pedido foi atendido.
   ///
-  /// `DilettaDialog` e `DilettaExpansionTile` não estão nas 69. Não é defeito de ninguém: o conjunto
-  /// cobre 69 de ~127 públicos, e cada bloco novo que eu declaro sobre um componente descoberto acende
-  /// esta luz. A lista derivada do meu registro está anexada ao pedido — medição de uma vez em vez de um
-  /// aviso por componente.
+  /// Eram três. `DilettaDialog` e `DilettaExpansionTile` entraram na **v0.19.0 do DS** — o conjunto
+  /// foi a 71 —, e o teste anti-fantasma abaixo é quem cobrou a limpeza: as duas linhas viraram
+  /// acusação de defeito já consertado no minuto em que eu subi o `ref`.
+  ///
+  /// Sobra o teclado: `DilettaKeyboard` também não está nas 71. O método continua o mesmo — a lista
+  /// derivada do meu registro anexada ao pedido, e uma linha nova a cada bloco sobre componente
+  /// descoberto, em vez de um aviso por componente.
   const baselineDeSpecsQueFaltam = {
-    "bloco-sem-contrato|PlugueDoDs.contratos['dialogo']",
-    "bloco-sem-contrato|PlugueDoDs.contratos['expansivel']",
-    // O teclado entrou na terceira medição de cobertura: `DilettaKeyboard` também não tem spec nas 69.
     "bloco-sem-contrato|PlugueDoDs.contratos['teclado']",
   };
 
