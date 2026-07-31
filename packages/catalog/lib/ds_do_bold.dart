@@ -1868,6 +1868,59 @@ void configurarDsDoBold() {
     // 300ms com `elasticOut` têm a mesma linha na tabela e são coisas diferentes na tela.
     estilos: InventarioDeEstilo(
       cores: _coresDaMarca(),
+      // PAPEL SEMÂNTICO (v0.53.0) — e esta seção era MINHA até agora.
+      //
+      // Eu escrevia as faixas claro/escuro à mão em `styles_do_bold.dart`, e o pai mediu que cada filho
+      // tinha metade da página: eu tinha faixa + hex e não tinha significado nem a amostra. As quatro
+      // andam juntas agora, então a minha seção saiu — quinta página deste catálogo que um release apaga.
+      //
+      // Os 17 papéis são os que aparecem em componente deste produto, e não os ~51 do esquema: lista longa
+      // em catálogo é lista que ninguém lê. Cada um lê `DilettaScheme.light/dark(BoldPalette.bold)`, então
+      // valor errado aqui é impossível — não há número digitado.
+      papeis: _papeisDoBold(),
+      amostraDePapeis: const AmostraDePapeis(
+        fundo: 'bg',
+        superficie: 'surface',
+        texto: 'fg',
+        textoSecundario: 'textSecondary',
+        primaria: 'primary',
+        sobrePrimaria: 'onPrimary',
+      ),
+      // O USO DE CADA TOKEN (v0.54.0). Sai da prosa que já existia em `kBoldFundamentos` — não é texto
+      // novo, é texto que estava numa página e não chegava no degrau que ele descreve.
+      descricoesDeToken: const {
+        'espaco.s2': 'Respiro mínimo — entre rótulo e campo, entre ícone e texto.',
+        'espaco.s3': 'Entre itens de uma mesma lista.',
+        'espaco.s4': 'O gap de trabalho: entre campos, padding interno de card.',
+        'espaco.s6': 'Entre blocos de uma tela.',
+        'espaco.s8': 'Entre seções — o maior respiro que uma tela de telefone aguenta.',
+        'tipografia.displaySm': 'O saldo. É o único lugar deste produto com voz de display.',
+        'tipografia.headlineLg': 'Título de tela cheia — comprovante, autorização.',
+        'tipografia.headlineSm': 'Título de folha e de diálogo.',
+        'tipografia.titleMd': 'Título de card e de seção dentro do conteúdo.',
+        'tipografia.subheading': 'Rótulo de controle: aba, segmento, botão.',
+        'tipografia.bodyMd': 'O corpo. Tudo que se lê em parágrafo.',
+        'tipografia.bodySm': 'Apoio: subtítulo de linha, ajuda de campo.',
+        'tipografia.label': 'Rótulo de campo e chave de linha de valor.',
+        'tipografia.labelSm': 'Sobrescrito de seção e legenda.',
+        'tipografia.numeric': 'Dígito que ALINHA em coluna — valor de extrato, código, relógio. '
+            'Não é um título pequeno: é outra categoria de voz.',
+        'forma.all8': 'Controle pequeno: chip, selo, campo.',
+        'forma.all16': 'Card e folha.',
+        'forma.all24': 'Superfície grande — o topo de uma folha de tela cheia.',
+        'forma.pillAll': 'Pílula: botão, segmento, avatar.',
+      },
+      // O GRUPO (v0.54.0) — 51 valores em fileira contínua é parede, e a frase é do pai.
+      gruposDeToken: const {
+        'tipografia': [
+          GrupoDeToken('TÍTULOS', ['displaySm', 'headlineLg', 'headlineSm', 'titleMd'],
+              descricao: 'Hierarquia de tela. Uma por nível, e nenhuma repete o nível de cima.'),
+          GrupoDeToken('CORPO', ['bodyMd', 'bodySm'],
+              descricao: 'O que se lê em parágrafo.'),
+          GrupoDeToken('UTILITÁRIAS', ['subheading', 'label', 'labelSm', 'numeric'],
+              descricao: 'Rótulo, controle e dígito. `numeric` é voz própria, não título pequeno.'),
+        ],
+      },
       tipos: const {
         'displaySm': DilettaType.displaySm,
         'headlineLg': DilettaType.headlineLg,
@@ -2065,6 +2118,74 @@ bool _vazio(Object? v) => v == null || '$v'.isEmpty;
 ///
 /// Derivado de `values` e não escrito à mão: enum que ganha membro no pai aparece aqui sozinho, e
 /// membro que ele remove vira erro de compilação em vez de opção fantasma no editor.
+/// OS 17 PAPÉIS que um componente deste produto lê, nos dois modos — e o PAR de tinta onde ele existe.
+///
+/// `tinta` é o nome do papel usado como texto/ícone em cima deste, e declarar habilita a medição de
+/// contraste do pai (WCAG 2.2 SC 1.4.3). Declarado e não adivinhado por nome, que é a regra que o pai
+/// escreveu: **convenção não é contrato.**
+///
+/// ## Quatro pares REPROVAM em AA, e o número está no `docs/pedidos/`
+///
+/// A medição foi a primeira coisa que este gancho me deu, e ela é achado de a11y de verdade:
+///
+/// | par | claro | escuro |
+/// |---|---|---|
+/// | `primary` × `onPrimary` | **3,46:1** | **2,73:1** |
+/// | `success` × `onSuccess` | **4,04:1** | 6,07:1 |
+/// | `warning` × `onWarning` | **2,08:1** | 6,03:1 |
+/// | `error` × `onError` | **3,68:1** | **4,49:1** |
+///
+/// Os pares `onXSubtle` passam todos — e isso não é sorte: foi o conserto que a escada de alçadas me
+/// obrigou a fazer ontem, quando `primarySubtle` com `primaryTrack` dava 3,08:1.
+///
+/// **Eu declaro o que reprova em vez de esconder**, porque a página existe pra dizer isso. O conserto não
+/// é meu: `primary` é derivado pelo esquema do pai (`primary04` no claro, `primary05` no escuro), e o app
+/// resolve exatamente este caso usando o degrau PROFUNDO no claro. Pedido escrito.
+Map<String, PapelNosDoisModos> _papeisDoBold() {
+  final c = DilettaScheme.light(BoldPalette.bold);
+  final e = DilettaScheme.dark(BoldPalette.bold);
+  PapelNosDoisModos p(
+    Color Function(DilettaScheme) ler, {
+    String? significado,
+    String? tinta,
+  }) =>
+      PapelNosDoisModos(ler(c), ler(e), significado: significado, tinta: tinta);
+
+  return {
+    'bg': p((s) => s.bg, significado: 'Fundo geral da tela (scaffold).', tinta: 'fg'),
+    'surface': p((s) => s.surface, significado: 'Card, folha, diálogo.', tinta: 'fg'),
+    'surfaceMuted': p((s) => s.surfaceMuted,
+        significado: 'Trilho e campo — a superfície que afunda.', tinta: 'fg'),
+    'fg': p((s) => s.fg, significado: 'Texto principal.'),
+    'textSecondary': p((s) => s.textSecondary, significado: 'Apoio, ajuda, chave de linha.'),
+    'border': p((s) => s.border, significado: 'Traço de card e de campo.'),
+    'divider': p((s) => s.divider, significado: 'Separador dentro de uma coleção.'),
+    'primary': p((s) => s.primary,
+        significado: 'Ação primária, link, foco. É o rosa da marca.', tinta: 'onPrimary'),
+    'onPrimary': p((s) => s.onPrimary, significado: 'Tinta sobre a ação primária.'),
+    'primarySubtle': p((s) => s.primarySubtle,
+        significado: 'Fundo de destaque da marca — pastilha, degrau de alçada.',
+        tinta: 'onPrimarySubtle'),
+    'onPrimarySubtle': p((s) => s.onPrimarySubtle, significado: 'Tinta sobre o destaque da marca.'),
+    'primaryTrack': p((s) => s.primaryTrack, significado: 'Traço e trilho no tom da marca.'),
+    'success': p((s) => s.success, significado: 'Concluído, aprovado.', tinta: 'onSuccess'),
+    // As TRÊS tintas de estado, e declará-las foi o que fez a medição aparecer.
+    //
+    // `tinta:` nomeia uma CHAVE deste mapa, e o pai resolve com `papeis[nome]` — nome que não existe vira
+    // `null`, e `null` significa "sem medição". Eu tinha escrito `tinta: 'onSuccess'` sem declarar o
+    // papel, e as três faixas ficaram sem contraste **sem nada falhar**. Achado escrito ao pai.
+    'onSuccess': p((s) => s.onSuccess, significado: 'Tinta sobre o estado concluído.'),
+    'onWarning': p((s) => s.onWarning, significado: 'Tinta sobre o estado pendente.'),
+    'onError': p((s) => s.onError, significado: 'Tinta sobre o estado de falha.'),
+    'successSubtle': p((s) => s.successSubtle,
+        significado: 'Fundo de estado concluído.', tinta: 'onSuccessSubtle'),
+    'onSuccessSubtle': p((s) => s.onSuccessSubtle, significado: 'Tinta sobre o fundo concluído.'),
+    'warning': p((s) => s.warning, significado: 'Pendente, atenção.', tinta: 'onWarning'),
+    'error': p((s) => s.error, significado: 'Falha, destrutivo.', tinta: 'onError'),
+    'glassTint': p((s) => s.glassTint, significado: 'O véu do vidro — é a única cor com alfa.'),
+  };
+}
+
 Map<String, T> _porNome<T extends Enum>(List<T> valores) =>
     {for (final v in valores) v.name: v};
 

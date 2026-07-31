@@ -2,7 +2,6 @@ import 'package:conta_bold_catalog/chrome_do_bold.dart';
 import 'package:conta_bold_catalog/conteudo_do_bold.dart';
 import 'package:conta_bold_catalog/ds_do_bold.dart';
 import 'package:conta_bold_catalog/main.dart';
-import 'package:conta_bold_catalog/styles_do_bold.dart';
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +12,8 @@ import 'package:flutter_test/flutter_test.dart';
 ///
 /// - a aba de Fundamentos é do pai, e o que eu meço nela é a DECLARAÇÃO: as seções que o plugue entrega
 ///   (a linguagem dele mais as quatro deste produto);
-/// - a de Styles é COMPOSTA desde a v0.48.0 (`SecoesDeEstilo.de()`): as famílias do motor mais a minha
-///   seção de papel semântico, que estava escondida na aba de conformidade;
+/// - a de Styles voltou a ser do motor INTEIRA na v0.53.0: o papel semântico virou peça dele, com hex,
+///   significado, amostra e contraste medido — e o que era a minha seção agora é DECLARAÇÃO no plugue;
 /// - o painel de conformidade continua sendo meu, e sobrou nele o que é conformidade — o relatório de
 ///   adoção inteiro.
 void main() {
@@ -62,14 +61,14 @@ void main() {
     expect(erros, isEmpty, reason: erros.take(3).join(' | '));
   });
 
-  testWidgets('STYLES é COMPOSTA: a minha família e as do motor na MESMA página', (t) async {
-    // A v0.48.0 trouxe `SecoesDeEstilo.de()`, e com ela o papel semântico nos dois modos saiu da aba de
-    // conformidade e voltou pra onde se procura valor de token.
+  testWidgets('STYLES desenha o papel semântico DECLARADO, e as famílias do motor', (t) async {
+    // A página é do motor inteira desde a v0.53.0, então o que eu meço aqui é a DECLARAÇÃO chegando na
+    // tela — não o desenho dela, que é gate do pai.
     //
-    // Este gate mede as DUAS metades juntas, porque cada uma sozinha passa com o defeito de pé: só a
-    // minha seção passaria com a composição quebrada (as famílias do motor sumindo), e só as do motor
-    // passariam com o meu jeito antigo (`AbaDeStyles` puro, e o papel escondido noutra aba).
-    t.view.physicalSize = const Size(1400, 8000);
+    // Mede as duas metades juntas, porque cada uma sozinha passa com o defeito de pé: só as famílias
+    // passariam com `papeis` vazio (a seção PAPEL simplesmente não apareceria), e só o papel passaria com
+    // o inventário quebrado.
+    t.view.physicalSize = const Size(1400, 12000);
     t.view.devicePixelRatio = 1.0;
     addTearDown(t.view.reset);
 
@@ -89,58 +88,62 @@ void main() {
     t.takeException();
     expect(erros, isEmpty, reason: erros.take(3).join(' | '));
 
-    // A METADE DO MOTOR: cada família declarada no inventário tem seu cabeçalho na página.
+    // A METADE DO MOTOR: cada família declarada tem seu cabeçalho.
     final inv = Ds.estilos;
     final familias = {
+      if (inv.papeis.isNotEmpty) 'PAPEL SEMÂNTICO',
       if (inv.cores.isNotEmpty) 'COR',
       if (inv.tipos.isNotEmpty) 'TIPOGRAFIA',
       if (inv.raios.isNotEmpty) 'FORMA',
-      if (inv.sombras.isNotEmpty) 'SOMBRA',
-      if (inv.gradientes.isNotEmpty) 'DEGRADÊ',
       if (inv.movimentos.isNotEmpty) 'MOVIMENTO',
     };
-    expect(familias, isNotEmpty, reason: 'o inventário deste filho está vazio — o gate mediria nada');
     for (final f in familias) {
-      expect(find.text(f), findsWidgets, reason: 'a família "$f" do motor não está na página composta');
+      expect(find.text(f), findsWidgets, reason: 'a família "$f" não está na página');
     }
 
-    // A MINHA METADE: o hex DERIVADO da paleta, nos dois modos. O jeito de esta seção mentir é mostrar
-    // um hex que não é o do token, então o teste procura o valor derivado e não um texto que eu digitei.
-    //
-    // `textContaining` e não `text`: a faixa escreve `claro · #FE3976` — o modo junto do valor, porque
-    // papel sem o modo é meia informação.
-    final claro = DilettaScheme.light(BoldPalette.bold);
-    final escuro = DilettaScheme.dark(BoldPalette.bold);
-    for (final (modo, s) in [('claro', claro), ('escuro', escuro)]) {
-      for (final cor in [s.primary, s.success, s.surfaceMuted]) {
+    // A MINHA METADE: o hex do papel DERIVADO da paleta, nos dois modos. O jeito de esta seção mentir é
+    // mostrar um hex que não é o do token, então o teste procura o valor derivado.
+    for (final (modo, e) in [
+      ('claro', DilettaScheme.light(BoldPalette.bold)),
+      ('escuro', DilettaScheme.dark(BoldPalette.bold)),
+    ]) {
+      for (final cor in [e.primary, e.success, e.surfaceMuted]) {
         final hex = '#${cor.toARGB32().toRadixString(16).substring(2).toUpperCase()}';
-        expect(find.textContaining('$modo · $hex'), findsWidgets,
+        expect(find.textContaining(hex), findsWidgets,
             reason: 'o papel $modo $hex não apareceu em Styles');
       }
     }
   });
 
-  testWidgets('e o papel NÃO ficou duplicado na aba de conformidade', (t) async {
-    // Mover é tirar de um lugar E pôr no outro. Sem esta metade, "está em Styles" passa com a página
-    // antiga intacta, e o catálogo fica com duas verdades sobre a mesma coisa — que é a classe de
-    // defeito que a limpa persegue, um nível acima do doc.
-    t.view.physicalSize = const Size(1400, 8000);
-    t.view.devicePixelRatio = 1.0;
-    addTearDown(t.view.reset);
+  test('os PARES que reprovam em AA são exatamente os quatro medidos', () {
+    // Este gate não protege o catálogo, protege a MEDIÇÃO: ele fixa os quatro pares que reprovam hoje,
+    // com o número. Se um conserto do pai subir o `primary` de 3,46:1, este teste falha e me obriga a
+    // atualizar o pedido — que é o oposto de um pedido que envelhece dizendo um número velho.
+    //
+    // Só o modo CLARO, que é onde o app vive e onde os quatro estão juntos.
+    final papeis = Ds.estilos.papeis;
+    final reprovam = <String, String>{};
+    papeis.forEach((nome, papel) {
+      if (papel.tinta == null) return;
+      final tinta = papeis[papel.tinta]!;
+      final razao = Contraste.razao(tinta.claro, papel.claro);
+      if (razao < 4.5) reprovam[nome] = razao.toStringAsFixed(2);
+    });
 
-    await t.pumpWidget(MaterialApp(
-      home: Scaffold(
-        body: Builder(
-          builder: (ctx) =>
-              configDoCatalogoDoBold().abas.firstWhere((a) => a.id == 'conformidade').constroi(ctx),
-        ),
-      ),
-    ));
-    await t.pump(const Duration(milliseconds: 300));
-    t.takeException();
+    expect(reprovam, {
+      'primary': '3.46',
+      'success': '4.04',
+      'warning': '2.08',
+      'error': '3.68',
+    }, reason: 'a medição de AA mudou — atualize o pedido ao pai do DS com os números novos');
 
-    expect(find.byType(SecaoDePapeis), findsNothing,
-        reason: 'a seção de papéis voltou pra conformidade — ela mora em Styles');
+    // E a metade que PASSA, porque foi conserto meu de ontem: os pares `onXSubtle`.
+    for (final nome in ['primarySubtle', 'successSubtle']) {
+      final papel = papeis[nome]!;
+      final razao = Contraste.razao(papeis[papel.tinta]!.claro, papel.claro);
+      expect(razao, greaterThanOrEqualTo(4.5),
+          reason: '$nome caiu abaixo de AA — era 7,13:1 e 5,19:1');
+    }
   });
 
   testWidgets('o relatório de adoção do PAI aparece inteiro', (t) async {

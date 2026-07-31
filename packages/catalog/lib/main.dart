@@ -17,7 +17,6 @@ import 'chrome_do_bold.dart';
 import 'conteudo_do_bold.dart';
 import 'ds_do_bold.dart';
 import 'medicao_do_bold.dart';
-import 'styles_do_bold.dart';
 
 void main() {
   configurarChromeDoBold();
@@ -48,14 +47,20 @@ CatalogoConfig configDoCatalogoDoBold() => CatalogoConfig(
           label: 'Fundamentos',
           constroi: (_) => const AbaDeFundamentos(),
         ),
-        // STYLES é do MOTOR desde a v0.39.0 (derivada do `InventarioDeEstilo`) e COMPOSTA desde a
-        // v0.48.0: `SecoesDeEstilo.de()` devolve as famílias sem casca, então a minha seção de papel
-        // semântico entra no meio delas em vez de morar noutra aba. A casca é minha porque a página
-        // inteira é minha — a regra do pai é "o motor entrega o que ele DERIVA".
+        // STYLES voltou a ser do MOTOR INTEIRA, e o caminho até aqui tem três degraus:
+        //
+        //   v0.39.0  a página derivada do `InventarioDeEstilo` — a minha, escrita à mão, saiu
+        //   v0.48.0  `SecoesDeEstilo.de()`, e eu compus: as famílias dele + o meu papel semântico
+        //   v0.53.0  o PAPEL virou peça dele (com hex, significado, amostra e contraste medido), e a
+        //            minha casca virou cartão em cima de cartão — o `PaginaDoCatalogo` já é o chrome
+        //
+        // Então a composição desapareceu por ter sido atendida, o que é o fim certo pra ela. O que era
+        // meu agora é DECLARAÇÃO no plugue (`papeis`, `amostraDePapeis`), e declaração não envelhece
+        // como página.
         AbaDoCatalogo(
           id: 'styles',
           label: 'Styles',
-          constroi: (_) => const AbaDeStylesDoBold(),
+          constroi: (_) => const AbaDeStyles(),
         ),
         // COMPONENTES é do MOTOR desde a v0.44.0, quando o `previaDeComponente` passou a envolver no
         // gancho `tema` e a dar `Stack` pro bloco de tela cheia — os dois defeitos que me faziam ficar

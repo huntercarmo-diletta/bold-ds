@@ -37,7 +37,7 @@ com este arquivo — e um pubspec que ninguém consegue conferir é a classe que
 - **dois sweeps de layout** sobre os 56 blocos, a 900 e a 320 de largura;
 - **a montagem da tela conferida contra a geometria pintada** — a doc do contrato contra o `dy` real de
   cada bloco, e o slot contra o retângulo do pai;
-- pais: `ds-diletta` **v0.21.4** · `catalogo-diletta` **v0.49.0**.
+- pais: `ds-diletta` **v0.21.4** · `catalogo-diletta` **v0.54.0**.
 
 ### O que ainda NÃO é entrega
 

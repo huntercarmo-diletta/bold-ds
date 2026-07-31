@@ -35,7 +35,6 @@
 ///   ninguém ver, e não é coisa que o filho deva escrever sozinho.
 library;
 
-import 'package:conta_bold_catalog/styles_do_bold.dart';
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
@@ -45,31 +44,24 @@ class PainelDeMedicao extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(32),
-      child: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 900),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Text('Medição deste filho', style: CT.tituloGrande),
-              SizedBox(height: CM.gapCompacto),
-              Text(
-                'As decisões estão em Fundamentos, os valores e os papéis em Styles. Aqui fica o que '
-                'só é conformidade: o que eu declarei contra o que estou herdando do pai.',
-                style: CT.corpo.copyWith(color: CC.neutral04),
-              ),
-              SizedBox(height: CM.gapAmplo),
-              const SecaoDoBold(
-                titulo: 'Adoção dos tokens — o relatório do PAI',
-                nota: 'Herdado quer dizer: confira contra o produto antigo antes de aceitar.',
-                child: _Adocao(),
-              ),
-            ],
-          ),
+    // A CASCA é do motor desde a v0.52.0, e a falta era minha: eu tinha escrito o meu próprio cartão
+    // branco com scroll e largura máxima, igual ao que o outro filho escreveu. Peça que todo consumidor
+    // embrulha do mesmo jeito é peça que veio sem a casca — e agora que ela existe, cartão meu em volta
+    // seria cartão em cima de cartão.
+    //
+    // 980 de largura em vez de 1.400, e o número é dele com razão medida: linha de 1.400px cansa.
+    return const PaginaDoCatalogo(
+      titulo: 'Conformidade',
+      descricao: 'As decisões estão em Fundamentos, e os valores e papéis em Styles. Aqui fica o que só '
+          'é conformidade: o que este filho declarou contra o que está herdando do pai.',
+      secoes: [
+        SecaoDeDoc(
+          titulo: 'Adoção dos tokens — o relatório do PAI',
+          explica: 'Herdado quer dizer: confira contra o produto antigo antes de aceitar.',
+          primeira: true,
+          child: _Adocao(),
         ),
-      ),
+      ],
     );
   }
 }

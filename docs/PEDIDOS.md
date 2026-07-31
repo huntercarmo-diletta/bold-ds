@@ -17,6 +17,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [a casca de topo não aceita conteúdo do filho](pedidos/2026-07-30-a-casca-de-topo-nao-aceita-conteudo-do-filho.md) | ENTRA | **v0.11.0** |
 | [resposta ao chamado do raio](pedidos/2026-07-30-resposta-ao-chamado-do-raio.md) | RESPOSTA ACEITA | — |
 | [a auditoria não sabe que está num filho](pedidos/2026-07-30-a-auditoria-nao-sabe-que-esta-num-filho.md) | ENTRA (as duas) | **v0.21.4** |
+| [o papel `primary` reprova em AA nos dois modos](pedidos/2026-07-31-o-papel-primary-reprova-em-AA-nos-dois-modos.md) | **sem veredito** | — |
 
 ## Ao pai da FERRAMENTA (`catalogo-diletta`)
 
@@ -48,13 +49,16 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [a unha no chip, o motion sem laço](avisos/2026-07-30-unha-no-chip-e-motion-sem-laco.md) | RELEASE | sim — o sweep achou defeito MEU |
 | [o contrato de tela monta a tela](avisos/2026-07-30-contrato-de-tela-monta-a-tela.md) | RELEASE | sim — Styles virou página composta |
 | [paleta busca, e variações declaradas](avisos/2026-07-30-paleta-busca-e-variacoes-declaradas.md) | RELEASE | sim — a checagem 9 achou gap no `botao` |
+| [a gramática dos blocos](avisos/2026-07-30-gramatica-dos-blocos.md) | RELEASE | sim — 54 de 56 na caixa âmbar |
+| [o chrome de página](avisos/2026-07-31-chrome-de-pagina.md) | RELEASE | sim — a minha última casca própria saiu |
+| [Styles do padrão-ouro](avisos/2026-07-31-styles-do-padrao-ouro.md) | RELEASE | sim — 4 pares abaixo de AA, e um pedido |
 
 Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
 pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedido novo.
 
 ## Dois números que este ledger deixa ver
 
-**14 pedidos, 14 com veredito, 14 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
+**15 pedidos, 14 com veredito, 14 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
 sobre o método e não sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
 
 **Três dos nove eram defeito do pai, não lacuna** — e os três apareceram na primeira execução de um

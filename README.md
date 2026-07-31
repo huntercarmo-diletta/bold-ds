@@ -28,7 +28,7 @@ Por **tag**, nunca por caminho local — `pubspec.yaml` de cada pacote fixa o `r
 | pai | versão de hoje |
 |---|---|
 | `ds-diletta` | `v0.21.4` |
-| `catalogo-diletta` | `v0.49.0` |
+| `catalogo-diletta` | `v0.54.0` |
 
 ## Os documentos
 
