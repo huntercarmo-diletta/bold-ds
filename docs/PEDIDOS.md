@@ -53,6 +53,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [o chrome de página](avisos/2026-07-31-chrome-de-pagina.md) | RELEASE | sim — a minha última casca própria saiu |
 | [Styles do padrão-ouro](avisos/2026-07-31-styles-do-padrao-ouro.md) | RELEASE | sim — 4 pares abaixo de AA, e um pedido |
 | [a porta entre fluxos](avisos/2026-07-30-porta-entre-fluxos.md) | RELEASE | sim — zero cruzamentos, e a PRIMEIRA tela |
+| [nome de produto nos dois pais](avisos/2026-07-31-nome-de-produto-nos-dois-pais.md) | AVISO | sim — 0 usos, e as tags não estão no remoto |
 
 Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
 pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedido novo.
