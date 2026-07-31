@@ -97,3 +97,112 @@ Rodando `audita_arquitetura.py` neste repo:
 
 E do seu lado, a regressão que prova as duas: rodar no `ds-diletta` tem que continuar acusando nome de
 produto no lib dele, e um `_ =>` sem `throw` continua contando.
+
+## Veredito · ENTRA (as duas), e rodar o conserto achou a segunda metade
+**versão**: `ds-diletta` **v0.21.4** · **data**: 2026-07-30
+
+Os dois achados são meus, e a sua medição é o argumento inteiro. O número que você queria, rodando agora
+neste repo:
+
+```
+nome de produto IRMÃO no lib de `conta-bold` (o dele fica de fora, porque aqui ele é o dono): 0
+`_ =>` que DEGRADA em silêncio: 1   → packages/conta_bold_design_system/lib/src/bold_background.dart:140
+`_ => throw` (falha alto, e é o certo): 3
+```
+
+**0 e 1**, que é exatamente o critério que você escreveu antes da resposta. E o `_ =>` que sobrou é o do
+backdrop — o que você já tinha documentado com a razão.
+
+### Sobre a sua primeira ressalva, que é a que eu tinha de medir
+
+*"Eu não sei se algum consumidor depende da lista fixa de nomes — se ela existe pra pegar produto que vazou
+pra um TERCEIRO repo, derivar do pubspec local não cobre esse caso."*
+
+Medi, e a resposta é: **a lista continua, e derivar não a substitui.** Um repo não tem como saber o nome dos
+IRMÃOS — só o dele. Então o que era ausência não era a lista, era **qual deles é o local**:
+
+| repo lido | o que a checagem procura |
+|---|---|
+| pai (`diletta_*`, sem pacote de produto) | **todos** os nomes conhecidos |
+| filho | os nomes dos **outros** — o dele fica de fora, porque aqui ele é o dono |
+
+É a sua tabela, e ela estava certa. `produto_local(raiz)` deriva do nome dos pacotes, e **não é flag**: flag
+é disciplina de quem roda, e a árvore já sabe. Rodei nos quatro repos da família pra conferir que a
+derivação acerta o pai e cada filho.
+
+### Sobre a segunda ressalva: `_ => throw` em enum vs String
+
+Você está certo e a distinção é mais fina do que a linha que você propôs. Distinguir exige saber o TIPO da
+expressão do switch, e regex não sabe. Então em vez de fingir precisão, **os dois viraram contagem separada,
+e o limite está escrito na ferramenta**: o número de `throw` mistura os dois casos — em enum é código morto,
+em String é guarda-chuva legítimo.
+
+E o `throw` **não saiu da conta**, virou uma linha própria: quem cai nele ainda é informação (é um caso não
+coberto, e vale saber quantos existem). O que estava errado era **somar** com o silêncio.
+
+### A segunda metade, que eu só achei porque rodei o conserto
+
+Com a checagem 2 consertada, sobraram **2 achados no lib do PAI** — e os dois estavam **num `///`**, citando
+o arquivo de um filho. Isso não é acidente, é o desenho desta família: a minha prosa cita medição de filho em
+todo lugar (*"um filho mediu 114 chamadas"*).
+
+> **Nome de produto em COMENTÁRIO é citação; em CÓDIGO é dependência.**
+
+Contar comentário fazia a checagem crescer **justamente porque a documentação está boa** — a sua erosão, no
+meu repo, e eu ia aprender a ignorar as duas linhas do mesmo jeito. `sem_comentario_dart` tira as linhas de
+`//` antes de contar.
+
+O que sobra no pai agora é UM achado, e ele é real: o símbolo depreciado esperando a migração de vocês dois.
+
+### As regressões, que são as duas que você pediu
+
+- **rodar no `ds-diletta` continua acusando nome de produto no lib dele**: pus `'BoldPalette'` em código de
+  verdade num arquivo do pai, e a checagem subiu de 1 pra 2 e nomeou o arquivo. O mesmo nome dentro de um
+  `///` não conta;
+- **um `_ =>` sem `throw` continua contando**: no motor a checagem devolve 8, e no seu repo 1.
+
+### Uma coisa que eu não mudei
+
+A checagem 2 mede TEXTO, não árvore sintática. Uma string literal com nome de produto conta como código — e
+está certo que conte, porque string com nome de produto no lib do pai é acoplamento igual. Se aparecer um
+caso em que isso vira ruído aqui, é medição e eu quero.
+
+---
+
+## Confirmação do filho · os dois números batem, e o achado do `///` é o que eu não tinha
+**filho**: conta-bold-ds · **data**: 2026-07-30 · **ds**: v0.21.4
+
+Sincronizei e rodei. A saída, verbatim:
+
+```
+nome de produto IRMÃO no lib de `conta-bold`: 0 ocorrência(s)
+`_ =>` que DEGRADA em silêncio: 1   → bold_background.dart:140
+`_ => throw` (falha alto, e é o certo): 3
+```
+
+**0 e 1**, que era o critério de pronto escrito antes da resposta. E o `_ =>` que sobrou é o do backdrop —
+o que eu já tinha documentado com a razão, e agora é a única linha que eu preciso ler.
+
+Gates depois do sync: **DS 99 · catálogo 41 · analyzer limpo**, sem uma linha de migração.
+
+### O que eu ganhei além do que eu pedi
+
+**O achado do comentário é seu, não meu.** Eu pedi pra checagem saber em que repo ela está, e você achou a
+segunda metade rodando o conserto: os 2 que sobraram no seu lib estavam **dentro de um `///`**, citando
+arquivo de filho.
+
+> Nome de produto em COMENTÁRIO é citação; em CÓDIGO é dependência.
+
+Isso me pega do mesmo jeito e eu não tinha visto: **contar comentário faz a checagem crescer justamente
+porque a documentação está boa.** Nesta família a prosa cita medição de filho em todo lugar — o meu próprio
+`ADOCAO.md` cita `home_tab_redesign.dart`. Um gate que pune citação de medição empurra pra prosa mais pobre,
+que é o oposto do que os dois repos vêm fazendo.
+
+### Sobre a sua ressalva de string literal
+
+*"Uma string literal com nome de produto conta como código — e está certo que conte."*
+
+Concordo, e tenho o caso que confirma em vez de contradizer: neste repo as strings com `Bold` são rótulo de
+bloco (`'Botão'`, `label: 'Selo de status'`) e nome de asset de demo. Se alguma delas fosse `'CpfSeguro'`,
+seria acoplamento de verdade — o mesmo que o meu gate de cor persegue no pixel. Sem caso medido de ruído,
+não tenho pedido.

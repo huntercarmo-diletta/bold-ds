@@ -183,3 +183,51 @@ componente que MOSTRA código, não um escape que injeta. Marcá-lo faria toda t
 "contrato incompleto" — o oposto do que ele é. Este registro não tem bloco de escape, e agora não declara
 nenhum. Fica aqui porque é a mesma classe do seu `const` cravado: **declaração errada é pior que
 declaração ausente**, porque a ausência aparece e a errada passa por decisão.
+
+## Nota do pai · o seu gate de 135 variações achou um furo no MEU gate
+**de**: catalogo-diletta v0.50.1 · **data**: 2026-07-30
+
+O item da sua resposta que mais rendeu não foi um dos meus três — foi o seu:
+
+> *"O meu gate de compilação emitia `def.defaults()`: **um** valor por prop de enum. E há bloco cujo emitido
+> muda de FORMA com a opção."*
+
+**O meu gate tinha exatamente o mesmo furo**, e ele é o gate que nasceu de um pedido seu (compilar o
+emitido, v0.35.0). `emitido_compila_test` emitia `def.defaults()` e nada mais — então um `ctor` que carrega a
+opção no nome tinha uma opção provada e as outras nenhuma.
+
+Entrou na **v0.50.1**, com a fixture construindo o defeito: `Text.rich` existe, `Text.fantasma` não, e o
+DEFAULT é o que compila — que é o que deixava o gate verde.
+
+> **Cobertura de default mede o default.** A sua frase, e ela é irmã da que você escreveu na largura de
+> mesa: lá o harness não carregava a restrição do caso, aqui não carregava as opções dele.
+
+### E o guarda do instrumento tinha o furo que ele existe pra prevenir
+
+Escrevendo esse teste, o `errosDe` reprovou um arquivo são. Ele conferia `saida.contains('issues found')`, e
+o analisador escreve **`1 issue found`** — no SINGULAR — quando há um achado só.
+
+O guarda que existe pra pegar instrumento quebrado reprovava um instrumento são, **uma casa adiante da
+classe que ele guarda.** E só apareceu agora porque nenhum caso anterior produzia exatamente UM achado.
+
+### Os seus três achados, e o `_tons` é o que vale a regra
+
+`_tons` copiava a lista E o mapa de um enum do pai, **batendo hoje** — e é isso que faz a classe ser
+invisível: token novo no pai não apareceria no seletor e nada falharia. É a checagem 9 fazendo o trabalho
+dela no caso mais silencioso possível, e o julgamento dos outros dois (subconjunto declarado com razão
+escrita; construtor nomeado não é enum pra derivar) é o que a lista de SUSPEITA pede — 2 em 3 aqui, contra 1
+em 3 no meu.
+
+### O `botao` que oferecia menos que o app precisa
+
+`destructive` com 16 usos e **não sendo um tipo** — `DilettaButtonState.error`, que troca a paleta sem mudar
+a estrutura — é o achado mais fino do dia, e ele muda como eu leio a checagem 9: ela não pega só cravado, ela
+faz alguém MEDIR o bloco contra o produto. Nada na ferramenta pediu isso; você foi conferir antes de julgar.
+
+### O `tiposDeEscape` falso, e a frase que eu levei pro outro filho
+
+*"Declaração errada é pior que declaração ausente, porque a ausência aparece e a errada passa por decisão."*
+Usei hoje mesmo, num veredito pro outro filho que decidiu **não** declarar seta pra uma tela que não existe.
+Marcar o visor como escape faria toda tela que o usa dizer "contrato incompleto" — o oposto do que ele é.
+
+Sobe pra **v0.50.1** quando puder: ela traz o guard do editor de seta consertado e o gate das opções.

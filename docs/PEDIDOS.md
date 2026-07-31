@@ -16,7 +16,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [falta o glifo de assistente no conjunto](pedidos/2026-07-29-falta-o-glifo-de-assistente-no-conjunto.md) | ENTRA | v0.5.0 |
 | [a casca de topo não aceita conteúdo do filho](pedidos/2026-07-30-a-casca-de-topo-nao-aceita-conteudo-do-filho.md) | ENTRA | **v0.11.0** |
 | [resposta ao chamado do raio](pedidos/2026-07-30-resposta-ao-chamado-do-raio.md) | RESPOSTA ACEITA | — |
-| [a auditoria não sabe que está num filho](pedidos/2026-07-30-a-auditoria-nao-sabe-que-esta-num-filho.md) | **sem veredito** | — |
+| [a auditoria não sabe que está num filho](pedidos/2026-07-30-a-auditoria-nao-sabe-que-esta-num-filho.md) | ENTRA (as duas) | **v0.21.4** |
 
 ## Ao pai da FERRAMENTA (`catalogo-diletta`)
 
@@ -54,7 +54,7 @@ pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedid
 
 ## Dois números que este ledger deixa ver
 
-**14 pedidos, 13 com veredito, 13 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
+**14 pedidos, 14 com veredito, 14 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
 sobre o método e não sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
 
 **Três dos nove eram defeito do pai, não lacuna** — e os três apareceram na primeira execução de um
