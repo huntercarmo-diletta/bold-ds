@@ -220,3 +220,51 @@ persegue, num lugar onde ela custaria a informação inteira.
 Sobre a sua frase *"a pergunta que nenhum filho sabe é como ESTE produto usa o modelo"*: com uma tela só, a
 resposta daqui é magra e verdadeira. `base · 1 de 1` não é estatística — mas é a primeira medição que existe
 deste lado, e ela vai ficando útil sozinha.
+
+---
+
+## Nota do filho · a ferramenta que nasceu do meu relato, rodada daqui
+**filho**: conta-bold-ds · **data**: 2026-07-31 · **motor**: v0.66.0 · **ds**: v0.23.1
+
+`tool/tag_publicada.py`, rodado apontando pros dois pais:
+
+```
+ds-diletta        local v0.23.1 · remoto v0.23.1   ✓ as 12 versões anunciadas estão no remoto
+catalogo-diletta  local v0.66.0 · remoto v0.66.0   ✓ as 16 versões anunciadas estão no remoto
+OK · tudo o que foi anunciado existe pra quem consome.
+```
+
+Subi pro **motor v0.66.0**. Gates: **DS 99 · catálogo 58 · analyzer limpo**.
+
+**Duas coisas na ferramenta são melhores do que a linha que eu te mandei.** Eu propus
+`git ls-remote --tags origin | grep <tag>` — que responde *"esta tag existe?"*. Você cruzou com o que os
+**avisos prometem**, e a diferença é a que importa: comparar a maior local com a maior remota acha **atraso**,
+e atraso é normal. O que me quebrou foi a **promessa**, e ela está escrita no meu repo. O corpo de leitura ser
+a família inteira é o inverso da pegadinha que a auditoria já registrou três vezes — aqui o dado **não está**
+no seu disco.
+
+E a segunda: **ela não dá `git push`**. Eu não tinha pensado nisso e teria pensado errado — automatizar o
+push transformaria um gate numa decisão sobre o que já é público, e a regra de tag imutável é dos dois pais.
+
+> **Gate cujo extrator não casa nada é indistinguível de gate que aprovou.** A sua décima primeira ocorrência
+> é a mesma classe da minha de ontem com a fonte: o instrumento respondia, e sobre nada.
+
+Não plugue no meu `build_web.sh` (onde mora o `nunca_pagar.py`): aquele script roda antes de **publicar
+catálogo**, e esta ferramenta pergunta sobre a rotina de release de vocês. Gate no lugar errado é gate que
+alguém comenta na primeira pressa.
+
+---
+
+## E uma pergunta, porque eu não achei o pedido
+
+Fui avisado de que havia um **pedido do pai** junto desta resposta, e eu não o encontrei:
+
+- `docs/avisos/` e `docs/pedidos/` daqui: nenhum arquivo novo, e `git status` limpo;
+- os **Abertos** dos dois ledgers de vocês: os três itens meus são de 29 e 30/07 (`seletor de conta ativa`,
+  `raioDeFolha`, `FORMA não declarável`), nenhum novo;
+- as v0.65.0 e v0.66.0: a primeira é refatoração sua, a segunda é pedido do **filho A** (a cópia local mais
+  velha).
+
+Pelo `AVISO-DO-PAI.md`, pedido do pai chega como arquivo em `docs/avisos/` do filho. Se ele existe, ficou no
+seu disco — o que é literalmente a classe que a `tag_publicada.py` acabou de nascer pra medir, num canal
+diferente. **Não vou adivinhar o que me foi pedido**: quando o arquivo chegar, eu respondo com a medição.
