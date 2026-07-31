@@ -16,11 +16,16 @@ import 'package:flutter_test/flutter_test.dart';
 /// | v0.30.0 | omitia argumento igual ao default (`const ds.X()`) | conteúdo |
 /// | v0.32.1 | argumento posicional saía como `(: 'oi')` | sintaxe |
 /// | v0.33.1 | callback não saía: 12 blocos sem handler | completude |
-/// | — | lista obrigatória que a tabela não declara | ? |
+/// | — | opção de enum que muda a FORMA do emitido | cobertura de variação |
 ///
 /// Cada conserto virou um regex, e o regex seguinte nasceu do defeito que o anterior não previa.
 /// Perseguir sintoma não termina. Este gate mede a PROPRIEDADE: monta um arquivo com o emitido de
 /// todos os blocos e roda `dart analyze` nele.
+///
+/// A quarta linha é de hoje, e ela mostra o limite que a primeira versão tinha: emitir só `defaults()`
+/// compila UM valor por prop de enum, e há bloco cujo emitido muda de forma com a opção
+/// (`ds.DilettaAppList.${idioma}` põe o valor no nome do construtor). Dois testes, então: o emitido de
+/// cada bloco, e o emitido de cada OPÇÃO.
 ///
 /// O pai fez o mesmo do lado dele (`emitido_compila_test`, v0.35.0), com widgets do Flutter, porque o
 /// motor não tem DS pra compilar. **A cobertura contra o DS de verdade é daqui** — é o único lugar onde
@@ -77,6 +82,52 @@ void main() {
     expect(erros, isEmpty,
         reason: 'o código gerado NÃO compila:\n${erros.join('\n')}\n\n'
             'emitido:\n${emitidos.entries.map((e) => '${e.key}: ${e.value}').join('\n')}');
+  }, timeout: const Timeout(Duration(minutes: 3)));
+
+  test('e compila com cada OPÇÃO de enum, não só com o default', () async {
+    // A quinta linha da tabela lá em cima, e ela nasceu da checagem 9 da auditoria do pai.
+    //
+    // O gate de cima emite `def.defaults()`, então ele compila **um** valor por prop de enum. Mas há
+    // bloco cujo emitido MUDA de forma com a opção — `ds.DilettaAppList.${idioma}` põe o valor no nome
+    // do CONSTRUTOR, e `carded` (o default) é o único que estava sendo compilado. Se `menu` não fosse um
+    // construtor de verdade, nada aqui acusaria; o defeito apareceria em quem colasse o código.
+    //
+    // Limite de 12 opções por prop, e é medido: `icone` oferece os 358 ícones do pai e o valor entra como
+    // string — a forma do emitido não muda de um pro outro, então compilar 358 mede o mesmo que compilar
+    // um, num arquivo dez vezes maior.
+    final emitidos = <String, String>{};
+    var variacoes = 0;
+    for (final def in Ds.blocos.values) {
+      if (Ds.ehChromeDeDispositivo(def.type)) continue;
+      for (final (nome, prop) in def.props.entries.map((e) => (e.key, e.value))) {
+        if (prop.kind != 'enum' || prop.options == null) continue;
+        if (prop.options!.length > 12) continue;
+        final padrao = '${def.defaults()[nome]}';
+        for (final opcao in prop.options!.where((o) => o != padrao)) {
+          final props = {...def.defaults(), nome: opcao};
+          final codigo =
+              temTabela(def) ? codigoDeBlocoDeclarado(def, props) : def.codegen(props);
+          if (codigo.trim().isEmpty) continue;
+          emitidos['${def.type}·$nome=$opcao'] = codigo;
+          variacoes++;
+        }
+      }
+    }
+    expect(variacoes, greaterThan(50),
+        reason: 'quase nenhuma variação de enum: o registro perdeu os `options`?');
+
+    final arquivo = File('.dart_tool/gate_do_emitido/variacoes.dart');
+    await arquivo.parent.create(recursive: true);
+    await arquivo.writeAsString(_arquivoDeTeste(emitidos));
+
+    final r = await Process.run('dart', ['analyze', '--no-fatal-warnings', arquivo.path]);
+    final saida = '${r.stdout}${r.stderr}';
+    expect(saida, isNot(contains('Usage: dart analyze')));
+
+    final erros =
+        saida.split('\n').where((l) => l.contains('error') && l.contains('.dart:')).toList();
+    expect(erros, isEmpty,
+        reason: 'opção de enum que emite código inválido:\n${erros.join('\n')}');
   }, timeout: const Timeout(Duration(minutes: 3)));
 
   test('e o gate SABE falhar — controle com código inválido de propósito', () async {

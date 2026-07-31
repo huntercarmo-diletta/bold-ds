@@ -82,40 +82,63 @@ BlockDef _tituloDaPagina() => BlockDef(
           '${_vazio(p['subtitulo']) ? '' : ', subtitle: ${_str(p['subtitulo'])}'})',
     );
 
+/// Os TIPOS de botão que este produto usa, e é um SUBCONJUNTO declarado dos oito do pai.
+///
+/// A lista cresceu de três pra quatro quando eu fui medir o app por causa da checagem 9 da auditoria, e
+/// a contagem é o argumento:
+///
+/// | variante do app | usos | tipo do pai |
+/// |---|---|---|
+/// | `secondary` | 49 | `secondary` |
+/// | `destructive` | 16 | **não é tipo** — é `DilettaButtonState.error`, e virou a prop `estado` |
+/// | `text` | 10 | `tertiary` |
+/// | `white` | 5 | `white` — **faltava aqui**, e é o botão de cima de fundo colorido |
+/// | `primary` | 5 explícitos (mais o default) | `primary` |
+///
+/// As quatro que sobram do pai (`secondaryPrimary`, `tertiaryPrimary`, `secondaryWhite`, `tertiaryWhite`)
+/// têm ZERO uso no app, e por isso não entram: seletor com opção que ninguém escolhe é seletor que pede
+/// leitura antes de cada escolha. Se alguma aparecer numa tela nova, é uma linha aqui.
+const _tiposDeBotao = ['primary', 'secondary', 'tertiary', 'white'];
+
 BlockDef _botao() => BlockDef(
       type: 'botao',
       acoes: const {'onPressed': 'aoContinuar'},
       ctor: 'ds.DilettaButton',
-      args: const {'label': Arg.texto('label'), 'tipo': Arg.enumeracao('type', 'ds.DilettaButtonType'), 'tamanho': Arg.enumeracao('size', 'ds.DilettaButtonSize'), 'larguraTotal': Arg.bool('fullWidth')},
+      args: const {'label': Arg.texto('label'), 'tipo': Arg.enumeracao('type', 'ds.DilettaButtonType'), 'tamanho': Arg.enumeracao('size', 'ds.DilettaButtonSize'), 'estado': Arg.enumeracao('state', 'ds.DilettaButtonState'), 'larguraTotal': Arg.bool('fullWidth')},
       label: 'Botão',
-      props: const {
-        'label': PropDef('text', bindable: true, dartType: 'String'),
-        'tipo': PropDef('enum', options: ['primary', 'secondary', 'tertiary']),
-        'tamanho': PropDef('enum', options: ['lg', 'md', 'sm']),
-        'larguraTotal': PropDef('bool'),
+      props: {
+        'label': const PropDef('text', bindable: true, dartType: 'String'),
+        'tipo': const PropDef('enum', options: _tiposDeBotao),
+        'tamanho': PropDef('enum', options: DilettaButtonSize.values.map((e) => e.name).toList()),
+        // O DESTRUTIVO do app são 16 sítios, e ele não é um tipo: é o estado `error`, que troca a paleta
+        // sem mudar a estrutura. Como tipo eu nunca poderia oferecê-lo — como estado, ele combina com
+        // qualquer um dos quatro, que é o que a tela de revogar acesso faz (secundário + destrutivo).
+        'estado': PropDef('enum', options: DilettaButtonState.values.map((e) => e.name).toList()),
+        'larguraTotal': const PropDef('bool'),
       },
-      defaults: () =>
-          {'label': 'Continuar', 'tipo': 'primary', 'tamanho': 'lg', 'larguraTotal': true},
+      defaults: () => {
+        'label': 'Continuar',
+        'tipo': 'primary',
+        'tamanho': 'lg',
+        'estado': 'normal',
+        'larguraTotal': true,
+      },
       build: (p) => _botaoWidget(p, aoTocar: null),
       codegen: (p) => 'ds.DilettaButton(label: ${_str(p['label'])}, onPressed: aoContinuar'
           ', type: ds.DilettaButtonType.${p['tipo']}'
           ', size: ds.DilettaButtonSize.${p['tamanho']}'
+          '${p['estado'] == 'normal' ? '' : ', state: ds.DilettaButtonState.${p['estado']}'}'
           '${p['larguraTotal'] == true ? ', fullWidth: true' : ''})',
     );
 
 Widget _botaoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) => DilettaButton(
       label: '${p['label']}',
       onPressed: aoTocar ?? () {},
-      type: _daOpcao(p['tipo'], const {
-        'primary': DilettaButtonType.primary,
-        'secondary': DilettaButtonType.secondary,
-        'tertiary': DilettaButtonType.tertiary,
-      }, DilettaButtonType.primary),
-      size: _daOpcao(p['tamanho'], const {
-        'lg': DilettaButtonSize.lg,
-        'md': DilettaButtonSize.md,
-        'sm': DilettaButtonSize.sm,
-      }, DilettaButtonSize.lg),
+      // Os três mapas escritos à mão saíram: `_porNome` lê o enum do pai, e o subconjunto de tipos é
+      // filtrado pelo `options` do prop — não por uma segunda lista que envelhece sozinha.
+      type: _daOpcao(p['tipo'], _porNome(DilettaButtonType.values), DilettaButtonType.primary),
+      size: _daOpcao(p['tamanho'], _porNome(DilettaButtonSize.values), DilettaButtonSize.lg),
+      state: _daOpcao(p['estado'], _porNome(DilettaButtonState.values), DilettaButtonState.normal),
       fullWidth: p['larguraTotal'] == true,
     );
 
@@ -181,24 +204,25 @@ BlockDef _valor() => BlockDef(
           '${p['heroi'] == true ? ', hero: true' : ''})',
     );
 
-const _tons = ['neutral', 'primary', 'success', 'warning', 'danger', 'secure'];
+/// DERIVADO do enum do pai, e antes era uma lista de seis nomes escrita à mão.
+///
+/// A checagem 9 da auditoria (`vocabulario_cravado`, v0.21.3 do DS) achou: era o único lugar deste
+/// registro que copiava um enum do pai em vez de lê-lo — quinze outros blocos já usavam `_porNome`. Batia
+/// hoje, e é justamente o que faz a classe ser difícil de ver: tom novo no pai não apareceria no seletor,
+/// e nada falharia.
+List<String> get _tons => DilettaStatusTone.values.map((e) => e.name).toList();
 
-DilettaStatusTone _tomDe(String t) => _daOpcao(t, const {
-      'neutral': DilettaStatusTone.neutral,
-      'primary': DilettaStatusTone.primary,
-      'success': DilettaStatusTone.success,
-      'warning': DilettaStatusTone.warning,
-      'danger': DilettaStatusTone.danger,
-      'secure': DilettaStatusTone.secure,
-    }, DilettaStatusTone.neutral);
+DilettaStatusTone _tomDe(String t) => _daOpcao(t, _porNome(DilettaStatusTone.values),
+    DilettaStatusTone.neutral);
 
 BlockDef _selo() => BlockDef(
       type: 'selo',
       ctor: 'ds.DilettaStatusTag',
       args: const {'label': Arg.texto('label'), 'tom': Arg.enumeracao('tone', 'ds.DilettaStatusTone')},
       label: 'Selo de status',
-      props: const {
-        'label': PropDef('text', bindable: true, dartType: 'String'),
+      // Sem `const` no mapa: `options` agora é derivado do enum do pai, e derivado não é constante.
+      props: {
+        'label': const PropDef('text', bindable: true, dartType: 'String'),
         'tom': PropDef('enum', options: _tons),
       },
       defaults: () => {'label': 'Aprovado', 'tom': 'success'},

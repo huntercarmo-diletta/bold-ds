@@ -52,7 +52,12 @@ void main() {
   }
 
   test('as três regiões saem na ordem de leitura, e o slot entra com o nome do slot', () {
-    final c = leContratoDaTela(telaComposta(), tiposDeEscape: const {'visorDeCodigo'});
+    // SEM `tiposDeEscape`, e isso é a declaração certa: este registro não tem bloco de código cru.
+    //
+    // A primeira versão deste teste passava `{'visorDeCodigo'}`, e era um fato falso meu — o visor é um
+    // COMPONENTE que mostra código, não um escape que injeta código. Marcá-lo como escape faria toda tela
+    // que o usa dizer "meu contrato está incompleto", que é o oposto do que ele é.
+    final c = leContratoDaTela(telaComposta());
 
     expect(c.regioes.map((r) => r.nome).toList(), ['topo', 'conteúdo', 'base'],
         reason: 'a ordem das regiões É a ordem de leitura da tela');

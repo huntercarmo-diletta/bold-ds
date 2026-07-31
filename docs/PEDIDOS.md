@@ -46,6 +46,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [o gate que trava o Cloudflare em zero](avisos/2026-07-30-nunca-pagar.md) | CONSELHO | sim — virou linha do `build_web.sh` |
 | [a unha no chip, o motion sem laço](avisos/2026-07-30-unha-no-chip-e-motion-sem-laco.md) | RELEASE | sim — o sweep achou defeito MEU |
 | [o contrato de tela monta a tela](avisos/2026-07-30-contrato-de-tela-monta-a-tela.md) | RELEASE | sim — Styles virou página composta |
+| [paleta busca, e variações declaradas](avisos/2026-07-30-paleta-busca-e-variacoes-declaradas.md) | RELEASE | sim — a checagem 9 achou gap no `botao` |
 
 Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
 pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedido novo.
