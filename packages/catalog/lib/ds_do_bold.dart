@@ -1954,6 +1954,39 @@ void configurarDsDoBold() {
             descricao: 'transição de página'),
       },
     ),
+    // COMO ESTE DS MOVE CADA TRANSIÇÃO (gancho `motionDaTransicao`).
+    //
+    // A vista de Gramática (v0.64.0 do motor) mede isto contra as setas dos fluxos, e ela me mostrou o
+    // gancho vazio: **oito tipos de conexão, oito "não declarado"**. Eu já tinha os quatro tokens de
+    // movimento em `estilos.movimentos` — mas ali eles são INVENTÁRIO (o que existe), e aqui é a
+    // correspondência (qual movimento é qual transição). São perguntas diferentes, e eu tinha só a primeira.
+    //
+    // Declaro TRÊS dos oito, e a razão de parar em três é que os três saem da minha própria descrição de
+    // token, palavra por palavra:
+    //
+    //   slow (400ms)   → "transição de página"        ⇒ push e voltar
+    //   medium (250ms) → "folha, toast, ponto de página" ⇒ sheet
+    //
+    // Os outros cinco (`estado`, `após espera` e os três de chat) eu NÃO declaro, e não é esquecimento:
+    // este produto não tem fluxo de chat, e eu não medi qual token move troca de estado. Chutar aqui
+    // encheria a página com número que ninguém verificou — e o board mostraria uma prévia tocando um
+    // movimento que o app não faz. Quando a primeira seta desses tipos existir, a vista acende em
+    // vermelho ("usado sem token") e aí eu tenho o caso medido.
+    motionDaTransicao: (tipo) => switch (tipo) {
+      TipoConexao.push || TipoConexao.volta => const MotionDaTransicao(
+          duracao: DilettaMotion.slow,
+          curva: DilettaMotion.standard,
+          token: 'DilettaMotion.slow',
+          descricao: 'transição de página'),
+      TipoConexao.sheet => const MotionDaTransicao(
+          duracao: DilettaMotion.medium,
+          curva: DilettaMotion.enter,
+          token: 'DilettaMotion.medium',
+          descricao: 'a folha sobe'),
+      // Sem `_ =>` com valor: tipo novo do pai tem que aparecer aqui como falta, e não herdar o
+      // movimento da folha por acidente. O motor já trata `null` como "não declarado", que é a verdade.
+      _ => const MotionDaTransicao(),
+    },
     // OS CONTRATOS (v0.36.0 do motor) — guideline é parte do contrato do COMPONENTE, não do catálogo
     // que o mostra. Pro componente do PAI o markdown vem do pacote dele (`kDilettaSpecs`), e o mapa
     // abaixo é DERIVADO do `ctor` de cada bloco: escrever a correspondência à mão com 43 blocos e 64
