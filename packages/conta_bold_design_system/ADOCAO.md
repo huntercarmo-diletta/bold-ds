@@ -670,3 +670,28 @@ lido.
 
 No catálogo o visor é bloco de **tela cheia** (`tiposDeTelaCheia`): sem isso o motor daria a ele o
 padding e o scroll do frame, e o retículo apareceria deslocado do centro da câmera.
+
+## Os três símbolos que a auditoria conta como "sem uso", e por que dois ficam — 2026-07-30
+
+A checagem 3 da auditoria de arquitetura cobra símbolo público com um uso ou menos, e ela tem razão em
+cobrar: API sem consumidor é peso que alguém mantém sem saber por quê. Neste repo ela aponta três, e o
+julgamento é diferente em cada um — o que este arquivo registra, porque a auditoria vai apontar de novo:
+
+| símbolo | usos aqui | veredito |
+|---|---|---|
+| `rodarCatalogo()` | 1 | **fica**: é o ponto de entrada, e ponto de entrada tem um chamador por definição |
+| `lerTelaDoBold()` | 1 | **fica**: é gancho de plugue (`leCodigoComoSpec`), e gancho é chamado pelo motor |
+| `BoldBackground.veuDaStatusBar()` | **0** | **fica, e o consumidor é o APP** |
+
+O véu é o que mascara o conteúdo rolando por baixo do notch, e ele tem **dois usos no app hoje**
+(`home_tab_redesign.dart:327` chama o `statusBarScrim` do DS interno). Zero aqui significa "o app não
+adotou ainda", e não "ninguém precisa" — é a mesma leitura que o pai faz do lado dele: *num pai, quem
+chama a API mora fora.*
+
+**E um saiu.** `BoldDinheiro.emReais(String) → double` tinha um uso: o próprio teste. Medindo o app, o
+caminho dele **não existe** — os campos de dinheiro guardam `_cents` (int) e emitem `_cents / 100.0` na
+hora de avisar a tela; ninguém nunca lê a string formatada de volta pra double. `centavosDe` fica, porque é
+a volta que o app faz de verdade.
+
+> **API que só o próprio teste chama é API que ainda não foi pedida.** E o teste dela dava a impressão
+> oposta: cobertura verde num caminho que produto nenhum percorre.

@@ -55,9 +55,6 @@ abstract final class BoldDinheiro {
     return 'R\$ $saida,$decimais';
   }
 
-  /// `R$ 2.500,00` → `2500.0`. Aceita texto sujo: o que não é dígito é ignorado.
-  static double emReais(String texto) => centavosDe(texto) / 100.0;
-
   /// `R$ 2.500,00` → `250000`. É a forma que se guarda e se manda pra API — ponto flutuante
   /// para dinheiro é como se perde um centavo por arredondamento.
   static int centavosDe(String texto) {

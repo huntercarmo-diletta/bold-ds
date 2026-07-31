@@ -1361,10 +1361,15 @@ BlockDef _cascaDeTopo() => BlockDef(
       // com entrada no leitor.
       codegen: (p) => 'ds.DilettaTopAppBar.defaultVariant(navBar: ds.DilettaNavigationTopBar('
           '${_vazio(p['titulo']) ? '' : 'title: ${_str(p['titulo'])}, '}'
+          // Os DOIS lados deste bloco decidem igual, e antes não decidiam: o `build` estourava em valor
+          // desconhecido e o `codegen` emitia `back` calado. A auditoria achou pelo `_ =>`, e a
+          // assimetria é o defeito — quem lê o codegen aprendia "desconhecido vira voltar", que era
+          // regra de um lado só.
           'left: ${switch (p['esquerda']) {
             'fechar' => 'ds.DilettaNavigationLeftAccessory.close(onPressed: aoFechar)',
             'nada' => 'null',
-            _ => 'ds.DilettaNavigationLeftAccessory.back(onPressed: aoVoltar)',
+            'voltar' => 'ds.DilettaNavigationLeftAccessory.back(onPressed: aoVoltar)',
+            _ => throw ArgumentError('acessório esquerdo desconhecido: ${p['esquerda']}'),
           }}))',
     );
 

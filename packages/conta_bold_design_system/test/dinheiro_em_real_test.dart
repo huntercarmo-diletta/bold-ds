@@ -47,11 +47,15 @@ void main() {
     expect(r.selection.baseOffset, r.text.length);
   });
 
-  test('a volta é em CENTAVOS, e em reais só pra exibir', () {
+  test('a volta é em CENTAVOS, e só em centavos', () {
     // Dinheiro se guarda em inteiro: ponto flutuante é como se perde um centavo por
     // arredondamento, e num extrato isso aparece.
+    //
+    // Havia um `emReais(String) → double` ao lado, e ele SAIU na auditoria: zero consumidor, e medindo o
+    // app o caminho dele não existe — os campos de dinheiro guardam `_cents` (int) e emitem
+    // `_cents / 100.0` na hora de avisar a tela. Ninguém nunca lê a string formatada de volta pra double.
+    // API que só o próprio teste chama é API que ainda não foi pedida.
     expect(BoldDinheiro.centavosDe(r'R$ 2.500,00'), 250000);
-    expect(BoldDinheiro.emReais(r'R$ 2.500,00'), 2500.0);
     expect(BoldDinheiro.centavosDe('texto sem número'), 0);
     expect(BoldDinheiro.centavosDe(''), 0);
   });
