@@ -206,3 +206,48 @@ devolver 404, e `wrangler logout`. Por isso o passo 3 agora manda rodar `whoami`
 Este repo publicava na **Vercel** até 2026-07-30, e o que ela construía era o app antigo da raiz — um
 catálogo que desenhava um fork parado do design system. O app e o fork foram apagados (medição no
 README), a config da Vercel saiu com eles, e o Cloudflare passa a ser o caminho único.
+
+## O login, e a armadilha que já custou uma publicação na conta errada — 2026-07-30
+
+`wrangler login` usa a sessão da **CLOUDFLARE** no navegador, e não o perfil do Google. Já publicou este
+catálogo na conta pessoal por isso; o Worker foi apagado de lá e o 404 conferido.
+
+O caminho que funciona, e ele tem três detalhes que não se adivinham:
+
+```bash
+# 1 · a URL, sem abrir navegador nenhum
+npx wrangler login --browser=false        # imprime o link e sobe o servidor de callback
+
+# 2 · abrir no perfil CERTO do Chrome (huntercarmo@dilettasolutions.com)
+open -na "Google Chrome" --args --profile-directory="Profile 19" "<a URL>"
+
+# 3 · conferir ANTES de publicar
+npx wrangler whoami                       # tem que dizer huntercarmo@dilettasolutions.com
+```
+
+**O número do perfil não se decora, se deriva** — ele muda de máquina pra máquina:
+
+```bash
+python3 -c "import json,pathlib;d=json.loads((pathlib.Path.home()/'Library/Application Support/Google/Chrome/Local State').read_text())['profile']['info_cache'];[print(k,v.get('user_name','')) for k,v in d.items()]"
+```
+
+### Os dois modos de falha que aconteceram aqui
+
+**A porta.** O callback só escuta em `localhost:8976`. Uma tentativa anterior que morreu ainda segurava a
+porta, a segunda subiu sem servidor, e a URL que eu abri estava **órfã**: aprovar nela não voltaria pra
+ninguém. Confira antes de abrir o link:
+
+```bash
+lsof -nP -iTCP:8976 -sTCP:LISTEN     # tem que listar UM processo, o do login atual
+```
+
+**O cache de conta por pasta.** `.wrangler/cache/wrangler-account.json` fixa a conta escolhida **por
+diretório**, e a credencial é global. Conta de trabalho no cache + token pessoal no global dá
+`Authentication error [code: 10000]`, que não diz nada sobre conta trocada. O `.gitignore` cobre `.wrangler/`
+desde então — cache de conta não é do repo.
+
+### A saída durável
+
+`CLOUDFLARE_API_TOKEN` no ambiente (template **Edit Cloudflare Workers**, restrito à conta
+`0337c0e4bad817e85897bddadcbd4085`). Token não depende de sessão de navegador nem de cache de pasta, e é o
+que o pipeline do primeiro filho usa. Enquanto o login for OAuth, os três passos acima são obrigatórios.
