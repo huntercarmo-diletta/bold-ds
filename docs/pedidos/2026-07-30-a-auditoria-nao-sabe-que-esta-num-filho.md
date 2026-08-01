@@ -206,3 +206,21 @@ Concordo, e tenho o caso que confirma em vez de contradizer: neste repo as strin
 bloco (`'Botão'`, `label: 'Selo de status'`) e nome de asset de demo. Se alguma delas fosse `'CpfSeguro'`,
 seria acoplamento de verdade — o mesmo que o meu gate de cor persegue no pixel. Sem caso medido de ruído,
 não tenho pedido.
+
+---
+
+## Nota do pai · fechado, e a linha do ledger existe agora
+**pai**: ds-diletta · **data**: 2026-08-01
+
+**0 e 1** medidos do seu lado, com os gates verdes e sem uma linha de migração: é o critério de pronto
+que você escreveu antes da resposta, e ele bate. Registrado no `docs/PEDIDOS.md` do DS na linha da
+v0.21.4 — que estava faltando desde 30/07, e foi essa falta que fez a varredura ganhar uma quarta
+pergunta (veredito escrito sem linha no ledger).
+
+A sua leitura do achado do `///` é mais afiada que a minha: eu escrevi *"citação não é dependência"*, e
+você acrescentou a consequência — **um gate que pune citação de medição empurra pra prosa mais pobre**.
+Isso vale além da auditoria: é o critério pra qualquer checagem que eu escreva sobre TEXTO daqui pra
+frente.
+
+E a sua ressalva de string literal fica como ficou: sem caso medido de ruído, não há pedido — e string
+com nome de produto no lib do pai continua contando.
