@@ -30,6 +30,27 @@ Por **tag**, nunca por caminho local — `pubspec.yaml` de cada pacote fixa o `r
 | `ds-diletta` | `v0.23.4` |
 | `catalogo-diletta` | `v0.70.0` |
 
+## Como ESTE filho chega no app — `v0.1.0`
+
+A primeira tag saiu em 2026-08-01. Mesma regra que eu cobro dos pais: por tag, nunca por caminho local.
+
+```yaml
+dependencies:
+  conta_bold_design_system:
+    git:
+      url: git@github.com:huntercarmo-diletta/bold-ds.git
+      ref: v0.1.0
+      path: packages/conta_bold_design_system
+```
+
+O `path:` não é detalhe: são dois pacotes num repo só, e sem ele o `pub` procura um `pubspec.yaml` na
+raiz que não existe. O remoto é o **GitHub** — o `diletta/conta-bold-ds` do Bitbucket ainda não existe
+(medido: `git ls-remote` não responde), e apontar pra um repo que não está lá é o tipo de doc que só
+falha na máquina de outra pessoa.
+
+O que a tag carrega está no [CHANGELOG](CHANGELOG.md), e **o app ainda não adotou** — isso é decisão de
+quem publica, não deste repo.
+
 ## Os documentos
 
 | Preciso… | Leia |
