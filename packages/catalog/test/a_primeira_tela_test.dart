@@ -1,13 +1,14 @@
 import 'package:conta_bold_catalog/chrome_do_bold.dart';
 import 'package:conta_bold_catalog/conteudo_do_bold.dart';
 import 'package:conta_bold_catalog/ds_do_bold.dart';
+import 'package:conta_bold_catalog/main.dart';
 import 'package:conta_bold_catalog/telas_do_bold.dart';
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-/// A PRIMEIRA TELA DESTE PRODUTO, e ela era zero até hoje.
+/// AS TELAS DESTE PRODUTO, e elas eram zero até hoje.
 ///
 /// O pai mediu a falta na v0.55.0 do motor — *"um filho tem 124 telas, o outro tem ZERO"* — e a
 /// consequência que ele escreveu é a que justifica este arquivo: **todo o pipeline de tela tinha um usuário
@@ -28,14 +29,23 @@ void main() {
     configurarConteudoDoBold();
   });
 
-  test('a HOME é válida pela autoria do PAI', () {
+  test('as DUAS telas são válidas pela autoria do PAI', () {
     // `montaDaAutoria` roda dentro de `telasDoBold()`, então chamar já é o gate: prop inexistente, enum
     // fora do vocabulário, slot que não existe e id repetido reprovam com a lista inteira.
     //
     // Ela já rendeu na primeira execução: eu tinha escrito `arrowsLeftRightLight`, que não existe. Terceira
     // vez nesta semana que eu invento nome de ícone, e a primeira em que a peça que acusa é do pai.
     final telas = telasDoBold();
-    expect(telas.keys, contains(kSlugDaHome));
+    expect(telas.keys, containsAll([kSlugDaHome, kSlugDasAutorizacoes]));
+
+    // A SEGUNDA é a única que usa os três componentes de alçada. Eles tinham uso medido no app e ZERO uso
+    // em tela declarada — o caso mais fácil de um componente apodrecer sem ninguém ver.
+    final pj = telas[kSlugDasAutorizacoes]!;
+    final tiposDaPj = [
+      for (final b in [...pj.top, ...pj.blocks, ...pj.bottom]) b.type,
+    ];
+    expect(tiposDaPj,
+        containsAll(['progressoDeAprovacao', 'prazoDaPendencia', 'escadaDeAlcadas']));
 
     final spec = telas[kSlugDaHome]!;
     expect(spec.scrollableContent, isTrue);
@@ -111,6 +121,32 @@ void main() {
     expect(find.byType(BoldSaldo), findsOneWidget);
   });
 
+  testWidgets('a PJ desenha no aperto de 320, com os três blocos de alçada', (t) async {
+    // A HOME tem um resíduo conhecido (o placeholder do pai). Esta não tem nenhum, e vale medir separado:
+    // ela é a que carrega os três componentes de alçada, que são os mais densos deste registro — escada com
+    // degraus, progresso com frase e pastilha de prazo, numa tela de 320.
+    t.view.physicalSize = const Size(320, 3000);
+    t.view.devicePixelRatio = 1.0;
+    addTearDown(t.view.reset);
+
+    final erros = <String>[];
+    final anterior = FlutterError.onError;
+    FlutterError.onError = (d) => erros.add(d.exceptionAsString().split('\n').first);
+    await t.pumpWidget(MaterialApp(
+      theme: ThemeData(fontFamily: BoldFonts.familyRaw),
+      home: Ds.tema(Scaffold(
+        body: buildScreenLayout(telasDoBold()[kSlugDasAutorizacoes]!, leaf: buildBlock),
+      )),
+    ));
+    await t.pump(const Duration(milliseconds: 200));
+    FlutterError.onError = anterior;
+    t.takeException();
+
+    expect(erros, isEmpty, reason: erros.take(3).join(' | '));
+    expect(find.byType(BoldEscadaDeAlcadas), findsOneWidget);
+    expect(find.byType(BoldProgressoDeAprovacao), findsOneWidget);
+  });
+
   testWidgets('e com DADO DE VERDADE ela não vaza em nada', (t) async {
     // A metade que separa "defeito do componente" de "artefato do placeholder". A mesma tela com os
     // valores literais do bloco, e mais o pior caso de dinheiro deste produto (conta PJ, sete dígitos).
@@ -158,11 +194,44 @@ void main() {
     expect(erros, isEmpty, reason: 'com dado real a tela vaza: ${erros.join(' | ')}');
   });
 
+  testWidgets('a aba TELAS mostra as duas, agrupadas pelo eixo macro', (t) async {
+    // Sem esta aba as telas existem no plugue e não aparecem em lugar nenhum do catálogo: quem lê
+    // `especificacoes` é o compositor e o board, e eu não tinha board. Declarar e não mostrar é o mesmo
+    // meio-caminho que a arte do fundo era.
+    t.view.physicalSize = const Size(1400, 1000);
+    t.view.devicePixelRatio = 1.0;
+    addTearDown(t.view.reset);
+
+    final grupos = gruposDeTelasDoBold();
+    expect(grupos.map((g) => g.macro).toSet(), {'PF', 'PJ'},
+        reason: 'o macro é DERIVADO do prefixo do slug — tela nova entra sozinha');
+    expect(grupos.expand((g) => g.screens).length, telasDoBold().length);
+
+    final erros = <String>[];
+    final anterior = FlutterError.onError;
+    FlutterError.onError = (d) => erros.add(d.exceptionAsString().split('\n').first);
+    await t.pumpWidget(MaterialApp(
+      theme: ThemeData(fontFamily: BoldFonts.familyRaw),
+      home: Scaffold(body: Builder(
+        builder: (ctx) =>
+            configDoCatalogoDoBold().abas.firstWhere((a) => a.id == 'telas').constroi(ctx),
+      )),
+    ));
+    await t.pump(const Duration(milliseconds: 400));
+    FlutterError.onError = anterior;
+    t.takeException();
+    expect(erros, isEmpty, reason: erros.take(3).join(' | '));
+
+    expect(find.text('Conta PF'), findsWidgets);
+    expect(find.text('Conta PJ'), findsWidgets);
+  });
+
   test('e a tela está no plugue de conteúdo, em JSON', () {
     // Sem esta linha a tela existe no código e não existe no catálogo: quem lê `Conteudo.especificacoes`
     // são o board, o compositor, a aba de telas e a conformidade. Declarar e não plugar é o mesmo tipo de
     // meio-caminho que a arte do fundo era.
-    expect(Conteudo.especificacoes.keys, contains(kSlugDaHome));
+    expect(Conteudo.especificacoes.keys, containsAll([kSlugDaHome, kSlugDasAutorizacoes]));
     expect(Conteudo.especificacoes[kSlugDaHome], contains('cabecalhoDaHome'));
+    expect(Conteudo.especificacoes[kSlugDasAutorizacoes], contains('escadaDeAlcadas'));
   });
 }

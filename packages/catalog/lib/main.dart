@@ -18,6 +18,7 @@ import 'chrome_do_bold.dart';
 import 'conteudo_do_bold.dart';
 import 'ds_do_bold.dart';
 import 'medicao_do_bold.dart';
+import 'telas_do_bold.dart';
 
 void main() {
   configurarChromeDoBold();
@@ -102,6 +103,25 @@ CatalogoConfig configDoCatalogoDoBold() => CatalogoConfig(
           id: 'specs',
           label: 'Specs',
           constroi: (_) => const AbaDeSpecs(),
+        ),
+        // TELAS — e ela só existe desde que existem telas.
+        //
+        // Ficou de fora por dois dias com a razão certa: aba de telas com zero tela é uma página que diz
+        // "não há nada" — o mesmo defeito do selo que diz pronto. Agora são duas, uma de cada eixo macro, e
+        // o board dá o que nenhuma outra aba dá: o FLUXO (as setas entre telas), o modal de doc com a
+        // montagem, e o código de cada uma pronto pra copiar.
+        //
+        // Os grupos são derivados do prefixo do slug — não há lista escrita à mão, então tela nova aparece
+        // aqui sozinha.
+        AbaDoCatalogo(
+          id: 'telas',
+          label: 'Telas',
+          constroi: (_) => HandoffLayout(
+            title: 'Telas do Conta BOLD',
+            description: 'As telas declaradas deste produto, com o fluxo, a documentação e o código. '
+                'Cada uma é uma spec no repo — rascunho no navegador não sobrevive ao deploy.',
+            groups: gruposDeTelasDoBold(),
+          ),
         ),
         AbaDoCatalogo(
           id: 'conformidade',

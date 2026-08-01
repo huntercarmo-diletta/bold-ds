@@ -157,3 +157,38 @@ Depois dele: os dois sweeps dos 56 blocos passam, e a HOME montada tem **um** re
 
 Se você quiser o caso medido: a listra amarela aparece no board pra qualquer tela com binding, porque o
 `{campo}` é mais largo que o dado. Não sei se vale conserto — só que é a convenção, e não o produto.
+
+---
+
+## Nota do filho · a segunda tela, e a aba que faltava pra elas aparecerem
+**filho**: conta-bold-ds · **data**: 2026-07-31 · **motor**: v0.66.0
+
+`pj1-autorizacoes` entrou, e a escolha tem duas razões medidas:
+
+1. é do **outro eixo macro** — com uma tela só de PF o board não tinha o que agrupar;
+2. **ela é a única que usa os três componentes de alçada** (`progressoDeAprovacao`, `prazoDaPendencia`,
+   `escadaDeAlcadas`). Eles tinham uso medido no app e **zero uso em tela declarada** — o caso mais fácil de
+   um componente apodrecer sem ninguém ver.
+
+A gramática de composição, remedida:
+
+```
+telas=2 · rolam=2 · alinhamentos={start: 2} · formatos={phone: 2}
+topo · conteúdo · base → as DUAS usam as três regiões
+CONSOME: 5 campos (PF) + 6 (PJ)
+```
+
+**E a aba Telas existe agora.** Ela ficou de fora dois dias pela razão certa — aba de telas com zero tela é
+uma página que diz "não há nada", que é o defeito do selo que diz pronto. Os grupos são derivados do prefixo
+do slug, então tela nova aparece sozinha: nenhuma lista escrita à mão.
+
+Duas coisas que eu declaro em vez de esconder:
+
+- **os dois botões da PJ empilham**, e no app eles são uma linha. Este registro não tem container de LINHA, e
+  inventar o bloco pra fechar um desenho é a ordem inversa da deste repo. Está na nota `decisao` da spec;
+- **a tela do app repete o cartão por pedido**; a spec declara **um**. O board mostra a forma, não o volume —
+  repetição vem de `listBindings` quando eu declarar a lista vinculada.
+
+Cruzamento entre fluxos continua **zero**: as duas telas são de fluxos diferentes e nenhuma leva à outra. É
+o primeiro estado em que a sua pergunta do item 2 pode ser respondida com medição em vez de com "não tenho
+fluxo nenhum".

@@ -32,6 +32,9 @@ import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 /// O slug é a chave estável — é por ele que fluxo, seta e deep-link apontam.
 const String kSlugDaHome = 'pf1-home';
 
+/// A segunda tela, e ela é da conta PJ — o outro eixo macro deste produto.
+const String kSlugDasAutorizacoes = 'pj1-autorizacoes';
+
 /// A HOME da conta PF, medida em `home_tab_redesign.dart`.
 ///
 /// A ordem é a do app: barra de topo com saudação, saldo com entradas e saídas, atalhos, o que precisa de
@@ -116,6 +119,86 @@ Map<String, dynamic> _homeDaPf() => {
       ],
     };
 
+/// AS AUTORIZAÇÕES da conta PJ, medidas em `autorizacoes_screen.dart` (1.216 linhas no app).
+///
+/// A segunda tela, e a escolha tem duas razões medidas. A primeira: ela é do **outro eixo macro** (PJ), e
+/// com uma tela só de PF o board não tinha o que agrupar. A segunda pesa mais — **ela é a única que usa os
+/// três componentes que eu construí pra alçada** (`progressoDeAprovacao`, `prazoDaPendencia`,
+/// `escadaDeAlcadas`). Eles existiam com uso medido no app e **zero uso em tela declarada aqui**, que é o
+/// caso mais fácil de um componente apodrecer sem ninguém ver.
+///
+/// ## O que eu mudei do app, e por quê
+///
+/// No app os dois botões são uma LINHA (`Rejeitar` | `Aprovar`). Aqui eles empilham na base, e não é
+/// preguiça: este registro **não tem container de linha** — a gramática de superfície do motor é
+/// `top`/`blocks`/`bottom`, e linha de botões seria bloco novo. Empilhar é o que o vocabulário permite hoje,
+/// e a diferença fica escrita aqui em vez de virar componente inventado pra fechar um desenho.
+///
+/// A tela do app também repete o cartão por pedido, num `ListView`. A spec declara **um** — o board mostra
+/// a forma da tela, não o volume de dados. Repetição vem de `listBindings` no dia em que eu declarar a
+/// lista vinculada, e aí é uma linha.
+Map<String, dynamic> _autorizacoesDaPj() => {
+      'slug': kSlugDasAutorizacoes,
+      'name': 'PJ1 · Autorizações',
+      'form': 'phone',
+      'scrollableContent': true,
+      'contentGap': 's4',
+      'top': [
+        {'type': 'barraDeStatus'},
+        {'type': 'cascaDeTopo', 'props': {'titulo': 'Autorizações', 'esquerda': 'voltar'}},
+        {'type': 'abas', 'props': {'abas': 'Pendentes, Histórico, Minhas', 'selecionada': '0'}},
+      ],
+      'blocks': [
+        {
+          'type': 'valor',
+          'props': {'heroi': false},
+          'bindings': {
+            'valor': 'valorDoPedido',
+            'rotulo': 'nomeDoSolicitante',
+            'carimbo': 'criadoEm',
+          },
+        },
+        {
+          'type': 'progressoDeAprovacao',
+          'props': {'exigeMaster': true, 'compacto': false},
+          'bindings': {'colhidas': 'assinaturasColhidas', 'exigidas': 'assinaturasExigidas'},
+        },
+        {'type': 'prazoDaPendencia', 'bindings': {'idade': 'idadeDaPendencia'}},
+        {'type': 'cabecalhoDeSecao', 'props': {'rotulo': 'A ALÇADA DESTA CONTA'}},
+        {'type': 'escadaDeAlcadas'},
+      ],
+      'bottom': [
+        {'type': 'botao', 'props': {'label': 'Aprovar', 'larguraTotal': true}},
+        {
+          'type': 'botao',
+          'props': {'label': 'Rejeitar', 'tipo': 'secondary', 'estado': 'error', 'larguraTotal': true},
+        },
+        {'type': 'indicadorDeHome'},
+      ],
+      'notes': [
+        {
+          'kind': 'decisao',
+          'text': 'Os dois botões empilham porque este registro não tem container de LINHA. No app eles '
+              'são uma linha; inventar o bloco pra fechar o desenho seria a ordem inversa da deste repo.',
+        },
+        {
+          'kind': 'regra',
+          'text': 'O destrutivo é o ESTADO `error` sobre o tipo secundário, e não um tipo próprio. É a '
+              'medição que o botão ganhou: 16 sítios de destrutivo no app, nenhum deles um tipo.',
+        },
+        {
+          'kind': 'borda',
+          'text': 'Sem `expiresAt` no contrato do backend, o prazo mostra a IDADE da pendência em vez de '
+              'inventar contagem regressiva. É a decisão que o app já tomou, e ela vem junto.',
+        },
+        {
+          'kind': 'a11y',
+          'text': 'O progresso anuncia a frase inteira ("1 de 2 assinaturas, exige master") em vez de dois '
+              'números soltos, e a escada usa `onPrimarySubtle`/`onSuccessSubtle` — o par que passa em AA.',
+        },
+      ],
+    };
+
 /// As telas do repo, por slug — em JSON, que é a forma que o plugue de conteúdo pede.
 ///
 /// Uma só, e o número é honesto: declarar 124 de uma vez seria inventar desenho, e este repo mede antes de
@@ -132,4 +215,29 @@ Map<String, String> telasDoBoldEmJson() => {
 /// As telas montadas, pra quem precisa da spec e não do texto (os gates deste repo).
 Map<String, ScreenSpec> telasDoBold() => {
       kSlugDaHome: montaDaAutoria(_homeDaPf()),
+      kSlugDasAutorizacoes: montaDaAutoria(_autorizacoesDaPj()),
     };
+
+/// As telas agrupadas pelo eixo MACRO, que é como o board as mostra.
+///
+/// O macro sai do prefixo do slug (`pf1-…`, `pj1-…`) e não de um campo novo: o contrato de autoria já manda
+/// o slug começar com o prefixo do fluxo, então declarar o macro de novo seria a mesma informação em dois
+/// lugares — e duas fontes divergem no primeiro conserto.
+List<HandoffGroup> gruposDeTelasDoBold() {
+  final porMacro = <String, List<HandoffScreen>>{};
+  telasDoBold().forEach((slug, spec) {
+    final macro = slug.startsWith('pj') ? 'PJ' : 'PF';
+    (porMacro[macro] ??= []).add(handoffFromSpec(spec));
+  });
+  return [
+    for (final e in porMacro.entries)
+      HandoffGroup(
+        title: e.key == 'PJ' ? 'Conta PJ' : 'Conta PF',
+        subtitle: e.key == 'PJ'
+            ? 'Alçada, operadores e aprovação em duas mãos.'
+            : 'O dia a dia da conta pessoa física.',
+        macro: e.key,
+        screens: e.value,
+      ),
+  ];
+}
