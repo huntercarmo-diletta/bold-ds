@@ -29,14 +29,14 @@ void main() {
     configurarConteudoDoBold();
   });
 
-  test('as DUAS telas são válidas pela autoria do PAI', () {
+  test('as TRÊS telas são válidas pela autoria do PAI', () {
     // `montaDaAutoria` roda dentro de `telasDoBold()`, então chamar já é o gate: prop inexistente, enum
     // fora do vocabulário, slot que não existe e id repetido reprovam com a lista inteira.
     //
     // Ela já rendeu na primeira execução: eu tinha escrito `arrowsLeftRightLight`, que não existe. Terceira
     // vez nesta semana que eu invento nome de ícone, e a primeira em que a peça que acusa é do pai.
     final telas = telasDoBold();
-    expect(telas.keys, containsAll([kSlugDaHome, kSlugDasAutorizacoes]));
+    expect(telas.keys, containsAll([kSlugDaHome, kSlugDoValorDoPix, kSlugDasAutorizacoes]));
 
     // A SEGUNDA é a única que usa os três componentes de alçada. Eles tinham uso medido no app e ZERO uso
     // em tela declarada — o caso mais fácil de um componente apodrecer sem ninguém ver.
@@ -226,11 +226,32 @@ void main() {
     expect(find.text('Conta PJ'), findsWidgets);
   });
 
+  test('a PRIMEIRA SETA existe, e ela dá sentido ao motionDaTransicao', () {
+    // Duas telas no mesmo fluxo é o que faz uma seta possível, e a seta é o que faz a declaração de
+    // movimento medir alguma coisa. Antes disto eu tinha ligado `push` ao token `slow` com ZERO setas —
+    // declaração sobre nada, que é a classe que este repo persegue desde o `tinta:` órfão.
+    final g = leGramaticaDeComposicao();
+
+    final push = g.movimentos.firstWhere((m) => m.tipo == TipoConexao.push);
+    expect(push.setas, 1, reason: 'a seta home → pix sumiu do `ligacoesDeclaradas`');
+    expect(push.motion?.token, 'DilettaMotion.slow',
+        reason: 'a seta existe e o movimento dela não — é o vermelho "usado sem token" do pai');
+
+    // DERIVADA não basta: o board desenha a seta pela ordem das telas quando ninguém editou, e a Gramática
+    // lê o que foi DECIDIDO. Com a seta só derivada, este painel mostrava `push: setas=0`.
+    expect(Conteudo.ligacoesDeclaradas['pf/conta-pf'], isNotNull,
+        reason: 'a seta voltou a ser só derivada, e a medição do movimento morre junto');
+
+    // E a chave do fluxo EXISTE: chave errada não casa, o board cai nas setas derivadas, e nada avisa.
+    expect(Conteudo.ligacoesParaFluxoInexistente({'pf/conta-pf', 'pj/conta-pj'}), isEmpty);
+  });
+
   test('e a tela está no plugue de conteúdo, em JSON', () {
     // Sem esta linha a tela existe no código e não existe no catálogo: quem lê `Conteudo.especificacoes`
     // são o board, o compositor, a aba de telas e a conformidade. Declarar e não plugar é o mesmo tipo de
     // meio-caminho que a arte do fundo era.
-    expect(Conteudo.especificacoes.keys, containsAll([kSlugDaHome, kSlugDasAutorizacoes]));
+    expect(Conteudo.especificacoes.keys,
+        containsAll([kSlugDaHome, kSlugDoValorDoPix, kSlugDasAutorizacoes]));
     expect(Conteudo.especificacoes[kSlugDaHome], contains('cabecalhoDaHome'));
     expect(Conteudo.especificacoes[kSlugDasAutorizacoes], contains('escadaDeAlcadas'));
   });

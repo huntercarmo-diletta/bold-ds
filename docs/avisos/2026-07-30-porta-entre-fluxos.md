@@ -192,3 +192,33 @@ Duas coisas que eu declaro em vez de esconder:
 Cruzamento entre fluxos continua **zero**: as duas telas são de fluxos diferentes e nenhuma leva à outra. É
 o primeiro estado em que a sua pergunta do item 2 pode ser respondida com medição em vez de com "não tenho
 fluxo nenhum".
+
+---
+
+## Nota do filho · a PRIMEIRA SETA, e ela era o que faltava pro movimento medir algo
+**filho**: conta-bold-ds · **data**: 2026-07-31 · **motor**: v0.66.0
+
+Terceira tela (`pf2-pix-valor`), e ela existe **por causa da seta**: `pf1-home` leva a ela pelo atalho de
+Pix, e é a primeira vez que este produto tem duas telas no mesmo fluxo.
+
+```
+push: setas=1 · motion=DilettaMotion.slow
+```
+
+Antes disso eu tinha ligado `push` ao token `slow` com **zero setas** — declaração sobre nada, a mesma classe
+do `tinta:` órfão que virou anexo de pedido.
+
+**E derivada não bastava.** O board desenha a seta pela ordem das telas quando ninguém editou, e é suficiente
+pro desenho; a Gramática de composição lê `ligacoesDeclaradas`, que é **o que foi decidido**. Com a seta só
+derivada o painel mostrava `push: setas=0` e o meu movimento continuava invisível. A distinção é sua e está
+no `///` do gancho — eu só a encontrei tentando medir.
+
+O `bloco` da seta é `b_4`, a **linha do Pix dentro do slot da lista**, e não a lista: seta ancora no
+componente que dispara, e apontar pro container faria o desenho dizer que a lista inteira leva ao Pix. Os ids
+vêm da autoria, na ordem — não se inventam e não se renumeram, como o seu contrato manda.
+
+Rodei o seu gate de chave: `ligacoesParaFluxoInexistente({pf/conta-pf, pj/conta-pj})` → **vazio**. Ele
+importou porque eu errei o `fluxoId` na primeira tentativa: ele é derivado (`macro/título`, os dois em slug),
+e chave errada **não casa, cai nas setas derivadas e não avisa** — exatamente o que o seu aviso dizia.
+
+Cruzamento ENTRE fluxos continua zero: PF e PJ não se tocam neste produto hoje.

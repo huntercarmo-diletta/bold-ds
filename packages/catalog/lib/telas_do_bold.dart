@@ -35,6 +35,9 @@ const String kSlugDaHome = 'pf1-home';
 /// A segunda tela, e ela é da conta PJ — o outro eixo macro deste produto.
 const String kSlugDasAutorizacoes = 'pj1-autorizacoes';
 
+/// A terceira, e a primeira que fica no MESMO fluxo de outra: `pf1-home` → esta.
+const String kSlugDoValorDoPix = 'pf2-pix-valor';
+
 /// A HOME da conta PF, medida em `home_tab_redesign.dart`.
 ///
 /// A ordem é a do app: barra de topo com saudação, saldo com entradas e saídas, atalhos, o que precisa de
@@ -199,6 +202,79 @@ Map<String, dynamic> _autorizacoesDaPj() => {
       ],
     };
 
+/// O VALOR DO PIX, medida em `pix_valor_screen.dart`.
+///
+/// A terceira tela, e a primeira que existe **por causa da seta**: `pf1-home` leva a ela pelo atalho de Pix,
+/// e é a primeira vez que este produto tem duas telas no mesmo fluxo. Sem isso, `motionDaTransicao` era
+/// declaração sobre nada — eu tinha ligado `push` ao token `slow` e **zero setas** pra provar.
+///
+/// ## O título vazio da barra é do app, e é decisão
+///
+/// `pix_valor_screen.dart` passa `title: ''`. Não é esquecimento: o contexto está no corpo (*"Transferir
+/// para <nome>"*), e repetir no topo seria o mesmo texto duas vezes na mesma dobra. Declaro vazio porque é
+/// o que a tela faz — inventar um título aqui faria a doc divergir do produto no primeiro olhar.
+Map<String, dynamic> _valorDoPix() => {
+      'slug': kSlugDoValorDoPix,
+      'name': 'PF2 · Pix · valor',
+      'form': 'phone',
+      'scrollableContent': true,
+      'contentGap': 's4',
+      'top': [
+        {'type': 'barraDeStatus'},
+        {'type': 'cascaDeTopo', 'props': {'titulo': '', 'esquerda': 'voltar'}},
+      ],
+      'blocks': [
+        {'type': 'texto', 'props': {'conteudo': 'Transferir para', 'preset': 'bodySm'}},
+        {
+          'type': 'texto',
+          'props': {'preset': 'titleMd'},
+          'bindings': {'conteudo': 'nomeDoDestinatario'},
+        },
+        {
+          'type': 'campo',
+          'props': {
+            'rotulo': 'Valor',
+            'placeholder': r'R$ 0,00',
+            'ajuda': 'O valor sai da sua conta na hora.',
+          },
+        },
+        {
+          'type': 'lista',
+          'props': {'idioma': 'carded'},
+          'slots': {
+            'itens': [
+              {
+                'type': 'linha',
+                'props': {'icone': 'walletLight', 'titulo': 'Saldo disponível'},
+                'bindings': {'subtitulo': 'saldoFormatado'},
+              },
+            ],
+          },
+        },
+      ],
+      'bottom': [
+        {'type': 'botao', 'props': {'label': 'Continuar', 'larguraTotal': true}},
+        {'type': 'indicadorDeHome'},
+      ],
+      'notes': [
+        {
+          'kind': 'decisao',
+          'text': 'A barra de topo não tem título: o contexto está no corpo ("Transferir para <nome>"), e '
+              'repetir no topo põe o mesmo texto duas vezes na mesma dobra. É o que o app faz.',
+        },
+        {
+          'kind': 'borda',
+          'text': 'Valor acima do saldo: o campo mostra o erro e o CTA desliga. O erro é prop do campo, '
+              'não bloco novo — estado de validação mora no componente que valida.',
+        },
+        {
+          'kind': 'a11y',
+          'text': 'O teclado numérico abre com a tela (autofocus no app). O CTA fica na base fixa, então '
+              'ele não é coberto pelo teclado — é a razão de o contrato mandar CTA pro `bottom`.',
+        },
+      ],
+    };
+
 /// As telas do repo, por slug — em JSON, que é a forma que o plugue de conteúdo pede.
 ///
 /// Uma só, e o número é honesto: declarar 124 de uma vez seria inventar desenho, e este repo mede antes de
@@ -215,6 +291,7 @@ Map<String, String> telasDoBoldEmJson() => {
 /// As telas montadas, pra quem precisa da spec e não do texto (os gates deste repo).
 Map<String, ScreenSpec> telasDoBold() => {
       kSlugDaHome: montaDaAutoria(_homeDaPf()),
+      kSlugDoValorDoPix: montaDaAutoria(_valorDoPix()),
       kSlugDasAutorizacoes: montaDaAutoria(_autorizacoesDaPj()),
     };
 

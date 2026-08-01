@@ -28,14 +28,14 @@ com este arquivo — e um pubspec que ninguém consegue conferir é a classe que
 
 - **19 arquivos de componente**, 23 tipos públicos `Bold*`, medidos por uso no app — não por catálogo de
   desejo. Oito componentes do pai com uso ZERO não foram declarados, de propósito;
-- **2 TELAS declaradas** (`pf1-home` e `pj1-autorizacoes`, 25 blocos, 11 campos vinculados) — eram zero
-  até 2026-07-31 —, com a aba **Telas** mostrando o fluxo, a doc e o código de cada uma;
+- **3 TELAS declaradas** (`pf1-home` → `pf2-pix-valor` e `pj1-autorizacoes`) com a **primeira seta** do
+  produto — eram zero até 2026-07-31 —, na aba **Telas** com fluxo, doc e código de cada uma;
 - **4 slots** declarados (2 fechados por medição, 2 abertos por decisão) — os containers COMPÕEM;
 - **56 blocos** no plugue do catálogo, todos em grupo, todos desenhando com os próprios defaults, e o
   emitido de cada um compilando — em **135 variações** de opção de enum, não só no default;
 - **paleta como INSTÂNCIA** do tipo do pai, com ~51 papéis derivados. O filho fornece a paleta e mais nada
   obrigatório;
-- **99 testes** no DS, **60** no catálogo, analyzer limpo. Conformidade do pai com baseline vazia no DS e
+- **99 testes** no DS, **61** no catálogo, analyzer limpo. Conformidade do pai com baseline vazia no DS e
   uma linha declarada no catálogo (`teclado`, componente do pai ainda sem spec);
 - **dois sweeps de layout** sobre os 56 blocos, a 900 e a 320 de largura;
 - **a montagem da tela conferida contra a geometria pintada** — a doc do contrato contra o `dy` real de

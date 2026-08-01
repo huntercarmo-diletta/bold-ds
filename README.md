@@ -13,7 +13,7 @@ de bloco é aqui.
 
 ```bash
 (cd packages/conta_bold_design_system && flutter analyze && flutter test)   # 99
-(cd packages/catalog && flutter analyze && flutter test)                    # 60
+(cd packages/catalog && flutter analyze && flutter test)                    # 61
 ```
 
 A conformidade dos dois pais roda dentro desses testes (`violacoesDeConformidade` e

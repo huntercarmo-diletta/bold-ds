@@ -26,5 +26,20 @@ void configurarConteudoDoBold() {
     // defeito daquele caminho era invisível deste lado. A HOME está em `telas_do_bold.dart`, com a razão
     // da escolha e o que dela eu não reproduzi.
     especificacoes: telasDoBoldEmJson(),
+    // A PRIMEIRA SETA deste produto, e ela é declarada e não derivada.
+    //
+    // O board deriva as ligações da ORDEM das telas quando ninguém editou, e é o suficiente pra desenhar.
+    // Mas a Gramática de composição lê `ligacoesDeclaradas` — o que foi DECIDIDO —, então com a seta só
+    // derivada o painel de movimento mostrava `push: setas=0` e o meu `motionDaTransicao` continuava sendo
+    // declaração sobre nada.
+    //
+    // O `bloco` é o id da LINHA do Pix dentro do slot da lista (`b_4`), e não o da lista: a seta ancora no
+    // componente que dispara, então apontar pro container faria o desenho dizer que a lista inteira leva ao
+    // Pix. Os ids vêm da autoria, na ordem — não se inventam e não se renumeram.
+    ligacoesDeclaradas: const {
+      'pf/conta-pf': [
+        Ligacao(de: 0, para: 1, tipo: TipoConexao.push, bloco: 'b_4'),
+      ],
+    },
   ));
 }
