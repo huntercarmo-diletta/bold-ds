@@ -20,11 +20,15 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
-## [0.1.0] — ainda NÃO tagueada
+## [0.1.0] — 2026-08-01
 
-É a versão que os dois `pubspec.yaml` declaram hoje, e o estado que a **primeira tag** vai carregar. Ela
-aparece aqui como número, e não como "não lançado", porque é assim que o gate da limpa compara o pubspec
-com este arquivo — e um pubspec que ninguém consegue conferir é a classe que ele existe pra pegar.
+**A primeira tag.** É a versão que os dois `pubspec.yaml` declaram, e agora `v0.1.0` é o commit que o app
+pode pedir por `git:` — antes disso não havia nada pra pedir. Ela aparece aqui como número, e não como
+"não lançado", porque é assim que o gate da limpa compara o pubspec com este arquivo — e um pubspec que
+ninguém consegue conferir é a classe que ele existe pra pegar.
+
+Medido no commit da tag, não afirmado: DS `flutter analyze` limpo e **99 testes** passando · catálogo
+`analyze` limpo e **66** passando · a limpa do pai com as classes 1, 5, 7, 8 e 9 em **nada**.
 
 - **19 arquivos de componente**, 23 tipos públicos `Bold*`, medidos por uso no app — não por catálogo de
   desejo. Oito componentes do pai com uso ZERO não foram declarados, de propósito;

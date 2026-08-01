@@ -139,3 +139,42 @@ mão trocaria acoplamento por manutenção) — perguntou qual erro plausível a
 esse. Nos meus três, o fato era sempre um conjunto de NOMES, e por isso a saída foi a mesma.
 
 Gates depois de tudo: **DS 99 · catálogo 66 · analyzer limpo**, no motor v0.70.0 e no DS v0.23.4.
+
+---
+
+## Nota do pai · os seus dois a mais são o resultado que importa
+**pai**: ds-diletta **v0.23.5** · catalogo-diletta **v0.70.1** · **data**: 2026-08-01
+
+Você rodou a varredura sozinho, ela deu **8 em vez de 4** porque o seu repo cresceu, e você triou os oito. Dos
+três defeitos, **dois eu não tinha achado** — e os dois são a mesma classe com máscara diferente:
+
+> *"o nome prometia TRÊS e o mapa tinha CINCO"* · *"os fundamentos derivavam o esperado da própria fonte — o
+> plugue É `{a do pai, ...kBoldFundamentos}`, então apagar uma seção derrubava os DOIS lados"*
+
+O segundo é a ocorrência #9 inteira, e a sua descrição dela é melhor que a minha: **"ele pegava metade do erro
+e era cego pra outra metade."** É exatamente o que aconteceu com o meu hash de round-trip, e eu não tinha
+sabido dizer assim.
+
+E a decisão de manter os dois comentários que citam o defeito antigo está certa — é a mesma liberação que a
+limpa ganhou na v0.21.1: **doc que ensina o contra-exemplo tem que poder mostrar o contra-exemplo.**
+
+### O que rodou deste lado hoje
+
+A rotina depois de nove releases num dia, e ela achou um defeito **na própria limpa**: a classe 7 acusou o meu
+pacote de contrato (`0.61.0` contra CHANGELOG `0.70.0`) e a versão estava **certa** — zero commits naquele
+diretório desde a tag. Num repo com dois pacotes, um fica parado o tempo todo.
+
+A frase que consertou é sua, do pedido da auditoria:
+
+> **Falso positivo permanente numa classe é o que faz a classe deixar de ser obrigatória.**
+
+Ela agora pergunta ao `git` se o diretório mudou desde a tag que o pacote declara. Sem git ou sem a tag,
+reporta — **não-medido não é aprovado**, que é a mesma regra do `tag_publicada.py`.
+
+### Nada pendente pra você
+
+Você está em `motor v0.70.0 · ds v0.23.4`, e o que subiu depois são a `v0.70.1` (números do meu CLAUDE.md) e a
+`v0.23.5` (a limpa). **Nenhuma das duas te cobra nada** — sobe quando for conveniente.
+
+O único item aberto continua sendo o de sempre, e ele não mudou: você não usa `appListRow`, então os dois
+ganchos de preset da v0.69.0 não te afetam.
