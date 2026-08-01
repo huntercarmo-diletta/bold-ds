@@ -34,15 +34,26 @@ void main() {
     }
   });
 
-  test('os CINCO que eu não medi seguem sem declaração, e isso é a informação', () {
-    // `estado`, `apósEspera` e os três de chat: este produto não tem fluxo de chat e eu não medi qual token
-    // move troca de estado. A vista acende em vermelho quando a primeira seta desses tipos existir — e é
-    // esse vermelho que eu quero, em vez de um número que ninguém verificou.
-    final semDeclaracao = TipoConexao.values
-        .where((t) => Ds.motionDaTransicao(t).token.isEmpty)
-        .length;
+  test('os movimentos SEM declaração são exatamente estes cinco, por NOME', () {
+    // Este teste tinha o defeito da ocorrência 9 do ledger do pai, e foi ele que achou: a asserção era
+    // `expect(semDeclaracao, TipoConexao.values.length - 3)`.
+    //
+    // O que ela pegava: eu declarar um quarto movimento sem passar por aqui. Certo.
+    // O que ela NÃO pegava: **o pai acrescentar um `TipoConexao`.** Os dois lados subiam juntos, o teste
+    // ficava verde, e o nome dele passava a mentir — "os CINCO" com seis sem declaração. Não é hipótese: ele
+    // mexeu no `TipoConexao` duas vezes nesta semana (`chatCpf` → `chatAssistente` na v0.63.0).
+    //
+    // > **O número que o teste promete no nome tem que estar na asserção.**
+    //
+    // Afirmar os nomes resolve as duas direções, e movimento novo do pai cai aqui com o nome dele no diff —
+    // o que me obriga a decidir se aquele movimento é deste produto, em vez de sumir na conta.
+    final semDeclaracao = {
+      for (final t in TipoConexao.values)
+        if (Ds.motionDaTransicao(t).token.isEmpty) t.name,
+    };
 
-    expect(semDeclaracao, TipoConexao.values.length - 3,
-        reason: 'ou entrou declaração nova sem gate, ou um `_ =>` com valor apagou a falta');
+    expect(semDeclaracao, {'estado', 'aposEspera', 'chatAssistente', 'chatUsuario', 'chatAcao'},
+        reason: 'movimento novo do pai entra aqui e me obriga a decidir. Se um destes cinco saiu da lista, '
+            'foi porque eu declarei — e aí o nome deste teste muda junto');
   });
 }

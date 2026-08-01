@@ -23,13 +23,24 @@ void main() {
     configurarConteudoDoBold();
   });
 
-  testWidgets('as SEÇÕES declaradas chegam na aba do pai', (t) async {
-    // O que é meu nesta aba é a declaração. A prosa do pai vem do pacote dele, e as quatro deste produto
-    // vêm do `kBoldFundamentos` — se alguma sumir do plugue, este gate cai.
-    expect(Ds.fundamentos.keys, contains('A linguagem (do pai)'));
+  testWidgets('as SEÇÕES declaradas chegam na aba do pai, e são exatamente estas cinco', (t) async {
+    // Terceiro achado da varredura do pai, e este é meu. A asserção iterava `kBoldFundamentos.keys` e cobrava
+    // presença em `Ds.fundamentos.keys` — mas o plugue É `{a do pai, ...kBoldFundamentos}`, então os dois
+    // lados leem a mesma fonte: **apagar uma seção no DS derruba os dois e o teste fica verde.**
+    //
+    // Ele pegava metade do erro (tirar do plugue e deixar na fonte) e ficava cego pra outra metade. Os nomes
+    // afirmados fecham as duas — e prosa que desaparece de Foundations é a classe que a limpa persegue.
+    expect(Ds.fundamentos.keys.toSet(), {
+      'A linguagem (do pai)',
+      'A paleta do Bold',
+      'Os dois gradientes',
+      'O vidro',
+      'A tipografia substituída',
+    }, reason: 'seção de Foundations entrou ou saiu — se foi de propósito, o nome vem no diff');
+
+    // E o cruzamento continua: tudo que a FONTE tem chega no plugue. Agora ele mede a direção que sobrou.
     for (final secao in kBoldFundamentos.keys) {
-      expect(Ds.fundamentos.keys, contains(secao),
-          reason: 'a seção "$secao" saiu do plugue');
+      expect(Ds.fundamentos.keys, contains(secao), reason: 'a seção "$secao" saiu do plugue');
     }
     // E a prosa NÃO é copiada: a do pai é a string do pacote dele, byte a byte.
     expect(Ds.fundamentos['A linguagem (do pai)'], same(kDilettaLinguagem));

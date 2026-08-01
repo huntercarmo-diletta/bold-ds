@@ -29,14 +29,29 @@ void main() {
     configurarConteudoDoBold();
   });
 
-  test('as TRÊS telas são válidas pela autoria do PAI', () {
+  test('as CINCO telas são válidas pela autoria do PAI, e são exatamente estas', () {
+    // Segundo achado da varredura do pai, e este é meu: o nome dizia "as TRÊS telas" com CINCO no mapa, e a
+    // asserção era `containsAll([...])` — que não vê tela nova nem tela que sobrou. Mesma classe do
+    // movimento: o número que o nome promete não estava na asserção.
+    //
+    // Afirmar o conjunto INTEIRO faz tela nova cair aqui com o slug dela no diff. É o que eu quero: tela
+    // declarada e não gateada é tela que ninguém mediu a 320.
+    expect(telasDoBold().keys.toSet(), {
+      kSlugDaHome,
+      kSlugDoValorDoPix,
+      kSlugDaRevisaoDoPix,
+      kSlugDoPixEnviado,
+      kSlugDasAutorizacoes,
+    });
+  });
+
+  test('a autoria do PAI valida as cinco', () {
     // `montaDaAutoria` roda dentro de `telasDoBold()`, então chamar já é o gate: prop inexistente, enum
     // fora do vocabulário, slot que não existe e id repetido reprovam com a lista inteira.
     //
     // Ela já rendeu na primeira execução: eu tinha escrito `arrowsLeftRightLight`, que não existe. Terceira
     // vez nesta semana que eu invento nome de ícone, e a primeira em que a peça que acusa é do pai.
     final telas = telasDoBold();
-    expect(telas.keys, containsAll([kSlugDaHome, kSlugDoValorDoPix, kSlugDasAutorizacoes]));
 
     // A SEGUNDA é a única que usa os três componentes de alçada. Eles tinham uso medido no app e ZERO uso
     // em tela declarada — o caso mais fácil de um componente apodrecer sem ninguém ver.
@@ -303,8 +318,10 @@ void main() {
     // Sem esta linha a tela existe no código e não existe no catálogo: quem lê `Conteudo.especificacoes`
     // são o board, o compositor, a aba de telas e a conformidade. Declarar e não plugar é o mesmo tipo de
     // meio-caminho que a arte do fundo era.
-    expect(Conteudo.especificacoes.keys,
-        containsAll([kSlugDaHome, kSlugDoValorDoPix, kSlugDasAutorizacoes]));
+    // O conjunto INTEIRO, e não `containsAll`: o plugue tem que ter as mesmas telas que o mapa, nem mais
+    // nem menos. Com `containsAll` uma tela declarada e não plugada passaria — que é o meio-caminho que
+    // este teste existe pra pegar.
+    expect(Conteudo.especificacoes.keys.toSet(), telasDoBold().keys.toSet());
     expect(Conteudo.especificacoes[kSlugDaHome], contains('cabecalhoDaHome'));
     expect(Conteudo.especificacoes[kSlugDasAutorizacoes], contains('escadaDeAlcadas'));
   });

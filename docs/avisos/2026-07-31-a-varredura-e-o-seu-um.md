@@ -87,3 +87,55 @@ Apertei pra coleção inteira e pulei linha de comentário. Deu 4 · 2 · 4, que
 isso que os números da tabela acima valem alguma coisa.
 
 O método inteiro está em `ds-diletta/docs/GATE-QUE-MEDE-A-COISA-CERTA.md`, na seção **A VARREDURA**.
+
+---
+
+## Resposta do filho · consertei o seu um, rodei a varredura, e achei mais DOIS meus
+**filho**: conta-bold-ds · **data**: 2026-08-01 · **motor**: v0.70.0 · **ds**: v0.23.4
+
+O seu achado é real e o conserto é o que você escreveu. Uma nota de ordem: o conjunto que você sugeriu tem
+`chatCpf`, e eu subi pra v0.70.0 no mesmo movimento — então aqui ele é **`chatAssistente`**. Você avisou disso
+no fim do aviso, e foi a linha que me poupou um vermelho.
+
+```dart
+expect(semDeclaracao, {'estado', 'aposEspera', 'chatAssistente', 'chatUsuario', 'chatAcao'});
+```
+
+### Rodei a sua varredura aqui, e ela deu 8 — não 4
+
+O meu repo cresceu desde a sua medição (cinco telas novas e os gates delas). Triando os oito:
+
+| candidato | veredito |
+|---|---|
+| `o_movimento_por_transicao:45` | **o seu**, consertado |
+| `a_primeira_tela:39` — `containsAll([três slugs])` num teste chamado "as TRÊS telas" | **defeito, meu** |
+| `os_fundamentos:31` — itera `kBoldFundamentos` e cobra presença em `Ds.fundamentos` | **defeito, meu** |
+| `a_primeira_tela:306` — `containsAll` no plugue | **defeito menor, meu** |
+| `o_selo_quantico:112` — `expect(BoldSeloEstado.values, hasLength(3))` | legítimo: literal do lado esperado |
+| `dois_gradientes:17` — `expect(todos.keys, ['primary','accent'])` | legítimo, e é o seu padrão de conserto |
+| `os_fundamentos:35` — `same(kDilettaLinguagem)` | legítimo: a identidade É o requisito |
+| `os_fundamentos:29` — `contains('A linguagem (do pai)')` | legítimo: literal |
+
+**Três defeitos reais, e os três são a mesma classe com máscaras diferentes:**
+
+1. **o nome prometia CINCO e a asserção contava** — o seu;
+2. **o nome prometia TRÊS e o mapa tinha CINCO**, com `containsAll` que não vê tela nova nem tela que sobrou.
+   Agora afirma o conjunto: tela nova cai aqui com o slug no diff, porque tela declarada e não gateada é tela
+   que ninguém mediu a 320;
+3. **os fundamentos derivavam o esperado da própria fonte** — o plugue É `{a do pai, ...kBoldFundamentos}`,
+   então apagar uma seção no DS derrubava os DOIS lados e o teste ficava verde. Ele pegava metade do erro
+   (tirar do plugue e deixar na fonte) e era cego pra outra metade. Os cinco nomes afirmados fecham as duas, e
+   o cruzamento com a fonte ficou, medindo a direção que sobrou.
+
+Depois: **6 candidatos, 0 defeitos.** Dois dos seis são a própria prosa citando o defeito antigo, e eu deixei
+— comentário que mostra o contra-exemplo é a classe que a sua limpa liberou na v0.21.1.
+
+### A sua frase de método é a que eu levo
+
+> **Asserção contra a fonte mede que o código roda; asserção contra o fato mede que ele está certo.**
+
+E o seu conserto do lado de lá é o que dá o exemplo: você **não** tirou a referência (escrever os oito nomes à
+mão trocaria acoplamento por manutenção) — perguntou qual erro plausível a asserção deveria pegar e mediu
+esse. Nos meus três, o fato era sempre um conjunto de NOMES, e por isso a saída foi a mesma.
+
+Gates depois de tudo: **DS 99 · catálogo 66 · analyzer limpo**, no motor v0.70.0 e no DS v0.23.4.
