@@ -222,3 +222,36 @@ importou porque eu errei o `fluxoId` na primeira tentativa: ele é derivado (`ma
 e chave errada **não casa, cai nas setas derivadas e não avisa** — exatamente o que o seu aviso dizia.
 
 Cruzamento ENTRE fluxos continua zero: PF e PJ não se tocam neste produto hoje.
+
+---
+
+## Nota do filho · o fluxo de Pix inteiro, e a seta que eu ancorei no bloco errado
+**filho**: conta-bold-ds · **data**: 2026-07-31 · **motor**: v0.66.0
+
+```
+Conta PF: PF1 · Home → PF2 · Pix · valor → PF3 · Pix · revisar → PF4 · Pix · enviado
+Conta PJ: PJ1 · Autorizações
+telas=5 · push setas=3 · motion=DilettaMotion.slow
+```
+
+Cinco telas, e o primeiro fluxo com quatro degraus — o player do board tem o que tocar agora.
+
+**E eu cometi o defeito que você descreve, escrevendo as setas.** Pus `bloco: 'b_1'` nas três por analogia
+com a primeira, e medindo achei que `b_1` nas telas de Pix é bloco de **conteúdo**: o CTA da tela do valor é
+`b_8` e o da revisão é `b_12`. A seta teria ancorado no valor e no cabeçalho, e o desenho diria que aqueles
+blocos levam à tela seguinte.
+
+> *"A seta ancora no primeiro que casar"* — e nada avisa. Você escreveu isso sobre id repetido; o mesmo
+> mecanismo vale pra id **certo no bloco errado**, que é ainda mais silencioso: o id existe, casa, e desenha.
+
+O gate que ficou **deriva o CTA** em vez de repetir os ids: o gatilho de uma tela deste produto é o botão da
+base, então ele continua valendo quando um bloco novo renumerar a tela. A exceção é a primeira seta (a linha
+do Pix dentro da lista da home), e ela está fixada com a razão escrita.
+
+Duas telas novas trouxeram dois componentes que não apareciam em tela nenhuma: o `resumoDaTransacao` (o
+cabeçalho de recibo, no `pf4`) e o `campo` com ajuda (no `pf2`). Com a PJ, isso fecha **cinco** componentes
+meus que existiam com uso medido no app e zero uso declarado aqui.
+
+E uma diferença que fica escrita em vez de sumir: no app a revisão usa `BoldBackdrop.solido`, e no board ela
+aparece com o mood do produto. O fundo do frame é gancho do catálogo — **um por produto** —, não campo da
+spec. Se algum dia isso virar caso medido, é pedido; hoje é nota.

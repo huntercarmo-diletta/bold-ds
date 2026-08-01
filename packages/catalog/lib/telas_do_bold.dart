@@ -38,6 +38,12 @@ const String kSlugDasAutorizacoes = 'pj1-autorizacoes';
 /// A terceira, e a primeira que fica no MESMO fluxo de outra: `pf1-home` → esta.
 const String kSlugDoValorDoPix = 'pf2-pix-valor';
 
+/// A revisão, e o passo em que o usuário confirma. Terceiro degrau do fluxo de Pix.
+const String kSlugDaRevisaoDoPix = 'pf3-pix-revisar';
+
+/// O comprovante. Fim do fluxo, e a única tela deste produto em estado CONCLUÍDO.
+const String kSlugDoPixEnviado = 'pf4-pix-enviado';
+
 /// A HOME da conta PF, medida em `home_tab_redesign.dart`.
 ///
 /// A ordem é a do app: barra de topo com saudação, saldo com entradas e saídas, atalhos, o que precisa de
@@ -275,6 +281,168 @@ Map<String, dynamic> _valorDoPix() => {
       ],
     };
 
+/// A REVISÃO DO PIX, medida em `pix_revisar_screen.dart`.
+///
+/// O passo em que o desenho para de pedir dado e passa a pedir CONFIRMAÇÃO — e é por isso que ele existe
+/// separado do valor: o mesmo Pix com o mesmo dado, numa tela que só mostra e num CTA que compromete.
+///
+/// O app usa `BoldBackdrop.solido` aqui, e não a imagem: fluxo secundário troca o fundo de mood pelo sólido.
+/// Isso **não** é declarável na spec — o fundo do frame é gancho do catálogo (`fundoDoFrame`), um por
+/// produto. Fica na nota, porque é diferença real entre esta tela no board e a mesma no aparelho.
+Map<String, dynamic> _revisaoDoPix() => {
+      'slug': kSlugDaRevisaoDoPix,
+      'name': 'PF3 · Pix · revisar',
+      'form': 'phone',
+      'scrollableContent': true,
+      'contentGap': 's4',
+      'top': [
+        {'type': 'barraDeStatus'},
+        {'type': 'cascaDeTopo', 'props': {'titulo': '', 'esquerda': 'voltar'}},
+      ],
+      'blocks': [
+        {
+          'type': 'valor',
+          'props': {'rotulo': 'Você vai transferir', 'heroi': true},
+          'bindings': {'valor': 'valorFormatado'},
+        },
+        {'type': 'cabecalhoDeSecao', 'props': {'rotulo': 'PARA'}},
+        {
+          'type': 'lista',
+          'props': {'idioma': 'carded'},
+          'slots': {
+            'itens': [
+              {
+                'type': 'linha',
+                'props': {'icone': 'userLight'},
+                'bindings': {'titulo': 'nomeDoDestinatario', 'subtitulo': 'documentoMascarado'},
+              },
+              {
+                'type': 'linha',
+                'props': {'icone': 'landmarkLight'},
+                'bindings': {'titulo': 'instituicao', 'subtitulo': 'chavePix'},
+              },
+            ],
+          },
+        },
+        {'type': 'cabecalhoDeSecao', 'props': {'rotulo': 'DETALHES'}},
+        {
+          'type': 'lista',
+          'props': {'idioma': 'menu'},
+          'slots': {
+            'itens': [
+              {'type': 'linha', 'props': {'icone': 'noteLightFull', 'titulo': 'Descrição', 'subtitulo': 'Opcional'}},
+              {
+                'type': 'linha',
+                'props': {'icone': 'calendarDayLight', 'titulo': 'Quando'},
+                'bindings': {'subtitulo': 'dataDoEnvio'},
+              },
+            ],
+          },
+        },
+      ],
+      'bottom': [
+        {'type': 'botao', 'props': {'label': 'Confirmar', 'larguraTotal': true}},
+        {'type': 'indicadorDeHome'},
+      ],
+      'notes': [
+        {
+          'kind': 'decisao',
+          'text': 'Tela só de leitura com UM CTA. O que dá pra mudar aqui volta pra tela anterior — editar '
+              'no lugar em que se confirma é como se confirma sem ler.',
+        },
+        {
+          'kind': 'regra',
+          'text': 'No app o fundo é BoldBackdrop.solido, e no board é o mood do produto: o fundo do frame '
+              'é gancho do catálogo (um por produto), não campo da spec.',
+        },
+        {
+          'kind': 'a11y',
+          'text': 'O valor é o heroi da tela e o leitor de tela o anuncia primeiro. Confirmar sem ouvir o '
+              'valor é o defeito que a hierarquia evita.',
+        },
+      ],
+    };
+
+/// O PIX ENVIADO, medido em `pix_enviado_screen.dart`.
+///
+/// A única tela deste produto em estado **concluído**, e a única que usa o `resumoDaTransacao` — o
+/// componente que eu construí pro cabeçalho de recibo e que até agora não aparecia em tela nenhuma.
+///
+/// O rodapé tem DOIS botões (primário + secundário), que é o que o app faz: `BoldBottomApp.button` com
+/// `primary` e `secondary`. Empilham aqui pela mesma razão da PJ — este registro não tem container de linha.
+Map<String, dynamic> _pixEnviado() => {
+      'slug': kSlugDoPixEnviado,
+      'name': 'PF4 · Pix · enviado',
+      'form': 'phone',
+      'scrollableContent': true,
+      'contentGap': 's4',
+      'top': [
+        {'type': 'barraDeStatus'},
+        {'type': 'cascaDeTopo', 'props': {'titulo': '', 'esquerda': 'fechar'}},
+      ],
+      'blocks': [
+        {
+          'type': 'resumoDaTransacao',
+          'props': {'titulo': 'Pix enviado', 'estado': 'concluida'},
+          'bindings': {'valor': 'valorFormatado', 'quando': 'dataDoEnvio'},
+        },
+        {'type': 'cabecalhoDeSecao', 'props': {'rotulo': 'PARA'}},
+        {
+          'type': 'lista',
+          'props': {'idioma': 'carded'},
+          'slots': {
+            'itens': [
+              {
+                'type': 'linha',
+                'props': {'icone': 'userLight'},
+                'bindings': {'titulo': 'nomeDoDestinatario', 'subtitulo': 'documentoMascarado'},
+              },
+            ],
+          },
+        },
+        {'type': 'cabecalhoDeSecao', 'props': {'rotulo': 'DETALHES'}},
+        {
+          'type': 'lista',
+          'props': {'idioma': 'menu'},
+          'slots': {
+            'itens': [
+              {
+                'type': 'linha',
+                'props': {'icone': 'hashtagLockLight', 'titulo': 'ID da transação'},
+                'bindings': {'subtitulo': 'idDaTransacao'},
+              },
+              {'type': 'linha', 'props': {'icone': 'noteLightFull', 'titulo': 'Descrição', 'subtitulo': '—'}},
+            ],
+          },
+        },
+      ],
+      'bottom': [
+        {'type': 'botao', 'props': {'label': 'Compartilhar comprovante', 'larguraTotal': true}},
+        {
+          'type': 'botao',
+          'props': {'label': 'Voltar ao início', 'tipo': 'secondary', 'larguraTotal': true},
+        },
+        {'type': 'indicadorDeHome'},
+      ],
+      'notes': [
+        {
+          'kind': 'decisao',
+          'text': 'O fecho é `fechar` e não `voltar`: o fluxo terminou, e voltar pra revisão de um Pix já '
+              'enviado é oferecer uma ação que não existe mais.',
+        },
+        {
+          'kind': 'regra',
+          'text': 'O ID da transação é o dado que o suporte pede. Ele fica em DETALHES e não escondido '
+              'atrás de um toque — comprovante que esconde o identificador não serve pro que existe.',
+        },
+        {
+          'kind': 'borda',
+          'text': 'Sem descrição, a linha mostra "—" e não some: linha que desaparece muda a altura do '
+              'comprovante entre dois envios e faz a pessoa procurar o que não foi preenchido.',
+        },
+      ],
+    };
+
 /// As telas do repo, por slug — em JSON, que é a forma que o plugue de conteúdo pede.
 ///
 /// Uma só, e o número é honesto: declarar 124 de uma vez seria inventar desenho, e este repo mede antes de
@@ -292,6 +460,8 @@ Map<String, String> telasDoBoldEmJson() => {
 Map<String, ScreenSpec> telasDoBold() => {
       kSlugDaHome: montaDaAutoria(_homeDaPf()),
       kSlugDoValorDoPix: montaDaAutoria(_valorDoPix()),
+      kSlugDaRevisaoDoPix: montaDaAutoria(_revisaoDoPix()),
+      kSlugDoPixEnviado: montaDaAutoria(_pixEnviado()),
       kSlugDasAutorizacoes: montaDaAutoria(_autorizacoesDaPj()),
     };
 

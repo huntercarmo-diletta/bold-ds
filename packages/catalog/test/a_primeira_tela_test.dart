@@ -121,6 +121,31 @@ void main() {
     expect(find.byType(BoldSaldo), findsOneWidget);
   });
 
+  for (final slug in [kSlugDoValorDoPix, kSlugDaRevisaoDoPix, kSlugDoPixEnviado]) {
+    testWidgets('$slug desenha no aperto de 320', (t) async {
+      // O fluxo inteiro no menor aparelho que o app suporta. A HOME tem o resíduo declarado do placeholder;
+      // estas três não têm nenhum, e é por isso que elas cobram ZERO em vez de "no máximo um".
+      t.view.physicalSize = const Size(320, 3000);
+      t.view.devicePixelRatio = 1.0;
+      addTearDown(t.view.reset);
+
+      final erros = <String>[];
+      final anterior = FlutterError.onError;
+      FlutterError.onError = (d) => erros.add(d.exceptionAsString().split('\n').first);
+      await t.pumpWidget(MaterialApp(
+        theme: ThemeData(fontFamily: BoldFonts.familyRaw),
+        home: Ds.tema(Scaffold(
+          body: buildScreenLayout(telasDoBold()[slug]!, leaf: buildBlock),
+        )),
+      ));
+      await t.pump(const Duration(milliseconds: 200));
+      FlutterError.onError = anterior;
+      t.takeException();
+
+      expect(erros, isEmpty, reason: erros.take(3).join(' | '));
+    });
+  }
+
   testWidgets('a PJ desenha no aperto de 320, com os três blocos de alçada', (t) async {
     // A HOME tem um resíduo conhecido (o placeholder do pai). Esta não tem nenhum, e vale medir separado:
     // ela é a que carrega os três componentes de alçada, que são os mais densos deste registro — escada com
@@ -226,14 +251,15 @@ void main() {
     expect(find.text('Conta PJ'), findsWidgets);
   });
 
-  test('a PRIMEIRA SETA existe, e ela dá sentido ao motionDaTransicao', () {
+  test('as SETAS do fluxo de Pix dão sentido ao motionDaTransicao', () {
     // Duas telas no mesmo fluxo é o que faz uma seta possível, e a seta é o que faz a declaração de
     // movimento medir alguma coisa. Antes disto eu tinha ligado `push` ao token `slow` com ZERO setas —
     // declaração sobre nada, que é a classe que este repo persegue desde o `tinta:` órfão.
     final g = leGramaticaDeComposicao();
 
     final push = g.movimentos.firstWhere((m) => m.tipo == TipoConexao.push);
-    expect(push.setas, 1, reason: 'a seta home → pix sumiu do `ligacoesDeclaradas`');
+    expect(push.setas, 3,
+        reason: 'o fluxo de Pix tem quatro telas e três saltos — sumiu seta do `ligacoesDeclaradas`');
     expect(push.motion?.token, 'DilettaMotion.slow',
         reason: 'a seta existe e o movimento dela não — é o vermelho "usado sem token" do pai');
 
@@ -244,6 +270,33 @@ void main() {
 
     // E a chave do fluxo EXISTE: chave errada não casa, o board cai nas setas derivadas, e nada avisa.
     expect(Conteudo.ligacoesParaFluxoInexistente({'pf/conta-pf', 'pj/conta-pj'}), isEmpty);
+  });
+
+  test('cada seta ancora no CTA da tela de origem, e não num bloco qualquer', () {
+    // O defeito que o pai descreve e que eu cometi escrevendo estas setas: `bloco` casa com o primeiro id
+    // que EXISTIR na tela, e nada avisa. Eu tinha posto `b_1` nas três por analogia com a primeira — e
+    // `b_1` nas telas de Pix é bloco de CONTEÚDO. O desenho diria que o valor leva à revisão.
+    //
+    // O gate deriva o CTA em vez de repetir os ids: o gatilho de uma tela deste produto é o botão da base.
+    // Assim ele continua valendo quando um bloco novo renumerar a tela.
+    final telas = [kSlugDaHome, kSlugDoValorDoPix, kSlugDaRevisaoDoPix, kSlugDoPixEnviado]
+        .map((s) => telasDoBold()[s]!)
+        .toList();
+
+    final ligacoes = Conteudo.ligacoesDeclaradas['pf/conta-pf']!;
+    expect(ligacoes, hasLength(3), reason: 'o fluxo de Pix tem quatro telas e três saltos');
+
+    for (final l in ligacoes.skip(1)) {
+      final origem = telas[l.de];
+      final cta = origem.bottom.firstWhere((b) => b.type == 'botao');
+      expect(l.bloco, cta.id,
+          reason: 'a seta ${l.de}→${l.para} ancora em "${l.bloco}", e o CTA de "${origem.name}" '
+              'é "${cta.id}"');
+    }
+
+    // A PRIMEIRA é a exceção, e ela é declarada: na home o gatilho não é CTA de base, é a LINHA do Pix
+    // dentro do slot da lista. Fixar o id aqui é o que impede que um "conserto" a mova pro rodapé.
+    expect(ligacoes.first.bloco, 'b_4');
   });
 
   test('e a tela está no plugue de conteúdo, em JSON', () {
