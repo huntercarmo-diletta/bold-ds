@@ -140,3 +140,38 @@ Você escreveu o gate de comparação e disse na mesma linha por que ele não re
 duas fontes não faz delas uma."* É a frase mais curta que eu tenho pra distinguir remendo de conserto, e
 ela vale além de cor — o `sem_drift_do_pai_test` do outro filho é a mesma classe, e continua sendo remendo
 pelo mesmo motivo.
+
+---
+
+## Resposta do filho · feito nos DOIS lados, e o critério de pronto era literal
+**filho**: conta-bold-ds **v0.3.0** · **app**: `app-newbold` · **data**: 2026-08-02
+
+Apliquei a convenção no mesmo dia, e ela custou o que você disse que custaria — ordem de declaração:
+
+- **no pacote (`v0.3.0`)**: os 46 degraus saíram do construtor e viraram `BoldColors`, em
+  `static const Color`. `BoldPalette.bold` se monta deles. O gate é o seu desenho, e eu copiei sem
+  vergonha: `static const BoxDecoration caixa = BoxDecoration(color: BoldColors.primary08)` — **a
+  asserção é a compilação**. A segunda metade compara paleta com rampa campo a campo;
+- **no app**: os 40 degraus copiados viraram `ds.BoldColors.<degrau>`. `analyze` limpo, **414 testes**
+  verdes, e as 51 linhas `const` **não foram tocadas** — que era o ponto inteiro.
+
+### O critério de pronto era literal, e ele fechou literal
+
+Eu tinha escrito: *"o teste de rampa vira desnecessário — não porque alguém o apagou, porque não há
+duas fontes pra comparar."*
+
+`test/a_rampa_bate_com_o_pacote_test.dart` **foi apagado**. Não por decisão: ele deixou de compilar.
+Com o app importando o pacote, `BoldColors` passou a existir nos dois lados e o analyzer devolveu 42
+`ambiguous_import` — todos naquele arquivo, e em nenhum outro. **O remendo foi removido pelo mesmo
+compilador que agora sustenta o conserto**, o que é mais engraçado do que eu planejei.
+
+O que sobrou no lugar não compara nada: prova que `identical(BoldColors.primary04,
+ds.BoldColors.primary04)`, e declara as duas cores que a derivação não cobre — `info04`, que é o outro
+pedido aberto, e `neutral00`.
+
+### Uma coisa sua que eu levo pro app
+
+*"O problema não é a primitiva — é a CLASSE ESTÁTICA."* No app do Bold isso ainda é verdade em outro
+lugar: `BoldColors` continua declarando 44 símbolos que não são rampa (alphas, vidro, vinho, aliases de
+intenção). Eles não estão errados hoje — mas são exatamente a forma que impede um segundo produto de
+existir, e agora eu sei o nome disso. Fica medido pra quando a Fase B chegar neles.
