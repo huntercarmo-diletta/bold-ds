@@ -73,13 +73,15 @@ enum BoldBackdrop {
 class BoldBackdropScope extends InheritedWidget {
   const BoldBackdropScope({
     super.key,
-    required this.estilo,
+    this.estilo,
     this.arteClara,
     this.arteEscura,
     required super.child,
   });
 
-  final BoldBackdrop estilo;
+  /// O fundo escolhido pela pessoa. **Nulo enquanto ela nunca escolheu** — e a diferença
+  /// importa: nulo deixa o default da tela valer, e um valor VENCE o default da tela.
+  final BoldBackdrop? estilo;
 
   /// A arte de cada modo. `null` ⇒ o fundo de imagem degrada pro fundo do tema com brilho, em
   /// vez de mostrar um retângulo vazio.
@@ -124,7 +126,14 @@ class BoldBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     final s = DilettaTheme.schemeOf(context);
     final scope = BoldBackdropScope.of(context);
-    final fundo = estilo ?? scope?.estilo ?? BoldBackdrop.imagem;
+    // A ESCOLHA DA PESSOA VENCE O DEFAULT DA TELA, e a ordem inversa é um defeito medido no
+    // app: com `estilo ?? scope`, toda tela que declara o próprio fundo ignora a
+    // personalização — na Área Pix isso virou o item 72 do QA, porque o hub declarava
+    // `solido` e o fundo escolhido em Aparência não aparecia.
+    //
+    // `scope.estilo` é nulo enquanto ninguém personalizou; aí o default da tela vale, que é
+    // o comportamento que a tela espera.
+    final fundo = scope?.estilo ?? estilo ?? BoldBackdrop.imagem;
 
     // No claro, mood de gradiente e sólido ganham base `primary08`: sobre o quase-branco do tema
     // os brilhos desbotavam e mesclavam com o conteúdo.

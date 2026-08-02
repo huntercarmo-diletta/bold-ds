@@ -20,6 +20,27 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.4.0] — 2026-08-02
+
+### Corrigido — **a escolha da pessoa vencia ou não o fundo da tela, dependendo do repo**, e a minha ordem era a errada
+
+- `BoldBackground` resolvia `estilo ?? scope?.estilo`; o app resolve `escolhido ?? padraoDaTela`.
+  **São ordens opostas**, e a minha regride um defeito que o app já tinha consertado: com ela, toda
+  tela que declara o próprio fundo passa a ignorar a personalização — na Área Pix isso foi o **item
+  72 do QA**, com o hub declarando `solido` e o fundo escolhido em Aparência não aparecendo;
+- achado **trocando o widget de verdade**, não lendo: eu ia adotar o meu por cima do do app e a
+  medição do call site mostrou a inversão. Copiar comportamento de um app e não copiar a ORDEM em
+  que ele resolve é a forma silenciosa de perder um conserto;
+- `BoldBackdropScope.estilo` virou **opcional**, e a diferença é semântica: nulo é *"ninguém
+  personalizou"* — aí o default da tela vale. Antes era obrigatório, e obrigar um valor apagava a
+  distinção entre "escolheu sólido" e "não escolheu";
+- o gate lê o valor que o componente **declara** (`DilettaDevInfo.props['estilo']`) em vez de inferir
+  por cor: no escuro, sólido e mood assentam no mesmo `bg`, então cor não distingue os dois — o
+  teste passaria com o defeito de volta.
+
+**Minor e não patch**: `BoldBackdropScope.estilo` deixou de ser `required`, e a ordem de precedência
+muda comportamento em tela. Quem chama não muda uma linha.
+
 ## [0.3.0] — 2026-08-02
 
 ### Adicionado — **`BoldColors`: a rampa vira a FONTE**, e a paleta se monta dela

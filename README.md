@@ -12,7 +12,7 @@ de bloco é aqui.
 ## O gate
 
 ```bash
-(cd packages/conta_bold_design_system && flutter analyze && flutter test)   # 102
+(cd packages/conta_bold_design_system && flutter analyze && flutter test)   # 105
 (cd packages/catalog && flutter analyze && flutter test)                    # 66
 ```
 
@@ -30,9 +30,9 @@ Por **tag**, nunca por caminho local — `pubspec.yaml` de cada pacote fixa o `r
 | `ds-diletta` | `v0.24.4` |
 | `catalogo-diletta` | `v0.74.1` |
 
-## Como ESTE filho chega no app — `v0.3.0`
+## Como ESTE filho chega no app — `v0.4.0`
 
-A primeira tag saiu em 2026-08-01; a de hoje é a `v0.3.0`. Mesma regra que eu cobro dos pais: por tag,
+A primeira tag saiu em 2026-08-01; a de hoje é a `v0.4.0`. Mesma regra que eu cobro dos pais: por tag,
 nunca por caminho local.
 
 ```yaml
@@ -40,7 +40,7 @@ dependencies:
   conta_bold_design_system:
     git:
       url: git@bitbucket.org:diletta/bold-ds.git
-      ref: v0.3.0
+      ref: v0.4.0
       path: packages/conta_bold_design_system
 ```
 
