@@ -27,19 +27,20 @@ Por **tag**, nunca por caminho local — `pubspec.yaml` de cada pacote fixa o `r
 
 | pai | versão de hoje |
 |---|---|
-| `ds-diletta` | `v0.23.4` |
-| `catalogo-diletta` | `v0.70.0` |
+| `ds-diletta` | `v0.24.0` |
+| `catalogo-diletta` | `v0.73.0` |
 
-## Como ESTE filho chega no app — `v0.1.0`
+## Como ESTE filho chega no app — `v0.2.0`
 
-A primeira tag saiu em 2026-08-01. Mesma regra que eu cobro dos pais: por tag, nunca por caminho local.
+A primeira tag saiu em 2026-08-01; a de hoje é a `v0.2.0`. Mesma regra que eu cobro dos pais: por tag,
+nunca por caminho local.
 
 ```yaml
 dependencies:
   conta_bold_design_system:
     git:
       url: git@bitbucket.org:diletta/bold-ds.git
-      ref: v0.1.0
+      ref: v0.2.0
       path: packages/conta_bold_design_system
 ```
 

@@ -20,6 +20,23 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.2.0] — 2026-08-02
+
+### Alterado — os dois pais sobem, e o que chega é CONTEÚDO das specs
+
+- `ds-diletta` **v0.23.4 → v0.24.0** · `catalogo-diletta` **v0.70.0 → v0.73.0**;
+- o que o app ganha ao subir: **`## Compõe` em 69 das 71 specs** do pai (era 8). As specs viajam no
+  pacote (`kDilettaSpecs`), então isto é conteúdo novo chegando em quem adota — não é só versão;
+- no catálogo, a **Árvore de dependências** aparece sozinha: a aba de Fundamentos aqui é a do motor
+  inteira, e a quarta vista entra assim que houver composição declarada;
+- **os 12 contratos deste filho já declaravam `## Compõe`** — medido, 12 de 12. O aviso do pai
+  supunha que eles teriam nó sem aresta; não é o caso, e a árvore nasce ligada dos dois lados;
+- `DilettaWalletCard.cpfSeguro` virou `.brand` no pai nesse intervalo. **Zero linha aqui** — este
+  filho não usa o componente, e os dois gates confirmam.
+
+Sem mudança de API deste pacote. Gates no commit: DS analyze limpo e **99 testes** · catálogo limpo e
+**66** · `build_web.sh` fecha com o gate do Cloudflare em zero.
+
 ## [0.1.0] — 2026-08-01
 
 **A primeira tag.** É a versão que os dois `pubspec.yaml` declaram, e agora `v0.1.0` é o commit que o app
