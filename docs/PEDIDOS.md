@@ -64,8 +64,12 @@ pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedid
 
 ## Dois números que este ledger deixa ver
 
-**15 pedidos, 15 com veredito, 15 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
+**17 pedidos, 15 com veredito, 15 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
 sobre o método e não sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
+
+Os **dois sem veredito** são de 2026-08-02 e têm origem diferente de todos os quinze: eles não saíram de
+ler o pai, saíram de **rodar a adoção no app do cliente**. Vale marcar, porque é a primeira vez que a
+demanda vem de fora dos três repos.
 
 **Três dos nove eram defeito do pai, não lacuna** — e os três apareceram na primeira execução de um
 gate dele contra um filho de verdade. Um deles só existiu porque o pai consertou outro: o conserto
