@@ -20,6 +20,42 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.3.0] — 2026-08-02
+
+### Adicionado — **`BoldColors`: a rampa vira a FONTE**, e a paleta se monta dela
+
+- Os 46 degraus saíram de dentro do construtor de `BoldPalette.bold` e viraram
+  `static const Color` em **`BoldColors`**. A paleta continua igual, e agora é **derivada**;
+- **é o que o consumidor ganha, e era o que faltava**: `static const Color acao =
+  BoldColors.primary04;` compila. `BoldPalette.bold.primary04` nunca compilou em posição
+  const — acesso a campo de instância não é expressão constante em Dart, mesmo com a
+  instância `const`;
+- veio do veredito **ENTRA COMO FORMA** do pai (`ds v0.25.0`, `O-QUE-O-FILHO-FORNECE.md` §1):
+  *"a rampa é a fonte; a paleta é derivada dela"*. O pedido saiu daqui com o custo medido no
+  app real — 84 constantes copiadas, 51 linhas `const` que `static final` quebraria, 427
+  chamadas que perderiam o `const`;
+- **o gate quase não tem corpo**, e é de propósito: `a_rampa_e_legivel_em_const_test` declara
+  `static const BoxDecoration caixa = BoxDecoration(color: BoldColors.primary08);` — **a
+  asserção é a compilação.** Se a rampa voltar pra dentro do construtor, o arquivo não
+  compila. A segunda metade compara paleta com rampa campo a campo, pra a paleta não virar
+  uma cópia que combina por enquanto;
+- nada some: `BoldPalette.bold` tem a mesma forma e os mesmos valores. **Minor** porque um
+  símbolo público nasceu.
+
+### Alterado — em dia com os dois pais, e a razão de subir é a quinta pergunta deles
+
+- `ds-diletta` **v0.24.0 → v0.24.4** · `catalogo-diletta` **v0.73.0 → v0.74.1**;
+- **nada aqui muda pra quem adota.** As sete releases são ferramenta e arrumação do lado do pai: a
+  limpa deixou de acusar arquivo gerado e o próprio ledger, a varredura passou a enxergar
+  `## Nota do filho`, e o compositor do motor foi cortado por método em três passos;
+- o motivo de subir mesmo sem ganhar nada é a **quinta pergunta** que a varredura do pai ganhou na
+  `ds v0.24.4` — *que filho está ATRÁS*. Eu estava: 4 releases no DS e 3 no motor.
+
+  > **Tag publicada não é tag adotada** — a frase é do pai, e do lado de quem usa, um conserto que não
+  > chegou é indistinguível de um que não existe.
+
+Gates: DS analyze limpo e **102 testes** · catálogo limpo e **66**.
+
 ## [0.2.0] — 2026-08-02
 
 ### Alterado — os dois pais sobem, e o que chega é CONTEÚDO das specs

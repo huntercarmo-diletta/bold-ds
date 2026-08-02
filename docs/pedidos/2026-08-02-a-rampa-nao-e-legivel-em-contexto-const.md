@@ -82,3 +82,61 @@ porque nem sinal fica.**
 O app do Conta BOLD apaga as 84 constantes de `bold_colors.dart`, mantém as 51 linhas `const` como estão, e
 o teste de rampa vira desnecessário — não porque alguém o apagou, porque **não há duas fontes pra
 comparar**.
+
+## Veredito · ENTRA COMO FORMA — a convenção é minha, e a Aurora passa a prová-la
+**versão**: `ds-diletta` **v0.25.0** · **data**: 2026-08-02 · **critério que pesou**: aplicação
+
+Você pediu a propriedade e não a forma, e a forma é a sua opção 1 — **com a diferença que muda tudo**:
+ela deixa de ser sua e passa a ser a convenção do pai, escrita e provada. A sua frase é o motivo:
+
+> *"O que eu não quero é os dois filhos resolvendo diferente, que é o sinal que você mesmo nomeou:
+> duas pessoas resolvendo igual o mesmo problema é peça faltando; **duas resolvendo diferente é pior,
+> porque nem sinal fica.**"*
+
+### O que entrou
+
+**1 · A regra, no `O-QUE-O-FILHO-FORNECE.md` (seção 1), onde o filho lê antes de escrever a paleta:**
+
+> **A rampa é a fonte; a paleta é derivada dela.** Inverter compila igual e tira do consumidor a única
+> forma de derivar sem copiar.
+
+Com o seu custo medido junto, porque número convence e regra não: 84 constantes copiadas, 51 linhas
+`const` que quebrariam, 427 chamadas que perderiam o `const`.
+
+**2 · A Aurora convertida** — os **55 degraus** dela saíram de dentro do construtor e viraram
+`AuroraColors`, com a paleta montada a partir deles. A Aurora é o critério de fechamento deste repo
+(*"se ela compila, o contrato é verdade"*), e ela estava fazendo exatamente o que o seu app não podia
+fazer.
+
+**3 · O gate, e ele quase não tem corpo:** `rampa_legivel_em_const_test` declara
+
+```dart
+static const Color acao = AuroraColors.primary04;
+static const BoxDecoration caixa = BoxDecoration(color: AuroraColors.primary08);
+```
+
+**A asserção é a COMPILAÇÃO.** Se alguém "simplificar" a Aurora de volta pro inline, o arquivo não
+compila — e falhar em compilação é o mais alto que um gate falha. As igualdades contra
+`AuroraPalette.aurora` são a segunda metade: elas provam que a paleta é a mesma coisa que a rampa, e
+não uma cópia que combina por enquanto.
+
+### Por que NÃO mexi no `DilettaPalette`
+
+Nenhuma das saídas boas exige. Mixin não carrega `const` por produto; um gerador teria que ler o Dart do
+filho; e mudar a classe pra estática mataria a coisa que a torna útil — **o filho tem a instância, o pai
+tem o tipo**, e é isso que impede paleta de produto de morar aqui. O que faltava era **ordem de
+declaração**, não tipo.
+
+### O que você faz
+
+Declare `BoldColors` com os degraus e monte `BoldPalette.bold` a partir dele. Aí o app apaga as 84, mantém
+as 51 linhas `const`, e o `a_rampa_bate_com_o_pacote_test` **fica desnecessário pelo motivo certo** — não
+porque alguém o apagou, porque não há duas fontes pra comparar. Era o seu critério de pronto, e ele é o
+meu também.
+
+### Uma coisa que eu devo registrar
+
+Você escreveu o gate de comparação e disse na mesma linha por que ele não resolve: *"um gate que compara
+duas fontes não faz delas uma."* É a frase mais curta que eu tenho pra distinguir remendo de conserto, e
+ela vale além de cor — o `sem_drift_do_pai_test` do outro filho é a mesma classe, e continua sendo remendo
+pelo mesmo motivo.
