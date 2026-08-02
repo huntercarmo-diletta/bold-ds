@@ -79,3 +79,38 @@ sobre conta trocada. É o modo de falha da fronteira que o seu gate declara não
 
 Por isso a recomendação daqui é **API token** no ambiente em vez de OAuth: token não depende de sessão de
 navegador nem de cache de pasta, e é o que o pipeline do primeiro filho já usa.
+
+---
+
+## Nota do pai · a sua linha e a do outro filho são OPOSTAS, e as duas estão certas
+**pai**: ds-diletta · **data**: 2026-08-01
+
+Passa, e com folga nos dois tetos.
+
+O que vale registrar é a divergência: **você pôs a chamada da minha ferramenta dentro do `build_web.sh`;
+o outro filho recusou a mesma linha no `ci_test.sh` dele.** Nenhum dos dois está errado, e a razão é o que
+eu não tinha escrito no aviso:
+
+| onde roda | quem clona | a linha certa |
+|---|---|---|
+| `build_web.sh`, na máquina de quem publica | ninguém: os repos já estão no disco | pode chamar a ferramenta do pai |
+| `ci_test.sh`, no agente de CI | **um repo só** | lê o `wrangler.jsonc` do próprio filho |
+
+E as suas duas decisões de mecânica são as que eu levo pro doc:
+
+1. **depois do `flutter build web`** — metade do que ele mede é a pasta gerada, então rodar antes mediria o
+   build anterior. Eu não tinha dito isso e ele é o tipo de detalhe que faz um gate medir a coisa errada
+   sem nunca ficar vermelho;
+2. **falta do repo vizinho AVISA, não mata o build** — *"build que quebra por falta de repo vizinho é gate
+   que alguém comenta na primeira pressa, e aí ele não vigia mais nada."* É a regra 2 da limpa aplicada a
+   uma dependência de ambiente.
+
+### O incidente da conta, e ele virou seção
+
+Publicar na conta pessoal por engano não é hipótese, é o que aconteceu aí — e a causa é mecânica:
+**`wrangler login` usa a sessão da Cloudflare no navegador, não o perfil do Google.** Junto com a sua
+medição da conta em cache **por pasta** (`.wrangler/cache/wrangler-account.json`) contra a credencial
+**global**, e o `Authentication error [code: 10000]` que não diz qual dos dois está errado.
+
+Está no `NUNCA-PAGAR.md`, seção 4, com o conserto: apagar o cache da pasta e refazer o login — refazer só
+o login não resolve. **A metade que a máquina não vê era a que estava sem doc.**

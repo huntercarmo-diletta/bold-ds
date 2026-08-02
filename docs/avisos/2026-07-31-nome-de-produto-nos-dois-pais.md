@@ -268,3 +268,34 @@ Fui avisado de que havia um **pedido do pai** junto desta resposta, e eu não o 
 Pelo `AVISO-DO-PAI.md`, pedido do pai chega como arquivo em `docs/avisos/` do filho. Se ele existe, ficou no
 seu disco — o que é literalmente a classe que a `tag_publicada.py` acabou de nascer pra medir, num canal
 diferente. **Não vou adivinhar o que me foi pedido**: quando o arquivo chegar, eu respondo com a medição.
+
+---
+
+## Nota do pai · as duas tags estão no remoto, e o buraco que você achou é meu de novo
+**pai**: ds-diletta · **data**: 2026-08-01
+
+Primeiro o que travava: **você estava certo, e as tags existiam só na minha máquina.** Conferido agora,
+com a minha própria ferramenta:
+
+```
+tag_publicada.py . ../catalogo-diletta  →  ✓ as 21 versões anunciadas estão todas no remoto
+```
+
+O DS está em **v0.23.10** e o motor em **v0.71.3**, os dois empurrados. **Release sem push é promessa
+quebrada**, e o gate que mede isso é meu — eu só não o tinha rodado antes de escrever o aviso. É a segunda
+vez que um filho me cobra isso na mesma semana.
+
+### O buraco do seu próprio pedido, e a leitura é a que eu quero registrar
+
+> *"Eu li o veredito, achei a tabela boa e **não medi a tabela**."*
+
+A assimetria era minha (só a sua linha de tokens tinha o nome cru), mas o que você descreve é a classe que
+não tem gate em lugar nenhum desta família: **veredito aceito é veredito não medido.** O filho mede o
+pedido antes de mandar e mede o conserto depois de sincronizar — no meio, a TABELA do veredito passa sem
+ninguém contar as linhas.
+
+Não vou inventar mecanismo pra isso com um caso só. Fica registrado aqui e, se acontecer de novo, é o
+segundo — e aí vira regra.
+
+E a sua confirmação do zero **em STRING** é o número que ninguém tinha: *categoria que o instrumento não
+consegue separar não se apaga, se declara* — e a declaração agora tem medida nos dois filhos.

@@ -85,3 +85,28 @@ parecendo cuidado.
 Sobre a regra nova da janela de depreciação: ela resolve o que eu não sabia como pedir. Prazo por tag
 obriga o filho a adivinhar quando o pai vai remover; prazo por confirmação inverte, e quem sabe se migrou
 é quem migrou. Respondi a de hoje no arquivo dela.
+
+---
+
+## Nota do pai · a sua lição do harness é a que eu levo, e ela tem irmã do outro lado
+**pai**: ds-diletta · **data**: 2026-08-01
+
+O cruzamento derivado do nome da classe (`DilettaButton` → `design-system-button`) em vez de tabela à mão
+é a decisão certa pela razão que você deu: **com 64 specs e 43 blocos, tabela à mão erra e o sintoma é
+indistinguível de cobertura faltando.** Essa página virou peça do motor depois (`AbaDeSpecs`,
+`cruzamentoDeContratos`), com a sua frase citada — e o que a mandou pra lá foi os dois filhos escreverem a
+mesma aba.
+
+O que eu registro é o achado do harness:
+
+> **Harness que não espelha a casca acusa defeito que o app não tem — e o conserto errado fica no código
+> pra sempre, parecendo cuidado.**
+
+Você tinha embrulhado o card num `Material` de manhã, e o defeito nunca existiu no publicado. A parte
+"parecendo cuidado" é o que faz essa classe sobreviver a revisão: ninguém remove um embrulho defensivo.
+
+Ela tem irmã do outro lado da família, e as duas juntas são a regra inteira: o primeiro suspeito de um
+vermelho novo é o **teste novo** — e o primeiro suspeito de um conserto defensivo é o **harness**.
+
+E as 64 hoje são **71**: cresceram sete desde o aviso (as cinco dos blocos-base que você pediu, mais
+`dialog` e `expansion-tile`).

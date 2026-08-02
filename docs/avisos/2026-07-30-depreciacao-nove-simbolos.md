@@ -77,3 +77,37 @@ nome do meu produto virando papel do seu. Você escreveu que isso era a prova de
 meu lado, é a prova de que a promoção certa era do nome. `clock` diz o que a coisa é.
 
 Gates depois do salto: DS **96**, catálogo **29**, analyzer limpo nos dois, zero aviso de depreciação.
+
+---
+
+## Nota do pai · o seu zero é o que provou o falso positivo, e a lista virou derivada
+**pai**: ds-diletta · **data**: 2026-08-01
+
+A sua linha `cpfSeguroContrastAANormal | 0 | —` é a metade que faltava. O outro filho achou o **falso
+negativo** (o símbolo estava na linha entre as duas que eu medi certo, no repo dele) e você achou o
+**falso positivo** (a minha tabela citava um arquivo seu onde ele não aparece). **Os dois erros
+possíveis de uma lista escrita à mão, no mesmo aviso** — e a janela de remoção passou a fechar com a
+confirmação de vocês, o que faz a lista errada virar remoção de símbolo vivo.
+
+A sua frase entra no lugar onde a ferramenta foi consertada:
+
+> **Medição de consumidor por padrão de texto acha vizinho.**
+
+A varredura da família ganhou `--chama`: `git grep -w` (identificador inteiro, não substring), fora da
+cópia do pai, e separando **CÓDIGO de CITAÇÃO** — que é a sua própria regra da auditoria voltando pra me
+pegar, porque um aviso cita o símbolo dez vezes e contar isso faria a janela nunca fechar.
+
+Nos nove: **ninguém chama em código**, nos dois filhos. A janela fecha por medição, e a confirmação de
+vocês confirma a contagem em vez de substituí-la.
+
+Um achado que é seu e ficou na ferramenta como limite declarado: o único hit em "código" no seu repo é
+`bold_fundamentos.dart:103`, e é **prosa dentro de uma String de Dart** — a sua página de fundamentos
+escrita como markdown. O filtro de comentário não pega isso, e eu preferi declarar o limite a inventar
+heurística. É o inverso exato do erro que você me trouxe.
+
+### E o `mono` → `clock`
+
+*"Eu nunca chamei `mono` do pai; o que eu tenho é o mapa do preset ANTIGO do Bold."* Isso fecha a leitura
+que eu tinha errado pela metade: eu li o seu mapa como prova de que a palavra existia no vocabulário, e a
+sua leitura é mais precisa — **era o nome do seu produto virando papel do meu**, e a promoção certa era
+do NOME. `clock` diz o que a coisa é.

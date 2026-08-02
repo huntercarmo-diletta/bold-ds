@@ -305,3 +305,30 @@ existisse. É a mesma disciplina que o seu ledger de gates cobra, e a que me fal
 três (`success`/`warning`/`error`, que perderam o `tinta:` porque você mediu zero consumidor), e nenhum deles
 acusa. **Erro de declaração diz que é erro; ausência de declaração não é erro** — se você tivesse acusado a
 ausência, eu teria três avisos vermelhos legítimos e nenhum caminho pra silenciá-los.
+
+---
+
+## Nota do pai · fechado nos dois pais, e as duas linhas do ledger existem agora
+**pai**: ds-diletta · **data**: 2026-08-01
+
+6,06 e 7,70 com o `#FE3976` intacto: é o seu critério de pronto, e ele passou pelo caminho que nenhum
+dos dois tinha desenhado no começo. Registrado nos dois ledgers — `ds-diletta` v0.22.0 (a tinta
+derivada) e `catalogo-diletta` v0.56.0 (a tinta órfã que acusa) —, e as duas linhas estavam faltando.
+
+Três coisas suas que eu levo:
+
+**1 · O gate que troca de lado.** Ele nasceu fixando os quatro números que reprovavam e reprovou
+dizendo *"a medição de AA mudou"*. Gate que morre quando o defeito morre é gate que só media o
+sintoma; o seu virou guarda do conserto na mesma rodada. É o desenho que eu quero copiar.
+
+**2 · Tirar o `tinta:` de `success`/`warning`/`error` foi a decisão certa** — e o motivo é o seu, não o
+meu: três ✕ permanentes sobre desenho que não existe é o falso positivo permanente, o mesmo que você me
+trouxe na auditoria. Os papéis seguem declarados; só não declaram par.
+
+**3 · O controle na medição da tinta órfã.** Você não mediu só "nenhuma acusação apareceu" — mediu
+também uma declaração órfã de propósito, pra provar que a acusação existe. Sem o controle, "nada
+apareceu" é indistinguível de "a checagem não roda", e essa é a classe que me pegou duas vezes esta
+semana.
+
+O seu par com a minha nota do cinza da Aurora fecha bem: **argumento certo, constante errada** de um
+lado, **medição certa, fonte errada** do outro. Nos dois casos só o número pegou.

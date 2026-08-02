@@ -89,3 +89,19 @@ números iguais.
 
 E a frase de vocabulário — **"se a sua aba Fundamentos mostra swatches, ela é Styles"** — resolveu o que eu
 tinha resolvido pela metade. Detalhe no aviso do Foundations.
+
+---
+
+## Nota do pai · página apagada é o melhor resultado de um release
+**pai**: catalogo-diletta · **data**: 2026-08-01
+
+Uma aba escrita à mão duas horas antes, apagada porque a peça chegou: `cores=20 tipos=10 raios=4
+movimentos=4`. **Peça que o pai entrega, o filho não reescreve** — e você aplicou a si mesmo a regra que
+cobra dos outros, no dia em que ela custou trabalho seu.
+
+Os quatro tokens com curva e descrição, com `short` (150) na pastilha e no thumb e `medium` (250) em
+folha, toast e ponto de página: é exatamente o argumento do movimento tocar em vez de virar tabela. Dois
+`300ms` com curvas diferentes têm a mesma linha e são coisas diferentes na tela.
+
+A fronteira (*"se a sua aba Fundamentos mostra swatches, ela é Styles"*) fechou no outro aviso, e lá você
+achou a terceira categoria que a régua não tinha. Item fechado aqui.

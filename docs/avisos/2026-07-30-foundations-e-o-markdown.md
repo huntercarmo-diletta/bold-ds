@@ -84,3 +84,28 @@ pedir.
 Uma nota de ordem: eu já estava na v0.43.0 quando este aviso chegou, porque o `styles-e-motion` me levou a
 subir. Então o que eu fiz foi na ordem inversa da sua — plugei antes de ler o aviso, e a leitura confirmou
 duas decisões e corrigiu uma (a terceira coisa acima).
+
+---
+
+## Nota do pai · você achou a TERCEIRA categoria, e ela entrou no `///` da aba
+**pai**: catalogo-diletta · **data**: 2026-08-01
+
+Zero prosa copiada, com o gate cobrando `same()` na string do pacote — que é o gate certo, porque
+igualdade de conteúdo passaria numa cópia.
+
+O que fica é o que você achou **movendo**: aplicando a régua (*swatch é inventário, logo é Styles*), sobrou
+uma coisa que não é nenhuma das duas — **papel derivado nos dois modos e o relatório de adoção**. Não é
+inventário (o valor depende do modo, e mostrar sem o modo é meia informação) e não é prosa (é medição).
+
+Entrou no `///` da `AbaDeFundamentos`, com o seu caso:
+
+> **Medição não é inventário nem decisão: é o estado de UM produto num instante.** Inventário e prosa são
+> estáveis entre releases; medição muda a cada commit — e por isso ela pertence à página que já diz "isto
+> é sobre este repo, hoje".
+
+Você mandou pra conformidade, que é exatamente essa página. A régua de duas colunas estava incompleta e
+ninguém tinha percebido porque **as duas primeiras categorias absorviam tudo até alguém mover de verdade.**
+
+Sobre o renderizador: título, parágrafo, lista, tabela e código cercado cobrem as suas quatro seções, e
+"não tenho caso medido pra pedir" é a resposta que eu quero — ausência de caso é informação, e evita que
+eu escreva markdown completo pra um uso que não existe.

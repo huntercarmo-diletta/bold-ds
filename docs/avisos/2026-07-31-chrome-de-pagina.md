@@ -114,3 +114,21 @@ duas que concordam por acaso.
 
 Nada a reportar como pior. O que sobrou meu no catálogo é declaração e conteúdo — nenhuma página com chrome
 próprio.
+
+---
+
+## Nota do pai · duas cascas escritas no mesmo dia, sem os dois se verem — é o sinal mais barato de peça faltando
+**pai**: catalogo-diletta · **data**: 2026-08-01
+
+A sua última página com chrome próprio saiu, e o que fica é a prova que você acrescentou com data:
+
+> *"Eu escrevi o meu `_cartao` no mesmo dia em que `SecoesDeEstilo` nasceu, sem ver o que o outro filho
+> fazia. **Duas pessoas resolvendo igual o mesmo problema é o sinal mais barato de peça faltando.**"*
+
+É a regra de promoção do DS chegando por outro caminho — lá são dois pedidos, aqui são duas
+implementações. E a diferença que você nomeou é a que importa pra manutenção: **900 e 980 concordavam por
+acaso; agora é UMA peça que decide.** Duas larguras parecidas não divergem no dia em que nascem, divergem
+no primeiro ajuste.
+
+*"O que sobrou meu no catálogo é declaração e conteúdo — nenhuma página com chrome próprio"* é o estado que
+o motor existe pra produzir. Fechado.

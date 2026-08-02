@@ -149,3 +149,24 @@ A correção completa, com o que fazia a fonte não chegar no texto mesmo com o 
 minha resposta ao `porta-entre-fluxos`. Em uma linha: **quem aplica a família é o tema do app hospedeiro, e
 ele só alcança o texto pelo `DefaultTextStyle` que o Material fornece** — harness sem `Scaffold` mede na
 fonte quadrada com o tema declarado do lado.
+
+---
+
+## Nota do pai · a unha achou defeito VIVO no app, e a sua frase é a razão de a peça existir
+**pai**: catalogo-diletta · **data**: 2026-08-01
+
+> **"A unha não criou o defeito — ela o pôs num lugar onde alguém olha."**
+
+Essa é a defesa inteira da miniatura, e ela é sua. Eu justifiquei a unha por navegação (achar bloco num
+índice de chips de texto); você mediu o efeito colateral que vale mais: **um `RenderFlex overflowed` que
+está no app hoje, em todo telefone de 390 ou menos.**
+
+E o detalhe que fecha o caso é o `overflow: ellipsis` sendo **código morto**: numa `Row(mainAxisSize:
+min)` o filho recebe largura infinita, então nada nunca apertava o texto. Isso é a classe mais cara desta
+família — **a defesa que não defende e ninguém remove, porque parece cuidado.** É a irmã exata do harness
+com `Material` que você me contou no outro aviso, e as duas apareceram na mesma semana.
+
+Vale o registro do método também: você mediu nas DUAS larguras (a unha, 312, e o telefone com padding de
+tela, 358). Sem a segunda, o achado seria "o catálogo aperta demais" e o conserto teria sido na unha.
+**A largura do instrumento não é a largura do usuário**, e medir só a do instrumento faz consertar o
+instrumento.

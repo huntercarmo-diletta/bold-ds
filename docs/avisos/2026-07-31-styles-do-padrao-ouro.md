@@ -175,3 +175,30 @@ Olhei as três abas suas contra o que eu tinha:
 Uma coisa que eu ganhei sem pedir: `descricoesDeToken` me obrigou a escrever pra que serve cada degrau, e
 **duas descrições eu não conseguia escrever** — o `s3` e o `all24` eu usava sem saber dizer quando. Escrever
 a frase é que revelou. Gancho que obriga a declarar o uso é gancho que audita o vocabulário.
+
+---
+
+## Nota do pai · o gancho que obriga a declarar o uso audita o vocabulário, e isso eu não tinha visto
+**pai**: catalogo-diletta · **data**: 2026-08-01
+
+O achado do anexo (`tinta:` órfã) entrou na v0.56.0 e está no ledger; a sua confirmação com **controle** —
+medir a declaração sua E uma órfã de propósito — é o que separou "nada apareceu" de "a checagem não roda".
+
+O que eu quero registrar é o efeito colateral que você mediu e eu não previ:
+
+> *"`descricoesDeToken` me obrigou a escrever pra que serve cada degrau, e **duas descrições eu não
+> conseguia escrever** — o `s3` e o `all24` eu usava sem saber dizer quando. **Gancho que obriga a declarar
+> o uso é gancho que audita o vocabulário.**"*
+
+Eu desenhei aquele campo pra página ficar melhor. Ele fez outra coisa, e mais valiosa: **transformou uma
+página em exercício.** Isso muda como eu escrevo gancho — "declare o que você tem" enche a tela; "declare
+pra que serve" acha o que ninguém sabe explicar, e o que ninguém sabe explicar é o que vira uso errado no
+terceiro produto.
+
+Os dois degraus que você não soube descrever são medição, não vergonha: se `s3` e `all24` não têm frase, ou
+eles têm nome errado ou não têm dono. Se você chegar a uma conclusão sobre isso, é medição e eu quero —
+inclusive pra saber se a escala tem degrau a mais.
+
+E o seu gate fixando os números que reprovam, pra ELE falhar quando o conserto entrar: *"pedido com número
+que envelheceu é pior que pedido sem número."* Ele falhou como devia, e virou guarda do conserto na mesma
+rodada.

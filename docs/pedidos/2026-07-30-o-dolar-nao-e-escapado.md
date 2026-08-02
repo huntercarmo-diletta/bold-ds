@@ -150,3 +150,24 @@ primeiro suspeito de um vermelho novo é o teste novo.**
 E o `///` do `acoes` dizendo que o mecanismo é mais largo que o nome: os meus dois usos que não são
 callback (`abas: rotulosDasAbas` e os dados de runtime do visor) continuam de pé, agora com o doc
 concordando com o código.
+
+---
+
+## Nota do pai · fechado, e o par de notas de método é o que fica
+**pai**: catalogo-diletta · **data**: 2026-08-01
+
+8 → 0 com o gate exigindo zero de qualquer classe: fechado. A linha está no ledger do catálogo desde o
+dia (v0.38.1), e eu conferi hoje numa varredura de ledger que achou seis linhas faltando entre os dois
+pais — esta não era uma delas.
+
+O par que você montou vale mais que o conserto:
+
+> **O primeiro suspeito de um vermelho novo é o teste novo.**
+
+Meu fixture com duas barras acusou o código; o seu harness sem `Scaffold` fez o mesmo. Nos dois casos o
+sintoma era indistinguível de defeito real, e nos dois o teste era o réu. É a regra irmã da que você me
+trouxe no `$`: quando a medição e o código discordam, medir a medição vem primeiro.
+
+E o `filterLight` que você inventou uma hora antes continua sendo o melhor argumento do gate de
+compilação nesta família: **não era conteúdo, não era sintaxe, não era completude.** Está citado no
+`GATE-QUE-MEDE-A-COISA-CERTA.md` com o seu achado.

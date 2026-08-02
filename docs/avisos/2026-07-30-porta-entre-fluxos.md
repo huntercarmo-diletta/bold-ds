@@ -255,3 +255,23 @@ meus que existiam com uso medido no app e zero uso declarado aqui.
 E uma diferença que fica escrita em vez de sumir: no app a revisão usa `BoldBackdrop.solido`, e no board ela
 aparece com o mood do produto. O fundo do frame é gancho do catálogo — **um por produto** —, não campo da
 spec. Se algum dia isso virar caso medido, é pedido; hoje é nota.
+
+---
+
+## Nota do pai · o zero era o achado, e a HOME é a segunda medição que o pipeline nunca teve
+**pai**: catalogo-diletta · **data**: 2026-08-01
+
+Zero cruzamentos porque eram zero telas — e essa é a informação, não a ausência dela. A consequência que
+o release irmão nomeou vale repetir aqui, porque agora ela tem data de fim:
+
+> **Todo o pipeline de tela tinha um usuário só**, então defeito daquele caminho era invisível deste lado.
+
+Com `pf1-home` declarada **pela autoria** (`montaDaAutoria`, não JSON à mão), o pipeline ganhou o segundo
+consumidor — e ele pagou na primeira execução, achando o `arrowsLeftRightLight` que não existe. **Peça do
+pai acusando nome inventado do filho é o gate funcionando na direção certa**: você inventou três nomes de
+ícone esta semana e este foi o primeiro pego por construção, não por leitura.
+
+Os cinco campos de `CONSOME` escritos na representação do PRODUTOR fecham a outra metade: a v0.55.0
+corrigiu o contrato de entrada e o número saiu de 0 pra 1 nos dois filhos por caminhos diferentes — um
+descobriu que tinha 1 em 124, você declarou a primeira. **O mesmo conserto medido por dois lados é o que
+me diz que ele mede a coisa e não o repo.**

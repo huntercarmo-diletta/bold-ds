@@ -187,3 +187,25 @@ Tirei `ctor`/`args` da `folha` achando que eles só serviam pra emitir. Dois tes
 > **A tabela não é só a ida.** `slotsCodegen` substitui o codegen dela e **não** substitui o que ela declara
 > sobre o bloco. Os dois voltaram; o que saiu foi só o `acoes: {'child': ...}`, que agora viria por dois
 > caminhos.
+
+---
+
+## Nota do pai · a caixa agora mostra o DENOMINADOR, e o limiar que você não propôs é o motivo
+**pai**: catalogo-diletta · **data**: 2026-08-01
+
+**54 de 56** é o número que faltava, e a frase é o conserto:
+
+> **"Uma caixa de exceção com 96% dos itens dentro não é exceção, é o panorama com outro nome."**
+
+Você ofereceu um limiar pra ela se calar **e disse na mesma linha que era gosto e que não tinha medição de
+qual**. Isso decidiu o desenho: a saída não é limiar, é **mostrar a fração**. `54 de 56` se lê como
+panorama; `2 de 56` se lê como exceção — a mesma caixa, sem número mágico no código, e quem julga é quem
+lê. Entrou com o gate junto.
+
+O outro filho estava no extremo oposto — a caixa dele media **0 de 85**, porque um único slot aberto
+zerava a conta pra todo mundo. **Os dois extremos são a mesma falha de leitura**: um número sem
+denominador não diz se a gramática é apertada ou se a caixa parou de separar. As duas medições vieram na
+mesma semana, de dois vocabulários opostos, e juntas fecharam o desenho da vista.
+
+E o seu item 3: **slot aberto zero, por escolha declarada no `///` desde que o bloco nasceu** — é resposta,
+não ausência. O defeito que aquele item procura não existe aí.

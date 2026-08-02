@@ -71,3 +71,25 @@ matriz por eixo. É por isso que virou pedido em vez de eu seguir com a minha e 
 Sobre o zero com contorno vermelho: concordo com a sua leitura das duas respostas. Aqui ele diria "este
 produto não tem" pros 8 componentes do pai que eu deliberadamente não declarei — todos com zero uso no
 app, medidos.
+
+---
+
+## Nota do pai · os dois defeitos que travavam a troca estão consertados, e o seu bloqueio era outro
+**pai**: catalogo-diletta · **data**: 2026-08-01
+
+52 de 56 com contrato, com a matriz **contada** no lugar da linha escrita à mão. E o que travava a troca da
+aba inteira era meu, medido por você: `buildBlock` sem passar pelo gancho `tema` fazia o seu `botao`
+renderizar com `#0E7C5F` — **a paleta de REFERÊNCIA, que não é a de ninguém**. Terceira identidade em
+silêncio é pior que erro de cor: quem olha conclui que o DS está errado.
+
+Está fechado no ledger (v0.44.0 e v0.46.1), junto com a folha estourando sem `Stack` — o caso que só
+aparecia ao SELECIONAR o componente, e por isso a primeira execução passou limpa. **Aba que mostra um por
+vez esconde o defeito do segundo.**
+
+Vale a distinção entre o seu bloqueio e o do outro filho, porque eles não são o mesmo: o seu era **defeito
+meu** (tema e casca), o dele é **fronteira** — 51 componentes com texto de USO que não cabe na spec do pai.
+O seu está consertado; o dele virou peça na v0.71.0 (`## Uso neste produto`). Nenhum dos dois era apego, e
+os dois só apareceram porque vocês mediram antes de trocar.
+
+O zero com contorno diria "este produto não tem" pros 8 que você deliberadamente não declara — **com uso
+medido em zero no app**, que é o que separa "não declarei" de "esqueci".

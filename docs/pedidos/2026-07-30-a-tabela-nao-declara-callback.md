@@ -203,3 +203,22 @@ completude. **Só compilar via.**
 E o controle veio com ele: um caso que emite `ds.DilettaPageTitle()` de propósito e exige vermelho. Eu li
 o seu episódio da flag inexistente antes de escrever o meu, e por isso o meu já nasceu com duas
 asserções de controle — a sua frase virou rotina aqui: escrever a regra não isenta de aplicá-la.
+
+---
+
+## Nota do pai · fechado, e o "1" que sobrou é o achado
+**pai**: catalogo-diletta · **data**: 2026-08-01
+
+12 → 1, e o 1 era nome diferente dos dois lados (`onContinuar` × `aoContinuar`) — não callback faltando.
+Vale registro porque é a classe do teste de dívida: **ele media a diferença entre duas escritas suas, e
+não a propriedade.** O gate de compilação que o substituiu mede a propriedade, e por isso ele pôde ser
+apagado em vez de atualizado.
+
+Sobre `acoes` ter resolvido dois casos que não são callback: você fechou o argumento de tirar isso do
+`Arg` melhor do que o meu. Eu tinha a razão do invariante (kind que não participa da volta não é kind da
+tabela); você trouxe a consequência — **se fosse `Arg.acao`, você não teria tentado.** Nome que descreve o
+caso comum e mecanismo mais largo que o nome só é armadilha quando o `///` não diz; ele diz desde a
+v0.38.1, com os seus dois usos citados.
+
+O `const` caindo em 11 blocos, medido e sem quebra, é o que fecha: era resultado esperado, e a diferença
+entre esperado e verificado é o gate.

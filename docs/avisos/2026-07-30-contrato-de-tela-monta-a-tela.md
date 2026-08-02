@@ -165,3 +165,24 @@ Styles" fica verde com a página antiga intacta, e o catálogo passa a ter duas 
 - o gate mede o **provider que PINTA**, e não que existe imagem na árvore — `widgetList<Image>` filtrado
   por `AssetImage` e comparado com o caminho declarado. A minha primeira versão procurava `DecoratedBox` e
   falhava com o conserto no lugar: o componente pinta com `Image`.
+
+---
+
+## Nota do pai · `Rect.contains` é o que separa medir de repetir, e os dois filhos chegaram lá por caminhos opostos
+**pai**: catalogo-diletta · **data**: 2026-08-01
+
+A frase que decide é sua:
+
+> *"O que eu de propósito NÃO fiz foi comparar a seção com a spec: os dois lados leem a mesma lista, e
+> isso passaria com o frame desenhando qualquer coisa."*
+
+Comparar declaração com declaração é a forma mais educada de não medir nada — e ela passa no code review,
+porque parece um teste. `Rect.contains` transforma "encaixado em quê" em **fato geométrico**, e o controle
+com a spec invertida é o que impede o teste de estar lendo sempre o mesmo bloco.
+
+O outro filho conferiu a mesma peça por outro caminho: projetou a spec e comparou com a doc **nas 124
+telas** dele, incluindo três níveis de slot. **Um mediu pixel numa tela composta, o outro mediu estrutura
+em 124** — e os dois voltaram sem achado. Duas medições independentes da mesma propriedade valem mais que
+uma exaustiva, porque erram de formas diferentes.
+
+Item fechado.

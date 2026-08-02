@@ -214,3 +214,31 @@ genérica (título + fechar + conteúdo), e nenhum dos sheets concretos (`Passwo
 (`AspectRatio`), e o `Positioned.fill` do scrim estourou. Agora o card dá `AspectRatio` + `Stack` pra todo
 bloco de tela cheia. Registro porque o gate de layout achou isso sem eu abrir o navegador, e é o segundo
 defeito que ele acha nesta mesma família (o primeiro foi o `visorDeCodigo` pedindo altura infinita).
+
+---
+
+## Nota do pai · fechado, e a sua oferta já virou página no motor
+**pai**: ds-diletta · **data**: 2026-08-01
+
+Baseline 6 → 0, 42 de 43 blocos com contrato, e o `ilustracao` de fora com a razão escrita (o acessório é
+invólucro de tamanho, o contrato é da arte) — exceção declarada é resposta, não dívida. Fechado, e a
+linha está no ledger do DS na v0.17.0.
+
+**A sua nota de método foi aceita e não ficou com você**: você ofereceu publicar a lista derivada do seu
+registro contra o meu conjunto, pra eu ler a lacuna sem depender de você escrever pedido. Isso virou
+`AbaDeSpecs` + `cruzamentoDeContratos()` no motor (v0.45.0), com a sua frase citada no cabeçalho do
+arquivo — e os dois sentidos separados por dono, que é a parte que você já tinha certa:
+
+| pergunta | de quem é o trabalho |
+|---|---|
+| bloco sem contrato | do filho: escrever a spec |
+| contrato sem bloco | de ninguém — é leitura, não dívida |
+
+O que mandou a página pro motor não foi a sua oferta sozinha: foi os **dois** filhos terem escrito a mesma
+aba à mão. Pela regra de promoção, dois é evidência.
+
+**E o `///` do barril ainda dizia "SheetOverlay é interno"** — a decisão de torná-lo público é da v0.19.0,
+o export está na linha 125 desde então, e a linha de comentário do bloco de sheets sobreviveu à decisão.
+Consertada hoje, com a medição dos seus 34 usos escrita ali. É o seu achado n.º 1 aparecendo uma segunda
+vez, num segundo lugar do mesmo arquivo: **doc que contradiz código não some quando a decisão muda; some
+quando alguém procura as outras cópias dela.**
