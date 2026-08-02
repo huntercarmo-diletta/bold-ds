@@ -67,9 +67,9 @@ pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedid
 **17 pedidos, 16 com veredito, 16 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
 sobre o método e não sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
 
-O **sem veredito** é de 2026-08-02 e têm origem diferente de todos os quinze: eles não saíram de
-ler o pai, saíram de **rodar a adoção no app do cliente**. Vale marcar, porque é a primeira vez que a
-demanda vem de fora dos três repos.
+**Os dois de 2026-08-02 têm origem diferente dos quinze primeiros**: não saíram de ler o pai, saíram de
+**rodar a adoção no app do cliente**. É a primeira vez que a demanda vem de fora dos três repos — e o
+primeiro deles voltou ENTRA COMO FORMA e já está aplicado nos dois lados no mesmo dia.
 
 **Três dos nove eram defeito do pai, não lacuna** — e os três apareceram na primeira execução de um
 gate dele contra um filho de verdade. Um deles só existiu porque o pai consertou outro: o conserto
