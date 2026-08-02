@@ -695,3 +695,162 @@ a volta que o app faz de verdade.
 
 > **API que só o próprio teste chama é API que ainda não foi pedida.** E o teste dela dava a impressão
 > oposta: cobertura verde num caminho que produto nenhum percorre.
+
+---
+
+# PRÉ-ADOÇÃO — onde a v0.2.0 quebra o app, medido em 2026-08-02
+
+Isto não é a lista do que trocar (essa são as três caixas acima). É a pergunta de antes: **o que quebra, o
+que compila e muda a tela em silêncio, e o que nem existe do outro lado.** Medido contra
+`app-newbold` na `feat/entrada-abrir-conta-e-saidas`, com o pacote em `v0.2.0`
+(`ds-diletta v0.24.0` · `catalogo-diletta v0.73.0`).
+
+**O ponto de partida mudou desde a iniciativa de julho**: o `pubspec.yaml` do app declara hoje
+*"o pacote externo `conta_bold_design_system` não é mais consumido"*. O app voltou pro DS interno
+(`lib/design_system` + `lib/ds_compat`) — 71 arquivos de widget, 141 classes públicas. A adoção começa do
+zero, não de onde parou.
+
+## O tamanho, em número
+
+| medida | valor |
+|---|---|
+| símbolos de DS citados pelo código de produto (fora de `design_system/`) | **130** |
+| desses, que existem no pacote **com o mesmo nome** | **3** (`BoldBackdrop`, `BoldBackdropScope`, `BoldBackground`) |
+| superfície do pacote | 23 `Bold*` + 193 `Diletta*` |
+| chamadas nos seis símbolos mais pesados | `BoldSpace` 1269 · `AppColors` 611 · `BoldType` 505 · `BoldColors` 298 · `AppTextStyles` 278 · `AppSpacing` 248 |
+
+Três de 130 é a informação: **a adoção não é upgrade, é tradução.** O que decide o custo não é o número
+de widgets, é em qual das cinco classes abaixo cada símbolo cai.
+
+## Classe 1 · Rename mecânico, ZERO risco visual — `BoldSpace`, 1269 chamadas
+
+Os oito degraus batem **por valor**, um a um:
+
+| app | valor | pacote |
+|---|---|---|
+| `BoldSpace.x1` | 4 | `DilettaSpacing.s1` |
+| `x2` · `x3` · `x4` · `x5` · `x6` | 8 · 12 · 16 · 20 · 24 | `s2` · `s3` · `s4` · `s5` · `s6` |
+| `x8` · `x10` | 32 · 40 | `s8` · `s10` |
+
+O pai tem 19 degraus contra 8, então nada falta. É `sed`, e o resultado é pixel-idêntico. **1269
+chamadas com risco zero é o lugar por onde começar** — não porque é fácil, porque é o único bloco grande
+que dá pra verificar por compilação em vez de por olho.
+
+## Classe 2 · MESMO NOME, VALOR DIFERENTE — a classe perigosa
+
+Compila, passa no analyzer, e muda a tela sem dizer.
+
+| token | app | pacote (`DilettaRadius`) | efeito se casar pelo NOME | usos |
+|---|---|---|---|---|
+| `card` | **24** | `card` = **16** | canto do card perde **8px** | 36 (`cardR` 24 + `card` 12) |
+| `sheet` | **22** | `sheet` = **24** | folha ganha **2px** | 8 |
+| `field` | 16 | `all16` = 16 | nenhum | 21 |
+| `pill` | 999 | `pill` = 200 | nenhum na prática | 25 |
+| `chip` | **10** | *não existe degrau 10* | tem que escolher 8 ou 16 | 1 |
+
+O `card` é o caso que justifica esta seção inteira: **o nome certo dá o valor errado, e o valor certo
+(`all24`) tem o nome errado.** Quem traduzir por busca-e-substitui de `BoldRadius.card` →
+`DilettaRadius.card` muda 36 cantos e não vê.
+
+O `sheet` de 22 já é item **ABERTO no ledger do pai** (`raioDeFolha` — a folha dele é 22, a minha é 24).
+Não inventar 22 aqui: ou o pai abre o degrau, ou o app aceita 24 por decisão escrita.
+
+## Classe 3 · A paleta — 37 de 42 degraus idênticos, e as 3 diferenças são de propósito
+
+| degrau | app | pacote | por quê |
+|---|---|---|---|
+| `primary03` | `#CC1E58` | `#9E1241` | o par 03/07 no escuro dava **3.29:1** |
+| `success03` | `#1E8F4E` | `#157A45` | a rampa do app estava **invertida no meio** (03 mais claro que o 04) |
+| `warning02` | `#8F5A06` | `#85520A` | tinte de aviso no escuro dava **4.21:1** |
+
+As três estão comentadas em `bold_palette.dart` com a medição. **São conserto, não regressão** — mas são
+mudança visível: o pressed state do rosa fica mais fundo.
+
+**Dois degraus o pacote não declara:** `info04` (`#3B82F6`, 4 usos) e `neutral00` (`#2B2B2B`, 1 uso). O
+`info` é o mais sério dos dois: o pai tem `primary`, `success`, `warning`, `error`, `secure` e `partner`
+— **família `info` não existe na linguagem.** Ou vira pedido, ou o app declara a constante localmente e
+assume que ela não é papel de DS.
+
+## Classe 4 · O scheme — a maior reescrita, e a única que não é mecânica
+
+**336 chamadas de `BoldColors.of(context)` em 102 arquivos** fora do `design_system`, quase sempre no
+padrão `final c = BoldColors.of(context)` seguido de `c.campo`. São ~1.000 leituras de campo.
+
+O app lê 15 campos; o pai tem 25 campos e 55 papéis. **Nove casam pelo nome:**
+
+`textSecondary` (326) · `primary` (103) · `border` (52) · `textMuted` (45) · `surface` (31) ·
+`success` (26) · `warning` (19) · `onPrimary` (6) — mais o acesso via `DilettaTheme.of(context)`.
+
+**Seis não casam, e somam 386 leituras:**
+
+| app | leituras | no pai |
+|---|---|---|
+| `textPrimary` | 260 | `fg` |
+| `danger` | 44 | `error` |
+| `isDark` | 41 | `brightness == Brightness.dark` |
+| `surfaceRaised` | 13 | `surfaceSubtle` ou `surfaceMuted` — **precisa de decisão, não tem 1:1** |
+| `field` | 13 | sem papel de campo; provável `surfaceMuted` |
+| `primaryWash` | 9 | `primarySubtle` |
+
+Os quatro primeiros são tradução. Os dois últimos são **escolha de papel**, e escolha errada aqui é a
+classe do `primary03`: passa no compilador e reprova em contraste.
+
+## Classe 5 · A fonte — e o app hoje NÃO renderiza o que ele pensa que renderiza
+
+Medição do estado atual, e ela é um achado por si:
+
+- `BoldType.fontFamily = 'Poppins'` (`bold_typography.dart:18`);
+- o `pubspec` empacota **Nunito** (5 pesos) e **JetBrains Mono**;
+- Poppins não está empacotada nem resolvida por `google_fonts` no arranque.
+
+**Então o app inteiro cai no fallback da plataforma** — nem Poppins, nem Nunito. O pacote traz **Inter**
+(5 pesos, OFL, `assets/fonts/`) e `BoldFonts.family` pronto pra `ThemeData.fontFamily`.
+
+Adotar conserta isso, e **muda a cara de todo texto do app de uma vez** — 505 chamadas de `BoldType`. É
+uma linha de código e a maior mudança visual da adoção inteira. Merece ser um passo sozinho, com o
+antes-e-depois olhado.
+
+## Classe 6 · Ícones — o risco é 2 linhas, não 44 arquivos
+
+| medida | valor |
+|---|---|
+| ícones no app | 355 |
+| ícones no pai | 358 |
+| **mesmo nome** | **311** |
+| só no app | 44 |
+
+Dos 44, **43 são o duplicado com sufixo `" 1"`** do export (`chevron-left-solid 1`) mais o `README.md`, e
+um asset morto (`send-cpf-seguro`, zero referências — nome de outro produto dentro do app do Bold).
+
+E o que importa: **só 2 linhas de código citam um nome com sufixo** — `'user-plus-light 1'` e
+`'chevron-left-light 1'`, e os dois têm gêmeo sem sufixo no conjunto do pai. Herdar a família do pai custa
+duas edições, não uma migração de assets.
+
+## Classe 7 · O que NÃO existe pra medir: rede de segurança
+
+| medida | valor |
+|---|---|
+| arquivos de teste no app | **8** |
+| goldens | **0** |
+| `flutter analyze` hoje | 2 *infos* |
+
+Tudo acima — 8px de canto, três degraus de paleta, a família tipográfica inteira — **aterrissa sem
+verificação**. O compilador pega a Classe 1 e a metade mecânica da Classe 4; ele é cego pras Classes 2, 3
+e 5, que são justamente as que mudam a tela.
+
+## A ordem que a medição sugere
+
+1. **Golden das telas mais pesadas ANTES de qualquer troca.** Sem isso, nada das Classes 2/3/5 é
+   verificável, e "parece igual" não é medição;
+2. `BoldSpace` → `DilettaSpacing` — 1269 chamadas, valor idêntico, verificável por compilação;
+3. o scheme — 9 nomes por tradução, e os 6 restantes um a um, com o `surfaceRaised` e o `field`
+   decididos por escrito;
+4. o raio **com a tabela da Classe 2 na mão**, nunca por nome;
+5. a fonte, **sozinha, no último passo**, porque ela muda tudo e é a única cuja regressão se enxerga.
+
+## Os dois que não dependem do app
+
+- **família `info`** não existe na linguagem do pai, e o app usa (4 chamadas);
+- **degrau de raio 22** não existe, e a folha do app usa — já ABERTO no ledger do pai como `raioDeFolha`.
+
+Nenhum dos dois se resolve neste repo. Os dois são pedido, e o primeiro ainda não foi escrito.
