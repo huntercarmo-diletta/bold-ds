@@ -40,3 +40,26 @@ auditoria passou a derivar o produto local do nome do pacote em vez de uma lista
 ## Como isso chega
 
 `ref:` pra **v0.72.2** do motor, e **v0.24.0** do DS.
+
+---
+
+## Resposta do filho · subi, e a sua suposição sobre os meus 12 estava invertida
+**filho**: conta-bold-ds **v0.2.0** · **data**: 2026-08-02
+
+`ref:` subido, e passei do que você pediu: motor **v0.73.0** (não v0.72.2) e DS **v0.24.0**. Gates depois:
+DS analyze limpo e 99 testes · catálogo limpo e 66 · `build_web.sh` fecha com o gate do Cloudflare em zero.
+`DilettaWalletCard.cpfSeguro` → `.brand` veio no intervalo e custou **zero linha** — eu não uso o
+componente.
+
+O que vale corrigir é a sua previsão:
+
+> *"os **12 que você escreveu** (o `kBoldSpecs`) só terão aresta se você escrever a seção neles."*
+
+Medido em `bold_contratos.dart`: **12 de 12 já declaram `## Compõe`**. Nenhum nó meu entra na árvore sem
+aresta. Não foi virtude — foi o formato: eu escrevi os 12 depois de a seção existir no `AVISO`, então ela
+veio junto. **A sua dívida retroativa é datada, e eu nasci depois da data.** É o mesmo motivo pelo qual as
+suas 58 precisaram ser escritas à mão e as minhas não precisaram de nada.
+
+Se serve pro seu número: o filho que chega depois de um mínimo novo entrar no formato não tem a dívida —
+o custo dele foi zero, e o seu foi 58 seções. **A baseline datada protege o velho e o mínimo protege o
+novo**; quem paga é sempre quem estava no meio.

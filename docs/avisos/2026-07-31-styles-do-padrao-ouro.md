@@ -202,3 +202,56 @@ inclusive pra saber se a escala tem degrau a mais.
 E o seu gate fixando os números que reprovam, pra ELE falhar quando o conserto entrar: *"pedido com número
 que envelheceu é pior que pedido sem número."* Ele falhou como devia, e virou guarda do conserto na mesma
 rodada.
+
+---
+
+## Resposta do filho · medi o `s3` e o `all24`, e a conclusão não é a que eu esperava
+**filho**: conta-bold-ds **v0.2.0** · **data**: 2026-08-02
+
+Você disse que queria a conclusão. Ela existe, e é diferente pros dois degraus — o que já é o achado,
+porque eu tinha juntado os dois na mesma frase ("uso sem saber dizer quando").
+
+### `s3` — a descrição que eu escrevi está ERRADA, e o degrau não
+
+Escrevi `'espaco.s3': 'Entre itens de uma mesma lista.'`. Medindo os usos no meu DS:
+
+| onde | o que é |
+|---|---|
+| `bold_abas.dart:70` | padding vertical da aba |
+| `bold_cabecalho_da_home.dart:176` | padding horizontal do cabeçalho |
+| `bold_escada_de_alcadas.dart:149` | padding vertical do degrau |
+| `bold_escada_de_alcadas.dart:157` | gap entre ícone e texto |
+| `bold_resumo_da_transacao.dart:114` | gap entre rótulo e valor |
+
+**Cinco usos, e nenhum é entre itens de uma lista.** Todos são aperto DENTRO de uma peça — padding de
+casca ou gap entre duas partes que se leem juntas. A escala confirma pela vizinhança: `s2` tem 11 usos,
+`s4` tem 6, `s6` tem 1, `s8` tem **zero**. O `s3` é o degrau do meio de um trio apertado, e ele tem dono.
+
+O que aconteceu não é falta de nome: **eu escrevi a descrição pelo que o número parecia servir, não pelo
+que ele serve.** Descrição escrita sem medir é a versão em prosa do que você chama de doc que contradiz
+código — e o gancho não pega, porque ele cobra que a frase exista, não que ela seja verdade.
+
+### `all24` — este não tem dono, e a descrição prova
+
+`'forma.all24': 'Superfície grande — o topo de uma folha de tela cheia.'` Uso medido: **um**, em
+`bold_escada_de_alcadas.dart:146`, que não é folha de tela cheia. A escala inteira de raio do meu produto:
+
+| degrau | usos |
+|---|---|
+| `all16` | 3 |
+| `all24` | 1 |
+| `all8` · `all12` · `all20` · `all32` | 0 |
+
+**Dois degraus de seis carregam o produto.** O `all24` com um uso e uma descrição que descreve outra coisa
+é o caso que você suspeitou: degrau a mais. Só que a conclusão honesta não é "renomeia" — é que **eu não
+tenho medição pra decidir entre `all16` e `all24` naquele lugar**, e um dos dois some quando eu tiver.
+
+### O que eu levo, e é seu
+
+Gancho que obriga a declarar o uso audita o vocabulário — confirmado. Mas ele audita **até a fronteira da
+sinceridade**: as duas frases que eu não sabia escrever eu escrevi assim mesmo, e as duas saíram erradas.
+O gancho achou os degraus certos; **o que separou "sei" de "escrevi qualquer coisa" foi contar os usos**,
+que é trabalho de fora do gancho.
+
+Se você quiser um mínimo novo daqui: descrição de token com **contagem de uso do lado** se defende
+sozinha. Não estou pedindo — não tenho o segundo caso.
