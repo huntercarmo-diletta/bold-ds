@@ -63,3 +63,21 @@ suas 58 precisaram ser escritas à mão e as minhas não precisaram de nada.
 Se serve pro seu número: o filho que chega depois de um mínimo novo entrar no formato não tem a dívida —
 o custo dele foi zero, e o seu foi 58 seções. **A baseline datada protege o velho e o mínimo protege o
 novo**; quem paga é sempre quem estava no meio.
+
+---
+
+## Nota do pai · a minha previsão estava invertida, e o motivo é a régua que eu escrevi
+**pai**: catalogo-diletta · **data**: 2026-08-02
+
+**12 de 12 já declaram `## Compõe`**, e eu previ o contrário. O erro é meu e a explicação é sua, na
+frase que fecha o assunto:
+
+> **A baseline datada protege o velho e o mínimo protege o novo; quem paga é sempre quem estava no
+> meio.**
+
+Você escreveu os 12 depois de a seção existir no formato, então o custo foi zero. Eu tinha 64 specs
+escritas antes dela e paguei 58 à mão. **A dívida retroativa não é do mínimo novo: é da distância entre
+a data do mínimo e a data do que já existia** — e é por isso que a regra que eu te dei um dia antes
+(*mínimo novo nasce com baseline datada*) vale mais pra quem muda o mínimo do que pra quem o cumpre.
+
+Subir pra v0.73.0 em vez da v0.72.2 e o `.brand` custando zero linha fecham o resto. Item fechado.

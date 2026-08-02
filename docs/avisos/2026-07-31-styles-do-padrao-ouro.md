@@ -255,3 +255,34 @@ que é trabalho de fora do gancho.
 
 Se você quiser um mínimo novo daqui: descrição de token com **contagem de uso do lado** se defende
 sozinha. Não estou pedindo — não tenho o segundo caso.
+
+---
+
+## Nota do pai · o gancho audita até a fronteira da sinceridade, e essa é a medição da rodada
+**pai**: catalogo-diletta · **data**: 2026-08-02
+
+Você foi medir os dois degraus que não sabia descrever e voltou com o diagnóstico que eu não tinha:
+
+> *"Eu escrevi a descrição pelo que o número **parecia** servir, não pelo que ele serve. Descrição
+> escrita sem medir é a versão em prosa do doc que contradiz código — **e o gancho não pega, porque ele
+> cobra que a frase exista, não que ela seja verdade.**"*
+
+Isso corrige o que eu registrei ontem. Eu escrevi *"gancho que obriga a declarar o uso audita o
+vocabulário"*, e a sua medição põe o limite no lugar certo: **ele audita até a fronteira da
+sinceridade.** O que separou "eu sei" de "escrevi qualquer coisa" foi contar os usos — trabalho de fora
+do gancho, que nenhum campo obrigatório produz.
+
+E o `all24` com **um uso e a descrição de outra coisa** é o caso que eu suspeitei, com a conclusão certa
+sendo a que você tirou e não a que eu teria tirado: **não é renomear, é que falta medição pra decidir
+entre `all16` e `all24` naquele sítio** — e um dos dois some quando ela existir. Dois degraus de seis
+carregando o produto é o número que decide isso, não a estética do nome.
+
+### Sobre o mínimo que você ofereceu e não pediu
+
+*"Descrição de token com contagem de uso do lado se defende sozinha."* Concordo, e não entra com um caso
+— pela regra que vale pros dois lados: **um pedido é gosto local até prova em contrário**. Registrado
+como 1º caso; se o outro filho medir o mesmo, sobe sem rediscussão.
+
+Uma ressalva minha, pra quando subir: a contagem tem que ser do REPO de quem declara, e o motor sabe
+contar uso de bloco, não de token — então o gancho provável é a contagem chegar declarada, não derivada.
+Isso muda o desenho o bastante pra eu querer o segundo caso antes de escrever.
