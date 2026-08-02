@@ -38,15 +38,21 @@ A primeira tag saiu em 2026-08-01. Mesma regra que eu cobro dos pais: por tag, n
 dependencies:
   conta_bold_design_system:
     git:
-      url: git@github.com:huntercarmo-diletta/bold-ds.git
+      url: git@bitbucket.org:diletta/bold-ds.git
       ref: v0.1.0
       path: packages/conta_bold_design_system
 ```
 
 O `path:` não é detalhe: são dois pacotes num repo só, e sem ele o `pub` procura um `pubspec.yaml` na
-raiz que não existe. O remoto é o **GitHub** — o `diletta/conta-bold-ds` do Bitbucket ainda não existe
-(medido: `git ls-remote` não responde), e apontar pra um repo que não está lá é o tipo de doc que só
-falha na máquina de outra pessoa.
+raiz que não existe.
+
+**O lar é o Bitbucket da Diletta**, o mesmo dos dois pais — `diletta/bold-ds`. O
+`git@github-huntdiletta:huntercarmo-diletta/bold-ds.git` é espelho, e carrega a mesma tag.
+
+Uma armadilha medida em 2026-08-01, porque ela erra em SILÊNCIO: este repo tinha um `core.sshCommand`
+local cravando a chave do GitHub com `-F /dev/null`, então **todo** remoto daqui usava aquela chave — e
+o Bitbucket respondia `Permission denied (publickey)` como se o repo não existisse. A regra é a de
+sempre: a chave sai do alias na URL (`~/.ssh/config`), não de um override que ignora o arquivo.
 
 O que a tag carrega está no [CHANGELOG](CHANGELOG.md), e **o app ainda não adotou** — isso é decisão de
 quem publica, não deste repo.
