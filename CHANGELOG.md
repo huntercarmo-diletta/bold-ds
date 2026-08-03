@@ -20,6 +20,33 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.9.4] — 2026-08-03
+
+### Corrigido — **os ícones do pai não apareciam no app**, e a linha que faltava é uma
+
+Chegou do simulador: *"as setas de voltar, os ícones da home, o `>` do extrato"* — todos sumidos ao mesmo
+tempo, depois de a adoção trocar componentes do app por componentes do pai. **Nada falhou**: nem `analyze`,
+nem os 414 testes do app, nem o console.
+
+A mecânica: `DilettaIcon` desenha com `VectorGraphic(loader: AssetBytesLoader(path, packageName:))`, e
+`DilettaAssets.assetPackage` nasce `null` — que significa *"assets na raiz do bundle"*. Num app que CONSOME
+o pacote eles moram em `packages/diletta_design_system/…`, então o loader procura no lugar errado. E
+**`VectorGraphic` com asset ausente não estoura: desenha caixa vazia.**
+
+A linha entrou no `BoldTheme`, no primeiro acesso ao tema, e **não no `main` do app**:
+
+> Quem liga o DS é quem sabe onde o DS guarda coisa.
+
+É a mesma razão que o catálogo escreveu no plugue dele quando os 358 ícones dele estavam invisíveis. No
+`main` isso vira uma linha que todo app novo precisa lembrar de copiar — o primeiro filho resolveu no `main`
+do catálogo dele e tem o mesmo buraco do lado do app.
+
+Não existe caminho que desenhe componente do pai sem passar por `BoldTheme.light`/`dark`: o
+`DilettaThemeScope` é obrigatório pra qualquer um deles. E é `??=`, então quem hospeda os ícones em outro
+pacote (o contrato do pai prevê) continua mandando — tem teste pra isso.
+
+Gates: DS analyze limpo e **114 testes** (3 novos) · catálogo limpo e **84**.
+
 ## [0.9.3] — 2026-08-03
 
 ### Alterado — `ds-diletta` **v0.32.0 → v0.33.0**: o cartão de destaque também é vidro

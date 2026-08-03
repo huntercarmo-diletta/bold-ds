@@ -58,11 +58,41 @@ export 'src/bold_visor_de_codigo.dart';
 class BoldTheme {
   BoldTheme._();
 
-  static final DilettaTheme light =
-      DilettaTheme.resolve(palette: BoldPalette.bold);
+  /// ONDE OS ASSETS DO PAI MORAM — uma linha, e sem ela nenhum ícone do pai aparece.
+  ///
+  /// `DilettaAssets.assetPackage` nasce `null`, que significa "assets na raiz do bundle". Num app que
+  /// CONSOME o pacote eles moram em `packages/diletta_design_system/…`, então o `AssetBytesLoader`
+  /// procura no lugar errado. E `VectorGraphic` com asset ausente **não estoura**: desenha caixa vazia.
+  ///
+  /// Chegou como *"os ícones não estão aparecendo no app"*, depois de a adoção trocar
+  /// `BoldIconButton` por `DilettaIconButton`: as setas de voltar, os ícones da home e o `>` do extrato
+  /// sumiram juntos. Nada falhou — nem `analyze`, nem os 414 testes, nem o console.
+  ///
+  /// **Fica AQUI e não no `main` do app**, e a razão é a mesma que o catálogo escreveu no plugue dele:
+  /// quem liga o DS é quem sabe onde o DS guarda coisa. No `main` isso é uma linha que todo app novo
+  /// tem que lembrar de copiar — e o primeiro filho, que resolveu no `main` do catálogo dele, tem o
+  /// mesmo buraco de um lado só.
+  ///
+  /// É idempotente e roda no primeiro acesso ao tema. Não existe caminho que desenhe componente do pai
+  /// sem passar por `BoldTheme.light`/`dark`: o `DilettaThemeScope` é obrigatório pra qualquer um deles.
+  static void _garanteOsAssetsDoPai() {
+    DilettaAssets.assetPackage ??= DilettaAssets.package;
+  }
 
-  static final DilettaTheme dark = DilettaTheme.resolve(
-      palette: BoldPalette.bold, brightness: Brightness.dark);
+  static DilettaTheme get light {
+    _garanteOsAssetsDoPai();
+    return _claro;
+  }
+
+  static DilettaTheme get dark {
+    _garanteOsAssetsDoPai();
+    return _escuro;
+  }
+
+  static final DilettaTheme _claro = DilettaTheme.resolve(palette: BoldPalette.bold);
+
+  static final DilettaTheme _escuro =
+      DilettaTheme.resolve(palette: BoldPalette.bold, brightness: Brightness.dark);
 }
 
 /// Uma tela do Bold montada SÓ com componentes do pai.
