@@ -37,6 +37,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [o card de conteúdo não sabe ser vidro](pedidos/2026-08-03-o-card-de-conteudo-nao-sabe-ser-vidro.md) | **ENTRA pela resposta 1** (`cardDeVidro` no scheme) | **ds v0.32.0** · adotado aqui na v0.9.0 |
 | [o traço de home da nav é uma cópia privada](pedidos/2026-08-03-o-traco-de-home-da-nav-e-uma-copia-privada.md) | **ENTRA como deleção** — e eram DUAS cópias | **ds v0.31.0** · adotado aqui na v0.9.0 (o contorno do gate SAIU) |
 | [a regra do vidro chegou em três cards, e o quarto está na mesma tela](pedidos/2026-08-03-a-regra-do-vidro-chegou-em-tres-cards-e-o-quarto-esta-na-mesma-tela.md) | **ENTRA um dos dois** — e o outro veio com a razão | **ds v0.33.0** · adotado aqui na v0.9.3 |
+| [o brilho do esqueleto é neutro, e o deste produto é rosa](pedidos/2026-08-03-o-brilho-do-esqueleto-e-neutro-e-o-deste-produto-e-rosa.md) | Pedido | — |
 
 ## O que os pais me mandaram
 
