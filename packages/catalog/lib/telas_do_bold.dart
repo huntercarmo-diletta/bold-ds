@@ -31,6 +31,14 @@ import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 
 import 'builder/screen_specs.g.dart';
 
+/// ## O rodapé da home são as ABAS, e isso só ficou possível hoje
+///
+/// Até a v0.7.2 a home mostrava uma barra de CTA escrito "Continuar" no rodapé — não porque alguém quis,
+/// mas porque o meu bloco `barraDeBaixo` expunha **1 das 7 variantes** do `DilettaBottomApp` do pai, e a
+/// única era a de botão. A cobrança dele (motor v0.77.0) mediu isso, o dono do produto escolheu as cinco
+/// sem chat, e a `nav` fechou o buraco: a home declara `variante: nav` com os três itens que o app tem de
+/// verdade — `Início`, `Câmera` e `Lia`, o terceiro condicional por feature flag lá.
+///
 /// ## Uma divergência DECLARADA entre o board e o aparelho: o card de lista é sólido aqui
 ///
 /// No app, o card que agrupa linhas de lista é **vidro** (`BoldAppListGroup` → `BoldCard(glass: true)`,

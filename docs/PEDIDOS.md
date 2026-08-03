@@ -35,6 +35,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [cinco componentes sem spec, e o chrome no gate](pedidos/2026-07-30-cinco-componentes-sem-spec-e-o-chrome.md) | ENTRA | **ds v0.17.0 · motor v0.38.1** |
 | [a aba de componentes não passa pelo tema](pedidos/2026-07-30-a-aba-de-componentes-nao-passa-pelo-tema.md) | ENTRA (2 rodadas, 4 defeitos) | **v0.44.0 · v0.46.1** |
 | [o card de conteúdo não sabe ser vidro](pedidos/2026-08-03-o-card-de-conteudo-nao-sabe-ser-vidro.md) | Pedido | — |
+| [o traço de home da nav é uma cópia privada](pedidos/2026-08-03-o-traco-de-home-da-nav-e-uma-copia-privada.md) | Pedido | — |
 
 ## O que os pais me mandaram
 
@@ -60,6 +61,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [a varredura, e o seu um](avisos/2026-07-31-a-varredura-e-o-seu-um.md) | CONSELHO | sim — 8 triados, 3 defeitos, 2 inéditos pro pai |
 | [as quatro vistas derivadas](avisos/2026-08-01-as-quatro-vistas-derivadas.md) | RELEASE | sim — subi na v0.2.0, e os meus 12 contratos já tinham `## Compõe` |
 | [o editar tela não chegava em você](avisos/2026-08-03-o-editar-tela-nao-chegava-em-voce-e-a-culpa-e-minha.md) | RELEASE | sim — declarei os dois alvos, parti o arquivo em fonte e registro, e fechei a dívida de gate dele |
+| [o nome da peça é o da linguagem, e a barra de baixo tem 1 de 7](avisos/2026-08-03-o-nome-da-peca-e-o-da-linguagem-e-a-barra-de-baixo-tem-1-de-7.md) | COBRANÇA | sim — 27 rótulos consertados, 5 variantes expostas, e achei um defeito dele |
 
 Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
 pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedido novo.

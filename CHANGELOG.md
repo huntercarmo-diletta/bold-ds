@@ -20,6 +20,61 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.8.0] — 2026-08-03
+
+### Corrigido — **27 dos 56 blocos não diziam o nome da peça da linguagem**
+
+Cobrança do pai (motor `v0.77.0`, regra `nome-fora-da-linguagem`), e a medição dele é o argumento inteiro:
+27 blocos meus contra 4 do outro filho. A frase do dono do produto que gerou a regra:
+
+> *"topbar e bottom bar por exemplo não estão lá e eu não sei dizer qual o novo nome porque eu nunca escolhi
+> outro nome pra eles! icon, applist, tudo deve se manter, porque senão vou ter que aprender coisas que eu
+> nem sei quais e quantas são."*
+
+**"Nem sei quais e quantas são" tinha número: 27.** O rótulo agora traz o nome da linguagem AO LADO do nome
+de produto — `Lista · AppList`, `Barra de baixo · BottomApp`, `Casca de topo · TopAppBar`, `Campo de texto ·
+Input`, `Selo de status · StatusTag`. O português fica; o que não podia ficar é o nome da linguagem não
+existir em lugar nenhum.
+
+**Dois entraram sem a regra pedir**: `lista` e `icone` passavam por ACIDENTE (`List` é sufixo de `AppList` e
+cabe dentro de "lista"; `Icon` cabe dentro de "icone"). Passar por acidente não é dizer o nome — e as duas
+palavras que o dono citou por escrito foram justamente `applist` e `icon`.
+
+### Adicionado — a barra de baixo expõe as **cinco** variantes, e era uma
+
+`DilettaBottomApp` tem sete factories; eu expunha só a `.button`. O dono escolheu as cinco sem chat, e a
+razão é a regra deste registro — variante que produto nenhum usa é desenho especulativo:
+
+`defaultVariant` · `nav` · `button` · `keyboard` · `buttonAndKeyboard`
+
+- **um bloco de UNIÃO, não cinco tipos**: a peça do pai é uma só, e cinco tipos na paleta obrigariam quem
+  procura "barra de baixo" a escolher antes de ver;
+- **`visibleProps` é o que faz a união não virar ruído**: `label`/`labelSecundario` só nas duas com botão,
+  `abas`/`abaAtiva` só na `nav`, e só `variante` nas outras duas. Prop que não faz nada é prop que ensina
+  errado;
+- **e a `nav` fechou um buraco declarado ontem**: a home do board mostrava uma barra de CTA "Continuar"
+  porque era a única variante que existia. Agora mostra as abas, com os três itens que o app tem de verdade
+  (`Início`, `Câmera`, `Lia`).
+
+### Achado — declarar a variante encontrou um defeito **do pai**, e virou pedido
+
+O gate de chrome conta `DilettaBottomHomeIndicator` e exige um. Na `.nav` ele achou **zero**, com o traço
+desenhado na tela: a `DilettaNav` usa um `_NavHomeIndicator` **privado**, cópia linha por linha do público —
+e sem as três regras dele: recolher com teclado aberto, **não desenhar pill fake em device real**, e o
+`DilettaDevInfo`. As duas primeiras são comportamento de aparelho, e o comentário do próprio público promete
+*"robusto p/ toda variante do BottomApp"*.
+
+Pedido aberto (`docs/pedidos/2026-08-03-o-traco-de-home-da-nav-e-uma-copia-privada.md`); o conserto que eu
+peço é deleção. Do meu lado o gate passou a contar `DilettaBottomHomeIndicator` + `DilettaNav`, que é o que
+sobrevive às duas formas.
+
+> **Enquanto eu expunha 1 das 7, a `.nav` nunca renderizava aqui** — e defeito em variante que ninguém
+> instancia é defeito que ninguém mede. Cobertura de variante não era conveniência de editor.
+
+**Minor**: nada muda pra quem consome o DS. O que mudou é a paleta do editor e as telas do board.
+
+Gates: catálogo analyze limpo e **84 testes** · DS **107**.
+
 ## [0.7.2] — 2026-08-03
 
 ### Corrigido — as telas do board não tinham `specId`, e por isso metade dos botões ficava muda

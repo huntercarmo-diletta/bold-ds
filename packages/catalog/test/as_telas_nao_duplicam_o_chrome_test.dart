@@ -121,8 +121,13 @@ void main() {
 
       expect(find.byType(DilettaStatusBar), findsOneWidget,
           reason: 'dois relógios: a casca do topo já traz a barra de status');
-      expect(find.byType(DilettaBottomHomeIndicator), findsOneWidget,
-          reason: 'dois traços de home: a barra de baixo já traz o indicador');
+      // QUEM desenha o traço de home muda com a variante, e o que se mede é que UM desenhe:
+      // `DilettaBottomApp.button` põe o `DilettaBottomHomeIndicator` público; a `.nav` desenha o traço
+      // por dentro do `DilettaNav`, num widget PRIVADO dele (`_NavHomeIndicator`, que é cópia do
+      // público — está pedido ao pai). Contar os dois juntos é o que sobrevive às duas formas.
+      final tracos = find.byType(DilettaBottomHomeIndicator).evaluate().length +
+          find.byType(DilettaNav).evaluate().length;
+      expect(tracos, 1, reason: 'dois traços de home, ou nenhum: $slug');
     });
   }
 

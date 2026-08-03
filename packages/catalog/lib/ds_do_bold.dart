@@ -68,7 +68,7 @@ BlockDef _tituloDaPagina() => BlockDef(
       type: 'tituloDaPagina',
       ctor: 'ds.DilettaPageTitle',
       args: const {'titulo': Arg.texto('title'), 'subtitulo': Arg.texto('subtitle')},
-      label: 'Título da página',
+      label: 'Título da página · PageTitle',
       props: const {
         'titulo': PropDef('text', bindable: true, dartType: 'String'),
         'subtitulo': PropDef('text', bindable: true, dartType: 'String'),
@@ -105,7 +105,7 @@ BlockDef _botao() => BlockDef(
       acoes: const {'onPressed': 'aoContinuar'},
       ctor: 'ds.DilettaButton',
       args: const {'label': Arg.texto('label'), 'tipo': Arg.enumeracao('type', 'ds.DilettaButtonType'), 'tamanho': Arg.enumeracao('size', 'ds.DilettaButtonSize'), 'estado': Arg.enumeracao('state', 'ds.DilettaButtonState'), 'larguraTotal': Arg.bool('fullWidth')},
-      label: 'Botão',
+      label: 'Botão · Button',
       props: {
         'label': const PropDef('text', bindable: true, dartType: 'String'),
         'tipo': const PropDef('enum', options: _tiposDeBotao),
@@ -146,7 +146,7 @@ BlockDef _campo() => BlockDef(
       type: 'campo',
       ctor: 'ds.DilettaInput',
       args: const {'rotulo': Arg.texto('label'), 'placeholder': Arg.texto('placeholder'), 'ajuda': Arg.texto('helper'), 'erro': Arg.texto('error'), 'desabilitado': Arg.bool('disabled')},
-      label: 'Campo de texto',
+      label: 'Campo de texto · Input',
       props: const {
         'rotulo': PropDef('text'),
         'placeholder': PropDef('text'),
@@ -179,7 +179,7 @@ BlockDef _valor() => BlockDef(
       type: 'valor',
       ctor: 'ds.DilettaAmountDisplay',
       args: const {'valor': Arg.texto('value'), 'rotulo': Arg.texto('label'), 'carimbo': Arg.texto('timestamp'), 'heroi': Arg.bool('hero')},
-      label: 'Valor (saldo)',
+      label: 'Valor (saldo) · AmountDisplay',
       props: const {
         'valor': PropDef('text', bindable: true, dartType: 'String'),
         'rotulo': PropDef('text', bindable: true, dartType: 'String'),
@@ -219,7 +219,7 @@ BlockDef _selo() => BlockDef(
       type: 'selo',
       ctor: 'ds.DilettaStatusTag',
       args: const {'label': Arg.texto('label'), 'tom': Arg.enumeracao('tone', 'ds.DilettaStatusTone')},
-      label: 'Selo de status',
+      label: 'Selo de status · StatusTag',
       // Sem `const` no mapa: `options` agora é derivado do enum do pai, e derivado não é constante.
       props: {
         'label': const PropDef('text', bindable: true, dartType: 'String'),
@@ -235,7 +235,7 @@ BlockDef _aviso() => BlockDef(
       type: 'aviso',
       ctor: 'ds.DilettaNoticeBanner',
       args: const {'titulo': Arg.texto('title'), 'descricao': Arg.texto('description'), 'ilustracao': Arg.enumeracao('illustration', 'ds.DilettaIllustration')},
-      label: 'Aviso com ilustração',
+      label: 'Aviso com ilustração · NoticeBanner',
       props: {
         'titulo': const PropDef('text', bindable: true, dartType: 'String'),
         'descricao': const PropDef('multiline', bindable: true, dartType: 'String'),
@@ -265,7 +265,7 @@ BlockDef _ritmo() => BlockDef(
       type: 'ritmo',
       ctor: 'ds.DilettaGap.h',
       args: const {'tamanho': Arg.enumeracaoPosicional('ds.DilettaSpacing')},
-      label: 'Espaço',
+      label: 'Espaço · Gap',
       props: const {'tamanho': PropDef('spacingToken', options: ['s2', 's3', 's4', 's6', 's8'])},
       defaults: () => {'tamanho': 's4'},
       build: (p) => DilettaGap.h(_espaco('${p['tamanho']}')),
@@ -275,7 +275,7 @@ BlockDef _ritmo() => BlockDef(
 BlockDef _divisor() => BlockDef(
       type: 'divisor',
       ctor: 'ds.DilettaDivider',
-      label: 'Divisor',
+      label: 'Divisor · Divider',
       props: const {},
       defaults: () => {},
       build: (p) => const DilettaDivider(),
@@ -286,7 +286,7 @@ BlockDef _cabecalhoDeSecao() => BlockDef(
       type: 'cabecalhoDeSecao',
       ctor: 'ds.DilettaSectionHeader',
       args: const {'rotulo': Arg.texto('label')},
-      label: 'Cabeçalho de seção',
+      label: 'Cabeçalho de seção · SectionHeader',
       props: const {'rotulo': PropDef('text', bindable: true, dartType: 'String')},
       defaults: () => {'rotulo': 'DETALHES'},
       build: (p) => DilettaSectionHeader(label: '${p['rotulo']}'),
@@ -308,7 +308,7 @@ BlockDef _linha() => BlockDef(
         'titulo': Arg.texto('title'),
         'subtitulo': Arg.texto('subtitle'),
       },
-      label: 'Linha de menu',
+      label: 'Linha de menu · AppListRow',
       props: {
         'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
         'titulo': const PropDef('text', bindable: true, dartType: 'String'),
@@ -347,7 +347,7 @@ BlockDef _linhaDeValor() => BlockDef(
         'valor': Arg.texto('amount'),
         'saida': Arg.bool('negative'),
       },
-      label: 'Linha de valor',
+      label: 'Linha de valor · AppListRow',
       props: {
         'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
         'titulo': const PropDef('text', bindable: true, dartType: 'String'),
@@ -397,7 +397,7 @@ const _idiomasDeLista = ['carded', 'plain', 'menu'];
 /// stroke externo, `plain` não, `menu` põe divisor sob cada linha.
 BlockDef _lista() => BlockDef(
       type: 'lista',
-      label: 'Lista',
+      label: 'Lista · AppList',
       props: const {
         'titulo': PropDef('text'),
         'idioma': PropDef('enum', options: _idiomasDeLista),
@@ -434,7 +434,7 @@ BlockDef _icone() => BlockDef(
       type: 'icone',
       ctor: 'ds.DilettaIcon',
       args: const {'nome': Arg.enumeracao('name', 'ds.DilettaIcons'), 'tamanho': Arg.numero('size')},
-      label: 'Ícone',
+      label: 'Ícone · Icon',
       props: {
         'nome': PropDef('enum', options: DilettaIcons.all.keys.toList()),
         'tamanho': const PropDef('enum', options: ['16', '20', '24', '32']),
@@ -460,27 +460,120 @@ BlockDef _barraDeStatusBloco() => BlockDef(
 
 BlockDef _barraDeBaixo() => BlockDef(
       type: 'barraDeBaixo',
-      label: 'Barra de baixo (CTA)',
+      label: 'Barra de baixo · BottomApp',
+      // AS CINCO VARIANTES, e antes era UMA.
+      //
+      // Cobrança do pai (motor v0.77.0), medida por ele comparando as duas árvores: o
+      // `DilettaBottomApp` tem SETE factories, eu expunha só a `.button`, e o outro filho expõe as sete.
+      // O dono do produto escolheu as cinco sem chat — *"pro bold só não a com o chat pq não precisa"* —,
+      // e a razão é a mesma que rege este registro: variante que produto nenhum usa é desenho
+      // especulativo.
+      //
+      // Bloco de UNIÃO, não cinco blocos: a peça do pai é uma só, e cinco tipos na paleta obrigariam
+      // quem procura "barra de baixo" a escolher antes de ver. O `visibleProps` é o que faz a união não
+      // virar ruído — cada variante mostra só as props que ela usa.
       props: const {
+        'variante': PropDef('enum', options: _variantesDaBarra),
         'label': PropDef('text', bindable: true, dartType: 'String'),
         'labelSecundario': PropDef('text'),
+        // As abas da variante `nav`, no mesmo idioma do bloco `abas`: rótulos separados por vírgula, e o
+        // ícone declarado depois de `:` quando existe. Sem ícone o item cai no ponto neutro do pai —
+        // inventar glifo por posição seria desenho meu passando por linguagem.
+        'abas': PropDef('text'),
+        'abaAtiva': PropDef('number'),
       },
-      defaults: () => {'label': 'Continuar', 'labelSecundario': ''},
+      defaults: () => {
+        'variante': 'button',
+        'label': 'Continuar',
+        'labelSecundario': '',
+        // A medição do app: a home tem três abas (a terceira é condicional por feature flag).
+        'abas': 'Início:houseLight, Câmera:cameraLight, Lia:sparklesLightFull',
+        'abaAtiva': '0',
+      },
+      // O inspetor mostra só o que a variante usa. Sem isto, escolher `keyboard` deixava dois campos de
+      // rótulo na tela sem nenhum efeito — prop que não faz nada é prop que ensina errado.
+      visibleProps: (p) => switch ('${p['variante']}') {
+        'nav' => const ['variante', 'abas', 'abaAtiva'],
+        'button' || 'buttonAndKeyboard' => const ['variante', 'label', 'labelSecundario'],
+        _ => const ['variante'],
+      },
       build: (p) => _barraDeBaixoWidget(p, aoTocar: null),
-      // A barra é um CONTAINER: o texto mora no botão de navegação dentro dela. Por isso
-      // o codegen aninha em vez de passar `label:` — é a forma que o pai expõe, e
-      // aplainar aqui geraria código que não compila no app.
-      codegen: (p) => 'ds.DilettaBottomApp.button(button: ds.DilettaNavigationButton('
-          'primary: ds.DilettaNavigationAction(label: ${_str(p['label'])}'
-          ', onPressed: onContinuar)'
-          '${_vazio(p['labelSecundario']) ? '' : ', secondary: ds.DilettaNavigationAction('
-              'label: ${_str(p['labelSecundario'])}, onPressed: onVoltar)'}'
-          '))',
+      // A barra é um CONTAINER: o texto mora no botão de navegação dentro dela. Por isso o codegen
+      // aninha em vez de passar `label:` — é a forma que o pai expõe, e aplainar aqui geraria código que
+      // não compila no app.
+      codegen: (p) => switch ('${p['variante']}') {
+        'defaultVariant' => 'ds.DilettaBottomApp.defaultVariant()',
+        'nav' => _navNoCodigo(p),
+        'keyboard' => 'ds.DilettaBottomApp.keyboard(keyboard: ds.DilettaKeyboard('
+            'onKey: aoTeclar, onBackspace: aoApagar))',
+        'buttonAndKeyboard' => 'ds.DilettaBottomApp.buttonAndKeyboard('
+            'button: ${_botaoDeNavegacaoNoCodigo(p)}'
+            ', keyboard: ds.DilettaKeyboard(onKey: aoTeclar, onBackspace: aoApagar))',
+        _ => 'ds.DilettaBottomApp.button(button: ${_botaoDeNavegacaoNoCodigo(p)})',
+      },
     );
 
-Widget _barraDeBaixoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) =>
-    DilettaBottomApp.button(
-      button: DilettaNavigationButton(
+/// As cinco factories que este produto usa. As duas de chat ficam fora por decisão do dono: o Bold não
+/// tem chat, e variante sem uso é desenho especulativo.
+const List<String> _variantesDaBarra = [
+  'defaultVariant',
+  'nav',
+  'button',
+  'keyboard',
+  'buttonAndKeyboard',
+];
+
+/// Um item da barra de navegação declarado no texto: `Rótulo` ou `Rótulo:iconeDoPai`.
+typedef _ItemDeNav = ({String rotulo, String? icone});
+
+List<_ItemDeNav> _itensDeNav(Object? cru) => [
+      for (final parte in '${cru ?? ''}'.split(','))
+        if (parte.trim().isNotEmpty)
+          if (parte.contains(':'))
+            (
+              rotulo: parte.split(':').first.trim(),
+              // Ícone que não existe no conjunto do pai é ícone que desenha caixa vazia. Cai pra nulo, e
+              // o item fica com o ponto neutro em vez de um buraco.
+              icone: DilettaIcons.all.containsKey(parte.split(':').last.trim())
+                  ? parte.split(':').last.trim()
+                  : null,
+            )
+          else
+            (rotulo: parte.trim(), icone: null),
+    ];
+
+int _indiceDeAba(Map<String, dynamic> p) {
+  final total = _itensDeNav(p['abas']).length;
+  final pedido = int.tryParse('${p['abaAtiva']}') ?? 0;
+  // Índice fora da lista é `RangeError` no aparelho. Cravar no último é a leitura mais próxima do que
+  // quem digitou quis dizer.
+  return total == 0 ? 0 : pedido.clamp(0, total - 1);
+}
+
+/// A barra de NAVEGAÇÃO no código gerado.
+///
+/// Sai em função separada porque montar identificador de ícone dentro de interpolação aninhada é como se
+/// escreve string quebrada sem perceber — o analisador pegou na primeira tentativa.
+String _navNoCodigo(Map<String, dynamic> p) {
+  final itens = _itensDeNav(p['abas']).map((i) {
+    final icone = i.icone == null ? "''" : 'ds.DilettaIcons.${i.icone}';
+    return 'ds.DilettaNavItem(icon: $icone, label: ${_str(i.rotulo)})';
+  }).join(', ');
+  return 'ds.DilettaBottomApp.nav(nav: ds.DilettaNav.items('
+      'items: const [$itens]'
+      ', activeIndex: ${_indiceDeAba(p)}'
+      ', onIndexChanged: aoTrocarAba))';
+}
+
+String _botaoDeNavegacaoNoCodigo(Map<String, dynamic> p) =>
+    'ds.DilettaNavigationButton(primary: ds.DilettaNavigationAction('
+    'label: ${_str(p['label'])}, onPressed: onContinuar)'
+    '${_vazio(p['labelSecundario']) ? '' : ', secondary: ds.DilettaNavigationAction('
+        'label: ${_str(p['labelSecundario'])}, onPressed: onVoltar)'}'
+    ')';
+
+Widget _barraDeBaixoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) {
+  DilettaNavigationButton botao() => DilettaNavigationButton(
         primary: DilettaNavigationAction(
           label: '${p['label']}',
           onPressed: aoTocar ?? () {},
@@ -488,8 +581,30 @@ Widget _barraDeBaixoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) =>
         secondary: _vazio(p['labelSecundario'])
             ? null
             : DilettaNavigationAction(label: '${p['labelSecundario']}', onPressed: () {}),
+      );
+  DilettaKeyboard teclado() => DilettaKeyboard(onKey: (_) {}, onBackspace: () {});
+
+  return switch ('${p['variante']}') {
+    'defaultVariant' => const DilettaBottomApp.defaultVariant(),
+    'nav' => DilettaBottomApp.nav(
+        nav: DilettaNav.items(
+          items: [
+            for (final i in _itensDeNav(p['abas']))
+              DilettaNavItem(
+                icon: i.icone == null ? '' : DilettaIcons.all[i.icone]!,
+                label: i.rotulo,
+              ),
+          ],
+          activeIndex: _indiceDeAba(p),
+          onIndexChanged: (_) {},
+        ),
       ),
-    );
+    'keyboard' => DilettaBottomApp.keyboard(keyboard: teclado()),
+    'buttonAndKeyboard' =>
+      DilettaBottomApp.buttonAndKeyboard(button: botao(), keyboard: teclado()),
+    _ => DilettaBottomApp.button(button: botao()),
+  };
+}
 
 /// O selo quântico — o primeiro bloco que vem de um componente NASCIDO no filho, e não da
 /// linguagem do pai. Declarar é publicar: ele aparece na paleta do compositor sem ninguém tocar
@@ -701,7 +816,7 @@ BlockDef _esqueleto() => BlockDef(
       type: 'esqueleto',
       ctor: 'ds.DilettaSkeleton.box',
       args: const {'largura': Arg.numero('width'), 'altura': Arg.numero('height')},
-      label: 'Esqueleto',
+      label: 'Esqueleto · Skeleton',
       props: const {
         'largura': PropDef('number'),
         'altura': PropDef('number'),
@@ -725,7 +840,7 @@ BlockDef _botaoDeIcone() => BlockDef(
         'tamanho': Arg.enumeracao('size', 'ds.DilettaIconButtonSize'),
         'marcador': Arg.bool('badge'),
       },
-      label: 'Botão de ícone',
+      label: 'Botão de ícone · IconButton',
       props: {
         'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
         'rotulo': const PropDef('text'),
@@ -797,7 +912,7 @@ BlockDef _interruptor() => BlockDef(
         'desabilitado': Arg.bool('disabled'),
         'rotulo': Arg.texto('semanticLabel'),
       },
-      label: 'Interruptor',
+      label: 'Interruptor · ToggleSwitch',
       props: {
         'ligado': const PropDef('bool'),
         'tamanho': PropDef('enum',
@@ -830,7 +945,7 @@ BlockDef _campoDeBusca() => BlockDef(
       acoes: const {'onChanged': 'aoBuscar'},
       ctor: 'ds.DilettaSearchInput',
       args: const {'placeholder': Arg.texto('placeholder')},
-      label: 'Campo de busca',
+      label: 'Campo de busca · SearchInput',
       props: const {'placeholder': PropDef('text')},
       defaults: () => {'placeholder': 'Buscar contato ou chave'},
       build: (p) => DilettaSearchInput(placeholder: '${p['placeholder']}'),
@@ -842,7 +957,7 @@ BlockDef _girando() => BlockDef(
       type: 'girando',
       ctor: 'ds.DilettaLoadingSpinner',
       args: const {'tamanho': Arg.enumeracao('size', 'ds.DilettaSpinnerSize')},
-      label: 'Carregando',
+      label: 'Carregando · LoadingSpinner',
       props: {
         'tamanho': PropDef('enum',
             options: DilettaSpinnerSize.values.map((e) => e.name).toList()),
@@ -861,7 +976,7 @@ BlockDef _ilustracao() => BlockDef(
         'arte': Arg.enumeracao('illustration', 'ds.DilettaIllustration'),
         'tamanho': Arg.enumeracao('size', 'ds.DilettaIllustrationSize'),
       },
-      label: 'Ilustração',
+      label: 'Ilustração · Illustration',
       props: {
         'arte': PropDef('enum', options: _nomesDeIlustracao),
         'tamanho': PropDef('enum',
@@ -888,7 +1003,7 @@ BlockDef _estadoVazio() => BlockDef(
         'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
         'acao': Arg.texto('actionLabel'),
       },
-      label: 'Estado vazio',
+      label: 'Estado vazio · EmptyState',
       props: {
         'titulo': const PropDef('text', bindable: true, dartType: 'String'),
         'legenda': const PropDef('multiline', bindable: true, dartType: 'String'),
@@ -1004,7 +1119,7 @@ BlockDef _cartaoDeAcesso() => BlockDef(
         'label': Arg.texto('label'),
         'estado': Arg.enumeracao('state', 'ds.DilettaQuickAccessState'),
       },
-      label: 'Cartão de acesso rápido',
+      label: 'Cartão de acesso rápido · QuickAccessCard',
       props: {
         'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
         'label': const PropDef('text', bindable: true, dartType: 'String'),
@@ -1035,7 +1150,7 @@ BlockDef _caixaDeSelecao() => BlockDef(
         'descricao': Arg.texto('description'),
         'variante': Arg.enumeracao('variant', 'ds.DilettaCheckboxVariant'),
       },
-      label: 'Caixa de seleção',
+      label: 'Caixa de seleção · Checkbox',
       props: {
         'marcado': const PropDef('bool'),
         'label': const PropDef('text'),
@@ -1081,7 +1196,7 @@ BlockDef _comprovante() => BlockDef(
       },
       // As linhas e as seções vêm de dado: um comprovante é o que o backend devolveu.
       acoes: const {'rows': 'linhasDoComprovante', 'sections': 'secoesDoComprovante'},
-      label: 'Comprovante',
+      label: 'Comprovante · Receipt',
       props: {
         'titulo': const PropDef('text', bindable: true, dartType: 'String'),
         'carimbo': const PropDef('text', bindable: true, dartType: 'String'),
@@ -1255,7 +1370,7 @@ BlockDef _criterios() => BlockDef(
       type: 'criterios',
       ctor: 'ds.DilettaCriteriaList',
       acoes: const {'items': 'criteriosDaSenha'},
-      label: 'Critérios',
+      label: 'Critérios · CriteriaList',
       props: const {'itens': PropDef('multiline')},
       defaults: () => {
         'itens': 'ok | Mínimo 8 caracteres\nok | Uma letra maiúscula\npending | Um número',
@@ -1321,7 +1436,7 @@ BlockDef _expansivel() => BlockDef(
       type: 'expansivel',
       ctor: 'ds.DilettaExpansionTile',
       args: const {'titulo': Arg.texto('title'), 'aberto': Arg.bool('initiallyExpanded')},
-      label: 'Expansível',
+      label: 'Expansível · ExpansionTile',
       props: const {
         'titulo': PropDef('text'),
         'conteudo': PropDef('multiline'),
@@ -1370,7 +1485,7 @@ BlockDef _cartaoDeDestaque() => BlockDef(
       },
       // A cor da marca do cartão é do PRODUTO, e vem como identificador do tema no código gerado.
       acoes: const {'brandColor': 'corDaMarca'},
-      label: 'Cartão de destaque',
+      label: 'Cartão de destaque · FeatureCard',
       props: {
         'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
         'titulo': const PropDef('text', bindable: true, dartType: 'String'),
@@ -1408,7 +1523,7 @@ BlockDef _cartaoDeDestaque() => BlockDef(
 /// deste produto usa a casca com barra de navegação simples: voltar (ou fechar) e título.
 BlockDef _cascaDeTopo() => BlockDef(
       type: 'cascaDeTopo',
-      label: 'Casca de topo',
+      label: 'Casca de topo · TopAppBar',
       props: const {
         'titulo': PropDef('text', bindable: true, dartType: 'String'),
         'esquerda': PropDef('enum', options: ['voltar', 'fechar', 'nada']),
@@ -1506,7 +1621,7 @@ BlockDef _teclado() => BlockDef(
       type: 'teclado',
       ctor: 'ds.DilettaKeyboard',
       acoes: const {'onKey': 'aoTeclar', 'onBackspace': 'aoApagar'},
-      label: 'Teclado numérico',
+      label: 'Teclado numérico · Keyboard',
       props: const {},
       defaults: () => {},
       build: (p) => DilettaKeyboard(onKey: (_) {}, onBackspace: () {}),
