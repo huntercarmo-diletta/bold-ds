@@ -20,6 +20,42 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.6.0] — 2026-08-03
+
+### Corrigido — **o copiar tinha perdido o haptic**, e nada na tela dizia isso
+
+- A adaptação de `BoldCopyButton` → `BoldCopiar` deixou cair
+  `HapticFeedback.selectionClick()`, e a doc do componente listou quatro mudanças sem citar esta.
+  **Era a única chamada de `HapticFeedback` do app inteiro** (`grep`: 1 ocorrência, nesse widget);
+- copiar não muda nada na tela além de um aviso de 1.8s **atrás do dedo** — sem o retorno tátil,
+  quem copiou com o polegar em cima do ícone não sabe se copiou. Defeito que só o dedo percebe é
+  defeito que nenhum golden pega;
+- o gate agora é o dedo: `o toque VIBRA` espiona `SystemChannels.platform` e exige
+  `HapticFeedback.vibrate` depois do toque. **Fica no filho e não sobe pro pai**: o DS pai tem zero
+  haptics, e um caso não vira família — é a mesma régua que a `ds v0.25.1` usou pro `info`.
+
+### Adicionado — **`BoldDinheiro.emReais`** volta, e a medição que a tirou estava errada
+
+- Ela saiu na auditoria com a justificativa *"zero consumidor — os campos de dinheiro guardam
+  `_cents` (int)"*. Isso vale pro campo de valor GRANDE. Os campos **bordados** leem o texto do
+  controller de volta, e são **10 pontos de uso** no app: a tela de valor do Pix, os quatro
+  acréscimos da cobrança com vencimento, o valor da cobrança em três fluxos e os limites;
+- sem ela, o custo da adoção era `centavosDe(t) / 100.0` escrito em dez telas — a máscara
+  reimplementada por fora, que é o defeito que este componente existe pra não ter;
+- **`centavosDe` continua sendo a preferida** e a doc diz por quê (inteiro não perde centavo por
+  arredondamento). `emReais` é `centavosDe/100`, e o teste amarra as duas pra não virarem duas
+  contas que divergem numa borda;
+- **minor**: símbolo novo, nada mudou de forma. Quem adota não muda uma linha.
+
+### Sobre como as duas apareceram
+
+As duas saíram da **adoção rodando no app de verdade** (fase B1b: pontos de página, copiar, abas,
+segmentos, saldo, escada de alçadas, selo quântico, resumo da transação, autorização pendente). Nenhuma
+das duas era visível de dentro deste repo: a primeira porque teste de widget não tem dedo, a segunda
+porque a medição olhou o campo errado. **Adoção é a única leitura que enxerga as duas.**
+
+Gates: DS analyze limpo e **107 testes** · catálogo limpo e **66**.
+
 ## [0.5.0] — 2026-08-03
 
 ### Alterado — **`ds-diletta` v0.24.4 → v0.26.0**, e a baseline de specs zerou por conserto do pai

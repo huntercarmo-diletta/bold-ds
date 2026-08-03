@@ -51,13 +51,21 @@ void main() {
     // Dinheiro se guarda em inteiro: ponto flutuante é como se perde um centavo por
     // arredondamento, e num extrato isso aparece.
     //
-    // Havia um `emReais(String) → double` ao lado, e ele SAIU na auditoria: zero consumidor, e medindo o
-    // app o caminho dele não existe — os campos de dinheiro guardam `_cents` (int) e emitem
-    // `_cents / 100.0` na hora de avisar a tela. Ninguém nunca lê a string formatada de volta pra double.
-    // API que só o próprio teste chama é API que ainda não foi pedida.
+    // O `emReais(String) → double` ao lado SAIU na auditoria por "zero consumidor" e VOLTOU na
+    // v0.6.0: a medição olhou só o campo de valor grande (que guarda `_cents`) e não os campos
+    // bordados, que leem o texto do controller de volta — 10 pontos de uso no app.
     expect(BoldDinheiro.centavosDe(r'R$ 2.500,00'), 250000);
     expect(BoldDinheiro.centavosDe('texto sem número'), 0);
     expect(BoldDinheiro.centavosDe(''), 0);
+  });
+
+  test('a volta em reais é a de centavos dividida, e não uma segunda conta', () {
+    // Duas contas pro mesmo valor é como as duas divergem numa borda. Esta amarra as duas.
+    for (final texto in [r'R$ 2.500,00', r'R$ 0,01', 'texto sem número', '']) {
+      expect(BoldDinheiro.emReais(texto), BoldDinheiro.centavosDe(texto) / 100.0,
+          reason: 'emReais tem que ser centavosDe/100, não uma máscara própria');
+    }
+    expect(BoldDinheiro.emReais(r'R$ 2.500,00'), 2500.0);
   });
 
   test('ida e volta fecham em qualquer valor', () {

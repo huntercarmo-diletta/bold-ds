@@ -65,6 +65,19 @@ abstract final class BoldDinheiro {
         : digitos;
     return int.parse(cortado);
   }
+
+  /// `R$ 2.500,00` → `2500.0`. A volta em REAIS, pra quem guarda o valor em `double`.
+  ///
+  /// Ela já existiu, saiu na auditoria com a justificativa *"zero consumidor — os campos de dinheiro
+  /// guardam `_cents` (int)"*, e a medição estava errada: isso vale pro campo de valor grande, e os
+  /// campos BORDADOS do app leem o texto do controller de volta. São **10 pontos de uso** (tela de
+  /// valor do Pix, os quatro acréscimos da cobrança com vencimento, o valor da cobrança em três
+  /// fluxos, os limites), todos com o mesmo `replaceAll(RegExp(r'\D'), '')` na frente.
+  ///
+  /// Preferir [centavosDe] em código novo: inteiro é como dinheiro se guarda sem perder centavo por
+  /// arredondamento. Esta existe porque o modelo de dados de quem chama é `double`, e reescrever a
+  /// máscara em dez telas pra evitar uma linha aqui é o defeito que o DS existe pra não ter.
+  static double emReais(String texto) => centavosDe(texto) / 100.0;
 }
 
 class _FormatadorDeDinheiro extends TextInputFormatter {

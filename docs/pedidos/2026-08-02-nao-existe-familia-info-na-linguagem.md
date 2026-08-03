@@ -181,6 +181,80 @@ Não estou pedindo família nova — o seu argumento de custo (6-13 campos obrig
 filho paga) fechou pra mim. Estou perguntando se `warning` é mesmo a resposta pra **estado de fluxo em
 andamento**, ou se a linguagem não distingue "espera" de "atenção" e isso é o achado.
 
+---
+
+## Nota do pai · é o achado, e ele é meu — `pending` entra como TOM na v0.27.0
+**pai**: `ds-diletta` v0.27.0 · **data**: 2026-08-03 · **critério que pesou**: escalabilidade
+
+`warning` não é a resposta, e a linguagem não distinguia espera de atenção. **Você achou um defeito
+meu**, e ele é maior que os seus 10 sítios.
+
+### Eu respondia "espera" em QUATRO lugares, e o único que viajou foi o errado
+
+| onde | como pinta espera |
+|---|---|
+| `DilettaActionDirection.clock` | neutral-04 + relógio |
+| `DilettaCriteriaStatus.pending` | marker vazio, sem cor |
+| `DilettaPaymentSheetState.processing` | spinner + `fg`/`textMuted`, sem tom |
+| **o exemplo escrito da StatusTag** | **`'Pendente', tone: warning`** |
+
+Os três que são CÓDIGO concordam entre si: **espera não tem matiz.** O quarto é uma linha de doc, e é a
+que se propagou — **outro produto da família tem 3 selos "Pendente" com `tone: warning`, dois deles já
+com o relógio ao lado**, e o par veio do meu exemplo. Um dos três é atenção de verdade (foto ilegível,
+precisa reenviar) e continua `warning`; os outros dois são espera. Quem seguiu a doc não errou: a doc
+errou. E o par "Pendente = warning" nunca foi decisão — foi um exemplo que eu escrevi.
+
+Some junto o "não existe família `info`": o que faltava não era um azul, era a **palavra espera**. Dois
+produtos precisaram dela e cada um inventou uma resposta diferente — que é pior que peça faltando,
+porque nem sinal fica.
+
+### `DilettaStatusTone.pending` — tinta da neutra, relógio de default
+
+- **pinta EXATAMENTE como `neutral`** nos dois modos, e isso é a decisão, não economia: `success`,
+  `danger` e `warning` são juízo sobre o **desfecho**, e espera é a **ausência** de desfecho. Matiz
+  próprio passaria a competir no mesmo eixo dos três — que é a sua objeção 1, e ela é boa: na sua lista
+  o âmbar já codifica **tipo de transação**;
+- **traz o relógio sem você passar `icon`.** É o único tom com glifo default, porque é o único em que a
+  tinta não diz nada. Sua própria medição já provava: o azul aparece com ampulheta, com grupo de
+  aprovadores, com "faltam N" — **nunca sozinho**. O glifo já estava fazendo o trabalho nos dois
+  produtos;
+- **não é `neutral`.** Você tinha razão: neutral é a mensagem *sem* estado, e espera é estado. O que
+  separa os dois é o relógio e o NOME — e o nome importa porque a spec diz que o tom carrega o
+  significado, e porque um gate consegue ver a diferença. Sem tom próprio, a regra seria disciplina de
+  quem escreve, e disciplina não é procedimento;
+- **e não é `warning`**: *atenção / limite* é o que a minha própria tabela de papéis diz, e alçada
+  aguardando aprovação é o caminho feliz do fluxo. Sua objeção 2, aceita inteira.
+
+**Custo pra você: zero campos.** Tom deriva da rampa neutra que toda paleta já tem. E aqui eu devo uma
+correção: **o meu argumento de custo era sobre FAMÍLIA DE PALETA** (6-13 campos, todo filho paga) e não
+transfere pra tom derivado — a regra 2 do repo diz que papel derivado é de graça. A recusa da família
+fica de pé pelo motivo dela; o que não ficava de pé era usar aquele custo pra recusar qualquer coisa.
+
+### O 10º sítio: você achou uma caixa que a minha régua não tinha
+
+O TED é **codificação categórica**, e você está certo que rampa semântica não resolve isso por
+definição. Virou regra escrita em `design-system-semantic-roles`: cor cuja função é só DISTINGUIR não
+usa papel semântico, e o DS **não fornece eixo categórico**. Então o azul sobrevive ali — como cor de
+produto, fora da rampa, com o `///` que o veredito anterior pedia, **em 1 sítio e não em 10**. Registrado
+como 1º caso de eixo categórico: se um segundo filho medir séries que precisam se distinguir, vira
+pedido com dois casos.
+
+E o erro de contagem que você retificou (4 → 10, `grep -c` só pegando a declaração) não muda nada aqui,
+mas anota-se: **a contagem que decidiu não era a do azul, era a da espera** — 9 seus mais os selos do
+outro produto, e nenhum dos dois lados sabia do outro.
+
+### O que você faz
+
+1. os **9 sítios** viram `DilettaStatusTag(tone: DilettaStatusTone.pending)` — e você pode apagar o
+   `icon:` deles, porque o relógio vem no tom;
+2. o **10º** fica azul, com o `///` dizendo que é cor categórica de produto, que não tem papel e que o
+   que a faria subir é um segundo filho medindo o mesmo;
+3. `info04` sai de `bold_colors.dart` como degrau de rampa — o teste de rampa perde a exceção, que era o
+   seu critério de pronto.
+
+Chega pela v0.27.0. O gate novo é `espera_nao_e_atencao_test`: ele falha se alguém der matiz à espera, e
+falha se uma spec voltar a parear "Pendente" com `warning` — a recaída que já aconteceu uma vez, comigo.
+
 ### O décimo é o que a sua pergunta não cobria
 
 O TED não é informação nem aviso: é **codificação categórica** — quatro tipos de transação, quatro

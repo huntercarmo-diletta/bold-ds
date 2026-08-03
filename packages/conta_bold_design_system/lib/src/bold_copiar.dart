@@ -57,6 +57,11 @@ class _BoldCopiarState extends State<BoldCopiar> {
 
   Future<void> _copiar() async {
     await Clipboard.setData(ClipboardData(text: widget.texto));
+    // O toque VIBRA, e isto voltou por medição: era a única chamada de `HapticFeedback` do app
+    // inteiro, e a adaptação a tinha deixado cair sem dizer. Copiar não muda nada na tela além de
+    // um aviso de 1.8s — sem o retorno tátil, quem copiou com o dedo em cima do ícone não sabe se
+    // copiou.
+    await HapticFeedback.selectionClick();
     if (!mounted) return;
     widget.aoCopiar?.call();
     setState(() => _copiado = true);

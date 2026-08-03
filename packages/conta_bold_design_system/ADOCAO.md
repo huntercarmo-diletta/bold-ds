@@ -688,13 +688,16 @@ O véu é o que mascara o conteúdo rolando por baixo do notch, e ele tem **dois
 adotou ainda", e não "ninguém precisa" — é a mesma leitura que o pai faz do lado dele: *num pai, quem
 chama a API mora fora.*
 
-**E um saiu.** `BoldDinheiro.emReais(String) → double` tinha um uso: o próprio teste. Medindo o app, o
-caminho dele **não existe** — os campos de dinheiro guardam `_cents` (int) e emitem `_cents / 100.0` na
-hora de avisar a tela; ninguém nunca lê a string formatada de volta pra double. `centavosDe` fica, porque é
-a volta que o app faz de verdade.
+**Um saiu — e VOLTOU na `v0.6.0`, porque a medição estava errada.** `BoldDinheiro.emReais(String) →
+double` saiu com a leitura *"tinha um uso: o próprio teste; os campos de dinheiro guardam `_cents`
+(int)"*. Isso é verdade do campo de valor GRANDE (`BoldCurrencyField`), e foi só nele que eu olhei. Os
+campos **bordados** fazem o contrário: leem o texto do controller de volta. A adoção de 03/08 contou
+**10 pontos de uso** — tela de valor do Pix, os quatro acréscimos da cobrança com vencimento, o valor da
+cobrança em três fluxos, os limites.
 
-> **API que só o próprio teste chama é API que ainda não foi pedida.** E o teste dela dava a impressão
-> oposta: cobertura verde num caminho que produto nenhum percorre.
+> **A pergunta "quem chama isso?" respondida num só ponto de uso é uma amostra, não uma medição.** O
+> `grep` que eu rodei achava `_cents`; o que faltava era rodar o outro — `.parse(`, o nome antigo, que
+> aparecia dez vezes.
 
 ---
 

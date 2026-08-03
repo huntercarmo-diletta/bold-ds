@@ -53,6 +53,29 @@ void main() {
       expect(t.widget<AnimatedOpacity>(meuAviso()).opacity, 0);
     });
 
+    testWidgets('o toque VIBRA, e é a única chamada tátil do produto', (t) async {
+      // A adaptação tinha deixado o haptic cair em silêncio — nada na tela muda quando ele falta,
+      // então só o dedo percebe. Este teste é o dedo.
+      final chamadas = <String>[];
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.platform, (c) async {
+        chamadas.add(c.method);
+        return null;
+      });
+      addTearDown(() => TestDefaultBinaryMessengerBinding
+          .instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(SystemChannels.platform, null));
+
+      await t.pumpWidget(montar(const BoldCopiar(
+        texto: 'chave-pix-123',
+        rotuloDeAcessibilidade: 'Copiar chave',
+      )));
+      await t.tap(meuToque());
+      await t.pump();
+
+      expect(chamadas, contains('HapticFeedback.vibrate'));
+    });
+
     testWidgets('dois toques rápidos NÃO cortam o segundo aviso', (t) async {
       // O bug da versão antiga: cada toque criava um `Timer` sem cancelar o anterior, então o
       // primeiro apagava o aviso do segundo ~1.8s antes da hora.
