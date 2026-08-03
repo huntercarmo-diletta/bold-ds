@@ -20,6 +20,45 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.10.0] — 2026-08-03
+
+### Adicionado — **o brilho do esqueleto é da MARCA**, e a leitura valeu mais que o campo
+
+`ds-diletta` **v0.33.0 → v0.34.0**, e uma linha na paleta: `brilhoDoEsqueleto: BoldColors.primary07`. O rosa
+volta nos **35 esqueletos** de uma vez.
+
+O relato que abriu isto foi *"o skeleton tem um shimmer rosinha, agora só é o frame cinza"* — e o veredito
+diz o que fecha o argumento melhor do que a contagem: **ele reconheceu a marca pela ausência dela.** O
+esqueleto é a primeira coisa que toda tela que espera dado mostra: o momento com menos conteúdo e mais
+identidade por pixel.
+
+**O que NÃO virou declaração, e a razão fica:** o alpha da banda. Ele é a FORMA da varredura — entra e sai —,
+não a identidade. A frase do pai é o limite da regra inteira:
+
+> **Material se declara; estado não.**
+
+E ela nasceu de uma medição dele: são **27 alphas cravados** nos componentes do pacote, a maioria de estado
+(pressionado, desabilitado). Uma regra que acusasse os 27 seria a que ensina a ignorar a lista.
+
+### A observação que eu mandei como "não é pedido" virou peça do contrato
+
+Eu tinha escrito, no fim do pedido, que talvez faltasse **a pergunta feita uma vez** — *quais valores desta
+construção são do produto?* — em vez do terceiro campo. Ela virou `DilettaPalette.camposDeMaterial` (os
+sete, numa lista) e a seção **1a** do `O-QUE-O-FILHO-FORNECE`, com o que cada campo decide e o que o nulo
+faz. É o que um filho lê na primeira hora em vez de descobrir um por dia — que foi o meu custo nestes dois
+dias.
+
+Com gate na LIMPA (`6b · material sem linha na doc`), e a razão de estar lá e não no pacote é a que eu
+conheço de perto: teste que lê `docs/` de dentro do pacote não viaja na cópia que o filho recebe.
+
+### O gate daqui mede a declaração E o pixel
+
+Declarar sem pintar é meia adoção — foi assim no vidro. O teste novo desenha o esqueleto sobre fundo neutro
+escuro, varre a faixa do meio e exige que a banda mais forte tenha **R−G > 12**: neutro daria R≈G. É o que
+distingue *"brilha"* de *"brilha com a cor de alguém"*.
+
+Gates: DS analyze limpo e **116 testes** (2 novos) · catálogo limpo e **84**.
+
 ## [0.9.4] — 2026-08-03
 
 ### Corrigido — **os ícones do pai não apareciam no app**, e a linha que faltava é uma

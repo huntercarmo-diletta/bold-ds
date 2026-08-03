@@ -82,3 +82,56 @@ os três campos somados.
   claramente *"não anima sozinha"*. Isso já está no app, e o brilho voltou — **neutro**;
 - gate de fonte novo: **todo `DilettaSkeleton` tem um `DilettaShimmer` acima**. Esqueleto solto compila,
   roda e não avisa — é caixa cinza parada, e nada falha.
+
+---
+
+## Veredito · ENTRA. E a sua LEITURA vale mais que o campo — ela virou a lista
+**pai**: `ds-diletta` v0.34.0 · **data**: 2026-08-03 · **critério que pesou**: aplicação
+
+```dart
+DilettaPalette(… brilhoDoEsqueleto: BoldColors.primary07)   // nulo ⇒ o neutro de hoje
+```
+
+Exatamente a forma que você pediu, e pelo motivo que você escreveu: nulo mantendo o comportamento é o que faz
+isto não cobrar nada de quem não pediu.
+
+**A frase que decide não é a contagem.** 35 esqueletos é o alcance, mas o que fecha é o relato do dono do
+produto: *"o skeleton tem um shimmer rosinha, agora só é o frame cinza"* — **ele reconheceu a marca pela
+ausência dela.** E a sua leitura do porquê está certa: o esqueleto é a primeira coisa que a tela mostra em
+toda tela que espera dado, o momento com menos conteúdo e mais identidade por pixel.
+
+Uma coisa que ficou no componente e não virou declaração: **o alpha.** Ele é a FORMA da varredura — banda que
+entra e sai —, não a identidade. O que é do produto é a cor, e é ela que você declara.
+
+### A sua observação sobre a CLASSE, e o que eu fiz com ela
+
+Você disse que não era pedido. É a melhor parte do arquivo:
+
+> *"talvez o que esteja faltando não seja o terceiro campo, e sim a PERGUNTA feita uma vez — quais valores
+> desta construção são do produto?"*
+
+Entrou `DilettaPalette.camposDeMaterial` — os **sete**, numa lista — e a seção **1a** do
+`O-QUE-O-FILHO-FORNECE`, com a tabela do que cada um decide e o que o nulo faz. É o que um filho lê na
+primeira hora de adoção em vez de descobrir um por dia, que foi o seu custo real nestes dois dias.
+
+**E o limite fica declarado, porque a sua ideia da regra geral não sobrevive à medição:** são **27 alphas
+cravados** nos componentes deste pacote, e a maioria é **estado** — opacidade de pressionado, de
+desabilitado. Uma regra que acusasse os 27 seria a que ensina a ignorar a lista, e você conhece essa frase
+melhor que eu. O que distingue não é a forma do valor, é o papel dele:
+
+> **Material se declara; estado não.**
+
+Então não é varredura, é lista — e o gate garante que a lista não fica só no código: `6b · MATERIAL SEM LINHA
+NA DOC`, na limpa. Campo de material novo sem linha na tabela reprova.
+
+**Por que na limpa e não no pacote:** um teste que lesse `docs/` de dentro do pacote não viajaria na cópia
+que você recebe, e essa classe já derrubou o gate de publicação de um filho **quatro vezes**. A checagem é de
+repo, e no repo os dois arquivos existem por construção.
+
+### O que você faz
+
+1. `brilhoDoEsqueleto: BoldColors.primary07` na paleta — o rosa volta nos 35 de uma vez;
+2. o seu gate novo (`todo DilettaSkeleton tem um DilettaShimmer acima`) fica, e ele é bom: **esqueleto solto
+   compila, roda e não avisa** é a descrição exata de defeito que só um gate acha.
+
+Chega pela tag **v0.34.0**.

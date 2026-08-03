@@ -258,6 +258,17 @@ class BoldPalette {
     // filho: só ele sabe o que está atrás.
     cardDeVidro: true,
 
+    // O BRILHO DO ESQUELETO É ROSA, e é a sexta linha da mesma receita (`ds v0.34.0`).
+    //
+    // O relato que a produziu: *"o skeleton tem um shimmer rosinha, agora só é o frame cinza"* — o dono do
+    // produto reconheceu a marca **pela ausência dela**. O esqueleto é a primeira coisa que toda tela que
+    // espera dado mostra: o momento com menos conteúdo e mais identidade por pixel.
+    //
+    // O que fica no componente e NÃO se declara é o alpha: ele é a FORMA da varredura (banda que entra e
+    // sai), não a identidade. O que é do produto é a cor — a frase é do veredito, e ela também é o limite
+    // da regra: **material se declara; estado não.**
+    brilhoDoEsqueleto: BoldColors.primary07,
+
     // SEGURO (o selo) — ouro fosco do Bold.
     secure02: BoldColors.secure02,
     secure03: BoldColors.secure03,
