@@ -20,6 +20,32 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.5.0] — 2026-08-03
+
+### Alterado — **`ds-diletta` v0.24.4 → v0.26.0**, e a baseline de specs zerou por conserto do pai
+
+- Três releases do pai num `ref:`: `v0.25.0` (a rampa é a fonte), `v0.25.1` (o `info` registrado, sem
+  código) e `v0.26.0` (5 specs novas, os três `cpfSeguro*` removidos, `DilettaTextLinkTone.cpf` →
+  `.brand`);
+- **o ganho que aparece aqui é a spec do teclado.** `keyboard` entrou nas 5 da `v0.26.0` — o conjunto do
+  pai foi de 71 pra 76 — e a única linha da minha
+  `baselineDeSpecsQueFaltam` (`PlugueDoDs.contratos['teclado']`) virou **fantasma na hora**: o teste
+  anti-fantasma reprovou no minuto seguinte ao `pub get`, antes de qualquer outro. A baseline agora é
+  `<String>{}`, e as duas do repo estão vazias;
+
+  > Baseline que só encolhe é baseline. A que cresce é dívida com outro nome.
+
+- **as duas metades da v0.25.0 já estavam feitas**: `BoldColors` saiu na minha `v0.3.0`, do veredito
+  **ENTRA COMO FORMA** do mesmo pedido. Subir o `ref:` só trouxe a regra pro lado de onde ela é cobrada;
+- **minor e não major, e o motivo é medição e não conveniência.** A tabela acima diz *"símbolo removido →
+  major"*, e três símbolos saíram da superfície que este pacote reexporta. Nenhum deles é meu, todos
+  tinham janela aberta desde **30/07** com o caminho de cada arquivo, e a contagem de hoje é **zero
+  chamadas** nos três consumidores — DS, catálogo e `app-newbold`. `DilettaTextLinkTone.cpf` segue
+  resolvendo `@Deprecated` até a `v0.27.0` do pai, então nem call site que existisse quebraria. **Quem
+  adota não muda uma linha** — e é isso que a coluna da tabela promete, não o número.
+
+Gates: DS analyze limpo e **105 testes** · catálogo limpo e **66**.
+
 ## [0.4.0] — 2026-08-02
 
 ### Corrigido — **a escolha da pessoa vencia ou não o fundo da tela, dependendo do repo**, e a minha ordem era a errada

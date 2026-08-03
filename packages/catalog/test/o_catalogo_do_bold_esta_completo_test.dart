@@ -19,18 +19,17 @@ void main() {
       ? codigoDeBlocoDeclarado(def, def.defaults())
       : def.codegen(def.defaults());
 
-  /// UM componente do pai sem spec, e a baseline encolheu porque o pedido foi atendido.
+  /// ZERO componente do pai sem spec, e a baseline morreu do jeito que devia.
   ///
   /// Eram três. `DilettaDialog` e `DilettaExpansionTile` entraram na **v0.19.0 do DS** — o conjunto
   /// foi a 71 —, e o teste anti-fantasma abaixo é quem cobrou a limpeza: as duas linhas viraram
   /// acusação de defeito já consertado no minuto em que eu subi o `ref`.
   ///
-  /// Sobra o teclado: `DilettaKeyboard` também não está nas 71. O método continua o mesmo — a lista
-  /// derivada do meu registro anexada ao pedido, e uma linha nova a cada bloco sobre componente
-  /// descoberto, em vez de um aviso por componente.
-  const baselineDeSpecsQueFaltam = {
-    "bloco-sem-contrato|PlugueDoDs.contratos['teclado']",
-  };
+  /// O teclado foi a última. `keyboard` entrou nas **5 specs da v0.26.0 do DS** — o conjunto foi a
+  /// 76 —, e de novo foi o anti-fantasma que cobrou: subir o `ref` de v0.24.4 pra v0.26.0 deixou esta
+  /// linha vermelha antes de qualquer outra coisa. Baseline que só encolhe é baseline; a que cresce
+  /// é dívida com outro nome.
+  const baselineDeSpecsQueFaltam = <String>{};
 
   test('a baseline NÃO tem fantasma', () {
     // Ela já me pegou duas vezes hoje: uma com 13 chaves inventadas e uma com 6 que o pai consertou.
