@@ -20,6 +20,37 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.7.1] — 2026-08-03
+
+### Corrigido — o **"✎ Editar tela" era um botão morto**, e faltava o fio no meio
+
+Achado clicando, não lendo: o dono do produto abriu a aba Telas, clicou em editar e **nada aconteceu**.
+Nenhum erro, nada no console, nenhuma aba trocada — o pior modo de falhar que existe.
+
+As duas metades estavam prontas desde sempre:
+
+- o board do pai faz a parte dele: `ComposerInbox.requestEditSpec` guarda a tela e chama `openBuilder`;
+- `openBuilder` é gancho da **casca do filho**, e com razão — quem sabe o id da aba do compositor é quem
+  declara as abas. Eu nunca o pluguei, e nunca declarei `navegacao:` no `CatalogoConfig`. A caixa de
+  entrada do compositor enchia em silêncio.
+
+Entraram as duas linhas que faltavam: `final nav = NavegacaoDoCatalogo()` + `navegacao: nav` na config, e
+`ComposerInbox.instance.openBuilder = () => nav.abrir('montar')`.
+
+> É a MESMA classe dos 6 campos calados do plugue de conteúdo, um nível acima: **capacidade pronta nos dois
+> lados e sem o fio no meio.** A `v0.7.0` declarou o alvo e o transporte; sem esta, não havia como chegar
+> na tela pra editar.
+
+### O gate mede o fio de ponta a ponta
+
+`o_editar_tela_abre_o_compositor_test` — pede a edição pelo mesmo canal que o board usa
+(`requestEditSpec` com a spec da home) e exige quatro coisas: que a config declare o canal, que o gancho
+esteja plugado, que o destino pedido seja **uma aba que existe** (`'montar'`, e o id vem da lista de abas,
+não de uma string solta) e que a tela chegue na caixa como SPEC — por código abriria um bloco sem preview.
+Mais um controle que reprova de propósito.
+
+Gates: catálogo analyze limpo e **83 testes** · DS **107**.
+
 ## [0.7.0] — 2026-08-03
 
 ### Adicionado — **editar tela no compositor e SALVAR NO REPO**, e o arquivo virou dois

@@ -32,10 +32,28 @@ void main() {
 /// O `id` é CONTRATO, não rótulo — ele entra na URL (`#componentes/...`), então mudar
 /// quebra link salvo. A ordem da barra é a ordem daqui, e o pai não reorganiza: ele não
 /// tem lista de abas, logo não pode mexer na casa do filho num upgrade.
-CatalogoConfig configDoCatalogoDoBold() => CatalogoConfig(
+CatalogoConfig configDoCatalogoDoBold() {
+  // O CANAL DE NAVEGAÇÃO, e sem ele o "✎ Editar tela" era um botão morto.
+  //
+  // Achado clicando: o dono do produto abriu a aba Telas, clicou em editar e **nada aconteceu**. O board
+  // do pai faz a parte dele — `ComposerInbox.requestEditSpec` guarda a tela e chama `openBuilder`. Só que
+  // `openBuilder` é um gancho que a CASCA do filho pluga, e eu nunca o pluguei: a tela ia pra caixa de
+  // entrada do compositor e ninguém trocava de aba. A caixa enchia em silêncio.
+  //
+  // É a mesma classe de falta dos 6 campos calados do plugue de conteúdo, um nível acima: **capacidade
+  // pronta nos dois lados e sem o fio no meio.** E o modo de falhar é o pior — nada de erro, nada no
+  // console, um clique que não faz nada.
+  //
+  // O `'montar'` é o id da aba do compositor, declarado logo abaixo. Id é contrato: ele entra na URL, e é
+  // por ele que o board pede a aba.
+  final nav = NavegacaoDoCatalogo();
+  ComposerInbox.instance.openBuilder = () => nav.abrir('montar');
+
+  return CatalogoConfig(
       titulo: 'Conta BOLD · DS Catalog',
       marca: 'BOLD · Design System',
       abaInicial: 'fundamentos',
+      navegacao: nav,
       // A FONTE DO PRODUTO no chrome, e ela faltava desde o primeiro dia.
       //
       // `BoldFonts` tinha ZERO consumidores neste repo: o catálogo publicado mostrava um DS cuja
@@ -129,7 +147,8 @@ CatalogoConfig configDoCatalogoDoBold() => CatalogoConfig(
           constroi: (_) => const _AbaConformidade(),
         ),
       ],
-    );
+  );
+}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // A aba de COMPONENTES e a de SPECS não moram mais aqui
