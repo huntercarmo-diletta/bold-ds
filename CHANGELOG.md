@@ -20,6 +20,30 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.9.1] — 2026-08-03
+
+### Alterado — as duas listas da home são CARD, e o print que pediu isso era de um bundle velho
+
+O dono do produto mandou print dizendo *"o card ainda tá fill"*. Medi antes de mexer, e o print **não era da
+build atual**: ele mostrava o rodapé com o CTA rosa "Continuar", que só existia até a `v0.8.0` — de lá pra cá
+a home mostra a barra de abas. O navegador dele estava servindo bundle em cache por um **service worker
+registrado antes** de eu tirar o service worker: a remoção só vale pra quem carrega a página de novo, e um SW
+já registrado continua servindo o que tem.
+
+O que a build atual desenha, medido na árvore em vez de no olho: **1 `DilettaCardSurface`** e **4
+`BackdropFilter`** na home (o saldo, a casca de topo, a barra de abas e o card de lista). O card É vidro.
+
+E o print mostrou uma coisa REAL: a lista de ATALHOS não tinha card nenhum (`idioma: menu` desenha rows
+soltas), então ela e a lista de baixo apareciam com materiais diferentes na mesma tela. As duas passaram a ser
+`carded` — no app aquela seção é uma grade de cartões de vidro, e duas listas com materiais diferentes lado a
+lado é pior que as duas erradas iguais.
+
+**Como eu passei a servir**: porta **8081**. Service worker é registrado por ORIGEM (host + porta), então
+porta nova é origem limpa — nenhum SW velho pra brigar. Custa uma linha no comando e economiza a explicação de
+como desregistrar SW no DevTools.
+
+Gates: catálogo analyze limpo e **84 testes** · DS **110**.
+
 ## [0.9.0] — 2026-08-03
 
 ### Adicionado — **o card de conteúdo é VIDRO**, e são seis versões do pai num `ref:`

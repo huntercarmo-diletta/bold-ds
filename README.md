@@ -30,9 +30,9 @@ Por **tag**, nunca por caminho local — `pubspec.yaml` de cada pacote fixa o `r
 | `ds-diletta` | `v0.32.0` |
 | `catalogo-diletta` | `v0.77.0` |
 
-## Como ESTE filho chega no app — `v0.9.0`
+## Como ESTE filho chega no app — `v0.9.1`
 
-A primeira tag saiu em 2026-08-01; a de hoje é a `v0.9.0`. Mesma regra que eu cobro dos pais: por tag,
+A primeira tag saiu em 2026-08-01; a de hoje é a `v0.9.1`. Mesma regra que eu cobro dos pais: por tag,
 nunca por caminho local.
 
 ```yaml
@@ -40,7 +40,7 @@ dependencies:
   conta_bold_design_system:
     git:
       url: git@bitbucket.org:diletta/bold-ds.git
-      ref: v0.9.0
+      ref: v0.9.1
       path: packages/conta_bold_design_system
 ```
 
@@ -135,6 +135,7 @@ No navegador não existe filesystem, então o transporte é o servidor de autori
 dart run diletta_catalog_core:servidor_autoria \
   --pacote packages/catalog \
   --raiz packages/catalog/build/web \
+  --porta 8081 \
   --permite lib/builder/screen_specs.g.dart \
   --permite lib/builder/ligacoes.g.dart
 ```
