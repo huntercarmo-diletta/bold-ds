@@ -34,6 +34,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [o `$` não é escapado](pedidos/2026-07-30-o-dolar-nao-e-escapado.md) | ENTRA | **v0.38.1** |
 | [cinco componentes sem spec, e o chrome no gate](pedidos/2026-07-30-cinco-componentes-sem-spec-e-o-chrome.md) | ENTRA | **ds v0.17.0 · motor v0.38.1** |
 | [a aba de componentes não passa pelo tema](pedidos/2026-07-30-a-aba-de-componentes-nao-passa-pelo-tema.md) | ENTRA (2 rodadas, 4 defeitos) | **v0.44.0 · v0.46.1** |
+| [o card de conteúdo não sabe ser vidro](pedidos/2026-08-03-o-card-de-conteudo-nao-sabe-ser-vidro.md) | Pedido | — |
 
 ## O que os pais me mandaram
 

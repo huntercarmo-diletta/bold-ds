@@ -31,6 +31,22 @@ import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 
 import 'builder/screen_specs.g.dart';
 
+/// ## Uma divergência DECLARADA entre o board e o aparelho: o card de lista é sólido aqui
+///
+/// No app, o card que agrupa linhas de lista é **vidro** (`BoldAppListGroup` → `BoldCard(glass: true)`,
+/// **96 sítios**) — e vidro é o que deixa a arte do fundo passar, que é regra escrita no DS do app antes de
+/// eu existir. No board ele aparece **sólido**, porque o `DilettaAppList.carded` do pai crava
+/// `color: s.surface` e não há como pedir outro material.
+///
+/// Não é defeito meu e não tem contorno honesto deste lado: envolver o card do pai num
+/// `DilettaGlassSurface` faria o board desenhar vidro que o componente não desenha, e pintar cor
+/// translúcida não é vidro — vidro é `BackdropFilter`, e sobre cor lisa não desfoca nada.
+///
+/// Está pedido em `docs/pedidos/2026-08-03-o-card-de-conteudo-nao-sabe-ser-vidro.md`, com o número dos dois
+/// lados: 25 arquivos do pai cravam `surface`, e os 4 que usam o vidro dele são todos chrome. Fica escrito
+/// aqui enquanto durar, porque **divergência declarada é melhor que divergência silenciosa** — quem abre o
+/// board e conhece o app tem que saber que a diferença é conhecida.
+///
 /// O slug é a chave estável — é por ele que fluxo, seta e deep-link apontam.
 ///
 /// A HOME da conta PF, medida em `home_tab_redesign.dart`.
