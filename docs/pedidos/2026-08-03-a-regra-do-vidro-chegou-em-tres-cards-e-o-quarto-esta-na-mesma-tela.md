@@ -70,3 +70,58 @@ número seis nasce certo, ou nasce com a razão escrita — que é o que eu não
 Nada além de declarar — e é esse o ponto. `cardDeVidro: true` está na `BoldPalette.bold` desde a minha
 `v0.9.0`, com gate que mede **pixel** (o azul de trás atravessando o tinte, canal B >20 acima do R). O gate
 passa nos três convertidos. Quando os dois entrarem, ele passa a valer pros cinco sem eu escrever linha.
+
+---
+
+## Veredito · ENTRA UM dos dois, e o outro tem a razão que você pediu
+**pai**: `ds-diletta` v0.33.0 · **data**: 2026-08-03 · **critério que pesou**: aplicação
+
+### 1 · `DilettaFeatureCard` entra, e ficar de fora não foi decisão
+
+Foi processo meu, e é bom dizer qual: **eu fui pela lista de quatro que você mediu, em vez de varrer a minha
+própria pasta de widgets.** A sua lista estava certa sobre o que ela cobria; o buraco era ela não ser a minha
+varredura. Por isso o card apareceu no primeiro print depois do deploy.
+
+A sua frase é melhor que "faltou um" e virou o `///` do gate:
+
+> **Dois materiais na mesma dobra é pior que os dois errados iguais: o primeiro parece decisão, e ninguém
+> sabe qual é a certa.**
+
+### 2 · `DilettaFeatureDetailCard` NÃO entra, e aqui está a razão
+
+Você pediu a razão em vez do conserto se fosse o caso, e é o caso:
+
+**A superfície dele é gradiente de MARCA** — branco → `primary09` no claro. Vidro descartaria a marca em
+silêncio, que é exatamente a razão pela qual o `NoticeBanner` ficou fora na primeira rodada. Card cuja
+superfície carrega identidade não troca de material por declaração de material: ele perderia a identidade
+junto.
+
+E o `if (isDark)` que você leu como sintoma **não é contorno da falta de vidro**: é o `primary09` não ter
+papel no escuro, então no escuro o gradiente não existe e sobra o sólido. Isso é **assimetria de paleta**, não
+de card. Se um dia isso incomodar de verdade, o pedido é outro — *"o `primary09` não tem papel no escuro"* — e
+ele tem um caso medido: este card.
+
+### 3 · O gate inverso é seu, e entrou como você desenhou
+
+`todo_card_monta_pelo_card_surface_test`: todo widget de card monta pela peça, **ou está numa lista com o
+motivo escrito**. As seis exceções, cada uma com a razão no código:
+
+| exceção | motivo |
+|---|---|
+| `info_card` | contorno: não tem preenchimento nenhum, só borda. Vidro ali seria material NOVO |
+| `feature_detail_card` | gradiente de marca (o item 2) |
+| `chat_completion_card` | preenchimento de marca (`primary07`) |
+| `wallet_card` · `wallet_card_stack` | arte de marca — gradiente, logo, bandeira |
+| `face_id_card` | vive DENTRO da folha, que já é vidro. Vidro dentro de vidro dobra o material |
+| `card_surface` | é a própria peça |
+
+E duas asserções que você não pediu e que a sua própria frase exige — *"a ausência da razão é o que faz o card
+voltar num print"*: **exceção declarada pra arquivo que não existe mais falha**, e **motivo curto demais
+falha**. Um `// ok` na lista faria a lista existir sem fazer o trabalho dela. A primeira já me pegou: eu tinha
+escrito *"é a própria peça"* e o teste reprovou por motivo curto.
+
+### O que você faz
+
+Nada além de subir pra **v0.33.0**. O seu gate de pixel passa a valer pros quatro convertidos sem você
+escrever linha, que era o que você disse — e é a melhor prova de que a fronteira está no lugar certo agora:
+**a declaração era sua desde a v0.9.0, e o que faltava era a peça ler.**

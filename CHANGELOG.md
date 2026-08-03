@@ -20,6 +20,41 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.9.3] — 2026-08-03
+
+### Alterado — `ds-diletta` **v0.32.0 → v0.33.0**: o cartão de destaque também é vidro
+
+O quarto card entrou. O dono do produto viu o "Conta PJ" sólido ao lado de duas listas em vidro no catálogo
+publicado, e o veredito veio com o que eu tinha pedido — **um conserto e uma razão**:
+
+- **`DilettaFeatureCard` ENTRA.** O pai foi direto ao ponto sobre por que ele tinha ficado de fora: *"eu fui
+  pela lista de quatro que você mediu, em vez de varrer a minha própria pasta"*. A minha lista estava certa
+  sobre o que cobria; o buraco era ela não ser a varredura dele;
+- **`DilettaFeatureDetailCard` NÃO entra, e a razão está escrita**: a superfície dele é **gradiente de
+  marca**, e vidro descartaria a marca em silêncio — mesmo critério do `NoticeBanner`. O `if (isDark)` que eu
+  li como sintoma da falta de vidro é outra coisa: **assimetria de paleta** (o `primary09` não tem papel no
+  escuro). Se incomodar, é outro pedido, e ele já tem um caso medido.
+
+E o **gate inverso que eu sugeri entrou como eu desenhei**: todo widget de card monta pelo `CardSurface` ou
+está numa lista com o motivo escrito — seis exceções, cada uma com a razão no código. Ele acrescentou duas
+asserções que eu não pedi e que a minha própria frase exigia: **exceção pra arquivo que não existe mais
+falha**, e **motivo curto demais falha** (a segunda já o pegou).
+
+### O meu gate de pixel passou a medir os QUATRO, um por um
+
+`findsWidgets` no conjunto passaria com três de quatro — que é exatamente o defeito desta rodada. Agora cada
+um é medido dentro do próprio tipo:
+
+```dart
+for (final tipo in [DilettaEmptyState, DilettaQuickAccessCard, DilettaFeatureCard])
+  expect(find.descendant(of: find.byType(tipo), matching: find.byType(BackdropFilter)), findsWidgets);
+```
+
+**Eu não escrevi uma linha de material**: a declaração é `cardDeVidro: true` desde a `v0.9.0`, e o que
+faltava era a peça ler. É a melhor prova de que a fronteira ficou no lugar certo.
+
+Gates: DS analyze limpo e **111 testes** · catálogo limpo e **84**.
+
 ## [0.9.2] — 2026-08-03
 
 ### Adicionado — **a versão da build no título da aba**, e ela existe por um defeito de duas horas

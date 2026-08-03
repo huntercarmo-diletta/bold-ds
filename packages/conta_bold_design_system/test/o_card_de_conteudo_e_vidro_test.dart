@@ -51,15 +51,31 @@ void main() {
     }
   });
 
-  testWidgets('e o estado vazio e o cartão de acesso vêm no mesmo material', (t) async {
-    // Os três que o veredito converteu. Se um deles voltar a sólido, o produto fica com dois materiais
-    // de card na mesma tela — que é pior que os dois sólidos.
+  testWidgets('e os QUATRO convertidos vêm no mesmo material', (t) async {
+    // Eram três na `ds v0.32.0`; o cartão de destaque entrou na `v0.33.0` depois de aparecer sólido no
+    // primeiro print do catálogo publicado, ao lado de dois já convertidos. Se um deles voltar a sólido, o
+    // produto fica com dois materiais de card na mesma tela — que é pior que os dois sólidos.
     await t.pumpWidget(montar(Column(children: const [
       DilettaEmptyState(title: 'Nada aqui', caption: 'Sem atividade ainda'),
       DilettaQuickAccessCard(icon: DilettaIcons.pixLight, label: 'Pix'),
+      DilettaFeatureCard(
+        icon: DilettaIcons.piggyBankLight,
+        title: 'Conta PJ',
+        description: 'Alçadas, operadores e aprovação em duas mãos.',
+        brandColor: BoldColors.primary04,
+      ),
     ])));
     await t.pump();
     expect(find.byType(BackdropFilter), findsWidgets);
+    // Um por um, porque `findsWidgets` no conjunto passaria com três de quatro — que é exatamente o
+    // defeito que este teste existe pra pegar.
+    for (final tipo in [DilettaEmptyState, DilettaQuickAccessCard, DilettaFeatureCard]) {
+      expect(
+        find.descendant(of: find.byType(tipo), matching: find.byType(BackdropFilter)),
+        findsWidgets,
+        reason: '$tipo desenha card sólido enquanto os vizinhos são vidro',
+      );
+    }
   });
 
   testWidgets('e o vidro DEIXA A COR DE TRÁS PASSAR — medido em pixel', (t) async {
