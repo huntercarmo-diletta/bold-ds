@@ -58,6 +58,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [nome de produto nos dois pais](avisos/2026-07-31-nome-de-produto-nos-dois-pais.md) | AVISO | sim — 0 usos, e as tags não estão no remoto |
 | [a varredura, e o seu um](avisos/2026-07-31-a-varredura-e-o-seu-um.md) | CONSELHO | sim — 8 triados, 3 defeitos, 2 inéditos pro pai |
 | [as quatro vistas derivadas](avisos/2026-08-01-as-quatro-vistas-derivadas.md) | RELEASE | sim — subi na v0.2.0, e os meus 12 contratos já tinham `## Compõe` |
+| [o editar tela não chegava em você](avisos/2026-08-03-o-editar-tela-nao-chegava-em-voce-e-a-culpa-e-minha.md) | RELEASE | sim — declarei os dois alvos, parti o arquivo em fonte e registro, e fechei a dívida de gate dele |
 
 Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
 pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedido novo.

@@ -28,11 +28,11 @@ Por **tag**, nunca por caminho local — `pubspec.yaml` de cada pacote fixa o `r
 | pai | versão de hoje |
 |---|---|
 | `ds-diletta` | `v0.26.0` |
-| `catalogo-diletta` | `v0.74.1` |
+| `catalogo-diletta` | `v0.76.0` |
 
-## Como ESTE filho chega no app — `v0.6.2`
+## Como ESTE filho chega no app — `v0.7.0`
 
-A primeira tag saiu em 2026-08-01; a de hoje é a `v0.6.2`. Mesma regra que eu cobro dos pais: por tag,
+A primeira tag saiu em 2026-08-01; a de hoje é a `v0.7.0`. Mesma regra que eu cobro dos pais: por tag,
 nunca por caminho local.
 
 ```yaml
@@ -40,7 +40,7 @@ dependencies:
   conta_bold_design_system:
     git:
       url: git@bitbucket.org:diletta/bold-ds.git
-      ref: v0.6.2
+      ref: v0.7.0
       path: packages/conta_bold_design_system
 ```
 
@@ -106,3 +106,27 @@ O que o deploy publicava era o catálogo antigo desenhando o fork — um catálo
 **O destino ficou decidido: Cloudflare.** Worker de assets + Access, build local pelo
 [`build_web.sh`](build_web.sh). O passo a passo, e a razão de o build NÃO rodar no CI, estão em
 [DEPLOY_CLOUDFLARE.md](DEPLOY_CLOUDFLARE.md).
+
+## Editar tela no compositor e salvar NO REPO
+
+A edição vira arquivo, e são dois — gerados pelo motor, **por inteiro**, a partir do estado do compositor:
+`packages/catalog/lib/builder/screen_specs.g.dart` (as telas) e
+`packages/catalog/lib/builder/ligacoes.g.dart` (as setas). Eles são a FONTE; a prosa que explica cada
+decisão de tela mora em `telas_do_bold.dart`, que o gerador nunca toca.
+
+No navegador não existe filesystem, então o transporte é o servidor de autoria do pai, que viaja no pacote:
+
+```bash
+dart run diletta_catalog_core:servidor_autoria \
+  --pacote packages/catalog \
+  --raiz packages/catalog/build/web \
+  --permite lib/builder/screen_specs.g.dart \
+  --permite lib/builder/ligacoes.g.dart
+```
+
+Os `--permite` são **os mesmos caminhos declarados em Dart** (`caminhoDoArquivoDeSpecs` e
+`caminhoDoArquivoDeLigacoes`, em `conteudo_do_bold.dart`): o servidor não adivinha o que o Dart declarou, e
+o gate `os_alvos_de_autoria_test` mede que os quatro números batem — os dois declarados, os dois daqui.
+
+Sem o servidor de pé nada quebra: o botão vira **download pra commitar**. O destino é o repo de qualquer
+jeito; o que muda é o transporte.

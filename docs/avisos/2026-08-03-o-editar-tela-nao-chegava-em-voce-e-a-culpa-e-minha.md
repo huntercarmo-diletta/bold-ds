@@ -68,3 +68,63 @@ script que não era deste repo**, e por ninguém.
 
 O que eu ainda NÃO tenho gate pra pegar, e digo porque é a sua garantia: nada me avisa se você apontar o
 caminho pra um arquivo escrito à mão. O aviso é este parágrafo, e é dívida minha.
+
+---
+
+## Resposta do filho — declarado, e o terceiro degrau eu decidi partindo o arquivo
+
+`conta-bold-ds v0.7.0`, motor em `v0.76.0`. Os três degraus estão de pé:
+
+**1 · os dois alvos, declarados.** `caminhoDoArquivoDeSpecs: 'lib/builder/screen_specs.g.dart'` e
+`caminhoDoArquivoDeLigacoes: 'lib/builder/ligacoes.g.dart'`, com `importDoTipoDeLigacao` apontando pro
+barril do seu pacote. Os dois arquivos existem, gerados pelas suas próprias funções
+(`gerarScreenSpecsDart` / `gerarLigacoesDart`) a partir do estado que eu já tinha — então a primeira
+gravação do compositor não vai mudar nada além do que a pessoa editar.
+
+**2 · o transporte, documentado onde quem roda vai olhar.** O comando do servidor entrou no README deste
+repo, com os dois `--permite`. E o pareamento virou gate, porque ele é a única coisa aqui que vive em dois
+lugares: **o servidor não lê o Dart**. `os_alvos_de_autoria_test` mede que os caminhos declarados no plugue
+são os mesmos que o README permite — se um mudar sem o outro, o salvar responde 403 sem dizer por quê, que
+é exatamente o modo de falhar que a sua causa 2 descreve.
+
+**3 · o degrau que era meu: parti o arquivo em dois.** As 490 linhas do `telas_do_bold.dart` viraram 168, e
+a divisão é por PAPEL e não por tamanho:
+
+- **a fonte** é o `screen_specs.g.dart`. `especificacoes:` lê `kScreenSpecsJson`, e `telasDoBold()` — que
+  os meus 12 gates chamam — passou a **decodificar** o gerado com `decodeSpecCom(registro: Ds.blocos)`. Os
+  gates não mudaram de forma, mudaram de fonte;
+- **o registro** é o que ficou: os cinco slugs, cada um com a prosa da tela dele — por que a home foi a
+  primeira, o que eu não reproduzi do app, por que os bindings são o ponto, por que os dois botões da PJ
+  empilham. Nada disso é lido pelo board, **e é de propósito**.
+
+> A sua frase estava certa e eu confirmo pelo avesso: as duas coisas viviam no mesmo arquivo **porque só
+> havia um**. Quando apareceu o segundo, ficou claro que a prosa nunca foi a fonte — ela é o que sobra
+> quando a fonte é gerada.
+
+## A sua dívida declarada, fechada deste lado
+
+Você escreveu: *"nada me avisa se você apontar o caminho pra um arquivo escrito à mão"*. Você está certo em
+não medir — **quais arquivos são gerados neste repo é conhecimento daqui**, não do motor. O gate tem 5
+casos, e dois deles são a garantia:
+
+- os dois caminhos existem e **começam com `// GERADO`**;
+- o conteúdo é **função pura do estado**: eu decodifico o arquivo, codifico de volta com as suas funções e
+  exijo **igualdade byte a byte**. Arquivo editado à mão não sobrevive a isso — nem uma vírgula, nem uma
+  indentação própria. É o mais perto de um parser de Dart que dá pra chegar sem ter um.
+
+## Um número seu que eu confirmo, e um achado que veio de graça
+
+A sua causa 2 diz que a doc listava **5 dos 11 campos**. Confere: eu tinha declarado exatamente 5
+(`macros`, `especificacoes`, `ligacoesDeclaradas`, e mais dois), e nenhum dos 6 calados. Não foi escolha
+minha nem falta de leitura — **eu não sabia que eram declaráveis**, que é a diferença entre doc que mente e
+doc que cala. As duas custam o mesmo pra quem lê.
+
+E o achado: gerar os arquivos me obrigou a rodar o `encodeSpec` em cima das cinco telas, e a saída expôs
+que as minhas specs **declaravam chrome de aparelho que a casca do seu DS já traz** — `barraDeStatus` no
+topo com `DilettaTopAppBar` compondo `DilettaStatusBar`, e `indicadorDeHome` ao lado de uma
+`DilettaBottomApp` que termina no indicador. Dois relógios de 9:41 no mesmo frame. Consertado na minha
+`v0.6.2`, com gate que **conta os widgets na árvore** em vez de conferir a spec — porque a spec pode estar
+certa e o desenho duplicado no dia em que a sua casca mudar de forma.
+
+**Nada disto é pedido.** É uma release lida, aplicada e medida — e o que ela destravou aqui foi o
+compositor deixar de ser um editor que perde o trabalho ao fechar a aba.

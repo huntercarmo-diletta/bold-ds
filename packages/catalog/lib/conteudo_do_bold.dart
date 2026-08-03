@@ -13,19 +13,38 @@ library;
 
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 
-import 'telas_do_bold.dart';
+import 'builder/ligacoes.g.dart';
+import 'builder/screen_specs.g.dart';
 
 /// O terceiro dos quatro plugues.
 void configurarConteudoDoBold() {
-  Conteudo.configurar(PlugueDeConteudo(
-    macros: const ['PF', 'PJ'],
+  Conteudo.configurar(const PlugueDeConteudo(
+    macros: ['PF', 'PJ'],
     // A PRIMEIRA TELA, e ela deixou de ser zero em 2026-07-31.
     //
     // O pai mediu a falta na v0.55.0 do motor (*"um filho tem 124 telas, o outro tem ZERO"*), e a
     // consequência que ele nomeou é a que importa: **todo o pipeline de tela tinha um usuário só**, então
     // defeito daquele caminho era invisível deste lado. A HOME está em `telas_do_bold.dart`, com a razão
     // da escolha e o que dela eu não reproduzi.
-    especificacoes: telasDoBoldEmJson(),
+    especificacoes: kScreenSpecsJson,
+    // ONDE O "SALVAR NO REPO" ESCREVE — os dois caminhos, e eles não são adivinháveis.
+    //
+    // A `v0.76.0` do motor trouxe o servidor de autoria dentro do pacote e documentou os 6 campos do
+    // plugue que estavam calados. Eu tinha declarado os 5 que a doc listava, corretamente, e o compositor
+    // respondia *"este catálogo não declarou o arquivo de specs"* sem dizer que era declarável.
+    //
+    // Os dois alvos são `*.g.dart` **de propósito**: o motor gera o arquivo INTEIRO a partir do estado
+    // (remendar exigiria parser de Dart), então apontar pra um arquivo escrito à mão apagaria o que
+    // estivesse escrito nele. Foi por isso que as specs saíram de `telas_do_bold.dart` — lá ficou a prosa,
+    // que é o registro das decisões e não a fonte das telas.
+    //
+    // Sem o servidor de pé nada quebra: o botão vira download pra commitar. O transporte muda, o destino é
+    // o repo de qualquer jeito.
+    caminhoDoArquivoDeSpecs: 'lib/builder/screen_specs.g.dart',
+    caminhoDoArquivoDeLigacoes: 'lib/builder/ligacoes.g.dart',
+    // O import que o arquivo gerado precisa pra ver `Ligacao` e `TipoConexao`. O CAMINHO é decisão deste
+    // repo — o motor não adivinha onde o filho guarda o arquivo.
+    importDoTipoDeLigacao: "import 'package:diletta_catalog_core/diletta_catalog_core.dart';",
     // A PRIMEIRA SETA deste produto, e ela é declarada e não derivada.
     //
     // O board deriva as ligações da ORDEM das telas quando ninguém editou, e é o suficiente pra desenhar.
@@ -36,21 +55,6 @@ void configurarConteudoDoBold() {
     // O `bloco` é o id da LINHA do Pix dentro do slot da lista (`b_4`), e não o da lista: a seta ancora no
     // componente que dispara, então apontar pro container faria o desenho dizer que a lista inteira leva ao
     // Pix. Os ids vêm da autoria, na ordem — não se inventam e não se renumeram.
-    ligacoesDeclaradas: const {
-      'pf/conta-pf': [
-        Ligacao(de: 0, para: 1, tipo: TipoConexao.push, bloco: 'b_4'),
-        // Os ids são do CTA de cada tela — hoje `b_7` é o "Continuar" da tela do valor e `b_11` é o
-        // "Confirmar" da revisão. Eu tinha escrito `b_1` nas duas por analogia com a primeira seta, e
-        // medindo achei que `b_1` ali é bloco de CONTEÚDO: a seta ancoraria no valor e no cabeçalho, e o
-        // desenho diria que aqueles blocos levam à tela seguinte. É o defeito que o pai descreve — a seta
-        // casa com o primeiro id que existir, e nada avisa.
-        //
-        // Eles ANDARAM quando o chrome duplicado saiu das specs (o CTA solto virou `barraDeBaixo` e a
-        // barra de status saiu do topo), e quem cobrou foi o gate que deriva o CTA em vez de repetir o
-        // id. É a razão de ele existir: id à mão não acompanha mudança de estrutura.
-        Ligacao(de: 1, para: 2, tipo: TipoConexao.push, bloco: 'b_7'),
-        Ligacao(de: 2, para: 3, tipo: TipoConexao.push, bloco: 'b_11'),
-      ],
-    },
+    ligacoesDeclaradas: kLigacoes,
   ));
 }

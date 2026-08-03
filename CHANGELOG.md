@@ -20,6 +20,48 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.7.0] — 2026-08-03
+
+### Adicionado — **editar tela no compositor e SALVAR NO REPO**, e o arquivo virou dois
+
+O motor foi pra `v0.76.0` e o pai fechou o transporte do "salvar no repo" (o servidor de autoria agora
+viaja no pacote dele). Faltavam os três degraus deste lado, e o terceiro era decisão minha:
+
+- **os dois alvos, declarados** no `PlugueDeConteudo`: `caminhoDoArquivoDeSpecs`
+  (`lib/builder/screen_specs.g.dart`), `caminhoDoArquivoDeLigacoes` (`lib/builder/ligacoes.g.dart`) e o
+  `importDoTipoDeLigacao`. Eu tinha declarado 5 dos 11 campos do plugue porque a doc dele listava 5 — e os
+  6 calados eram justamente os da edição. **Doc que cala custa o mesmo que doc que mente**;
+- **o transporte documentado no README**, com o comando e os dois `--permite`. Ele é a única peça que fala
+  com quem roda o servidor, e o servidor **não lê o Dart**;
+- **o arquivo partiu em dois, por PAPEL**. O motor gera o alvo por inteiro a partir do estado, então
+  apontar pro `telas_do_bold.dart` apagaria as 490 linhas de prosa na primeira gravação. Agora:
+  **a fonte** é `screen_specs.g.dart` (`especificacoes: kScreenSpecsJson`, e `telasDoBold()` decodifica
+  com `decodeSpecCom(registro: Ds.blocos)`), e **o registro** é o `telas_do_bold.dart` de 168 linhas — os
+  cinco slugs, cada um com a razão da tela dele. Nada do registro é lido pelo board, e é de propósito.
+
+  > As duas coisas viviam no mesmo arquivo **porque só havia um**. Quando apareceu o segundo, ficou claro
+  > que a prosa nunca foi a fonte — ela é o que sobra quando a fonte é gerada.
+
+- **os 12 gates não mudaram de forma, mudaram de fonte**: quem chamava `telasDoBold()` continua chamando.
+
+### Adicionado — o gate da dívida que o PAI declarou como dele
+
+`os_alvos_de_autoria_test`, 5 casos. Ele escreveu: *"nada me avisa se você apontar o caminho pra um arquivo
+escrito à mão"* — e está certo em não medir, porque **quais arquivos são gerados aqui é conhecimento
+daqui**:
+
+- os dois caminhos declarados existem e começam com `// GERADO`;
+- o conteúdo é **função pura do estado**: decodifica, codifica de volta com as funções do pai, e exige
+  igualdade **byte a byte**. Arquivo editado à mão não sobrevive — nem uma vírgula. É o mais perto de um
+  parser de Dart que dá pra chegar sem ter um;
+- e o pareamento README ⇄ Dart, porque os `--permite` do servidor e os caminhos do plugue vivem em lugares
+  diferentes. Divergir ali dá **403 sem explicação** no salvar, que é o modo de falhar que a release do pai
+  descreve.
+
+**Minor**: nada muda pra quem consome o DS. O que mudou é como o catálogo é autorado.
+
+Gates: DS analyze limpo e **107 testes** · catálogo limpo e **81**.
+
 ## [0.6.2] — 2026-08-03
 
 ### Corrigido — **o board desenhava o chrome DUAS VEZES**, e o CTA flutuava fora da barra
