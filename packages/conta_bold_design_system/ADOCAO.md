@@ -692,12 +692,13 @@ chama a API mora fora.*
 double` saiu com a leitura *"tinha um uso: o próprio teste; os campos de dinheiro guardam `_cents`
 (int)"*. Isso é verdade do campo de valor GRANDE (`BoldCurrencyField`), e foi só nele que eu olhei. Os
 campos **bordados** fazem o contrário: leem o texto do controller de volta. A adoção de 03/08 contou
-**10 pontos de uso** — tela de valor do Pix, os quatro acréscimos da cobrança com vencimento, o valor da
+**9 pontos de uso** — tela de valor do Pix, os quatro acréscimos da cobrança com vencimento, o valor da
 cobrança em três fluxos, os limites.
 
 > **A pergunta "quem chama isso?" respondida num só ponto de uso é uma amostra, não uma medição.** O
 > `grep` que eu rodei achava `_cents`; o que faltava era rodar o outro — `.parse(`, o nome antigo, que
-> aparecia dez vezes.
+> aparecia **dez** vezes: nove chamadas de produto e o exemplo na doc do próprio widget. Contar o
+> próprio exemplo como consumidor é a mesma classe de erro que a remoção de julho.
 
 ---
 

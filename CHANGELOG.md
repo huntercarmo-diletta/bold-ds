@@ -20,6 +20,20 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.6.1] — 2026-08-03
+
+### Corrigido — o número da `v0.6.0` era **10** e são **9**
+
+- A doc do próprio widget virava consumidor no `grep`: `BoldMoneyInputFormatter.parse` aparecia dez
+  vezes em `lib/` + `test/` do app, e uma delas era o exemplo dentro do arquivo que eu estava
+  apagando. Nove são chamada de produto;
+- corrigido nos três lugares que afirmavam o presente (entrada da `v0.6.0`, `ADOCAO.md`, doc de
+  `emReais`). **Só doc**: nenhuma linha de código mudou, e quem está na `v0.6.0` não precisa subir
+  por causa disto;
+- registrado em vez de apagado porque é a MESMA classe de erro das duas pontas desta história —
+  contar o próprio exemplo como uso é o espelho de contar o próprio teste como uso, que foi a
+  justificativa da remoção em julho.
+
 ## [0.6.0] — 2026-08-03
 
 ### Corrigido — **o copiar tinha perdido o haptic**, e nada na tela dizia isso
@@ -38,7 +52,7 @@ O que cada degrau significa **pro app que adota**:
 
 - Ela saiu na auditoria com a justificativa *"zero consumidor — os campos de dinheiro guardam
   `_cents` (int)"*. Isso vale pro campo de valor GRANDE. Os campos **bordados** leem o texto do
-  controller de volta, e são **10 pontos de uso** no app: a tela de valor do Pix, os quatro
+  controller de volta, e são **9 pontos de uso** no app: a tela de valor do Pix, os quatro
   acréscimos da cobrança com vencimento, o valor da cobrança em três fluxos e os limites;
 - sem ela, o custo da adoção era `centavosDe(t) / 100.0` escrito em dez telas — a máscara
   reimplementada por fora, que é o defeito que este componente existe pra não ter;
@@ -46,6 +60,11 @@ O que cada degrau significa **pro app que adota**:
   arredondamento). `emReais` é `centavosDe/100`, e o teste amarra as duas pra não virarem duas
   contas que divergem numa borda;
 - **minor**: símbolo novo, nada mudou de forma. Quem adota não muda uma linha.
+
+**Correção do número, depois da tag** (o commit da `v0.6.0` dizia 10): são **9** chamadas de produto. A
+décima era o **exemplo na doc do próprio widget** — `grep` conta comentário, e eu não separei. Fica
+registrado em vez de sumir: contar o próprio exemplo como consumidor é a mesma classe de erro que fez a
+função ser removida em julho.
 
 ### Sobre como as duas apareceram
 
