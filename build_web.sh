@@ -42,7 +42,15 @@ flutter pub get
 #
 # O Flutter já deprecou o próprio service worker (o `index.html` gerado diz isso em comentário), então
 # `--pwa-strategy=none` também é o caminho pra frente.
-flutter build web --release --source-maps --pwa-strategy=none
+# A VERSÃO ENTRA NA BUILD, lida do pubspec e não digitada.
+#
+# Ela aparece no título da aba, e existe porque dois prints seguidos de bundle velho custaram uma volta
+# cada: não havia como saber qual build estava na tela. Agora a aba diz.
+VERSAO="v$(grep -m1 '^version:' pubspec.yaml | sed 's/version: *//')"
+echo "versão desta build: $VERSAO"
+
+flutter build web --release --source-maps --pwa-strategy=none \
+  --dart-define=BOLD_VERSAO="$VERSAO"
 
 # O GATE DO CUSTO, e ele roda DEPOIS do build porque metade do que ele mede é a pasta gerada.
 #

@@ -1,5 +1,9 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// O CARD DE CONTEÚDO É VIDRO NESTE PRODUTO, e uma linha da paleta é o que diz isso.
@@ -56,5 +60,67 @@ void main() {
     ])));
     await t.pump();
     expect(find.byType(BackdropFilter), findsWidgets);
+  });
+
+  testWidgets('e o vidro DEIXA A COR DE TRÁS PASSAR — medido em pixel', (t) async {
+    // Este teste existe porque dois prints seguidos discutiram material olhando, e olhar não decide: vidro
+    // sobre fundo claro parece branco, e branco chapado também. O que distingue é o pixel — se a cor de
+    // trás atravessa, é vidro; se não atravessa, é fill.
+    const chave = Key('paraLerOsPixels');
+    const fundo = Color(0xFF1B6FE0); // azul forte, longe de qualquer cor da paleta
+
+    await t.pumpWidget(MaterialApp(
+      home: DilettaThemeScope(
+        theme: BoldTheme.light,
+        child: RepaintBoundary(
+          key: chave,
+          child: Stack(children: [
+            Positioned.fill(child: ColoredBox(color: fundo)),
+            Center(
+              child: SizedBox(
+                width: 300,
+                child: DilettaAppList.carded(children: const [
+                  DilettaAppListRow(
+                    middle: DilettaMiddleAccessory.titleSubtitle(title: 'Pix', subtitle: 'Enviar'),
+                  ),
+                ]),
+              ),
+            ),
+          ]),
+        ),
+      ),
+    ));
+    await t.pump(const Duration(milliseconds: 300));
+
+    // `runAsync`: fora dele o relógio do teste é falso, e a codificação da imagem — que é assíncrona de
+    // verdade — nunca completa. O teste ficava dez minutos pendurado até o timeout.
+    late final Uint8List rgba;
+    late final ui.Image imagem;
+    await t.runAsync(() async {
+      final boundary = t.renderObject<RenderRepaintBoundary>(find.byKey(chave));
+      imagem = await boundary.toImage();
+      final bytes = await imagem.toByteData(format: ui.ImageByteFormat.rawRgba);
+      rgba = bytes!.buffer.asUint8List();
+    });
+
+    ({int r, int g, int b}) pixel(int x, int y) {
+      final i = (y * imagem.width + x) * 4;
+      return (r: rgba[i], g: rgba[i + 1], b: rgba[i + 2]);
+    }
+
+    // Um ponto no MEIO do card, longe do texto e do ícone: a faixa entre a borda direita do card e o
+    // acessório da direita.
+    final dentro = pixel(imagem.width ~/ 2 + 100, imagem.height ~/ 2);
+    // E um de controle, fora do card.
+    final fora = pixel(10, 10);
+
+    expect(fora, (r: 27, g: 111, b: 224), reason: 'o controle não é o fundo declarado');
+
+    // VIDRO: o azul de trás atravessa o tinte branco@50%, então o pixel de dentro puxa azul — o canal B
+    // fica bem acima do R. Fill branco daria R≈G≈B.
+    expect(dentro.b - dentro.r, greaterThan(20),
+        reason: 'o pixel dentro do card é $dentro: sem azul atravessando, isso é FILL e não vidro');
+    // E não é o fundo cru: o tinte clareia, então o pixel é mais claro que o azul puro.
+    expect(dentro.r, greaterThan(60), reason: 'o card não está tingindo nada — cadê o tinte?');
   });
 }

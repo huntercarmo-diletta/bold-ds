@@ -27,6 +27,9 @@ void main() {
   rodarCatalogo(configDoCatalogoDoBold());
 }
 
+/// A versão desta build, injetada pelo `build_web.sh` a partir do `pubspec`.
+const String _versaoDaBuild = String.fromEnvironment('BOLD_VERSAO');
+
 /// A casca: quais abas existem, e em que ordem.
 ///
 /// O `id` é CONTRATO, não rótulo — ele entra na URL (`#componentes/...`), então mudar
@@ -50,7 +53,18 @@ CatalogoConfig configDoCatalogoDoBold() {
   ComposerInbox.instance.openBuilder = () => nav.abrir('montar');
 
   return CatalogoConfig(
-      titulo: 'Conta BOLD · DS Catalog',
+      // A VERSÃO no título, e ela existe por um defeito de duas horas.
+      //
+      // O dono do produto mandou dois prints seguidos de um bundle velho — o navegador servia cache de um
+      // service worker registrado antes de eu tirar o service worker. Os dois prints custaram uma volta cada
+      // pra descobrir **qual build estava na tela**, e não havia como saber olhando.
+      //
+      // Agora a aba do navegador diz. O valor vem do `pubspec` por `--dart-define` no `build_web.sh`, então
+      // ele não é digitado aqui e não pode divergir. Vazio (num `flutter run`) some — o título fica o de
+      // sempre em vez de dizer "vazio".
+      titulo: _versaoDaBuild.isEmpty
+          ? 'Conta BOLD · DS Catalog'
+          : 'Conta BOLD · DS Catalog $_versaoDaBuild',
       marca: 'BOLD · Design System',
       abaInicial: 'fundamentos',
       navegacao: nav,

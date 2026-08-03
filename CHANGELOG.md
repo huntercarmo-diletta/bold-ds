@@ -20,6 +20,37 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.9.2] — 2026-08-03
+
+### Adicionado — **a versão da build no título da aba**, e ela existe por um defeito de duas horas
+
+Dois prints seguidos do dono do produto eram de **bundle velho** — o navegador servia cache de um service
+worker registrado ANTES de eu tirar o service worker, e SW já registrado continua servindo o que tem. Cada
+print custou uma volta pra descobrir qual build estava na tela, e **não havia como saber olhando**.
+
+Agora a aba diz: `Conta BOLD · DS Catalog v0.9.2`. O valor sai do `pubspec` por `--dart-define` no
+`build_web.sh`, então ele não é digitado no Dart e não pode divergir. Num `flutter run` (sem o define) o
+título fica o de sempre, em vez de dizer "vazio".
+
+**E o servidor mudou de porta: 8081.** Service worker é registrado por ORIGEM (host + porta), então porta
+nova é origem limpa. O 8080 foi derrubado — origem que serve bundle velho e não tem como se corrigir sozinha
+é pior que origem que não responde.
+
+### Adicionado — o gate do vidro passou a medir **PIXEL**, e não tipo de widget
+
+Os dois prints discutiram material olhando, e olhar não decide: vidro sobre fundo claro parece branco, e
+branco chapado também. O teste novo desenha o card sobre um azul forte, lê o `RepaintBoundary` e compara dois
+pixels — um dentro do card, um fora:
+
+- **dentro**, o canal B tem que estar >20 acima do R: o azul de trás ATRAVESSA o tinte branco@50%. Fill
+  daria R≈G≈B;
+- e o R tem que passar de 60, senão não há tinte nenhum — seria o fundo cru.
+
+Um detalhe que custou dez minutos de timeout e vale escrito: **`toImage()` precisa de `runAsync`**. Fora
+dele o relógio do teste é falso e a codificação — que é assíncrona de verdade — nunca completa.
+
+Gates: DS analyze limpo e **111 testes** · catálogo limpo e **84**.
+
 ## [0.9.1] — 2026-08-03
 
 ### Alterado — as duas listas da home são CARD, e o print que pediu isso era de um bundle velho
