@@ -20,6 +20,50 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.8.1] — 2026-08-03
+
+### A LIMPA rodou, e o conserto foi de PROTOCOLO, não de conteúdo
+
+136 símbolos fantasma na primeira execução. O que a triagem mostrou:
+
+- **83 dos 136 eram nome que mora no `app-newbold`.** A limpa aceita repo irmão no corpo de leitura
+  (`faz_a_limpa.py . ../app-newbold`), e sem ele o registro da adoção — que fala dos componentes do app por
+  nome — enche a lista de ruído. **O comando com o irmão está no README**, porque ferramenta que só funciona
+  certo quando alguém lembra do segundo argumento é ferramenta que vai rodar errado;
+- **os 53 restantes eram quase todos nome que a adoção APAGOU hoje** (`BoldSkeleton`, `BoldCheckbox`,
+  `BoldQuantumSeal`…). Eles ficam: são o "de onde" da tabela de migração, e apagá-los deixaria a tabela
+  dizendo de onde para onde sem o de onde;
+- **e o conserto certo era o NOME DO ARQUIVO.** A regra é do pai (`ds v0.25.2`): número ou nome que registra
+  uma medição passada quer a isenção, e a isenção vem de o arquivo começar com a data. Dois viraram isso:
+  `ADOCAO.md` → `2026-07-29-adocao-do-ds-do-bold.md`, e `PARITY_BOLD.md` →
+  `docs/2026-07-30-paridade-do-ds-app-x-catalogo.md` (esse já se declarava história no corpo desde 30/07, e
+  seguia na raiz sem a isenção).
+
+Fantasmas **136 → 6**, números afirmados **4 → 0**, links quebrados 0, md órfão 0. Os 6 que sobram são
+palavra de configuração em backtick no doc de deploy (`whoami`, `_redirects`, `not_found_handling`) — falso
+positivo por natureza, e é o que a doc da ferramenta prevê.
+
+O registro da adoção ganhou no topo o **ESTADO de 03/08**: o plano rodou, 23 arquivos saíram de
+`lib/design_system/widgets/` do app, e as contagens dele são de 29/07 e não se corrigem.
+
+### Registrado — os dois pedidos de hoje voltaram com veredito
+
+| pedido | veredito | chega em |
+|---|---|---|
+| o card de conteúdo não sabe ser vidro | **ENTRA pela resposta 1** — `cardDeVidro` no scheme, e `DilettaCardSurface` monta os dois materiais | `ds v0.32.0` |
+| o traço de home da nav é uma cópia privada | **ENTRA como deleção** — e a medição dele achou uma SEGUNDA cópia (`DilettaKeyboardIndicator`) | `ds v0.31.0` |
+
+**Nenhum dos dois está adotado aqui**: eu consumo `ds v0.26.0`, e o caminho até a v0.32.0 passa por uma
+quebra declarada (a marca de carteira, v0.29.0). É o próximo ciclo, e o ledger diz isso em vez de deixar a
+linha vazia.
+
+Uma frase do veredito do vidro que vale guardar, porque ela corrige o meu enquadramento: *"não é falta de
+parâmetro, é uma **fronteira desenhada errado**"*. E uma correção de número minha: são **três** componentes
+convertidos, não quatro — o `DilettaReceipt` não tem card, as duas ocorrências de `bg` que eu contei são o
+spot e a caixa do rodapé.
+
+Gates: catálogo analyze limpo e **84 testes** · DS **107**.
+
 ## [0.8.0] — 2026-08-03
 
 ### Corrigido — **27 dos 56 blocos não diziam o nome da peça da linguagem**

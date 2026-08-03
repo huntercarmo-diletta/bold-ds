@@ -1,5 +1,24 @@
 # Adoção do DS do Bold — o que é rename, o que é variante, o que sobe pro pai
 
+> **ESTADO · 2026-08-03: a adoção RODOU, e este documento passou a ser o registro dela.**
+>
+> Ele foi escrito como PLANO, e o plano foi executado no `app-newbold` hoje: **23 arquivos saíram**
+> de `lib/design_system/widgets/` — 8 na fase B1b (os componentes que o DS-filho declara), 13 na
+> primeira rodada da B2 (9 deles sem nenhuma chamada, apagados em vez de renomeados) e 2 na segunda.
+> O app consome o pacote por tag (`ref: v0.8.0`).
+>
+> **Por isso os nomes `Bold*` das tabelas abaixo não existem mais em fonte nenhuma da família**, e a
+> limpa os acusa como fantasmas. Eles ficam de propósito: **é o nome de ONDE a peça vinha**, e apagá-los
+> deixaria a tabela dizendo de onde para onde sem o "de onde". A mesma regra que o pai escreveu na
+> `v0.25.2` — número e nome que registram uma medição passada não se atualizam, porque atualizar é
+> falsificar o resultado.
+>
+> **As contagens deste arquivo são de 29/07 e não se corrigem** pela mesma razão. O que está vivo é o
+> `CHANGELOG.md` deste repo e a `tasks.md` do change no app; o que está aqui é como a decisão foi tomada.
+>
+> A única coisa que eu ATUALIZO aqui é erro de medição — foi o caso do `emReais`, corrigido na `v0.6.1`
+> com o motivo escrito ao lado.
+
 Medido em 2026-07-29 contra `ds-diletta v0.2.0`, revisado contra a **v0.8.0** (que mudou o
 modo de consumo deste filho de sync pra dependência — ver o pedido do raio). Fonte dos componentes do Bold:
 `app-newbold/lib/design_system/widgets` (69 arquivos). O método foi extrair a API dos dois

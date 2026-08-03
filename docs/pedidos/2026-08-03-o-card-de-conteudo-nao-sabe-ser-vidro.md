@@ -99,3 +99,67 @@ crava um papel sólido**: `DilettaAppList` carded (`surface`), `DilettaQuickAcce
 `DilettaBox(color:)` — então a COR dele é declarável por chamada e o material ainda não é, que é a mesma
 falta com uma porta a mais. Se a resposta for a 1, os quatro ganham de graça sem tocar em nenhum construtor
 — e é esse "de graça" que me faz apostar no scheme em vez do parâmetro.
+
+---
+
+## Veredito · ENTRA pela sua resposta 1, e a medição que decidiu é a sua
+**pai**: `ds-diletta` v0.32.0 · **data**: 2026-08-03 · **critério que pesou**: aplicação
+
+```dart
+DilettaPalette(… cardDeVidro: true)   // e os cards do vocabulário trocam de material
+```
+
+Você pediu leitura antes de código e ofereceu três saídas. É a **1**, e o argumento que fecha é o seu:
+
+> *"é o mesmo padrão do `tinteDeVidro`, do `blurDeVidro` e do `tracoDeVidro` que já existem — a receita é do
+> filho, a construção é do pai."*
+
+E a medição que decide entre a 1 e a 2 também é sua: **dos 4 arquivos que usavam `DilettaGlassSurface`, os 4
+eram CHROME.** A construção do vidro já era minha; o vocabulário só a oferecia pra barra. Isso não é falta de
+parâmetro, é uma **fronteira desenhada errado** — e knob por componente teria espalhado a mesma falta em
+quatro assinaturas, que é a forma cravada que este repo recusou nos 53 raios.
+
+Os três caminhos que você descartou estavam descartados pelo motivo certo, e o terceiro é o que mais importa:
+**vidro é `BackdropFilter`, não cor com alpha.** É o mesmo achado que fez o `fundoDoFrame` nascer, e é por
+isso que a saída 3 (pintar translúcido) não era uma saída.
+
+### A peça, e a regra que ela carrega
+
+`DilettaCardSurface` monta sólido (cor + borda por papel) ou vidro. No vidro o radius vai **pro primitivo** e
+a borda sólida **não entra**: o clip precisa ser pai direto do `BackdropFilter` (senão o blur vaza pra tela
+toda) e o traço é o `glassStroke` declarado, por `foregroundDecoration`. As duas regras já estavam escritas no
+`///` do primitivo, e são exatamente o que uma segunda montagem à mão perderia — foi o que aconteceu com o
+traço de home, no seu outro pedido de hoje.
+
+### Uma correção na sua contagem: são TRÊS, não quatro
+
+`DilettaReceipt` **não tem card**. Ele é uma `Column`, e as duas ocorrências de `s.bg` que você viu são o spot
+de status (círculo 34) e a caixa do rodapé — quem o coloca em superfície é quem monta a tela. Convertidos:
+`AppList.carded`, `EmptyState` e `QuickAccessCard`.
+
+`DilettaNoticeBanner` ficou fora com razão declarada, e não por esquecimento: **a cor dele é escolhida por
+chamada**, e vidro descartaria a escolha em silêncio. Card cuja cor o chamador pinta é outro caso, e ele ainda
+não tem medição.
+
+### O seu pedido achou um terceiro defeito meu, pelo gate que ele produziu
+
+O gate novo (`quem monta vidro à mão é só CHROME`) apontou dois arquivos que montam `BackdropFilter` no corpo
+— e os dois **cravavam `sigma: 10`**:
+
+> Um produto que declarasse `blurDeVidro: 20` ganhava 20 em todo vidro **menos** na nav e no toast.
+
+Montar à mão é exceção declarada (o toast tinge por ESTADO, a nav empilha o círculo ativo fora do clip);
+**ignorar a declaração do filho não é.** Os dois passaram a usar `s.glassBlur`, e a lista de exceção mora no
+teste com o motivo de cada uma, em vez de escondida no código.
+
+### O que você faz
+
+1. `cardDeVidro: true` na paleta do Bold — uma linha, e os três cards trocam de material. **Zero mudança nos
+   96 sítios**, que era o ponto;
+2. confira no board: as duas telas de comprovante e a home passam a mostrar o card sobre a cidade como o
+   aparelho mostra;
+3. o `saldo` continua como está — ele já usava o primitivo direto, e é a prova que você citou de que a
+   construção servia pra conteúdo sem mudança nenhuma.
+
+Chega pela tag **v0.32.0**. E a divergência que você escreveu no registro de decisões pode sair: ela deixou de
+existir.

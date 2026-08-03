@@ -30,9 +30,9 @@ Por **tag**, nunca por caminho local — `pubspec.yaml` de cada pacote fixa o `r
 | `ds-diletta` | `v0.26.0` |
 | `catalogo-diletta` | `v0.77.0` |
 
-## Como ESTE filho chega no app — `v0.8.0`
+## Como ESTE filho chega no app — `v0.8.1`
 
-A primeira tag saiu em 2026-08-01; a de hoje é a `v0.8.0`. Mesma regra que eu cobro dos pais: por tag,
+A primeira tag saiu em 2026-08-01; a de hoje é a `v0.8.1`. Mesma regra que eu cobro dos pais: por tag,
 nunca por caminho local.
 
 ```yaml
@@ -40,7 +40,7 @@ dependencies:
   conta_bold_design_system:
     git:
       url: git@bitbucket.org:diletta/bold-ds.git
-      ref: v0.8.0
+      ref: v0.8.1
       path: packages/conta_bold_design_system
 ```
 
@@ -63,11 +63,11 @@ quem publica, não deste repo.
 | Preciso… | Leia |
 |---|---|
 | **o que muda ao subir de versão** deste pacote | [CHANGELOG.md](CHANGELOG.md) |
-| **adotar isto no app** (token primeiro, componente depois) e ver o que já nasceu | [packages/conta_bold_design_system/ADOCAO.md](packages/conta_bold_design_system/ADOCAO.md) |
+| **como a adoção foi decidida** — rename, variante, o que nasceu aqui (registro de 29/07) | [packages/conta_bold_design_system/2026-07-29-adocao-do-ds-do-bold.md](packages/conta_bold_design_system/2026-07-29-adocao-do-ds-do-bold.md) |
 | o que eu já pedi aos pais, e o veredito de cada um | [docs/PEDIDOS.md](docs/PEDIDOS.md) |
 | o que os pais me mandaram | [docs/avisos/](docs/avisos/) |
 | **publicar o catálogo** (Cloudflare Worker + Access) | [DEPLOY_CLOUDFLARE.md](DEPLOY_CLOUDFLARE.md) |
-| a auditoria que precedeu esta arquitetura (histórico) | [PARITY_BOLD.md](PARITY_BOLD.md) |
+| a auditoria que precedeu esta arquitetura (histórico) | [docs/2026-07-30-paridade-do-ds-app-x-catalogo.md](docs/2026-07-30-paridade-do-ds-app-x-catalogo.md) |
 
 O protocolo de conversa com os pais (formato do pedido, os quatro vereditos, como o pai responde)
 mora no DS pai: `ds-diletta/docs/PEDIDO-DO-FILHO.md` e `AVISO-DO-PAI.md`.
@@ -106,6 +106,21 @@ O que o deploy publicava era o catálogo antigo desenhando o fork — um catálo
 **O destino ficou decidido: Cloudflare.** Worker de assets + Access, build local pelo
 [`build_web.sh`](build_web.sh). O passo a passo, e a razão de o build NÃO rodar no CI, estão em
 [DEPLOY_CLOUDFLARE.md](DEPLOY_CLOUDFLARE.md).
+
+## A limpa, e ela roda com o IRMÃO no corpo de leitura
+
+```bash
+python3 ../ds-diletta/tool/faz_a_limpa.py . ../app-newbold
+```
+
+O segundo argumento não é enfeite: **83 dos 136 "símbolos fantasma" da primeira execução eram nomes que
+moram no `app-newbold`** — o registro da adoção fala dos componentes do app por nome, e sem o irmão no corpo de
+leitura a lista vira ilegível por ruído. Com ele, sobram 53, e aí dá pra triar.
+
+Dos 53, a maioria é **nome que a adoção apagou** (o `Bold*` que saiu do app hoje). Eles ficam: são o "de
+onde" da tabela de migração, e o registro declara isso no topo. O nome do arquivo começa com a DATA, que é
+o que dá a ele a isenção da limpa — a regra é do pai (`ds v0.25.2`): número que registra uma medição
+passada não se atualiza, porque atualizar é falsificar o resultado.
 
 ## Editar tela no compositor e salvar NO REPO
 

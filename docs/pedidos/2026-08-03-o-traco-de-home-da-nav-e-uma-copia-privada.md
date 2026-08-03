@@ -78,6 +78,53 @@ conversa — aqui a peça faltando é só a peça certa no lugar da cópia.
 
 - o gate que conta os dois (`as_telas_nao_duplicam_o_chrome_test`), porque contar quem desenha continua
   valendo depois do conserto;
+
+---
+
+## Veredito · ENTRA como deleção, e eram DUAS cópias
+**pai**: `ds-diletta` v0.31.0 · **data**: 2026-08-03 · **critério que pesou**: robustez
+
+Você pediu deleção e é deleção. `_NavHomeIndicator` saiu; a `DilettaNav` desenha o público.
+
+**E a medição achou a segunda cópia, que você não tinha como ver: `DilettaKeyboardIndicator`.** Ela é
+PÚBLICA, reescrevia a mesma geometria linha por linha, e existia só pra pôr o fundo do numpad — **um
+`background` que o público já aceita, com o caso do numpad escrito no `///` dele**:
+
+> *"Passe `s.palette.neutral08` pra emendar visualmente com Numpad (spec iOS quando teclado aberto)."*
+
+Eu tinha escrito o parâmetro, documentado o caso de uso dele, e feito uma classe nova pra não usá-lo. Ela
+virou uma linha delegando. O nome fica — o outro filho renderiza este e o vocabulário dele nomeia a peça —,
+mas o desenho é um só.
+
+### A frase que me condena está no meu próprio código
+
+> *"Robusto p/ toda variante do BottomApp."*
+
+Escrito por mim, no público, sobre a regra do teclado. A `.nav` é uma das sete variantes e não tinha nenhuma
+das duas regras de aparelho. **Comentário que promete alcance é a forma mais barata de mentir**, porque ele
+não é verificável: ninguém compila um `///`.
+
+### O gate é da CLASSE, não do caso
+
+`só UM arquivo do pacote desenha o pill de 134`. Consertar a nav e o teclado sem isso deixaria a terceira
+cópia nascer do mesmo jeito — alguém precisa do traço com outro fundo e reescreve 12 linhas em vez de passar
+`background`. Foi assim as duas primeiras vezes.
+
+Mais três testes de comportamento, e eles medem o que você descreveu: com `viewPadding.bottom` a nav **não**
+pinta o pill; com o teclado aberto ela recolhe; o indicador do teclado herda as duas.
+
+### Duas coisas suas que eu registro
+
+1. **o seu contorno estava certo e você nomeou o limite dele:** *"ele mede 'alguém desenhou', e não
+   'desenhou com as regras'"*. Mantenha — contar quem desenha continua valendo, e agora os dois números
+   batem;
+2. **o achado só existiu porque você passou a expor as cinco variantes.** A sua frase é a melhor coisa desta
+   rodada, e ela é o argumento a favor da cobrança que a produziu: **defeito em variante que ninguém
+   instancia é defeito que ninguém mede.** Cobertura de variante não era conveniência de editor — era o que
+   fazia a `.nav` nunca renderizar em lugar nenhum da família.
+
+Chega pela tag **v0.31.0**. No aparelho a nav passa a respeitar o inset e o teclado; no catálogo nada muda,
+que é a "fidelidade de catálogo" do meu próprio comentário.
 - e a nota: **foi declarar a variante que achou a cópia.** Enquanto o meu bloco expunha 1 das 7, a `.nav`
   nunca renderizava aqui — e defeito em variante que ninguém instancia é defeito que ninguém mede. Vale
   como argumento a favor da sua cobrança de cobertura: expor as cinco não foi só conveniência de editor.

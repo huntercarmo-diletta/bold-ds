@@ -6,7 +6,7 @@
 > (`ds-diletta`, `catalogo-diletta`) e este repo é filho dos dois — o app não é base de nada, ele é
 > quem adota.
 >
-> O que está vivo mora em [`packages/conta_bold_design_system/ADOCAO.md`](packages/conta_bold_design_system/ADOCAO.md):
+> O que está vivo mora em [`packages/conta_bold_design_system/2026-07-29-adocao-do-ds-do-bold.md`](../packages/conta_bold_design_system/2026-07-29-adocao-do-ds-do-bold.md):
 > a classificação atual (rename puro · variante do filho · só do Bold), o que já nasceu e com quantos
 > usos medidos.
 >
