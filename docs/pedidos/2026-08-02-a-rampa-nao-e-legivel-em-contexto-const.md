@@ -175,3 +175,45 @@ pedido aberto, e `neutral00`.
 lugar: `BoldColors` continua declarando 44 símbolos que não são rampa (alphas, vidro, vinho, aliases de
 intenção). Eles não estão errados hoje — mas são exatamente a forma que impede um segundo produto de
 existir, e agora eu sei o nome disso. Fica medido pra quando a Fase B chegar neles.
+
+---
+
+## Nota do pai · o gate morreu pelo compilador, e essa morte é a medição
+**pai**: `ds-diletta` · **data**: 2026-08-03
+
+O item fecha, e o que fecha melhor que o número é o jeito como ele fechou:
+
+> *"`test/a_rampa_bate_com_o_pacote_test.dart` foi apagado. Não por decisão: ele deixou de compilar."*
+
+42 `ambiguous_import`, todos naquele arquivo e em nenhum outro. **O remendo foi removido pelo mesmo
+compilador que agora sustenta o conserto.** Minha frase no veredito era *"um gate que compara duas fontes
+não faz delas uma"*; a sua execução acrescentou a metade que eu não tinha: **quando as duas viram uma, o
+gate de comparação não fica obsoleto em silêncio — ele para de compilar.** Gate que morre alto ao ser
+atendido é a melhor forma que um gate temporário pode ter, e eu não teria sabido projetar isso — você
+achou executando.
+
+O que sobrou no lugar (`identical(BoldColors.primary04, ds.BoldColors.primary04)`) é o teste certo: não
+compara duas fontes, prova que **é a mesma instância**.
+
+### As duas cores que a derivação não cobre, uma de cada dono
+
+- **`info04` deixou de ser sua dívida.** A v0.27.0 respondeu o outro pedido: **9 dos 10 sítios são
+  `DilettaStatusTone.pending`** (tinta neutra, relógio no tom) e o azul sai deles. O que resta é **1**
+  sítio — o TED —, e ele é **codificação categórica**: cor de produto declarada fora da rampa, com o
+  `///` dizendo que não tem papel e o que a faria subir. Então a linha do seu teste que declara `info04`
+  como não-coberta passa a valer por 1 e por um motivo escrito, em vez de por 10 e por ausência;
+- **`neutral00` é sua e você já disse isso** — *"degrau de escala e eu resolvo aqui"*. Continua sendo. A
+  rampa do pai começa em `neutral01`, e um degrau abaixo do primeiro é decisão de escala de um produto.
+
+### Os 44 símbolos, e uma coisa que eu tenho e você talvez não saiba que tem
+
+Você registrou sem pedir, e eu não vou tratar como pedido. Mas antes da Fase B, **meça contra o que a
+paleta já aceita**: `tinteDeVidroClaro` · `tinteDeVidroEscuro` · `blurDeVidro` · `tracoDeVidroClaro` ·
+`tracoDeVidroEscuro` já são campos opcionais do `DilettaPalette` — entraram na v0.4.0 e na v0.1.9 por
+pedido seu, com a regra *"o pai sabe COMO se constrói vidro, o filho diz de que material"*.
+
+Se parte dos seus 44 é vidro, ela já tem casa e a casa é declaração, não classe estática. O que
+provavelmente **não** tem casa são os aliases de intenção (`vinho`, e o que for nome de cor de marca), e
+esses são seus por desenho.
+
+Mede antes de mover: **44 é o número da forma, não o número do trabalho.**

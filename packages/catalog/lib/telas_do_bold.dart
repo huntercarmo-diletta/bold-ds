@@ -152,11 +152,36 @@ Map<String, ScreenSpec> telasDoBold() => {
 /// O macro sai do prefixo do slug (`pf1-…`, `pj1-…`) e não de um campo novo: o contrato de autoria já manda
 /// o slug começar com o prefixo do fluxo, então declarar o macro de novo seria a mesma informação em dois
 /// lugares — e duas fontes divergem no primeiro conserto.
+///
+/// ## Cada tela declara o `specId`, e sem ele metade do board fica muda
+///
+/// Antes eu usava o `handoffFromSpec(spec)` do motor, que monta a tela com a spec INLINE e um `child`
+/// renderizado na hora. Funciona pra tela publicada do compositor, e é a coisa errada pra tela que mora no
+/// repo: **o `specId` é a chave da tela na FONTE**, e é por ele que o board sabe qual entrada do
+/// `screen_specs.g.dart` uma edição substitui.
+///
+/// O custo de não declarar apareceu clicando, e em duas portas diferentes:
+///
+/// - **Anotar** respondia *"Selecione uma tela spec-first pra anotar"* — a nota se guarda por slug, e sem
+///   slug não há onde guardar;
+/// - **salvar no repo** não teria como saber qual das cinco entradas trocar.
+///
+/// E o `child` do helper era pior que inútil: ele é um SNAPSHOT do render feito no momento em que o grupo é
+/// montado, e o preview prefere o `child` à spec. Tela spec-first não tem mock — ela renderiza a fonte,
+/// que é o que faz o board mostrar o que o arquivo diz e não o que estava na tela quando alguém montou a
+/// lista.
 List<HandoffGroup> gruposDeTelasDoBold() {
   final porMacro = <String, List<HandoffScreen>>{};
   telasDoBold().forEach((slug, spec) {
     final macro = slug.startsWith('pj') ? 'PJ' : 'PF';
-    (porMacro[macro] ??= []).add(handoffFromSpec(spec));
+    (porMacro[macro] ??= []).add(HandoffScreen(
+      label: spec.name,
+      // A legenda é derivada da própria spec: contar blocos à mão é número que envelhece no primeiro
+      // bloco novo.
+      caption: '${spec.blocks.length} '
+          '${spec.blocks.length == 1 ? 'bloco' : 'blocos'} · fonte: $slug',
+      specId: slug,
+    ));
   });
   return [
     for (final e in porMacro.entries)

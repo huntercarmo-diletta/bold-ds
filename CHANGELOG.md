@@ -20,6 +20,41 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.7.2] — 2026-08-03
+
+### Corrigido — as telas do board não tinham `specId`, e por isso metade dos botões ficava muda
+
+Segundo relato do mesmo clique: o editor não abriu, e o **Anotar** respondeu *"Selecione uma tela
+spec-first pra anotar"*. A frase é do motor e está certa — a nota se guarda por SLUG, e o board lê o slug
+do `specId` da tela.
+
+Eu montava as telas do board com `handoffFromSpec(spec)`, que é o helper para tela **publicada do
+compositor**: ele põe a spec inline e um `child` renderizado na hora, e não tem como saber a chave da tela
+na fonte. Para tela que mora no repo, o certo é o que o primeiro filho faz — `HandoffScreen(label:,
+caption:, specId:)`, e nada mais:
+
+- **`specId` é a chave na FONTE.** Sem ele ficam mudos o anotar, o status e o "salvar no repo", que precisa
+  saber qual das cinco entradas do `screen_specs.g.dart` a edição substitui;
+- **e o `child` era pior que inútil**: ele é um SNAPSHOT do render feito quando a lista de grupos é
+  montada, e o preview prefere o `child` à spec. Tela spec-first não tem mock — ela renderiza a fonte, que
+  é o que faz o board mostrar o que o arquivo diz.
+
+O gate mede as duas metades: toda tela do board tem `specId`, o `specId` existe em
+`Conteudo.especificacoes`, nenhuma tem mock, e a contagem do board é igual à da fonte.
+
+### Corrigido — o build web não tem mais service worker
+
+`--pwa-strategy=none` no `build_web.sh`. O service worker servia o bundle em cache depois de um rebuild, e
+isso custou uma volta inteira nesta sessão: o conserto do "editar tela" estava no disco, e o navegador
+continuava executando o bundle velho. **Quem está do outro lado conclui que o conserto não funcionou, e
+não que ele não chegou.**
+
+Num catálogo que é ferramenta o offline não paga nada, e o Flutter já deprecou o próprio service worker —
+o `index.html` gerado diz isso em comentário. O arquivo velho foi apagado do `build/web`: cliente que
+ainda tenha o SW registrado recebe 404 na checagem e o larga.
+
+Gates: catálogo analyze limpo e **84 testes** · DS **107**.
+
 ## [0.7.1] — 2026-08-03
 
 ### Corrigido — o **"✎ Editar tela" era um botão morto**, e faltava o fio no meio

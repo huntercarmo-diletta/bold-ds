@@ -33,7 +33,16 @@ flutter pub get
 # Sem eles o console mostra `main.dart.js:34970` com nomes minificados, que não localizam nada
 # — os nomes mudam a cada build. O `.map` só é baixado com o devtools aberto, e este catálogo é
 # ferramenta interna atrás do Access: custo zero pra quem usa, diferença enorme pra quem conserta.
-flutter build web --release --source-maps
+# SEM SERVICE WORKER, e a razão é o dia em que isto custou uma sessão.
+#
+# O `flutter build web` gera um service worker que serve a versão em cache até ele decidir trocar. Num
+# catálogo que é FERRAMENTA isso não paga nada — ninguém precisa dele offline — e cobra a pior forma de
+# confusão: eu consertei o "editar tela", rebuildei, e o navegador continuou executando o bundle velho.
+# Quem está do outro lado conclui que o conserto não funcionou, e não que não chegou.
+#
+# O Flutter já deprecou o próprio service worker (o `index.html` gerado diz isso em comentário), então
+# `--pwa-strategy=none` também é o caminho pra frente.
+flutter build web --release --source-maps --pwa-strategy=none
 
 # O GATE DO CUSTO, e ele roda DEPOIS do build porque metade do que ele mede é a pasta gerada.
 #

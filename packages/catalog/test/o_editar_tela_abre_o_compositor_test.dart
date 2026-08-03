@@ -57,6 +57,31 @@ void main() {
     expect(ComposerInbox.instance.hasPending, isFalse, reason: 'a caixa consome o pendente');
   });
 
+  test('toda tela do board declara o specId, e ele existe na FONTE', () {
+    // O segundo defeito do mesmo clique: `Anotar` respondia "Selecione uma tela spec-first pra anotar".
+    // A nota se guarda por slug, e o board lê o slug do `specId` — que eu não declarava porque usava o
+    // `handoffFromSpec`, que monta a tela com spec inline e sem chave.
+    //
+    // Sem o specId ficam mudos: anotar, o status da tela e o "salvar no repo" (que precisa saber qual
+    // entrada do arquivo-fonte a edição substitui).
+    final grupos = gruposDeTelasDoBold();
+    expect(grupos, isNotEmpty);
+    var telas = 0;
+    for (final g in grupos) {
+      for (final tela in g.screens) {
+        telas++;
+        expect(tela.specId, isNotNull, reason: '"${tela.label}" sem specId: o board a trata como mock');
+        expect(Conteudo.especificacoes.containsKey(tela.specId), isTrue,
+            reason: '"${tela.label}" aponta pra ${tela.specId}, que não está no arquivo-fonte');
+        // E NÃO tem mock: o preview prefere o `child` à spec, então um snapshot aqui esconderia o que o
+        // arquivo diz. Tela spec-first renderiza a fonte.
+        expect(tela.child, isNull, reason: '"${tela.label}" tem mock e é spec-first');
+      }
+    }
+    expect(telas, Conteudo.especificacoes.length,
+        reason: 'o board mostra menos (ou mais) telas do que a fonte tem');
+  });
+
   test('e o gate SABE reprovar — controle sem o fio plugado', () {
     // Sem o controle, o teste acima passaria se `openBuilder` fosse plugado por acidente em outro lugar.
     final orfa = NavegacaoDoCatalogo();
