@@ -39,13 +39,17 @@ void configurarConteudoDoBold() {
     ligacoesDeclaradas: const {
       'pf/conta-pf': [
         Ligacao(de: 0, para: 1, tipo: TipoConexao.push, bloco: 'b_4'),
-        // Os ids são do CTA de cada tela — `b_8` é o "Continuar" da tela do valor e `b_12` é o
+        // Os ids são do CTA de cada tela — hoje `b_7` é o "Continuar" da tela do valor e `b_11` é o
         // "Confirmar" da revisão. Eu tinha escrito `b_1` nas duas por analogia com a primeira seta, e
         // medindo achei que `b_1` ali é bloco de CONTEÚDO: a seta ancoraria no valor e no cabeçalho, e o
         // desenho diria que aqueles blocos levam à tela seguinte. É o defeito que o pai descreve — a seta
         // casa com o primeiro id que existir, e nada avisa.
-        Ligacao(de: 1, para: 2, tipo: TipoConexao.push, bloco: 'b_8'),
-        Ligacao(de: 2, para: 3, tipo: TipoConexao.push, bloco: 'b_12'),
+        //
+        // Eles ANDARAM quando o chrome duplicado saiu das specs (o CTA solto virou `barraDeBaixo` e a
+        // barra de status saiu do topo), e quem cobrou foi o gate que deriva o CTA em vez de repetir o
+        // id. É a razão de ele existir: id à mão não acompanha mudança de estrutura.
+        Ligacao(de: 1, para: 2, tipo: TipoConexao.push, bloco: 'b_7'),
+        Ligacao(de: 2, para: 3, tipo: TipoConexao.push, bloco: 'b_11'),
       ],
     },
   ));

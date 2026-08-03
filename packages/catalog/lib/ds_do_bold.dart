@@ -1868,6 +1868,24 @@ void configurarDsDoBold() {
       'setas': DilettaIcons.arrowRightArrowLeftLight,
     },
     tiposDeAcao: const {'botao', 'barraDeBaixo'},
+    // QUEM DISPARA A SAÍDA de uma tela, em ordem de hierarquia de ação — e este gancho estava VAZIO.
+    //
+    // O custo apareceu no board antes de eu medir: as três setas do fluxo de Pix mostravam
+    // **"gatilho não documentado"** em vermelho. Com a lista vazia o motor não tem como ancorar a seta
+    // num componente, então ela sai da borda do frame e o rótulo denuncia a falta — que é degradação
+    // honesta do motor, e era falta MINHA.
+    //
+    // É lista de CRITÉRIOS e não de tipos porque o rótulo mora em prop diferente em cada peça: na barra
+    // ele é o `label` do botão de dentro, e na linha de lista é o `titulo`. A ordem é a que
+    // `gatilhoPrincipalDe` usa — barra primeiro, porque a ação ancorada do rodapé é a saída principal de
+    // toda tela de fluxo deste produto; a linha por último, porque ela é a saída das telas de MENU (a
+    // home sai pelo item "Pix", não por CTA).
+    gatilhosDeSaida: [
+      (b) => b.type == 'barraDeBaixo' ? '${b.props['label'] ?? 'Continuar'}' : null,
+      (b) => b.type == 'botao' ? '${b.props['label'] ?? 'Botão'}' : null,
+      (b) => b.type == 'cartaoDeAcesso' ? '${b.props['label'] ?? 'Acesso rápido'}' : null,
+      (b) => b.type == 'linha' ? '${b.props['titulo'] ?? 'Linha'}' : null,
+    ],
     acaoInterativa: _acaoInterativa,
     tiposDeChromeDeDispositivo: const {'barraDeStatus', 'indicadorDeHome'},
     // O visor é overlay de tela cheia: sem isto o motor daria a ele o padding e o scroll do

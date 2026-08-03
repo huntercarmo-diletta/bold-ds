@@ -20,6 +20,49 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.6.2] — 2026-08-03
+
+### Corrigido — **o board desenhava o chrome DUAS VEZES**, e o CTA flutuava fora da barra
+
+Três defeitos no mesmo print da aba Telas, mandado por quem estava olhando o board. Os três são spec
+minha pedindo peça que a casca do pai já traz:
+
+- **dois relógios de 9:41 empilhados.** As cinco telas declaravam `barraDeStatus` no `top`, e
+  `DilettaTopAppBar.defaultVariant`/`.comConteudo` compõem `DilettaStatusBar` por dentro. O bloco saiu
+  das cinco;
+- **o CTA solto no `bottom`.** Três telas de fluxo declaravam `botao` direto na região de baixo: no
+  aparelho ele flutuava sobre a arte, sem o vidro que separa ação de conteúdo, e com o traço de home
+  logo abaixo. Agora é `barraDeBaixo` com `label` (+ `labelSecundario`), que é o que o app faz —
+  `BoldBottomApp.button`. De graça, o empilhamento dos dois CTAs virou o do pai (gap 12) em vez do meu;
+- **dois traços de home.** `indicadorDeHome` declarado ao lado da barra, e **toda** variante de
+  `DilettaBottomApp` termina em `DilettaBottomHomeIndicator`.
+
+A regra que sai: *quem declara a casca não declara o chrome que ela traz.* Os dois blocos continuam no
+vocabulário pra tela sem casca — o que estava errado era a coexistência.
+
+### Corrigido — **`gatilhosDeSaida` estava VAZIO**, e as setas diziam "gatilho não documentado"
+
+- O terceiro rótulo vermelho do mesmo print, e o de causa mais distante: sem critério de gatilho no
+  plugue, o motor não tem como ancorar a seta num componente — ela sai da borda do frame e o board
+  **escreve a falta**. Degradação honesta dele, falta minha;
+- entraram quatro critérios, na ordem da hierarquia de ação deste produto: `barraDeBaixo` (rótulo = o
+  label do botão), `botao`, `cartaoDeAcesso` e `linha` (rótulo = o título). A linha é a última porque a
+  saída da HOME é o item "Pix" da lista, não um CTA;
+- os ids das setas declaradas **andaram** com a troca (`b_8`→`b_7`, `b_12`→`b_11`), e quem cobrou foi o
+  gate que DERIVA o CTA em vez de repetir o id. É a razão de ele existir.
+
+### O gate novo mede na spec E na árvore
+
+`as_telas_nao_duplicam_o_chrome_test` — 10 casos. Três na spec (nenhuma tela declara `barraDeStatus`
+junto de casca, nem `indicadorDeHome` junto de barra, nem `botao` no `bottom`), um de gatilho, cinco
+**renderizando cada tela e CONTANDO** `DilettaStatusBar` e `DilettaBottomHomeIndicator` — um de cada —,
+e um controle que reprova de propósito. A contagem na árvore é a que fecha a porta: se a casca do pai
+mudar de forma, o defeito aparece aqui e não num print.
+
+**Patch**: nada muda pra quem consome o DS. O que mudou é o catálogo — spec de tela, plugue e gate.
+
+Gates: DS analyze limpo e **107 testes** · catálogo limpo e **71**.
+
 ## [0.6.1] — 2026-08-03
 
 ### Corrigido — o número da `v0.6.0` era **10** e são **9**

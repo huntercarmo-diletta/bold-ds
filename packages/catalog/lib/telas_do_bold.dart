@@ -47,8 +47,19 @@ const String kSlugDoPixEnviado = 'pf4-pix-enviado';
 /// A HOME da conta PF, medida em `home_tab_redesign.dart`.
 ///
 /// A ordem é a do app: barra de topo com saudação, saldo com entradas e saídas, atalhos, o que precisa de
-/// atenção, e o destaque da conta PJ. O `barraDeStatus` e o `indicadorDeHome` são chrome de APARELHO — por
-/// contrato eles não saem no código gerado, e existem pra a tela parecer uma tela no board.
+/// atenção, e o destaque da conta PJ.
+///
+/// ## O chrome de aparelho NÃO se declara aqui, e isso foi medido no board
+///
+/// As cinco telas declaravam `barraDeStatus` no `top` e `indicadorDeHome` no `bottom`. As duas peças já
+/// vêm de dentro das cascas do pai: `DilettaTopAppBar.defaultVariant` e `.comConteudo` compõem
+/// `DilettaStatusBar`, e **toda** variante de `DilettaBottomApp` termina em `DilettaBottomHomeIndicator`.
+/// O resultado no board era **dois relógios de 9:41 empilhados** e dois traços de home — o print veio de
+/// quem estava olhando a aba Telas.
+///
+/// A regra que sai disso: *quem declara a casca não declara o chrome que ela traz.* O `barraDeStatus` e o
+/// `indicadorDeHome` continuam no vocabulário pra tela SEM casca, e o gate
+/// `as_telas_nao_duplicam_o_chrome_test` reprova a coexistência.
 ///
 /// O que eu NÃO reproduzi, e é decisão: o app tem uma fileira de avatares (`BoldAvatarRow`) e um carrossel
 /// horizontal de promo. Nenhum dos dois é bloco deste registro, porque nenhum dos dois passou a medição de
@@ -61,7 +72,6 @@ Map<String, dynamic> _homeDaPf() => {
       'scrollableContent': true,
       'contentGap': 's5',
       'top': [
-        {'type': 'barraDeStatus'},
         {
           'type': 'cabecalhoDaHome',
           'bindings': {'nome': 'nomeDoTitular', 'conta': 'rotuloDaConta'},
@@ -102,7 +112,6 @@ Map<String, dynamic> _homeDaPf() => {
       ],
       'bottom': [
         {'type': 'barraDeBaixo'},
-        {'type': 'indicadorDeHome'},
       ],
       'notes': [
         {
@@ -153,7 +162,6 @@ Map<String, dynamic> _autorizacoesDaPj() => {
       'scrollableContent': true,
       'contentGap': 's4',
       'top': [
-        {'type': 'barraDeStatus'},
         {'type': 'cascaDeTopo', 'props': {'titulo': 'Autorizações', 'esquerda': 'voltar'}},
         {'type': 'abas', 'props': {'abas': 'Pendentes, Histórico, Minhas', 'selecionada': '0'}},
       ],
@@ -177,18 +185,17 @@ Map<String, dynamic> _autorizacoesDaPj() => {
         {'type': 'escadaDeAlcadas'},
       ],
       'bottom': [
-        {'type': 'botao', 'props': {'label': 'Aprovar', 'larguraTotal': true}},
         {
-          'type': 'botao',
-          'props': {'label': 'Rejeitar', 'tipo': 'secondary', 'estado': 'error', 'larguraTotal': true},
+          'type': 'barraDeBaixo',
+          'props': {'label': 'Aprovar', 'labelSecundario': 'Rejeitar'},
         },
-        {'type': 'indicadorDeHome'},
       ],
       'notes': [
         {
           'kind': 'decisao',
-          'text': 'Os dois botões empilham porque este registro não tem container de LINHA. No app eles '
-              'são uma linha; inventar o bloco pra fechar o desenho seria a ordem inversa da deste repo.',
+          'text': 'Os dois botões moram DENTRO da barra de baixo, como primário e secundário dela — CTA '
+              'solto no rodapé não existe neste produto. No app estes dois são uma linha dentro do '
+              'cartão do pedido, e não o rodapé da tela; a barra é a forma que o vocabulário tem.',
         },
         {
           'kind': 'regra',
@@ -226,7 +233,6 @@ Map<String, dynamic> _valorDoPix() => {
       'scrollableContent': true,
       'contentGap': 's4',
       'top': [
-        {'type': 'barraDeStatus'},
         {'type': 'cascaDeTopo', 'props': {'titulo': '', 'esquerda': 'voltar'}},
       ],
       'blocks': [
@@ -259,8 +265,7 @@ Map<String, dynamic> _valorDoPix() => {
         },
       ],
       'bottom': [
-        {'type': 'botao', 'props': {'label': 'Continuar', 'larguraTotal': true}},
-        {'type': 'indicadorDeHome'},
+        {'type': 'barraDeBaixo', 'props': {'label': 'Continuar'}},
       ],
       'notes': [
         {
@@ -296,7 +301,6 @@ Map<String, dynamic> _revisaoDoPix() => {
       'scrollableContent': true,
       'contentGap': 's4',
       'top': [
-        {'type': 'barraDeStatus'},
         {'type': 'cascaDeTopo', 'props': {'titulo': '', 'esquerda': 'voltar'}},
       ],
       'blocks': [
@@ -341,8 +345,7 @@ Map<String, dynamic> _revisaoDoPix() => {
         },
       ],
       'bottom': [
-        {'type': 'botao', 'props': {'label': 'Confirmar', 'larguraTotal': true}},
-        {'type': 'indicadorDeHome'},
+        {'type': 'barraDeBaixo', 'props': {'label': 'Confirmar'}},
       ],
       'notes': [
         {
@@ -369,7 +372,9 @@ Map<String, dynamic> _revisaoDoPix() => {
 /// componente que eu construí pro cabeçalho de recibo e que até agora não aparecia em tela nenhuma.
 ///
 /// O rodapé tem DOIS botões (primário + secundário), que é o que o app faz: `BoldBottomApp.button` com
-/// `primary` e `secondary`. Empilham aqui pela mesma razão da PJ — este registro não tem container de linha.
+/// `primary` e `secondary` — e eles vão DENTRO da barra de baixo, que é quem empilha (gap 12) e quem traz o
+/// indicador de home. Botão solto no `bottom` era o defeito: no aparelho ele flutuava sobre a arte, sem a
+/// superfície de vidro que separa a ação do conteúdo.
 Map<String, dynamic> _pixEnviado() => {
       'slug': kSlugDoPixEnviado,
       'name': 'PF4 · Pix · enviado',
@@ -377,7 +382,6 @@ Map<String, dynamic> _pixEnviado() => {
       'scrollableContent': true,
       'contentGap': 's4',
       'top': [
-        {'type': 'barraDeStatus'},
         {'type': 'cascaDeTopo', 'props': {'titulo': '', 'esquerda': 'fechar'}},
       ],
       'blocks': [
@@ -417,12 +421,13 @@ Map<String, dynamic> _pixEnviado() => {
         },
       ],
       'bottom': [
-        {'type': 'botao', 'props': {'label': 'Compartilhar comprovante', 'larguraTotal': true}},
         {
-          'type': 'botao',
-          'props': {'label': 'Voltar ao início', 'tipo': 'secondary', 'larguraTotal': true},
+          'type': 'barraDeBaixo',
+          'props': {
+            'label': 'Compartilhar comprovante',
+            'labelSecundario': 'Voltar ao início',
+          },
         },
-        {'type': 'indicadorDeHome'},
       ],
       'notes': [
         {

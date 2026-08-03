@@ -303,7 +303,9 @@ void main() {
 
     for (final l in ligacoes.skip(1)) {
       final origem = telas[l.de];
-      final cta = origem.bottom.firstWhere((b) => b.type == 'botao');
+      // A barra de baixo, e não mais um `botao` solto: o CTA deste produto mora DENTRO dela. Quando o
+      // botão solto saiu das specs, foi esta linha que apontou os ids velhos das setas.
+      final cta = origem.bottom.firstWhere((b) => b.type == 'barraDeBaixo');
       expect(l.bloco, cta.id,
           reason: 'a seta ${l.de}→${l.para} ancora em "${l.bloco}", e o CTA de "${origem.name}" '
               'é "${cta.id}"');
