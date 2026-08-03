@@ -121,13 +121,15 @@ void main() {
 
       expect(find.byType(DilettaStatusBar), findsOneWidget,
           reason: 'dois relógios: a casca do topo já traz a barra de status');
-      // QUEM desenha o traço de home muda com a variante, e o que se mede é que UM desenhe:
-      // `DilettaBottomApp.button` põe o `DilettaBottomHomeIndicator` público; a `.nav` desenha o traço
-      // por dentro do `DilettaNav`, num widget PRIVADO dele (`_NavHomeIndicator`, que é cópia do
-      // público — está pedido ao pai). Contar os dois juntos é o que sobrevive às duas formas.
-      final tracos = find.byType(DilettaBottomHomeIndicator).evaluate().length +
-          find.byType(DilettaNav).evaluate().length;
-      expect(tracos, 1, reason: 'dois traços de home, ou nenhum: $slug');
+      // UM traço, e agora ele é o MESMO widget em toda variante.
+      //
+      // Este `expect` já foi um contorno: quando a `.nav` desenhava o traço num `_NavHomeIndicator`
+      // privado, ele contava `DilettaBottomHomeIndicator` + `DilettaNav`, porque de fora não há como
+      // referenciar classe privada de outro pacote. O pedido voltou **ENTRA como deleção** (`ds v0.31.0`,
+      // e a medição do pai achou uma segunda cópia que eu não tinha como ver), então o contorno saiu e o
+      // gate voltou a medir a peça — que é o que ele queria medir desde o começo.
+      expect(find.byType(DilettaBottomHomeIndicator), findsOneWidget,
+          reason: 'dois traços de home, ou nenhum: $slug');
     });
   }
 

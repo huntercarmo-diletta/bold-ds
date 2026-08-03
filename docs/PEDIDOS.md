@@ -34,8 +34,8 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [o `$` não é escapado](pedidos/2026-07-30-o-dolar-nao-e-escapado.md) | ENTRA | **v0.38.1** |
 | [cinco componentes sem spec, e o chrome no gate](pedidos/2026-07-30-cinco-componentes-sem-spec-e-o-chrome.md) | ENTRA | **ds v0.17.0 · motor v0.38.1** |
 | [a aba de componentes não passa pelo tema](pedidos/2026-07-30-a-aba-de-componentes-nao-passa-pelo-tema.md) | ENTRA (2 rodadas, 4 defeitos) | **v0.44.0 · v0.46.1** |
-| [o card de conteúdo não sabe ser vidro](pedidos/2026-08-03-o-card-de-conteudo-nao-sabe-ser-vidro.md) | **ENTRA pela resposta 1** (`cardDeVidro` no scheme) | **ds v0.32.0** · não adotado aqui ainda |
-| [o traço de home da nav é uma cópia privada](pedidos/2026-08-03-o-traco-de-home-da-nav-e-uma-copia-privada.md) | **ENTRA como deleção** — e eram DUAS cópias | **ds v0.31.0** · não adotado aqui ainda |
+| [o card de conteúdo não sabe ser vidro](pedidos/2026-08-03-o-card-de-conteudo-nao-sabe-ser-vidro.md) | **ENTRA pela resposta 1** (`cardDeVidro` no scheme) | **ds v0.32.0** · adotado aqui na v0.9.0 |
+| [o traço de home da nav é uma cópia privada](pedidos/2026-08-03-o-traco-de-home-da-nav-e-uma-copia-privada.md) | **ENTRA como deleção** — e eram DUAS cópias | **ds v0.31.0** · adotado aqui na v0.9.0 (o contorno do gate SAIU) |
 
 ## O que os pais me mandaram
 

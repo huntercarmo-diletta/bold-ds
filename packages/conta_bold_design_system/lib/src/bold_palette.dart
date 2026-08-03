@@ -241,6 +241,23 @@ class BoldPalette {
     tracoDeVidroClaro: BoldColors.tracoDeVidroClaro,
     tracoDeVidroEscuro: BoldColors.tracoDeVidroEscuro,
 
+    // E O CARD DE CONTEÚDO É VIDRO, que é a quinta linha da mesma receita (`ds v0.32.0`).
+    //
+    // Ela existe porque o dono do produto olhou o board e disse *"o fundo nos cards (lista) também é
+    // glassy e eles estão solid"*. O card de lista deste produto é vidro em **96 sítios do app**, e a
+    // razão não é estética: o fundo da home é o mood de IMAGEM, e card sólido em cima da arte apaga a
+    // arte — *"fills deixam a foto de fundo passar"* é regra do DS do app de antes de eu existir.
+    //
+    // O veredito do pai foi pela forma que eu preferia, e o argumento dele é a fronteira e não o knob:
+    // dos 4 arquivos dele que usavam o vidro, **os 4 eram chrome** — a construção já era dele, e o
+    // vocabulário só a oferecia pra barra. Parâmetro por componente teria espalhado a mesma falta em
+    // quatro assinaturas.
+    //
+    // Uma linha aqui converte `AppList.carded`, `EmptyState` e `QuickAccessCard`. **Declarar isto num
+    // produto de fundo liso seria pagar `BackdropFilter` por nada** — e é por isso que a decisão é do
+    // filho: só ele sabe o que está atrás.
+    cardDeVidro: true,
+
     // SEGURO (o selo) — ouro fosco do Bold.
     secure02: BoldColors.secure02,
     secure03: BoldColors.secure03,

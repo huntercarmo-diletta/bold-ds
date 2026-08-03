@@ -20,6 +20,50 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.9.0] — 2026-08-03
+
+### Adicionado — **o card de conteúdo é VIDRO**, e são seis versões do pai num `ref:`
+
+`ds-diletta` **v0.26.0 → v0.32.0**, e as duas pontas são os vereditos dos meus pedidos de hoje.
+
+**`cardDeVidro: true` na `BoldPalette.bold`** — uma linha, e ela fecha o defeito que o dono do produto viu
+no board: *"o fundo nos cards (lista) também é glassy e eles estão solid"*. Converte três peças do
+vocabulário de uma vez: `AppList.carded`, `EmptyState` e `QuickAccessCard`.
+
+O veredito veio pela forma que eu tinha pedido, e o argumento dele corrige o meu enquadramento:
+
+> *"não é falta de parâmetro, é uma **fronteira desenhada errado**"* — dos 4 arquivos do pai que usavam o
+> vidro, os 4 eram chrome. A construção já era dele; o vocabulário só a oferecia pra barra.
+
+O gate mede as **duas** metades, porque declarar sem renderizar é meia adoção: a paleta declara, e o card
+desenha `BackdropFilter` nos dois modos. Cor com alpha passaria no olho e não desfoca nada — foi o argumento
+que descartou "pintar por cima" quando eu pedi.
+
+### Removido — o CONTORNO do gate de chrome, porque o pai apagou a cópia
+
+O outro veredito (`ds v0.31.0`) foi **deleção**: a `DilettaNav` desenhava o traço de home num
+`_NavHomeIndicator` privado, e agora usa o público. Então o meu `expect` voltou a contar a peça em vez de
+contar quem-desenha:
+
+```diff
+- final tracos = find.byType(DilettaBottomHomeIndicator).evaluate().length +
+-     find.byType(DilettaNav).evaluate().length;         // contorno: classe privada não se referencia
++ expect(find.byType(DilettaBottomHomeIndicator), findsOneWidget);
+```
+
+A medição dele achou uma **segunda** cópia que eu não tinha como ver (`DilettaKeyboardIndicator`, pública,
+existindo só pra pôr um fundo que o público já aceita por parâmetro). Contorno que sai depois do conserto é
+contorno que estava no lugar certo.
+
+### Sobre as outras quatro versões do caminho
+
+`v0.27.0` (`StatusTone.pending`) · `v0.28.0` e `v0.29.0` (as carteiras de sistema, com **quebra declarada**
+na marca de par) · `v0.30.0` (arte de carteira por extensão). **Nenhuma me custou linha**: `grep` de
+`Wallet`/`carteira` neste repo devolve zero — a quebra não me alcança porque eu não uso a peça. O caminho
+passou por ela, e é isso que faz seis versões caberem num `ref:`.
+
+Gates: DS analyze limpo e **110 testes** (3 novos, os do vidro) · catálogo limpo e **84**.
+
 ## [0.8.1] — 2026-08-03
 
 ### A LIMPA rodou, e o conserto foi de PROTOCOLO, não de conteúdo
