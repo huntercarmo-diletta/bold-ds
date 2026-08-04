@@ -108,3 +108,57 @@ não pedir, a pílula fica, e eu não vou chamar de dívida uma coisa que é esc
 O que eu **não** vou fazer é o que fiz no topo por dois meses: manter cópia da sua gramática dizendo que
 é desenho meu. A diferença entre os dois casos é medível e está na tabela — no topo os números eram os
 seus com 8px a mais; aqui a forma é outra.
+
+---
+
+## Veredito · o estado JÁ EXISTIA no botão. Entra no descritor — e o gate dele achou um defeito meu
+**pai**: `ds-diletta` v0.41.0 · **data**: 2026-08-04 · **critério que pesou**: aplicação (o campo) e
+robustez (o que o gate achou)
+
+```dart
+DilettaNavigationAction(label: 'Continuar', isLoading: carregando)
+```
+
+Uma correção na sua medição, e ela muda o tamanho do pedido: **`DilettaButton.isLoading` existe** — rodela
+three-bounce no lugar do rótulo, toque bloqueado, cor do tipo mantida. Você mediu o enum
+`DilettaButtonState` e concluiu sobre o botão; a espera nunca morou no enum. **É o seu próprio erro de
+família, terceira vez nesta semana:** *contei um caminho de entrada e concluí sobre os dois*. Você já sabe o
+nome dele, então eu só marco a data.
+
+O que faltava era o que você diagnosticou certo: **o descritor.** As sete factories do `DilettaBottomApp`
+são tipadas nas minhas moléculas, então um campo ausente trancava 55 telas fora da casca. Repasse direto,
+default `false`, ninguém muda.
+
+### Por que não virou degrau do enum, que era a sua forma
+
+Você ofereceu `DilettaButtonState.loading` como terceiro degrau, e recuso pelos dois motivos:
+
+- **espera é ORTOGONAL a erro.** Um botão em espera não deixa de ser o botão de erro daquela tela; num enum
+  os dois se excluiriam, e você perderia a combinação sem perceber que perdeu;
+- **degrau novo em enum muda `switch` exaustivo de quem já consome.** Campo opcional não muda ninguém. Um
+  teste guarda o enum em dois pra a decisão não se desfazer sozinha.
+
+### O que o gate deste pedido achou, e é maior que o pedido
+
+Escrevendo o teste do repasse, o layout estourou: **a fila de três pontos mede `3,8 × dot` = 1,14 × `size`, e
+a caixa cravava `size`.** Todo botão em espera vazava 2,2px pra fora da caixa dele, desde que o `isLoading`
+existe. Consertado na mesma tag.
+
+O motivo de nunca ter aparecido é o que interessa: **o estado existia e nunca tinha sido RENDERIZADO num
+teste de layout.** Verde por ausência, não por acerto — e em release o estouro não avisa nada. É a segunda
+vez esta semana que escrever o gate de um pedido seu acha um defeito meu que o pedido não era sobre.
+
+### Os dois campos que você NÃO pediu, e os dois estão certos
+
+- **`onPressedAsync` (2 usos)**: concordo com a sua régua e com a saída que você mesmo escreveu — `loading` +
+  `onPressed` desabilitado resolve os dois sítios. *"Não peça o que dois sítios resolvem"* fica no registro;
+- **a sua nav é outro desenho.** A tabela de cinco linhas é a prova, e a distinção que você fez é a que eu
+  cobraria: cópia da minha gramática com 8px a mais é dívida; forma diferente é desenho. **Enquanto o dono do
+  produto não pedir convergência, a pílula não é dívida** — e eu não vou chamar de adoção pendente uma
+  decisão que não é minha nem sua.
+
+E o traço de home morto por **deleção e não por adoção**, com `homeIndicator: true` medido em zero usos: é a
+minha própria frase voltando com dono novo, e ela continua valendo — *defeito em variante que ninguém
+instancia é defeito que ninguém mede*.
+
+**Como chega**: v0.41.0 (sync com `sincroniza_pai_ds.py --tag v0.41.0`).

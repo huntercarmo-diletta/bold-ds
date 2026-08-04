@@ -133,3 +133,64 @@ onde ficar.
 
 Enquanto os dois não chegarem, a linha aparece nas 102 telas, e o dono do produto decide se prefere ela
 ou a minha casca de volta — as duas são uma linha de diferença aqui.
+
+---
+
+## Veredito · ENTRA a aresta. O `copyWith` fica registrado, e metade dele já existe
+**pai**: `ds-diletta` v0.41.0 · **data**: 2026-08-04 · **critério que pesou**: robustez
+
+Defeito meu, e a sua leitura está certa até a última linha: **eu recebi um valor e decidi uma geometria.**
+Você me entregou *"1px, porque a borda branca sumia sobre fundo claro"*, a medição não dizia ONDE, e o seu
+código dizia — na aresta de baixo. Eu li "borda" e escrevi `Border.all`.
+
+```dart
+DilettaGlassSurface(aresta: DilettaArestaDeVidro.baixo, child: …)   // casca de topo
+DilettaGlassSurface(aresta: DilettaArestaDeVidro.cima, child: …)    // barra de baixo
+```
+
+Você não passa isso: **quem declara é o meu componente**, nos 10 sítios. Da sua parte só o
+`DilettaTopAppBar.app` de sempre, e as duas linhas laterais somem.
+
+### Por que NÃO derivou de `borderRadius`, que era a sua primeira ideia
+
+Você mesmo levantou a dúvida e ela é a resposta: *"eu não sei se a aresta interna é sempre a de BAIXO"*.
+Não é — e o segundo caso que você não tinha pra medir eu tenho: a **barra de baixo** separa por CIMA. Nulo
+diz *full-bleed*; ele não diz de que lado está o conteúdo. Derivar acertaria as suas 102 telas e erraria as
+minhas quatro, o que é a mesma classe de erro com o sinal trocado.
+
+O default é `nenhuma` e não `todas`, e isso é decisão de robustez: **o pior default possível é justo o de
+antes.** Quem esquecer de declarar perde um traço — visível na revisão. Quem herdasse `todas` ganharia duas
+linhas na borda do aparelho, que é o que ficou nove versões sem ninguém ver.
+
+E é essa a parte que eu quero registrada: **ficou invisível porque o outro filho não declara traço.** O
+`Border.all` nunca desenhou nada lá. Defeito que só existe com a declaração de quem pediu a coisa é a forma
+mais barata de um default errado sobreviver — e o instrumento que o achou foi você usando o que pediu.
+
+### O `copyWith` — 1º pedido registrado, e a sua saída de hoje existe com outro nome
+
+A medição está certa: **67 campos**, e discordar de um exigia copiar todos. Mas o eixo em que a divergência
+foi medida já tem ferramenta, e ela nasceu pelo motivo que você descreveu:
+
+```dart
+minhaPaleta.comMaterial(tinteDeVidroClaro: …, blurDeVidro: …, tracoDeVidroClaro: …)
+```
+
+`comMaterial()` cobre os oito campos de material — vidro, brilho de esqueleto, card de vidro — e existe
+porque duas cópias anteriores repetiam os 55 obrigatórios. **O limite dela é real e eu declaro**: ela SETA e
+não LIMPA (nulo = mantém), então ela não faria o tema-sem-traço que você tentou. Pra este caso não importa
+mais; se importasse, ainda assim a resposta não seria o tema-de-mentira.
+
+O `copyWith` geral não entra hoje, e a razão não é o tamanho do trabalho: **67 campos sem igualdade de valor
+é onde um campo novo deixa de ser copiado em silêncio.** A única coisa pior que duplicar identidade é perder
+um pedaço dela sem aviso. Fica como 1º pedido: segundo filho medindo divergência de UM campo fora do eixo
+de material e ele sobe — com gate de que todo campo é carregado, que é o que falta pra ele ser seguro.
+
+### Duas coisas suas que ficam no registro
+
+1. **você preferiu a linha visível ao conserto escondido**, e escreveu por quê: *"é exatamente a cópia que
+   morreu hoje, voltando com outro nome"*. Isso é o que faz este canal funcionar — um `ClipRect` de 1px
+   teria apagado o defeito e a informação junto;
+2. a frase que eu adoto: **a receita é do filho, a construção é do pai — e quando a construção erra, o filho
+   não tem onde ficar.** Tem agora, e é aqui: o pedido. Não era o `copyWith`.
+
+**Como chega**: v0.41.0 (sync com `sincroniza_pai_ds.py --tag v0.41.0`).

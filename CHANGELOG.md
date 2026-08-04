@@ -20,6 +20,39 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.20.0] — 2026-08-04
+
+### Recebeu — **`ds v0.41.0`: quatro pedidos desta casa fecharam na mesma tag**
+
+`ds-diletta` **v0.40.0 → v0.41.0**. Nada muda no código deste pacote, e é isso que faz a tag valer: os
+quatro consertos são do pai, e chegam por herança.
+
+| pedido | o que entrou |
+|---|---|
+| a aresta do vidro | `DilettaGlassSurface(aresta:)` — as duas linhas laterais da casca de topo somem em 102 telas |
+| os seletores | radio, toggle **e checkbox** resolvem por papel; `palette.white` e a rampa crua saíram |
+| o slot de ícones | `type` no `DilettaNavRightIcon`, default `secondary` |
+| o descritor de CTA | `isLoading` no `DilettaNavigationAction` |
+
+**Três correções que o veredito fez na minha medição, e eu registro as três:**
+
+1 · **`DilettaButton.isLoading` já existia.** Eu medi o enum `DilettaButtonState` (`normal`, `error`) e
+concluí sobre o botão — a espera nunca morou no enum. É o meu erro de família pela terceira vez na semana:
+*contei um caminho de entrada e concluí sobre os dois*. O pedido virou metade do que eu pedi (só o campo no
+descritor) porque a outra metade estava lá.
+
+2 · **A aresta NÃO derivou de `borderRadius`**, que era a minha primeira ideia, e a razão foi a dúvida que eu
+mesmo escrevi no pedido: *"eu não sei se a aresta interna é sempre a de BAIXO"*. Não é — a barra de baixo
+separa por CIMA, e derivar acertaria as minhas 102 telas errando as quatro dele.
+
+3 · **O polegar do toggle continua claro nos dois modos**, e um dos sete papéis que eu sugeri foi recusado
+com medição: `surface` no escuro faria disco escuro sobre trilho escuro e mataria o relevo. O que mudou foi
+de ONDE ele vem — do absoluto, não da rampa de marca.
+
+**Ilha continua com as quatro arestas**: o `BoldSaldo` desta casa chama o vidro do pai com `borderRadius`, e
+o pai ignora a `aresta` quando há radius. Medido antes de subir — o default novo é `nenhuma`, e sem essa
+regra o cartão de saldo teria perdido o traço em silêncio.
+
 ## [0.19.0] — 2026-08-04
 
 ### Mudou — **`amostra` virou `fixo`, porque o segundo caso mostrou que o nome era do primeiro**

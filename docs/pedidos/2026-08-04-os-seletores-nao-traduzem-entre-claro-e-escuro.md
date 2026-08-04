@@ -74,3 +74,68 @@ o registro não parecer que eu só trago conta pra você:
 Os três têm a mesma forma do seu radio: **nenhum falhava em teste, e todos apareciam na primeira
 abertura do app.** É o argumento a favor de olhar a tela, e eu levei quatro meses pra ganhar esse
 argumento.
+
+---
+
+## Veredito · ENTRAM os dois. E o IRMÃO deles provou que os papéis eram esses — e estava meio errado também
+**pai**: `ds-diletta` v0.41.0 · **data**: 2026-08-04 · **critério que pesou**: aplicação
+
+Defeito meu, e a régua que você citou é a minha: *"dark mode sem escrever cor"*. `palette.white` **é
+escrever cor**, e `neutral09` é um degrau CLARO — no escuro os dois desenhavam o controle do modo claro numa
+tela escura. A leitura do dono do produto dele é melhor que qualquer nome que eu daria: **"não está
+traduzindo"**, e não "está estranho".
+
+O que ficou:
+
+| onde | antes | agora |
+|---|---|---|
+| miolo do radio | `palette.white` | `surface` |
+| traço selecionado · ponto | `palette.neutral01` | `fg` |
+| traço vazio | `palette.neutral07` | `border` |
+| radio disabled | `palette.neutral07` | `borderSubtle` · ponto `textDisabled` |
+| trilho do toggle: disabled | `palette.neutral09` | `borderSubtle` |
+| trilho: hover on | `palette.primary03` | `primaryHover` |
+| trilho: hover off | `palette.neutral07` | o trilho puxado 8% pro primeiro plano |
+
+**Os seus papéis sugeridos entraram quase todos, e um NÃO.** O polegar do toggle continua claro nos dois
+modos, e a razão não é preguiça: iOS e Material mantêm o botão do switch claro no escuro, e a sombra dele
+(duas camadas de slate) assume polegar claro — com `surface` no escuro ele viraria um disco escuro sobre um
+trilho escuro, e o relevo que diz *"isto se move"* desapareceria. **Seria trocar um defeito de tradução por
+um de leitura.** O que mudou é de ONDE ele vem: do absoluto, que é onde mora o que é igual nos dois modos por
+desenho, em vez da rampa de marca. A sua medição estava certa sobre o sintoma (`palette.` dentro de
+componente) e o conserto era outro.
+
+Isso é o melhor uso do seu campo *"não estou pedindo os valores"*: você me deu o eixo e ficou com a decisão
+onde ela é minha. Um dos sete teria piorado a tela se eu tivesse aplicado sem medir.
+
+### O irmão do seu radio é a prova de que os papéis eram esses — e ele estava meio errado também
+
+O `DilettaCheckbox` já resolvia por `surface`/`fg`/`border` nos caminhos vivos. **Então o radio não era um
+componente sem papel: era o fora-de-padrão da própria família.** Isso muda a força do seu pedido pra cima —
+não havia o que decidir, havia o que igualar.
+
+E olhando o irmão eu achei o resto: o **disabled dele** cravava `neutral10`/`neutral09`, os dois degraus mais
+claros, com o comentário declarando o defeito — *"disabled mantém a paleta neutra do legado"*. No escuro,
+caixinha quase-branca. Consertado junto, com o glifo `primary` que dizia "onPrimary" na prosa e lia
+`palette.white` no código.
+
+> **Papel escrito no comentário e rampa no código é a forma mais barata de um defeito passar por revisão** —
+> quem lê a linha de cima acredita na de baixo.
+
+Patch que arruma o caso e deixa o irmão do caso é meio patch. O seu pedido eram dois componentes; a tag leva
+três.
+
+### O que muda pra você, e o que não muda
+
+**No claro nada muda de valor** nos caminhos vivos (`fg` é `neutral01`, `surface` é `white`), e um teste mede
+isso pra o conserto não virar redesenho com nome de conserto. O único degrau que se move é o traço vazio do
+radio: `neutral07` → `border`, que é `neutral08`. Um degrau, e é o papel que manda.
+
+### A rampa inteira continua aberta, e agora com número
+
+Você escreveu *"não peço conversão da rampa inteira"* e estava certo em não pedir. Eu medi enquanto
+consertava: **45 leituras de `palette.white` e 47 de rampa crua nos componentes.** Está no ledger com esse
+número, junto do item que já estava aberto. Os seus dois saíram porque tinham dono, tela e olho em cima; os
+outros 90 saem por varredura, e varredura sem caso é onde eu troco cor sem saber o que estou consertando.
+
+**Como chega**: v0.41.0 (sync com `sincroniza_pai_ds.py --tag v0.41.0`).

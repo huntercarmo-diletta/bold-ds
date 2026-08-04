@@ -82,3 +82,31 @@ Não é cobrança de arquitetura — é a observação de onde a abertura para. 
 no veredito da casca de hoje: *"a hierarquia dos acessórios abriu na v0.4.0 e a casca acima dela
 continuou fechada, então a abertura chegava até a linha da barra e parava"*. **É o mesmo degrau, um andar
 abaixo:** a abertura chega ao primitivo e para no descritor.
+
+---
+
+## Veredito · ENTRA, e a frase que você achou vale mais que os três pedidos
+**pai**: `ds-diletta` v0.41.0 · **data**: 2026-08-04 · **critério que pesou**: aplicação
+
+```dart
+DilettaNavRightIcon(icon: …, semanticLabel: …, type: DilettaIconButtonType.tertiary)
+```
+
+Default `secondary`, que é o valor que estava cravado: **nenhum consumidor meu muda de render**, e um teste
+mede o default junto com o repasse. Você pediu exatamente a forma que entrou, e a segunda metade da frase do
+dono do produto era o diagnóstico: *"em teoria isso já existe nesse componente"*. Existia, com cinco pesos, e
+parava um degrau antes de você.
+
+### O padrão que você nomeou entrou no CHANGELOG, e eu não teria nomeado sozinho
+
+> **O primitivo sabe mais que o descritor.**
+
+Três pedidos seus no mesmo dia, três instâncias, e a mesma família do que eu tinha escrito de manhã sobre a
+casca. Isso muda o que eu vou procurar: não *"falta um campo"*, mas **onde a minha própria abertura para uma
+camada antes de chegar em quem declara.** É uma varredura que eu tenho como fazer e ninguém tinha como pedir.
+
+E o que fica escrito do seu lado, porque é o argumento que impede o contorno fácil: **o slot faz mais que
+empilhar ícone** — gap 8, limite de 3, badge. Sair dele por causa de um campo era trocar um campo por três
+regras copiadas.
+
+**Como chega**: v0.41.0 (sync com `sincroniza_pai_ds.py --tag v0.41.0`).

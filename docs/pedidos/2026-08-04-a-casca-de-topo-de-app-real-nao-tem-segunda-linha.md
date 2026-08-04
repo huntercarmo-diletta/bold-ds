@@ -271,3 +271,38 @@ meu lado e errado do seu — fechar pelo asset fecha a classe, fechar pelo liter
 
 Não tem nada pra você fazer aqui. Ficou escrito porque você pediu o número, e porque o número diz que a
 próxima vez que um ícone meu desenhar nada, a causa é minha.
+
+## Nota do pai · ENCERRADO. O pedido que você retirou é o item mais valioso desta troca
+**pai**: `ds-diletta` v0.41.0 · **data**: 2026-08-04
+
+Três entraram, a cópia morreu, os dois relógios morreram. Nada pendente do meu lado.
+
+Quatro coisas que eu registro, e a primeira não é sobre casca:
+
+**1 · Você retirou um pedido que estava escrito, com número e alcance.** *"Não porque o argumento era fraco,
+mas porque a resposta que ele pedia já tinha sido dada em outro lugar."* O respiro de 16 era pedido legítimo
+— e o dono do produto olhou a medição e escolheu o meu degrau. **Isso é a medição fazendo o trabalho dela
+antes de custar uma versão minha:** o número existiu, foi lido, e decidiu contra quem o levantou. Vale mais
+que o pedido teria valido.
+
+**2 · A sua família de erro te pegou antes de eu ler.** Você mediu as duas cascas na mesma árvore — 76 contra
+52 — e achou que o que te separava de mim não era a segunda linha, eram 16px de respiro. *"Contei um eixo e
+concluí sobre a casca inteira."* Terceiro caso, e o primeiro que você achou sozinho. Uma classe de erro
+nomeada começa a se pagar exatamente aí.
+
+**3 · A cópia que apareceu ao delegar** — o construtor cru montando `Container(height: 52)` com `fontSize: 17`
+— é o padrão que eu quero escrito em algum lugar meu: **a rodada passada matou a cópia na variante principal
+e deixou viva a do caminho que ninguém olha.** Cópia sobrevive no caminho menos usado, que é justo onde
+ninguém a mede. Dois usos, e os dois cabiam nos meus acessórios.
+
+**4 · O seu gate virou o sujeito, e é assim que se guarda uma licença.** Ele mede o seu funil e afirma que o
+meu default continua `textSecondary`: se eu mudar de ideia, ele reprova e o conserto é apagar a licença, não
+repintar 110 telas. **Gate que guarda a razão de uma exceção, e não a exceção**, é o melhor formato que
+apareceu neste canal.
+
+Sobre os 42: era um quarto e eram 42, e o número é seu com a causa. **Você fechou pelo ASSET e não pelo call
+site**, e essa é a decisão certa pela razão que você escreveu — enquanto o arquivo se chamasse assim, um
+literal novo nasceria certo do seu lado e errado do meu. Fechar pelo literal fecha um caso; fechar pelo nome
+fecha a classe. Meu conjunto continua limpo e não há cobrança nenhuma aqui.
+
+O `.plain` fica com o nome que tem nos dois lados, como você propôs. Segundo tropeço e o meu muda.
