@@ -20,6 +20,31 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.10.1] — 2026-08-03
+
+### Corrigido — o bloco do esqueleto no board mostrava a FORMA sem o BRILHO
+
+*"Shimmer ainda não apareceu"* — dito depois de o rosa entrar na paleta. A adoção do app já estava certa
+(os 35 embrulhados), mas o **catálogo** não: o bloco `esqueleto` declarava só `DilettaSkeleton.box`, e a
+forma do pai não anima sozinha — o `///` dele manda embrulhar num `DilettaShimmer`.
+
+Então o board mostrava caixa cinza parada onde o app mostra a varredura. **Board que mostra a peça sem o
+movimento dela ensina o movimento errado**, e o custo é literal: quem copia o código leva a caixa parada.
+
+O bloco virou PAR, e isso teve três consequências que valem escritas:
+
+- **saiu da tabela** (`ctor` fora): a tabela emite `nome: valor` num construtor só, e aninhamento de dois
+  níveis não cabe. Mesmo caso da `barraDeBaixo` e da `cascaDeTopo`;
+- **entrou no leitor à mão**: a volta lê `ds.DilettaShimmer` e tira as duas medidas do construtor de
+  DENTRO, que é onde elas moram;
+- **o contrato virou exceção declarada**: sem `ctor`, a derivação classe→slug não alcança, e o gate
+  `bloco-sem-contrato` reprovou na hora. O contrato continua sendo o do pai (`design-system-skeleton`) —
+  a spec dele fala das duas peças juntas.
+
+Gate: o bloco renderizado tem **um `DilettaShimmer` e um `DilettaSkeleton`** na árvore.
+
+Gates: catálogo analyze limpo e **85 testes** · DS **116**.
+
 ## [0.10.0] — 2026-08-03
 
 ### Adicionado — **o brilho do esqueleto é da MARCA**, e a leitura valeu mais que o campo

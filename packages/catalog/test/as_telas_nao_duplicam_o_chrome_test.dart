@@ -133,6 +133,21 @@ void main() {
     });
   }
 
+  testWidgets('o bloco do esqueleto desenha o PAR — forma e brilho', (t) async {
+    // O board mostrava caixa cinza parada onde o app mostra a varredura, porque eu declarava só a forma.
+    // O `///` do pai é explícito: *"não anima sozinha — embrulhe num DilettaShimmer"*.
+    await t.pumpWidget(MaterialApp(
+      theme: ThemeData(fontFamily: BoldFonts.familyRaw),
+      home: Ds.tema(Scaffold(body: Center(child: buildBlock(
+        Block(id: 'x', type: 'esqueleto', props: Ds.blocos['esqueleto']!.defaults()),
+      )))),
+    ));
+    await t.pump(const Duration(milliseconds: 100));
+    expect(find.byType(DilettaShimmer), findsOneWidget,
+        reason: 'esqueleto sem brilho no board ensina o movimento errado: quem copia leva a caixa parada');
+    expect(find.byType(DilettaSkeleton), findsOneWidget);
+  });
+
   test('e o gate SABE reprovar — controle com as três formas erradas', () {
     // Sem o controle, os três testes acima passam num mapa vazio e ninguém nota.
     Block bloco(String tipo) => Block(id: tipo, type: tipo, props: const {});

@@ -814,19 +814,29 @@ BlockDef _toast() => BlockDef(
 
 BlockDef _esqueleto() => BlockDef(
       type: 'esqueleto',
-      ctor: 'ds.DilettaSkeleton.box',
-      args: const {'largura': Arg.numero('width'), 'altura': Arg.numero('height')},
-      label: 'Esqueleto · Skeleton',
+      // SEM `ctor`, e por isso fica fora da tabela: o bloco emite um PAR.
+      //
+      // O esqueleto do pai é a FORMA e não anima sozinho — o `///` dele diz *"embrulhe num
+      // DilettaShimmer pra ganhar o brilho"*. Eu declarava só a forma, então o catálogo mostrava uma
+      // caixa cinza parada enquanto o app mostrava a varredura. Board que mostra a peça sem o movimento
+      // dela ensina o movimento errado: quem copia o código leva a caixa parada.
+      //
+      // Achado pelo dono do produto, e do jeito mais direto: *"o skeleton tem um shimmer rosinha, agora
+      // só é o frame cinza"*. O rosa é declaração deste produto (`brilhoDoEsqueleto`, ds v0.34.0).
+      label: 'Esqueleto · Skeleton com Shimmer',
       props: const {
         'largura': PropDef('number'),
         'altura': PropDef('number'),
       },
       defaults: () => {'largura': '180', 'altura': '16'},
-      build: (p) => DilettaSkeleton.box(
-        width: double.tryParse('${p['largura']}'),
-        height: double.tryParse('${p['altura']}'),
+      build: (p) => DilettaShimmer(
+        child: DilettaSkeleton.box(
+          width: double.tryParse('${p['largura']}'),
+          height: double.tryParse('${p['altura']}'),
+        ),
       ),
-      codegen: (p) => 'ds.DilettaSkeleton.box(width: ${p['largura']}, height: ${p['altura']})',
+      codegen: (p) => 'ds.DilettaShimmer(child: ds.DilettaSkeleton.box('
+          'width: ${p['largura']}, height: ${p['altura']}))',
     );
 
 BlockDef _botaoDeIcone() => BlockDef(
@@ -2320,6 +2330,9 @@ Map<String, String> _contratosDosBlocos(Map<String, BlockDef> blocos) {
     'linhaDeValor': 'design-system-app-list',
     'barraDeBaixo': 'design-system-bottom-app',
     'indicadorDeHome': 'design-system-bottom-home-indicator',
+    // O esqueleto perdeu o `ctor` quando virou PAR (`Shimmer(child: Skeleton)`), porque a forma do pai
+    // não anima sozinha. O contrato continua sendo o dele — a spec do pai fala das duas peças juntas.
+    'esqueleto': 'design-system-skeleton',
   };
   excecoes.forEach((tipo, slug) {
     if (!blocos.containsKey(tipo)) return;

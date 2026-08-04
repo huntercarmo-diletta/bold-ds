@@ -30,9 +30,9 @@ Por **tag**, nunca por caminho local — `pubspec.yaml` de cada pacote fixa o `r
 | `ds-diletta` | `v0.34.0` |
 | `catalogo-diletta` | `v0.77.0` |
 
-## Como ESTE filho chega no app — `v0.10.0`
+## Como ESTE filho chega no app — `v0.10.1`
 
-A primeira tag saiu em 2026-08-01; a de hoje é a `v0.10.0`. Mesma regra que eu cobro dos pais: por tag,
+A primeira tag saiu em 2026-08-01; a de hoje é a `v0.10.1`. Mesma regra que eu cobro dos pais: por tag,
 nunca por caminho local.
 
 ```yaml
@@ -40,7 +40,7 @@ dependencies:
   conta_bold_design_system:
     git:
       url: git@bitbucket.org:diletta/bold-ds.git
-      ref: v0.10.0
+      ref: v0.10.1
       path: packages/conta_bold_design_system
 ```
 
@@ -149,5 +149,5 @@ jeito; o que muda é o transporte.
 
 **A porta é 8081 de propósito.** Service worker é registrado por ORIGEM (host + porta), e a 8080 ficou com um
 SW velho servindo bundle em cache — dois prints de defeito vieram de lá, de uma build que já não existia.
-Porta nova é origem limpa. E o título da aba diz a versão da build (`v0.9.3`), lida do `pubspec` pelo
+Porta nova é origem limpa. E o título da aba diz a versão da build (`v0.10.1`), lida do `pubspec` pelo
 `build_web.sh`: quem olha a tela sabe o que está olhando.

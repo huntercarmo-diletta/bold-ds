@@ -102,6 +102,17 @@ Block _bloco(String expr) {
     });
   }
 
+  // O ESQUELETO: virou PAR na v0.10.0 (`Shimmer(child: Skeleton.box)`) porque a forma do pai não anima
+  // sozinha, e o board mostrava caixa cinza parada onde o app mostra a varredura. Aninhamento de dois
+  // níveis não cabe na tabela, então a volta é lida à mão — e as duas medidas vêm do construtor de
+  // DENTRO, que é onde elas moram.
+  if (ehCtor(expr, 'ds.DilettaShimmer')) {
+    return Block(id: _novoId(), type: 'esqueleto', props: {
+      'largura': argNumeroComoTexto(expr, 'width') ?? '180',
+      'altura': argNumeroComoTexto(expr, 'height') ?? '16',
+    });
+  }
+
   // A CASCA DE TOPO: aninha casca → barra → acessório, e a tabela não cobre aninhamento. O acessório
   // esquerdo volta pelo NOME do construtor dele, que é o único sinal disponível no código.
   if (ehCtor(expr, 'ds.DilettaTopAppBar.defaultVariant')) {
