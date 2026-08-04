@@ -20,6 +20,44 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.11.0] — 2026-08-03
+
+### Adicionado — **o feixe**, e ele vem em PAR claro/escuro
+
+`ds-diletta` **v0.34.0 → v0.35.1**, e o pedido voltou com as duas metades atendidas:
+
+- **a varredura virou luz que atravessa**: três stops, pontas em alpha 0, banda de 0.36 da peça, e o `t`
+  correndo de −0.18 a 1.18 pra o feixe **entrar e sair**. Antes eram dois stops com banda de 0.9 sobre alvo
+  de largura 1 — cobria a peça inteira. A frase do veredito é a minha medição de volta: *"um banho que
+  escorre, não uma luz que passa"*;
+- **`brilhoDoEsqueletoClaro` + `brilhoDoEsqueletoEscuro`**, resolvidos por modo dentro do scheme.
+
+**Aqui os dois rosas são diferentes, e o motivo é medido:**
+
+| modo | fundo do esqueleto | cor declarada | pico medido |
+|---|---|---|---|
+| claro | cinza **217** | `primary07` (#FFB6CB) | `244,192,207` · R−G **52** |
+| escuro | cinza **82** | `primary06` (#FF87AB) | `206,120,146` · R−G **86** |
+
+Os dois abrem no mesmo **R (207)** — a diferença não é brilho, é **saturação**. Sobre o fundo escuro a cor
+lavada perde o rosa e vira luz branca; o degrau mais forte mantém a leitura de *"luz ROSA passando"*, que é
+o que foi pedido. Declarar o mesmo valor duas vezes seria pagar o campo e não usar o que ele resolve — e o
+gate mede isso: os dois têm que ser **diferentes**.
+
+### O gate ficou mais forte, porque agora existe forma pra medir
+
+O pai tornou `feixeDoEsqueleto(scheme, t)` **público** com a razão escrita: forma que só vive dentro de um
+`shaderCallback` não tem como ser medida — o callback devolve `Shader`, e `Shader` não conta stops.
+
+Então o teste daqui mede as duas coisas em dois níveis:
+
+- **a forma, onde ela é declarada**: três cores, pontas em alpha 0, centro acima de 0.5 e na cor da marca;
+  e no instante 0 os stops se achatam na borda — o feixe ainda está entrando;
+- **o resultado, em pixel**: o pico varre a peça (x=250 → 315 → 467 ao longo do ciclo) e some quando o feixe
+  sai (R−G = 0 aos 900ms). Com o controle de sempre: sem shimmer, R−G = 0.
+
+Gates: DS analyze limpo e **118 testes** · catálogo limpo e **85**.
+
 ## [0.10.2] — 2026-08-03
 
 ### Corrigido — os esqueletos que moram DENTRO deste pacote também precisavam do brilho

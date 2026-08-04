@@ -17,9 +17,32 @@ import 'package:flutter_test/flutter_test.dart';
 /// O veredito (`ds v0.34.0`) trouxe `brilhoDoEsqueleto` com nulo mantendo o neutro. Aqui se mede a
 /// declaração **e** o pixel: a cor tem que aparecer na varredura, senão a linha da paleta é enfeite.
 void main() {
-  test('a paleta declara o brilho, e ele é o rosa da marca', () {
-    expect(BoldPalette.bold.brilhoDoEsqueleto, BoldColors.primary07,
+  test('a paleta declara o brilho nos DOIS modos, e são rosas diferentes', () {
+    expect(BoldPalette.bold.brilhoDoEsqueletoClaro, BoldColors.primary07,
         reason: 'sem a declaração o brilho volta a ser neutro — e ninguém falha, só some a marca');
+    expect(BoldPalette.bold.brilhoDoEsqueletoEscuro, BoldColors.primary06);
+    // Dois valores DIFERENTES, e é o ponto do par: o que se vê é a cor misturada com o que está atrás, e
+    // o fundo do esqueleto é cinza 217 num modo e 82 no outro. Declarar o mesmo rosa duas vezes seria
+    // pagar o campo e não usar o que ele resolve.
+    expect(BoldPalette.bold.brilhoDoEsqueletoClaro,
+        isNot(BoldPalette.bold.brilhoDoEsqueletoEscuro));
+  });
+
+  test('o FEIXE tem pontas transparentes e centro na cor — a forma, medida onde ela é declarada', () {
+    // A forma virou peça pública (`feixeDoEsqueleto`) exatamente pra poder ser medida: `shaderCallback`
+    // devolve `Shader`, e `Shader` não conta quantos stops tem.
+    final feixe = feixeDoEsqueleto(BoldTheme.light.scheme, 0.5);
+    expect(feixe.colors, hasLength(3), reason: 'dois stops é banho que escorre, não luz que passa');
+    expect(feixe.colors.first.a, 0, reason: 'a ponta de entrada tem que ser transparente');
+    expect(feixe.colors.last.a, 0, reason: 'a ponta de saída tem que ser transparente');
+    expect(feixe.colors[1].a, greaterThan(0.5), reason: 'o centro é a luz');
+    expect(feixe.colors[1].r, BoldColors.primary07.r, reason: 'e a luz é da marca');
+
+    // E ela ENTRA e SAI: no começo do ciclo os stops se achatam no 0, então não há luz sobre a peça.
+    final inicio = feixeDoEsqueleto(BoldTheme.light.scheme, 0);
+    expect(inicio.stops!.first, 0);
+    expect(inicio.stops!.last, lessThan(0.4),
+        reason: 'no instante 0 o feixe ainda está entrando pela borda esquerda');
   });
 
   test('todo esqueleto DESTE pacote está dentro de um shimmer', () {

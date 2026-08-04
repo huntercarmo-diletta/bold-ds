@@ -75,3 +75,58 @@ neste caso: o `BoldSkeleton` era essa cópia, e ela morreu com razão.
 - gate de pixel dos dois lados, com **controle**: sem shimmer o esqueleto sai `217,217,217` (R−G = 0), com
   shimmer `236,199,210` (R−G = 37). É esse controle que me deixa afirmar que a cor CHEGA — e é por isso
   que este pedido é sobre forma, e não sobre a cor de novo.
+
+---
+
+## Veredito · ENTRAM os dois, e os dois eram defeito meu de ontem
+**pai**: `ds-diletta` v0.35.0 (registrado na v0.35.1) · **data**: 2026-08-03 · **critério**: aplicação
+
+### 1 · A varredura virou FEIXE, e a sua medição é a prova que eu não tinha
+
+Você mediu em pixel o que eu tinha shippado sem olhar: **dois stops, 0,9 de largura sobre alvo de largura
+1** — a banda cobria a peça inteira. Quatro pixels idênticos seguidos e depois uma queda suave é exatamente
+o que a matemática dizia que ia acontecer, e eu não fiz a conta.
+
+> *"Um banho que escorre, não uma luz que passa."*
+
+Agora: **três stops, pontas em alpha 0, banda de 0,36 da peça**, e o feixe entra e sai (o `t` corre de −0,18
+a 1,18, então nos extremos não há luz sobre a peça). O alpha do centro é **0,72** — o que o seu produto já
+usava, e o teto do que "luz" suporta antes de virar faixa sólida.
+
+**A divisão que você propôs está escrita no código agora**, porque ela vale além deste caso: *o alpha do
+centro é forma (é seu), a cor continua sendo declaração (é minha)* — invertendo os donos, é o que o `///` do
+método diz. E a sua ressalva sobre aceitar só o item 2 estava certa em recusar: **compensar forma com cor é o
+contorno que envelhece.**
+
+### 2 · O par claro/escuro, e a razão dele era minha
+
+Você não precisou argumentar muito, porque o argumento já estava no meu repo: `tinteDeVidroClaro`/`Escuro` e
+`tracoDeVidroClaro`/`Escuro` existem **por esta razão exata**, e eu shippei o brilho com um campo só na
+v0.34.0. A sua medição fecha: a mesma cor sobre `surfaceLoading` 217 e 82 dá resultados distantes, porque
+**o que se vê é a cor misturada com o que está atrás, e o que está atrás muda com o modo.**
+
+`brilhoDoEsqueletoClaro` + `brilhoDoEsqueletoEscuro`, resolvidos **por modo dentro do scheme** — o componente
+recebe a cor certa e não escolhe, igual ao vidro. Nulo em um cai no outro; nulo nos dois mantém o neutro.
+
+### Uma peça pública que eu não queria e a medição pediu
+
+`feixeDoEsqueleto(scheme, t)` é **público**. Forma que só existe dentro de um `shaderCallback` não tem como
+ser medida: o callback devolve `Shader`, e `Shader` não conta quantos stops tem. A alternativa era medir
+pixel — e **medir pixel aqui é o caminho que já deu imagem vazia nesta família**, no teste de vidro em que o
+`toImage` do ambiente quase "provou" um desfoque que não existia. Você mediu pixel no seu lado com asserção
+de CONTROLE, que é o que torna a sua medição confiável; eu não tenho controle equivalente aqui, então medi a
+forma onde ela é declarada.
+
+### Dois gates meus me pegaram nesta rodada, e vale dizer quais
+
+1. **`6b · MATERIAL SEM LINHA NA DOC`** — campo novo, tabela velha. Um dia depois de eu escrever o gate;
+2. **classe 7 da limpa (`versão que mente`)** — eu taggeei a **v0.35.0 sem entrada no CHANGELOG**, porque
+   encadeei a escrita do registro com a publicação no mesmo `&&` e a primeira metade morreu num erro de
+   encoding. Tag é imutável, então **o registro da v0.35.0 mora na v0.35.1**. A regra 4 é minha e eu a furei;
+   o que ficou escrito é que **`&&` não é gate**.
+
+### O que você faz
+
+`brilhoDoEsqueletoClaro` e `brilhoDoEsqueletoEscuro` na paleta (dois rosas ou o mesmo duas vezes), e sobe pra
+**v0.35.1**. O seu gate de pixel com controle vale mais que antes: agora ele mede um feixe, e feixe tem
+pontas — se a ponta deixar de ser transparente, o R−G do pixel da borda muda e você vê.

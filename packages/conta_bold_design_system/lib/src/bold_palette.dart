@@ -267,7 +267,16 @@ class BoldPalette {
     // O que fica no componente e NÃO se declara é o alpha: ele é a FORMA da varredura (banda que entra e
     // sai), não a identidade. O que é do produto é a cor — a frase é do veredito, e ela também é o limite
     // da regra: **material se declara; estado não.**
-    brilhoDoEsqueleto: BoldColors.primary07,
+    // O FEIXE, e ele vem em PAR — a `ds v0.35.1` corrigiu as duas metades do mesmo pedido: a varredura
+    // virou luz que atravessa (três stops, pontas transparentes) e a cor passou a ter um valor por modo.
+    //
+    // Por que dois rosas e não um: o que se vê é a cor MISTURADA com o que está atrás, e o que está
+    // atrás muda. No claro o esqueleto é cinza 217 e o `primary07` (rosa lavado) abre a banda sem
+    // estourar; no escuro ele é cinza 82, e sobre esse fundo o mesmo rosa lavado quase some — a medição
+    // do pedido mostrou o pico caindo de `236,199,210` pra `169,132,142`. No escuro entra o `primary06`,
+    // um degrau mais forte, pra a luz ter o mesmo peso de leitura nos dois modos.
+    brilhoDoEsqueletoClaro: BoldColors.primary07,
+    brilhoDoEsqueletoEscuro: BoldColors.primary06,
 
     // SEGURO (o selo) — ouro fosco do Bold.
     secure02: BoldColors.secure02,
