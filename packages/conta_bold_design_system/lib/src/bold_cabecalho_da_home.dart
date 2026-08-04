@@ -178,7 +178,7 @@ class _BotaoDeConta extends StatelessWidget {
           DilettaIcon(name: DilettaIcons.piggyBankLight, size: 16, color: tinta),
           DilettaGap.w(DilettaSpacing.s1_5),
           if (carregando)
-            DilettaSkeleton.box(width: 58, height: 11)
+            DilettaShimmer(child: DilettaSkeleton.box(width: 58, height: 11))
           else
             DilettaText(rotulo, style: DilettaType.labelMd.copyWith(color: tinta)),
           // O chevron só existe quando há troca de conta: rótulo estático com afordância de

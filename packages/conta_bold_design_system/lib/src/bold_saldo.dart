@@ -91,7 +91,11 @@ class BoldSaldo extends StatelessWidget {
               if (carregandoValor)
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: DilettaSpacing.s1),
-                  child: DilettaSkeleton.box(width: 190, height: 26),
+                  // O ESQUELETO NÃO ANIMA SOZINHO — o `///` do pai diz, e este card é o caso mais visto
+                  // do produto: a home abre nele. Chegou como *"o skeleton tem um shimmer rosinha, agora
+                  // só é o frame cinza"*, e o meu conserto de ontem tinha embrulhado os 35 do APP e
+                  // deixado os 3 que moram AQUI DENTRO — quem carrega o saldo vê estes, não aqueles.
+                  child: DilettaShimmer(child: DilettaSkeleton.box(width: 190, height: 26)),
                 )
               else
                 _ValorComLarguraReservada(
@@ -101,11 +105,16 @@ class BoldSaldo extends StatelessWidget {
                 ),
               if (carregandoTotais) ...[
                 DilettaGap.h(DilettaSpacing.s2),
-                Row(children: [
-                  DilettaSkeleton.box(width: 92, height: 20),
-                  DilettaGap.w(DilettaSpacing.s1),
-                  DilettaSkeleton.box(width: 92, height: 20),
-                ]),
+                // UM shimmer pros dois selos, e não um por selo: a varredura atravessa o par como
+                // atravessaria o conteúdo que vem no lugar dele. Dois wrappers dariam duas bandas fora
+                // de fase, que lê como dois carregamentos independentes.
+                DilettaShimmer(
+                  child: Row(children: [
+                    DilettaSkeleton.box(width: 92, height: 20),
+                    DilettaGap.w(DilettaSpacing.s1),
+                    DilettaSkeleton.box(width: 92, height: 20),
+                  ]),
+                ),
               ] else if (entradas != null || saidas != null) ...[
                 DilettaGap.h(DilettaSpacing.s2),
                 Row(children: [

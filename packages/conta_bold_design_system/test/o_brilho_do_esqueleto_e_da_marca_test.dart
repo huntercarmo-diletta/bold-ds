@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
@@ -19,6 +20,28 @@ void main() {
   test('a paleta declara o brilho, e ele é o rosa da marca', () {
     expect(BoldPalette.bold.brilhoDoEsqueleto, BoldColors.primary07,
         reason: 'sem a declaração o brilho volta a ser neutro — e ninguém falha, só some a marca');
+  });
+
+  test('todo esqueleto DESTE pacote está dentro de um shimmer', () {
+    // O conserto de ontem embrulhou os 35 esqueletos do APP e deixou os que moram AQUI: três no card de
+    // saldo e um no cabeçalho da home. E são justamente os que aparecem primeiro — a home abre no saldo.
+    //
+    // *"Estou olhando no app (carregar saldo por exemplo)"* — o dono do produto apontou o caso exato, e o
+    // meu gate anterior não o alcançava porque ele varria `lib/` do app, não deste pacote. Gate que mede
+    // um lado da fronteira acha metade do defeito.
+    final soltos = <String>[];
+    for (final f in Directory('lib').listSync(recursive: true).whereType<File>()) {
+      if (!f.path.endsWith('.dart')) continue;
+      final fonte = f.readAsStringSync();
+      for (final m in RegExp(r'DilettaSkeleton\.[a-z]+\(').allMatches(fonte)) {
+        final acima = fonte.substring((m.start - 400).clamp(0, m.start), m.start);
+        if (!acima.contains('DilettaShimmer(')) {
+          soltos.add('${f.path}:${'\n'.allMatches(fonte.substring(0, m.start)).length + 1}');
+        }
+      }
+    }
+    expect(soltos, isEmpty,
+        reason: 'esqueleto sem shimmer é caixa cinza parada, e nada falha:\n${soltos.join('\n')}');
   });
 
   testWidgets('e a varredura pinta ROSA — medido em pixel', (t) async {

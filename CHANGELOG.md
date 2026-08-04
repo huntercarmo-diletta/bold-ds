@@ -20,6 +20,33 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.10.2] — 2026-08-03
+
+### Corrigido — os esqueletos que moram DENTRO deste pacote também precisavam do brilho
+
+*"Estou olhando no app (carregar saldo por exemplo)"* — e é o caso exato que o conserto de ontem não
+alcançou. Eu embrulhei os **35 esqueletos do app** e deixei os **4 que moram aqui**: três no `BoldSaldo` (o
+valor e os dois selos de totais) e um no `BoldCabecalhoDaHome`.
+
+São justamente os que aparecem primeiro: **a home abre no saldo.** Quem carrega o saldo vê estes, não
+aqueles.
+
+Nos totais é **um shimmer pro par**, e não um por selo: a varredura atravessa os dois como atravessaria o
+conteúdo que vem no lugar deles. Dois wrappers dariam duas bandas fora de fase, que lê como dois
+carregamentos independentes.
+
+### O gate anterior media um lado da fronteira
+
+O que eu tinha varria `lib/` do APP. Este pacote é o outro lado, e o mesmo defeito morava aqui —
+**gate que mede um lado da fronteira acha metade do defeito.** Agora cada lado tem o seu, com a mesma
+regra: todo `DilettaSkeleton` tem um `DilettaShimmer` acima.
+
+E o gate de pixel ganhou o **controle** que faltava: sem shimmer o esqueleto sai `217,217,217` (R−G = 0);
+com shimmer, `236,199,210` (R−G = 37). Sem essa metade, um `surfaceLoading` levemente quente passaria no
+teste e eu concluiria que o brilho pinta quando ele não pinta nada.
+
+Gates: DS analyze limpo e **117 testes** · catálogo limpo e **85**.
+
 ## [0.10.1] — 2026-08-03
 
 ### Corrigido — o bloco do esqueleto no board mostrava a FORMA sem o BRILHO
