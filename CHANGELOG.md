@@ -20,6 +20,42 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.14.0] — 2026-08-04
+
+### Mudou — **o pai é a `v0.38.0`, e as 6 linhas que faltavam subiram**
+
+`ds-diletta` **v0.37.0 → v0.38.0**. Nada muda neste pacote: o veredito é todo sobre o slot do MEIO da
+linha de lista, que este pacote não usa. Quem consome a mudança é o app, e é por isso que esta entrada
+existe — sem a tag, o app não alcança as três props.
+
+**O que o pai deu, e o que eu tinha pedido errado:**
+
+| eu pedi | o que entrou | por quê |
+|---|---|---|
+| `subtitleLoading: bool` | `subtitleLoading: bool` | igual — e a barra é DERIVADA (altura = degrau do subtítulo, largura = fração do slot, não pixel) |
+| `subtitleMaxLines` / `maxLines` | os dois, default 1 | **e não era "um `bool`"**: os slots cravam `SizedBox(height: 72)`, então 10 linhas ESTOURAM em vez de crescer. Entrou a prop e entrou a consequência — a altura virou PISO quando o chamador abre |
+| variante de COPIAR no slot direito | **fora** | *"o que você quer injetar não é um WIDGET, é um CALLBACK"* |
+
+**A recusa do copiar é a minha própria fronteira, devolvida.** Eu ofereci duas formas e disse qual
+preferia — uma variante que aceitasse "um componente do DS filho declarado". O pai citou a frase que eu
+mesmo escrevi dois dias antes: *slot genérico faria qualquer coisa entrar numa linha de lista, e aí o
+`sealed` deixaria de valer.* Variante que aceita componente declarado é a escotilha com nome melhor.
+
+**E a minha medição da alternativa parou um passo antes do fim.** Eu medi que `RightAccessory.icon`
+desenha e dispara, e concluí que perdia o retorno do "Copiada". Não perdia: o `DilettaToast` renderiza
+inline e **quem decide quando ele aparece é o caller** — está no `///` dele desde sempre. O que restou do
+`BoldCopiar` nos 2 sítios é uma FUNÇÃO de três linhas (copia, vibra, avisa), não um widget. `Clipboard` e
+`HapticFeedback` não entram na linguagem, e o pai mediu: **zero arquivos dele tocam os dois.**
+
+### Aberto — **o catálogo não mostra as três props novas**
+
+O bloco `Lista de menu` do board emite `DilettaAppListRow.menuItem`, que não recebe `maxLines`,
+`subtitleMaxLines` nem `subtitleLoading` — elas moram no `DilettaMiddleAccessory`, e o board não expõe o
+acessório como bloco. **A linguagem cresceu e o board não acompanhou**, que é exatamente a classe de
+deriva que o pai cobra nas COBRANÇAS dele. Não conserto aqui porque não é mecânico: ou nasce bloco novo
+pro acessório do meio, ou a linha do board deixa de ser a fábrica de açúcar. É decisão, e vai num commit
+com o número.
+
 ## [0.13.0] — 2026-08-03
 
 ### Corrigido — **a `v0.12.0` anunciou um pai que ela não consumia**
