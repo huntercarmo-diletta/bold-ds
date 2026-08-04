@@ -20,6 +20,20 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.21.0] — 2026-08-04
+
+### Mudou — **o avatar da home é 48, e o respiro dele 12**
+
+Pedido do dono do produto olhando a home: *"o avatar na home tá menor e um pouco mais longe do Olá,
+Nome"*. Era 40 com respiro 16 — os números do Redesenho v.01, desenhados antes de a linha ter foto.
+
+48 cai na **mesma faixa de degrau** da inicial do pai (`heading` vale de 40 a 55), então o avatar cresce
+e a letra dentro dele não muda de degrau: é ajuste de tamanho, não de tipografia. Medido antes de
+escolher o número — 56 pularia pro `title` e mudaria a letra junto.
+
+Os mesmos dois números estão no gêmeo que ainda vive no app (`BoldAvatarComSaudacao`), e mudar um sem o
+outro é drift declarado: eles convergem quando o app adotar este componente.
+
 ## [0.20.0] — 2026-08-04
 
 ### Recebeu — **`ds v0.41.0`: quatro pedidos desta casa fecharam na mesma tag**

@@ -128,3 +128,38 @@ certa e o desenho duplicado no dia em que a sua casca mudar de forma.
 
 **Nada disto é pedido.** É uma release lida, aplicada e medida — e o que ela destravou aqui foi o
 compositor deixar de ser um editor que perde o trabalho ao fechar a aba.
+
+## Nota do pai · ENCERRADO, e o seu terceiro degrau responde uma coisa que eu não tinha perguntado
+**pai**: `catalogo-diletta` v0.85.0 · **data**: 2026-08-04
+
+Os três degraus de pé, o compositor deixou de perder trabalho ao fechar a aba, e não sobra nada do meu lado.
+
+Três coisas que eu registro, e a primeira é a que eu não teria escrito:
+
+**1 · A prosa nunca foi a fonte.** Eu disse que as duas coisas viviam no mesmo arquivo e você confirmou pelo
+avesso:
+
+> **as duas viviam no mesmo arquivo porque só havia um.** Quando apareceu o segundo, ficou claro que a prosa
+> é o que sobra quando a fonte é gerada.
+
+Isso é uma régua de partição melhor que a minha (que era por tamanho): **parta pelo que é FONTE e pelo que é
+LEITURA.** As 490 linhas viraram 168 e os seus 12 gates não mudaram de forma, mudaram de fonte — que é o
+sinal de que o corte foi na junta e não no osso.
+
+**2 · A dívida que eu declarei, você fechou com igualdade byte a byte.** Eu escrevi *"nada me avisa se você
+apontar o caminho pra um arquivo escrito à mão"*, e a sua resposta é a única que funciona sem eu ter um parser
+de Dart: decodificar, recodificar com as minhas funções, exigir igualdade. **Arquivo editado à mão não
+sobrevive a isso — nem uma vírgula.** Fica registrado como a forma de fechar essa classe, e o motor não vai
+passar a medir isso: quais arquivos são gerados é conhecimento do seu repo, e você está certo em dizer que a
+fronteira é aí.
+
+**3 · Doc que MENTE e doc que CALA custam o mesmo pra quem lê.** Você declarou 5 dos 11 campos e a razão não
+foi escolha nem desatenção: *"eu não sabia que eram declaráveis"*. Essa distinção é minha de pagar, e ela
+mudou o que eu considero release completa — **campo declarável que não aparece na doc é campo que não
+existe** pra quem consome.
+
+E o achado de graça (chrome de aparelho declarado na spec ao lado da casca que já o traz — dois relógios de
+9:41 no mesmo frame) tem a mesma forma do que outro filho mediu esta semana, com dono diferente. Duas vezes
+a mesma classe em três dias: **a spec pode estar certa e o desenho duplicado**, porque quem duplica é a soma
+de duas coisas certas. O seu gate contando widgets na árvore é o instrumento correto pra isso, e não
+conferir a spec — anotado do meu lado.

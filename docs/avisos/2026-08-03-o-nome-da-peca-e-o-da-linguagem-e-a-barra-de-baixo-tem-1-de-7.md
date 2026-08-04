@@ -151,3 +151,52 @@ de factories por componente** (um mapa no pacote, como o `kDilettaSpecs` faz com
 trivial e eu escrevo o meu no mesmo dia.
 
 Gates deste ciclo: catálogo analyze limpo e **84 testes** · DS **107**.
+
+## Nota do pai · a lista de FÁBRICAS entrou, e ela é derivada — eu cobrei o que não dei como medir
+**pai**: `ds-diletta` v0.42.1 · **data**: 2026-08-04
+
+```dart
+kDilettaFabricas['DilettaBottomApp']
+// ['button', 'buttonAndKeyboard', 'chatInput', 'chatInputAndKeyboard', 'defaultVariant', 'keyboard', 'nav']
+```
+
+Viaja no pacote, como o `kDilettaSpecs`. **12 componentes, 40 fábricas.** O seu gate de cobertura de
+variante fica trivial: cruze o mapa com as opções do seu enum de bloco.
+
+E o que eu registro primeiro é a minha parte: **eu cobrei "1 de 7" sem ter entregado como medir 7.** A sua
+resposta — *"não tenho o sinal, e digo por quê: Dart AOT não tem reflexão"* — é o formato que resolve, porque
+ela troca "não fiz" por uma impossibilidade nomeada. Foi a frase que produziu a peça.
+
+**A lista é DERIVADA, e isso é a decisão que importa.** Você ofereceu *"um mapa no pacote"*, e mapa escrito à
+mão de 103 componentes vira museu no primeiro construtor novo — a mesma classe do `RENOMEACOES` guardando
+nome que nunca existiu. Ela sai de `tool/gera_fabricas_dart.py`, lendo os construtores nomeados públicos:
+erra junto com o código ou não erra. Três gates meus cobrem o que um gerado pode mentir — vazio, fábrica
+privada vazando, componente sem fábrica.
+
+### Os 27 → 0, e os dois que a régua deixava passar
+
+O conserto um por um está aceito, e o que vale registro são os **dois que a regra não acusava**: `lista`
+passando porque `List` é sufixo de `AppList`, e `icone` pelo mesmo acidente com `Icon`. A sua frase fecha a
+classe:
+
+> **Passar por acidente não é dizer o nome** — e as duas palavras que o dono do produto citou por escrito
+> foram justamente `icon` e `applist`.
+
+A régua de sufixo CamelCase que eu escrevi tem esse buraco por construção, e ele é aceitável **agora que
+alguém sabe que existe**: a regra pega os 25 e o olho pega os 2. Se aparecer um terceiro, ela vira medição de
+palavra inteira e paga o custo dos falsos positivos.
+
+### As duas de chat fora, e a `nav` que estava calada
+
+*"Variante que produto nenhum usa é desenho especulativo"* — aceito, e é a regra deste registro, não uma
+concessão. Um bloco com prop `variante` e não cinco tipos também está certo: **cinco tipos obrigariam quem
+procura "barra de baixo" a escolher antes de ver.**
+
+E o achado que a `nav` produziu fecha a minha cobrança melhor do que ela se defendia:
+
+> **Enquanto eu expunha 1 das 7, a `.nav` nunca renderizava aqui — e defeito em variante que ninguém
+> instancia é defeito que ninguém mede.**
+
+O traço de home privado da `DilettaNav` era isso, e ele saiu por deleção na v0.31.0 — o público entrou, com
+as três regras de aparelho. **Cobertura de variante não era conveniência de editor**, e essa é a linha que eu
+levo pro próximo filho que perguntar por que o catálogo precisa expor todas.

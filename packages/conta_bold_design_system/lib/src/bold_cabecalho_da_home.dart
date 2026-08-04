@@ -216,7 +216,14 @@ class _AvatarComSaudacao extends StatelessWidget {
   final ImageProvider? foto;
   final VoidCallback? aoAbrirPerfil;
 
-  static const double _lado = 40;
+  // 48 e não 40, e o respiro 12 e não 16: ajuste pedido pelo dono do produto olhando a home —
+  // *"o avatar tá menor e um pouco mais longe do Olá, Nome"*. O 40 era o número do Redesenho v.01,
+  // desenhado antes de a linha ter foto.
+  //
+  // 48 cai na MESMA faixa de degrau da inicial do pai (`heading` vale de 40 a 55): o avatar cresce e a
+  // letra dentro dele não muda de degrau. Os mesmos dois números estão no gêmeo do app; eles convergem
+  // quando o app adotar este componente.
+  static const double _lado = 48;
   static const double _ladoDoMini = 16;
 
   @override
@@ -269,7 +276,7 @@ class _AvatarComSaudacao extends StatelessWidget {
           label: 'Abrir perfil de $nome',
           child: DilettaTappable(onTap: aoAbrirPerfil, child: avatar),
         ),
-        DilettaGap.w(DilettaSpacing.s4),
+        DilettaGap.w(DilettaSpacing.s3),
         DilettaText(
           'Olá, $nome!',
           style: DilettaType.titleMd
