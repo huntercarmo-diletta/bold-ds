@@ -63,3 +63,61 @@ adoção em vez de contorno local.
 - as três famílias estão medidas fábrica a fábrica (a tabela acima), então a adoção do `AppList` está
   pronta pra rodar **no dia em que o avatar aceitar foto** — o resto casa 1:1;
 - a classificação inteira da fase B2 está no `tasks.md` do change no app, com o motivo de cada bloqueio.
+
+---
+
+## Veredito · a FOTO entra. E a escotilha que você achou não existe — a minha doc mentia
+**pai**: `ds-diletta` v0.36.0 · **data**: 2026-08-03 · **critério que pesou**: aplicação
+
+### 1 · `DilettaAvatar.image` — e a sua frase é o diagnóstico
+
+```dart
+DilettaLeftAccessory.avatar(initials: 'HC', image: NetworkImage(url))
+```
+
+`ImageProvider?`, nulo ⇒ iniciais. Passa direto pelo acessório esquerdo, então **10 dos seus 11 `custom`
+deixam de existir** e o `AppList` (186 usos) destrava.
+
+Você acertou o tipo e a razão, e eu não teria escrito melhor: **`ImageProvider` porque a foto vem de rede e
+quem resolve cache é o app.** Um `String` obrigaria o DS a escolher carregador de rede dentro de um
+componente de lista, e essa não é decisão dele.
+
+E a frase que fica é a sua:
+
+> **A escotilha não era preguiça de quem escreveu a tela. Ela era o buraco do avatar aparecendo uma camada
+> acima.**
+
+Uma decisão que eu tomei e você não pediu: **as iniciais NÃO ficam por baixo da foto.** Foto que não carrega
+mostra o círculo vazio, e círculo vazio é sinal — iniciais por baixo esconderiam a falha e ninguém
+distinguiria "sem foto cadastrada" de "a foto não veio". É a mesma regra da moldura da carteira.
+
+Sobre o `fontSize`: **eu não vou aceitá-lo, e a razão é que ele já é derivado** — o avatar escala o texto em
+40% do `size`, e está no `///` desde sempre. Se os seus 9 sítios passam um valor que **diverge** dos 40%, isso
+é medição e eu quero: ou a minha derivação está errada, ou o app tinha um desvio. Com o número, é pedido.
+
+### 2 · A assimetria que você achou é mentira da minha doc, e você mediu contra a promessa
+
+Você pediu a frase se fosse decisão. Não é decisão nem esquecimento: **não existe `.custom` público em
+nenhum dos três slots.** O `_RightCustom` é privado e serve os açúcares `time` e `timeStatus`;
+`Middle.custom` e `Left.custom` nunca existiram.
+
+Eram **três linhas de `///`** prometendo uma API inexistente — no cabeçalho do arquivo, no do Middle e no do
+Right. E o custo é exatamente o que você fez: **comparar fábrica por fábrica contra a doc e concluir que a
+linguagem era assimétrica.**
+
+> **Doc que promete API é pior que doc ausente.** Ausente manda perguntar; prometendo, você mede em cima e
+> planeja a adoção com uma peça que não está lá.
+
+A regra ficou escrita onde você foi procurar (o cabeçalho do `diletta_app_list.dart`), e o critério dela é o
+**seu**, de dois dias atrás, no pedido da carteira: *slot genérico faria qualquer coisa entrar numa linha de
+lista, e aí o `sealed` deixaria de valer*. Os três slots são vocabulário fechado; variante nova entra como
+fábrica nomeada. Um teste falha se a doc voltar a prometer a escotilha.
+
+### O que fica pra você
+
+1. os 10 avatares viram `.avatar(initials:, image:)` e o 11º (o badge em `Container`) fica sem fábrica — **se
+   ele virar dois, é caso medido e eu quero**;
+2. o `valueAction` fica de fora pela sua própria régua (*um caso não vira fábrica*), e você já a aplicou antes
+   de eu precisar dizer.
+
+Chega pela tag **v0.36.0**.
