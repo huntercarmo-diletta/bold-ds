@@ -272,15 +272,41 @@ BlockDef _ritmo() => BlockDef(
       codegen: (p) => 'ds.DilettaGap.h(ds.DilettaSpacing.${p['tamanho']})',
     );
 
+/// AS TRÊS FORMAS do divisor, e antes eu expunha UMA.
+///
+/// O tracejado ganhou palavra pública na `ds v0.39.0` — era classe privada dentro
+/// de um card, e o pai escreveu a razão: *"componente que existe e não tem palavra
+/// pública não é vocabulário"*. A recíproca é minha: **palavra pública que o board
+/// não expõe também não é vocabulário** pra quem monta tela aqui. É a mesma
+/// cobrança que ele me fez na barra de baixo, onde eu mostrava 1 de 7.
+///
+/// O `vertical` entra junto porque ele já existia e eu também não mostrava.
 BlockDef _divisor() => BlockDef(
       type: 'divisor',
-      ctor: 'ds.DilettaDivider',
       label: 'Divisor · Divider',
-      props: const {},
-      defaults: () => {},
-      build: (p) => const DilettaDivider(),
-      codegen: (p) => 'ds.DilettaDivider()',
+      props: const {'forma': PropDef('enum', options: _formasDoDivisor)},
+      defaults: () => {'forma': 'linha'},
+      build: (p) => switch ('${p['forma']}') {
+        'tracejado' => const DilettaDivider.dashed(),
+        'vertical' => const SizedBox(height: 24, child: DilettaDivider.vertical()),
+        // Sem `_ =>`: a forma é fechada, e forma nova tem que aparecer aqui.
+        'linha' => const DilettaDivider(),
+        _ => throw ArgumentError('forma de divisor desconhecida: ${p['forma']}'),
+      },
+      codegen: (p) => switch ('${p['forma']}') {
+        'tracejado' => 'ds.DilettaDivider.dashed()',
+        // O vertical precisa de altura de quem o hospeda: sozinho ele não tem
+        // eixo. E o `SizedBox` é do Flutter, não do DS — o gate me pegou emitindo
+        // `ds.SizedBox`, que não existe em pacote nenhum.
+        'vertical' => 'const SizedBox(height: 24, child: ds.DilettaDivider.vertical())',
+        'linha' => 'ds.DilettaDivider()',
+        _ => throw ArgumentError('forma de divisor desconhecida: ${p['forma']}'),
+      },
     );
+
+/// As três formas que o pai expõe. Lista fechada de propósito: o gate
+/// `o_emitido_compila` compila cada opção, então forma que ele remover reprova.
+const List<String> _formasDoDivisor = ['linha', 'tracejado', 'vertical'];
 
 BlockDef _cabecalhoDeSecao() => BlockDef(
       type: 'cabecalhoDeSecao',
@@ -2330,6 +2356,10 @@ Map<String, String> _contratosDosBlocos(Map<String, BlockDef> blocos) {
     'linhaDeValor': 'design-system-app-list',
     'barraDeBaixo': 'design-system-bottom-app',
     'indicadorDeHome': 'design-system-bottom-home-indicator',
+    // O divisor perdeu o `ctor` quando virou UNIÃO de três formas (`DilettaDivider`,
+    // `.dashed()`, `.vertical()` dentro de um `SizedBox`): construtor nomeado e aninhamento não caem
+    // numa tabela de um `ctor` só. O contrato é o mesmo — a spec do pai fala das três.
+    'divisor': 'design-system-divider',
     // O esqueleto perdeu o `ctor` quando virou PAR (`Shimmer(child: Skeleton)`), porque a forma do pai
     // não anima sozinha. O contrato continua sendo o dele — a spec do pai fala das duas peças juntas.
     'esqueleto': 'design-system-skeleton',

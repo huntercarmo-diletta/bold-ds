@@ -20,6 +20,28 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.15.0] — 2026-08-04
+
+### Mudou — **`ds v0.39.0`, e o board passou a mostrar as TRÊS formas do divisor**
+
+A tag do pai era pro filho A (padding do banner medido com régua contra o Figma), e nenhuma das duas
+peças toca o app daqui. Mas uma delas me alcança: **`DilettaDivider.dashed()` ganhou palavra pública** —
+era classe privada dentro de um card, e a razão que o pai escreveu é *"componente que existe e não tem
+palavra pública não é vocabulário"*.
+
+**A recíproca é minha, e é a mesma cobrança que ele já me fez na barra de baixo:** palavra pública que o
+board não expõe também não é vocabulário pra quem monta tela aqui. Eu mostrava **1 de 3** formas. Agora
+mostra as três (`linha`, `tracejado`, `vertical`) — o vertical entrou junto porque ele já existia e eu
+também não mostrava.
+
+**O que a união custou, e os gates cobraram os três:**
+
+| gate | o que ele pegou |
+|---|---|
+| `bloco-sem-contrato` | união não tem `ctor`, então a derivação do contrato não alcança — entrou na lista de exceções, ao lado da casca de topo e do esqueleto |
+| `bloco-sem-leitura` | a VOLTA quebrou: dois dos três emitidos não são `Ctor(args)` (um é construtor NOMEADO, o outro vem aninhado). Entrada manual no leitor, com `.dashed`/`.vertical` ANTES do liso — senão o prefixo casa os três e toda forma volta como linha |
+| `o_emitido_compila` | eu emiti **`ds.SizedBox`**. O `SizedBox` é do Flutter, não do DS, e não existe em pacote nenhum. Sem este gate, montar um divisor vertical no board geraria código que não compila |
+
 ## [0.14.0] — 2026-08-04
 
 ### Mudou — **o pai é a `v0.38.0`, e as 6 linhas que faltavam subiram**

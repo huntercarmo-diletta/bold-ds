@@ -135,6 +135,20 @@ Block _bloco(String expr) {
     });
   }
 
+  // 5 · O divisor, que virou UNIÃO de três formas. Fica fora da tabela pelo mesmo motivo da barra de
+  // baixo: dois dos três emitidos não são `Ctor(args)` — um é construtor NOMEADO (`.dashed()`) e o
+  // outro vem aninhado num `SizedBox` que dá o eixo. A ordem importa: `.dashed`/`.vertical` antes do
+  // liso, senão o prefixo `ds.DilettaDivider` casa os três e toda forma volta como linha.
+  if (ehCtor(expr, 'ds.DilettaDivider.dashed')) {
+    return Block(id: _novoId(), type: 'divisor', props: {'forma': 'tracejado'});
+  }
+  if (expr.contains('ds.DilettaDivider.vertical')) {
+    return Block(id: _novoId(), type: 'divisor', props: {'forma': 'vertical'});
+  }
+  if (ehCtor(expr, 'ds.DilettaDivider')) {
+    return Block(id: _novoId(), type: 'divisor', props: {'forma': 'linha'});
+  }
+
   // 5 · Desconhecido: bloco cru com o código dentro. A tela aparece, e o pedaço que ninguém
   // declarou fica VISÍVEL como código à mão — que é o sinal certo pra declarar o bloco que falta,
   // em vez de o pedaço desaparecer em silêncio.
