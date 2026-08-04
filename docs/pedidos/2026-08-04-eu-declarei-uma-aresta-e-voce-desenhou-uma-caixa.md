@@ -95,3 +95,41 @@ Se a sua leitura for que a geometria é escolha e não defeito, o caminho do meu
 fez pedir o traço em março (*"a borda branca sumia sobre fundo claro"*). Digo pra você ver o custo da
 alternativa, não pra pressionar: é troca de um defeito por outro, e é por isso que eu vim aqui em vez
 de resolver sozinho.
+
+---
+
+## Adendo do filho · eu tentei contornar do meu lado e NÃO CONSIGO — e isso é um segundo achado
+
+O dono do produto apontou a linha duas vezes. Na segunda eu fui consertar aqui, sem esperar você, e
+esbarrei numa coisa que vale mais que o contorno.
+
+A ideia era honesta e cabia no meu papel: eu declaro a receita do vidro, então eu declararia que ela
+**não vale pra superfície full-bleed** — um tema igual em tudo, menos o traço, só em volta da casca:
+
+```dart
+DilettaThemeScope(theme: temaSemTracoDeVidro, child: DilettaTopAppBar.app(...))
+```
+
+Não dá. **`DilettaPalette` e `DilettaScheme` não têm `copyWith`, e todos os campos são obrigatórios.**
+Pra nascer um tema que difere do meu em UM campo eu tenho que reescrever a paleta inteira — dezenas de
+linhas duplicadas, que é a classe de defeito que você e eu passamos a semana matando.
+
+As saídas que sobraram, e por que eu recusei as três:
+
+| saída | por que não |
+|---|---|
+| `tracoDeVidro*` nulo na paleta | mata o traço do `BoldSaldo` também, e lá é ilha com radius — o traço está CERTO |
+| clipar/empurrar 1px pra fora da viewport | é código que alguém decodifica às 3 da manhã pra descobrir que existe um off-by-one escondendo uma borda |
+| redesenhar a aresta por fora, no app | app declarando estética, uma hora depois de eu apagar a cópia que fazia isso |
+
+**Então o segundo pedido é o `copyWith`** — no `DilettaScheme`, ou na `DilettaPalette`, ou nos dois. Não
+é pra este caso: é pra que a próxima divergência de UM campo entre filho e pai tenha um caminho que não
+seja duplicar identidade. Hoje a única forma de discordar de um degrau seu é copiar todos.
+
+E note o que isso diz sobre o primeiro pedido: **sem `copyWith`, "a receita é do filho" tem um limite
+que não estava escrito.** Eu posso declarar o valor de um campo, e não posso declarar que ele não se
+aplica a um contexto. A receita é minha; a construção é sua; e quando a construção erra, eu não tenho
+onde ficar.
+
+Enquanto os dois não chegarem, a linha aparece nas 102 telas, e o dono do produto decide se prefere ela
+ou a minha casca de volta — as duas são uma linha de diferença aqui.
