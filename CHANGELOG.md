@@ -20,6 +20,22 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.18.0] — 2026-08-04
+
+### Consertou — **o brilho ganhava +30% no claro em cima da ARTE, e a razão era da base rosa**
+
+Visto no app, no claro: *"o rosa do degradê tá muito forte, tem que ficar mais clarinho"*, com o brilho
+de topo pintando por cima do skyline.
+
+A saturação dos brilhos subia 30% em todo estilo no modo claro (`s.isDark ? 1.0 : 1.3`). A razão estava
+escrita no comentário ao lado e é boa — **sobre a base `primary08`** os brilhos mesclavam com o conteúdo
+e precisavam de corpo. Só que a condição na expressão não era a mesma do comentário: `imagem` assenta na
+ARTE, não em `primary08`, e levava o boost sem ter o problema.
+
+`k = (!isDark && fundo != imagem) ? 1.3 : 1.0`. Mood e sólido seguem com o corpo que precisam — os dois
+assentam em `primary08` no claro; a arte volta a 1.0. A condição agora é a MESMA que escolhe a base, no
+mesmo arquivo, e não uma paráfrase dela.
+
 ## [0.17.0] — 2026-08-04
 
 ### Consertou — **o seletor de fundo mostrava cinco vezes o fundo já escolhido**

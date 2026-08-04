@@ -190,9 +190,17 @@ class BoldBackground extends StatelessWidget {
       DilettaScheme s, BoldBackdrop fundo, BoldBackdropScope? scope) {
     final p = BoldPalette.bold;
 
-    // Saturação dos brilhos. No claro SOBE, porque sobre a base `primary08` eles precisam de
-    // mais corpo pra não mesclar com o conteúdo.
-    final k = s.isDark ? 1.0 : 1.3;
+    // Saturação dos brilhos. No claro SOBE **só onde a base é `primary08`** — que é o caso dos moods:
+    // sobre aquele rosa quase-branco os brilhos mesclavam com o conteúdo e precisavam de corpo.
+    //
+    // O `imagem` NÃO tem essa base: ele assenta na arte. Aplicar o mesmo +30% ali é reforçar rosa sobre
+    // uma foto que já tem a cor toda — e foi o que o dono do produto viu no claro, *"o rosa do degradê
+    // tá muito forte, tem que ficar mais clarinho"*, com o brilho de topo pintando por cima do skyline.
+    //
+    // A condição é a MESMA que decide a base, lá no `build`: no claro, mood **e sólido** assentam em
+    // `primary08`; só o `imagem` assenta na arte. Ela estava escrita no comentário e não na expressão —
+    // `s.isDark ? 1.0 : 1.3` boostava os sete estilos por causa da razão de seis.
+    final k = (!s.isDark && fundo != BoldBackdrop.imagem) ? 1.3 : 1.0;
 
     return switch (fundo) {
       BoldBackdrop.imagem => _camadasDeArte(s, scope),
