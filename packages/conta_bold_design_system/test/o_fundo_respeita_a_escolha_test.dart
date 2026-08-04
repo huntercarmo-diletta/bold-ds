@@ -56,4 +56,29 @@ void main() {
   testWidgets('sem escolha e sem default, o fundo é imagem', (t) async {
     expect(await fundoResolvido(t), 'imagem');
   });
+
+  testWidgets('a AMOSTRA desenha o mood pedido mesmo com outro escolhido', (t) async {
+    // Visto no app, não medido aqui: a tela de Aparência desenha as cinco opções de mood, e **as
+    // cinco mostravam o fundo já escolhido**. É a regra certa no lugar errado — "a escolha vence o
+    // default" está certa pra TELA (o QA 72 acima) e errada pro SELETOR, onde cada quadradinho é o
+    // retrato de um mood. Nenhum teste falhava: cinco amostras concordando é estado consistente.
+    await t.pumpWidget(
+      DilettaThemeScope(
+        theme: BoldTheme.dark,
+        child: const Directionality(
+          textDirection: TextDirection.ltr,
+          child: BoldBackdropScope(
+            estilo: BoldBackdrop.aurora,
+            child: BoldBackground.amostra(
+              estilo: BoldBackdrop.porDoSol,
+              child: SizedBox(),
+            ),
+          ),
+        ),
+      ),
+    );
+    final info = t.widget<DilettaDevInfo>(find.byType(DilettaDevInfo));
+    expect(info.props['estilo'], 'porDoSol',
+        reason: 'a amostra seguiu a escolha — o seletor volta a mostrar cinco iguais');
+  });
 }

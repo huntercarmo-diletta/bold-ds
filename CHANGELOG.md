@@ -20,6 +20,26 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.17.0] — 2026-08-04
+
+### Consertou — **o seletor de fundo mostrava cinco vezes o fundo já escolhido**
+
+Visto no app, não medido aqui. A tela de Aparência desenha as cinco opções de mood com
+`BoldBackground(estilo: cada uma)`, e **as cinco desenhavam o fundo atual**: escolher outro mudava os
+cinco quadradinhos juntos. Um seletor em que toda opção parece igual à atual.
+
+A causa é a regra certa aplicada no lugar errado, e a regra é da v0.4.0: *a escolha da pessoa vence o
+default da tela*. Isso está certo pra TELA — é o item 72 do QA, a Área Pix declarando `solido` e
+perdendo pro fundo personalizado. E está errado pro SELETOR, onde cada quadradinho não é uma tela sob
+a personalização: é o retrato de um mood ao lado dos outros quatro.
+
+`BoldBackground.amostra(estilo:)` inverte a precedência, e é o único lugar que inverte. O `estilo` é
+obrigatório nela — amostra sem mood declarado não tem o que retratar.
+
+**Nenhum gate falhava, e não falharia**: cinco amostras concordando é um estado perfeitamente
+consistente. O teste novo mede a amostra com um mood diferente no scope, e o CONTROLE ao lado mede que
+a tela continua obedecendo a escolha — senão este conserto reintroduz o QA 72.
+
 ## [0.16.0] — 2026-08-04
 
 ### Consertou — **o cabeçalho da home desenhava DOIS RELÓGIOS no app real**

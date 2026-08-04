@@ -102,16 +102,32 @@ class BoldBackdropScope extends InheritedWidget {
 ///
 /// ```dart
 /// BoldBackground(child: conteudo)                              // segue a personalização
-/// BoldBackground(estilo: BoldBackdrop.solido, child: conteudo)  // fixa
+/// BoldBackground(estilo: BoldBackdrop.solido, child: conteudo)  // default da tela
+/// BoldBackground.amostra(estilo: BoldBackdrop.aurora, child: …) // ESTE mood, sempre
 /// ```
 class BoldBackground extends StatelessWidget {
-  const BoldBackground({super.key, required this.child, this.estilo});
+  const BoldBackground({super.key, required this.child, this.estilo})
+      : amostra = false;
+
+  /// AMOSTRA de um mood: desenha o [estilo] pedido e ignora a escolha da pessoa.
+  ///
+  /// Existe porque a regra "a escolha vence o default da tela" está certa pra TELA e errada pro
+  /// SELETOR: a tela de Aparência desenha as cinco opções com `BoldBackground(estilo: cada uma)`, e
+  /// como a escolha vencia, **as cinco amostras mostravam o fundo já escolhido**. Escolher outro
+  /// mudava as cinco juntas — um seletor em que toda opção parece igual à atual.
+  ///
+  /// Visto no app, não medido aqui: nenhum teste falha quando cinco amostras concordam.
+  const BoldBackground.amostra({super.key, required this.child, required BoldBackdrop this.estilo})
+      : amostra = true;
 
   final Widget child;
 
   /// `null` ⇒ resolve pelo [BoldBackdropScope]; sem scope, cai em [BoldBackdrop.imagem]. Passar
-  /// valor explícito é pra tela que precisa FIXAR o fundo.
+  /// valor explícito é pra tela que precisa declarar o próprio default.
   final BoldBackdrop? estilo;
+
+  /// `true` ⇒ o [estilo] declarado ganha da escolha da pessoa. Só amostra de seletor.
+  final bool amostra;
 
   /// O véu sobre a arte. Claro: branco a 20% — a arte é diurna e o ink escuro precisa ler por
   /// cima. Escuro: preto a 8%, porque a arte noturna já é escura.
@@ -133,7 +149,11 @@ class BoldBackground extends StatelessWidget {
     //
     // `scope.estilo` é nulo enquanto ninguém personalizou; aí o default da tela vale, que é
     // o comportamento que a tela espera.
-    final fundo = scope?.estilo ?? estilo ?? BoldBackdrop.imagem;
+    //
+    // A AMOSTRA inverte a precedência de propósito, e é o único caso: ela não é uma tela sob a
+    // personalização, ela é o retrato de um mood ao lado dos outros quatro.
+    final fundo =
+        amostra ? estilo! : (scope?.estilo ?? estilo ?? BoldBackdrop.imagem);
 
     // No claro, mood de gradiente e sólido ganham base `primary08`: sobre o quase-branco do tema
     // os brilhos desbotavam e mesclavam com o conteúdo.
