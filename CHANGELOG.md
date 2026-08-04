@@ -20,6 +20,24 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.19.0] — 2026-08-04
+
+### Mudou — **`amostra` virou `fixo`, porque o segundo caso mostrou que o nome era do primeiro**
+
+`BoldBackground.amostra` nasceu na v0.17.0 pro seletor de fundo. Uma hora depois, olhando o app, apareceu
+o segundo caso do MESMO conceito: a tela de login declara `estilo: imagem` com a intenção escrita no
+código dela — *"login sempre no fundo de cidade, independente da personalização de fundo escolhida pelo
+usuário"* — e **desde a v0.4.0 ela não conseguia garantir isso.** Quem tinha um mood salvo via o mood no
+login, e a tela de loading (que desenha a arte por outro caminho) ficava com fundo diferente da de login.
+Foi o que o dono do produto viu: *"a tela de loading está com um bg diferente da tela de login"* e *"rosa
+muito escuro no degradê"* — o rosa era o mood dele vencendo a cidade.
+
+O conceito é um só: **o declarado vence a escolha.** `amostra` era o nome do primeiro caso, e nome de caso
+vira nome errado no segundo. Renomeado com 1 call site — barato agora, caro depois.
+
+**Migração**: `BoldBackground.amostra(...)` → `BoldBackground.fixo(...)`. Mesma assinatura, mesmo
+comportamento. A v0.17.0 viveu uma hora e o único consumidor é o catálogo/app desta casa.
+
 ## [0.18.0] — 2026-08-04
 
 ### Consertou — **o brilho ganhava +30% no claro em cima da ARTE, e a razão era da base rosa**

@@ -57,7 +57,7 @@ void main() {
     expect(await fundoResolvido(t), 'imagem');
   });
 
-  testWidgets('a AMOSTRA desenha o mood pedido mesmo com outro escolhido', (t) async {
+  testWidgets('o `fixo` desenha o estilo pedido mesmo com outro escolhido', (t) async {
     // Visto no app, não medido aqui: a tela de Aparência desenha as cinco opções de mood, e **as
     // cinco mostravam o fundo já escolhido**. É a regra certa no lugar errado — "a escolha vence o
     // default" está certa pra TELA (o QA 72 acima) e errada pro SELETOR, onde cada quadradinho é o
@@ -69,7 +69,7 @@ void main() {
           textDirection: TextDirection.ltr,
           child: BoldBackdropScope(
             estilo: BoldBackdrop.aurora,
-            child: BoldBackground.amostra(
+            child: BoldBackground.fixo(
               estilo: BoldBackdrop.porDoSol,
               child: SizedBox(),
             ),

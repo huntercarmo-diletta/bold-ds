@@ -103,22 +103,29 @@ class BoldBackdropScope extends InheritedWidget {
 /// ```dart
 /// BoldBackground(child: conteudo)                              // segue a personalização
 /// BoldBackground(estilo: BoldBackdrop.solido, child: conteudo)  // default da tela
-/// BoldBackground.amostra(estilo: BoldBackdrop.aurora, child: …) // ESTE mood, sempre
+/// BoldBackground.fixo(estilo: BoldBackdrop.aurora, child: …)  // ESTE mood, sempre
 /// ```
 class BoldBackground extends StatelessWidget {
   const BoldBackground({super.key, required this.child, this.estilo})
-      : amostra = false;
+      : declaradoVence = false;
 
-  /// AMOSTRA de um mood: desenha o [estilo] pedido e ignora a escolha da pessoa.
+  /// FIXA o [estilo]: desenha o que foi pedido e ignora a escolha da pessoa.
   ///
-  /// Existe porque a regra "a escolha vence o default da tela" está certa pra TELA e errada pro
-  /// SELETOR: a tela de Aparência desenha as cinco opções com `BoldBackground(estilo: cada uma)`, e
-  /// como a escolha vencia, **as cinco amostras mostravam o fundo já escolhido**. Escolher outro
-  /// mudava as cinco juntas — um seletor em que toda opção parece igual à atual.
+  /// A regra "a escolha vence o default da tela" (v0.4.0) está certa pra tela comum e há DOIS lugares
+  /// em que ela é errada — e os dois apareceram olhando o app, não medindo:
   ///
-  /// Visto no app, não medido aqui: nenhum teste falha quando cinco amostras concordam.
-  const BoldBackground.amostra({super.key, required this.child, required BoldBackdrop this.estilo})
-      : amostra = true;
+  /// 1 · **o SELETOR.** A tela de Aparência desenha as cinco opções com `estilo:` em cada uma, e como a
+  ///     escolha vencia, as cinco mostravam o fundo já escolhido. Escolher outro mudava as cinco
+  ///     juntas — um seletor em que toda opção parece igual à atual;
+  /// 2 · **a tela que não é do usuário.** O login declara `imagem` com a intenção escrita no código
+  ///     dele — *"login sempre no fundo de cidade, independente da personalização"* —, e desde a v0.4.0
+  ///     ele não conseguia garantir isso: quem tinha um mood salvo via o mood, e a tela de loading (que
+  ///     desenha a arte por outro caminho) ficava com fundo diferente da tela de login.
+  ///
+  /// O nome é `fixo` e não `amostra` porque o conceito é um só: **o declarado vence a escolha.** Amostra
+  /// era o primeiro caso que apareceu, e nome de caso vira nome errado no segundo.
+  const BoldBackground.fixo({super.key, required this.child, required BoldBackdrop this.estilo})
+      : declaradoVence = true;
 
   final Widget child;
 
@@ -126,8 +133,8 @@ class BoldBackground extends StatelessWidget {
   /// valor explícito é pra tela que precisa declarar o próprio default.
   final BoldBackdrop? estilo;
 
-  /// `true` ⇒ o [estilo] declarado ganha da escolha da pessoa. Só amostra de seletor.
-  final bool amostra;
+  /// `true` ⇒ o [estilo] declarado ganha da escolha da pessoa. Ver [BoldBackground.fixo].
+  final bool declaradoVence;
 
   /// O véu sobre a arte. Claro: branco a 20% — a arte é diurna e o ink escuro precisa ler por
   /// cima. Escuro: preto a 8%, porque a arte noturna já é escura.
@@ -150,10 +157,11 @@ class BoldBackground extends StatelessWidget {
     // `scope.estilo` é nulo enquanto ninguém personalizou; aí o default da tela vale, que é
     // o comportamento que a tela espera.
     //
-    // A AMOSTRA inverte a precedência de propósito, e é o único caso: ela não é uma tela sob a
-    // personalização, ela é o retrato de um mood ao lado dos outros quatro.
-    final fundo =
-        amostra ? estilo! : (scope?.estilo ?? estilo ?? BoldBackdrop.imagem);
+    // O `fixo` inverte a precedência de propósito: ele não é uma tela sob a personalização — é o
+    // retrato de um mood no seletor, ou uma tela que não pertence ao usuário (o login).
+    final fundo = declaradoVence
+        ? estilo!
+        : (scope?.estilo ?? estilo ?? BoldBackdrop.imagem);
 
     // No claro, mood de gradiente e sólido ganham base `primary08`: sobre o quase-branco do tema
     // os brilhos desbotavam e mesclavam com o conteúdo.
