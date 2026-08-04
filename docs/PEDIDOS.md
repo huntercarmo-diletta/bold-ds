@@ -21,6 +21,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [a rampa não é legível em contexto `const`](pedidos/2026-08-02-a-rampa-nao-e-legivel-em-contexto-const.md) | **ENTRA COMO FORMA** | **ds v0.25.0** · aplicado aqui na v0.3.0 |
 | [não existe família `info` na linguagem](pedidos/2026-08-02-nao-existe-familia-info-na-linguagem.md) | *sem veredito* | — |
 | [o vocabulário dos três slots fechou, e 6 linhas ficaram de fora](pedidos/2026-08-04-o-vocabulario-fechou-e-seis-linhas-ficaram-de-fora.md) | **ENTRAM 2 de 3** — o `maxLines` não era um `bool` (altura cravada estoura), e o COPIAR era CALLBACK, não widget | **ds v0.38.0** · adotado aqui na v0.14.0 |
+| [a casca de topo de APP REAL não tem segunda linha](pedidos/2026-08-04-a-casca-de-topo-de-app-real-nao-tem-segunda-linha.md) | *sem veredito* | — |
 
 ## Ao pai da FERRAMENTA (`catalogo-diletta`)
 
