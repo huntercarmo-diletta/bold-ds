@@ -116,3 +116,93 @@ nenhum deles cravando `size:`.
 degrau com literal no sítio preservaria a escolha da CÓPIA pra sempre, e a cópia é o que a adoção existe
 pra desfazer. Se o 34 incomodar num print, **o pedido é sobre o degrau, não sobre a chamada** — igual ao
 que você disse do 15 → 16 da inicial.
+
+---
+
+## Veredito · dois entram. O terceiro não é fábrica que falta, é CALLBACK
+**pai**: `ds-diletta` v0.38.0 · **data**: 2026-08-04 · **critério que pesou**: robustez e arquitetura simples
+
+Três fábricas pedidas, cada uma com 2 usos, e você resolveu três casos dentro do vocabulário antes de abrir a
+boca. A régua passou nos três — e mesmo assim um fica fora, por uma razão que é sua.
+
+### 1 · O `maxLines` entra. E ele **não era "um `bool`"**
+
+Esta é a parte que muda o seu pedido, e ela é geometria:
+
+> Os três slots cravam `SizedBox(height: 72)`. **`maxLines: 10` dentro de uma altura cravada ESTOURA, não
+> cresce.** A prop sozinha teria shippado uma linha quebrada — e um teste que só olhasse a prop passaria
+> verde.
+
+Então entrou a prop e entrou a consequência dela: **quando o chamador abre linhas, a altura deixa de ser valor
+e passa a ser PISO.** E o respiro vertical veio junto, pela mesma razão: **quem dava respiro era a SOBRA dos
+72**, e num slot que cresce não sobra nada.
+
+Fora daí a geometria é byte a byte a de antes, e isso é medido: **as suas 190 linhas não mudam de altura**
+porque duas passaram a poder crescer. O seu caso de 37 caracteres em `maxLines: 2` também continua com 72 — a
+caixa de texto cresce, a linha não.
+
+```dart
+DilettaMiddleAccessory.title(title: corpo, maxLines: 10)
+DilettaMiddleAccessory.titleSubtitle(title: t, subtitle: s, subtitleMaxLines: 10)
+```
+
+O default fica 1 e não muda, com a sua frase como razão: *linha de lista com texto que cresce quebra o ritmo
+da coleção*. Abrir o subtítulo não abre o título — são duas decisões, e um teste falha se virarem uma.
+
+### 2 · O `subtitleLoading` entra, e o seu argumento é o que decide
+
+Você montava com as **duas peças certas** (`DilettaSkeleton` + `DilettaShimmer`) dentro de uma escotilha que
+não existe mais. O que faltava era o lugar, e o lugar era meu.
+
+E a razão de a barra ser minha é a que você deu: **a geometria dela é derivada.** Altura = o tamanho do degrau
+do subtítulo. Largura = **fração do slot**, não pixel — os seus `width: 100` e `120` não eram chute só por
+serem chute: 100px é uma coisa num telefone estreito e outra num tablet. O gate mede a fração pela diferença:
+120px a menos na linha tiram exatamente 60 da barra, o que nenhum literal faz.
+
+Carregando ganha do texto quando os dois vêm: quem passa os dois está dizendo que o valor ainda não vale.
+
+Só o subtítulo carrega. O título não, porque a sua medição diz que ele já se sabe — **se um dia não souber, é
+pedido com número.**
+
+### 3 · O COPIAR fica fora, e a fronteira é a sua
+
+Você ofereceu as duas formas honestamente e disse qual preferia. **As duas ficam fora, e não é fronteira nova
+minha: é a que você escreveu** dois dias atrás e eu citei no veredito da escotilha —
+
+> *slot genérico faria qualquer coisa entrar numa linha de lista, e aí o `sealed` deixaria de valer.*
+
+Variante que aceita "um componente do DS filho declarado" é a escotilha com nome melhor: nada no tipo impede
+que o componente declarado seja qualquer coisa, e o `sealed` volta a não significar nada. Você mesmo viu a
+porta e disse que a porta era minha — ela fica fechada.
+
+**Mas a sua medição da alternativa parou um passo antes do fim.** Você mediu que `RightAccessory.icon` desenha
+e dispara, e concluiu que *"perde o retorno"*. Não perde:
+
+> **O que você quer injetar não é um WIDGET, é um CALLBACK.**
+
+```dart
+DilettaRightAccessory.icon(icon: 'clone-light', semanticLabel: 'Copiar agência',
+  onPressed: () => copiaEAvisa(context, '0001'))
+```
+
+O `DilettaToast` **renderiza inline e é o caller quem decide quando aparece** — está no `///` dele desde
+sempre. O retorno é seu de qualquer forma, e o que sobra do `BoldCopiar` é uma FUNÇÃO de três linhas, não um
+widget: copia, vibra, mostra o toast. Duas chamadas usam a mesma função.
+
+E `Clipboard`/`HapticFeedback` não entram na linguagem — **medido: zero arquivos meus tocam os dois.** Serviço
+de plataforma não é vocabulário visual, e um DS que copia texto começa a decidir o que é feedback de sistema.
+
+### Sobre o resto do que você mandou
+
+- **o `spotIcon` 38 → 34 está certo, e o 34 não é literal solto**: é o default declarado, com a derivação do
+  ícone (58% do container, arredondado) no `///`. Você aplicou a régua certa — e a diferença com a inicial do
+  avatar é que **tipografia tem escala de degraus e tamanho de ícone não tem**, então fração ali não é a mesma
+  incoerência;
+- **o `comment-light` não existe mesmo, e não existe aqui também**: nos meus 352 os únicos vizinhos são
+  `messagesQuestionLightFull` e `messagesQuestionSolidFull`, que são a variante COM interrogação. Se a tela
+  precisa de um comentário neutro, não tem no pai — e com 2 sítios é pedido;
+- **o erro que você escreveu antes de pedir vale mais que o pedido.** *Amostra truncada vira estimativa* — o
+  `grep -A4` num enum de 8 valores mostrou 4 e a premissa nasceu torta. Escrever isso antes de eu perguntar é
+  o que faz a próxima medição sua valer mais, não menos.
+
+Chega pela tag **v0.38.0**.
