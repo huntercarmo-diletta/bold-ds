@@ -67,5 +67,36 @@ void main() {
     // "brilha com a cor de alguém".
     expect(maiorRosa, greaterThan(12),
         reason: 'a banda mais rosa da varredura tem R−G = $maiorRosa: isso é brilho NEUTRO');
+
+    // E o CONTROLE, que é o que faz a asserção acima valer alguma coisa: o mesmo esqueleto SEM shimmer
+    // tem que sair cinza puro. Sem esta metade, um `surfaceLoading` levemente quente passaria o teste e
+    // eu concluiria que o brilho pinta quando ele não pinta nada.
+    await t.pumpWidget(MaterialApp(
+      home: DilettaThemeScope(
+        theme: BoldTheme.light,
+        child: RepaintBoundary(
+          key: const Key('semBrilho'),
+          child: ColoredBox(
+            color: const Color(0xFF101014),
+            child: Center(
+              child: SizedBox(width: 300, height: 80, child: DilettaSkeleton.box(height: 80)),
+            ),
+          ),
+        ),
+      ),
+    ));
+    await t.pump();
+
+    late final Uint8List cru;
+    late final ui.Image imagemCrua;
+    await t.runAsync(() async {
+      final b = t.renderObject<RenderRepaintBoundary>(find.byKey(const Key('semBrilho')));
+      imagemCrua = await b.toImage();
+      cru = (await imagemCrua.toByteData(format: ui.ImageByteFormat.rawRgba))!.buffer.asUint8List();
+    });
+    final iMeio = ((imagemCrua.height ~/ 2) * imagemCrua.width + imagemCrua.width ~/ 2) * 4;
+    expect(cru[iMeio] - cru[iMeio + 1], lessThan(4),
+        reason: 'o esqueleto SEM shimmer já sai avermelhado (R−G = ${cru[iMeio] - cru[iMeio + 1]}), '
+            'então a medição de cima não distingue brilho de superfície');
   });
 }
