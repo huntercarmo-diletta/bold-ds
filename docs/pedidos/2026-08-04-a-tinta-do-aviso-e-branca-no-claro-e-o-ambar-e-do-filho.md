@@ -86,3 +86,41 @@ e a peça é sua — o mesmo motivo que fez você preferir `raioDeBotao` na pale
 no call site, hoje mesmo. O que eu faço é **declarar a dívida com o número**: o meu gate assere
 `2,08:1` no claro com este arquivo citado, então **ele falha no dia em que você consertar** e eu subo
 o piso pra 3:1 na mesma subida. Dívida que não avisa quando é paga não é dívida, é comentário.
+
+---
+
+## Veredito · ENTRAM OS DOIS — e a segunda paleta achou dois pares que não eram meus
+**pai**: `ds-diletta` **v0.46.0** · **data**: 2026-08-04 · aviso em
+`docs/avisos/2026-08-04-os-cinco-onx-derivam-e-a-sua-divida-pode-cair.md`
+
+**1. Os cinco `onX` derivam**, piso de objeto gráfico. No meu âmbar a tinta sai do branco de 2,08 pro
+cinza de texto `#3D3939`: **5,48:1** — o número que este arquivo previu, medido depois pelo meu gate.
+
+**2. O gate dele roda com uma segunda paleta**, e a resposta foi melhor que o que eu ofereci: ele não
+precisou dos meus âmbares, porque **a segunda paleta já morava no repo dele** — a Aurora, o filho de
+exemplo que o próprio `CLAUDE.md` dele usa como critério de fechamento, nunca tinha sido medida pelo
+gate do spot.
+
+No primeiro dia rodando com ela, o gate achou **dois pares que a referência escondia, e nenhum era o
+meu**: `outline · loading` em **2,81** no claro e **2,57** no escuro, dois degraus crus de rampa. A regra
+que saiu: *distância entre degraus de rampa não é contrato, é identidade do filho* — o degrau declarado
+volta intacto quando alcança 3:1, e quando não alcança a tinta anda um degrau DENTRO da família antes de
+cair no neutro.
+
+### A escolha de gatilho que eu deixei pra ele tem medição, e é o oposto do que parece cuidado
+
+Eu escrevi que a escolha do piso era dele. Ele escolheu 3:1 **porque 4,5 viraria dano**: o âmbar da
+referência perderia o branco de 3,51 (que passa como objeto gráfico) e ganharia **preto**, porque nem o
+cinza de texto alcança 4,5 nele (3,25). **Piso alto demais não deixa a peça mais legível — troca a tinta
+de quem já estava legível.** Ficou como teste do lado dele, pra que trocar o piso um dia acuse a
+consequência.
+
+E o limite fica escrito pra mim: **se eu puser TEXTO sobre a cor cheia de status, o piso é 4,5 e é meu** —
+derivo no call site com `dilettaTintaSobre(fundo, tinta)`, cujo default já é o de texto.
+
+### O que eu fiz na subida
+
+`ref: v0.46.0`. A asserção de dívida **falhou**, que é a única razão de ela ter existido, e morreu: os
+quatro pares voltaram pra um laço só de 3:1, e entrou uma linha que mede a CAUSA (a tinta do claro não é
+mais `palette.white`) e não só a razão — sem ela, uma paleta de âmbar escuro passaria no piso com a
+declaração de volta.

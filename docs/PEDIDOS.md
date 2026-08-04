@@ -28,7 +28,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [eu declarei uma aresta e você desenhou uma caixa](pedidos/2026-08-04-eu-declarei-uma-aresta-e-voce-desenhou-uma-caixa.md) | **ENTRA** (`aresta:` no vidro) | **ds v0.41.0** · adotado aqui na v0.20.0 |
 | [a forma do CTA é pill cravado, e a minha é 16](pedidos/2026-08-04-a-forma-do-cta-e-pill-cravado-e-o-meu-e-16.md) | **ENTRA na PALETA** — promoção disparou pelo BLOQUEIO (55 telas), não pela contagem de filhos | **ds v0.44.0** · declarado aqui na v0.22.0 |
 | [o spot usa `primary` onde você já tem `onPrimarySubtle`](pedidos/2026-08-04-o-spot-usa-primary-onde-voce-tem-onprimarysubtle.md) | **ENTRA a troca de uma linha** — e o gate que eu propus achou **cinco casos além do meu** | **ds v0.44.0** · adotado aqui na v0.22.0 |
-| [a tinta do aviso é branca no claro, e o âmbar é do filho](pedidos/2026-08-04-a-tinta-do-aviso-e-branca-no-claro-e-o-ambar-e-do-filho.md) | *sem veredito* | — |
+| [a tinta do aviso é branca no claro, e o âmbar é do filho](pedidos/2026-08-04-a-tinta-do-aviso-e-branca-no-claro-e-o-ambar-e-do-filho.md) | **ENTRAM os dois** — os cinco `onX` derivam com piso de 3:1, e o gate dele ganhou uma **segunda paleta** que achou dois pares que não eram meus | **ds v0.46.0** · adotado aqui na v0.23.0 |
 
 ## Ao pai da FERRAMENTA (`catalogo-diletta`)
 
@@ -76,15 +76,22 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [as quatro vistas derivadas](avisos/2026-08-01-as-quatro-vistas-derivadas.md) | RELEASE | sim — subi na v0.2.0, e os meus 12 contratos já tinham `## Compõe` |
 | [o editar tela não chegava em você](avisos/2026-08-03-o-editar-tela-nao-chegava-em-voce-e-a-culpa-e-minha.md) | RELEASE | sim — declarei os dois alvos, parti o arquivo em fonte e registro, e fechei a dívida de gate dele |
 | [o nome da peça é o da linguagem, e a barra de baixo tem 1 de 7](avisos/2026-08-03-o-nome-da-peca-e-o-da-linguagem-e-a-barra-de-baixo-tem-1-de-7.md) | COBRANÇA | sim — 27 rótulos consertados, 5 variantes expostas, e achei um defeito dele |
+| [um ícone embarcava sem nome, e 6 arquivos saíram](avisos/2026-08-04-o-icone-que-embarcava-sem-nome.md) | RELEASE | sim — `grep` dos 6 removidos deu ZERO aqui, e `walletSolid` entra sozinho porque eu declaro `icones: DilettaIcons.all` |
+| [os cinco `onX` derivam, e a sua dívida pode cair](avisos/2026-08-04-os-cinco-onx-derivam-e-a-sua-divida-pode-cair.md) | RELEASE | sim — a dívida caiu: 2,08 → **5,48:1**, e o gate voltou a ser um só |
 
 Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
 pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedido novo.
 
 ## Dois números que este ledger deixa ver
 
-**33 pedidos, 30 com veredito, 30 ENTRARAM** (17 ao pai da linguagem, 16 ao da ferramenta; medido em
-2026-08-04, na v0.22.0). Nenhum voltou como "MORA NO SEU DS", e isso é informação sobre o método e não
+**33 pedidos, 31 com veredito, 31 ENTRARAM** (17 ao pai da linguagem, 16 ao da ferramenta; medido em
+2026-08-04, na v0.23.0). Nenhum voltou como "MORA NO SEU DS", e isso é informação sobre o método e não
 sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
+
+**E o último tem um número que não é meu**: o gate que eu pedi achou **dois pares** que a paleta de
+referência escondia, e **nenhum dos dois era o meu caso**. Pedido que conserta o defeito de quem pediu
+paga uma vez; pedido que conserta o INSTRUMENTO segue pagando pra quem vier — é a diferença entre pedir a
+cor certa e pedir a segunda amostra.
 
 **E o último ENTRA mudou a régua de PROMOÇÃO do pai**: a forma do botão estava no ledger dele como *"1
 divergência de 2 respostas, e a promoção NÃO dispara"*, e subiu com um filho só — porque o que chegou não

@@ -53,13 +53,27 @@ void main() {
 
   // O GLIFO DO SPOT — os dois estados que o resumo da transação renderiza, com a MINHA rampa.
 
-  test('o par tinta/fundo do spot alcança 3:1 — nos três que já alcançam', () {
+  /// A DÍVIDA DO AVISO NO CLARO FOI PAGA, e o gate voltou a ser um só.
+  ///
+  /// Ele nasceu partido em dois: os pares que alcançavam 3:1 e uma asserção que cravava `2,08:1` no claro
+  /// — `onWarning` era `palette.white` pra qualquer paleta, e o âmbar desta marca (`#F6A21A`) é claro. O
+  /// pedido voltou **ENTRA nos dois lados** (`ds v0.46.0`): os cinco `onX` de status passaram a derivar a
+  /// tinta com piso de objeto gráfico, e o gate dele passou a rodar com uma **segunda paleta**.
+  ///
+  /// A asserção de dívida falhou no dia em que ele consertou, que é a única razão de ela existir: o claro
+  /// mediu **5,48:1** (tinta `#3D3939`), exatamente o número que o pedido previu. Aí ela morreu e os
+  /// quatro pares voltaram pra um laço só.
+  ///
+  /// O que a segunda paleta dele achou não era meu — `outline · loading` reprovava em 2,81 e 2,57 na
+  /// paleta de exemplo que já morava no repo dele e nunca tinha sido medida. **Uma paleta só não é gate
+  /// multiproduto, é gate com uma amostra.**
+  test('o par tinta/fundo do spot alcança 3:1 nos dois estados que eu uso', () {
     // `DilettaSpotIcon` nasce `fill`, que é como o resumo o usa: fundo semântico cheio.
     for (final (nome, escuro) in [('claro', false), ('escuro', true)]) {
       final s = (escuro ? BoldTheme.dark : BoldTheme.light).scheme;
       for (final (estado, tinta, fundo) in [
         ('success', s.onSuccess, s.success),
-        if (escuro) ('warning', s.onWarning, s.warning),
+        ('warning', s.onWarning, s.warning),
       ]) {
         final razao = _razao(tinta, fundo);
         expect(razao, greaterThanOrEqualTo(3.0),
@@ -69,25 +83,14 @@ void main() {
     }
   });
 
-  /// A DÍVIDA DO AVISO NO CLARO — declarada com o número, e não com um comentário.
+  /// E a tinta do aviso no claro não é mais branca — o papel DERIVA.
   ///
-  /// `onWarning` é `palette.white` no claro pra QUALQUER paleta (`DilettaScheme.light`, linha 316), e o
-  /// âmbar desta marca é claro: 2,08:1, abaixo do piso de 3:1. **Não é regressão da `ds v0.44.1`** — o
-  /// glifo era branco cravado antes e é branco por papel agora; o que a subida mudou foi o escuro, que
-  /// passou de reprovado a 6,03:1.
-  ///
-  /// Pedido aberto: `docs/pedidos/2026-08-04-a-tinta-do-aviso-e-branca-no-claro-e-o-ambar-e-do-filho.md`.
-  /// O gate do pai não podia ver: ele mede 28 pares com `DilettaPalette.referencia`, cujo âmbar
-  /// (`#B0810A`) segura branco em 3,51:1 — o defeito só aparece com a paleta do filho.
-  ///
-  /// **Esta asserção FALHA no dia em que o pai consertar**, e é pra isso que ela existe: aí o piso sobe
-  /// pra 3:1 junto com o resto da família, na mesma subida de `ref:`. Dívida que não avisa quando é paga
-  /// é comentário.
-  test('e o do CLARO ainda não — 2,08:1, dívida do pai com pedido aberto', () {
+  /// Sem esta linha, o gate de 3:1 acima passaria de novo se um dia a derivação voltasse a ser declaração
+  /// numa paleta cujo âmbar seja escuro: a razão passaria e a CAUSA teria voltado.
+  test('e no claro ela sai do branco, porque o papel deriva', () {
     final s = BoldTheme.light.scheme;
-    expect(_razao(s.onWarning, s.warning), closeTo(2.08, 0.01));
-    expect(s.onWarning, s.palette.white,
-        reason: 'a tinta é branca porque o papel é declarado, não derivado');
+    expect(s.onWarning, isNot(s.palette.white));
+    expect(_razao(s.onWarning, s.warning), closeTo(5.48, 0.01));
   });
 }
 

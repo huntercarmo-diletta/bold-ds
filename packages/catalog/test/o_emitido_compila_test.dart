@@ -98,9 +98,13 @@ void main() {
     // do CONSTRUTOR, e `carded` (o default) é o único que estava sendo compilado. Se `menu` não fosse um
     // construtor de verdade, nada aqui acusaria; o defeito apareceria em quem colasse o código.
     //
-    // Limite de 12 opções por prop, e é medido: `icone` oferece os 358 ícones do pai e o valor entra como
-    // string — a forma do emitido não muda de um pro outro, então compilar 358 mede o mesmo que compilar
-    // um, num arquivo dez vezes maior.
+    // Limite de 12 opções por prop, e é medido: `icone` oferece os **352** ícones do pai e o valor entra
+    // como string — a forma do emitido não muda de um pro outro, então compilar 352 mede o mesmo que
+    // compilar um, num arquivo dez vezes maior.
+    //
+    // Era 358 aqui até a `ds v0.46.0`: o pai tinha 358 arquivos no disco e 351 nomeáveis, e nenhum dos
+    // dois números era o que a doc dele dizia. O gate que faltava media do nome pro arquivo e não do
+    // arquivo pro nome — os 6 exports crus moravam justo nessa direção. Agora os dois lados são 352.
     final emitidos = <String, String>{};
     var variacoes = 0;
     for (final def in Ds.blocos.values) {

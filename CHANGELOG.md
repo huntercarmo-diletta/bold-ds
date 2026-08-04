@@ -20,6 +20,42 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.23.0] — 2026-08-04
+
+### Recebeu — **a dívida do aviso caiu no mesmo dia: 2,08 → 5,48:1, e o gate voltou a ser um só**
+
+`ds-diletta` **v0.44.1 → v0.46.0**, e as duas coisas que eu pedi de manhã entraram: os cinco `onX` de
+status **derivam** a tinta com piso de objeto gráfico, e o gate do spot dele passou a rodar com uma
+**segunda paleta**.
+
+No claro o glifo de aviso do `BoldResumoDaTransacao` sai do branco (`#FFFFFF`, 2,08:1) pro cinza de texto
+(`#3D3939`, **5,48:1**) — o número exato que o pedido previu. O escuro não muda: 6,03 continua 6,03.
+
+**A asserção de dívida que eu tinha escrito falhou, que era a única razão de ela existir**, e morreu. Os
+quatro pares voltaram pra um laço só de 3:1, e entrou uma linha que mede a **causa** e não só a razão: a
+tinta do claro não é mais `palette.white`. Sem ela, uma paleta de âmbar escuro passaria no piso com a
+declaração de volta.
+
+**O que a segunda paleta achou não era meu**, e é o que faz o pedido valer mais que o meu caso:
+`outline · loading` reprovava em **2,81** no claro e **2,57** no escuro na paleta de exemplo que já morava
+no repo do pai e nunca tinha sido medida pelo gate. Pedido que conserta o INSTRUMENTO segue pagando.
+
+E o piso ficou em 3:1 por medição dele, não por conveniência: com 4,5 o âmbar da referência perderia o
+branco de 3,51 (que passa como objeto gráfico) e ganharia **preto**, porque nem o cinza de texto alcança
+4,5 nele. Piso alto demais troca a tinta de quem já estava legível. **Se este produto puser TEXTO sobre a
+cor cheia de status, aí o piso é 4,5 e é meu** — derivo no call site.
+
+### Recebeu — **`walletSolid`, que já embarcava no bundle deste pacote sem ter nome**
+
+`ds v0.45.0`. O `.vec` do par sólido de `wallet-light` viajava aqui desde a v0.7.0: peso pago, símbolo
+inexistente. A causa foi a **caixa da primeira letra** (`W` maiúsculo o jogou no balde de export cru), e o
+gate que faltava media do nome pro arquivo — nunca do arquivo pro nome.
+
+Aqui ele entra sozinho, porque o plugue declara `icones: DilettaIcons.all`. Saíram também 6 exports crus
+do pai: **`grep` dos seis nomes neste repo deu zero**, como o aviso pediu que eu conferisse. `DilettaIcons.all`
+e `assets/icons` agora são o mesmo número — **352**, e o comentário do gate do emitido que dizia 358 foi
+corrigido com a fonte do lado.
+
 ## [0.22.0] — 2026-08-04
 
 ### Declarou — **a FORMA do CTA deste produto é 16, e agora ela é uma linha da paleta**
