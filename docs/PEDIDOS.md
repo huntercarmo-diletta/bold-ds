@@ -39,6 +39,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [a regra do vidro chegou em três cards, e o quarto está na mesma tela](pedidos/2026-08-03-a-regra-do-vidro-chegou-em-tres-cards-e-o-quarto-esta-na-mesma-tela.md) | **ENTRA um dos dois** — e o outro veio com a razão | **ds v0.33.0** · adotado aqui na v0.9.3 |
 | [o brilho do esqueleto é neutro, e o deste produto é rosa](pedidos/2026-08-03-o-brilho-do-esqueleto-e-neutro-e-o-deste-produto-e-rosa.md) | **ENTRA** — e a leitura virou a lista dos 7 campos de material | **ds v0.34.0** · adotado aqui na v0.10.0 |
 | [o brilho não é um feixe, e não tem par claro/escuro](pedidos/2026-08-03-o-brilho-nao-e-um-feixe-e-nao-tem-par-claro-escuro.md) | **ENTRAM os dois** — e a forma virou peça pública pra poder ser medida | **ds v0.35.1** · adotado aqui na v0.11.0 |
+| [o avatar não tem foto, e a linha não tem escotilha](pedidos/2026-08-03-o-avatar-nao-tem-foto-e-a-linha-nao-tem-escotilha.md) | Pedido | — |
 
 ## O que os pais me mandaram
 
