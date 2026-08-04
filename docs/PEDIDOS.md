@@ -40,7 +40,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [o brilho do esqueleto é neutro, e o deste produto é rosa](pedidos/2026-08-03-o-brilho-do-esqueleto-e-neutro-e-o-deste-produto-e-rosa.md) | **ENTRA** — e a leitura virou a lista dos 7 campos de material | **ds v0.34.0** · adotado aqui na v0.10.0 |
 | [o brilho não é um feixe, e não tem par claro/escuro](pedidos/2026-08-03-o-brilho-nao-e-um-feixe-e-nao-tem-par-claro-escuro.md) | **ENTRAM os dois** — e a forma virou peça pública pra poder ser medida | **ds v0.35.1** · adotado aqui na v0.11.0 |
 | [o avatar não tem foto, e a linha não tem escotilha](pedidos/2026-08-03-o-avatar-nao-tem-foto-e-a-linha-nao-tem-escotilha.md) | **ENTRA a foto** — e a escotilha era doc mentindo | **ds v0.36.0** · adotado na v0.12.0 |
-| [o avatar do produto é vidro, e a inicial é token](pedidos/2026-08-03-o-avatar-do-produto-e-vidro-e-a-inicial-e-token.md) | Pedido | — |
+| [o avatar do produto é vidro, e a inicial é token](pedidos/2026-08-03-o-avatar-do-produto-e-vidro-e-a-inicial-e-token.md) | **ENTRAM os dois** — a inicial virou ESCADA e o avatar lê o `cardDeVidro` que eu já declarava | **ds v0.37.0** · adotado aqui na v0.13.0 |
 
 ## O que os pais me mandaram
 

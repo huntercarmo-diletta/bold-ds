@@ -20,6 +20,45 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.13.0] — 2026-08-03
+
+### Corrigido — **a `v0.12.0` anunciou um pai que ela não consumia**
+
+A entrada da `v0.12.0` e o README dizem `ds-diletta v0.36.0`; o `pubspec` dela diz **`v0.35.1`**. O `cd` de
+um comando encadeado falhou, o `&&` engoliu a troca do `ref:` e o resto da corrente rodou como se tivesse
+subido. **Tag é imutável, então o conserto mora aqui** — mesma forma que o pai usou quando a `v0.35.0` saiu
+sem CHANGELOG.
+
+A frase é dele, escrita hoje, e eu a repeti no mesmo dia: **`&&` não é gate.** A diferença entre nós dois é
+só qual metade da corrente morreu.
+
+O `ref:` foi de `v0.35.1` direto pra **`v0.37.0`**, então a `v0.36.0` (a foto no avatar) chega junto — nada
+se perdeu, só chegou uma versão atrasado.
+
+### Adicionado — a inicial do avatar é DEGRAU, e o círculo lê o material do produto
+
+O veredito do pedido, e ele corrige a minha leitura antes de me dar razão:
+
+- **a minha amostra era armadilha.** Eu li "15 nos dois tamanhos" como *constante*; 40 e 44 são vizinhos, e
+  **qualquer escada dá o mesmo degrau pros dois**. O que a medição provava era mais estreito: 40 e 44 são o
+  mesmo degrau;
+- **e o defeito de verdade estava do lado dele**: `size * 0.4` num avatar de 44 dá **17,6**. *"Um DS que
+  proíbe cor crua e CALCULA tamanho de fonte está sendo incoerente com a própria regra."* Saiu a fração,
+  entrou uma escada de cinco degraus por diâmetro;
+- **e uma correção na minha premissa**: 15 não é `labelMd` na escala do pai (lá `labelMd` é 12) — é
+  `button`, que é papel de botão, não de identidade. Os 8 sítios perdem o `fontSize:` e ganham **16**, que
+  é degrau (`heading`). O que muda de verdade é o que eu reclamei e não medi: **64 e 72 vão de 25,6/28,8
+  pra 22**;
+- **o avatar É card**, e o `cardDeVidro` que eu já declaro desde a `v0.9.0` resolve — **sem campo novo na
+  paleta**. É a quinta peça da família e a primeira que a pergunta *"quais valores desta construção são do
+  produto?"* responde sozinha: nenhum novo, faltava a peça ler o que já estava declarado.
+
+Duas fronteiras que ele declarou junto, e as duas com o critério do `FeatureDetailCard`: **o `solid` não
+vira vidro** (preenchimento de marca não é material) e **a foto também não** — vidro sob imagem opaca não
+aparece e cobraria um `BackdropFilter` **por linha**, na linha que tem 186 usos aqui.
+
+Gates: DS analyze limpo e **118 testes** · catálogo limpo e **85**.
+
 ## [0.12.0] — 2026-08-03
 
 ### Alterado — `ds-diletta` **v0.35.1 → v0.36.0**: o avatar aceita FOTO
