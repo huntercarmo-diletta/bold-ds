@@ -68,6 +68,7 @@ quem publica, não deste repo.
 | o que os pais me mandaram | [docs/avisos/](docs/avisos/) |
 | **publicar o catálogo** (Cloudflare Worker + Access) | [DEPLOY_CLOUDFLARE.md](DEPLOY_CLOUDFLARE.md) |
 | a auditoria que precedeu esta arquitetura (histórico) | [docs/2026-07-30-paridade-do-ds-app-x-catalogo.md](docs/2026-07-30-paridade-do-ds-app-x-catalogo.md) |
+| a **auditoria de arquitetura** de hoje — os 10 achados, com a leitura de cada um | [docs/2026-08-03-auditoria-de-arquitetura.md](docs/2026-08-03-auditoria-de-arquitetura.md) |
 
 O protocolo de conversa com os pais (formato do pedido, os quatro vereditos, como o pai responde)
 mora no DS pai: `ds-diletta/docs/PEDIDO-DO-FILHO.md` e `AVISO-DO-PAI.md`.
