@@ -22,6 +22,13 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [não existe família `info` na linguagem](pedidos/2026-08-02-nao-existe-familia-info-na-linguagem.md) | *sem veredito* | — |
 | [o vocabulário dos três slots fechou, e 6 linhas ficaram de fora](pedidos/2026-08-04-o-vocabulario-fechou-e-seis-linhas-ficaram-de-fora.md) | **ENTRAM 2 de 3** — o `maxLines` não era um `bool` (altura cravada estoura), e o COPIAR era CALLBACK, não widget | **ds v0.38.0** · adotado aqui na v0.14.0 |
 | [a casca de topo de APP REAL não tem segunda linha](pedidos/2026-08-04-a-casca-de-topo-de-app-real-nao-tem-segunda-linha.md) | *sem veredito* | — |
+| [os seletores não traduzem entre claro e escuro](pedidos/2026-08-04-os-seletores-nao-traduzem-entre-claro-e-escuro.md) | **ENTRA** — e o conserto pegou radio, toggle **e** checkbox | **ds v0.41.0** · adotado aqui na v0.20.0 |
+| [o slot de ícones crava `secondary`, e o terciário já existe](pedidos/2026-08-04-o-slot-de-icones-crava-secondary-e-o-terciario-existe.md) | **ENTRA** | **ds v0.41.0** · adotado aqui na v0.20.0 |
+| [o descritor de CTA não sabe dizer carregando](pedidos/2026-08-04-o-descritor-de-cta-nao-sabe-dizer-carregando.md) | **ENTRA** | **ds v0.41.0** · adotado aqui na v0.20.0 |
+| [eu declarei uma aresta e você desenhou uma caixa](pedidos/2026-08-04-eu-declarei-uma-aresta-e-voce-desenhou-uma-caixa.md) | **ENTRA** (`aresta:` no vidro) | **ds v0.41.0** · adotado aqui na v0.20.0 |
+| [a forma do CTA é pill cravado, e a minha é 16](pedidos/2026-08-04-a-forma-do-cta-e-pill-cravado-e-o-meu-e-16.md) | **ENTRA na PALETA** — promoção disparou pelo BLOQUEIO (55 telas), não pela contagem de filhos | **ds v0.44.0** · declarado aqui na v0.22.0 |
+| [o spot usa `primary` onde você já tem `onPrimarySubtle`](pedidos/2026-08-04-o-spot-usa-primary-onde-voce-tem-onprimarysubtle.md) | **ENTRA a troca de uma linha** — e o gate que eu propus achou **cinco casos além do meu** | **ds v0.44.0** · adotado aqui na v0.22.0 |
+| [a tinta do aviso é branca no claro, e o âmbar é do filho](pedidos/2026-08-04-a-tinta-do-aviso-e-branca-no-claro-e-o-ambar-e-do-filho.md) | *sem veredito* | — |
 
 ## Ao pai da FERRAMENTA (`catalogo-diletta`)
 
@@ -75,8 +82,14 @@ pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedid
 
 ## Dois números que este ledger deixa ver
 
-**17 pedidos, 16 com veredito, 16 ENTRARAM.** Nenhum voltou como "MORA NO SEU DS", e isso é informação
-sobre o método e não sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
+**33 pedidos, 30 com veredito, 30 ENTRARAM** (17 ao pai da linguagem, 16 ao da ferramenta; medido em
+2026-08-04, na v0.22.0). Nenhum voltou como "MORA NO SEU DS", e isso é informação sobre o método e não
+sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
+
+**E o último ENTRA mudou a régua de PROMOÇÃO do pai**: a forma do botão estava no ledger dele como *"1
+divergência de 2 respostas, e a promoção NÃO dispara"*, e subiu com um filho só — porque o que chegou não
+foi insistência, foi o **caso bloqueante** (55 telas que não podiam adotar a peça sem virar redesenho).
+Promoção por bloqueio medido não é promoção por contagem, e a diferença ficou escrita nos dois lados.
 
 **Os dois de 2026-08-02 têm origem diferente dos quinze primeiros**: não saíram de ler o pai, saíram de
 **rodar a adoção no app do cliente**. É a primeira vez que a demanda vem de fora dos três repos — e o

@@ -17,6 +17,16 @@ import 'package:flutter_test/flutter_test.dart';
 ///
 /// - `DilettaTopAppBar.defaultVariant` e `.comConteudo` compõem `DilettaStatusBar` por dentro. Então
 ///   `cascaDeTopo` e `cabecalhoDaHome` JÁ TÊM a barra de status;
+///
+/// ## O que a `v0.16.0` mudou aqui, e este gate levou cinco tags pra saber
+///
+/// O `cabecalhoDaHome` deixou de compor `DilettaStatusBar`: ele virou `DilettaTopAppBar.app`, que usa o
+/// **inset real** da `SafeArea` no lugar do relógio mock de 9:41 — *"não é uma tela minha, é um componente
+/// meu que não podia ser usado no meu app"*. Então na HOME o certo é **zero** barra de status, e a asserção
+/// de `findsOneWidget` passou a reprovar o render correto.
+///
+/// **A falha é do gate, e o achado maior é que ninguém a viu**: `flutter test` neste pacote ficou sem rodar
+/// da v0.16.0 à v0.21.0. Um gate vermelho que ninguém executa mede tanto quanto gate que não existe.
 /// - **toda** variante de `DilettaBottomApp` termina em `DilettaBottomHomeIndicator` — `.button`, `.nav`,
 ///   `.keyboard`, as duas de chat. Então `barraDeBaixo` JÁ TEM o indicador;
 /// - `DilettaNavigationButton` empilha 1-3 CTAs com gap 12 dentro do vidro da barra. Então CTA de rodapé
@@ -119,8 +129,14 @@ void main() {
       await t.pump(const Duration(milliseconds: 200));
       t.takeException();
 
-      expect(find.byType(DilettaStatusBar), findsOneWidget,
-          reason: 'dois relógios: a casca do topo já traz a barra de status');
+      // A HOME usa a casca de APP REAL (`.app`), que traz o inset da `SafeArea` e não o relógio mock.
+      // Nas outras quatro a casca é `cascaDeTopo`, que compõe a `DilettaStatusBar` por dentro. O que o
+      // gate proíbe nos dois casos é o MESMO: mais de um relógio na tela.
+      final relogios = slug == kSlugDaHome ? findsNothing : findsOneWidget;
+      expect(find.byType(DilettaStatusBar), relogios,
+          reason: slug == kSlugDaHome
+              ? 'a casca de app real não desenha relógio mock — quem marca a hora é o sistema'
+              : 'dois relógios: a casca do topo já traz a barra de status');
       // UM traço, e agora ele é o MESMO widget em toda variante.
       //
       // Este `expect` já foi um contorno: quando a `.nav` desenhava o traço num `_NavHomeIndicator`

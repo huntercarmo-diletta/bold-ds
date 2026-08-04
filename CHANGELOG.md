@@ -20,6 +20,55 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.22.0] — 2026-08-04
+
+### Declarou — **a FORMA do CTA deste produto é 16, e agora ela é uma linha da paleta**
+
+`ds-diletta` **v0.41.0 → v0.44.1**, e o que abriu a subida foi o veredito do pedido da forma: o botão do
+pai era `pillAll` cravado, e adotar a casca de baixo dele (que exige o descritor, que exige o botão) viraria
+**pílula em 55 telas** — redesenho, não integração. Entrou como `DilettaPalette.raioDeBotao`, campo de
+paleta que o scheme deriva (`formaDoBotao`).
+
+```dart
+raioDeBotao: 16,   // nulo ⇒ pílula, que é o default dele
+```
+
+**Uma linha, num arquivo, e é o único lugar do produto que diz a forma** — pelo argumento que voltou como
+regra dos dois lados: *a receita é do filho, a construção é do pai.* `borderRadius` no call site teria posto
+a forma de volta no produto, 55 vezes.
+
+O que o app vê: todo `DilettaButton` que este pacote monta passa de pílula a canto 16. `chatLift` **não**
+obedece à declaração — a forma dele (24) é do desenho da variante, e o pai guarda os dois lados com teste.
+
+### Recebeu — **o glifo do spot alcança 3:1 no escuro, e o conserto era de SEIS casos**
+
+O pedido media um (`outline · primary`, 2,94:1 no escuro, com o dono do produto vendo antes de qualquer
+medição). O gate que ele propôs achou cinco além dele, todos no `fill`, e três reprovavam no escuro.
+
+Neste pacote quem muda de render é o `BoldResumoDaTransacao`: o glifo do spot no **escuro** passa de branco
+a `onSuccess`/`onWarning` — **6,07:1** na concluída e **6,03:1** na agendada, contra os 2,x de branco sobre
+verde e âmbar claros.
+
+### Mede — **a subida trouxe um gate novo, e ele achou dívida do pai na primeira execução**
+
+`test/a_forma_do_cta_e_o_glifo_do_spot_test.dart`: a declaração da forma medida **no render** (nenhuma
+camada do botão ficou pill) e o par tinta/fundo do spot nos dois estados que a minha peça desenha.
+
+No claro o aviso dá **2,08:1** — `onWarning` é `palette.white` pra qualquer paleta, e o âmbar desta marca
+(`#F6A21A`) é claro. **Não é regressão**: o glifo já era branco antes, cravado. O gate do pai não podia ver
+porque mede 28 pares com uma paleta só, a dele, cujo âmbar (`#B0810A`) segura branco em 3,51:1 — *o defeito
+só existe com a paleta do filho.* Pedido aberto, e a asserção guarda o número de hoje: **ela falha no dia em
+que ele consertar**, que é a diferença entre dívida e comentário.
+
+### Corrigido — o gate do chrome do catálogo reprovava o render CERTO, desde a v0.16.0
+
+`as_telas_nao_duplicam_o_chrome_test.dart` exigia uma `DilettaStatusBar` na home. Só que na v0.16.0 o
+`cabecalhoDaHome` virou casca de **app real** (`DilettaTopAppBar.app`): inset da `SafeArea` no lugar do
+relógio mock, e os dois relógios morreram junto. O certo na home é **zero** relógio.
+
+**O achado maior é que ninguém viu**: `flutter test` no pacote do catálogo ficou sem rodar da v0.16.0 à
+v0.21.0 — cinco tags com um gate vermelho. Gate que não se executa mede tanto quanto gate que não existe.
+
 ## [0.21.0] — 2026-08-04
 
 ### Mudou — **o avatar da home é 48, e o respiro dele 12**

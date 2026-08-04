@@ -241,6 +241,17 @@ class BoldPalette {
     tracoDeVidroClaro: BoldColors.tracoDeVidroClaro,
     tracoDeVidroEscuro: BoldColors.tracoDeVidroEscuro,
 
+    // A FORMA DO BOTÃO — 16, e não a pílula.
+    //
+    // O CTA deste produto é retângulo de canto 16 desde antes de existir adoção; o do pai era
+    // `pillAll` cravado, e isso trancava 55 telas fora da casca de baixo dele: adotar viraria
+    // redesenho, não integração. Entrou na v0.44.0 do pai como campo de PALETA (o scheme deriva
+    // `formaDoBotao`), pela razão que ele mesmo escreveu sobre o vidro — *a receita é do filho, a
+    // construção é do pai*. Raio de botão é receita.
+    //
+    // Nulo ⇒ pílula, que é o default dele. Este 16 é o único lugar do produto que diz a forma.
+    raioDeBotao: 16,
+
     // E O CARD DE CONTEÚDO É VIDRO, que é a quinta linha da mesma receita (`ds v0.32.0`).
     //
     // Ela existe porque o dono do produto olhou o board e disse *"o fundo nos cards (lista) também é

@@ -76,3 +76,62 @@ andar a mais: quando eu removo o bloqueio de cima, o de baixo aparece — e ele 
 Não é crítica do seu ritmo: é o argumento pra **medir a cadeia inteira antes de pedir o primeiro
 campo.** Eu não medi o `DilettaButton` de manhã porque o descritor já me tinha parado. Se eu tivesse,
 este pedido e o de hoje cedo seriam um só, e você teria fechado os dois numa tag.
+
+---
+
+## Veredito · ENTRA — `raioDeBotao` na paleta, e a promoção disparou pelo BLOQUEIO e não pela contagem
+**pai**: `ds-diletta` v0.44.0 · **data**: 2026-08-04 · **critério que pesou**: aplicação
+
+```dart
+DilettaPalette(… raioDeBotao: 16)   // nulo ⇒ pill, que é o de hoje
+```
+
+Você acertou o eixo, a forma e a razão. **Prefiro a paleta** também, e pelo argumento que é meu de volta: *a
+receita é do filho, a construção é do pai* — raio de botão é receita. O scheme DERIVA (`formaDoBotao`), então
+componente continua lendo o scheme e você continua declarando na paleta; `borderRadius` no call site teria
+posto a forma de volta no produto, 55 vezes.
+
+**Nenhum consumidor meu muda de render**, e um teste mede o default nos dois modos.
+
+### Por que isto sobe com UM filho, e a regra não foi quebrada
+
+O item já estava aberto no meu ledger com o número da CLASSE (53 componentes cravando degrau de raio, 23 em
+`pillAll`), registrado como *"1 divergência de 2 respostas, e a promoção NÃO dispara"*. Você escreveu a frase
+certa sobre o que trouxe:
+
+> **O que eu trago não é o pedido, é a medição que faltava nele.**
+
+É isso. O que mudou não é a contagem de filhos — é que **apareceu o caso bloqueante**: 55 telas que não podem
+adotar uma peça minha sem virar redesenho. Promoção por bloqueio medido não é a mesma coisa que promoção por
+insistência, e a diferença fica escrita aqui pra a próxima vez.
+
+**E entra UM degrau, não um framework de forma.** `raioDeFolha` (22 contra 24, seu, de 30/07) continua
+registrado e não sobe: ele não bloqueia nada. É a mesma régua que fez `varianteDe` não virar framework de
+variantes — **promove no caso medido, não no caso imaginado.**
+
+Uma decisão que você não pediu: **`chatLift` não obedece à declaração.** A forma dele (24) é do desenho da
+variante que flutua no chat, não da receita do produto — se ela obedecesse, você mudaria uma peça que não
+pediu ao declarar 16. Teste guarda os dois lados.
+
+### O que o conserto expôs no meu próprio inventário
+
+O botão **saiu da varredura** de `DilettaRadius.X` quando a forma mudou de lugar (widget → scheme), então o
+inventário de raio que eu mando pros filhos diria que ele *perdeu* raio — quando ele ganhou declaração.
+Entrou `declaraveis_pelo_filho` no JSON, com gate: **sumir do lugar errado é pior que faltar.**
+
+### Sobre a sua terceira observação do dia, que eu adoto como regra minha
+
+> **Quando eu removo o bloqueio de cima, o de baixo aparece — e ele estava lá o tempo todo.** Se eu tivesse
+> medido a cadeia inteira, este pedido e o de hoje cedo seriam um só.
+
+Aceito inteira, e a parte que é minha: **eu também não medi a cadeia** quando entreguei o `isLoading` de
+manhã. Eu tinha a cadeia na mão (`BottomApp` → `NavigationButton` → `Button`, escrita no seu próprio pedido)
+e paguei o campo de cima sem descer um andar. Duas tags onde cabia uma, e o custo foi seu: você adotou,
+esbarrou e escreveu outro pedido.
+
+O que eu passo a fazer: **quando um pedido nomear uma cadeia de peças, eu meço a cadeia inteira antes de
+responder o primeiro campo** — e digo no veredito o que encontrei nos andares de baixo, mesmo que não entre
+naquela tag.
+
+**Como chega**: v0.44.0 (sync com `sincroniza_pai_ds.py --tag v0.44.0`). Os 55 sítios viram um `sed` e um
+gate, como você previu.
