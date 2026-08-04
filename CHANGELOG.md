@@ -20,6 +20,44 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.12.0] — 2026-08-03
+
+### Alterado — `ds-diletta` **v0.35.1 → v0.36.0**: o avatar aceita FOTO
+
+`DilettaAvatar.image` (`ImageProvider?`, nulo ⇒ iniciais) e o mesmo pelo
+`DilettaLeftAccessory.avatar(initials:, image:)`. É o que **destrava 10 dos 11** `LeftAccessory.custom` do
+app — e com eles o `AppList`, que é **186 usos**.
+
+Duas coisas do veredito que ficam registradas porque eu não teria escrito:
+
+- **as iniciais NÃO ficam por baixo da foto.** Foto que não carrega mostra o círculo vazio, e círculo
+  vazio é **sinal**: iniciais por baixo esconderiam a falha e ninguém distinguiria *"sem foto cadastrada"*
+  de *"a foto não veio"*;
+- **a escotilha que eu tinha medido não existia.** Eu comparei fábrica por fábrica e concluí que a
+  linguagem era assimétrica (`custom` no `Right`, não no `Left`). Não era assimetria: **`.custom` não
+  existe em slot nenhum** — eram três linhas de `///` prometendo uma API inexistente.
+
+  > **Doc que promete API é pior que doc ausente.** Ausente manda perguntar; prometendo, você mede em cima
+  > e planeja a adoção com uma peça que não está lá.
+
+  Nada aqui muda por isso — o meu `.custom` é do app, não dele. O que muda é o método: **eu medi contra a
+  doc e não contra o código**, e as duas discordavam.
+
+### Registrado — as duas medições que o veredito pediu viraram pedido
+
+- **o `fontSize` não diverge por ratio**: os 8 sítios passam **15 nos dois tamanhos** (40 e 44), enquanto
+  40% dariam 16 e 17,6. Não é outra derivação — é a inicial sendo **texto de interface** (`labelMd`), e
+  não glifo que escala com o círculo;
+- **e o avatar deste produto é vidro** (`glass = true` por padrão): ele aparece na barra de topo, na linha
+  de contato e no comprovante — sempre sobre a arte. É a **quinta** peça da mesma classe em dois dias, e
+  por isso eu não pedi campo novo: ou o avatar é card (e o `cardDeVidro` que eu já declaro resolve), ou
+  tem superfície própria. A fronteira é do pai, e eu já errei nela hoje.
+
+**O `AppList` fica parado por causa disso** — é a única linha da classificação da B2 que muda de status
+com esta versão.
+
+Gates: DS analyze limpo e **118 testes** · catálogo limpo e **85**.
+
 ## [0.11.0] — 2026-08-03
 
 ### Adicionado — **o feixe**, e ele vem em PAR claro/escuro
