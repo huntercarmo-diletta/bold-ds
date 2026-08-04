@@ -2076,6 +2076,17 @@ void configurarDsDoBold() {
       return s.isDark ? BoldPalette.bold.bgEscuro : BoldPalette.bold.primary08;
     },
     superficieDaTela: (ctx) => DilettaTheme.schemeOf(ctx).surface,
+    // `margensDoConteudo` (motor v0.83.0) fica NULO de propósito, e o número está medido.
+    //
+    // O default do gancho é `(lateral: 20, acimaDaCamadaDeBaixo: 8)`, e a grade deste produto é
+    // `BoldSpace.x5` = `DilettaSpacing.s5` = **20** — o `///` do app é explícito (*"20 — gutter lateral
+    // padrão das telas"*), e é o valor mais usado nas telas dele (10 sítios contra 5 do x6). O motor
+    // cravou a grade de um filho e acertou a minha; declarar 20 aqui seria repetir o default pra dizer a
+    // mesma coisa.
+    //
+    // A folga de BAIXO (8) eu não medi — não tenho tela deste produto com conteúdo ancorado no fundo
+    // contra a barra, que é o caso em que ela aparece. Declarar sem medir é o que a assimetria do pai
+    // existe pra evitar: **ele só abriu o campo que alguém tinha medido.**
     // No claro a tela declara o próprio fundo; no escuro o tema manda, senão cada tela
     // precisaria declarar duas cores.
     fundoImpostoPeloTema: (ctx) {
