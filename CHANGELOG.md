@@ -20,6 +20,39 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.16.0] — 2026-08-04
+
+### Consertou — **o cabeçalho da home desenhava DOIS RELÓGIOS no app real**
+
+`ds-diletta` **v0.39.0 → v0.40.0**, e a tag é o veredito do pedido desta casa: `DilettaTopAppBar.app`
+ganhou `conteudo`. Uma linha muda aqui, e ela é o defeito inteiro:
+
+```diff
+- child: DilettaTopAppBar.comConteudo(   // desenha DilettaStatusBar() — a MOCK 9:41
++ child: DilettaTopAppBar.app(           // inset REAL da SafeArea
+```
+
+O `BoldCabecalhoDaHome` monta em casca com **segunda linha**, e até a v0.40.0 a segunda linha só existia
+nas variantes de status bar MOCK. Num app de verdade a mock empilha em cima da status bar do sistema: dois
+relógios. **A peça de produto da home nascia inutilizável no próprio produto** — e foi essa a evidência
+que fechou o pedido, nas palavras do pai: *"não é uma tela sua, é um componente seu que não podia ser
+usado no seu app"*.
+
+O `conteudo` não mudou. A gramática (a linha, depois o respiro de 8) é a mesma das duas variantes — o pai
+a tirou da duplicata e pôs numa função só, então se o respiro mudar ele chega aqui sem eu saber que existe.
+
+**O gate mudou de lado**: `o_cabecalho_da_home_test.dart` fixava `DilettaStatusBar` **presente**. Agora
+mede a AUSÊNCIA, com controle na casca — senão o `findsNothing` também passaria se a casca inteira tivesse
+sumido.
+
+### Ainda de fora — as duas coisas que o veredito NÃO deu, e por quê
+
+- **variante sem vidro** não existe porque a molécula é a versão sem vidro: `DilettaNavigationTopBar`
+  direto, sem casca, é o degrau mais alto da escada e já estava lá. Registrado como 1º pedido no pai;
+- **`.plain` não foi renomeado.** O nome dele quer dizer "sem status bar e sem SafeArea" e o meu quer
+  dizer "sem vidro" — mesmo nome, eixo diferente. Uma quase-queda: o custo do rename cairia inteiro no
+  filho que nunca se confundiu com o nome. Segundo tropeço e o nome muda.
+
 ## [0.15.0] — 2026-08-04
 
 ### Mudou — **`ds v0.39.0`, e o board passou a mostrar as TRÊS formas do divisor**

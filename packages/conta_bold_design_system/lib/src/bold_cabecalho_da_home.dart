@@ -25,6 +25,17 @@
 /// A observação que fez o pedido entrar foi a que vale reter: **era o mesmo pedido do acessório livre,
 /// um nível acima.** Quando uma camada abre e a de cima não, a abertura para na linha de baixo.
 ///
+/// ## E na v0.40.0 do pai ele virou `.app` — porque `.comConteudo` desenhava DOIS RELÓGIOS
+///
+/// A casca com segunda linha só existia nas variantes de status bar MOCK: `.comConteudo` desenha a
+/// `DilettaStatusBar` 9:41, e no app real ela empilha em cima da status bar do sistema. Este
+/// componente é a peça da home de um app REAL, então ele nascia inutilizável no próprio produto —
+/// e foi essa a evidência que fechou o pedido: *não é uma tela minha, é um componente meu que não
+/// podia ser usado no meu app*.
+///
+/// `DilettaTopAppBar.app(navBar:, conteudo:)` é a mesma gramática (a linha, o respiro de 8) com o
+/// **inset real** da `SafeArea`. Nada mais mudou aqui: o `conteudo` é o mesmo.
+///
 /// A linha de cima USA o acessório livre da v0.4.0 — ela é o botão de conta, que cabe nos 52.
 ///
 /// ## O que mudou na adaptação
@@ -119,7 +130,7 @@ class BoldCabecalhoDaHome extends StatelessWidget {
         'foto': foto == null ? 'inicial' : 'imagem',
       },
       tokens: const ['scheme.fg', 'scheme.primary', 'type.titleMd'],
-      child: DilettaTopAppBar.comConteudo(
+      child: DilettaTopAppBar.app(
         // Linha 1: a barra do PAI, com a conta à esquerda no acessório livre e os ícones à direita no
         // acessório dele. Cabe nos 52 — o botão de conta tem 28.
         navBar: DilettaNavigationTopBar(

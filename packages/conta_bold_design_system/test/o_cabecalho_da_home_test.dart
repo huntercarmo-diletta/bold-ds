@@ -45,9 +45,22 @@ void main() {
         reason: 'a casca voltou a ser composta à mão aqui dentro');
     // A barra do pai é usada por dentro, e a linha de conta vai no acessório livre dela.
     expect(find.byType(DilettaNavigationTopBar), findsOneWidget);
-    expect(find.byType(DilettaStatusBar), findsOneWidget);
     expect(t.getSize(find.byType(BoldCabecalhoDaHome)).height, greaterThan(52),
         reason: 'se caiu pra 52, a segunda linha sumiu');
+  });
+
+  testWidgets('a casca é a de APP REAL — sem a status bar mock, senão são DOIS relógios', (t) async {
+    // A v0.40.0 do pai. Até ela, a segunda linha só existia nas variantes de status bar MOCK, e
+    // esta peça montava em `.comConteudo` — que desenha a `DilettaStatusBar` 9:41 por cima da
+    // status bar do sistema. Este componente é a home de um app REAL: aqui a mock é defeito, não
+    // moldura. O gate mede a AUSÊNCIA porque é ela que o print mostrava errado.
+    await t.pumpWidget(naBarra(const BoldCabecalhoDaHome(nome: 'Ana', conta: 'Conta PF')));
+    await t.pump(const Duration(milliseconds: 50));
+
+    expect(find.byType(DilettaStatusBar), findsNothing,
+        reason: 'o relógio mock voltou — no app real ele empilha na status bar do sistema');
+    // O controle: sem ele o `findsNothing` acima passaria também se a casca inteira tivesse sumido.
+    expect(find.byType(DilettaTopAppBar), findsOneWidget);
   });
 
   testWidgets('sem troca de conta NÃO tem chevron', (t) async {

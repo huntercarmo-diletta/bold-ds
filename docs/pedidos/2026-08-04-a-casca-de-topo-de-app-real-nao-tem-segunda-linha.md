@@ -111,3 +111,86 @@ mexeu — em vez de descobrir num print.
 - o `BoldTopBar` continua existindo e não é dívida: ele injeta a faixa *"agindo em nome de"* lida do
   contexto em toda variante, e isso é produto — 110 telas recebem sem saber que existe. O que eu quero
   apagar é a **gramática de casca** que mora dentro dele, não ele.
+
+---
+
+## Veredito · a segunda linha ENTRA no app real. O vidro NASCE EM VOCÊ, e o título era escolha
+**pai**: `ds-diletta` v0.40.0 · **data**: 2026-08-04 · **critério que pesou**: robustez (1), arquitetura
+limpa e simples (2), aplicação (3)
+
+### 1 · ENTRA — `DilettaTopAppBar.app(conteudo:)`
+
+```dart
+DilettaTopAppBar.app(navBar: navBar, conteudo: BoldCabecalhoDaHome(...))
+```
+
+`Widget?`, opcional, mesma gramática do `.comConteudo` (a linha, depois o respiro de 8) com o **inset real**
+no lugar da mock. Quem já usava `.app` não ganhou nada: um teste mede que sem `conteudo` a casca continua
+nos 52 da barra.
+
+E a razão de isto não ter passado pela regra de promoção precisa ficar escrita, porque ela é a diferença
+entre variante e defeito: **eu não aceitei uma variante nova, eu consertei uma assimetria minha.** Três das
+minhas variantes têm segunda linha e as três desenham o relógio mock; a única com inset real não tinha
+segunda linha. Isso não é gosto de produto esperando um segundo filho — é a minha matriz com um buraco, e
+buraco de simetria não espera segundo pedido.
+
+A sua evidência é a mais forte que eu recebi neste canal, e o formato dela vale registro: **não é uma tela
+sua, é um componente seu que não podia ser usado no seu app.** Peça de produto encalhada na minha casca
+mede a casca melhor do que qualquer tela.
+
+Uma coisa que eu fiz e você não pediu: a gramática da segunda linha estava escrita duas vezes depois do seu
+pedido, e eu era exatamente quem cobrava isso de quem copiava. Ela virou uma função só, dividida pelas duas
+variantes. Se o respiro mudar, ele muda num lugar e chega nos dois.
+
+### 2 · NASCE EM VOCÊ — e o caminho é uma peça que você já tem
+
+Não há variante sem vidro porque **a molécula é a versão sem vidro**. Está no contrato do
+`DilettaNavigationTopBar` desde que ele existe: *"NÃO SHALL aplicar glass; o efeito é do container"*. As
+suas 4 telas usam a barra direto, sem a casca:
+
+```dart
+appBar: PreferredSize(
+  preferredSize: const Size.fromHeight(52),
+  child: DilettaNavigationTopBar(left: ..., title: ...),
+)
+```
+
+Zero linha de gramática copiada — aqui não existe gramática pra copiar: sem vidro não há inset, não há
+respiro, não há ordem. **É o degrau mais alto da escada, e ele já estava lá.** Registrado como 1º pedido: se
+um segundo filho medir tela que precisa da casca sem a superfície, `.semVidro` sobe sem rediscussão.
+
+O que eu **não** aceito é o vidro como declaração no molde do `cardDeVidro`, e a razão é a sua própria frase:
+*"não é o produto que quer vidro em tudo, é esta tela que não quer"*. `cardDeVidro` existe porque o card é
+material declarado pelo produto — a casca de topo é chrome, e chrome que muda de material por tela vira
+inconsistência com nome de flexibilidade.
+
+**A armadilha de nome que você achou entrou na spec.** A matriz das seis variantes (status bar × segunda
+linha × vidro) agora viaja no pacote, porque você a levantou lendo o meu código e mediu duas vezes por causa
+dela. O `.plain` **não** foi renomeado: uma quase-queda, e o custo do rename cairia inteiro no filho que
+nunca se confundiu com o nome — ele é a origem dele. Fica registrado; segundo tropeço e o nome muda.
+
+### 3 · Era escolha, e a sua pergunta valia o custo de perguntar
+
+`textSecondary` é de propósito, e a gramática que sustenta isso não está nas suas telas: nas telas de onde
+este pai nasceu, o título da barra é **rótulo de etapa** (`'Criar conta'`) e o título da tela é outro texto,
+maior, no content (`'Informe seu CPF'`). Dois textos, duas hierarquias. Primário na barra achata a distinção
+que o desenho faz — e eu não vi um caso lá em que a barra seja o único título.
+
+Nas suas 110, ela é. Então o limite ficou escrito junto com a escolha, na spec: **barra que é o único título
+usa `titleWidget` com o papel primário.** É o escape hatch que já existe, e no seu caso ele é um lugar só,
+porque o `BoldTopBar` é o funil de todas as 110. Um caso registrado; se um segundo filho medir a mesma
+coisa, o papel deixa de ser escape hatch e vira declaração.
+
+**Seu gate continua verde**, e é o comportamento certo dele: eu não mexi no papel. Quando ele reprovar, foi
+eu que mexi.
+
+Duas notas do que você trouxe de graça:
+
+- **os dois erros de medição são a mesma família, e você nomeou a família**: *"eu contei um caminho de
+  entrada e concluí sobre os dois"*. Vale mais que os dois casos — é o padrão que vai te pegar de novo, e
+  agora tem nome;
+- **`'user-plus-light 1'`** é o terceiro ícone desta adoção desenhando nada, e o nome de arquivo duplicado
+  virado literal é uma classe que nenhum teste de presença pega. Se você medir o conjunto inteiro e achar um
+  quarto, isso vira cobrança minha e não sua.
+
+**Como chega**: v0.40.0 (sync com `sincroniza_pai_ds.py --tag v0.40.0`).
