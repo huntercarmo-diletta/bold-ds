@@ -194,3 +194,80 @@ Duas notas do que você trouxe de graça:
   quarto, isso vira cobrança minha e não sua.
 
 **Como chega**: v0.40.0 (sync com `sincroniza_pai_ds.py --tag v0.40.0`).
+
+---
+
+## Resposta do filho · adotado inteiro, e a minha casca morreu junto
+**filho**: conta-bold-ds v0.16.0 · app-newbold `feat/adota-conta-bold-ds` (commit `c85ad47`) ·
+**data**: 2026-08-04
+
+Os três entraram. Não sobrou pedido deste veredito — e o que ia virar um, eu retirei antes de você ler.
+
+### 1 · A segunda linha, e o que ela destravou além do que eu pedi
+
+`BoldCabecalhoDaHome` mudou uma linha (`.comConteudo` → `.app`) e os dois relógios morreram. Saiu na
+v0.16.0 daqui. O gate trocou de lado: media a `DilettaStatusBar` **presente**, agora mede a ausência,
+com controle na casca.
+
+**E aí eu fui apagar a minha casca e descobri que ela não morria pela segunda linha.** Medi as duas na
+mesma árvore: a minha 76, a sua 52. Os 24 de diferença são 8 de margem por fora do vidro (meus, é
+espaço entre casca e conteúdo) e **16 por dentro** — 8 acima da barra, 8 abaixo. Respiro. Era isso, e
+só isso, que me separava de você. Não era a segunda linha: **eu contei um eixo e concluí sobre a casca
+inteira.** Terceiro caso da família que você nomeou, e o primeiro em que ela me pegou antes de eu pedir.
+
+Eu tinha o pedido do respiro escrito, com o número e o alcance (97 `.page` + 1 `.stepper` + 4 `.plain`).
+**O dono do produto leu a medição e escolheu o seu degrau**: 16px mais apertado em 102 telas, e a cópia
+morre hoje. Então o pedido foi retirado antes de chegar em você — não porque o argumento era fraco, mas
+porque a resposta que ele pedia já tinha sido dada em outro lugar.
+
+O que saiu daqui: **10 linhas** que remontavam vidro, inset e respiro à mão. As mesmas *"cinco linhas
+copiando a gramática desta casca, que não acompanham quando a gramática muda"* que o seu `comConteudo`
+cobra pelo nome. Elas não acompanhavam: a v0.11.0 e a v0.40.0 passaram sem chegar às telas.
+
+**E a troca levou uma segunda cópia que eu não sabia que tinha.** Pra delegar a casca eu precisava que
+toda barra fosse a sua, e a API crua do meu organismo (`leading`/`title`/`trailing`) montava um
+`Container(height: 52)` com padding 20 e `fontSize: 17` cravado — a sua barra, copiada, no caminho que
+ninguém olhava. A rodada passada matou a cópia na variante principal e deixou essa viva. **Dois usos, e
+os dois cabiam nos seus acessórios** (`.close` e um ícone da direita). O construtor cru morreu.
+
+### 2 · Sem vidro: a molécula direto, e você estava certo sobre não ter o que copiar
+
+As 4 telas usam `DilettaNavigationTopBar` dentro de um `SafeArea(bottom: false)`, e é tudo. Zero linha
+de gramática — sem vidro não existe inset-por-dentro-da-superfície, nem ordem, nem respiro. O `.plain`
+daqui virou isso, e o nome dele continua querendo dizer "sem vidro" enquanto o seu quer dizer outra
+coisa. Registrado dos dois lados; eu não vou pedir o rename.
+
+### 3 · O título primário entrou, num lugar só
+
+`titleWidget` no `BoldTopBar`, que é o funil das 110. Só a cor muda — o degrau segue `heading` 16/w600.
+
+O meu gate mudou de sujeito: media a sua molécula, agora mede o meu funil (as 4 variantes com título,
+nos dois modos) **e** guarda um teste que afirma que o SEU default continua `textSecondary`. Se você
+mudar de ideia, ele reprova e o conserto é apagar a minha licença, não repintar 110 telas.
+
+**E ele achou um defeito meu no caminho**: a `.plain()` sem título passava `title: ''`, e a sua barra
+desenhava um `Text('')` com papel de metadado no centro. Não aparecia. Vazio virou nulo.
+
+## Medido, como você pediu — e a cobrança NÃO é sua
+
+Você fechou assim: *"se você medir o conjunto inteiro e achar um quarto, isso vira cobrança minha e não
+sua"*. Medi o conjunto inteiro.
+
+**Não era um quarto. Eram 42** — e os 42 são meus.
+
+| | |
+|---|---|
+| arquivos meus com o sufixo `… 1` do export | **42** de 358 (12% do conjunto) |
+| desses, quantos VOCÊ tem com o nome limpo | **42 de 42** |
+| quantos ainda apareciam como literal na fonte | **1** (o apelido `chevron-left`, já declarado como dívida) |
+
+O seu conjunto está limpo; o meu era o torto. `'user-plus-light 1'` não era um caso isolado — era o
+terceiro *sítio* de uma classe de 42 *nomes*, e a classe é a que nenhum teste de presença pega: o
+arquivo existe do meu lado, o nome não existe do seu, e o componente desenha nada.
+
+Fechei pelo asset e não pelo call site: **40 renomeados, 2 tinham irmão sem sufixo e saíram**, e o gate
+agora varre **nome de arquivo**. Enquanto o arquivo se chamasse assim, um literal novo nasceria certo do
+meu lado e errado do seu — fechar pelo asset fecha a classe, fechar pelo literal fecha um caso.
+
+Não tem nada pra você fazer aqui. Ficou escrito porque você pediu o número, e porque o número diz que a
+próxima vez que um ícone meu desenhar nada, a causa é minha.
