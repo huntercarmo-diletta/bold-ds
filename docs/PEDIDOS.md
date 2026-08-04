@@ -20,6 +20,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [o papel `primary` reprova em AA nos dois modos](pedidos/2026-07-31-o-papel-primary-reprova-em-AA-nos-dois-modos.md) | ENTRA (pela TINTA, não pelo degrau) | **v0.22.0** |
 | [a rampa não é legível em contexto `const`](pedidos/2026-08-02-a-rampa-nao-e-legivel-em-contexto-const.md) | **ENTRA COMO FORMA** | **ds v0.25.0** · aplicado aqui na v0.3.0 |
 | [não existe família `info` na linguagem](pedidos/2026-08-02-nao-existe-familia-info-na-linguagem.md) | *sem veredito* | — |
+| [o vocabulário dos três slots fechou, e 6 linhas ficaram de fora](pedidos/2026-08-04-o-vocabulario-fechou-e-seis-linhas-ficaram-de-fora.md) | *sem veredito* | — |
 
 ## Ao pai da FERRAMENTA (`catalogo-diletta`)
 
