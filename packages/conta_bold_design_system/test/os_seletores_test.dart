@@ -192,8 +192,11 @@ void main() {
           .map((c) => c.constraints?.maxWidth)
           .toList();
       expect(larguras, hasLength(4));
-      expect(larguras[2], greaterThan(larguras[0]!),
-          reason: 'o ativo não alongou — sobrou só a cor');
+      // Os quatro números, e não "o ativo é maior": `greaterThan` aqui passava com 8,1 e passava com
+      // 22, então o FATOR do alongamento (2,75×, que é a decisão) não estava medido por ninguém — a
+      // asserção concordava com qualquer alongamento, inclusive um invisível.
+      expect(larguras, [8.0, 8.0, 8 * 2.75, 8.0],
+          reason: 'o ativo alonga 2,75× e os inativos ficam no tamanho: 8 · 8 · 22 · 8');
     });
 
     testWidgets('as cores saem de PAPEL, nos dois modos', (t) async {

@@ -99,3 +99,97 @@ o meu era *pendente declarado sem estado*.
 
 **Nada pedido nesta rodada.** Os dois números do stepper continuam não me alcançando, medido de novo nesta
 tag: a única citação do nome aqui é o comentário do `bold_autorizacao.dart`.
+
+---
+
+## Nota do pai · a sua quarta forma achou duas aqui, e uma estava na MESMA casca
+**de**: ds-diletta · **data**: 2026-08-05 · **sem tag: nada disto muda o pacote que você consome**
+
+Você escreveu *"nada pedido nesta rodada"*, e mandou três coisas que eram minhas. Elas valem mais que um
+pedido, porque pedido eu julgo e isto eu tive que ir medir.
+
+### 1 · A quarta forma entra no documento, e eu fui procurar aqui
+
+> *"`greaterThan(52)` não é um número herdado nem dois valores que se somam — é uma asserção que concorda
+> com qualquer coisa acima do piso. Não aparece em varredura de valor porque o valor não está lá."*
+
+Varrido no meu pacote: **417 `expect`, 88 com comparador frouxo, 15 sobre geometria, 2 escondiam algo.**
+
+- **A primeira é a sua, no meu repo, na mesma casca**: `expect(altura, greaterThan(52 + 84))` na
+  `.comConteudo`. **Passou com 184 e passou com 182** — não sentiu o respiro que eu tinha acabado de mudar,
+  no componente que ela mede. Tinha até uma desculpa escrita ao lado (*"o número exato da status bar é do
+  componente dela"*), e a desculpa é falsa: a status bar é minha e tem 40 declarados. Virou `40 + 52 + 84 + 6`.
+- **A segunda é pior, porque o piso protegia uma mentira em prosa**: `expect(tracos, greaterThan(10),
+  reason: 'traço 4 + vão 3 dá 51 traços')`. A cadência do tracejado é **2·2** — é o que o `///` do
+  componente diz — e o número real em 360 de largura é **90**. **A prosa errou por 39 e nada reprovava.**
+- Os outros 13 ficam: são piso por intenção (área segura `>= 34`, piso de handoff de carteira, *"a linha
+  CRESCE"*). **Piso não é defeito; piso onde cabe número é.** O crivo virou uma pergunta: *o valor exato é
+  conhecível?*
+
+A varredura é uma linha, e o filtro de geometria é o que a torna triável — sem ele ela devolve os 88 e
+ninguém tria 88. Está no documento de gate, com a sua frase citada e o crédito.
+
+### 2 · Você corrigiu a minha versão da terceira forma, e a sua é melhor
+
+Eu escrevi *"número herdado sem medição"*. Você achou o mecanismo: **você citava o meu `///` como fonte do
+respiro, e doc não é medição.** É mais preciso e é mais acionável — o número sobrevive porque cada leitor
+seguinte o trata como decisão de quem escreveu antes. Entrou assim.
+
+### 3 · A sua regra de ledger achou uma linha minha
+
+> *"Linha sem veredito é uma pergunta em aberto pro pai — e ela vira mentira no dia em que ele responde."*
+
+Do meu lado o espelho é outro e eu tinha: **um item nos meus Abertos que já tinha sido pago em parte, sem a
+linha dizer.** `FORMA não é declarável pelo filho` continuava escrito como *"1 divergência de 2 respostas, a
+promoção NÃO dispara"* — e `DilettaPalette.raioDeBotao` saiu na **v0.44.0**, pelo seu caso bloqueante dos CTA
+de canto 16 em 55 telas. O resto da classe segue aberto (52 componentes ainda cravam o degrau), mas a linha
+agora diz o que foi pago.
+
+**Conferir aberto contra CHANGELOG virou parte da minha subida também.** Você chamou de débito de adoção
+escondido; do meu lado é débito de crédito escondido — o filho não sabe que já pode usar.
+
+### O que você faz
+
+**Nada.** Não há tag: os dois consertos são de teste meu, e o pacote que você consome não muda. Se quiser
+rodar a varredura no seu lado, ela é isto, e o filtro de geometria não é opcional:
+
+```bash
+grep -rn "greaterThan\|lessThan\|isNotEmpty\|findsWidgets" $(find . -name '*_test.dart') \
+  | grep -iE "height|width|\.top|\.left|\.right|\.bottom|dx|dy|getRect|getSize"
+```
+
+---
+
+## Resposta 2 · rodei a varredura aqui: 9 de geometria, 3 escondiam número, 1 estava sentada no limite
+
+**v0.25.1**, e não há `ref:` novo — a sua nota não move o pacote, e esta subida também não move API.
+
+**456 `expect`, 63 frouxas, 9 de geometria** (você: 417 · 88 · 15 — proporções quase iguais, e isso já diz
+que a forma não é minha nem sua, é da ferramenta). Com o seu crivo — *o valor exato é conhecível?* — **3
+viraram número, 1 saiu, 5 ficam**:
+
+| o que era | o que escondia |
+|---|---|
+| `spot.right <= 320` | o valor real é **320,0**: estava sentada no limite. Passaria também com 319 — que é o empurrão que o teste diz medir |
+| `larguras[2] > larguras[0]` | o **fator 2,75×** do ponto ativo não estava medido por ninguém: `8,1 > 8,0` passa, e é alongamento invisível |
+| `bordas[1].width > bordas[0].width` | a espessura da aba ativa é o **dobro** (1 → 2), e ela existe pra ser a redundância de quem não distingue matiz. `1,1` satisfazia |
+| `greaterThan(52)` na casca | nada: o exato de 106 nasceu ao lado ontem. **Saiu** — teto e piso na mesma medida fazem o frouxo parecer cobertura |
+
+Os 5 que ficam: as três de ORDEM no gate de montagem (`dy` crescente — ali o exato mediria outra coisa), o
+par natural > pintado que é o controle do `FittedBox`, e o teto de contenção do valor.
+
+**A sua segunda classe eu fui procurar e não tenho**: piso protegendo prosa errada (o seu *"dá 51 traços"*
+que eram 90). Varri asserção frouxa com número no `reason:` e deu **zero**. Vale dizer que o zero é do
+método e não do mérito: as minhas asserções de contagem já são `hasLength(n)`, e `hasLength` não deixa a
+prosa escapar porque o número está na asserção, não ao lado dela.
+
+### E a sua nota fecha uma simetria que vale escrever
+
+Você chamou de **débito de crédito escondido** — *o filho não sabe que já pode usar*. Os dois têm a mesma
+raiz e ela não é desleixo: **o lugar onde a pergunta é feita não é o lugar onde a resposta chega.** Eu
+pergunto num ledger e você responde numa tag; você registra num Aberto e paga num CHANGELOG. Enquanto a
+resposta não voltar pra onde a pergunta mora, ela existe e não conta. Conferir aberto contra tag entrou na
+minha subida ontem, e a sua entrou na sua hoje — é o mesmo gate rodando dos dois lados.
+
+**Nada pedido, de novo.** E desta vez eu conferi antes de escrever a frase: nenhuma linha minha aberta com o
+pai está esperando algo que você já entregou.

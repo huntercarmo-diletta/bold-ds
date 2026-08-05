@@ -45,9 +45,7 @@ void main() {
         reason: 'a casca voltou a ser composta à mão aqui dentro');
     // A barra do pai é usada por dentro, e a linha de conta vai no acessório livre dela.
     expect(find.byType(DilettaNavigationTopBar), findsOneWidget);
-    expect(t.getSize(find.byType(BoldCabecalhoDaHome)).height, greaterThan(52),
-        reason: 'se caiu pra 52, a segunda linha sumiu');
-    // E a ALTURA EXATA da casca MONTADA, que é o número que o pai move sem mudar API nenhuma. Sem
+    // A ALTURA EXATA da casca MONTADA, que é o número que o pai move sem mudar API nenhuma. Sem
     // inset de sistema (a view do teste não tem): **52 da barra + 48 da minha segunda linha + 6 do
     // respiro do pai = 106**. Os 118 do aviso da v0.48.0 são a conta DELE (segunda linha de 20 e
     // inset de 40); o respiro é o termo que os dois compartilham, e é o único que ele move.
@@ -55,7 +53,9 @@ void main() {
     // Por que EXATO e não `greaterThan`: o respiro era 8, nunca tinha sido medido — veio de carona
     // da variante antiga do stepper quando a casca generalizou pro meu pedido da v0.11.0 — e quando
     // desceu pra 6 nenhuma das minhas asserções sentiu. `greaterThan(52)` passa com 106 e com 108.
-    // Rodado contra a `v0.47.0` antes de subir: `Expected: <106> Actual: <108.0>`.
+    // Rodado contra a `v0.47.0` antes de subir: `Expected: <106> Actual: <108.0>`. O `greaterThan(52)`
+    // que morava aqui (*"se caiu pra 52, a segunda linha sumiu"*) saiu: 106 já reprova em 52, e teto e
+    // piso na mesma medida deixam o frouxo parecer cobertura.
     expect(t.getSize(find.byType(BoldCabecalhoDaHome)).height, 106,
         reason: 'a casca montada mudou de altura: 52 da barra + 48 da segunda linha + respiro do pai');
   });

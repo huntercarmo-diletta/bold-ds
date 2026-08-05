@@ -121,7 +121,11 @@ void main() {
             .widgetList<AnimatedContainer>(find.byType(AnimatedContainer))
             .map((c) => (c.decoration! as BoxDecoration).border!.bottom)
             .toList();
-        expect(bordas[1].width, greaterThan(bordas[0].width));
+        // Os dois números, e não "a ativa é mais grossa": o contraste de espessura é a redundância
+        // que substitui a cor pra quem não distingue matiz, e 1,1 contra 1,0 passaria no `greaterThan`
+        // sendo invisível na tela. O que se mede é o DOBRO.
+        expect([bordas[0].width, bordas[1].width], [1.0, 2.0],
+            reason: 'inativa 1, ativa 2 — o dobro é o que se vê sem cor');
         expect(bordas[1].color, isNot(bordas[0].color));
       }
     });

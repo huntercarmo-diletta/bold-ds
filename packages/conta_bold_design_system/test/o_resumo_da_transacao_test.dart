@@ -100,7 +100,12 @@ void main() {
 
     expect(t.takeException(), isNull);
     final spot = t.getRect(find.byType(DilettaSpotIcon));
-    expect(spot.right, lessThanOrEqualTo(320));
+    // O número exato, e ele revela o que o `<= 320` escondia: o spot encosta na borda DIREITA do
+    // componente (320 dos 320), porque a margem de tela é de quem monta a tela e não deste cabeçalho.
+    // O teto passava também se o título tivesse empurrado o spot pra 319 — e aí a segunda linha é que
+    // teria sumido. Com o número exato, empurrão de 1px reprova.
+    expect(spot.right, 320, reason: 'o título longo empurrou o spot: ele encosta na borda do componente');
+    expect(spot.width, 38, reason: 'o spot encolheu pra caber, em vez de o título quebrar');
   });
 
   testWidgets('o spot NÃO é anunciado pelo leitor de tela — o estado já está no título', (t) async {

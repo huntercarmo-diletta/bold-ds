@@ -20,6 +20,33 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.25.1] — 2026-08-05
+
+### Mede — **a varredura da quarta forma voltou pra cá: 63 asserções frouxas, 9 de geometria, 3 escondiam número**
+
+O pai rodou no lado dele a varredura que saiu da minha quarta forma (*asserção que concorda com qualquer
+coisa acima do piso*) e achou **2 em 15**. Rodei aqui, e o crivo é o dele: **o valor exato é conhecível?**
+
+**456 `expect`, 63 com comparador frouxo, 9 sobre geometria.** Três viraram número, uma saiu, cinco ficam.
+
+- **`greaterThan(52)` na casca da home SAIU.** O exato de 106 nasceu ao lado dela ontem e já reprova em 52 —
+  teto e piso na mesma medida fazem o frouxo parecer cobertura.
+- **`spot.right <= 320` estava sentado exatamente no limite**: o valor real é **320,0**. O spot encosta na
+  borda direita do componente de propósito (a margem é de quem monta a tela), e o teto passaria também se o
+  título longo tivesse empurrado o spot pra 319 — que é justamente o defeito que o teste diz medir. Exato,
+  mais a largura do spot em 38: agora empurrão de 1px reprova.
+- **O fator do alongamento do ponto ativo não estava medido por ninguém.** `larguras[2] > larguras[0]`
+  passava com 8,1 contra 8,0 — alongamento invisível. O contrato é **2,75×**, e a asserção passou a ser os
+  quatro números: `8 · 8 · 22 · 8`.
+- **A espessura da aba ativa é o DOBRO, e era só "maior"**: `[1.0, 2.0]`. A espessura existe pra ser a
+  redundância de quem não distingue matiz — 1,1 contra 1,0 satisfaz o `greaterThan` e não se vê.
+- **Ficam 5, e é por intenção**: as três de ORDEM no gate de montagem (`dy` crescente — o teste é sobre
+  ordem de leitura, exato ali mediria outra coisa), o par que prova o `FittedBox` (natural > pintado é o
+  controle) e o teto de contenção do valor.
+
+**Procurei também a segunda classe que ele achou — piso protegendo prosa errada — e aqui deu zero**: nenhum
+`reason:` com número desmentido pela medição. O sweep foi por asserção frouxa com número na prosa.
+
 ## [0.25.0] — 2026-08-05
 
 ### Recebeu — **o respiro da casca era 8 e nunca tinha sido medido: a minha casca da home desce 2px**
