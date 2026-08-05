@@ -144,11 +144,17 @@ class BoldPrazoDaPendencia extends StatelessWidget {
   }
 
   /// A regra, separada do desenho pra poder ser lida e testada como regra.
+  ///
+  /// O tom da ESPERA é `pending`, e ele chegou porque esta casa pediu: o pedido era família `info`
+  /// pra um azul próprio, e o pai voltou **ENTRA COMO TOM** (`ds v0.27.0`) medindo que 9 dos 10
+  /// sítios não eram informação, eram espera. `pending` pinta igual a `neutral` nos dois modos —
+  /// espera é a AUSÊNCIA de desfecho, e matiz competiria com as quatro famílias que JULGAM o
+  /// desfecho —, então trocar não move pixel: move a declaração. `neutral` quer dizer *sem estado*.
   ({String rotulo, DilettaStatusTone tom, String icone})? get _estado {
     final r = restante;
     if (r == null) {
       if (idade == null || idade!.isEmpty) return null;
-      return (rotulo: idade!, tom: DilettaStatusTone.neutral, icone: DilettaIcons.clockLight);
+      return (rotulo: idade!, tom: DilettaStatusTone.pending, icone: DilettaIcons.clockLight);
     }
     if (r.isNegative || r == Duration.zero) {
       return (
@@ -160,7 +166,9 @@ class BoldPrazoDaPendencia extends StatelessWidget {
     final urgente = r < urgenteAbaixoDe;
     return (
       rotulo: 'faltam ${_duracao(r)}',
-      tom: urgente ? DilettaStatusTone.warning : DilettaStatusTone.neutral,
+      // Prazo largo é espera; prazo curto é ATENÇÃO, e essa é a fronteira que o pai escreveu ao
+      // recusar pintar espera de âmbar. O `warning` aqui é juízo sobre o prazo, não sobre o desfecho.
+      tom: urgente ? DilettaStatusTone.warning : DilettaStatusTone.pending,
       icone: urgente ? DilettaIcons.hourglassStartLight : DilettaIcons.clockLight,
     );
   }

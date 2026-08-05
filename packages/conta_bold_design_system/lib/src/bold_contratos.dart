@@ -502,4 +502,10 @@ ausência.
 ### Requirement: o pill é do PAI
 O componente SHALL delegar forma e tom à `DilettaStatusTag`. Desenhar pill próprio SHALL ser
 considerado regressão.
+
+### Requirement: espera é `pending`, e não `neutral`
+Estado de ESPERA (sem prazo, ou prazo largo) SHALL sair no tom `pending`; prazo curto SHALL sair em
+`warning` e prazo vencido em `danger`. `neutral` quer dizer *sem estado*, e uma pendência tem estado —
+ela está esperando. A tinta de `pending` é a mesma da neutra de propósito (o relógio é o estado), então
+a regra é sobre DECLARAÇÃO e não sobre pixel.
 ''';

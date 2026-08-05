@@ -20,6 +20,50 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.25.0] — 2026-08-05
+
+### Recebeu — **o respiro da casca era 8 e nunca tinha sido medido: a minha casca da home desce 2px**
+
+`ds-diletta` **v0.47.0 → v0.48.0**. Nenhuma API muda. O `SizedBox(height: 8)` do fim da segunda linha da
+casca virou `DilettaSpacing.s1_5` (**6**), e o meu `BoldCabecalhoDaHome` monta em
+`DilettaTopAppBar.app(navBar:, conteudo:)` — então a casca montada sai de **108 pra 106** (52 da barra +
+48 da minha segunda linha + 6 do respiro). Os `118` do aviso dele são a conta DELE: segunda linha de 20 e
+inset de 40. O termo que os dois compartilham é o respiro, e é o único que ele moveu.
+
+A origem vale mais que os 2px: o `8` era o número da variante antiga do **stepper**, e veio de carona pro
+meu conteúdo quando a casca generalizou pro meu pedido da v0.11.0. Eu recebi como *"a gramática do pai"* um
+respiro que era de outra peça — e o `///` dele que eu citava dizia a mesma coisa, com o número errado dentro.
+
+### Mede — **o gate de posição nasceu ontem e a primeira coisa que ele pega é altura de casca MONTADA**
+
+A asserção que existia era `greaterThan(52)`, escrita pra pegar *"a segunda linha sumiu"*. Ela passa com 106
+e passa com 108: **`greaterThan` não é gate de desenho, é gate de existência.** Virou número exato em
+`o_cabecalho_da_home_test.dart`, e rodado contra a `v0.47.0` antes de subir — `Expected: <106> Actual:
+<108.0>`. Segundo dia seguido de controle contra a versão anterior, e é o que separa medir de acreditar.
+
+O que ele mede que os outros não: a **composição**. O componente solto tem a altura dele; o número que o
+produto vê é o da peça dentro da casca do pai, e é ali que dois valores de layout se somam com cada metade
+parecendo certa sozinha.
+
+### Pagou — **`pending` chegou na v0.27.0 e a minha espera continuou saindo como `neutral` por seis versões**
+
+Dívida achada auditando o meu próprio ledger, e ele era o esconderijo: as duas linhas dos pedidos **família
+`info`** e **casca de app real** ainda diziam *sem veredito* — o primeiro voltou `ENTRA COMO TOM`
+(`DilettaStatusTone.pending`, `ds v0.27.0`) e o segundo `ENTRA` (`ds v0.40.0`), e a casca eu já uso desde
+então. **Ledger que não registra o veredito faz o débito de adoção desaparecer junto.**
+
+O `BoldPrazoDaPendencia` tinha dois sítios de espera em `neutral` + relógio à mão — exatamente o par que
+`pending` existe pra dizer numa palavra. `pending` pinta igual à neutra nos dois modos de propósito (o
+relógio é o estado; matiz competiria com as quatro famílias que julgam o desfecho), então **a troca não move
+um pixel**: ela declara. `neutral` quer dizer *sem estado*, e pendência tem estado — ela está esperando.
+
+Entrou junto o **gate da classe**, não dos dois sítios: nenhum estado de espera desta casa pode sair como
+`neutral`. É o `espera_nao_e_atencao_test` do pai um nível abaixo, pegando a outra metade do defeito — ele
+tinha o caso "pendente pintado de âmbar", e o meu era "pendente declarado sem estado". O contrato do
+componente ganhou a Requirement que o gate cobra: espera `pending`, prazo curto `warning`, vencido `danger`.
+
+Gates: DS analyze limpo e **125 testes** (1 novo) · catálogo limpo e **86**.
+
 ## [0.24.0] — 2026-08-04
 
 ### Recebeu — **o traço de home subiu 10,5px e o glifo da volta andou 20**, em cinco telas do board

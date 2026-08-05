@@ -92,8 +92,10 @@ void main() {
       await t.pump(const Duration(milliseconds: 50));
 
       expect(find.text('criada há 2 h'), findsOneWidget);
+      // `pending`, não `neutral`: o veredito do meu pedido de família `info` (`ds v0.27.0`) foi que
+      // espera é tom, e `neutral` quer dizer *sem estado*. A tinta é a mesma, a declaração não.
       expect(t.widget<DilettaStatusTag>(find.byType(DilettaStatusTag)).tone,
-          DilettaStatusTone.neutral);
+          DilettaStatusTone.pending);
     });
 
     testWidgets('prazo curto vira ALERTA; prazo largo fica neutro', (t) async {
@@ -109,7 +111,27 @@ void main() {
       await t.pump(const Duration(milliseconds: 50));
       expect(find.text('faltam 2 d'), findsOneWidget);
       expect(t.widget<DilettaStatusTag>(find.byType(DilettaStatusTag)).tone,
-          DilettaStatusTone.neutral);
+          DilettaStatusTone.pending,
+          reason: 'prazo largo é espera; só o prazo curto é ATENÇÃO');
+    });
+
+    // O GATE DA RECAÍDA, e ele mede a classe inteira e não os dois sítios: nenhum estado de espera
+    // desta casa pode voltar a sair como `neutral`. O pai escreveu o `espera_nao_e_atencao_test`
+    // porque o exemplo da doc dele pareava "Pendente" com `warning` — este é o mesmo gate um nível
+    // abaixo, e o que ele pega aqui é a outra metade: espera que se declara *sem estado*.
+    testWidgets('nenhuma espera sai como neutral — nem sem prazo, nem com prazo largo', (t) async {
+      for (final espera in [
+        const BoldPrazoDaPendencia(idade: 'criada há 2 h'),
+        const BoldPrazoDaPendencia(restante: Duration(days: 2)),
+        const BoldPrazoDaPendencia(restante: Duration(minutes: 30), urgenteAbaixoDe: Duration.zero),
+      ]) {
+        await t.pumpWidget(naTela(espera));
+        await t.pump(const Duration(milliseconds: 50));
+        final tag = t.widget<DilettaStatusTag>(find.byType(DilettaStatusTag));
+        expect(tag.tone, isNot(DilettaStatusTone.neutral),
+            reason: 'espera declarada como "sem estado": ${tag.label}');
+        expect(tag.tone, DilettaStatusTone.pending);
+      }
     });
 
     testWidgets('vencido é estado TERMINAL, e não "faltam -2 h"', (t) async {

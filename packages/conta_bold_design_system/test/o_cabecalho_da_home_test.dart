@@ -47,6 +47,17 @@ void main() {
     expect(find.byType(DilettaNavigationTopBar), findsOneWidget);
     expect(t.getSize(find.byType(BoldCabecalhoDaHome)).height, greaterThan(52),
         reason: 'se caiu pra 52, a segunda linha sumiu');
+    // E a ALTURA EXATA da casca MONTADA, que é o número que o pai move sem mudar API nenhuma. Sem
+    // inset de sistema (a view do teste não tem): **52 da barra + 48 da minha segunda linha + 6 do
+    // respiro do pai = 106**. Os 118 do aviso da v0.48.0 são a conta DELE (segunda linha de 20 e
+    // inset de 40); o respiro é o termo que os dois compartilham, e é o único que ele move.
+    //
+    // Por que EXATO e não `greaterThan`: o respiro era 8, nunca tinha sido medido — veio de carona
+    // da variante antiga do stepper quando a casca generalizou pro meu pedido da v0.11.0 — e quando
+    // desceu pra 6 nenhuma das minhas asserções sentiu. `greaterThan(52)` passa com 106 e com 108.
+    // Rodado contra a `v0.47.0` antes de subir: `Expected: <106> Actual: <108.0>`.
+    expect(t.getSize(find.byType(BoldCabecalhoDaHome)).height, 106,
+        reason: 'a casca montada mudou de altura: 52 da barra + 48 da segunda linha + respiro do pai');
   });
 
   testWidgets('a casca é a de APP REAL — sem a status bar mock, senão são DOIS relógios', (t) async {

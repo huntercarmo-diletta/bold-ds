@@ -19,9 +19,9 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [a auditoria não sabe que está num filho](pedidos/2026-07-30-a-auditoria-nao-sabe-que-esta-num-filho.md) | ENTRA (as duas) | **v0.21.4** |
 | [o papel `primary` reprova em AA nos dois modos](pedidos/2026-07-31-o-papel-primary-reprova-em-AA-nos-dois-modos.md) | ENTRA (pela TINTA, não pelo degrau) | **v0.22.0** |
 | [a rampa não é legível em contexto `const`](pedidos/2026-08-02-a-rampa-nao-e-legivel-em-contexto-const.md) | **ENTRA COMO FORMA** | **ds v0.25.0** · aplicado aqui na v0.3.0 |
-| [não existe família `info` na linguagem](pedidos/2026-08-02-nao-existe-familia-info-na-linguagem.md) | *sem veredito* | — |
+| [não existe família `info` na linguagem](pedidos/2026-08-02-nao-existe-familia-info-na-linguagem.md) | **ENTRA COMO TOM — `DilettaStatusTone.pending` —, e a FAMÍLIA continua não**: a contra-medição dele mostrou que 9 dos 10 sítios não eram informação, eram ESPERA; o 10º é codificação categórica e fica fora da rampa, com o motivo escrito | **ds v0.27.0** · adotado aqui só na **v0.25.0** — seis versões de dívida, e o esconderijo foi esta linha dizendo *sem veredito* |
 | [o vocabulário dos três slots fechou, e 6 linhas ficaram de fora](pedidos/2026-08-04-o-vocabulario-fechou-e-seis-linhas-ficaram-de-fora.md) | **ENTRAM 2 de 3** — o `maxLines` não era um `bool` (altura cravada estoura), e o COPIAR era CALLBACK, não widget | **ds v0.38.0** · adotado aqui na v0.14.0 |
-| [a casca de topo de APP REAL não tem segunda linha](pedidos/2026-08-04-a-casca-de-topo-de-app-real-nao-tem-segunda-linha.md) | *sem veredito* | — |
+| [a casca de topo de APP REAL não tem segunda linha](pedidos/2026-08-04-a-casca-de-topo-de-app-real-nao-tem-segunda-linha.md) | **UM ENTRA, UM NASCE AQUI, UM ERA ESCOLHA**: (1) `DilettaTopAppBar.app(conteudo:)` — *"não é variante nova esperando segundo pedido, é assimetria minha"*; (2) sem vidro nasce aqui, e o caminho já existia (`DilettaNavigationTopBar` é sem vidro por contrato); (3) o título em `textSecondary` era escolha, com a gramática escrita | **ds v0.40.0** · adotado aqui na v0.16.0 (esta linha ficou dizendo *sem veredito* até a v0.25.0) |
 | [os seletores não traduzem entre claro e escuro](pedidos/2026-08-04-os-seletores-nao-traduzem-entre-claro-e-escuro.md) | **ENTRA** — e o conserto pegou radio, toggle **e** checkbox | **ds v0.41.0** · adotado aqui na v0.20.0 |
 | [o slot de ícones crava `secondary`, e o terciário já existe](pedidos/2026-08-04-o-slot-de-icones-crava-secondary-e-o-terciario-existe.md) | **ENTRA** | **ds v0.41.0** · adotado aqui na v0.20.0 |
 | [o descritor de CTA não sabe dizer carregando](pedidos/2026-08-04-o-descritor-de-cta-nao-sabe-dizer-carregando.md) | **ENTRA** | **ds v0.41.0** · adotado aqui na v0.20.0 |
@@ -78,6 +78,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [o nome da peça é o da linguagem, e a barra de baixo tem 1 de 7](avisos/2026-08-03-o-nome-da-peca-e-o-da-linguagem-e-a-barra-de-baixo-tem-1-de-7.md) | COBRANÇA | sim — 27 rótulos consertados, 5 variantes expostas, e achei um defeito dele |
 | [um ícone embarcava sem nome, e 6 arquivos saíram](avisos/2026-08-04-o-icone-que-embarcava-sem-nome.md) | RELEASE | sim — `grep` dos 6 removidos deu ZERO aqui, e `walletSolid` entra sozinho porque eu declaro `icones: DilettaIcons.all` |
 | [os cinco `onX` derivam, e a sua dívida pode cair](avisos/2026-08-04-os-cinco-onx-derivam-e-a-sua-divida-pode-cair.md) | RELEASE | sim — a dívida caiu: 2,08 → **5,48:1**, e o gate voltou a ser um só |
+| [o respiro da casca desce dois pixels](avisos/2026-08-05-o-respiro-da-casca-desce-dois-pixels.md) | RELEASE | sim — a casca montada sai de **108 pra 106**, o `greaterThan(52)` virou número exato (controle: `Expected: <106> Actual: <108.0>` na v0.47.0), e a auditoria do ledger achou **duas linhas minhas dizendo *sem veredito* com veredito** — o débito de `pending` estava escondido ali |
 | [o traço de home desce, e o acessório esquerdo anda](avisos/2026-08-04-o-traco-de-home-desce-e-o-acessorio-esquerdo-anda.md) | RELEASE | sim — **85 asserções minhas não sentiram**: entrou gate de POSIÇÃO (traço em 21, glifo em 44) com controle contra a v0.46.0; e o chip denso NÃO promove, medido em 0 telas |
 
 Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
@@ -85,9 +86,17 @@ pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedid
 
 ## Dois números que este ledger deixa ver
 
-**33 pedidos, 31 com veredito, 31 ENTRARAM** (17 ao pai da linguagem, 16 ao da ferramenta; medido em
-2026-08-04, na v0.23.0). Nenhum voltou como "MORA NO SEU DS", e isso é informação sobre o método e não
-sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
+**34 pedidos, 34 com veredito, 34 ENTRARAM** (18 ao pai da linguagem, 16 ao da ferramenta; recontado
+linha por linha em 2026-08-05, na v0.25.0). Nenhum voltou como "MORA NO SEU DS", e isso é informação sobre
+o método e não sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
+
+**E os 2 "sem veredito" da contagem anterior não estavam sem veredito.** Os dois tinham resposta —
+`família info` na **ds v0.27.0** e `casca de app real` na **v0.40.0** —, e a linha aqui nunca foi atualizada.
+Isso não é erro de bookkeeping: **o débito de ADOÇÃO se esconde no veredito que ninguém registrou.** O tom
+`pending` ficou seis versões disponível com a espera desta casa saindo em `neutral`, e o único lugar onde
+essa pergunta era feita (*"o que voltou, e eu apliquei?"*) era esta tabela dizendo que nada tinha voltado.
+Regra que sai daqui: **linha sem veredito é uma pergunta em aberto pro pai — e ela vira mentira no dia em
+que ele responde.** Conferir as linhas abertas contra as tags dele passou a ser parte da subida.
 
 **E o último tem um número que não é meu**: o gate que eu pedi achou **dois pares** que a paleta de
 referência escondia, e **nenhum dos dois era o meu caso**. Pedido que conserta o defeito de quem pediu

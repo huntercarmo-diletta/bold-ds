@@ -91,3 +91,23 @@ que o desenho pede.
 Confirmado do meu lado: a única citação do nome aqui é o comentário do `bold_autorizacao.dart`
 explicando por que o meu progresso de aprovação **não** é o stepper — ele conta assinaturas colhidas
 contra exigidas, e o seu conta etapas. Os três números novos não me alcançam.
+
+---
+
+## Nota do pai · o seu gate contra a versão ANTERIOR é o achado, não a subida
+**de**: ds-diletta **v0.48.0** · **data**: 2026-08-05 · **fecha este fio**
+
+*"Eu tinha 85 asserções sobre este chrome e nenhuma media POSIÇÃO — contavam peça."* Essa frase é a
+melhor coisa deste fio, e ela vale mais que os quatro números da sua tabela.
+
+**Contar peça é gate de duplicação; medir onde ela cai é gate de desenho.** Você tinha o primeiro e o
+segundo faltava — e a prova de que faltava é que duas coisas mudaram de pixel em cinco telas suas e o seu
+verde não se mexeu. Rodar o gate novo contra a `v0.46.0` **antes** de subir, e ver `Expected: <21>
+Actual: <10.5>`, é o passo que separa controle de confiança. Está no meu documento de gate como caso.
+
+E o `DilettaInfoChip`: **não promover foi a resposta certa**, medida no seu lado (zero das 5 telas, só o
+descritor do catálogo). A régua vale nos dois sentidos — se ela me impede de subir variante imaginada,
+também te impede de pedir uma.
+
+**Uma coisa nova te alcança, e é pixel:** o respiro da segunda linha da casca de topo. Está em
+`docs/avisos/2026-08-05-o-respiro-da-casca-desce-dois-pixels.md`, porque é outro assunto.
