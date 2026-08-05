@@ -149,6 +149,48 @@ void main() {
     });
   }
 
+  /// E ONDE o chrome desenha, e não só QUANTAS vezes — os dois números que a `ds v0.47.0` moveu.
+  ///
+  /// O aviso dele avisa: *"mexe em pixel de toda tela que desenha a barra de baixo ou a de cima"*, e as
+  /// minhas 85 asserções passaram sem sentir — porque nenhuma media POSIÇÃO. O traço de home descia
+  /// 10,5px desde sempre (um `alignment: center` cancelando um `padding: bottom 8`) e o acessório
+  /// esquerdo alinhava a CAIXA em vez do glifo; os dois consertos chegaram por medição de pixel, que é
+  /// a única varredura que acha *dois valores de layout que se anulam*.
+  ///
+  /// Contar peça é gate de duplicação. Medir onde ela cai é gate de desenho, e é o que faltava aqui.
+  testWidgets('o traço de home fica a 8 do fim da faixa, e o glifo da volta centra em 44', (t) async {
+    t.view.physicalSize = const Size(500, 3000);
+    t.view.devicePixelRatio = 1.0;
+    addTearDown(t.view.reset);
+
+    // `pf2` tem os dois: `cascaDeTopo` com `esquerda: voltar` e a barra de baixo com o traço.
+    await t.pumpWidget(MaterialApp(
+      theme: ThemeData(fontFamily: BoldFonts.familyRaw),
+      home: Ds.tema(Scaffold(
+        body: buildScreenLayout(telasDoBold()[kSlugDoValorDoPix]!, leaf: buildBlock),
+      )),
+    ));
+    await t.pump(const Duration(milliseconds: 200));
+    t.takeException();
+
+    // A FAIXA tem 34 e o traço 134×5. Com `bottomCenter` + `bottom: 8`, ele cai em `y 21`.
+    final faixa = t.getRect(find.byType(DilettaBottomHomeIndicator));
+    final traco = t.getRect(find.descendant(
+      of: find.byType(DilettaBottomHomeIndicator),
+      matching: find.byWidgetPredicate((w) => w is Container && w.constraints?.maxWidth == 134),
+    ));
+    expect(faixa.height, 34);
+    expect(traco.top - faixa.top, 21, reason: 'o traço desce 10,5 quando o center cancela o padding');
+    expect(faixa.bottom - traco.bottom, 8, reason: 'a folga de baixo é 8, que é o que o iOS desenha');
+
+    // O ALVO encosta na margem (x 24, caixa 40) e o glifo centra dentro dele ⇒ centro em 44.
+    final barra = t.getRect(find.byType(DilettaNavigationTopBar));
+    final volta = t.getRect(find.bySemanticsLabel('Voltar'));
+    expect(volta.center.dx - barra.left, 44,
+        reason: 'com flush o glifo ia pra 24 e o alvo saía da margem — o alvo encosta, o glifo centra');
+    expect(volta.width, 40, reason: 'a caixa de toque do acessório é 40, e o desenho declara 40');
+  });
+
   testWidgets('o bloco do esqueleto desenha o PAR — forma e brilho', (t) async {
     // O board mostrava caixa cinza parada onde o app mostra a varredura, porque eu declarava só a forma.
     // O `///` do pai é explícito: *"não anima sozinha — embrulhe num DilettaShimmer"*.

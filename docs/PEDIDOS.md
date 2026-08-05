@@ -78,6 +78,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [o nome da peça é o da linguagem, e a barra de baixo tem 1 de 7](avisos/2026-08-03-o-nome-da-peca-e-o-da-linguagem-e-a-barra-de-baixo-tem-1-de-7.md) | COBRANÇA | sim — 27 rótulos consertados, 5 variantes expostas, e achei um defeito dele |
 | [um ícone embarcava sem nome, e 6 arquivos saíram](avisos/2026-08-04-o-icone-que-embarcava-sem-nome.md) | RELEASE | sim — `grep` dos 6 removidos deu ZERO aqui, e `walletSolid` entra sozinho porque eu declaro `icones: DilettaIcons.all` |
 | [os cinco `onX` derivam, e a sua dívida pode cair](avisos/2026-08-04-os-cinco-onx-derivam-e-a-sua-divida-pode-cair.md) | RELEASE | sim — a dívida caiu: 2,08 → **5,48:1**, e o gate voltou a ser um só |
+| [o traço de home desce, e o acessório esquerdo anda](avisos/2026-08-04-o-traco-de-home-desce-e-o-acessorio-esquerdo-anda.md) | RELEASE | sim — **85 asserções minhas não sentiram**: entrou gate de POSIÇÃO (traço em 21, glifo em 44) com controle contra a v0.46.0; e o chip denso NÃO promove, medido em 0 telas |
 
 Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
 pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedido novo.

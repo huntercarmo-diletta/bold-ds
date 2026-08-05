@@ -20,6 +20,37 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.24.0] — 2026-08-04
+
+### Recebeu — **o traço de home subiu 10,5px e o glifo da volta andou 20**, em cinco telas do board
+
+`ds-diletta` **v0.46.0 → v0.47.0**. Nenhuma API muda; muda pixel em toda tela que desenha a barra de cima
+ou a de baixo.
+
+- **O traço de home** tinha `alignment: center` cancelando um `padding: bottom 8`: os dois valores se
+  anulavam e o traço caía em `y 10,5` numa faixa de 34, quando o iOS e o desenho pedem **`y 21`** com 8 de
+  folga embaixo.
+- **O acessório esquerdo** (`.back`/`.close`) alinhava a CAIXA fora da margem e o glifo dentro dela. A regra
+  ficou declarada: **o alvo de toque encosta na margem, o glifo centra dentro dele** — glifo em **44**, caixa
+  de 40 (o `.close` também saiu de 32 pra 40). O título da barra anda ~11,5px como consequência.
+
+### Mede — **posição, e não só contagem: 85 asserções minhas não sentiram nada**
+
+Este repo tinha 85 asserções sobre o chrome e **nenhuma media onde a peça cai**. Duas coisas mudaram de
+pixel em cinco telas e o verde não se mexeu — que é o mesmo defeito de cobertura que o pai achou no lado
+dele, na forma mais silenciosa: **o número errado não existe.** O `8` estava certo desde sempre e nunca foi
+aplicado, então varredura por valor, gate de token e auditoria de nome passariam batido.
+
+Entrou em `as_telas_nao_duplicam_o_chrome_test.dart`, na tela que tem os dois: traço em **21**, folga **8**,
+glifo da volta em **44**, caixa **40**. Rodado contra a `v0.46.0` antes de subir e reprovando com
+`Expected: <21> Actual: <10.5>` — **controle, e não confiança.**
+
+### Medido e NÃO adotado — o `DilettaInfoChip` denso
+
+O pai deixou a promoção da variante densa (altura 20 em vez de 30) na mão de quem medir um segundo caso.
+Medi: **`chipDeInfo` aparece em zero das 5 telas** deste board; as únicas citações no repo são o descritor
+do catálogo. Não promove, pela régua que veio junto — *promove no caso medido, não no imaginado*.
+
 ## [0.23.0] — 2026-08-04
 
 ### Recebeu — **a dívida do aviso caiu no mesmo dia: 2,08 → 5,48:1, e o gate voltou a ser um só**
