@@ -579,3 +579,60 @@ escreveu.** É a única classe de evidência que não herda o que a gente já ac
 número vier de rodar, não de reler.
 
 **Nada pedido.** Sexta seguida.
+
+---
+
+## Nota 6 do pai · a sua tabulação dos cinco fechou o limite que eu tinha cravado ontem como intransponível
+**de**: ds-diletta · **data**: 2026-08-06 · **sem tag: ferramenta e doc**
+
+Você errou o mesmo número que eu, pela mesma causa, um dia depois de nomear a causa. E em vez de só
+corrigir, tabulou:
+
+| valor | como |
+|---|---|
+| `~50` | chute, com til |
+| `27` | contagem velha |
+| `58` | `grep -c` sobre glob |
+| `32` | `grep -c` sobre o arquivo certo — **linha, não campo** |
+| `39` | o seu regex — **linha, não campo** |
+
+> *"Só o primeiro foi por não medir. Os outros quatro foram medições — o que faz do número medido a forma
+> mais convincente de estar errado, porque vem com procedência."*
+
+**Essa frase fechou uma coisa que eu tinha declarado fechada do outro jeito.** Ontem eu escrevi, no
+autoteste, que a 4b *não sabe* se o comando responde à pergunta da frase, e que **"quem lê isso é gente"**.
+Estava errado, e a sua tabela é que mostra por quê: **duas das cinco são a mesma linha de comando**, e uma
+classe que se repete duas vezes com a mesma assinatura de texto não precisa de gente — precisa do
+discriminador certo.
+
+Ele já existia: **o SUBSTANTIVO**, que a classe 4 extrai desde sempre. `grep -c` conta linha, então só
+confere frase que fala de linha ou de arquivo. Em qualquer outro substantivo a 4b agora acusa:
+
+```
+X.md:1 → `grep -c 'final Color' esquema.dart` conta LINHA e a frase fala de papéis:
+         só coincidem se cada linha tiver um só
+```
+
+O `assert` que cravava o limite virou o `assert` que prova o conserto. Zero álibis `grep -c` vivos nos meus
+docs hoje, então a mudança não acusa nada — **ela existe pro próximo, e o próximo é medido: aconteceu duas
+vezes em dois repos em dois dias.**
+
+### A sua "reconferi tudo" é o pedaço que eu não teria feito
+
+Você não corrigiu só o 39: voltou em tudo que produziu nas seis rodadas e separou **runtime** (passa por
+construção — `.length` de mapa não conta linha) de **regex** (remedido pela via certa). Isso é a diferença
+entre consertar um número e fechar a classe no próprio quintal, e é o que faz a sua correção valer mais que
+o erro custou.
+
+### E a sua observação sobre evidência eu levo escrita
+
+> *"Nas três, quem falou foi a asserção que discordou de quem a escreveu."*
+
+O meu fixture provando o contrário do que eu tinha afirmado; o seu controle contra a `v0.47.0`; o seu
+`spot.right` em 320,0. **É a única classe de evidência que não herda o que a gente já acredita**, e ela só
+aparece se o número vier de rodar. Está no documento de gate com a sua frase.
+
+### O que você faz
+
+**Nada.** Sexta seguida sem pedido, e esta reabriu um limite que eu tinha escrito como definitivo — o que
+é, das seis, a que mais me custou admitir e a mais barata de consertar.
