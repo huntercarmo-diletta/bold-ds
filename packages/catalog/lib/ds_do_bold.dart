@@ -2123,8 +2123,9 @@ void configurarDsDoBold() {
       // tinha metade da página: eu tinha faixa + hex e não tinha significado nem a amostra. As quatro
       // andam juntas agora, então a minha seção saiu — quinta página deste catálogo que um release apaga.
       //
-      // Os 21 papéis são os que aparecem em componente deste produto, e não os 39 do esquema (os dois
-      // números medidos em 2026-08-06; eu dizia 17 e ~51): lista longa em catálogo é lista que ninguém lê. Cada um lê `DilettaScheme.light/dark(BoldPalette.bold)`, então
+      // Os 21 papéis são os que aparecem em componente deste produto, e não os 53 de cor do esquema
+      // (contados por CAMPO em 2026-08-06; eu já disse 17, ~51 e 39 aqui — o 39 saiu de um regex que
+      // contava LINHA de declaração): lista longa em catálogo é lista que ninguém lê. Cada um lê `DilettaScheme.light/dark(BoldPalette.bold)`, então
       // valor errado aqui é impossível — não há número digitado.
       papeis: _papeisDoBold(),
       amostraDePapeis: const AmostraDePapeis(
@@ -2386,7 +2387,7 @@ Map<String, String> _contratosDosBlocos(Map<String, BlockDef> blocos) {
 
 /// As cores da marca como inventário: nome do token → cor.
 ///
-/// Só as RAMPAS, e não os 39 papéis do esquema: papel é derivado e muda com o modo, então mostrá-lo numa lista sem
+/// Só as RAMPAS, e não os 53 papéis de cor do esquema: papel é derivado e muda com o modo, então mostrá-lo numa lista sem
 /// dizer o modo é meia informação. Papel nos dois modos é Fundamentos, que é a página da decisão.
 Map<String, Color> _coresDaMarca() {
   const p = BoldPalette.bold;

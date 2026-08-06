@@ -20,6 +20,43 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.25.6] — 2026-08-06
+
+### Consertou — **o 39 que eu escrevi ontem estava errado, e pelo mesmo defeito que eu tinha acabado de nomear**
+
+Ontem eu troquei o `~50 papéis` da minha prosa por **39**, medido. O pai foi conferir porque o número dele
+dizia 32, rodou por CAMPO e achou **53** — e o meu 39 tem a causa exata do `grep -c` dele: **o meu regex
+contava LINHA de declaração.** `final Color warning, onWarning, warningSubtle;` é uma linha e três papéis,
+e eu li como um.
+
+A frase dele é a régua nova, e ela está uma casa acima das outras três:
+
+> **A 4b confere se o comando devolve o número da frase. Ela não confere se o comando responde a PERGUNTA
+> da frase.**
+
+O meu comando respondia *"quantas declarações existem"* com precisão. A frase perguntava *"quantos
+papéis"*. Os dois números são inteiros, os dois saem de medição, e o errado parecia mais honesto que o
+chute que ele substituiu — **medir a coisa errada produz um número com cara de fonte.**
+
+Este número já errou cinco vezes entre os dois repos: `~50` (chute meu) · `27` (contagem velha dele) · `58`
+(glob errado) · `32` (`grep -c`, linha) · `39` (meu regex, linha). **Agora é 53, e o comando que responde a
+pergunta certa ficou ao lado dele na prosa** — `grep -oE 'final Color\??[^;]+;' … | tr ',' '\n' | wc -l`,
+verificado devolvendo 53.
+
+### Reconferido — **os outros números destas cinco rodadas, contra a pergunta nova**
+
+Fui atrás de todos os que eu produzi desde v0.25.0 pra ver quais respondiam outra pergunta:
+
+- **Os de runtime passam por construção**: `Ds.blocos.length` (56), specs (77 + 12), ícones (352), telas
+  (5), `ctor`/`args` (46 · 42), as medições de pixel. `.length` de um mapa não tem como contar linha.
+- **Os dois de regex eu remedi pela via que responde a pergunta**: as 12 opcionais da paleta (uma por
+  parâmetro `this.x` — parâmetro não lista dois nomes, e eu já tinha conferido nome por nome) e os **21
+  papéis** do catálogo, recontados por par `'chave': p(` em vez de por chave solta. Bateram.
+
+**A distinção dele sobre o `~` entra como regra**: aproximação sobre grandeza CONTÍNUA é cuidado
+(`~30px de dissolução`); sobre coisa CONTÁVEL é licença que ninguém deu. Papel, bloco e spec se contam com
+um comando — não há o que aproximar, e o til só disfarça.
+
 ## [0.25.5] — 2026-08-06
 
 ### Consertou — **a minha varredura de ontem era FECHADA como a dele, e a aberta achou OITO**

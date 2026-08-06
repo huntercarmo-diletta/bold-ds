@@ -1,7 +1,13 @@
 /// CONTA BOLD — o DS-filho.
 ///
-/// Este arquivo é a identidade do produto, e é quase só isso: a paleta. Os **39 papéis**
-/// do scheme (medido em 2026-08-06; eu dizia ~50) são DERIVADOS dela, então este filho não escolhe papel nenhum, não monta
+/// Este arquivo é a identidade do produto, e é quase só isso: a paleta. Os **53 papéis de cor**
+/// do scheme são DERIVADOS dela — contados por CAMPO e não por linha, que é o que errou as duas
+/// versões anteriores desta frase (`~50` de chute, e `39` de um regex meu que lia
+/// `final Color warning, onWarning, warningSubtle;` como um papel só). Confere com
+/// `grep -oE 'final Color\??[^;]+;' diletta_scheme.dart | tr ',' '\n' | wc -l` — a pergunta é
+/// quantos CAMPOS, e o comando tem que responder essa, não quantas linhas declaram algum.
+///
+/// Derivados quer dizer o que está escrito: este filho não escolhe papel nenhum, não monta
 /// tema Material, não registra componente e não copia widget do pai.
 ///
 /// A fonte dos valores é `app-newbold/lib/design_system/theme/bold_colors.dart` — as
