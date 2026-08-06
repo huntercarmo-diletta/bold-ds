@@ -527,6 +527,47 @@ também não mostrava.
 | `bloco-sem-leitura` | a VOLTA quebrou: dois dos três emitidos não são `Ctor(args)` (um é construtor NOMEADO, o outro vem aninhado). Entrada manual no leitor, com `.dashed`/`.vertical` ANTES do liso — senão o prefixo casa os três e toda forma volta como linha |
 | `o_emitido_compila` | eu emiti **`ds.SizedBox`**. O `SizedBox` é do Flutter, não do DS, e não existe em pacote nenhum. Sem este gate, montar um divisor vertical no board geraria código que não compila |
 
+## [catalogo 0.15.0] — 2026-08-06
+
+### Ganhou — **a aba de ADOÇÃO, e o inventário que ela mostra é do APP e não deste repo**
+
+`diletta_catalog_core` **v0.85.1 → v0.86.0**, e é a entrega do pedido que esta casa escreveu hoje:
+o catálogo tinha sete abas e nenhuma respondia *"quanto deste produto já é o DS"*. As sete descrevem
+o que o DS TEM; nenhuma descrevia o que o produto ADOTOU.
+
+**O veredito trouxe um número que eu não tinha**: o primeiro filho já mantinha uma aba `Integração`
+de **997 linhas** à mão, com um `///` mandando *"mova o item de status aqui"*. Dois filhos, duas
+telas, duas definições de "adotado" — e a regra de conhecimento é o que impedia cada um de ver o
+outro. Só o pai podia, e é o trabalho dele.
+
+O que subiu não é o meu desenho nem o dele: `adotado` (peça do DS **e a casca que delega**) ·
+`lacuna` (+ `temParNoDs`) · `deliberado` (com razão obrigatória, senão não compila). Duas frases
+minhas viraram `assert` do contrato: *exceção sem razão cresce em silêncio* ⇒ `deliberado` sem razão
+não constrói; *peça morta é linha pra apagar, não linha de relatório* ⇒ **alcance 0 não constrói**.
+
+### A conta é em ALCANCE, e a diferença é 6 pontos
+
+O inventário do app, medido no código dele: **46 peças adotadas (690 arquivos de alcance) · 37
+lacunas (436) · 1 deliberada (11, fora do denominador)**.
+
+| conta | resultado |
+|---|---|
+| por ALCANCE (a do contrato) | **61,3% adotado** |
+| por contagem de peça | 55,4% |
+
+Seis pontos de diferença, e o motivo é o que faz a régua ser essa: `BoldTopBar` alcança 87 arquivos e
+`BoldSummaryAction` alcança 1 — contar peça faz as duas pesarem igual.
+
+### O inventário é GERADO, e essa foi a lição do veredito
+
+A lista mora em `lib/adocao_do_bold.g.dart`, e o gerador é do app
+(`dart run tool/inventario_de_adocao.dart`): a mesma varredura que o gate de adoção de lá usa, só
+impressa no formato do motor. **O motor não mede nada** — varrer a fonte do app é do app, e isso era
+metade do pedido.
+
+Lista à mão é onde inventário e produto se separam em silêncio, e a prova estava no veredito: as 997
+linhas do outro filho. O `medidoPor` viaja com o inventário pra que o número tenha a fonte ao lado.
+
 ## [0.14.0] — 2026-08-04
 
 ### Mudou — **o pai é a `v0.38.0`, e as 6 linhas que faltavam subiram**

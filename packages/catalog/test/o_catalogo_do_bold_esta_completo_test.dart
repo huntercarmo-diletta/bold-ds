@@ -139,8 +139,10 @@ void main() {
     // sessão de depuração; aqui custa uma mensagem.
     final c = configDoCatalogoDoBold();
     expect(c.abas.map((a) => a.id), contains(c.abaInicial));
-    // As 7 abas, e não "mais de uma": com 7 medidos, o `greaterThan(1)` sobreviveria a perder cinco.
-    expect(c.abas.length, 7, reason: 'aba entrou ou saiu da config — se foi de propósito, atualize aqui');
+    // As 8 abas, e não "mais de uma": com 8 medidos, o `greaterThan(1)` sobreviveria a perder seis.
+    // Eram 7 até 06/08; a oitava é a de ADOÇÃO, que o motor entregou na v0.86.0 respondendo ao pedido
+    // desta casa. Este número subir é o gate funcionando: aba nova é decisão, e decisão se declara.
+    expect(c.abas.length, 8, reason: 'aba entrou ou saiu da config — se foi de propósito, atualize aqui');
   });
 
   group('a VOLTA — o leitor de código', () {

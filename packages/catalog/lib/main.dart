@@ -14,6 +14,7 @@ import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 
+import 'adocao_do_bold.g.dart';
 import 'chrome_do_bold.dart';
 import 'conteudo_do_bold.dart';
 import 'ds_do_bold.dart';
@@ -160,6 +161,18 @@ CatalogoConfig configDoCatalogoDoBold() {
           id: 'conformidade',
           label: 'Conformidade',
           constroi: (_) => const _AbaConformidade(),
+        ),
+        // ADOÇÃO (motor v0.86.0) — a aba que este catálogo pediu, e o inventário é o
+        // do APP, não o deste repo: a pergunta que ela responde ("quanto do produto
+        // já é o DS?") só tem número do lado de quem consome.
+        //
+        // O motor não mede nada, e isso é do pedido: varrer a fonte do app é do app.
+        // A lista vem GERADA de lá (`dart run tool/inventario_de_adocao.dart`), e o
+        // `medidoPor` viaja com ela pra que o número tenha fonte ao lado.
+        AbaDoCatalogo(
+          id: 'adocao',
+          label: 'Adoção',
+          constroi: (_) => const AbaDeAdocao(inventario: inventarioDoBold),
         ),
       ],
   );
