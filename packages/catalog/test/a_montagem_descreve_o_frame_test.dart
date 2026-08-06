@@ -127,9 +127,24 @@ void main() {
     expect([dys[2], dys[3]], [248.0, 248.0],
         reason: 'o card da lista ganhou respiro próprio, ou a linha saiu de dentro dele');
 
-    // A BASE é fixa: ela fica no fim da tela, e não no fim do conteúdo. Exercida com 400 de folga
-    // (808 contra 408) — não está em cima do limite, então o comparador fica.
-    expect(dyDe('b1'), greaterThan(dyDe('c3')));
+    // A BASE é fixa: ela fica no fim do FRAME, e não no fim do conteúdo.
+    //
+    // A TERCEIRA pergunta, e ela veio do pai da ferramenta achando no motor uma asserção que media o
+    // objeto errado: *o valor medido é o que o `reason:` fala?* Aqui não era. O que estava escrito é
+    // "a base é FIXA" e o que se media era `dyDe('b1') > dyDe('c3')` — que só diz que ela pinta depois
+    // do último bloco do conteúdo, e é exatamente o que aconteceria se ela ROLASSE junto. A asserção
+    // passava nos dois mundos, com 400 de folga pra parecer exercida.
+    //
+    // O que distingue é a ÂNCORA: a distância da base até o fim do frame. Hoje é 8 — a borda do
+    // próprio frame, a mesma que o bloco de topo tem em cima (`dys[0]`). Se a base seguisse o
+    // conteúdo, ela pararia logo depois do botão e esse vão passaria de 400.
+    final b1 = t.getRect(find.byWidgetPredicate(
+        (w) => w is MetaData && w.metaData is BlockTag && (w.metaData as BlockTag).id == 'b1'));
+    final frame = t.getRect(find.byType(SpecPhoneFrame));
+    expect(frame.bottom - b1.bottom, 8,
+        reason: 'a base descolou do fim do frame: ela está seguindo o fim do conteúdo');
+    expect(frame.bottom - b1.bottom, dys[0] - frame.top,
+        reason: 'topo e base não encostam na mesma borda — o frame perdeu a simetria');
 
     // E o slot está DENTRO do pai, não ao lado dele — é o "encaixado em quê" da seção, medido em pixels.
     final listaRect = t.getRect(find.byWidgetPredicate(

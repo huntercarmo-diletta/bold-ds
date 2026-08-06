@@ -20,6 +20,29 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.25.4] — 2026-08-06
+
+### Mede — **a base "é fixa" e o que eu media era "pinta depois do último bloco"**
+
+Nenhum aviso chegou nesta rodada: o pai da FERRAMENTA rodou a mesma varredura no motor dele, no repo dele,
+e achou **1 defeito em 12 frouxas de geometria** — uma asserção cujo `reason:` falava da altura da CAMADA e
+que media um TEXTO de 8px contra um teto de 170. A frase dele é a terceira pergunta do crivo:
+
+> **O valor medido é o que o `reason:` fala?** E o que distingue é a ÂNCORA.
+
+Fui aplicar às minhas, e a que caiu é a mesma forma. `expect(dyDe('b1'), greaterThan(dyDe('c3')))` com o
+comentário dizendo *"a BASE é fixa: ela fica no fim da tela, e não no fim do conteúdo"*. **Ela só dizia que
+a base pinta depois do último bloco — que é exatamente o que aconteceria se a base ROLASSE junto.** Passava
+nos dois mundos, e os 400 de folga que eu tinha anotado ontem como *"exercida"* faziam ela parecer sólida.
+
+O erro é meu e é anterior ao comparador: eu tinha triado essa asserção **duas vezes** nas rodadas passadas,
+pelas duas primeiras perguntas (*o exato é conhecível?* e *está em cima do limite?*), e as duas responderam
+"está boa". Nenhuma das duas pergunta se o número medido **é o assunto da frase**.
+
+Ancorada agora na borda do frame: a distância da base até o fim do frame é **8** — a mesma borda que o
+bloco de topo tem em cima, medida contra `dys[0]` pra que a simetria seja o gate. Se a base seguisse o
+conteúdo, esse vão passaria de **400**.
+
 ## [0.25.3] — 2026-08-06
 
 ### Consertou — **sete números vivos na minha prosa tinham derivado, e o pior era o do escopo**
