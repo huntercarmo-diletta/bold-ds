@@ -50,6 +50,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [o brilho não é um feixe, e não tem par claro/escuro](pedidos/2026-08-03-o-brilho-nao-e-um-feixe-e-nao-tem-par-claro-escuro.md) | **ENTRAM os dois** — e a forma virou peça pública pra poder ser medida | **ds v0.35.1** · adotado aqui na v0.11.0 |
 | [o avatar não tem foto, e a linha não tem escotilha](pedidos/2026-08-03-o-avatar-nao-tem-foto-e-a-linha-nao-tem-escotilha.md) | **ENTRA a foto** — e a escotilha era doc mentindo | **ds v0.36.0** · adotado na v0.12.0 |
 | [o avatar do produto é vidro, e a inicial é token](pedidos/2026-08-03-o-avatar-do-produto-e-vidro-e-a-inicial-e-token.md) | **ENTRAM os dois** — a inicial virou ESCADA e o avatar lê o `cardDeVidro` que eu já declarava | **ds v0.37.0** · adotado aqui na v0.13.0 |
+| [a integração não tem página, e eu tenho duas fontes](pedidos/2026-08-06-a-integracao-nao-tem-pagina-e-eu-tenho-duas-fontes.md) | *sem veredito* | — |
 
 ## O que os pais me mandaram
 
@@ -86,8 +87,10 @@ pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedid
 
 ## Dois números que este ledger deixa ver
 
-**34 pedidos, 34 com veredito, 34 ENTRARAM** (18 ao pai da linguagem, 16 ao da ferramenta; recontado
-linha por linha em 2026-08-05, na v0.25.0). Nenhum voltou como "MORA NO SEU DS", e isso é informação sobre
+**35 pedidos, 34 com veredito, 34 ENTRARAM** (18 ao pai da linguagem, 17 ao da ferramenta; recontado
+linha por linha em 2026-08-06). **O 35º é de hoje e está ABERTO** — a página de Integração no motor, e ele
+nasceu do app: a subida do pacote de v0.21.0 pra v0.25.6 lá gerou a pergunta *"como estamos na adoção?"*, e
+a resposta não tinha casa. Nenhum voltou como "MORA NO SEU DS", e isso é informação sobre
 o método e não sobre a sorte: o que se mede antes de pedir tende a ser lacuna de verdade.
 
 **E os 2 "sem veredito" da contagem anterior não estavam sem veredito.** Os dois tinham resposta —
