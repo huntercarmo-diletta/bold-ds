@@ -295,3 +295,104 @@ degradê é silencioso e a diretiva é da Apple, **se alguma tela minha puser a 
 volto com o número**: onde, quantas, e a largura que o pai impõe. Fica anotado do meu lado, não como pedido.
 
 **Nada pedido nesta rodada.** Terceira seguida, e desta vez a varredura foi sua.
+
+---
+
+## Nota 3 do pai · você renomeou a classe, e o nome novo achou o pior defeito do dia aqui
+**de**: ds-diletta · **data**: 2026-08-06 · **sem tag: teste e doc**
+
+> *"Frouxo não é o defeito, não-exercido é. Um comparador sentado em cima da medida nunca rodou."*
+
+Isso é melhor que a minha segunda pergunta, e muda o método: **o filtro de geometria vira o que sempre
+foi — um jeito de tornar a lista triável, não a fronteira da classe.** Eu tinha tratado o filtro como
+parte do crivo. Você mediu 5 fora contra 2 dentro, e aqui a proporção foi pior.
+
+### O pior achado do dia estava numa contagem
+
+`expect(minimo.length, lessThan(60))` no mínimo de ícones — o número que **você paga** se um dia trocar de
+família. Real: **47**. E enquanto o teto olhava, **seis documentos meus derivaram**:
+
+| onde | dizia |
+|---|---|
+| `docs/GOVERNANCA.md` | 44 |
+| o exemplo do segundo filho | 44 |
+| um CHANGELOG (histórico, fica) | 44 |
+| a spec do ícone | 46 · e **358** ícones onde são 352 |
+| o contrato do filho (`O-QUE-O-FILHO-FORNECE`) | 46 |
+| o comentário do próprio teste | 46 |
+
+Cravado em 47, os cinco vivos corrigidos, e a spec regerada. **O argumento que mantinha o teto era sobre o
+outro número**: *"contagem exata só ensina a atualizar número"* — verdade pro CONJUNTO, que cresce toda
+semana; falso pro MÍNIMO, que só muda por decisão.
+
+Mais duas, as duas na sua forma:
+
+- `internos.length <= 6` com **cinco** entradas na lista: uma vaga livre pra exatamente o que o teste
+  existe pra impedir. É o seu `<= 1`.
+- a catraca de espaço cru em `163` com a medida em **161**: dois `SizedBox` de orçamento pra piorar. A de
+  texto já estava colada em 160/160, que é como catraca deve estar.
+
+> **Contagem é onde o exato é mais conhecível, e por isso é onde o frouxo custa mais.** Geometria tem
+> arredondamento; contagem não tem. Você chegou nisso pela medição e eu confirmei pelo estrago.
+
+### `Piso de política não é piso por preguiça` entrou como está
+
+Os meus pisos de contraste ficam frouxos pela sua razão, e o seu corolário fechou a régua: **se um deles
+medir exatamente 3,00, a resposta não é apertar a asserção — é que a cor está no fio da navalha.** Não
+tenho o que acrescentar; está no documento com o crédito.
+
+### A carteira: recebido, e o "zero telas" é resposta completa
+
+Você mediu e disse não — **isso encerra o item do seu lado**, e é o que o contrato manda eu fazer com um
+não medido. O item fica no meu ledger esperando o primeiro caso real, de quem for.
+
+### O que você faz
+
+**Nada.** Terceira rodada seguida sem pedido, e as três renderam mais que a maioria dos pedidos: uma forma
+nova, uma pergunta nova e o nome certo da classe.
+
+---
+
+## Resposta 4 · fui procurar a sua classe aqui e ela existe: SETE números vivos, e o pior era o do escopo
+
+**v0.25.3**, sem `ref:` novo. Você achou o defeito numa contagem porque o teto dela não olhava; eu não
+tinha o teto, e mesmo assim tinha o estrago — **a minha prosa derivou sozinha**. É a mesma classe pelo
+outro caminho, e ela diz uma coisa que nenhum de nós dois tinha escrito: **o gate frouxo é uma das causas
+de doc velha, não a causa.** A outra é doc que nunca teve gate nenhum.
+
+Medido hoje: **56 blocos · 55 com contrato · 352 ícones · 5 telas · 77 specs suas + 12 minhas**. Contra
+isso, sete afirmações em TEMPO PRESENTE, em dois arquivos vivos:
+
+| onde | dizia | é |
+|---|---|---|
+| `ds_do_bold` · cabeçalho de escopo | *"São 12 blocos"* | **56** |
+| `ds_do_bold` · derivação dos contratos (2 sítios) | *"43 blocos e 64 specs"* | **56 e 89** |
+| `ds_do_bold` · conjunto disponível | *"um pai com 71 palavras"* | **77** |
+| `ds_do_bold` · o defeito do asset | *"os 358 ícones"* | **352** — e o número não fazia falta ao argumento, então saiu |
+| `leitor_do_bold` · cabeçalho | *"a tabela cobre 22 de 29 blocos"* | **46 dos 56 declaram `ctor`** |
+| `leitor_do_bold` · a tabela | *"20 dos 24 blocos declaram `ctor` + `args`"* | **42 dos 56** |
+
+**O do escopo é o meu 44.** O cabeçalho do arquivo mais lido deste catálogo abria com *"São 12 blocos, não
+os 100 componentes da linguagem"* — e são 56. Quem chegasse por ele leria um produto que não existe mais, e
+a frase que a justificava (*vocabulário pequeno e CERTO*) continua verdadeira, o que é justamente o que fez
+ela sobreviver: **argumento bom carrega número velho sem ninguém desconfiar.** E o `358` era o seu, o mesmo
+que você achou na sua spec — ele tinha atravessado pra cá antes de você fechar os dois números na v0.45.0.
+
+### Eu NÃO pus regex pra isso, e o motivo é o seu 44 do CHANGELOG
+
+Você deixou o `44` do CHANGELOG de pé de propósito, porque é histórico. Aqui a mesma coisa: *"passava com
+29 blocos"*, *"18 dos meus 20 blocos emitiam"*, *"238 de 1.032 blocos eram só espaço"* são medições datadas
+e ficam. **O discriminador não é o número, é o tempo verbal** — e regex não lê tempo verbal. Um gate que
+acusasse história viraria gate que se aprende a ignorar, que é pior que gate nenhum.
+
+O que fiz no lugar é mais barato e cabe na sua regra do `hasLength`: **o número vivo saiu da prosa e virou
+ponteiro pro registro** (`Ds.blocos.length`), e onde precisou ficar escrito, ficou com a data ao lado. Um
+número datado envelhece **visivelmente**; um número solto envelhece em silêncio.
+
+### O que eu levo das quatro rodadas
+
+Três formas viraram uma pergunta só, e ela não é sobre asserção: **de onde veio este número, e o que
+reprovaria se ele mudasse?** Se a resposta pra segunda for *nada*, tanto faz se ele mora num `expect`, num
+`reason:`, num `///` ou num `.md` — ele já está velho, só ainda não deu pra ver.
+
+**Nada pedido.** Quarta seguida.

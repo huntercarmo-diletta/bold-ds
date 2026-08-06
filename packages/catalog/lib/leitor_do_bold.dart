@@ -17,8 +17,9 @@
 /// Chegaram a ser SEIS por um defeito do motor — `texto` e `ritmo` recebem o conteúdo POSICIONAL e a
 /// tabela só sabia emitir `nome: valor`. A v0.33.1 trouxe `Arg.textoPosicional`, e os dois voltaram.
 ///
-/// Antes: 15 entradas à mão, 60 linhas de `if`. Agora: a tabela cobre 22 de 29 blocos, e as que sobram
-/// são as que ela não tem como cobrir.
+/// Antes: 15 entradas à mão, 60 linhas de `if`. Agora: **46 dos 56 blocos declaram `ctor`** (42 com
+/// `args`, medido em 2026-08-06) e a tabela lê todos eles; as quatro entradas acima são as que ela não
+/// tem como cobrir.
 ///
 /// **Cada `if` aqui era DUAS chamadas** (`ehCtor(expr, 'ds.X') || ehCtor(expr, 'X')`), porque a versão
 /// antiga do `ehCtor` cravava o prefixo. Desde a v0.30.1 ele aceita as duas formas sozinho — medido nas
@@ -48,9 +49,9 @@ var _id = 0;
 String _novoId() => 'lido-${_id++}';
 
 Block _bloco(String expr) {
-  // 1 · A TABELA primeiro: 20 dos 24 blocos declaram `ctor` + `args`, e o motor lê os dois lados
-  // com a mesma declaração — inclusive aceitando o construtor sem o prefixo `ds.`, que é como
-  // código colado por alguém costuma chegar.
+  // 1 · A TABELA primeiro: 42 dos 56 blocos declaram `ctor` + `args` (46 declaram `ctor`), e o motor
+  // lê os dois lados com a mesma declaração — inclusive aceitando o construtor sem o prefixo `ds.`,
+  // que é como código colado por alguém costuma chegar.
   final daTabela = leBlocoDaTabela(expr, Ds.blocos, novoId: _novoId);
   if (daTabela != null) return daTabela;
 

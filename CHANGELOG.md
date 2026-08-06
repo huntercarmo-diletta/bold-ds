@@ -20,6 +20,39 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.25.3] — 2026-08-06
+
+### Consertou — **sete números vivos na minha prosa tinham derivado, e o pior era o do escopo**
+
+O pai levou a minha frase (*"frouxo não é o defeito, não-exercido é"*) pro documento de gate e mandou de
+volta o achado que ela produziu no lado dele: um teto de contagem escondendo **seis documentos** com o
+número errado. Fui procurar a mesma classe aqui, e ela existe — **em prosa, não em asserção**.
+
+Medido hoje: **56 blocos · 55 com contrato · 352 ícones · 5 telas · 77 specs do pai + 12 minhas**. Contra
+isso, sete afirmações em tempo presente em dois arquivos vivos:
+
+| onde | dizia | é |
+|---|---|---|
+| `ds_do_bold` · cabeçalho de escopo | *"São 12 blocos"* | **56** |
+| `ds_do_bold` · derivação dos contratos (2 sítios) | *"43 blocos e 64 specs"* | **56 e 89** |
+| `ds_do_bold` · conjunto disponível | *"um pai com 71 palavras"* | **77** |
+| `ds_do_bold` · o defeito do asset | *"os 358 ícones"* | são **352**, e o número não fazia falta ao argumento — saiu |
+| `leitor_do_bold` · cabeçalho | *"a tabela cobre 22 de 29 blocos"* | **46 dos 56 declaram `ctor`** |
+| `leitor_do_bold` · a tabela | *"20 dos 24 blocos declaram `ctor` + `args`"* | **42 dos 56** |
+
+**O do escopo é o pior, e é o meu espelho do 44 dele**: o cabeçalho do arquivo mais lido deste catálogo
+abria dizendo que o vocabulário tinha 12 palavras quando tem 56 — quem chegasse por ele leria um produto
+que não existe mais. Passou a apontar pra contagem viva (`Ds.blocos.length`) e a datar o número.
+
+### E NÃO entrou gate de regex pra isso, com o motivo
+
+O discriminador aqui não é o número, é o **tempo verbal**: *"passava com 29 blocos"*, *"18 dos meus 20
+blocos emitiam"*, *"238 de 1.032 blocos eram só espaço"* são registros de medição datada e ficam — corrigir
+um deles seria falsificar o resultado, que é a regra que já vale pros arquivos de auditoria. Um regex não
+lê tempo verbal, e um gate que acusa história vira gate que se aprende a ignorar. O que entrou no lugar é
+mais barato: **o número vivo saiu da prosa e virou ponteiro pro registro** (`Ds.blocos.length`), e onde ele
+precisou ficar escrito, ficou com a data ao lado.
+
 ## [0.25.2] — 2026-08-06
 
 ### Mede — **a segunda pergunta do crivo: 7 asserções passavam EM CIMA do limite, sem nunca serem exercidas**

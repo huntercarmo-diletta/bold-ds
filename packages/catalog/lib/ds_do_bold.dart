@@ -5,17 +5,17 @@
 /// entrega isto, e **declarar é publicar**: bloco novo aqui aparece no catálogo sem
 /// ninguém tocar no catálogo.
 ///
-/// ## Escopo desta primeira versão, dito claro
+/// ## Escopo, e ele CRESCEU por medição — a contagem viva é `Ds.blocos.length`
 ///
-/// São 12 blocos, não os 100 componentes da linguagem. A escolha é deliberada: este
-/// arquivo é o contrato entre duas coisas que ainda estão se conhecendo, e um vocabulário
-/// pequeno e CERTO vale mais que 100 entradas escritas às cegas — cada `BlockDef` carrega
-/// props, defaults, render e codegen, e errar o codegen produz código que compila e não
-/// usa o design system, que é o furo mais perigoso do plugue porque nada falha.
+/// **Hoje são 56 blocos** (medido em 2026-08-06; a contagem que vale é a do registro, e os gates
+/// derivam dela em vez de repeti-la). A primeira versão declarava **12**, e a frase que a justificava
+/// segue de pé: um vocabulário pequeno e CERTO vale mais que 100 entradas escritas às cegas — cada
+/// `BlockDef` carrega props, defaults, render e codegen, e errar o codegen produz código que compila e
+/// não usa o design system, que é o furo mais perigoso do plugue porque nada falha.
 ///
-/// Os 12 cobrem a gramática de uma tela de verdade do Bold: barra, título, texto, ação,
-/// campo, valor, selo, aviso, ritmo, divisor, ícone e barra de baixo. O resto entra por
-/// medição, tela a tela.
+/// Os 12 do começo cobriam a gramática de uma tela de verdade do Bold: barra, título, texto, ação,
+/// campo, valor, selo, aviso, ritmo, divisor, ícone e barra de baixo. O resto entrou como estava
+/// escrito que entraria: por medição, tela a tela.
 library;
 
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
@@ -1875,7 +1875,7 @@ void configurarDsDoBold() {
   // `DilettaAssets.assetPackage` nasce `null`, que significa "assets na raiz do bundle". Num app que
   // CONSOME o pacote eles moram em `packages/diletta_design_system/…`, então o `AssetBytesLoader`
   // procurava no lugar errado — e `VectorGraphic` com asset ausente não estoura: desenha uma caixa
-  // vazia. Os 358 ícones do catálogo estavam invisíveis por causa disto, e nenhum teste viu porque
+  // vazia. TODOS os ícones do catálogo estavam invisíveis por causa disto, e nenhum teste viu porque
   // widget na árvore não é pixel na tela.
   //
   // Fica aqui, no plugue, e não no `main`: é quem liga o DS que sabe onde o DS guarda coisa — e assim
@@ -2238,12 +2238,13 @@ void configurarDsDoBold() {
     },
     // OS CONTRATOS (v0.36.0 do motor) — guideline é parte do contrato do COMPONENTE, não do catálogo
     // que o mostra. Pro componente do PAI o markdown vem do pacote dele (`kDilettaSpecs`), e o mapa
-    // abaixo é DERIVADO do `ctor` de cada bloco: escrever a correspondência à mão com 43 blocos e 64
-    // specs erra, e o sintoma (bloco sem contrato) é indistinguível de spec que não existe.
+    // abaixo é DERIVADO do `ctor` de cada bloco: escrever a correspondência à mão com 56 blocos e 89
+    // specs (77 do pai + 12 meus, medido em 2026-08-06) erra, e o sintoma (bloco sem contrato) é
+    // indistinguível de spec que não existe.
     contratos: _contratosDosBlocos(blocos),
     // O CONJUNTO DISPONÍVEL (v0.45.0) — sem ele a aba de Specs só mede metade: "bloco sem contrato".
     // Com ele mede a outra ponta, "contrato sem bloco", que **não é dívida** — é o vocabulário que existe
-    // e este produto não usou. Um pai com 71 palavras e um filho com 56 blocos tem palavras de sobra, e
+    // e este produto não usou. Um pai com 77 palavras e um filho com 56 blocos tem palavras de sobra, e
     // isso é o normal: o filho pega o que precisa.
     contratosDisponiveis: const {...kDilettaSpecs, ...kBoldSpecs},
     // A VOLTA: sem isto, tela que só existe como código aparece como código, sem preview — e quem
@@ -2321,7 +2322,7 @@ double _espaco(String token) => _daOpcao(token, const {
 /// nascido AQUI não tem spec do pai e fica de fora — e o cabeçalho degrada pro nome, que é a regra do
 /// motor: ausência degrada, não quebra.
 ///
-/// Derivado e não escrito: com 43 blocos e 64 specs, tabela à mão erra e o sintoma (bloco sem contrato)
+/// Derivado e não escrito: com 56 blocos e 89 specs, tabela à mão erra e o sintoma (bloco sem contrato)
 /// é indistinguível de spec que não existe.
 ///
 /// Os componentes NASCIDOS aqui ainda não têm contrato escrito, e essa dívida é minha: o
