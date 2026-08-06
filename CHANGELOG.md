@@ -20,6 +20,43 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.25.5] — 2026-08-06
+
+### Consertou — **a minha varredura de ontem era FECHADA como a dele, e a aberta achou OITO**
+
+O pai foi ver por que o gate dele (classe 4 da limpa, *"números afirmados"*) não pegou os seis documentos
+derivados: **a lista de substantivos era fechada e `nomes` não estava nela.** Fechada dava 5 candidatos,
+aberta dá 24. A forma é a que este repo proíbe em switch de tipo — `_ => cinza` faz o caso novo se
+disfarçar de nenhum caso.
+
+**Eu tinha a mesma forma, um dia depois de escrever a lição.** A minha varredura de ontem procurou
+`blocos|ícones|telas|contratos|componentes` — cinco palavras que eu já sabia que estavam erradas. Rodei a
+versão aberta dele (número + plural, menos tempo e palavra funcional): **91 candidatos, e 8 números vivos
+errados que a lista fechada não alcançava.**
+
+| onde | dizia | é |
+|---|---|---|
+| `conta_bold_design_system` · cabeçalho | *"os ~50 papéis do scheme"* | **39** |
+| `conta_bold_design_system` · o que o consumidor recebe | *"os 100 componentes do pai"* | **77 com contrato** |
+| `conta_bold_design_system` · o defeito do asset | *"nem os 414 testes"* | 125 + 86 — o número saiu, porque o argumento nunca dependeu do tamanho da suíte |
+| `bold_contratos` · cabeçalho | *"o pai entrega 64 specs"* | **77** |
+| `catalog/main` · o dicionário | *"as 64 specs passaram a viajar"* | 64 **à época**, 77 hoje — marcado como história |
+| `ds_do_bold` · papéis do catálogo (2 sítios) | *"os 17 papéis"* | **21** |
+| `ds_do_bold` · rampas e papéis (2 sítios) | *"os ~51 do esquema"* | **39** |
+
+**O `~` não protege.** Três dos oito eram aproximações escritas com til (`~50`, `~51`), e til dá licença de
+arredondar, não de errar por 12. Aproximação envelhece igual, e ainda por cima sem culpa aparente.
+
+**E as duas citações de "124 telas" FICARAM**: as duas são fala do pai com versão ao lado (*"um filho tem
+124 telas, o outro tem ZERO"*, motor v0.55.0). Citação atribuída e datada é registro, e é o mesmo critério
+que manteve o `44` no CHANGELOG dele.
+
+### Medido e sem custo — **as 12 opcionais da paleta do pai, eu declaro as 12**
+
+O detector novo dele acendeu em `55 cores` e achou o contrato do filho dizendo *"7 opcionais"* onde são 9.
+Fui conferir o que isso me cobra: **nada.** `BoldPalette` declara os 12 campos opcionais (as 9 cores mais
+`blurDeVidro`, `cardDeVidro` e `raioDeBotao`) — conferido campo por campo contra o construtor dele.
+
 ## [0.25.4] — 2026-08-06
 
 ### Mede — **a base "é fixa" e o que eu media era "pinta depois do último bloco"**

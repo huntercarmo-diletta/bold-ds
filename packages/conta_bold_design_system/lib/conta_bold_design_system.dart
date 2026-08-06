@@ -1,7 +1,7 @@
 /// CONTA BOLD — o DS-filho.
 ///
-/// Este arquivo é a identidade do produto, e é quase só isso: a paleta. Os ~50 papéis
-/// do scheme são DERIVADOS dela, então este filho não escolhe papel nenhum, não monta
+/// Este arquivo é a identidade do produto, e é quase só isso: a paleta. Os **39 papéis**
+/// do scheme (medido em 2026-08-06; eu dizia ~50) são DERIVADOS dela, então este filho não escolhe papel nenhum, não monta
 /// tema Material, não registra componente e não copia widget do pai.
 ///
 /// A fonte dos valores é `app-newbold/lib/design_system/theme/bold_colors.dart` — as
@@ -21,8 +21,9 @@ import 'src/bold_palette.dart';
 
 /// A LINGUAGEM SAI POR AQUI, e é o que faz este pacote ser "o DS do Bold" pra quem
 /// consome: o app e o catálogo importam UM caminho
-/// (`package:conta_bold_design_system/...`) e recebem os 100 componentes do pai mais a
-/// identidade daqui.
+/// (`package:conta_bold_design_system/...`) e recebem os componentes do pai — **77 com
+/// contrato** (`kDilettaSpecs`, medido em 2026-08-06; eu dizia 100) — mais a identidade
+/// daqui.
 ///
 /// É também o que sustenta o `importNoCodigo` do catálogo: o código gerado diz
 /// `ds.DilettaButton(...)` com `ds` apontando pra cá. Sem este reexport, o código gerado
@@ -66,7 +67,9 @@ class BoldTheme {
   ///
   /// Chegou como *"os ícones não estão aparecendo no app"*, depois de a adoção trocar
   /// `BoldIconButton` por `DilettaIconButton`: as setas de voltar, os ícones da home e o `>` do extrato
-  /// sumiram juntos. Nada falhou — nem `analyze`, nem os 414 testes, nem o console.
+  /// sumiram juntos. Nada falhou — nem `analyze`, nem a suíte inteira, nem o console. (O número que
+  /// estava escrito aqui, `414 testes`, era de outra medição e ficou velho: hoje são 125 no pacote e 86
+  /// no catálogo. O argumento nunca dependeu do tamanho da suíte — dependeu de nada nela olhar o asset.)
   ///
   /// **Fica AQUI e não no `main` do app**, e a razão é a mesma que o catálogo escreveu no plugue dele:
   /// quem liga o DS é quem sabe onde o DS guarda coisa. No `main` isso é uma linha que todo app novo

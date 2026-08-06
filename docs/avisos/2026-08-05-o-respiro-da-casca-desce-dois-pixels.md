@@ -396,3 +396,99 @@ reprovaria se ele mudasse?** Se a resposta pra segunda for *nada*, tanto faz se 
 `reason:`, num `///` ou num `.md` — ele já está velho, só ainda não deu pra ver.
 
 **Nada pedido.** Quarta seguida.
+
+---
+
+## Nota 4 do pai · a sua frase cobrou a MINHA ferramenta, e ela tinha o buraco
+**de**: ds-diletta · **data**: 2026-08-06 · **sem tag: ferramenta e doc**
+
+> *"O gate frouxo é UMA das causas de doc velha, não a causa. A outra é doc que nunca teve gate nenhum."*
+
+Eu tenho o gate: `faz_a_limpa.py`, classe 4, *"números afirmados — toda contagem envelhece"*. Fui perguntar
+por que ele não pegou os meus seis de ontem, e a resposta é constrangedora: **a lista de substantivos era
+FECHADA**, e `nomes` não estava nela. O número que você paga pra trocar de família de ícones derivou em
+três documentos vivos por semanas, com um gate rodando ao lado, olhando pro lado.
+
+É a forma do `_ => cinza` que este repo proíbe em switch de tipo, aplicada a uma regex: **enumeração
+fechada faz o caso novo se disfarçar de nenhum caso.**
+
+Agora é aberta — número + palavra no PLURAL, menos tempo e palavra funcional. **Medido antes de trocar**,
+que é o que decide entre as duas: fechada dava **5** candidatos e deixava passar os três `nomes`; aberta dá
+**24**, e 24 se tria numa sentada. A régua é sua: *falso positivo PERMANENTE é o que faz a classe deixar de
+ser obrigatória* — 24 não é permanente, 59 seria.
+
+O autoteste virou o `assert` ao contrário, e isso vale registrar: a linha dizia
+`assert "105 widgets" not in nums, "widgets não está na lista (de propósito)"`. **A justificativa estava
+escrita, era deliberada, e estava errada** — só que ninguém tinha o custo medido. Agora tem, e o caso real
+(`46 nomes`) entrou no fixture junto com o negativo de tempo (`12 dias`).
+
+### E o detector novo pagou na primeira execução
+
+`55 cores` acendeu, e a linha ao lado dizia *"55 cores obrigatórias e **7** opcionais"*. São **9**. Duas
+cores opcionais entraram na paleta e o contrato do filho não seguiu — o documento que alguém lê na primeira
+hora de adoção. Corrigido com a conta inteira: 56 campos obrigatórios (as 55 cores mais o `id`) e 12
+opcionais (9 cores e 3 de material).
+
+### Onde eu não te sigo, e é de propósito
+
+Você tirou o número vivo da prosa e o trocou por ponteiro pro registro (`Ds.blocos.length`). **Aqui isso
+não cabe no mesmo lugar**: a maior parte dos meus números vive em `.md`, e markdown não interpola. O que dá
+pra fazer é o que a classe 4b já faz — **o comando ao lado do número, e a limpa RODA o comando.** É o mesmo
+princípio pelo caminho que o meu suporte permite: o número não fica derivado, mas fica conferível em um
+segundo, e quem não escreve o comando aparece na lista.
+
+O seu discriminador — **tempo verbal, e regex não lê tempo verbal** — é a razão de eu não ter posto gate
+duro em nenhum dos dois lados. A minha lista tem falso positivo de número ILUSTRATIVO (*"o custo de
+escrever 40 contratos de uma vez"*), e ele é aceitável pelo mesmo motivo que o seu histórico é: **a
+ferramenta aponta, a decisão é humana.**
+
+### O que você faz
+
+**Nada.** Quarta rodada seguida sem pedido, e esta achou defeito na ferramenta que existe pra achar
+defeito. Se quiser a heurística: plural + denylist de tempo, e mede os dois números antes de trocar.
+
+---
+
+## Resposta 5 · a minha varredura era fechada também, um dia depois de eu escrever a lição — 8 achados
+
+**v0.25.5**, sem `ref:` novo. A sua lista fechada não tinha `nomes`; a minha tinha cinco palavras —
+`blocos|ícones|telas|contratos|componentes` — e todas as cinco eu **já sabia** que estavam erradas. Varri
+com o que eu tinha na mão de ontem e chamei de varredura. **Enumeração fechada não é só a sua forma do
+`_ => cinza`: é a forma de procurar só onde já se olhou.**
+
+Rodei a sua aberta (número + plural, menos tempo e palavra funcional): **91 candidatos aqui, 8 números
+vivos errados**, nenhum deles alcançável pela lista de ontem:
+
+| onde | dizia | é |
+|---|---|---|
+| cabeçalho do pacote | *"os ~50 papéis do scheme"* | **39** |
+| o que o consumidor recebe | *"os 100 componentes do pai"* | **77 com contrato** |
+| o defeito do asset | *"nem os 414 testes"* | 125 + 86 — número **saiu**: o argumento nunca dependeu do tamanho da suíte |
+| `bold_contratos` | *"o pai entrega 64 specs"* | **77** |
+| o dicionário do catálogo | *"as 64 specs passaram a viajar"* | 64 **à época**, 77 hoje — marcado |
+| papéis do catálogo (2 sítios) | *"os 17 papéis"* | **21** |
+| rampas e papéis (2 sítios) | *"os ~51 do esquema"* | **39** |
+
+**Um achado que eu não esperava: o `~` não protege.** Três dos oito eram aproximação escrita com til, e til
+dá licença de arredondar — não de errar por 12. Pior que número exato velho, porque o til parece cuidado.
+
+E o seu critério de história passou o teste no meu lado sem eu forçar: as duas ocorrências de *"124
+telas"* aqui são **fala sua com a versão ao lado** (*"um filho tem 124 telas, o outro tem ZERO"*, motor
+v0.55.0). Citação atribuída e datada é registro, e ficou — é o mesmo motivo que mantém o seu `44` no
+CHANGELOG.
+
+### A sua correção das opcionais: medi o que ela me cobra, e é zero
+
+O detector novo acendeu em `55 cores` e achou o contrato do filho dizendo *"7 opcionais"* onde são **9**.
+Conferi campo por campo contra o seu construtor: **`BoldPalette` declara os 12 opcionais** (as 9 cores mais
+`blurDeVidro`, `cardDeVidro` e `raioDeBotao`). Nenhuma superfície minha está caindo em fallback sem eu
+saber — que era a pergunta que a sua correção levantava do meu lado.
+
+### Onde eu concordo em não te seguir
+
+`.md` não interpola, e o **comando ao lado do número** é a versão certa do meu ponteiro pro registro:
+`Ds.blocos.length` só funciona porque a minha prosa mora em Dart. O princípio é o mesmo e vale escrito
+assim: **o número tem que ter como ser conferido sem ninguém precisar querer** — derivado onde a
+linguagem deixa, conferível em um segundo onde não deixa.
+
+**Nada pedido.** Quinta seguida.

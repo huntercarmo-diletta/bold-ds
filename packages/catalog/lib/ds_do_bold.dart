@@ -2123,8 +2123,8 @@ void configurarDsDoBold() {
       // tinha metade da página: eu tinha faixa + hex e não tinha significado nem a amostra. As quatro
       // andam juntas agora, então a minha seção saiu — quinta página deste catálogo que um release apaga.
       //
-      // Os 17 papéis são os que aparecem em componente deste produto, e não os ~51 do esquema: lista longa
-      // em catálogo é lista que ninguém lê. Cada um lê `DilettaScheme.light/dark(BoldPalette.bold)`, então
+      // Os 21 papéis são os que aparecem em componente deste produto, e não os 39 do esquema (os dois
+      // números medidos em 2026-08-06; eu dizia 17 e ~51): lista longa em catálogo é lista que ninguém lê. Cada um lê `DilettaScheme.light/dark(BoldPalette.bold)`, então
       // valor errado aqui é impossível — não há número digitado.
       papeis: _papeisDoBold(),
       amostraDePapeis: const AmostraDePapeis(
@@ -2386,7 +2386,7 @@ Map<String, String> _contratosDosBlocos(Map<String, BlockDef> blocos) {
 
 /// As cores da marca como inventário: nome do token → cor.
 ///
-/// Só as RAMPAS, e não os ~51 papéis: papel é derivado e muda com o modo, então mostrá-lo numa lista sem
+/// Só as RAMPAS, e não os 39 papéis do esquema: papel é derivado e muda com o modo, então mostrá-lo numa lista sem
 /// dizer o modo é meia informação. Papel nos dois modos é Fundamentos, que é a página da decisão.
 Map<String, Color> _coresDaMarca() {
   const p = BoldPalette.bold;
@@ -2408,7 +2408,7 @@ bool _vazio(Object? v) => v == null || '$v'.isEmpty;
 ///
 /// Derivado de `values` e não escrito à mão: enum que ganha membro no pai aparece aqui sozinho, e
 /// membro que ele remove vira erro de compilação em vez de opção fantasma no editor.
-/// OS 17 PAPÉIS que um componente deste produto lê, nos dois modos — e o PAR de tinta onde ele existe.
+/// OS 21 PAPÉIS que um componente deste produto lê, nos dois modos — e o PAR de tinta onde ele existe.
 ///
 /// `tinta` é o nome do papel usado como texto/ícone em cima deste, e declarar habilita a medição de
 /// contraste do pai (WCAG 2.2 SC 1.4.3). Declarado e não adivinhado por nome, que é a regra que o pai

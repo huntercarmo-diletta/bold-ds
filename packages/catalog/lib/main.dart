@@ -126,7 +126,8 @@ CatalogoConfig configDoCatalogoDoBold() {
           label: 'Montar tela',
           constroi: (_) => const BuilderScreen(),
         ),
-        // O DICIONÁRIO. Ele só existe desde a v0.16.0 do pai, quando as 64 specs passaram a viajar
+        // O DICIONÁRIO. Ele só existe desde a v0.16.0 do pai, quando as specs passaram a viajar
+        // (eram 64 à época, são 77 hoje)
         // com o pacote — antes moravam na raiz do repo dele e não chegavam a filho nenhum.
         // SPECS é do MOTOR desde a v0.45.0, e ela mede o que a minha media MAIS a outra ponta: contrato
         // sem bloco, que **não é dívida**. Eu tinha feito só o sentido "spec tem bloco?" e chamei a outra

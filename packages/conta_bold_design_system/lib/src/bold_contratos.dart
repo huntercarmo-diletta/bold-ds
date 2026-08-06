@@ -1,7 +1,8 @@
 /// OS CONTRATOS DOS COMPONENTES NASCIDOS AQUI.
 ///
-/// O pai entrega 64 specs (`kDilettaSpecs`) pros componentes DELE. Os 12 que nasceram neste filho não
-/// tinham contrato nenhum, e o gate `bloco-sem-contrato` (v0.36.0 do motor) estava certo em cobrar: sem
+/// O pai entrega **77 specs** (`kDilettaSpecs`, medido em 2026-08-06) pros componentes DELE. Os 12 que
+/// nasceram neste filho não tinham contrato nenhum, e o gate `bloco-sem-contrato` (v0.36.0 do motor)
+/// estava certo em cobrar: sem
 /// contrato, a aba de componentes desenha nome e matriz e para ali — sem "quando usar", sem faça/evite.
 ///
 /// ## Por que Dart e não markdown em `docs/`
