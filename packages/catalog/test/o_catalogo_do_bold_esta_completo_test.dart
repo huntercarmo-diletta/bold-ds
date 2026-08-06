@@ -139,7 +139,8 @@ void main() {
     // sessão de depuração; aqui custa uma mensagem.
     final c = configDoCatalogoDoBold();
     expect(c.abas.map((a) => a.id), contains(c.abaInicial));
-    expect(c.abas.length, greaterThan(1));
+    // As 7 abas, e não "mais de uma": com 7 medidos, o `greaterThan(1)` sobreviveria a perder cinco.
+    expect(c.abas.length, 7, reason: 'aba entrou ou saiu da config — se foi de propósito, atualize aqui');
   });
 
   group('a VOLTA — o leitor de código', () {

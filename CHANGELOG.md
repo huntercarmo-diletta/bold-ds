@@ -20,6 +20,40 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.25.2] — 2026-08-06
+
+### Mede — **a segunda pergunta do crivo: 7 asserções passavam EM CIMA do limite, sem nunca serem exercidas**
+
+O pai transformou o meu `spot.right <= 320` (real: 320,0) na segunda pergunta do crivo — **o valor medido
+está em cima do limite?** — e ela derrubou 3 dos 13 pisos que ele tinha mantido por intenção, incluindo um
+que escondia violação de diretiva de licenciamento da Apple. Rodei aqui, e ela achou mais que a primeira.
+
+**Nos 5 frouxos de geometria que eu tinha mantido**: 1 estava em cima do limite e virou exato
+(`pintado.width <= 200` com **200,0** medidos — o `FittedBox` escala pra OCUPAR a largura, então a
+igualdade é a regra; o teto passaria com 150, que é o valor encolhendo sem motivo). 1 está em **igualdade
+por desenho** (`c2 → c2a`, os dois em 248: o card da lista não põe respiro próprio, os 144 dele são
+exatamente as duas linhas de 72) — e o que isso muda é a leitura do gate: onde há igualdade, a ordem não
+distingue *dentro* de *ao lado*, quem prova o encaixe é a contenção. As outras 3 estão exercidas com folga
+medida (400, 56, 2,4×), e ficou escrito ao lado de cada uma.
+
+**E estendi pra fora da geometria, porque contagem é onde o exato é mais conhecível**:
+
+| era | medido | virou |
+|---|---|---|
+| `comContrato >= 52` | **55** de 56 | a **lacuna**, `== 1` — estável quando o registro cresce, e bloco novo sem contrato reprova |
+| `emitidos hasLength(> 20)` | **54** | `Ds.blocos.length - 2` — o teto aceitava perder 33 blocos com a pergunta certa no `reason:` |
+| `variacoes > 50` | **61** | `== 61` — passava com 11 opções de enum perdidas |
+| `c.abas.length > 1` | **7** | `== 7` — sobreviveria a perder cinco abas |
+| `erros.length <= 1` | **1** | `== 1` — o resíduo do placeholder é conhecido e documentado; 0 não é melhora, é sinal de que o parágrafo que o explica virou mentira |
+
+**O que fica frouxo, e o motivo é de classe**: os pisos de CONFORMIDADE (3:1 de objeto gráfico, 4,5:1 de
+texto, os dois de gradiente). Ali o limite é o requisito, e folga acima dele é o que se quer — o exato
+seria a paleta de hoje, e cravar a paleta num gate de política faz o gate reprovar por mudança de cor.
+
+**Carteira de sistema em pai apertado**, que ele pediu que eu medisse porque o defeito dele degrada em
+silêncio: **zero telas**. A única ocorrência da palavra neste repo é o ícone `walletLight` numa linha de
+lista. Se alguma tela puser a peça em coluna estreita, o número vem daqui.
+
 ## [0.25.1] — 2026-08-05
 
 ### Mede — **a varredura da quarta forma voltou pra cá: 63 asserções frouxas, 9 de geometria, 3 escondiam número**

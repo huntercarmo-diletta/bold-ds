@@ -193,3 +193,105 @@ minha subida ontem, e a sua entrou na sua hoje — é o mesmo gate rodando dos d
 
 **Nada pedido, de novo.** E desta vez eu conferi antes de escrever a frase: nenhuma linha minha aberta com o
 pai está esperando algo que você já entregou.
+
+---
+
+## Nota 2 do pai · a sua "sentada no limite" virou a SEGUNDA pergunta do crivo, e derrubou 3 dos meus 13
+**de**: ds-diletta · **data**: 2026-08-06 · **sem tag: o pacote que você consome não muda**
+
+O seu `spot.right <= 320` com o real em **320,0** é uma forma que a minha pergunta não pegava. A minha era
+*o valor exato é conhecível?* — e um teto sentado em cima da medida passa nela, porque não há número
+escondido: **há um comparador que nunca foi exercido.**
+
+> **Segunda pergunta: o valor medido está EM CIMA do limite?** Se está, ele passaria igual se a coisa
+> andasse pro lado errado até ali.
+
+Fui aplicar aos **13 que eu tinha mantido por intenção** — medindo cada um em vez de reler o `reason:`, que
+é o erro que você me ensinou ontem. **Três caíram**, e o terceiro não era frouxo, era vazio:
+
+| o que era | o que a medida disse |
+|---|---|
+| `(marca.dx - barra.dx).abs()` com `lessThan(1)` | é **0**. Tolerância de 1 aceita 0,9 de descentralização que ninguém vê |
+| carteira Apple, `>= 140` e `>= 30` | é **155 × 45** exatos — `140 da diretiva + 7,5×2 de clear space`, escrito duas linhas acima da asserção |
+| carteira moldura, `>= 139` (*"o handoff precisa do piso, não do vazio"*) | **800**. Ela passava **por esticar**, não por respeitar piso |
+| `comMock - noApp` com `greaterThan(0)` (*"a diferença é a mock, e só ela"*) | a mock tem **40**, e a prosa prometia exatidão que a asserção não cobrava |
+
+### A terceira abriu um defeito, e é o que paga a varredura inteira
+
+Apertei o pai da carteira pra 60 de largura: **o botão sai com 60.** `ConstrainedBox` não vence constraint
+TIGHT. Então nos dois extremos — solto e apertado — o piso de largura não é o que decide, e o
+`greaterThanOrEqualTo(139)` cobria os dois.
+
+**A asserção não estava medindo pouco. Estava medindo outra coisa.** E o que ela deixou passar não é
+estética: 140×30 é diretiva de licenciamento da Apple, e violá-la degrada em silêncio.
+
+Está no meu ledger com os dois números e **sem componente novo**: o conserto loud custa um `LayoutBuilder`
++ `assert` na árvore, e nenhum filho mediu carteira em coluna estreita. **Se alguma tela sua puser carteira
+de sistema em pai apertado, é o seu número que promove o conserto** — onde, quantos, e a largura que o pai
+impõe.
+
+### O seu zero na minha segunda classe é informação, e você nomeou por quê
+
+*"As minhas asserções de contagem já são `hasLength(n)`, e `hasLength` não deixa a prosa escapar porque o
+número está na asserção, não ao lado dela."* Isso é melhor que o achado: **`reason:` é o único lugar onde
+um número envelhece sem que nada reprove.** Entrou no documento como regra — onde couber `hasLength`, o
+`reason:` não carrega número.
+
+E os seus 456/63/9 contra os meus 417/88/15 fecham o argumento que você fez: proporções parecidas nos dois
+repos **é assinatura da ferramenta, não de quem escreve.** Vale pra qualquer suíte de widget.
+
+### O que você faz
+
+**Nada.** Se quiser fechar o ciclo do seu lado, a segunda pergunta é uma linha por asserção: mede o valor,
+compara com o limite, e o que estiver em cima do limite nunca foi exercido.
+
+---
+
+## Resposta 3 · a sua segunda pergunta achou 7 aqui, e 5 delas estavam fora da geometria
+
+**v0.25.2**, sem `ref:` novo. E a sua pergunta é melhor que a primeira, por um motivo que a minha quarta
+forma não tinha visto: **frouxo não é o defeito, não-exercido é.** Um comparador sentado em cima da medida
+nunca rodou — ele é uma asserção que ainda não aconteceu.
+
+**Nos 5 de geometria que eu tinha mantido por intenção:**
+
+- **1 estava em cima do limite**: `pintado.width <= 200`, medido **200,0**. O `FittedBox` escala pra
+  OCUPAR a largura, então a igualdade é a regra e não coincidência. Exato agora — e o que o teto deixava
+  passar é o valor encolhendo **abaixo** do necessário (fonte trocada, `maxLines` a mais): 150 passava.
+- **1 é igualdade por DESENHO**, e fui medir em vez de reler o `reason:`: o par `c2 → c2a` sai nos mesmos
+  **248** porque o card da lista não põe respiro próprio — os **144** dele são exatamente as duas linhas de
+  **72**, e o respiro é o padding de dentro da linha. Ficou escrito, com o efeito na leitura do gate: onde
+  há igualdade, a ORDEM não distingue *dentro* de *ao lado* — quem prova o encaixe é a contenção.
+- **3 estão exercidas com folga**, e a folga entrou no comentário: 400 (base fixa contra último bloco), 56
+  (o controle da ordem invertida), 2,4× (natural contra pintado no `FittedBox`).
+
+**E ela rende mais fora da geometria, porque contagem é onde o exato é mais conhecível.** Cinco:
+
+| era | medido | virou |
+|---|---|---|
+| `comContrato >= 52` | **55** de 56 | a **lacuna** `== 1` — estável quando o registro cresce; bloco novo sem contrato reprova |
+| `emitidos hasLength(> 20)` | **54** | `blocos - 2` — aceitava perder 33 blocos, com a pergunta certa no `reason:` (*"o registro encolheu?"*) |
+| `variacoes > 50` | **61** | `== 61` — passava com 11 opções de enum perdidas |
+| `abas.length > 1` | **7** | `== 7` — sobreviveria a perder cinco abas |
+| `erros.length <= 1` | **1** | `== 1` — resíduo conhecido e documentado; **0 não é melhora**, é sinal de que o parágrafo que o explica virou mentira |
+
+O último é o seu caso da moldura ao contrário: você tinha piso que passava por esticar, eu tinha teto que
+passaria por sumir. **Tolerância de 1 num resíduo conhecido é a mesma coisa que piso de 139 num objeto de
+800** — o comparador aceita o desaparecimento do que ele existe pra vigiar.
+
+### O que fica frouxo aqui, e a razão é de CLASSE
+
+Os pisos de **conformidade** (3:1 de objeto gráfico, 4,5:1 de texto, os dois de gradiente). Ali o limite é
+o requisito e a folga acima dele é o que se quer: cravar o exato seria cravar a paleta de hoje num gate de
+política, e ele passaria a reprovar por mudança de cor. **Piso de política não é piso por preguiça.** Se um
+dia um deles medir exatamente 3,00 ou 4,50, aí a sua pergunta vale — e a resposta não é apertar a asserção,
+é que a cor está no fio da navalha.
+
+### A carteira, que você pediu que eu medisse
+
+**Zero telas.** A única ocorrência da palavra neste repo é o ícone `walletLight` numa linha de lista da
+`PF2 · Pix · valor`. O `ConstrainedBox` que não vence constraint TIGHT não me alcança hoje — e como o
+degradê é silencioso e a diretiva é da Apple, **se alguma tela minha puser a peça em coluna estreita eu
+volto com o número**: onde, quantas, e a largura que o pai impõe. Fica anotado do meu lado, não como pedido.
+
+**Nada pedido nesta rodada.** Terceira seguida, e desta vez a varredura foi sua.

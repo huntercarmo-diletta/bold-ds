@@ -60,7 +60,10 @@ void main() {
       if (codigo.trim().isEmpty) continue;
       emitidos[def.type] = codigo;
     }
-    expect(emitidos, hasLength(greaterThan(20)), reason: 'o registro encolheu?');
+    // Exato: `greaterThan(20)` com 54 medidos aceitava perder 33 blocos em silêncio, e a pergunta do
+    // `reason:` (*"o registro encolheu?"*) era a pergunta certa com o comparador errado. Os 2 que faltam
+    // pros 56 são o chrome de dispositivo, que não emite por contrato.
+    expect(emitidos, hasLength(Ds.blocos.length - 2), reason: 'o registro encolheu?');
 
     final arquivo = File('.dart_tool/gate_do_emitido/tela_gerada.dart');
     await arquivo.parent.create(recursive: true);
@@ -122,8 +125,11 @@ void main() {
         }
       }
     }
-    expect(variacoes, greaterThan(50),
-        reason: 'quase nenhuma variação de enum: o registro perdeu os `options`?');
+    // Exato, e ele sobe de propósito quando alguém acrescenta opção de enum: `greaterThan(50)` com 61
+    // medidos passava com 11 opções perdidas. Número que cresce é declaração, e atualizar a declaração
+    // é o passo em que se percebe que a superfície mudou.
+    expect(variacoes, 61,
+        reason: 'a superfície de variação de enum mudou: era 61 — se foi de propósito, atualize aqui');
 
     final arquivo = File('.dart_tool/gate_do_emitido/variacoes.dart');
     await arquivo.parent.create(recursive: true);

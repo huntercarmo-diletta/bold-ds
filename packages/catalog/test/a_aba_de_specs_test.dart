@@ -27,7 +27,10 @@ void main() {
   test('a DECLARAÇÃO chega inteira — é o que é meu nesta aba', () {
     // 56 blocos, e a cobertura de contrato é o número que a aba mostra no topo.
     final comContrato = Ds.blocos.keys.where((t) => Ds.contratoDe(t) != null).length;
-    expect(comContrato, greaterThanOrEqualTo(52),
+    // O que se mede é a LACUNA e não um piso: `>= 52` com 55 medidos deixava três blocos poderem
+    // perder o contrato sem nada reprovar. A lacuna é estável quando o registro cresce — bloco novo COM
+    // contrato não mexe nela, bloco novo SEM contrato reprova, que é a única coisa que este número diz.
+    expect(Ds.blocos.length - comContrato, 1,
         reason: 'a cobertura de contrato caiu: $comContrato de ${Ds.blocos.length}');
 
     // O conjunto DISPONÍVEL é o que permite a outra ponta ("contrato sem bloco"). Sem ele declarado, a

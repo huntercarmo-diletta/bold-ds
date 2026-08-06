@@ -128,8 +128,12 @@ void main() {
     //
     // Fica declarado em vez de silenciado porque quem abre o board VÊ a listra amarela, e isso é
     // informação sobre a convenção do pai, não sobre este produto.
-    expect(erros.length, lessThanOrEqualTo(1),
-        reason: 'estouro NOVO além do do placeholder: ${erros.join(' | ')}');
+    // EXATO em 1, e não `<= 1`: o resíduo é conhecido, documentado e tem causa (o placeholder do pai).
+    // O teto aceitava 0 em silêncio, e 0 aqui não é melhora — é sinal de que o placeholder mudou de
+    // largura ou o card parou de medir, e é a hora de apagar este parágrafo inteiro em vez de mantê-lo
+    // explicando um resíduo que não existe mais.
+    expect(erros.length, 1,
+        reason: 'estouro NOVO além do do placeholder, ou o resíduo do placeholder sumiu: ${erros.join(' | ')}');
 
     // O saldo é o que a tela existe pra mostrar. Com binding, o preview usa o PLACEHOLDER do pai
     // (`{saldoFormatado}`) — então o que se prova aqui é que o bloco chegou na árvore, não o valor.

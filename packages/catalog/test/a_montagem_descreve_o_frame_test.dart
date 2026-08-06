@@ -117,8 +117,18 @@ void main() {
       expect(dys[i], greaterThanOrEqualTo(dys[i - 1]),
           reason: 'a doc põe "${ids[i]}" depois de "${ids[i - 1]}", e o frame pinta antes');
     }
+    // A SEGUNDA PERGUNTA do crivo do pai — *o valor medido está EM CIMA do limite?* — aplicada às 6
+    // comparações deste laço: **uma está**, o par `c2 → c2a`, os dois em `248`. Fui medir por quê em vez
+    // de reler o `reason:`, e a igualdade é o DESENHO: o card da lista não põe respiro próprio, os seus
+    // 144 são exatamente as duas linhas de 72, e o respiro é o padding de dentro da linha.
+    //
+    // O que isso muda na leitura do gate: onde há igualdade, a ORDEM não distingue "dentro" de "ao
+    // lado" — quem prova o encaixe é a contenção medida no fim deste teste, e não o `dy`.
+    expect([dys[2], dys[3]], [248.0, 248.0],
+        reason: 'o card da lista ganhou respiro próprio, ou a linha saiu de dentro dele');
 
-    // A BASE é fixa: ela fica no fim da tela, e não no fim do conteúdo.
+    // A BASE é fixa: ela fica no fim da tela, e não no fim do conteúdo. Exercida com 400 de folga
+    // (808 contra 408) — não está em cima do limite, então o comparador fica.
     expect(dyDe('b1'), greaterThan(dyDe('c3')));
 
     // E o slot está DENTRO do pai, não ao lado dele — é o "encaixado em quê" da seção, medido em pixels.
@@ -158,6 +168,8 @@ void main() {
 
     // A doc desta spec diz botão-depois-saldo, e o frame concorda. A asserção do teste de cima,
     // aplicada à ordem ERRADA, reprovaria — que é o que faz ela medir algo.
+    // Exercida com folga (108 contra 52), então o `greaterThan` fica: aqui o número exato seria o
+    // layout do saldo, e o que este controle mede é a INVERSÃO da ordem.
     expect(dyDe('c1'), greaterThan(dyDe('c3')));
   });
 }

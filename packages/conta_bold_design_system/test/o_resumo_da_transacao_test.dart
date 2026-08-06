@@ -80,8 +80,13 @@ void main() {
     // Medir só um dos dois não distingue "encolheu" de "cortou".
     final pintado = t.getRect(find.text(r'R$ 1.234.567,89'));
     final natural = t.getSize(find.text(r'R$ 1.234.567,89'));
-    expect(pintado.width, lessThanOrEqualTo(200),
-        reason: 'o valor pintado vazou a largura da tela');
+    // A SEGUNDA PERGUNTA do crivo: o teto era `<= 200` e o valor medido é **200,0 exatos** — sentado
+    // em cima do limite, nunca exercido. O `FittedBox` escala pra OCUPAR a largura, então a igualdade
+    // é a regra e não coincidência; o teto passaria também com 150, que seria o valor encolhendo sem
+    // motivo (fonte trocada, `maxLines` a mais) — o defeito que ninguém veria.
+    expect(pintado.width, 200, reason: 'o valor não ocupa mais a largura: encolheu além do necessário');
+    // Esta fica frouxa de propósito, e agora com o número do lado: 480 contra 200 é 2,4× de folga —
+    // exercida. O exato aqui seria métrica de fonte, que muda com o fallback e não é o que se mede.
     expect(natural.width, greaterThan(pintado.width),
         reason: 'sem escala aplicada este teste não mede nada — se os dois batem, o FittedBox saiu');
   });
