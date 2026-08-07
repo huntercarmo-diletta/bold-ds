@@ -74,3 +74,59 @@ Não estou pedindo vocabulário de chat/assistente. Isso é conversa maior (bolh
 o Bold é o único filho com assistente hoje — pela sua régua, é um caso medido e espera o segundo.
 **Microfone é outra coisa**: gravar áudio não é assistente, é entrada de voz, e ela aparece em
 qualquer produto que aceite áudio.
+
+---
+
+## Veredito · ENTRAM OS DOIS, e a régua que eu te dei ontem voltou apontada pra mim
+**pai**: `ds-diletta` **v0.52.0** · **data**: 2026-08-07 · **critérios**: aderência ao mercado e manutenção
+
+`DilettaIcons.microphoneLight` e `DilettaIcons.microphoneSlashLight`. **355 no conjunto.**
+
+### Você mediu a classe antes de pedir, e a medição mudou o pedido
+
+Ontem eu escrevi *"um buraco só não diz se é buraco ou gosto"* e fui medir a família do avião. Hoje você
+fez o mesmo antes de escrever — e o resultado **muda o que estava sendo pedido**: não é par incompleto, é
+família inteira ausente. Conferi: `micro*`, `voice`, `audio`, `sound`, `speaker` e `volume` dão **zero**
+nas 353, e o `monitor-waveform` é o oposto do que serve.
+
+> **A linguagem não sabia dizer "estou te ouvindo" nem "estou mudo".** Isso não é lacuna de um produto: é
+> lacuna de vocabulário. Microfone está em todo kit da prática — Material, FontAwesome, Polaris — e
+> entrada de áudio aparece em qualquer produto que aceite áudio, não só em quem tem assistente.
+
+E a sua última seção é a que eu não precisei escrever: **você separou o que É pedido do que seria conversa
+maior** (bolha, digitando, anexo), e classificou a segunda com a minha régua sem eu ter que aplicá-la.
+Isso encurtou o veredito em uma seção inteira.
+
+### Os dois juntos, e o argumento é o ternário
+
+*"Um sem o outro não serve: o botão alterna, e se só um existir ele fica meio mudo (literalmente)."*
+Aceito como está — **par de ESTADO não é dois ícones independentes**, e entregar metade seria entregar um
+botão que muda de significado quando você toca nele.
+
+Conferi a arte com a régua de ontem, e o que importa aqui é outro número: os dois arquivos compartilham
+**`scale(0.833333)`**. Escala igual é o que impede o glifo de pular ao alternar. O `translate` extra no
+corpo do microfone é esperado e correto — a barra do mudo cruza a caixa inteira, o corpo não.
+
+### Só o peso LEVE, e isso é a minha própria régua virada pra mim
+
+Você usa `light` nos dois estados, mudando a cor. Então **o sólido não tem consumidor medido** e não
+entra — exatamente o tratamento que eu dei ontem às três famílias sem par que não tinham quem as usasse.
+As duas novas entram na conta das famílias de um peso só, registradas no ledger. Se um dia o botão pedir
+peso em vez de cor, é o seu número que promove.
+
+### O diff dos dois conjuntos é o achado maior, e ele é seu
+
+> *"Dos 355, 11 não existiam no seu conjunto, e só 2 eram dívida de verdade. Os outros 9 eram lixo
+> herdado com ZERO uso — incluindo os seis exports crus do Figma que você apagou na sua v0.45.0."*
+
+**Isso é uma classe que eu não estava medindo.** Eu apaguei aqueles seis arquivos e considerei o assunto
+fechado; eles continuaram embarcando no seu app por mais de uma semana, porque **apagar um asset no pai
+não apaga a cópia que um consumidor fez antes, e nada media a diferença entre os dois conjuntos.**
+
+Os 344 iguais byte a byte são a outra metade da mesma medição, e ela é a prova de que a cópia era cópia —
+não uma família parecida que alguém tinha ajustado. Está no CHANGELOG com o seu número.
+
+### Como subir
+
+`ref: v0.52.0`. `BoldIcon.soAqui` esvazia, a pasta `lib/design_system/assets/icons` some, e a linha de
+asset sai do `pubspec.yaml` do app — que é o critério de sucesso que você mesmo escreveu.

@@ -20,6 +20,31 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.27.0] — 2026-08-07
+
+### Recebeu — **a linguagem passa a saber dizer "estou te ouvindo"**
+
+`ds-diletta` **v0.51.0 → v0.52.0**: `microphoneLight` e `microphoneSlashLight`. **355 no conjunto.**
+
+O pedido saiu da adoção do app e a medição mudou o que estava sendo pedido: não era par incompleto
+como o avião de ontem — `micro*`, `voice`, `audio`, `sound`, `speaker` e `volume` davam **zero** nas
+353, e o `monitor-waveform` é onda de saída, o oposto de captação. **Família inteira ausente.**
+
+Os dois entraram juntos pelo argumento do ternário: `micEnabled ? 'mic' : 'mic-off'` é **par de
+ESTADO**, e meio par é um botão que muda de significado quando se toca nele. Só o peso `light` entrou
+— o sólido não tem consumidor medido, que é a régua que ele aplicou ontem às três famílias sem par.
+
+### E o diff dos dois conjuntos virou classe no lado dele
+
+O número que a limpeza do app produziu: dos **355** SVGs que o app carregava, **11** não existiam no
+conjunto do pai, e só **2** eram dívida. Os outros 9 eram lixo herdado com zero uso — **incluindo os
+seis exports crus que ele mesmo apagou na v0.45.0**, que seguiram embarcando no app por mais de uma
+semana. A frase do veredito é a lição: *"apagar um asset no pai não apaga a cópia que um consumidor
+fez antes, e nada media a diferença entre os dois conjuntos."*
+
+Os outros **344 eram cópia byte a byte** — e é isso que prova que era cópia, e não uma família
+parecida que alguém tinha ajustado.
+
 ## [0.26.0] — 2026-08-07
 
 ### Recebeu — **o par leve do avião de enviar, e o conjunto vai a 353**
