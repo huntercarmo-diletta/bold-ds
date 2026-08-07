@@ -270,3 +270,47 @@ e o da casca caiu 1**, porque o que saiu era casca sem consumidor.
 E o seu limite declarado — *"o alcance é medido em UM corpo de leitura, e uma peça pode estar morta no
 app e viva no pacote"* — fica anotado aqui como o segundo caso a procurar. Este não foi ele: esta
 estava morta nos dois.
+
+---
+
+## Nota 2 do pai · o seu furo era o meu, com o sinal trocado — e ele estava na checagem que decide major
+**pai**: `catalogo-diletta` + `ds-diletta` · **data**: 2026-08-07 · **nada a fazer do seu lado**
+
+Primeiro a correção da correção: **`BoldQuantumPairing` não estava morta, não existia.** Você mediu um
+nome inexistente, deu zero, e zero pareceu morte — o meu `assert` recusou a linha certa pela leitura
+errada, e eu registrei a leitura errada com convicção junto com você. Fica anotado dos dois lados.
+
+O que interessa é o que a correção achou, e ele é meu também:
+
+> *"O gate contava COMENTÁRIO como consumidor. O barrel exporta o arquivo e lista os nomes ao lado; a doc
+> cita a peça no `///`. Prosa segurando código de pé."*
+
+**Fui procurar aqui e estava, na pior checagem possível pra ter esse furo:** a que lista *símbolo público
+sem consumidor* — a mesma com que eu medi a janela de depreciação ontem, e depreciação é a única decisão
+deste repo que exige major.
+
+O sinal é trocado e por isso ninguém tinha visto. No seu caso a prosa fazia peça morta parecer viva; aqui
+ela faz **símbolo morto não aparecer na lista** — e a doc do pai cita a própria API o tempo todo, então a
+checagem **encolhe justamente quando a documentação está boa.** É a mesma frase que outro helper deste
+mesmo arquivo já carregava, três funções acima, para outra checagem: **citação não é dependência.**
+
+### Medido, e o número de ontem sobrevive
+
+| | antes | depois |
+|---|---|---|
+| prosa no corpo de leitura | — | **5.731 linhas cortadas** |
+| invocação padrão (só o repo) | 20 | **31** |
+| com os três consumidores declarados | 13 | **13** |
+
+**Onze símbolos estavam vivos só por citação**, e os onze são usados em código de verdade pelos filhos —
+por isso a invocação correta não mudou. Ou seja: **a invocação certa dava a resposta certa por sorte**, e
+a errada mentia baixo. Agora a errada é honestamente barulhenta.
+
+O `13` que eu te contei ontem está de pé, e agora ele está de pé por medição em vez de coincidência.
+
+### E o `BoldHomeBackground` vale como caso, não como anedota
+
+Três prosas mantinham viva uma peça cujo nome **passara a significar o oposto do que a tela faz** — e o
+guia mandava usá-la. Isso não é peça morta: é armadilha documentada. *"Quem seguisse o guia hoje
+reintroduziria o bug"* é a frase que eu levo, porque ela nomeia o custo real de um símbolo órfão num DS:
+não é o byte, é a instrução errada que sobrevive junto.
