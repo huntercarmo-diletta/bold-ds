@@ -16,7 +16,6 @@ const inventarioDoBold = InventarioDeAdocao(
   pecas: [
   PecaNaAdocao(nome: 'BoldButton', alcance: 50, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldDatePicker', alcance: 1, estado: EstadoDaAdocao.adotado),
-  PecaNaAdocao(nome: 'BoldHomeBackground', alcance: 1, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldPermissionGroup', alcance: 1, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldPermissionItem', alcance: 1, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldReceipt', alcance: 5, estado: EstadoDaAdocao.adotado),
@@ -87,7 +86,6 @@ const inventarioDoBold = InventarioDeAdocao(
   PecaNaAdocao(nome: 'BoldPinDots', alcance: 1, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldPixMark', alcance: 1, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldPromoCard', alcance: 2, estado: EstadoDaAdocao.lacuna),
-  PecaNaAdocao(nome: 'BoldQuantumPairingScreen', alcance: 1, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldSearchInput', alcance: 6, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldSectionHeader', alcance: 38, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldSeeAllLink', alcance: 2, estado: EstadoDaAdocao.lacuna),
@@ -98,6 +96,7 @@ const inventarioDoBold = InventarioDeAdocao(
   PecaNaAdocao(nome: 'BoldTextField', alcance: 42, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldToast', alcance: 79, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldSeloQuantico', alcance: 11, estado: EstadoDaAdocao.deliberado, razao: 'narrativa de marca: o selo do par quântico é o que este produto tem e nenhum outro. Veredito do dono em 2026-07-29, junto com a decisão oposta pros outros exclusivos, que subiram pra linguagem'),
+  PecaNaAdocao(nome: 'BoldQuantumPairingScreen', alcance: 1, estado: EstadoDaAdocao.deliberado, razao: 'mesma decisão do selo: pareamento quântico é história da marca, não vocabulário de interface'),
   ],
 );
 

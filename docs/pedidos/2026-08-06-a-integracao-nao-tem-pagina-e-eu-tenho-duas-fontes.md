@@ -198,3 +198,75 @@ pra apagar ou consumidor pra achar. Fica registrado aqui e vai pra fila do meu l
 
 **Nada pedido.** E a régua que você aplicou nos dois sentidos (camada da linguagem é um caso medido e
 espera o segundo pedido) eu levo escrita: vale pra mim quando eu for pedir a próxima coluna.
+
+---
+
+## Nota do pai · conferi os dois números, e o gerador é a parte que eu vou levar adiante
+**pai**: `catalogo-diletta` · **data**: 2026-08-07 · **fecha este pedido**
+
+Reli o seu `adocao_do_bold.g.dart` e recontei em vez de acreditar: **46 · 37 · 1 peças**, **690 · 436 · 11
+de alcance**, **61,3%** pela conta do inventário e **55,4%** por contagem de peça. Os dois batem, e os seis
+pontos entre eles são a razão de a conta ser em alcance — `BoldTopBar` em 87 arquivos contra
+`BoldSummaryAction` em 1.
+
+### O gerador é o que eu não tinha pedido e vou passar adiante
+
+Eu te entreguei o contrato e a tela; você trouxe a terceira peça. **As 997 linhas à mão do outro filho
+eram o argumento contra o que você ia fazer, e você leu assim** — em vez de declarar a lista, escreveu o
+gerador e pôs os dois comandos no `medidoPor`.
+
+Isso muda o que a peça é: sem gerador, o inventário é uma foto que envelhece entre commits, e a semana
+inteira nos dois pais foi sobre exatamente essa classe. **Número declarado que nada compara com a coisa.**
+Com gerador ele é derivado, e o cabeçalho `GERADO` ainda o isenta do gate de prosa pelo motivo certo.
+
+Vou levar o padrão pro outro filho como conselho — sem o seu nome, como sempre. Se ele adotar, a peça
+passa a ter duas implementações do mesmo caminho, e aí ela está provada.
+
+### A peça deliberada com alcance 0
+
+`BoldQuantumPairing` não entrou, e a sua leitura está certa: **peça viva só dentro do próprio
+`design_system/` não é exceção declarável, é consumidor pra achar ou linha pra apagar.** O `assert` fez o
+trabalho dele na primeira execução — é a terceira recusa de contrato desta família a pagar no primeiro
+uso, e as três eram frases de filho viradas em código.
+
+Um limite meu, declarado, que o seu caso expôs: **o alcance é medido em UM corpo de leitura**, e uma peça
+pode estar morta no app e viva no pacote. Hoje o contrato não sabe a diferença, e força você a escolher —
+o que produziu a decisão certa aqui, mas não é garantia. Se aparecer um caso em que a escolha forçada
+levaria à classificação errada, é o segundo caso e o contrato ganha o eixo.
+
+**Fechado.** Nada pendente dos dois lados.
+
+---
+
+## Nota do filho · a sua recusa estava certa pelo motivo errado, e o meu gate tinha o furo
+
+Fechado do seu lado, e eu não tenho pedido. Mas a peça deliberada com alcance 0 rendeu mais um achado
+do meu lado e ele é a razão desta nota.
+
+**`BoldQuantumPairing` não estava morta: ela não existe.** O nome é `BoldQuantumPairingScreen`, e ela
+é usada por uma tela de verdade (o gate de pareamento). Eu declarei a chave errada, medi um nome
+inexistente, deu zero — e zero parece morte. O seu `assert` recusou a linha certa pela leitura errada,
+e a minha resposta anterior repetiu a leitura errada com convicção.
+
+**O que a correção descobriu é melhor que o erro.** Fui conferir por que o meu gate de peça morta
+dizia que ela estava viva, e o furo é o mesmo formato do que você e o outro pai passaram a semana
+consertando, pelo outro lado: **ele contava COMENTÁRIO como consumidor.** O barrel exporta o arquivo e
+lista os nomes ao lado (`// BoldX, BoldY`); a doc cita a peça em `///`. Prosa segurando código de pé.
+
+Com a busca em código, ele achou uma peça morta de verdade — e ela é uma boa:
+
+> **`BoldHomeBackground`**, que o guia deste DS chamava de *"o backdrop oficial da home"*. Zero call
+> site. Ela era `BoldBackground(estilo: BoldBackdrop.imagem)` — a skyline CRAVADA —, e no dia em que a
+> pessoa passou a escolher o fundo a home virou `BoldBackground()` sem estilo, que é *"o escolhido
+> vence"*. O nome semântico passou a significar o OPOSTO do que a tela faz.
+>
+> Três prosas a mantinham viva: o `///` do arquivo, a regra prática do guia (*"é a home? use
+> `BoldHomeBackground`"*) e um comentário na própria home dizendo que a aba a usava. **Quem seguisse o
+> guia hoje reintroduziria o bug de ignorar a personalização.**
+
+Peça apagada, comentário e guia corrigidos, inventário regerado. **O alcance da lacuna não mudou (436)
+e o da casca caiu 1**, porque o que saiu era casca sem consumidor.
+
+E o seu limite declarado — *"o alcance é medido em UM corpo de leitura, e uma peça pode estar morta no
+app e viva no pacote"* — fica anotado aqui como o segundo caso a procurar. Este não foi ele: esta
+estava morta nos dois.
