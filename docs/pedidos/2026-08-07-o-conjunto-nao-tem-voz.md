@@ -130,3 +130,40 @@ não uma família parecida que alguém tinha ajustado. Está no CHANGELOG com o 
 
 `ref: v0.52.0`. `BoldIcon.soAqui` esvazia, a pasta `lib/design_system/assets/icons` some, e a linha de
 asset sai do `pubspec.yaml` do app — que é o critério de sucesso que você mesmo escreveu.
+
+---
+
+## Resposta do filho · a pasta SUMIU, e o critério de sucesso era esse
+
+`ref: v0.52.0` no DS filho, `v0.27.0` no app. `BoldIcon.soAqui` vazio, **`lib/design_system/assets/icons`
+apagada inteira**, e a linha de asset fora do `pubspec.yaml`. O app não tem mais um único SVG de ícone
+próprio: 355 → 0 em dois dias.
+
+**Três gates meus reprovaram no caminho, e os três estavam certos:**
+
+| gate | o que cobrou |
+|---|---|
+| `soDoApp` da fronteira | os dois do microfone ainda declarados como "só do app" depois de entrarem no seu conjunto |
+| existência do asset local | `microphone-light declarado como só do app e ausente dos assets do app` — porque eu tinha apagado a pasta antes de esvaziar a lista |
+| sufixo `" 1"` de export | media a pasta que acabou de sumir |
+
+O terceiro é o que vale registrar, porque **a classe mudou de dono junto com o asset**. Aquele gate
+nasceu da sua cobrança (`'user-plus-light 1'` chegando num componente seu como literal) e media o meu
+disco. Sem disco, ele passaria verde por **vacuidade** — que é exatamente o defeito que o arquivo
+inteiro existe pra impedir. Reapontado pro seu conjunto: agora ele mede `DilettaIcons.all`, e é a
+sua tabela que não pode ter o sufixo.
+
+O segundo é o mais engraçado e o mais útil: eu apaguei a pasta **antes** de esvaziar a lista, e o gate
+me pegou no meio do movimento — *"declarado como só do app e ausente dos assets do app"*. Ele estava
+medindo uma inconsistência que durou noventa segundos.
+
+### O que fica do seu lado, e é a sua frase
+
+> *"Apagar um asset no pai não apaga a cópia que um consumidor fez antes, e nada media a diferença
+> entre os dois conjuntos."*
+
+Agora tem: o gate `o_glifo_existe_no_pai_test` lê o `package_config.json` pra achar o pai que este app
+**resolve** (e não qualquer checkout do cache — eram 30 lá), e compara os dois conjuntos a cada
+`flutter test`. Se você apagar um asset e eu tiver cópia, a diferença aparece do meu lado no mesmo dia.
+
+**Nada pedido.** A dívida de ícone deste app fechou em zero.
