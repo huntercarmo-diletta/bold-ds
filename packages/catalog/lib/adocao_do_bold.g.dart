@@ -14,6 +14,7 @@ const inventarioDoBold = InventarioDeAdocao(
   medidoPor: 'dart run tool/inventario_de_adocao.dart (app-newbold) · '
       'confere em flutter test test/a_adocao_do_ds_tem_numero_test.dart',
   pecas: [
+  PecaNaAdocao(nome: 'BoldBottomApp', alcance: 45, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldButton', alcance: 50, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldDatePicker', alcance: 1, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldPermissionGroup', alcance: 1, estado: EstadoDaAdocao.adotado),
@@ -27,6 +28,7 @@ const inventarioDoBold = InventarioDeAdocao(
   PecaNaAdocao(nome: 'BoldSummaryAction', alcance: 1, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldSummaryRow', alcance: 2, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldSummarySection', alcance: 2, estado: EstadoDaAdocao.adotado),
+  PecaNaAdocao(nome: 'BoldTabItem', alcance: 1, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldTopBar', alcance: 87, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldTransactionSummary', alcance: 2, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'DilettaActionDirection', alcance: 16, estado: EstadoDaAdocao.adotado),
@@ -63,7 +65,6 @@ const inventarioDoBold = InventarioDeAdocao(
   PecaNaAdocao(nome: 'BoldAppListDayGroup', alcance: 1, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldAvatar', alcance: 4, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldAvatarRow', alcance: 3, estado: EstadoDaAdocao.lacuna),
-  PecaNaAdocao(nome: 'BoldBottomApp', alcance: 45, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
   PecaNaAdocao(nome: 'BoldBusy', alcance: 5, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldCard', alcance: 36, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
   PecaNaAdocao(nome: 'BoldCurrencyField', alcance: 6, estado: EstadoDaAdocao.lacuna),
@@ -92,7 +93,6 @@ const inventarioDoBold = InventarioDeAdocao(
   PecaNaAdocao(nome: 'BoldSelectField', alcance: 3, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldSpotIcon', alcance: 2, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldStatusBadge', alcance: 3, estado: EstadoDaAdocao.lacuna),
-  PecaNaAdocao(nome: 'BoldTabItem', alcance: 1, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldTextField', alcance: 42, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldToast', alcance: 79, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldSeloQuantico', alcance: 11, estado: EstadoDaAdocao.deliberado, razao: 'narrativa de marca: o selo do par quântico é o que este produto tem e nenhum outro. Veredito do dono em 2026-07-29, junto com a decisão oposta pros outros exclusivos, que subiram pra linguagem'),
