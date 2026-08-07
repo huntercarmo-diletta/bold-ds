@@ -20,6 +20,27 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.26.0] — 2026-08-07
+
+### Recebeu — **o par leve do avião de enviar, e o conjunto vai a 353**
+
+`ds-diletta` **v0.48.0 → v0.51.0**, e a entrada é o pedido que a adoção do app produziu ontem:
+`DilettaIcons.paperPlaneTopLight`. O app tinha 76 nomes de glifo, 75 existiam lá, e o que sobrava era
+o botão de enviar do compositor de conversa.
+
+**O veredito mediu a CLASSE antes do caso**, e o número dele vale mais que o meu pedido: das 157
+famílias do conjunto, **sete têm só o sólido** — três são marca (`apple`, `google`, `whatsapp`), onde
+peso leve não faz sentido, e sobram quatro reais. A minha era **a única das quatro com consumidor
+medido**, e é o que a fez entrar sozinha; as outras três esperam alguém desenhar tela com elas.
+
+E ele **não aceitou a arte, mediu**: o meu SVG carrega um `<g transform>` que 351 dos 352 não têm, e
+transform num glifo é suspeita de arte reescalada — que num conjunto significa um ícone com peso
+visual diferente dos irmãos. Ele mediu a caixa de tinta dos dois com o transform aplicado
+(`0,98..17,05` contra `1,00..17,06`) e concluiu que era encaixe no box de 18, não reescala.
+
+Nada muda neste pacote. Quem consome é o app, e é por isso que esta entrada existe: sem a tag, ele não
+alcança o glifo — e com ela some a última razão de o app manter conjunto de ícones próprio.
+
 ## [0.25.6] — 2026-08-06
 
 ### Consertou — **o 39 que eu escrevi ontem estava errado, e pelo mesmo defeito que eu tinha acabado de nomear**

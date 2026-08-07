@@ -63,3 +63,69 @@ convite implícito de que dá pra pôr o próximo ali também.
 `BoldIcon.soAqui` fica vazio, o segundo teste do gate passa a reprovar se alguém puser algo lá, e a
 pasta `assets/icons` do app **some** — que é o número que interessa: um consumidor a menos com
 vocabulário próprio de ícone.
+
+---
+
+## Veredito · ENTRA, e a arte foi CONFERIDA contra o irmão em vez de aceita
+**pai**: `ds-diletta` **v0.51.0** · **data**: 2026-08-07 · **critério que pesou**: manutenção
+
+`DilettaIcons.paperPlaneTopLight`. **353 no conjunto.**
+
+### A classe antes do caso, que é o que decide
+
+Você trouxe um nome; eu fui medir a família inteira, porque um buraco só não diz se é buraco ou gosto:
+
+- **157 famílias** no conjunto;
+- **sete têm só o sólido** — e **três são marca** (`apple`, `google`, `whatsapp`), onde par não faz
+  sentido nenhum: marca não tem peso leve;
+- sobram **quatro reais**: `check-to-slot`, `moon-cloud`, `siren` e o seu `paper-plane-top`.
+
+**A sua é a única das quatro com consumidor medido**, e é isso que a faz entrar sozinha. As outras três
+ficam como estão até alguém desenhar tela com elas — o mesmo tratamento que o `walletSolid` deu às cinco
+irmãs dele.
+
+### A sua leitura do espelho está exata
+
+*"É o `walletSolid` com o sinal trocado."* É, e a simetria é literal: lá o arquivo sólido embarcava no
+bundle **sem ter nome**, aqui a família tem nome pro sólido e **não tinha a arte leve**. Os dois são a
+mesma coisa vista dos dois lados de uma tabela de pares que ninguém tinha montado inteira até hoje.
+
+### A arte eu não aceitei — eu medi
+
+O seu SVG carrega um `<g transform="translate(1 1) scale(0.767754)">` que **351 dos meus 352 não têm**
+(sete têm algum). Transform num glifo é suspeita de arte reescalada, e arte reescalada num conjunto
+significa um ícone com peso visual diferente dos irmãos — o tipo de coisa que ninguém abre ticket pra
+consertar.
+
+Medi a caixa de tinta dos dois, com o transform aplicado:
+
+| glifo | x | y |
+|---|---|---|
+| `paperPlaneLight` (meu) | `0,98 .. 17,05` | `0,94 .. 16,04` |
+| `paperPlaneTopLight` (seu) | **`1,00 .. 17,06`** | **`0,94 .. 17,00`** |
+
+Mesma largura até a segunda casa, mesmo topo. **O `transform` existe justamente pra encaixar no box de
+18** — é export ajustado, não arte reescalada. Entrou como veio.
+
+### O que fez entrar não foi o desvio, foi o que ele mantinha vivo
+
+> *"O custo não é o desvio: é que o app não pode apagar o bundle de ícones dele por causa de um arquivo.
+> São 352 assets carregados de lá e 1 daqui, e a pasta local continua existindo — com o convite
+> implícito de que dá pra pôr o próximo ali também."*
+
+É o mesmo argumento da v0.6.0, quando o glifo de assistente entrou: **dois ícones próprios obrigam a
+manter conjunto próprio.** Aqui era um, e um já bastava pra manter a pasta.
+
+E o seu gate nos DOIS sentidos é a parte que eu não teria pedido: a segunda metade (*nome na lista que o
+pai passou a ter reprova também*) é o que impede a lista de apodrecer calada. Ela vai reprovar agora, que
+é o que você quer que aconteça.
+
+### Como subir
+
+`ref: v0.51.0`. `BoldIcon.soAqui` fica vazio, e a pasta `assets/icons` do app pode sair.
+
+### Um número da prosa que o seu pedido derrubou de carona
+
+Corrigindo `352 → 353` nos documentos, achei um `46` que devia ter caído anteontem: a frase é *"46 de
+352"*, **dois números velhos numa frase só**, e a minha varredura procurava um de cada vez. O mínimo é 47
+desde anteontem. Terceira vez esta semana que a forma da frase esconde o número.
