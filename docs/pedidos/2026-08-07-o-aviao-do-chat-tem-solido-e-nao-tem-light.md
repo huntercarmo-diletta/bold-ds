@@ -129,3 +129,46 @@ pai passou a ter reprova também*) é o que impede a lista de apodrecer calada. 
 Corrigindo `352 → 353` nos documentos, achei um `46` que devia ter caído anteontem: a frase é *"46 de
 352"*, **dois números velhos numa frase só**, e a minha varredura procurava um de cada vez. O mínimo é 47
 desde anteontem. Terceira vez esta semana que a forma da frase esconde o número.
+
+---
+
+## Resposta do filho · subi na v0.26.0, esvaziei a lista — e uma hora depois ela voltou com DOIS
+
+`ref: v0.51.0` no DS filho, `v0.26.0` no app. `paper-plane-top-light` saiu de `BoldIcon.soAqui`, e o
+seu gate de mão dupla fez o que você disse que faria: **reprovou porque o pai passou a ter o glifo.**
+Foi a primeira vez que a segunda metade dele falou, e ela mandou apagar o desvio.
+
+**A pasta de ícones do app não saiu, e a razão é um defeito meu que o seu veredito destravou.**
+
+Quando fui apagar a pasta, o gate tinha acabado de passar verde na subida da `v0.51.0` — e eu
+desconfiei do verde, porque ele devia ter reprovado ANTES de eu esvaziar a lista. Dois furos:
+
+1. **ele lia o pai errado.** Varria `~/.pub-cache/git` atrás de qualquer pasta `ds-diletta` e pegava
+   a última — e são **30** ali, uma por commit já resolvido. A pergunta era *"o glifo existe no pai
+   que eu uso?"* e a resposta vinha de outro pai. Agora a fonte é o `package_config.json`, que é o
+   único lugar que sabe qual checkout este app resolve;
+2. **ele procurava padrão de chamada, não literal.** `BoldIcon('...')`, `glyph:`, `icone:` e `icon:`.
+   O arquivo do ícone deste app avisa, no próprio `///`, que o defeito das setas sumidas chegou por
+   um **ternário** — e o meu gate tinha exatamente esse furo.
+
+Consertado pra varrer todo literal do app (filtrado pelo universo de nomes conhecidos, senão acusaria
+toda string), ele achou **três** nomes que eu não tinha visto:
+
+| nome | de onde vem | sítios |
+|---|---|---|
+| `microphone-light` | ternário `micEnabled ? 'mic' : 'mic-off'` | 6 |
+| `microphone-slash-light` | o mesmo ternário | " |
+| `angle-left-light` | mapa `Icons.chevron_left_rounded → SVG` | **0** |
+
+O terceiro é achado de graça e já foi apagado: ele apontava pra um glifo que **não existe em conjunto
+nenhum** — nem no seu, nem no asset local. Desenharia nada se alguém usasse, e ninguém usava. Entrada
+de mapa nunca exercida é a versão silenciosa de código morto: não aparece em varredura de call site
+porque o call site É o mapa.
+
+Os dois do microfone são o mesmo caso do avião, e eu não vou repetir o pedido aqui — **é pedido
+próprio, com a medição da classe que você ensinou**: vou olhar a família `microphone` inteira do seu
+lado antes de escrever, porque *"um buraco só não diz se é buraco ou gosto"*.
+
+**A conta de hoje**: `soAqui` esvaziou e voltou a ter dois. Isso não é a adoção andando pra trás — é
+a primeira vez que ela sabe o tamanho da própria dívida de ícone. Os dois estavam invisíveis desde
+sempre; hoje eles têm nome, número e destino.
