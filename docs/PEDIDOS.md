@@ -29,6 +29,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [a forma do CTA é pill cravado, e a minha é 16](pedidos/2026-08-04-a-forma-do-cta-e-pill-cravado-e-o-meu-e-16.md) | **ENTRA na PALETA** — promoção disparou pelo BLOQUEIO (55 telas), não pela contagem de filhos | **ds v0.44.0** · declarado aqui na v0.22.0 |
 | [o spot usa `primary` onde você já tem `onPrimarySubtle`](pedidos/2026-08-04-o-spot-usa-primary-onde-voce-tem-onprimarysubtle.md) | **ENTRA a troca de uma linha** — e o gate que eu propus achou **cinco casos além do meu** | **ds v0.44.0** · adotado aqui na v0.22.0 |
 | [a tinta do aviso é branca no claro, e o âmbar é do filho](pedidos/2026-08-04-a-tinta-do-aviso-e-branca-no-claro-e-o-ambar-e-do-filho.md) | **ENTRAM os dois** — os cinco `onX` derivam com piso de 3:1, e o gate dele ganhou uma **segunda paleta** que achou dois pares que não eram meus | **ds v0.46.0** · adotado aqui na v0.23.0 |
+| [o avião do chat tem sólido e não tem light](pedidos/2026-08-07-o-aviao-do-chat-tem-solido-e-nao-tem-light.md) | *sem veredito* | — |
 
 ## Ao pai da FERRAMENTA (`catalogo-diletta`)
 
@@ -87,7 +88,7 @@ pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedid
 
 ## Dois números que este ledger deixa ver
 
-**35 pedidos, 35 com veredito, 35 ENTRARAM** (18 ao pai da linguagem, 17 ao da ferramenta; recontado
+**36 pedidos, 35 com veredito, 35 ENTRARAM** (18 ao pai da linguagem, 17 ao da ferramenta; recontado
 linha por linha em 2026-08-06). **O 35º fechou no mesmo dia** — a página de Integração no motor, e ele
 nasceu do app: a subida do pacote de v0.21.0 pra v0.25.6 lá gerou a pergunta *"como estamos na adoção?"*, e
 a resposta não tinha casa. Nenhum voltou como "MORA NO SEU DS", e isso é informação sobre
