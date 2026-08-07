@@ -16,6 +16,7 @@ const inventarioDoBold = InventarioDeAdocao(
   pecas: [
   PecaNaAdocao(nome: 'BoldBottomApp', alcance: 45, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldButton', alcance: 50, estado: EstadoDaAdocao.adotado),
+  PecaNaAdocao(nome: 'BoldCard', alcance: 36, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldDatePicker', alcance: 1, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldIcon', alcance: 39, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldPermissionGroup', alcance: 1, estado: EstadoDaAdocao.adotado),
@@ -67,7 +68,6 @@ const inventarioDoBold = InventarioDeAdocao(
   PecaNaAdocao(nome: 'BoldAvatar', alcance: 4, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldAvatarRow', alcance: 3, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldBusy', alcance: 5, estado: EstadoDaAdocao.lacuna),
-  PecaNaAdocao(nome: 'BoldCard', alcance: 36, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
   PecaNaAdocao(nome: 'BoldCurrencyField', alcance: 6, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldDialog', alcance: 14, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldEmptyState', alcance: 7, estado: EstadoDaAdocao.lacuna),
