@@ -79,3 +79,50 @@ não é só desenho duplicado: é vocabulário estrangeiro entrando pela janela.
 
 `BoldDialog` vira casca de 20 linhas — só o `confirm` com os dois rótulos —, os 15 `IconData` viram
 nomes do seu conjunto, e o alcance privado deste app cai 14 arquivos de uma vez.
+
+---
+
+## Veredito · ENTRA sem esperar segundo filho, e a frase que decide já era deste repo
+**pai**: `ds-diletta` **v0.53.0** · **data**: 2026-08-07 · **critério que pesou**: arquitetura limpa e simples
+
+`DilettaDialog({icon, state})` e o mesmo par no `.show`. Nulo ⇒ o diálogo de antes — **nenhum consumidor
+muda**.
+
+### A sua tabela é o veredito, e eu só conferi
+
+Das cinco peças de atenção, quatro carregam glifo e a mais interruptiva era a que não tinha. Conferi peça
+por peça no meu lado e bate. **Isso não é variante esperando promoção**, e você citou a frase certa: é a
+mesma leitura da v0.40.0, quando a segunda linha da casca de topo entrou como *"não é variante nova
+esperando segundo pedido, é assimetria minha"*.
+
+> **Buraco de simetria não espera promoção.** A régua do segundo filho existe pra decidir se uma coisa é
+> linguagem ou gosto local. Quando quatro irmãs já têm e uma não, essa pergunta já está respondida — o que
+> falta é a peça alcançar as outras.
+
+### O que você NÃO pediu decidiu o desenho
+
+- **cor por parâmetro**: fora, e o número é seu — *21 de 21 passam glifo, zero passam cor*. Quem chama
+  escolhe o GLIFO, o tom sai do `state`. Mesma divisão do toast, e é por isso que não há `accent`;
+- **a forma do spot**: você declarou não ter medição que sustente o 56 do seu desenho (*"é o que o desenho
+  deste produto usou"*). **Então ficou 34, o default da família** — o toast, que é a irmã mais próxima
+  (interrompe, tem glifo, título e mensagem), usa o default. Sem número medido, o número da família ganha.
+  Se o seu desenho pedir maior, volte com a medida e a razão, e é o seu número que promove.
+
+Declarar o que você não tem medição pra sustentar é o que me deixou escolher sem inventar. Se o pedido
+tivesse vindo com `56` afirmado, eu teria que ou aceitar o número de um produto na linguagem, ou recusar
+o item inteiro pra não aceitar.
+
+### A segunda metade do custo é o achado
+
+> *"Os 15 glifos são `IconData` do Material, porque a peça é privada e aceita o que o app tem à mão. Peça
+> privada não é só desenho duplicado: é vocabulário estrangeiro entrando pela janela."*
+
+Essa frase eu levo. O inventário de adoção conta peça própria como dívida de DESENHO; ela mostra que a
+dívida tem uma segunda dimensão que ninguém estava contando — **cada peça privada é uma porta por onde
+outro vocabulário entra**, e ela não aparece em nenhuma contagem de arquivo.
+
+### Como subir
+
+`ref: v0.53.0`. `BoldDialog` vira casca, os 15 `IconData` viram nomes do conjunto, e a ponte `appIcon`
+perde um consumidor. Se algum dos 15 não existir do meu lado, é o mesmo formato do avião e do microfone —
+mede e manda.

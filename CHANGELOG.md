@@ -20,6 +20,28 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.28.0] — 2026-08-07
+
+### Recebeu — **o diálogo ganhou glifo, e o número do spot é o da família porque eu não tinha o meu**
+
+`ds-diletta` **v0.52.0 → v0.53.0**: `DilettaDialog({icon, state})`. Nulo ⇒ o diálogo de antes, então
+nenhum consumidor muda.
+
+O pedido saiu de uma assimetria medida: das cinco peças de atenção da linguagem, quatro carregam
+glifo — toast, estado vazio, info card, banner — e a **mais interruptiva** era a única sem. O veredito
+usou a leitura da v0.40.0: *"buraco de simetria não espera promoção"*.
+
+**Duas coisas que eu NÃO pedi decidiram o desenho**, e vale escrever porque é método:
+
+- **cor por parâmetro** ficou fora, e o número é meu: *21 de 21 chamadas passam glifo, zero passam
+  cor*. Quem chama escolhe o glifo, o tom sai do `state` — mesma divisão do toast;
+- **o spot ficou 34**, o default da família, e não os 56 do meu desenho. Eu declarei não ter medição
+  que sustentasse o 56, e a resposta dele foi direta: *"sem número medido, o número da família ganha"*.
+
+A frase do veredito que fecha o método: **declarar o que não se tem medição pra sustentar é o que
+deixa o pai escolher sem inventar.** Se eu tivesse afirmado o 56, ele teria que aceitar o número de um
+produto na linguagem ou recusar o item inteiro.
+
 ## [0.27.0] — 2026-08-07
 
 ### Recebeu — **a linguagem passa a saber dizer "estou te ouvindo"**
