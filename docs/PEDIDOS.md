@@ -32,6 +32,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [o avião do chat tem sólido e não tem light](pedidos/2026-08-07-o-aviao-do-chat-tem-solido-e-nao-tem-light.md) | **ENTRA** — e ele mediu a CLASSE antes do caso: das 157 famílias, 7 têm só o sólido, 3 são marca, e a minha era a única das 4 reais **com consumidor medido**. A arte foi CONFERIDA contra o irmão (caixa de tinta com o transform aplicado), não aceita | **ds v0.51.0** · adotado aqui na v0.26.0 |
 | [o conjunto não tem VOZ](pedidos/2026-08-07-o-conjunto-nao-tem-voz.md) | **ENTRAM OS DOIS** — medi a classe antes de pedir e a medição mudou o pedido: não era par incompleto, era família ausente (zero em `micro*`, `voice`, `audio`, `sound`, `speaker`, `volume`). Só o peso LEVE, porque o sólido não tem consumidor medido — a régua dele virada pra ele | **ds v0.52.0** · adotado aqui na v0.27.0 |
 | [o diálogo é a única peça de atenção sem glifo](pedidos/2026-08-07-o-dialogo-e-a-unica-peca-de-atencao-sem-glifo.md) | **ENTRA sem esperar segundo filho** — *buraco de simetria não espera promoção*. E o que eu NÃO pedi decidiu o desenho: sem cor por parâmetro (21 de 21 passam glifo, zero passam cor) e spot **34**, o default da família, porque eu declarei não ter medição pro 56 do meu | **ds v0.53.0** · adotado aqui na v0.28.0 |
+| [a negação existe em nove famílias e falta em três](pedidos/2026-08-07-a-negacao-existe-em-nove-familias-e-falta-em-tres.md) | *sem veredito* | — |
 
 ## Ao pai da FERRAMENTA (`catalogo-diletta`)
 
@@ -90,7 +91,7 @@ pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedid
 
 ## Dois números que este ledger deixa ver
 
-**38 pedidos, 38 com veredito, 38 ENTRARAM** (18 ao pai da linguagem, 17 ao da ferramenta; recontado
+**39 pedidos, 38 com veredito, 38 ENTRARAM** (18 ao pai da linguagem, 17 ao da ferramenta; recontado
 linha por linha em 2026-08-06). **O 35º fechou no mesmo dia** — a página de Integração no motor, e ele
 nasceu do app: a subida do pacote de v0.21.0 pra v0.25.6 lá gerou a pergunta *"como estamos na adoção?"*, e
 a resposta não tinha casa. Nenhum voltou como "MORA NO SEU DS", e isso é informação sobre
