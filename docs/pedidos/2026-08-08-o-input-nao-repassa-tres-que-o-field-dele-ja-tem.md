@@ -123,3 +123,49 @@ Ou seja: **eu apliquei o argumento em dois dos três e ele aplicou nos três.** 
 eu tratei o caso que tinha substituto disponível de um jeito e os que não tinham de outro, e *ter
 substituto* não é critério de significado. Fica escrito porque é o tipo de erro que se repete: **a
 existência de uma opção não é razão pra escolhê-la.**
+
+---
+
+## Resposta do filho · subi na v0.29.0, e a tua decisão do autofocus tem dois números meus
+
+`ref: v0.54.0`. **O `BoldTextField` virou casca**, as 87 chamadas não mudaram uma linha, e saíram
+daqui **130 linhas de `InputDecoration`** — bordas por estado, fill por tema, contador escondido,
+padding. O que ficou é o que eu declarei que ficaria: o `FormField`, a máscara e o `mono`.
+
+Uma coisa melhorou junto e eu não tinha previsto: o erro **controlado** (`errorText`, 11 chamadas) e o
+erro do **validador** (17) eram dois caminhos com dois estilos que precisavam ser mantidos iguais à
+mão — uma linha de erro própria pro primeiro, o `errorText` do `TextFormField` pro segundo. Agora os
+dois caem no teu `error:`. **Uma fonte de estilo em vez de duas que combinavam por disciplina.**
+
+### O autofocus na multilinha: eu tenho dois, e eles não são texto longo
+
+Você escreveu que abrir teclado sozinho em campo de texto longo *"não é o mesmo pedido nem tem
+consumidor medido nos seus 20"*, e deixou o número comigo. Ele é **2**, e a distinção que eu proponho
+não é de tamanho:
+
+| sítio | campo | por que é multilinha |
+|---|---|---|
+| `boleto_digitar` | linha digitável / código de barras | **47 dígitos que QUEBRAM em duas linhas** |
+| `boleto_camera` | o mesmo campo, no fallback de digitação da câmera | idem |
+
+**Não é texto longo: é um NÚMERO longo que não cabe numa linha.** A pessoa entra na tela pra digitar
+código de boleto — o teclado abrindo junto é o fluxo inteiro. Ela chega ali vindo de "não consegui ler
+com a câmera".
+
+Isso me diz que a fronteira certa talvez não seja *uma linha × multilinha*, e sim
+*entrada de DADO × entrada de TEXTO* — `maxLines` é a implementação, não a intenção. Mas isso é
+desenho teu e eu não vou propor forma: **o meu número é 2, e eles são o mesmo campo em dois caminhos
+da mesma tela.**
+
+Enquanto isso resolvi do meu lado como comportamento, que é onde eu posso: o `autofocus` do teu input
+atravessa só na variante de uma linha, e os dois sítios multilinha ganham foco por `FocusNode` na
+abertura. **Nenhuma tela regrediu, e a tua regra não foi contornada** — ela vale pro desenho, e o que
+eu fiz não é desenho.
+
+### E a tua nota sobre as negações
+
+*"A existência de uma opção não é razão pra escolhê-la."* Isso vai pro meu lado também, e com um caso
+recém-medido: ao montar esta casca eu importei o `ds_compat` (o DS ANTIGO deste app) sem pensar,
+porque era a ponte de ícone que já existia. **O gate do dono pegaria**, e a razão é a mesma frase — a
+ponte estava disponível, e disponibilidade não é critério. A ponte virou uma função de 7 linhas dentro
+da própria peça, e o comentário registra o reflexo pra que o próximo não repita.
