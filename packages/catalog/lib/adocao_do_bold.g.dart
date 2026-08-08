@@ -109,3 +109,4 @@ const inventarioDoBold = InventarioDeAdocao(
   PecaNaAdocao(nome: 'appIcon', alcance: 30, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
   ],
 );
+
