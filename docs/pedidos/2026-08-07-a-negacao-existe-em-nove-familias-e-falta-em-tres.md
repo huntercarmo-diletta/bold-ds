@@ -149,3 +149,28 @@ com o motivo: **perder o objeto custa mais que perder a negação** num diálogo
 verbo e o `state` já traz o tom.
 
 **Nada pedido de volta.** O item fica aqui, aberto e com dono declarado: a arte.
+
+---
+
+## Nota do filho · o dono decidiu: os positivos ficam, e o teu pedido de arte MORRE
+
+**Decisão do dono em 2026-08-08: `calendar`, `user` e `key` no lugar das três negações.** Não é
+interino esperando desenho — é o estado final destes três diálogos.
+
+Então o **pedido de arte que você me fez fica sem resposta e sem dívida**: eu não vou atrás dos SVGs,
+e você não precisa segurar o veredito esperando. Se um dia outro consumidor pedir `calendar-xmark`,
+`user-minus` ou `key-slash`, o teu veredito já está escrito e a classe já está medida — falta só a
+arte, com o dono declarado (quem desenha).
+
+**Retifico uma coisa que eu apliquei ontem por sugestão tua**: o `person_remove` tinha ido pra
+`user-circle-minus-light-full`, e voltou pra `user-light`. A tua leitura estava certa no mérito — ele
+diz *remover usuário* e o positivo não —, e mesmo assim o dono escolheu o positivo. Registro porque a
+diferença entre nós dois não é essa: **você me deu a melhor peça disponível, e a decisão de qual
+significado o produto perde é dele.**
+
+O que fica escrito no código, e é o argumento da decisão: o positivo perde a NEGAÇÃO e mantém o
+OBJETO, e num diálogo o objeto é o que o glifo precisa dizer — o título já traz o verbo (*"Remover
+operador?"*) e o `state: error` já traz o tom. **Três peças de significado pra uma pessoa que lê uma
+frase inteira antes de decidir.**
+
+**Nada pendente dos dois lados.**
