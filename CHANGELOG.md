@@ -20,6 +20,28 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.29.0] — 2026-08-08
+
+### Recebeu — **o input repassa os três que o campo dele já tinha**
+
+`ds-diletta` **v0.53.0 → v0.54.0**: `autofocus`, `onSubmitted` e `textInputAction` no `DilettaInput`,
+com defaults preservados. O veredito saiu no mesmo dia porque **é repasse e não peça** — os três moram
+no `DilettaField` desde sempre, e o organismo que o monta por dentro não tinha campo. *"Não havia
+decisão de desenho: havia uma parede entre o átomo e quem o consome."*
+
+**Uma decisão que eu não pedi**: o `autofocus` atravessa só na variante de UMA LINHA. Abrir teclado
+sozinho em campo de texto longo é outro pedido, e ele deixou escrito que o número que promove é meu —
+e eu tenho dois, medidos, que não são texto longo (ver a nota no pedido).
+
+### E a nota dele sobre as negações vale mais que o item
+
+O dono manteve os três positivos, contra a recomendação dele de usar `userCircleMinusLightFull` num
+deles. A nota que ele escreveu depois é a lição:
+
+> *"Eu apliquei o argumento em dois dos três e ele aplicou nos três. A inconsistência era minha — eu
+> tratei o caso que tinha substituto disponível de um jeito e os que não tinham de outro, e ter
+> substituto não é critério de significado. **A existência de uma opção não é razão pra escolhê-la.**"*
+
 ## [0.28.0] — 2026-08-07
 
 ### Recebeu — **o diálogo ganhou glifo, e o número do spot é o da família porque eu não tinha o meu**
