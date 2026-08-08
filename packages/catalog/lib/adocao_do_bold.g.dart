@@ -99,7 +99,7 @@ const inventarioDoBold = InventarioDeAdocao(
   PecaNaAdocao(nome: 'BoldSeloQuantico', alcance: 11, estado: EstadoDaAdocao.deliberado, razao: 'narrativa de marca: o selo do par quântico é o que este produto tem e nenhum outro. Veredito do dono em 2026-07-29, junto com a decisão oposta pros outros exclusivos, que subiram pra linguagem'),
   PecaNaAdocao(nome: 'BoldQuantumPairingScreen', alcance: 1, estado: EstadoDaAdocao.deliberado, razao: 'mesma decisão do selo: pareamento quântico é história da marca, não vocabulário de interface'),
   PecaNaAdocao(nome: 'AppButton', alcance: 13, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
-  PecaNaAdocao(nome: 'AppColors', alcance: 35, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
+  PecaNaAdocao(nome: 'AppColors', alcance: 34, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
   PecaNaAdocao(nome: 'AppCurrencyField', alcance: 1, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
   PecaNaAdocao(nome: 'AppGradients', alcance: 5, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
   PecaNaAdocao(nome: 'AppRadius', alcance: 20, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
