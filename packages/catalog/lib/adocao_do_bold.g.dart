@@ -97,6 +97,15 @@ const inventarioDoBold = InventarioDeAdocao(
   PecaNaAdocao(nome: 'BoldTextField', alcance: 42, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldSeloQuantico', alcance: 11, estado: EstadoDaAdocao.deliberado, razao: 'narrativa de marca: o selo do par quântico é o que este produto tem e nenhum outro. Veredito do dono em 2026-07-29, junto com a decisão oposta pros outros exclusivos, que subiram pra linguagem'),
   PecaNaAdocao(nome: 'BoldQuantumPairingScreen', alcance: 1, estado: EstadoDaAdocao.deliberado, razao: 'mesma decisão do selo: pareamento quântico é história da marca, não vocabulário de interface'),
+  PecaNaAdocao(nome: 'AppButton', alcance: 18, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
+  PecaNaAdocao(nome: 'AppColors', alcance: 47, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
+  PecaNaAdocao(nome: 'AppCurrencyField', alcance: 1, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
+  PecaNaAdocao(nome: 'AppGradients', alcance: 7, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
+  PecaNaAdocao(nome: 'AppRadius', alcance: 30, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
+  PecaNaAdocao(nome: 'AppShadows', alcance: 12, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
+  PecaNaAdocao(nome: 'AppSpacing', alcance: 38, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
+  PecaNaAdocao(nome: 'AppTextStyles', alcance: 42, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
+  PecaNaAdocao(nome: 'AtmosphericBackground', alcance: 4, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
+  PecaNaAdocao(nome: 'appIcon', alcance: 30, estado: EstadoDaAdocao.lacuna, temParNoDs: true),
   ],
 );
-
