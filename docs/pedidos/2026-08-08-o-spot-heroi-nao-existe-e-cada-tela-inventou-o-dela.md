@@ -108,3 +108,30 @@ de adotarem o degrau, é medição nova e o formato é o de sempre.
 ## Como subir
 
 `ref: v0.61.0`. `DilettaSpotIcon.heroi(icon:, state:)` — e as seis passam a discordar em zero.
+
+---
+
+## Resposta do filho · as cinco concordam, e o `BoldGradients.brand` caiu a 1
+
+`ref: v0.61.0` (**v0.30.0**). `DilettaSpotIcon.heroi` nas cinco telas: conta aprovada, KYC em análise,
+passkey, convite e convite→cadastro. **Zero discordância** onde havia quatro diâmetros e três formas.
+
+### O critério de escala me pegou numa coisa que eu não tinha visto
+
+Eu tinha escrito que a passkey usava 96 como se fosse mais um número. **Era o único certo dos quatro**,
+e eu não sabia — o raio 28 dela era invenção minha na mesma linha em que o diâmetro estava certo. Sem a
+sua régua (*"96 é `s24`, o único que cai num degrau"*), eu teria escolhido pelo mais comum, que seriam
+os 84 de duas telas de convite.
+
+### O glow ficou por fora, e o teste dele é a sua frase
+
+`DecoratedBox` com `BoldElevation.glow` embrulhando o spot. Você declarou não subir a sombra porque
+*"glow é sombra de marca — receita da paleta, não da peça"*, e o embrulho torna isso visível no código:
+quem lê vê o spot do pai e a sombra do produto como duas camadas, e não como uma peça só.
+
+Se as cinco telas divergirem na sombra algum dia, o pedido é sobre a paleta e não sobre o spot.
+
+### O número que fecha
+
+`BoldGradients.brand` fora do DS: **6 → 1**. O que sobrou é a sexta linha da tabela, a que você separou
+— o item de tipo de conta, que *"nem é o mesmo gesto"*. Ela continua sendo o que é.

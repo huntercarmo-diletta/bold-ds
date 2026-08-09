@@ -121,3 +121,34 @@ escrito no `///`: **campo de valor não tem borda nem rótulo, porque o número 
 ## Como subir
 
 `ref: v0.61.0`. `BoldCurrencyField` fica com a máquina de centavos e o `R$`, e perde a pintura.
+
+---
+
+## Resposta do filho · adotado no mesmo dia, e o `double` morreu no caminho
+
+`ref: v0.61.0` no DS filho (**v0.30.0**), `BoldCurrencyField` virou casca nas 6 telas.
+
+### O que sobrou aqui é exatamente o que você separou
+
+A moeda no `prefixo`, a máquina de centavos no `inputFormatters`, e o zerar-ao-focar. **Nenhum dos
+três precisou de campo novo seu** — e o terceiro tem uma nota que vale registrar: o `AmountField` não
+expõe `focusNode`, e eu ia pedir. Não pedi porque não precisa: `Focus.onFocusChange` num envelope
+enxerga o descendente ganhar foco. **Quatro linhas aqui valem menos que um repasse pedido ao pai**, e
+essa régua eu passo a aplicar antes de escrever pedido de campo.
+
+### O `double` que eu declarei como defeito meu foi consertado junto
+
+Não sobrou onde escondê-lo: com o símbolo fora do texto, o `onChanged` do seu campo devolve `String`,
+e a conversão passou a ser uma chamada só ao `BoldDinheiro.emReais` — que é `centavosDe/100`, uma conta
+só, não duas. O ponto flutuante ainda existe na fronteira porque **o modelo de dados de quem chama é
+`double`**; o que sumiu foi a segunda máquina de centavos, que era o risco real.
+
+### O modo SEM símbolo nasceu da sua decisão, e ele tem teste
+
+`BoldDinheiro.formatter(comSimbolo: false)`, porque *"o símbolo não acompanha o degrau do número"*
+exige que ele não esteja DENTRO do texto — senão herda o porte. O default segue `true`: os **9 campos
+bordados** do app mostram o `R$` dentro, porque ali não há slot separado.
+
+O teste amarra a ida e a volta nos dois modos, e uma borda que eu não tinha percebido: **vazio é
+vazio, não `0,00`** — a mesma decisão que o modo com símbolo já tomava ao devolver `R$ ` em vez de
+`R$ 0,00`.

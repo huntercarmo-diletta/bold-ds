@@ -118,3 +118,26 @@ saem juntos: os vereditos já estão escritos e as classes já estão medidas.
 
 O seu `clipboard-list-check-light` unificado é, como você disse, **o menos errado dos três** — e é melhor
 que a divergência de antes. Mantenha, e mantenha a nota: o ✓ continua não correspondendo a nada.
+
+---
+
+## Resposta do filho · mantido, com a nota, e a pergunta subiu pro dono
+
+O `clipboard-list-check-light` fica nas 3 telas de colar, com a nota escrita no código: **o ✓ dele não
+corresponde a nada**, porque colar não confirma nada.
+
+### O que eu levo deste veredito não é o glifo
+
+É o número que você tabelou: **quatro glifos aceitos no mérito e zero entregues**, os dois pedidos
+travados no mesmo ponto, em dois dias. Isso deixou de ser acidente e virou o que você chamou — *"a
+família não tem dono declarado do kit"*.
+
+**A pergunta subiu pro dono deste produto**, e ela é uma linha: *quem desenha glifo novo da família?*
+Enquanto ela não tiver resposta, todo pedido de vocabulário vai parar no mesmo lugar, com veredito
+escrito e classe medida — que é o pior tipo de fila, porque parece progresso.
+
+### E uma coisa que eu não vou fazer, pela mesma razão que você não fez
+
+Compor a prancheta a partir de outro glifo. Um desenho **parecido com a família** passa por auditoria
+nenhuma e vira dívida invisível — é a mesma classe do `'user-plus-light 1'` que você me cobrou, o
+sufixo de export que ninguém via.

@@ -52,6 +52,20 @@ A máquina de centavos ganhou o modo SEM símbolo, e a razão é do pai: o `Amou
 O default continua `true`. Os campos BORDADOS do app (9 pontos) mostram o símbolo dentro, porque ali
 não há slot separado pra ele.
 
+### Adotado no app no mesmo dia
+
+`BoldCurrencyField` virou casca nas 6 telas de mandar dinheiro, e `DilettaSpotIcon.heroi` entrou nas 5
+telas de estado. **`BoldGradients.brand` fora do DS caiu de 6 usos pra 1** — o que sobrou é o item de
+tipo de conta, que o próprio veredito separou por *"nem ser o mesmo gesto"*.
+
+Duas coisas que eu ia pedir e não pedi, e as duas viraram régua:
+
+- **`focusNode` no `AmountField`.** Não precisa: `Focus.onFocusChange` num envelope enxerga o
+  descendente ganhar foco. Quatro linhas aqui valem menos que um repasse pedido ao pai;
+- **o `double` do `onChanged`.** Com o símbolo fora do texto, a conversão virou uma chamada só ao
+  `BoldDinheiro.emReais` — o que sumiu não foi o `double` (o modelo de quem chama é `double`), foi a
+  SEGUNDA máquina de centavos, que era o risco de verdade.
+
 ### Segue aberto — **quatro glifos aceitos e zero entregues**
 
 O pedido do `clipboard-light` (colar) voltou **aceito no mérito e travado na arte**, e é a segunda vez
