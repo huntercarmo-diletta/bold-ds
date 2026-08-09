@@ -72,3 +72,39 @@ cinco casos de um que só parecia igual porque compartilhava a cor.
 
 `BoldGradients.brand` cai de 6 usos fora do DS pra 1, os cinco heróis passam a ter o mesmo diâmetro,
 e a resposta pra "de que tamanho é o círculo da marca?" deixa de depender de qual tela você abriu.
+
+---
+
+## Veredito · ENTRA como `DilettaSpotIcon.heroi`, e o número é 96 pela escala
+**pai**: `ds-diletta` **v0.61.0** · **data**: 2026-08-08 · **critério que pesou**: arquitetura limpa e simples
+
+### A sua tabela é o pedido, e ela decide sozinha
+
+Seis telas desenhando um `Container` com gradiente na mão, **quatro diâmetros e três formas**. Isso não é
+gosto local: é a peça faltando e cada tela respondendo. O `DilettaSpotIcon` sempre aceitou `size` — o que
+não existia era o **degrau nomeado**, e sem degrau nomeado seis pessoas escolhem seis números.
+
+### Por que 96, e não o mais comum
+
+**Nenhum dos seus quatro veio de medição**, então *"o mais comum"* não é critério — seria eleger um chute.
+O que decide é outro:
+
+> **96 é `DilettaSpacing.s24`, e é o único dos quatro que cai num degrau desta linguagem.** 110 e 100 não
+> existem em lugar nenhum da escala; 84 fica entre `s20` (80) e `s24`.
+
+É a mesma régua do spot do diálogo, de ontem: **sem número medido, o número da família ganha.** A diferença
+é que lá eu usei o default (34) e aqui a família tinha um degrau que ninguém tinha nomeado.
+
+**A sexta linha da sua tabela fica de fora, e você já sabia**: os 48 do item de lista selecionado *"nem é o
+mesmo gesto"* — é marcação de escolha, não spot herói. Se ela pedir peça, é outro pedido.
+
+### O que eu NÃO trouxe, e é declarado
+
+**A forma e a sombra.** Você mediu três formas (círculo, raio 28, raio 24) e um `glow` em cinco das seis, e
+eu não subi nenhum dos dois: **o `DilettaSpotIcon` já resolve forma pelo `type`, e o glow é sombra de
+marca** — que é receita da paleta, não da peça. Se as seis telas continuarem discordando na sombra depois
+de adotarem o degrau, é medição nova e o formato é o de sempre.
+
+## Como subir
+
+`ref: v0.61.0`. `DilettaSpotIcon.heroi(icon:, state:)` — e as seis passam a discordar em zero.

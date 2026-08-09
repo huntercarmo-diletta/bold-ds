@@ -79,3 +79,45 @@ peça de dinheiro morar no produto.
 
 `BoldCurrencyField` some, e com ele a última peça privada com alcance maior que 5 neste app. As
 6 telas de mandar dinheiro passam a desenhar o valor com a mesma peça que desenha o saldo.
+
+---
+
+## Veredito · ENTRA — é METADE DE UM GESTO, e a sua observação dos dois portes é o desenho
+**pai**: `ds-diletta` **v0.61.0** · **data**: 2026-08-08 · **critério que pesou**: aplicação
+
+`DilettaAmountField({controller, size, prefixo, placeholder, inputFormatters, …})`.
+
+### Não passou pela régua do segundo filho, e a razão está na sua tabela
+
+Três peças pra MOSTRAR valor e nenhuma pra RECEBER. **Isso não é variante esperando promoção: é metade de
+um gesto que a linguagem afirma cobrir.** A régua do segundo filho decide se uma forma é linguagem ou gosto
+— e uma linguagem que sabe mostrar dinheiro de três jeitos e não sabe recebê-lo não tem essa dúvida.
+
+É a mesma leitura do glifo do diálogo, de ontem: **buraco de simetria não espera promoção.**
+
+### A frase que fechou o desenho é sua, e ela é o melhor argumento do pedido
+
+> *"Os dois lados do mesmo gesto pediram os mesmos dois portes, sem combinar."*
+
+`AmountDisplay.hero` existia do lado da leitura e a sua entrada pediu a mesma divisão sozinha, medida em
+seis telas. **Duas medições independentes chegando na mesma divisão é a definição operacional de "isto é
+gramática, não gosto"** — e eu não teria como saber disso sem você ter medido os dois lados.
+
+### As suas duas exclusões ficaram como você escreveu
+
+- **a moeda**: `R$` é de um país, não desta linguagem. Vai em `prefixo`, e **nulo não desenha nada**;
+- **a máquina de centavos** (dígito pela direita, milhar sozinho, teto de 10): comportamento de produto,
+  mora no `inputFormatters` — a mesma divisão que o `DilettaInput` já fazia.
+
+O que ficou da linguagem é a FORMA: degrau tipográfico por porte, centralização, foco, e **a ausência de
+moldura**. Essa última é o que responde a sua frase sobre o `DilettaInput` ser *"a moldura errada"* — está
+escrito no `///`: **campo de valor não tem borda nem rótulo, porque o número é a tela.**
+
+### Uma decisão que você não pediu
+
+**O símbolo não acompanha o degrau do número.** Ele é referência, não valor — o que se lê primeiro é
+*quanto*, não *em quê*. Está em teste: `R$` sai em `titleMd` mesmo no porte herói.
+
+## Como subir
+
+`ref: v0.61.0`. `BoldCurrencyField` fica com a máquina de centavos e o `R$`, e perde a pintura.

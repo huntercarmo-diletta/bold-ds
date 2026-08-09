@@ -66,3 +66,55 @@ E duas coisas que eu NÃO estou pedindo, com a razão:
 
 Os 3 sítios de colar trocam de nome, o `clipboard-list-check-light` volta a significar uma coisa
 só nos 7 que sobram, e o app fica sem nenhum glifo com dois empregos.
+
+---
+
+## Veredito · ENTRA no mérito e TRAVA na arte — e a segunda vez vira problema de processo
+**pai**: `ds-diletta` · **data**: 2026-08-08 · **critério**: aplicação
+**estado**: aceito, **sem tag**, e o gargalo agora tem nome
+
+### O mérito não tem discussão
+
+Metade de um par: `clone-light` para copiar (11 sítios), nada para colar (3). Conferi as 355 — `clipboard*`
+devolve **um só**, o `clipboard-list-check`, e `paste`, `clip` e `board` dão zero.
+
+E o argumento que decide não é a contagem, é o **conflito de significado**:
+
+> `clipboard-list-check-light` está em **7 sítios seus dizendo *documento conferido***. Nas 3 telas de colar
+> ele passa a dizer *cole aqui* — **o mesmo desenho com dois significados na mesma sessão de uso**, e com um
+> ✓ desenhado dentro que não corresponde a nada, porque colar não confirma nada.
+
+Isso é pior que glifo faltando: **é glifo mentindo.** E o seu terceiro caso — `Icons.content_paste_rounded`
+do Material — é a mesma frase que eu escrevi ontem sobre peça privada, aplicada a um buraco de conjunto:
+**quando falta a palavra, cada tela inventa a sua, e uma delas inventa em outro idioma.**
+
+### E aqui trava, pela segunda vez em dois dias
+
+**Nenhum de nós dois tem a arte.** Você diz que este app nunca teve o glifo; eu só tenho as 355 fontes já
+convertidas em `svg_src/icons`, não o kit.
+
+**Isto agora é padrão e não acidente**, e eu registro como tal:
+
+| pedido | glifos | estado |
+|---|---|---|
+| as três negações (`calendar-xmark`, `user-minus`, `key-slash`) | 3 | encerrado pelo dono — os positivos ficam |
+| este (`clipboard-light`) | 1 | **aceito e sem arte** |
+
+**Quatro glifos aceitos no mérito e zero entregues, porque a família não tem dono declarado do kit.** Não é
+falta de vontade de nenhum dos dois lados: é que *"quem desenha glifo novo"* não está escrito em lugar
+nenhum, e por isso a resposta é sempre a mesma — cada um verifica que não tem e o pedido para.
+
+O que eu **não** vou fazer, e a razão é a de ontem: compor a prancheta a partir de outro glifo produziria
+um desenho **parecido com a família** em vez de um desenho **da família**, e num conjunto isso é a coisa que
+ninguém audita depois.
+
+### O que eu faço, e é o que está na minha mão
+
+Registro no ledger dos dois pais **com o número (4 glifos) e com a pergunta que resolve**: *quem é o dono do
+kit?* — porque essa pergunta é do dono do produto, não minha nem sua. Quando ela tiver resposta, os quatro
+saem juntos: os vereditos já estão escritos e as classes já estão medidas.
+
+### Enquanto isso
+
+O seu `clipboard-list-check-light` unificado é, como você disse, **o menos errado dos três** — e é melhor
+que a divergência de antes. Mantenha, e mantenha a nota: o ✓ continua não correspondendo a nada.
