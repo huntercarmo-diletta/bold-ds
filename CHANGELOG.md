@@ -20,6 +20,49 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.30.0] — 2026-08-08
+
+### Recebeu — **a linguagem passou a RECEBER valor, e o spot herói ganhou degrau**
+
+`ds-diletta` **v0.54.0 → v0.61.0**, com dois vereditos que saíram de dois pedidos medidos aqui:
+
+- **`DilettaAmountField({controller, size, prefixo, placeholder, inputFormatters})`** — o campo de
+  valor. A medição que decidiu foi a assimetria: **três peças pra MOSTRAR valor** (`DilettaAmount`,
+  `DilettaAmountDisplay`, `DilettaReceiptRow`) e **nenhuma pra RECEBER**. O veredito chamou de *"metade
+  de um gesto que a linguagem afirma cobrir"*, e não passou pela régua do segundo filho: *"buraco de
+  simetria não espera promoção"*.
+
+  O que fechou o desenho foi uma frase minha que eu não tinha percebido ser o argumento: *"os dois lados
+  do mesmo gesto pediram os mesmos dois portes, sem combinar"* — o `AmountDisplay.hero` já existia na
+  leitura, e as 6 telas de entrada daqui pediram a mesma divisão sozinhas. **Duas medições
+  independentes chegando na mesma divisão é a definição operacional de gramática.**
+
+- **`DilettaSpotIcon.heroi`** — o círculo grande da marca (96 = `DilettaSpacing.s24`). O pedido não
+  levou tela nenhuma: levou a **discordância**. Seis telas desenhando `Container` com gradiente na mão,
+  **quatro diâmetros e três formas**. Eu declarei não ter o número certo — tenho quatro, que é a prova
+  de que ninguém decidiu —, e o veredito escolheu pela escala: *"96 é o único dos quatro que cai num
+  degrau desta linguagem; 110 e 100 não existem em lugar nenhum"*.
+
+### Mudou aqui — `BoldDinheiro.formatter(comSimbolo: false)`
+
+A máquina de centavos ganhou o modo SEM símbolo, e a razão é do pai: o `AmountField` põe o `R$` num
+`Text` próprio, num degrau **menor** que o número — *"ele é referência, não valor: o que se lê primeiro
+é quanto, não em quê"*. Com o símbolo dentro do texto, ele herdaria o porte do número.
+
+O default continua `true`. Os campos BORDADOS do app (9 pontos) mostram o símbolo dentro, porque ali
+não há slot separado pra ele.
+
+### Segue aberto — **quatro glifos aceitos e zero entregues**
+
+O pedido do `clipboard-light` (colar) voltou **aceito no mérito e travado na arte**, e é a segunda vez
+em dois dias. O pai transformou o padrão em pergunta ao dono, e ela não é minha nem dele:
+
+> **Quem é o dono do kit de ícones da família?**
+
+Enquanto não tiver resposta, os quatro glifos ficam parados com veredito escrito e classe medida: as
+três negações (`calendar-xmark`, `user-minus`, `key-slash`) e a prancheta. O `clipboard-list-check-light`
+segue como o menos errado nas 3 telas de colar — **com a nota de que o ✓ dele não corresponde a nada**.
+
 ## [0.29.0] — 2026-08-08
 
 ### Recebeu — **o input repassa os três que o campo dele já tinha**

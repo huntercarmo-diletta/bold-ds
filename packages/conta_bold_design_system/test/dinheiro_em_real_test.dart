@@ -73,4 +73,25 @@ void main() {
       expect(BoldDinheiro.centavosDe(BoldDinheiro.formatar(centavos)), centavos);
     }
   });
+
+  test('sem símbolo, o texto é só o número — e a volta continua fechando', () {
+    // O modo nasceu na `ds v0.61.0` do pai: o `DilettaAmountField` põe o `R$` num `Text`
+    // próprio, num degrau MENOR que o número. Com o símbolo dentro do texto, ele herdaria o
+    // porte do número e a hierarquia (*quanto* antes de *em quê*) se perderia.
+    expect(BoldDinheiro.formatar(250000, comSimbolo: false), '2.500,00');
+    expect(BoldDinheiro.formatar(1, comSimbolo: false), '0,01');
+
+    // Vazio é VAZIO, e não `0,00`: campo de valor vazio espera digitação, e um zero
+    // formatado parece valor preenchido. É a mesma decisão do modo com símbolo, que
+    // devolve `R$ ` e não `R$ 0,00`.
+    expect(BoldDinheiro.formatar(0, comSimbolo: false), '');
+
+    // A volta não olha o símbolo — ela lê dígito. Se um dia olhar, este teste cai.
+    for (final centavos in [1, 99, 100, 12345, 999999999]) {
+      expect(
+          BoldDinheiro.centavosDe(
+              BoldDinheiro.formatar(centavos, comSimbolo: false)),
+          centavos);
+    }
+  });
 }

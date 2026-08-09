@@ -39,12 +39,22 @@ abstract final class BoldDinheiro {
   /// Máximo de dígitos aceitos: R$ 99.999.999,99.
   static const int digitosMaximos = 10;
 
-  static TextInputFormatter formatter() => const _FormatadorDeDinheiro();
+  /// [comSimbolo] `false` devolve só o número (`1.234,56`), sem o `R$ `.
+  ///
+  /// Existe desde a `ds v0.61.0` do pai, e a razão é dele: o `DilettaAmountField` põe o símbolo
+  /// num `Text` PRÓPRIO, num degrau menor que o número — *"ele é referência, não valor: o que se
+  /// lê primeiro é quanto, não em quê"*. Com o símbolo dentro do texto, ele herdaria o porte do
+  /// número e a hierarquia se perderia.
+  ///
+  /// O default continua `true`: os campos BORDADOS do app (9 pontos) mostram o símbolo dentro,
+  /// porque ali não há slot separado pra ele.
+  static TextInputFormatter formatter({bool comSimbolo = true}) =>
+      comSimbolo ? const _FormatadorDeDinheiro() : const _FormatadorDeDinheiro(simbolo: false);
 
   /// Centavos → `R$ 1.234,56`. Zero devolve `R$ ` (com o espaço), porque campo de valor vazio
   /// mostra o prefixo e espera a digitação — `R$ 0,00` parece valor preenchido.
-  static String formatar(int centavos) {
-    if (centavos == 0) return r'R$ ';
+  static String formatar(int centavos, {bool comSimbolo = true}) {
+    if (centavos == 0) return comSimbolo ? r'R$ ' : '';
     final decimais = (centavos % 100).toString().padLeft(2, '0');
     final inteiros = (centavos ~/ 100).toString();
     final saida = StringBuffer();
@@ -52,7 +62,7 @@ abstract final class BoldDinheiro {
       if (i > 0 && (inteiros.length - i) % 3 == 0) saida.write('.');
       saida.write(inteiros[i]);
     }
-    return 'R\$ $saida,$decimais';
+    return comSimbolo ? 'R\$ $saida,$decimais' : '$saida,$decimais';
   }
 
   /// `R$ 2.500,00` → `250000`. É a forma que se guarda e se manda pra API — ponto flutuante
@@ -81,7 +91,9 @@ abstract final class BoldDinheiro {
 }
 
 class _FormatadorDeDinheiro extends TextInputFormatter {
-  const _FormatadorDeDinheiro();
+  const _FormatadorDeDinheiro({this.simbolo = true});
+
+  final bool simbolo;
 
   @override
   TextEditingValue formatEditUpdate(TextEditingValue antigo, TextEditingValue novo) {
@@ -91,7 +103,8 @@ class _FormatadorDeDinheiro extends TextInputFormatter {
     // novo empurrava o primeiro fora — o valor mudava no meio em vez de parar de crescer.
     if (digitos.length > BoldDinheiro.digitosMaximos) return antigo;
 
-    final texto = BoldDinheiro.formatar(digitos.isEmpty ? 0 : int.parse(digitos));
+    final texto = BoldDinheiro.formatar(digitos.isEmpty ? 0 : int.parse(digitos),
+        comSimbolo: simbolo);
     return TextEditingValue(
       text: texto,
       // Cursor sempre no fim: o texto é reescrito inteiro a cada tecla, então qualquer outra
