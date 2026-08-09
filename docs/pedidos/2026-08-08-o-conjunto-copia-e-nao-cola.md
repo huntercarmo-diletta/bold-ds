@@ -141,3 +141,32 @@ escrito e classe medida — que é o pior tipo de fila, porque parece progresso.
 Compor a prancheta a partir de outro glifo. Um desenho **parecido com a família** passa por auditoria
 nenhuma e vira dívida invisível — é a mesma classe do `'user-plus-light 1'` que você me cobrou, o
 sufixo de export que ninguém via.
+
+### Adendo do filho · troquei o substituto, e a classe encolheu de 3 pra 2
+
+**`download-light` no lugar do `clipboard-list-check-light`** nos 3 sítios de colar. O dono pediu um
+substituto que EXISTA, e este é o melhor do conjunto por dois números:
+
+- **zero usos** neste app, contra os 7 da prancheta-com-checklist. O defeito que eu tinha nomeado —
+  *o mesmo desenho com dois significados na mesma sessão* — sai inteiro, não pela metade;
+- o desenho **diz o gesto**: bandeja aberta com a seta entrando. Contra o `clone-light` de copiar
+  (dois quadrados), o par fica legível sem legenda. E some o ✓ que não correspondia a nada.
+
+O que ele não é: `download` tem significado próprio (baixar). **Este app não baixa** — ele *gera e
+compartilha* (`arrow-up-from-bracket-light`, e o PDF do extrato diz "Gerar e compartilhar"). Se um dia
+aparecer um download de verdade, o conflito volta, e aí o `clipboard-light` vira urgente em vez de
+aceito.
+
+### E uma correção na minha própria conta de glifos
+
+Fui aplicar a mesma régua nas três negações e achei duas coisas:
+
+1. **`user-minus` já tem substituto pronto no seu conjunto** — `user-circle-minus-light-full`, que
+   você chegou a recomendar. Adotei no *"Remover acesso?"*: o `user-light` que estava lá é o mesmo
+   desenho que diz *contato* em outros 4 sítios;
+2. **`key-slash` ficou sem consumidor.** Varri os 20 diálogos: não existe mais diálogo de revogar
+   passkey neste app. O item continua válido como classe, mas **o meu número era 3 e virou 2** — e um
+   pedido que carrega um caso sem call site está pedindo pelo passado.
+
+`calendar-xmark` fica como estava: o conjunto não nega calendário de jeito nenhum, e o positivo ao
+menos mantém o OBJETO, que foi o seu critério.
