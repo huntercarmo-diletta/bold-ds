@@ -20,6 +20,50 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.31.0] — 2026-08-10
+
+### Recebeu — **o release do pai não move nada aqui, e medi-lo achou um corpo**
+
+`ds-diletta` **v0.61.0 → v0.62.2** e motor **v0.86.1 → v0.90.0**. As três tags do pai (tracejado do
+cartão de conclusão, respiro do stepper, contrato do slot do banner) e a do motor (`slot-de-um-com-mais`)
+**vieram todas do filho A**, e eu conferi peça por peça em vez de aceitar pelo changelog:
+
+| peça que mudou | sítios neste app |
+|---|---|
+| `DilettaChatCompletionCard` | **0** |
+| `DilettaStatusBanner` | **0** |
+| `DilettaStepper` | **0** |
+
+Zero é resposta, e ela vale escrita: subir a ref custou nada e mantém a fronteira — filho atrás do pai
+é dívida que ninguém vê até precisar de uma peça nova.
+
+### E o zero do stepper era um CORPO
+
+Fui medir se o respiro de 4px do `DilettaStepper` chegava aqui, e não chegava porque **nada usa
+stepper neste app**. As nove telas de onboarding que mostram progresso usam outra peça — a
+`OnboardingProgressBar`, uma barra de 4px.
+
+O `BoldStepper` e a fábrica `BoldTopBar.stepper` estavam vivos **só pelos dois testes que os
+exercitavam**. É o quarto tipo de código morto desta adoção, e passa pelos três gates que já existem:
+tem consumidor no `lib`, é classe pública citada, e é construído. **O consumidor é o teste.**
+
+> Um teste que é o único consumidor de uma peça não está protegendo o produto: está mantendo a peça
+> viva pra si.
+
+A garantia que aqueles testes guardavam é real — *a segunda linha entra DENTRO da casca do pai* — e
+ela **mudou de veículo em vez de sumir**: hoje quem a exercita é a FAIXA de "agindo em nome de", que é
+o ocupante vivo do mesmo slot. Gate novo: `nenhuma_peca_vive_so_pelo_teste_test`.
+
+**E o pai já sabia, do lado dele.** O `///` do `DilettaStepper` diz *"o único consumidor real do
+stepper nos dois filhos é quem pediu a troca"* — o filho A. A medição dele e a minha bateram sem
+combinar, e é isso que dá confiança nas duas.
+
+### Segue aberto — os dois pedidos de 09/08
+
+`content` no `DilettaDialog` (2 sítios com campo dentro) e `state` na `DilettaProgressBar` (o medidor
+de limite, 2 sítios). Nenhum dos dois entrou em código na v0.62.2 — conferido lendo a assinatura das
+duas peças, não o changelog.
+
 ## [0.30.0] — 2026-08-08
 
 ### Recebeu — **a linguagem passou a RECEBER valor, e o spot herói ganhou degrau**
