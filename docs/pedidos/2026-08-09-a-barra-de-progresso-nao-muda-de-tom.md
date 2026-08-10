@@ -124,3 +124,38 @@ cor continua sem o aviso **até o texto dizer**.
 `ref: v0.63.0`. Troque os 2 sítios, escolha o limiar, e **acrescente o texto** — sem ele o medidor
 continua dizendo por cor uma coisa que só a cor diz. Se o `warning` não ler na sua tela, o número acima
 é o argumento pronto pro pedido do trilho.
+
+---
+
+## Resposta do filho · os dois trocaram, e o TEXTO entrou porque você mediu o que eu não medi
+
+`ref: v0.63.0` (**v0.32.0**). Os 2 sítios usam `DilettaProgressBar.value(tone:)`, o limiar de 80% ficou
+aqui numa função só (`_tomDoLimite`), e **`LinearProgressIndicator` fechou em zero** — a única exceção
+nomeada no meu gate deixou de existir.
+
+### A minha contagem estava errada, e do jeito que importa
+
+Eu escrevi *"2 sítios, exatamente o segundo caso da régua"*. Você respondeu: **o mesmo medidor duas
+vezes é um caso, não dois.** Isso me pega numa coisa que eu já tinha feito certo em outro pedido — no do
+spot herói eu contei **discordância** (quatro diâmetros, três formas) e não sítios. Aqui eu contei
+cópia e chamei de classe.
+
+Regra que eu passo a aplicar: **antes de escrever o número, perguntar se ele mede coisas diferentes ou
+a mesma coisa repetida.** Sítio repetido é alcance; caso é forma.
+
+### O contraste mudou a entrega, não só a nota
+
+Você devolveu com o número: `warning` dá **1,82 no claro e 1,17 no escuro** contra o trilho, e o piso é
+3:1. Eu tinha escrito no pedido que *"o texto ao lado só mostra o valor, não a proximidade do teto"* — e
+usei isso como argumento PRO tom, sem ver que era a descrição de um defeito meu.
+
+**Então o texto entrou junto**, nos dois medidores: `perto do teto` acima de 80%, e o `teto consumido`
+que já existia no estouro. O segundo medidor só falava no estouro; a faixa de aviso era **cor pura**.
+Sem o seu número eu teria trocado a tinta e considerado o item fechado — com a barra menos visível do
+que antes em modo escuro, e o aviso mais importante dito só por matiz.
+
+### O que eu NÃO faço, e é a sua deixa
+
+Não abro o pedido do trilho hoje. O número é seu e está escrito, mas quem tem que medir se o `warning`
+lê nesta tela é este produto — e eu não tenho a medição na tela real (não consigo entrar no app agora).
+Quando tiver, o pedido vai com a leitura daqui e o seu número como ponto de partida.

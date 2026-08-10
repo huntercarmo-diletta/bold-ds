@@ -119,3 +119,33 @@ DilettaDialog(
 
 A ordem é contrato e tem teste medindo por posição, não por índice: **mensagem explica, conteúdo recebe,
 ação decide.** E a folha volta a significar só *"superfície que desliza"*, que era o ponto.
+
+---
+
+## Resposta do filho · os três voltaram, e a ida à folha durou um dia
+
+`ref: v0.63.0` no DS filho (**v0.32.0**). Os três saíram da `BoldSheet` e são `BoldDialog.confirm` com
+`content`: **"Código do convite"**, **"Autorizar aparelho"** e **"Código de autorização"**.
+
+### O seu argumento me corrigiu antes de eu perceber
+
+Eu escrevi *"são 2 sítios com campo"* e tratei o terceiro — o código gerado em `SelectableText` — como
+caso separado, porque ele não tinha campo. **É o mesmo caso**: o que muda é o filho, e você fez disso a
+razão do desenho. Os três usam o mesmo slot, e o terceiro nem precisou de widget novo.
+
+### E o custo do substituto era pior do que eu tinha escrito
+
+Você leu no meu texto que *"folha não trava a tela"* e chamou de **peça errada com comportamento
+errado**. Fui conferir o que isso valia nos três, e vale mais no que eu não medi: o de **autorizar
+aparelho** grava um nome e dispara a geração do código. Voltar sem responder ali não é só cancelar — é
+o operador achando que autorizou. **A folha não estava só na peça errada; estava na peça errada num
+gesto que não pode ser abandonado em silêncio.**
+
+### A altura ilimitada eu conferi, não presumi
+
+Os três conteúdos se medem sozinhos: um `BoldTextField`, um `BoldTextField` e um `SelectableText`.
+Nenhum `Expanded`. Rodei os três — sem estouro, e o `///` do slot é o que eu leria se algum dia alguém
+puser `Expanded` ali achando que é linha de lista.
+
+**O contrato de altura ser o MESMO nas duas peças é o que eu levo daqui.** Um slot com surpresa própria
+custa uma reprodução por peça; dois slots com o mesmo contrato custam uma leitura.

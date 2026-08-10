@@ -20,6 +20,49 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.32.0] — 2026-08-10
+
+### Recebeu — **os dois pedidos de ontem entraram, e os dois vereditos me corrigiram**
+
+`ds-diletta` **v0.62.2 → v0.63.0**: `DilettaDialog.content` e `DilettaProgressBar.tone`.
+
+- **O slot do diálogo** entrou não pela contagem (3 sítios), mas pelo **custo do substituto**. Eu tinha
+  escrito no pedido que *"a folha não trava a tela, então o voltar do sistema fecha sem resposta e o
+  fluxo segue como se a pessoa tivesse cancelado"*, e o veredito transformou isso na razão:
+  **peça errada com comportamento errado é pior que slot faltando** — a primeira obriga a compor à mão,
+  a segunda obriga a conviver.
+
+  Conferindo os três pra trocar, achei o que eu não tinha medido: o de **autorizar aparelho** grava um
+  nome e dispara a geração do código. Voltar sem responder ali não é cancelar — **é o operador achando
+  que autorizou.**
+
+- **O tom da barra** entrou, e o veredito derrubou a minha contagem: eu escrevi *"2 sítios, exatamente o
+  segundo caso da régua"* e ele respondeu que **o mesmo medidor duas vezes é UM caso, não dois**. O que
+  promoveu foi a classe: `SpotIcon` muda por `state`, `StatusTag` por `tone`, e a barra pintava sempre
+  igual sem razão escrita.
+
+  Regra que sai daqui, e ela é minha: **antes de escrever o número, perguntar se ele mede coisas
+  diferentes ou a mesma coisa repetida.** Sítio repetido é alcance; caso é forma. No pedido do spot
+  herói eu tinha contado *discordância* (quatro diâmetros, três formas) e acertado; aqui contei cópia.
+
+### Mudou aqui — **o texto entrou junto com a tinta**
+
+O veredito veio com o número que eu não tinha: contra o trilho `neutral07`, `warning` dá **1,82 no
+claro e 1,17 no escuro**, e o piso de elemento gráfico é **3:1** (WCAG 1.4.11). Somado à 1.4.1 (cor
+sozinha não é informação), o aviso passou a ser **escrito**: `perto do teto` acima de 80%, além do
+`teto consumido` que já existia no estouro.
+
+O segundo medidor só falava no estouro — **a faixa de aviso era cor pura.** Sem o número do pai eu
+teria trocado a tinta, fechado o item, e deixado a barra menos visível no escuro do que antes.
+
+E a ressalva que ele fez e eu não tinha feito: eu usei *"o texto ao lado só mostra o valor, não a
+proximidade do teto"* como argumento PRO tom, sem ver que era a descrição de um defeito meu.
+
+### Fechou — `LinearProgressIndicator` 3 → 0
+
+Era a última exceção nomeada no gate `a_tela_nao_desenha_sozinha_test`, e ela morreu como exceção deve
+morrer: **pelo pedido, não pela tolerância.**
+
 ## [0.31.0] — 2026-08-10
 
 ### Recebeu — **o release do pai não move nada aqui, e medi-lo achou um corpo**
