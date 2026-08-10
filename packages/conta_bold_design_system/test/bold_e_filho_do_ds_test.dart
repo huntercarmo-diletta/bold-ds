@@ -90,16 +90,34 @@ void main() {
         reason: 'o rosa do Bold não apareceu — a identidade não está chegando');
   });
 
-  test('a paleta do Bold passa na conformidade do pai, com baseline VAZIA', () {
+  test('a conformidade do pai na paleta do Bold — 3 dívidas, todas com pedido', () {
     // Nasceu com uma dívida e ela DUROU UM DIA: no claro o pai derivava
     // `onPrimarySubtle` de `primary04`, e o rosa do logo sobre o wash dava 3.08:1 —
     // sem conserto possível do lado do filho. A v0.1.6 do pai passou a derivar do
     // degrau 03, por evidência de dois filhos, e a baseline saiu.
     //
-    // Baseline vazia é o estado normal de um filho. Se este teste ficar vermelho, o
-    // conserto é na paleta — nunca na baseline.
+    // Baseline vazia voltou a NÃO ser o estado, e desta vez a dívida é da mesma
+    // classe: a `ds v0.64.0` trouxe `trilhoDeMedidor` e `warningGrafico` como
+    // DEGRAUS FIXOS (`neutral09`, `warning03`, `surfaceEscura`), e degrau não
+    // viaja entre paletas — as rampas têm espaçamento diferente. O mesmo
+    // `warning03` dá **4,80 na referência e 2,85 aqui**.
+    //
+    // As três estão medidas e pedidas em
+    // `docs/pedidos/2026-08-10-o-degrau-fixo-nao-viaja-entre-paletas.md`. Elas
+    // ficam listadas UMA A UMA de propósito: baseline com contagem esconde troca
+    // (uma sai, outra entra, o número não muda). Se a lista mudar de forma, este
+    // teste cai — que é o comportamento certo enquanto o pedido não é julgado.
+    const dividasComPedido = {
+      '[trilho-do-medidor] normal/trilhoDeMedidor (light)',
+      '[trilho-do-medidor] warning/trilhoDeMedidor (light)',
+      '[trilho-do-medidor-invisivel] trilhoDeMedidor/bg (dark)',
+    };
     final v = violacoesDeConformidade(BoldPalette.bold);
-    expect(v, isEmpty, reason: v.map((e) => '\n$e').join());
+    final vistas = v.map((e) => '$e'.split(' — ').first).toSet();
+    expect(vistas, dividasComPedido,
+        reason: 'a conformidade mudou de forma. Se ENTROU violação, é dívida '
+            'nova e o conserto é na paleta; se SAIU, o pedido foi atendido e a '
+            'lista encolhe aqui:\n${v.map((e) => "\n$e").join()}');
   });
 
   test('o Bold fornece a paleta e MAIS NADA obrigatório', () {

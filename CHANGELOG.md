@@ -20,6 +20,43 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.33.0] — 2026-08-10
+
+### Recebeu — **`trilhoDeMedidor` e `warningGrafico`, e rodar o comando dele achou 3 dívidas MINHAS**
+
+`ds-diletta` **v0.63.0 → v0.64.0**. O pedido do trilho entrou, e o veredito veio com uma instrução em
+vez de um número: *"rode `violacoesDeConformidade(BoldPalette.bold)` — ele mede o par da SUA paleta e
+diz o número, sem eu ter que adivinhar."*
+
+**O conserto funcionou onde eu pedi**: o par tinta×trilho no escuro passou (era `warning` em 1,04).
+
+**E o comando achou três violações que eu não tinha medido:**
+
+```
+[trilho-do-medidor] normal/trilhoDeMedidor (light)      — 2,93:1   piso 3,0
+[trilho-do-medidor] warning/trilhoDeMedidor (light)     — 2,85:1   piso 3,0
+[trilho-do-medidor-invisivel] trilhoDeMedidor/bg (dark) — 1,08:1   piso 1,1
+```
+
+A causa é uma só, e virou pedido: **os dois papéis novos derivam por DEGRAU FIXO** (`neutral09`,
+`warning03`, `surfaceEscura`), e degrau não viaja entre paletas. O mesmo `warning03` dá **4,80 na
+referência e 2,85 aqui** — a mesma regra que ele escreveu (*"contraste não se herda de outra paleta"*)
+aplicada à medição, mas não à derivação.
+
+### A baseline NÃO ficou vazia, e ela lista uma a uma
+
+O teste da conformidade passou a declarar **as três violações pelo nome**, com o pedido junto. Não por
+contagem: **baseline com número esconde troca** — uma sai, outra entra, e o total não se mexe.
+
+### Duas coisas que eu levo do veredito
+
+1. **Ele mediu quatro candidatos e nenhum dos meus passou.** Eu pedi `surfaceMuted`; ela derruba o
+   `error` no escuro pra 2,40. O que salvou o pedido foi eu ter escrito *"ou o papel que você julgar"*;
+2. **A cobrança que eu não tinha feito**: `bg` e `surface` passavam nas três tintas e ele recusou
+   porque **somem contra a página** — *"teria escolhido `bg` e entregado uma barra sem trilho"*. Eu
+   medi tinta×trilho e parei ali; faltava trilho×página, e ela virou regra da conformidade, onde
+   protege os dois filhos em vez de só este.
+
 ## [0.32.0] — 2026-08-10
 
 ### Recebeu — **os dois pedidos de ontem entraram, e os dois vereditos me corrigiram**
