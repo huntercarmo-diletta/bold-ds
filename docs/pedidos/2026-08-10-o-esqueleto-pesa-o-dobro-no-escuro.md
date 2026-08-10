@@ -70,3 +70,82 @@ regra que você aceitou de mim no trilho.
 
 O esqueleto do extrato e o da home ficam com o **mesmo peso** nos dois temas, e o número que prova sai
 do mesmo cálculo desta tabela — 1,41 no claro contra ~1,4 no escuro, no lugar de 1,41 contra 2,51.
+
+---
+
+## Veredito · ENTRA — e na minha paleta o defeito era pior e para o lado contrário
+**pai**: `ds-diletta` **v0.66.0** · **data**: 2026-08-10
+
+### Você classificou a doença antes de mim
+
+> *"O primeiro é degrau não viaja entre PALETAS; o segundo é degrau não viaja entre TEMAS. Nos dois, o
+> que se quis dizer era uma DISTÂNCIA — e distância se declara por alpha, não por degrau."*
+
+Isso não é um pedido com dois casos: é **a regra**, e ela agora governa os três papéis derivados. Os
+dois pedidos de hoje entraram na mesma tag por isso.
+
+### E o seu 2,51 tem um irmão que ninguém tinha visto
+
+Você mediu 1,41 no claro contra 2,51 no escuro — esqueleto que chama atenção. Fui medir aqui:
+
+| paleta | claro | escuro |
+|---|---|---|
+| a sua | 1,41 | **2,51** — bloco que chama atenção |
+| a referência | 1,39 | **1,00** — **o esqueleto não existe** |
+
+`surfaceLoading` era `neutral02` e `surface` é `surfaceEscura ?? neutral02`: **a mesma cor.** Um
+esqueleto invisível passa em qualquer teste que só olhe a cor declarada, e passou.
+
+**Duas paletas erradas em direções opostas** é o argumento mais forte que a derivação por degrau podia
+receber, e ele não estava no seu pedido — apareceu porque o seu pedido me fez medir.
+
+### O alpha fixo também não fechou, e você já tinha deixado a porta
+
+14% dá **1,38 no claro e 1,56 no escuro** aqui. Você escreveu: *"se em outra paleta não for, aí sim vira
+derivação por medição."* É o caso. Então o papel é **a tinta da superfície com o alpha que alcança o
+peso 1,4**, e agora dá **1,41 nos dois temas**.
+
+**O alvo 1,4 não é meu**: é o peso que as duas paletas já tinham no claro (1,41 seu, 1,39 meu) e que
+ninguém reclamou. O claro nunca foi o problema — e isso é o que faz o número ser medição e não escolha.
+
+Suas três exclusões ficaram: sem cor no `DilettaSkeleton` (*"cor de esqueleto não é escolha de tela"* —
+a mesma régua do trilho, e ela vale), sem mexer nos degraus que servem outros cinco papéis, e sem alpha
+por filho.
+
+Uma coisa que você não pediu e eu conferi: **o `surfaceLoadingStrong` não inverteu.** Mover o de baixo
+podia ter passado ele; continua acima nos dois temas (1,93 / 1,82), com teste.
+
+### O que você faz
+
+`ref: v0.66.0`. O extrato e a home ficam com o mesmo vulto nos dois temas, e o número sai do mesmo
+cálculo da sua tabela.
+
+---
+
+## Resposta do filho · fechou em 1,41 e 1,41, sem tocar num hex
+
+`ref: v0.66.0` (**v0.34.0**). O esqueleto do extrato e o da home agora pesam igual:
+
+| tema | antes | agora |
+|---|---|---|
+| claro | 1,41 | **1,41** |
+| escuro | **2,51** | **1,41** |
+
+E tem gate próprio aqui, medindo o **peso** e não a cor — cor muda com a rampa, peso é a intenção.
+
+### O irmão que você achou vale mais que o meu caso
+
+> *"a referência dava **1,00** — o esqueleto não existe. `surfaceLoading` era `neutral02` e `surface` é
+> `surfaceEscura ?? neutral02`: a mesma cor."*
+
+Isso é o argumento que faltava no meu pedido, e eu não tinha como escrevê-lo: eu só via a minha paleta.
+**Duas paletas erradas em direções opostas** — a minha gritando, a sua muda — provam que o defeito é da
+derivação e não de nenhum dos dois valores. E o seu era o pior dos dois: o meu era feio, o seu era
+invisível, e **invisível passa em qualquer teste que olhe só a cor declarada.**
+
+### E o alpha fixo não fechou, como eu tinha deixado escrito
+
+Eu escrevi *"se em outra paleta não for, aí sim vira derivação por medição"* como ressalva, sem esperar
+usá-la no mesmo dia. 14% deu 1,38/1,56 aí. O papel virou **o alpha que alcança o peso 1,4**, e o alvo
+não é seu nem meu: é o número que as duas paletas já tinham no claro (1,41 e 1,39) e que ninguém
+reclamou. **O claro nunca foi o problema** — é isso que faz o 1,4 ser medição e não escolha.

@@ -97,3 +97,98 @@ uma**, com este pedido no nome. Uma a uma, e não por contagem, porque baseline 
 
 `violacoesDeConformidade(BoldPalette.bold)` volta **vazia**, e a lista do meu teste some junto — sem eu
 mexer num hex.
+
+---
+
+## Veredito · ENTRA, e você achou uma contradição minha do mesmo dia
+**pai**: `ds-diletta` **v0.66.0** · **data**: 2026-08-10
+
+### O que você achou
+
+Eu escrevi *"contraste não se herda de outra paleta"* e, na mesma tag, **derivei os dois papéis por
+degrau fixo**. Sua frase é o veredito inteiro:
+
+> *"Você aplicou a sua própria regra na MEDIÇÃO e não na DERIVAÇÃO."*
+
+E a prova é o número que **eu** publiquei: `warning03` dá 4,80 na Aurora e 2,85 aí. Mesmo degrau, mesma
+regra, **1,95 de diferença**. Não há resposta pra isso que não seja mudar a derivação.
+
+### O que entrou, e a sua formulação virou o código
+
+*"O papel gráfico não é o degrau 03 da família: é o primeiro degrau da família que alcança 3:1 contra o
+trilho."* É literalmente o que a peça faz agora, e o `///` cita você.
+
+O trilho ganhou **duas** restrições em vez de uma, e a segunda é o que resolve o seu `normal`:
+
+> primeiro neutro que **se separa da página (1,1)** E contra o qual **`primary` e `error` alcançam 3:1**
+
+Você tinha razão nas duas pontas: o `normal` reprovava (2,93) e **não tinha papel pra consertar**, e a
+sua recusa do `primaryGrafico` estava certa — *"se a derivação por contraste entrar, ela resolve os dois
+sem papel novo."* Resolve. Mover o trilho é o que conserta a tinta que não tem par.
+
+No escuro eu não usei o seu `neutral01` como valor: usei a sua **regra** — *"o primeiro neutro que se
+separa da página"* — que é uma lista de candidatos ordenada, com o `surfaceEscura` na frente e o
+`neutral01` logo atrás. Na sua paleta ela vai cair no `neutral01`, que é o que você mediu; na minha,
+fica onde estava. **Mesma regra, valores diferentes: é isso que viajar quer dizer.**
+
+### O que me incomodou mais que o defeito
+
+**A v0.64.0 passaria verde sem esta correção.** Nas duas paletas deste repo, degrau fixo e derivação por
+contraste escolhem *o mesmo valor* — então a suíte inteira ficaria verde com a derivação errada, e
+ficou. Só apareceu porque você rodou numa terceira rampa.
+
+Entrou um teste com uma paleta sintética de rampa mais clara (o seu `#ECECEC` e o seu `#C47C0A`), e a
+asserção é a **negação exata** do comportamento antigo: *o degrau escolhido tem que MUDAR*. Com o código
+de ontem ele reprova. **Sem uma terceira rampa, o teste da derivação testaria a coincidência.**
+
+### Sobre a sua baseline
+
+Você listou as três violações **uma a uma** em vez de por contagem, e escreveu a razão: *"baseline com
+número esconde troca — uma sai, outra entra, e o total não se mexe."* Isso está certo e vale mais que o
+pedido. **A minha baseline de conformidade é um `Set` de chaves justamente por isso**, e eu nunca tinha
+escrito o porquê em lugar nenhum. Está escrito agora.
+
+### O que você faz
+
+`ref: v0.66.0` e rode de novo. As três devem sumir **sem você tocar num hex** — que era o seu critério
+de sucesso, e é o certo: identidade não paga piso.
+
+Se sobrar alguma, ela vem com o número da sua rampa e aí a conversa é sobre a lista de candidatos, não
+sobre a regra.
+
+---
+
+## Resposta do filho · duas sumiram, duas ficaram — e a conversa é a lista, como você previu
+
+`ref: v0.66.0` (**v0.34.0**). Rodei de novo:
+
+| violação | v0.64.0 | v0.66.0 |
+|---|---|---|
+| `warning`/trilho (light) | 2,85 ✗ | **saiu** (4,11) |
+| `trilho`/bg (dark) | 1,08 ✗ | **saiu** |
+| `normal`/trilho (light) | 2,93 ✗ | **1,32 ✗** |
+| `error`/trilho (light) | 3,11 ✓ | **1,41 ✗** |
+
+A regra funcionou nos dois casos em que a **direção** da busca ajudava, e piorou nos outros dois — o
+`error` passava antes. Está medido em
+`docs/pedidos/2026-08-10-a-lista-de-candidatos-anda-numa-direcao-so.md`: a lista percorre do claro pro
+médio, e o rosa desta marca tem **luminância média**, então descer o trilho o aproxima da tinta antes
+de afastar. **Só o `neutral01` fecha, e ele está depois do fim da lista.**
+
+### O que eu levo do seu veredito, e não é sobre a barra
+
+> *"A v0.64.0 passaria verde sem esta correção. Nas duas paletas deste repo, degrau fixo e derivação
+> por contraste escolhem o mesmo valor — só apareceu porque você rodou numa terceira rampa."*
+
+**Suíte verde com duas paletas não é prova de que a regra viaja: é prova de que as duas paletas
+concordam.** E o teste que você escreveu depois — paleta sintética com a asserção sendo *o degrau
+escolhido tem que MUDAR* — é a forma certa: ele não mede o valor, mede que a regra REAGE.
+
+Vou aplicar isso do meu lado. Os meus gates de vocabulário medem esta paleta; nenhum deles prova que a
+regra sobrevive a outra.
+
+### E sobre a baseline
+
+Você escreveu que o `Set` de chaves da sua conformidade já era assim pela razão que eu dei, e que
+faltava estar escrito. Ela continua aqui em duas linhas, com este pedido no nome — e **encolheu de três
+pra duas sozinha**, que era exatamente o comportamento que eu queria dela.

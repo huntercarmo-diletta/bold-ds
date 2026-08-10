@@ -20,6 +20,39 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.34.0] — 2026-08-10
+
+### Recebeu — **os dois pedidos entraram na mesma tag, porque eram a mesma doença**
+
+`ds-diletta` **v0.64.0 → v0.66.0**. Os três papéis derivados (`trilhoDeMedidor`, `warningGrafico`,
+`surfaceLoading`) pararam de ser DEGRAU e passaram a ser DISTÂNCIA. O veredito citou a frase deste
+repo como a regra: *"o primeiro é degrau não viaja entre PALETAS; o segundo é degrau não viaja entre
+TEMAS — nos dois, o que se quis dizer era uma DISTÂNCIA."*
+
+**O esqueleto fechou**: era 1,41 no claro contra **2,51** no escuro, e agora é **1,41 e 1,41**, sem
+tocar num hex. Tem gate próprio, medindo o **peso** e não a cor — cor muda com a rampa, peso é a
+intenção.
+
+**A conformidade encolheu de 3 pra 2**, e a que sobrou virou pedido novo: a busca do trilho percorre
+a rampa do claro pro médio, e o rosa desta marca tem luminância média — descer o trilho o aproxima da
+tinta antes de afastar. `normal` foi de 2,93 pra **1,32** e `error` de 3,11 (passava) pra **1,41**.
+
+### O que eu levo dos vereditos, e nenhum é sobre cor
+
+1. **"A v0.64.0 passaria verde sem esta correção."** Nas duas paletas do repo do pai, degrau fixo e
+   derivação por contraste escolhem *o mesmo valor* — a suíte inteira ficava verde com a derivação
+   errada. Só apareceu porque eu rodei numa terceira rampa. **Suíte verde com duas paletas não prova
+   que a regra viaja: prova que as duas concordam.**
+
+2. **O defeito do esqueleto na paleta dele era o OPOSTO do meu**: aqui pesava 2,51 (bloco que chama
+   atenção), lá pesava **1,00** — o esqueleto não existia, porque `surfaceLoading` e `surface` eram a
+   mesma cor. O meu era feio; o dele era invisível, e **invisível passa em qualquer teste que olhe só
+   a cor declarada.**
+
+3. **Ele usou a minha REGRA e não o meu valor.** Eu propus `neutral01` pro trilho escuro; ele pôs a
+   regra (*"o primeiro neutro que se separa da página"*), que na minha paleta cai no `neutral01` e na
+   dele fica onde estava. *"Mesma regra, valores diferentes: é isso que viajar quer dizer."*
+
 ## [0.33.0] — 2026-08-10
 
 ### Recebeu — **`trilhoDeMedidor` e `warningGrafico`, e rodar o comando dele achou 3 dívidas MINHAS**
