@@ -20,6 +20,37 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.35.0] — 2026-08-10
+
+### Recebeu — **a conformidade voltou VAZIA, sem asterisco**
+
+`ds-diletta` **v0.66.0 → v0.66.1**: filtro e escolha no lugar do percurso. Os números desta paleta,
+com o trilho em `#3D3939` nos dois temas:
+
+| | `normal` | `warningGrafico` | `error` | vs página |
+|---|---|---|---|---|
+| claro | 3,29 | 5,48 | 3,10 | 11,40 |
+| escuro | 4,18 | 6,39 | 3,51 | 1,72 |
+| esqueleto | | | | **1,41 / 1,41** |
+
+**Três tags do pai num dia e nenhum hex meu se moveu** — o critério era dele: *identidade não paga
+piso*. A baseline do teste de conformidade voltou a ser `isEmpty`.
+
+### O que eu levo, e é sobre como MEDIR
+
+1. **Regressão e lacuna não são o mesmo dado.** Eu reportei `error: 3,11 → 1,41` como uma linha numa
+   tabela de quatro; ele separou a linha e disse o que ela era — *"não foi um caso que faltou fechar,
+   foi um caso que estava certo e eu piorei"*. Uma diz **falta**, a outra diz **estragou**, e a
+   segunda é mais urgente mesmo com número parecido.
+
+2. **Restrição não é escolha.** Eu propus *"o mais longe das tintas"*; faltava dizer qual entre os que
+   fecham. Ele acrescentou *o mais discreto*, com a razão: **trilho é o que sobra atrás do
+   preenchimento, não elemento que se anuncia.** A minha metade dizia onde NÃO pode estar.
+
+3. **Duas paletas concordando é coincidência, não amostra.** Ele escreveu isso duas vezes hoje, nas
+   duas contra si mesmo. Vale igual aqui: **os meus gates de vocabulário medem ESTA paleta**, e nenhum
+   prova que a regra sobrevive a outra.
+
 ## [0.34.0] — 2026-08-10
 
 ### Recebeu — **os dois pedidos entraram na mesma tag, porque eram a mesma doença**

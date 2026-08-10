@@ -92,34 +92,26 @@ void main() {
         reason: 'o rosa do Bold não apareceu — a identidade não está chegando');
   });
 
-  test('a conformidade do pai na paleta do Bold — 2 dívidas, uma classe só', () {
-    // A `ds v0.66.0` trocou degrau por DISTÂNCIA nos três papéis derivados, e o
-    // resultado na minha paleta é o melhor tipo de resposta: **duas violações
-    // sumiram e uma trocou de tinta.**
+  test('a paleta do Bold passa na conformidade do pai, com baseline VAZIA', () {
+    // A BASELINE VOLTOU A SER VAZIA, e o caminho até aqui é a história de três
+    // tags em um dia — todas sem eu tocar num hex, que era o critério certo:
+    // identidade não paga piso.
     //
-    //   saiu  warning/trilho (light)        — a derivação do `warningGrafico`
-    //                                         achou o degrau que fecha (4,11)
-    //   saiu  trilho/bg (dark)              — o trilho escuro se separou da página
-    //   fica  normal/trilho (light)         — 2,93 → **1,32**
-    //   entra error/trilho (light)          — 3,11 → **1,41**
+    //   v0.64.0  3 violações  degrau fixo (`neutral09`, `warning03`)
+    //   v0.66.0  2 violações  derivação por CONTRASTE, percorrendo a rampa
+    //   v0.66.1  0            filtro + escolha, sem ordem de rampa
     //
-    // Os dois que ficam PIORARAM, e o número é o achado: a busca do trilho anda
-    // do claro pro médio (`neutral09 → neutral05`) e **o rosa desta marca tem
-    // luminância média**. Descer o trilho o aproxima da tinta antes de afastar —
-    // a curva não é monotônica, e a lista para no meio dela.
+    // O passo do meio é o que ensina: a derivação por contraste **piorou** dois
+    // casos, e um deles (`error`, 3,11 → 1,41) PASSAVA antes. A causa foi o
+    // percurso — ele supunha que o contraste com a tinta cresce ao descer a
+    // rampa, e o rosa desta marca tem luminância média, então descia do começo
+    // ao fim. A busca otimizou a única restrição que sabia percorrer e caminhou
+    // para dentro da tinta.
     //
-    // Medido e pedido em
-    // `docs/pedidos/2026-08-10-a-lista-de-candidatos-anda-numa-direcao-so.md`.
-    const dividasComPedido = {
-      '[trilho-do-medidor] normal/trilhoDeMedidor (light)',
-      '[trilho-do-medidor] error/trilhoDeMedidor (light)',
-    };
+    // Baseline vazia é o estado normal de um filho. Se este teste ficar
+    // vermelho, o conserto é na paleta — nunca na baseline.
     final v = violacoesDeConformidade(BoldPalette.bold);
-    final vistas = v.map((e) => '$e'.split(' — ').first).toSet();
-    expect(vistas, dividasComPedido,
-        reason: 'a conformidade mudou de forma. Se ENTROU violação, é dívida '
-            'nova e o conserto é na paleta; se SAIU, o pedido foi atendido e a '
-            'lista encolhe aqui:\n${v.map((e) => "\n$e").join()}');
+    expect(v, isEmpty, reason: v.map((e) => '\n$e').join());
   });
 
   test('o esqueleto pesa IGUAL nos dois temas — 1,41 e 1,41', () {
