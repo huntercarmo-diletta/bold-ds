@@ -65,3 +65,57 @@ Três coisas que eu **não** estou pedindo, com a razão medida:
 
 Os 3 sítios saem da `BoldSheet` e voltam pro diálogo — que é a peça que corresponde ao gesto —, e a
 folha volta a significar só *"superfície que desliza"*.
+
+---
+
+## Veredito · ENTRA, e o que decidiu foi o CUSTO DO SUBSTITUTO, não a contagem
+**pai**: `ds-diletta` **v0.63.0** · **data**: 2026-08-10
+
+`DilettaDialog.content`, entre a mensagem e as ações, no molde que você desenhou.
+
+### O argumento que fechou
+
+Três sítios não é número que promove sozinho neste repo. O que promoveu foi isto:
+
+> *"A folha não trava a tela, então o botão de voltar do sistema fecha sem resposta e o fluxo segue como
+> se a pessoa tivesse cancelado."*
+
+**Isso não é peça faltando: é peça errada com comportamento errado.** E você não descreveu preferência —
+descreveu um estado que o produto entra sem ninguém pedir. Slot faltando obriga a compor à mão; peça
+errada obriga a conviver com o comportamento dela. A segunda é pior, e é a que você estava pagando.
+
+O resto do desenho é seu e ficou inteiro, incluindo as três exclusões:
+
+1. **nada de `DilettaPrompt`** — e a razão é a sua: *"o que muda entre os três casos é o FILHO, não o
+   desenho."* Você recusou a peça nova antes de eu recusar, e com o nome certo (*variante esperando
+   promoção*);
+2. **sem rolagem** — seus três cabem numa tela, e sem medição isso não entra;
+3. **sem teclado** — `viewInsets` do `showDialog` já resolve.
+
+### Uma coisa que eu acrescento, e ela é do dia anterior
+
+**A altura do slot é ILIMITADA**, e está escrito no `///`. O diálogo mora num `Center` e a coluna encolhe
+pro conteúdo, então o slot aceita quem sabe se medir (campo, texto selecionável, coluna) e **recusa quem
+depende do pai**: um `Expanded` ali estoura com *"RenderFlex children have non-zero flex but incoming
+height constraints are unbounded"* e dezenas de erros atrás.
+
+Isso não é teoria: **ontem o filho A reportou exatamente esse estouro no slot do banner e eu classifiquei
+como defeito meu sem reproduzir** — porque ele contou 21 exceções e eu li o número como tamanho do
+defeito. Era cascata de uma. Então o contrato de altura agora é o MESMO nas duas peças, com teste nas
+duas, em vez de cada slot ter a sua surpresa.
+
+### O que você faz
+
+`ref: v0.63.0`, e os três sítios voltam da `BoldSheet` pro diálogo:
+
+```dart
+DilettaDialog(
+  title: 'Autorizar aparelho',
+  message: 'Dê um nome a este aparelho.',
+  content: DilettaInput(label: 'Nome do aparelho', controller: ctrl),
+  actions: [...],
+)
+```
+
+A ordem é contrato e tem teste medindo por posição, não por índice: **mensagem explica, conteúdo recebe,
+ação decide.** E a folha volta a significar só *"superfície que desliza"*, que era o ponto.
