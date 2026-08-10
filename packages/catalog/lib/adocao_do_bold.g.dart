@@ -15,6 +15,7 @@ const inventarioDoBold = InventarioDeAdocao(
       'confere em flutter test test/a_adocao_do_ds_tem_numero_test.dart',
   pecas: [
   PecaNaAdocao(nome: 'BoldAlert', alcance: 20, estado: EstadoDaAdocao.adotado),
+  PecaNaAdocao(nome: 'BoldAppListDayGroup', alcance: 1, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldAvatar', alcance: 4, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldAvatarRow', alcance: 3, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'BoldBottomApp', alcance: 43, estado: EstadoDaAdocao.adotado),
@@ -84,7 +85,6 @@ const inventarioDoBold = InventarioDeAdocao(
   PecaNaAdocao(nome: 'DilettaStatusTone', alcance: 16, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'DilettaThemeScope', alcance: 1, estado: EstadoDaAdocao.adotado),
   PecaNaAdocao(nome: 'DilettaToggleSwitch', alcance: 7, estado: EstadoDaAdocao.adotado),
-  PecaNaAdocao(nome: 'BoldAppListDayGroup', alcance: 1, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldFilterChip', alcance: 3, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldMenuTile', alcance: 4, estado: EstadoDaAdocao.lacuna),
   PecaNaAdocao(nome: 'BoldNoticeRow', alcance: 2, estado: EstadoDaAdocao.lacuna),
