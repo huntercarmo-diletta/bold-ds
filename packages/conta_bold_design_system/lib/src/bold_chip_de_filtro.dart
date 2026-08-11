@@ -1,36 +1,27 @@
-/// CONTA BOLD — o CHIP DE FILTRO. Terceira lacuna, e a que mais parece já existir.
+/// CONTA BOLD — o CHIP DE FILTRO: casca de uma linha sobre a variante do pai.
 ///
-/// Pílula selecionável: *Todos · Entradas · Saídas*. Seis arquivos do app, todos no extrato e nas
-/// folhas de filtro.
+/// Ele nasceu aqui em 11/08 porque a família de chips da linguagem não tinha o SELECIONÁVEL — o
+/// `filled` do `DilettaInputChip` fica no mesmo tom nos dois estados, porque marca *um filtro
+/// aplicado* numa fila de vários; este marca *A escolha* numa fila mutuamente exclusiva.
 ///
-/// ## Por que ele não é o `DilettaInputChip`
+/// O pedido entrou no mesmo dia (`ds v0.67.0`), e o pai achou uma coisa que eu não tinha como ver:
+/// **o desenho já tinha a variante há dois dias.** O `Input chips` do Figma declara
+/// `State: … Selected` desde 09/08; o código não tinha, e o mapa que liga os dois não perguntava.
 ///
-/// O chip do pai tem `filled`, e a distância entre `filled` e `selected` é o desenho inteiro:
+/// ## E ele me corrigiu num número, o que muda o que a coisa É
 ///
-/// | | não escolhido | escolhido |
-/// |---|---|---|
-/// | `DilettaInputChip` | superfície + borda | `primarySubtle` + label `primary` |
-/// | este | transparente + borda neutra + tinta forte | **`primary` cheio** + `onPrimary` |
+/// Eu citei **2.5.5** pros 44 do alvo de toque. **2.5.5 é AAA.** O mínimo AA é o **2.5.8** da WCAG
+/// 2.2, que pede **24×24** — e a pílula do `filled` tem exatamente 24. Ou seja: o chip que já
+/// existia **não falhava**; ele estava em cima do piso com margem zero, que nesta casa é a segunda
+/// pergunta do crivo e não é reprovar. Foi por isso que ele não mexeu naquele.
 ///
-/// O do pai fica no mesmo tom nos dois estados — ele marca *este filtro está aplicado* numa fila de
-/// filtros aplicados. Este INVERTE, porque ele vive numa fila onde exatamente um está escolhido e a
-/// leitura tem que ser instantânea. Cor sozinha também não decide: o peso do rótulo vai de 400 pra
-/// 600 junto.
-///
-/// Está pedido ao pai como variante `selecionavel` — o par que falta na família de chips. Enquanto
-/// não vem, mora aqui, que é onde o desenho do produto mora.
-///
-/// ## O alvo de toque é 44 e o desenho é 26, de propósito
-///
-/// WCAG 2.5.5. A pílula visível tem ~26px; o respiro vertical de 9 de cada lado leva a área de toque
-/// a 44 **sem inflar a pílula**. É a razão de o respiro estar por fora do `AnimatedContainer` e não
-/// dentro — invertê-los engorda o desenho e não muda o alvo.
+/// A variante nova entrega 44 com a pílula em 26, e o respiro FORA do desenho.
 library;
 
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
-/// A pílula de filtro.
+/// A pílula de filtro. O desenho é do pai; o que sobrou aqui é o nome do produto.
 class BoldChipDeFiltro extends StatelessWidget {
   const BoldChipDeFiltro(
     this.rotulo, {
@@ -44,44 +35,9 @@ class BoldChipDeFiltro extends StatelessWidget {
   final VoidCallback aoTocar;
 
   @override
-  Widget build(BuildContext context) {
-    final s = DilettaTheme.schemeOf(context);
-
-    return Semantics(
-      button: true,
-      selected: escolhido,
-      label: rotulo,
-      child: DilettaTappable(
+  Widget build(BuildContext context) => DilettaInputChip.selecionavel(
+        label: rotulo,
+        selecionado: escolhido,
         onTap: aoTocar,
-        child: DilettaDevInfo(
-          component: 'chipDeFiltro',
-          props: {'escolhido': '$escolhido'},
-          tokens: const ['radius.pill', 'type.bodySm', 'scheme.primary'],
-          child: Padding(
-            // Fora da pílula: ele é alvo de toque, não desenho. Ver o `///`.
-            padding: const EdgeInsets.symmetric(vertical: 9),
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 150),
-              padding: EdgeInsets.symmetric(
-                  horizontal: DilettaSpacing.s3 + 2, vertical: DilettaSpacing.s1),
-              decoration: BoxDecoration(
-                color: escolhido ? s.primary : const Color(0x00000000),
-                borderRadius: DilettaRadius.pillAll,
-                border: Border.all(color: escolhido ? s.primary : s.border),
-              ),
-              child: DilettaText(
-                rotulo,
-                style: DilettaType.bodySm.copyWith(
-                  // O peso acompanha a cor: cor sozinha não é informação, e a fila inteira muda
-                  // de tom quando o tema muda.
-                  fontWeight: escolhido ? FontWeight.w600 : FontWeight.w400,
-                  color: escolhido ? s.onPrimary : s.fg,
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+      );
 }

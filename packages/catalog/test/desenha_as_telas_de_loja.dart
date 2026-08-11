@@ -105,6 +105,24 @@ void main() {
         ));
         await t.pump(const Duration(milliseconds: 600));
 
+        // A ARTE PRECISA SER ESPERADA, e este é o defeito que a primeira leva desta ferramenta teve:
+        // a home saía SEM a cidade nos dois temas, e as outras quatro saíam com ela. Não era a tela —
+        // era a ordem. `AssetImage` decodifica FORA do relógio do teste, e a home é a primeira de
+        // cada laço; da segunda em diante a imagem já estava no cache e aparecia.
+        //
+        // Um artefato que mente sobre a primeira tela e acerta as outras quatro é pior que um que
+        // erra todas: ele passa por decisão de design. `precacheImage` dentro de `runAsync` é o que
+        // dá ao decodificador um relógio de verdade.
+        await t.runAsync(() async {
+          for (final arte in const [
+            AssetImage('assets/demo/cidade-claro.jpg'),
+            AssetImage('assets/demo/cidade-escuro.jpg'),
+          ]) {
+            await precacheImage(arte, chave.currentContext!);
+          }
+        });
+        await t.pump(const Duration(milliseconds: 600));
+
         await t.runAsync(() async {
           final limite = chave.currentContext!.findRenderObject()!
               as RenderRepaintBoundary;

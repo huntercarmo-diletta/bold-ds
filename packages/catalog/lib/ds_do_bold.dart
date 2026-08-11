@@ -2194,13 +2194,15 @@ BlockDef _grade() => BlockDef(
         if ('${p['colunas']}' == 'fileira') {
           return 'ds.DilettaFrame.row(gap: $vao, children: [${itens.join(', ')}])';
         }
-        // A FLUIDA embrulha um `Wrap` dentro do frame do pai, e o `Wrap` é do Flutter. É a mesma
-        // exceção declarada do divisor vertical (`SizedBox` pra dar o eixo): a linguagem não tem
-        // container de FLUXO — o que ela tem é linha e coluna. Está pedido ao pai; enquanto não vem,
-        // o container é do DS e o fluxo é do framework, escrito aqui em vez de escondido.
+        // A FLUIDA é `ds.DilettaFrame.flow`, e ela embrulhava um `Wrap` do Flutter até o pedido
+        // entrar (`ds v0.67.0`, no mesmo dia). O que o veredito acrescentou vale reter: o `Wrap`
+        // estava listado no `ENCAPSULAMENTO.md` do pai como *deixar cru — sem decisão estética*, e
+        // `Row`/`Column`/`Stack` também não carregam estética e têm wrapper. **O que o `DilettaFrame`
+        // encapsula nunca foi o eixo, é o RITMO** — e o `Wrap` precisa de DOIS ritmos, então ele era
+        // o caso mais forte da regra e não a exceção dela.
         if ('${p['colunas']}' == 'fluida') {
-          return 'ds.DilettaFrame.column(children: [Wrap(spacing: $vao'
-              ', runSpacing: $vao, children: [${itens.join(', ')}])])';
+          return 'ds.DilettaFrame.flow(gap: $vao, runGap: $vao'
+              ', children: [${itens.join(', ')}])';
         }
         return 'ds.DilettaFrame.column(gap: $vao, children: ['
             '${_emLinhas(itens, int.parse('${p['colunas']}'), vao).join(', ')}])';
@@ -2213,8 +2215,7 @@ Widget _gradeWidget(Map<String, Object?> p, List<Widget> itens) {
   final vao = _espaco('${p['vao']}');
   final colunas = int.tryParse('${p['colunas']}') ?? 0;
   if ('${p['colunas']}' == 'fluida') {
-    return DilettaFrame.column(
-        children: [Wrap(spacing: vao, runSpacing: vao, children: itens)]);
+    return DilettaFrame.flow(gap: vao, runGap: vao, children: itens);
   }
   if (colunas == 0) {
     return DilettaFrame.row(gap: vao, children: itens);
@@ -2563,6 +2564,10 @@ void configurarDsDoBold() {
       // pelas duas ações que ele carrega dentro. Ficam por último pela mesma razão da linha: eles
       // são saída de tela de MENU e de fila, não CTA ancorado de fluxo.
       (b) => b.type == 'ladrilhoDeMenu' ? '${b.props['rotulo'] ?? 'Atalho'}' : null,
+      // A LINHA DE VALOR é a saída do extrato: tocar um lançamento abre o detalhe dele. Ela ficou de
+      // fora até o extrato existir como tela — o gate `toda tela tem gatilho de saída` foi quem
+      // cobrou, e ele cobrou certo: uma tela que não leva a lugar nenhum é uma tela sem seta.
+      (b) => b.type == 'linhaDeValor' ? '${b.props['titulo'] ?? 'Lançamento'}' : null,
       (b) => b.type == 'cartaoDePedido'
           ? (b.props['jaAprovei'] == true ? 'Ver pedido' : 'Aprovar')
           : null,

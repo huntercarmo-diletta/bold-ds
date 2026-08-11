@@ -81,7 +81,7 @@ void main() {
         reason: 'espaço virou bloco — o ritmo é o contentGap');
   });
 
-  test('a seção CONSOME tem os SEIS campos, e é o conserto do pai medido daqui', () {
+  test('a seção CONSOME tem os seis campos, e é o conserto do pai medido daqui', () {
     // A v0.55.0 do motor consertou `leContratoDaTela`, que lia só `BoundRef` dentro de `props` e ignorava
     // o mapa `Block.bindings` — a forma que o compositor de verdade escreve. Resultado: CONSOME vazia pra
     // toda tela real, numa página recém-anunciada.
@@ -89,22 +89,32 @@ void main() {
     // Esta tela é escrita na representação do PRODUTOR, então ela é o caso de verdade. O gate fixa os cinco
     // campos: se a seção esvaziar de novo, isto falha aqui — no repo que tem a tela — e não no do pai, que
     // não tem nenhuma.
-    final c = leContratoDaTela(telasDoBold()[kSlugDaHome]!);
+    // A tela medida deixou de ser a HOME e passou a ser a REVISÃO DO PIX, e a troca é declarada: o
+    // dono pediu as telas de loja com dado mocado (*"vou usar esses prints"*), então as cinco de loja
+    // são literais de propósito. As de fluxo continuam vinculadas, e é nelas que o contrato vive.
+    //
+    // O gate não perdeu força com a troca — ele perderia se eu tivesse apagado a asserção. O que ele
+    // mede é `leContratoDaTela` lendo o mapa `Block.bindings`, e qualquer tela vinculada serve.
+    final c = leContratoDaTela(telasDoBold()[kSlugDaRevisaoDoPix]!);
 
     expect(c.dados.map((d) => '${d.campo} → ${d.bloco}.${d.prop}').toSet(), {
-      'nomeDoTitular → cabecalhoDaHome.nome',
-      'rotuloDaConta → cabecalhoDaHome.conta',
-      'saldoFormatado → saldo.valor',
-      'entradasDoMes → saldo.entradas',
-      'saidasDoMes → saldo.saidas',
-      // O sexto entrou com a home em alta fidelidade: a contagem de pendências é dado do backend, e
-      // deixar o "2" escrito seria o mock silencioso que o contrato de autoria existe pra impedir.
-      'pendenciasAbertas → linhaDeAviso.contagem',
+      'valorFormatado → valor.valor',
+      'nomeDoDestinatario → linha.titulo',
+      'documentoMascarado → linha.subtitulo',
+      'instituicao → linha.titulo',
+      'chavePix → linha.subtitulo',
+      'dataDoEnvio → linha.subtitulo',
     });
 
     // E as quatro notas, uma de cada tipo que o contrato distingue: o que se perde no handoff é caso de
     // borda e acessibilidade, e por isso os dois têm tipo próprio.
-    expect(c.notas.keys.toSet(), {'decisao', 'regra', 'borda', 'a11y'});
+    //
+    // Medidas na HOME e não na tela de cima: as duas asserções deste teste passaram a olhar telas
+    // diferentes porque elas medem coisas diferentes. Bindings vivem nas telas de FLUXO (a home é
+    // literal desde que virou tela de loja); as quatro espécies de nota vivem onde há mais decisão
+    // pra registrar, que é a home. Amarrar as duas na mesma tela era coincidência, não desenho.
+    expect(leContratoDaTela(telasDoBold()[kSlugDaHome]!).notas.keys.toSet(),
+        {'decisao', 'regra', 'borda', 'a11y'});
   });
 
   testWidgets('a HOME DESENHA, e no aperto de um telefone de 320', (t) async {
@@ -128,21 +138,19 @@ void main() {
     FlutterError.onError = anterior;
     t.takeException();
 
-    // UM resíduo, e ele é do PLACEHOLDER e não do componente.
+    // ZERO estouro, e este parágrafo é o que sobrou de um que se apagou sozinho.
     //
-    // As props vinculadas aparecem no preview como `{campo}`, e `{entradasDoMes}` + `{saidasDoMes}` são
-    // mais largos que qualquer dinheiro real: a fileira de pastilhas vaza 9,4px. Medido com valor de
-    // verdade — inclusive `R$ 1.234.567,89`, sete dígitos — o card **não vaza em nenhuma largura**, e o
-    // teste abaixo prova as duas metades.
+    // Ele explicava UM resíduo conhecido: as props vinculadas apareciam no preview como `{campo}`, e
+    // `{entradasDoMes}` + `{saidasDoMes}` são mais largos que qualquer dinheiro real — a fileira de
+    // pastilhas vazava 9,4px. O texto terminava com a instrução de quando removê-lo: *"0 aqui não é
+    // melhora — é a hora de apagar este parágrafo inteiro em vez de mantê-lo explicando um resíduo
+    // que não existe mais."*
     //
-    // Fica declarado em vez de silenciado porque quem abre o board VÊ a listra amarela, e isso é
-    // informação sobre a convenção do pai, não sobre este produto.
-    // EXATO em 1, e não `<= 1`: o resíduo é conhecido, documentado e tem causa (o placeholder do pai).
-    // O teto aceitava 0 em silêncio, e 0 aqui não é melhora — é sinal de que o placeholder mudou de
-    // largura ou o card parou de medir, e é a hora de apagar este parágrafo inteiro em vez de mantê-lo
-    // explicando um resíduo que não existe mais.
-    expect(erros.length, 1,
-        reason: 'estouro NOVO além do do placeholder, ou o resíduo do placeholder sumiu: ${erros.join(' | ')}');
+    // A hora chegou em 11/08: o dono pediu as telas de loja com **dado mocado** (*"vou usar esses
+    // prints"*), a home ficou literal, e o placeholder deixou de existir. O bloco de bindings não
+    // morreu — ele mora nas telas de fluxo, que continuam medindo o contrato.
+    expect(erros, isEmpty,
+        reason: 'estouro NOVO na home: ${erros.join(' | ')}');
 
     // O saldo é o que a tela existe pra mostrar. Com binding, o preview usa o PLACEHOLDER do pai
     // (`{saldoFormatado}`) — então o que se prova aqui é que o bloco chegou na árvore, não o valor.

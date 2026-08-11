@@ -20,6 +20,55 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.37.0] — 2026-08-11
+
+### Recebeu — `ds-diletta` **v0.66.1 → v0.67.0**, os dois pedidos do dia
+
+**`DilettaFrame.flow`.** A forma `fluida` do bloco `grade` deixou de embrulhar um `Wrap` do Flutter.
+O veredito trouxe uma correção no doc do próprio pai: o `Wrap` estava listado em *"deixar cru — sem
+decisão estética"*, e `Row`/`Column`/`Stack` também não têm estética e têm wrapper. **O que o frame
+encapsula nunca foi o eixo, é o RITMO** — e o `Wrap` precisa de dois.
+
+**`DilettaInputChip.selecionavel`.** O `BoldChipDeFiltro` virou casca de uma linha. Duas coisas
+saíram maiores que o chip: o desenho **já tinha a variante há dois dias** (`State: Selected` no
+Figma desde 09/08) e o mapa desenho↔código não perguntava — 23 de 39 pares na mesma situação.
+
+### Corrigido — eu estava errado sobre o alvo de toque, e o erro tem classe
+
+Eu citei **2.5.5** pros 44 do chip. **2.5.5 é AAA**; o mínimo AA é o **2.5.8** da WCAG 2.2, que pede
+**24×24** — e a pílula existente tem exatamente 24. Ou seja: o chip **não falhava**, estava em cima
+do piso com margem zero.
+
+É a mesma classe de erro que o pai me apontou em 10/08 sobre **regressão e lacuna**: dois estados
+diferentes com números parecidos, e o rótulo errado muda a urgência de quem lê.
+
+### As telas de loja foram REDESENHADAS contra o aparelho
+
+O dono comparou o que eu tinha desenhado com o app e disse o que era: *"não tem nada a ver."* Ele
+estava certo, e a causa não era uma só.
+
+**Ler o código dá o que a tela PODE mostrar; o print dá o que ela mostra.** A minha home tinha
+"Enviar para" e a linha de Autorizações porque o código as constrói — e o aparelho não tem nenhuma
+das duas, porque as seções somem sem dado. Menu, rótulos e valores vieram do print: `Minha conta`,
+`Cobrar` no lugar de `Autorizações`, `Letti` no lugar de `Lia`.
+
+### Corrigido — a ferramenta de desenho mentia sobre a PRIMEIRA tela
+
+A home saía sem a arte da cidade nos dois temas; as outras quatro saíam com ela. Não era a tela, era
+a ordem: `AssetImage` decodifica fora do relógio do teste, e a home é a primeira de cada laço — da
+segunda em diante a imagem já estava em cache.
+
+**Um artefato que mente sobre a primeira tela e acerta as outras quatro é pior que um que erra
+todas**: ele passa por decisão de design. Entrou `precacheImage` dentro de `runAsync`.
+
+### Aberto, com nome
+
+- **o gate do vocabulário mede o PREFIXO e precisa medir a substância.** Ele cobra que o bloco emita
+  algo que comece com `ds.`, e o `grade` com `colunas: 2` ainda emite `Row(children: [Expanded(…)])`
+  cru por dentro. O pai registrou no veredito (*"o caso concreto some, o buraco do gate não"*) e o
+  dono disse o mesmo por outro caminho: *"no catálogo não deve ter NADA fora do DS."*
+- **o topo da home é vidro na linguagem e não é nada no aparelho** — pedido aberto.
+
 ## [0.36.0] — 2026-08-11
 
 ### O pedido era screenshot de loja. Ele virou a maior auditoria de adoção deste repo.

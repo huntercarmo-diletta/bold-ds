@@ -106,13 +106,26 @@ void main() {
       await t.pump(const Duration(milliseconds: 50));
 
       final alvo = t.getSize(find.byType(BoldChipDeFiltro)).height;
-      final pilula = t.getSize(find.byType(AnimatedContainer)).height;
+      // A pílula é o `Container` de dentro do chip do pai; o alvo é a peça inteira. Medir os dois
+      // pelo mesmo `find` daria 44 nos dois e o teste passaria sem medir nada.
+      final pilula = t
+          .getSize(find
+              .descendant(
+                  of: find.byType(DilettaInputChip),
+                  matching: find.byType(Container))
+              .first)
+          .height;
 
-      // WCAG 2.5.5. O respiro mora FORA do container animado justamente pra que o alvo cresça e o
-      // desenho não — invertê-los passa num teste que só olhe o alvo.
+      // O número certo é **2.5.8** (WCAG 2.2, nível AA, 24×24), e não o 2.5.5 que eu tinha citado —
+      // 2.5.5 é AAA. A correção é do pai, e ela muda o que a coisa é: o chip `filled`, com 24
+      // cravados, **não falha** — ele está em cima do piso com margem zero.
+      //
+      // Esta variante entrega 44 porque o desenho dela pede, com o respiro FORA do desenho. Os dois
+      // números são medidos separados de propósito: pôr o respiro dentro engorda a pílula e não move
+      // o alvo, que é o erro fácil na direção contrária.
       expect(alvo, 44);
       expect(pilula, lessThan(30),
-          reason: 'a pílula engordou junto com o alvo: o respiro de 9 foi parar '
+          reason: 'a pílula engordou junto com o alvo: o respiro foi parar '
               'dentro do desenho');
     });
   });

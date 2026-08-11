@@ -17,27 +17,24 @@ const Map<String, String> kTelasDeLoja = {
   // pagou o preço mais visível de a adoção parar em 99%.
   'pf1-home': r'''
 {"formato":1,"name":"PF1 · Home","form":"phone","contentGap":"s5","scrollableContent":true,
-"top":[{"id":"b_1","type":"cabecalhoDaHome","props":{"nome":"Ranter","conta":"Conta PF"},"bindings":{"nome":"nomeDoTitular","conta":"rotuloDaConta"}}],
+"top":[{"id":"b_1","type":"cabecalhoDaHome","props":{"nome":"Ranter","conta":"Minha conta"}}],
 "blocks":[
-{"id":"b_2","type":"saldo","props":{"valor":"R$ 2.912,47","entradas":"R$ 4.180,00","saidas":"R$ 1.267,53","oculto":false},"bindings":{"valor":"saldoFormatado","entradas":"entradasDoMes","saidas":"saidasDoMes"}},
-{"id":"b_3","type":"cabecalhoDeSecao","props":{"rotulo":"Enviar para","verTodos":true}},
-{"id":"b_4","type":"fileiraDeAvatares","props":{"iniciais":"AM, BL, RS, CF","rotulos":"Ana, Bruno, Rita, Caio","subrotulos":"BOLD, Nubank, Itaú, Inter","adiciona":true}},
-{"id":"b_5","type":"linhaDeAviso","props":{"icone":"paperPlaneLight","titulo":"Autorizações","subtitulo":"Veja o que está esperando você.","contagem":"2"},"bindings":{"contagem":"pendenciasAbertas"}},
-{"id":"b_6","type":"cabecalhoDeSecao","props":{"rotulo":"Menu","verTodos":true}},
-{"id":"b_7","type":"grade","props":{"colunas":"2","vao":"s4"},"slots":{"itens":[
-  {"id":"b_8","type":"ladrilhoDeMenu","props":{"icone":"pixLight","rotulo":"Área Pix","porte":"largo"}},
-  {"id":"b_9","type":"ladrilhoDeMenu","props":{"icone":"arrowDownToLineLight","rotulo":"Receber","porte":"largo"}},
-  {"id":"b_10","type":"ladrilhoDeMenu","props":{"icone":"barcodeLight","rotulo":"Pagar contas","porte":"largo"}},
-  {"id":"b_11","type":"ladrilhoDeMenu","props":{"icone":"clipboardListCheckLight","rotulo":"Autorizações","porte":"largo"}}
+{"id":"b_2","type":"saldo","props":{"valor":"R$ 0,14","entradas":"R$ 2.925,49","saidas":"R$ 2.925,70","oculto":false}},
+{"id":"b_3","type":"cabecalhoDeSecao","props":{"rotulo":"Menu","verTodos":true}},
+{"id":"b_4","type":"grade","props":{"colunas":"2","vao":"s4"},"slots":{"itens":[
+  {"id":"b_5","type":"ladrilhoDeMenu","props":{"icone":"pixLight","rotulo":"Área Pix","porte":"largo"}},
+  {"id":"b_6","type":"ladrilhoDeMenu","props":{"icone":"arrowDownToLineLight","rotulo":"Receber","porte":"largo"}},
+  {"id":"b_7","type":"ladrilhoDeMenu","props":{"icone":"barcodeLight","rotulo":"Pagar contas","porte":"largo"}},
+  {"id":"b_8","type":"ladrilhoDeMenu","props":{"icone":"fileInvoiceDollarLight","rotulo":"Cobrar","porte":"largo"}}
 ]}},
-{"id":"b_12","type":"cartaoPromocional","props":{"titulo":"Habilite sua passkey","subtitulo":"Login sem senha, resistente a phishing.","fecha":true}}
+{"id":"b_9","type":"cartaoPromocional","props":{"titulo":"Habilite sua passkey","subtitulo":"Login sem senha, resistente a phishing.","fecha":true}}
 ],
-"bottom":[{"id":"b_13","type":"barraDeBaixo","props":{"variante":"nav","label":"","labelSecundario":"","abas":"Início:houseLight, Câmera:cameraLight, Lia:sparklesLightFull","abaAtiva":"0"}}],
+"bottom":[{"id":"b_10","type":"barraDeBaixo","props":{"variante":"nav","label":"","labelSecundario":"","abas":"Início:houseLight, Câmera:cameraLight, Letti:sparklesLightFull","abaAtiva":"0"}}],
 "notes":[
-{"kind":"decisao","text":"O saldo, o nome, o rótulo da conta e a contagem de pendências são BINDING e não texto. Placeholder escrito à mão vira mock silencioso — o dev copia o código e leva o valor fixo pro app."},
-{"kind":"regra","text":"O menu é 2×2 porque a home comporta QUATRO atalhos (`kHomeMenuSlots`), e a Área Pix é fixa no primeiro (`kHomeMenuMandatoryId`). Os outros três a pessoa escolhe na personalização."},
-{"kind":"borda","text":"Zero pendências: em conta PF a linha de aviso SOME; em PJ ela fica, mesmo zerada, porque governança é rotina ali e o atalho sumindo obrigava a caçar o item no menu."},
-{"kind":"a11y","text":"O olho de ocultar mora no cabeçalho e não no card de saldo: é ação de TELA, e ocultar cobre o saldo E os totais — meia máscara não esconde nada."}
+{"kind":"decisao","text":"Redesenhada contra o PRINT do aparelho, não contra a leitura do código. A primeira versão tinha \"Enviar para\" e a linha de Autorizações, e o aparelho não tem NENHUMA das duas: as seções da home somem quando não há dado, e esta conta não tem favorito nem pendência. Ler o código dá o que a tela PODE mostrar; o print dá o que ela mostra."},
+{"kind":"regra","text":"O menu é 2×2 porque a home comporta QUATRO atalhos (`kHomeMenuSlots`), e a Área Pix é fixa no primeiro (`kHomeMenuMandatoryId`). Os outros três a pessoa escolhe na personalização — no aparelho medido são Receber, Pagar contas e Cobrar."},
+{"kind":"borda","text":"Com favoritos, entra a fileira \"Enviar para\" logo abaixo do saldo; com pendência, entra a linha de Autorizações. Em conta PJ a linha fica mesmo zerada, porque governança é rotina ali."},
+{"kind":"a11y","text":"O olho de ocultar é o PRIMEIRO ícone da direita do cabeçalho, antes do sino, e não mora no card de saldo: é ação de tela. Ocultar cobre o saldo E os totais — meia máscara não esconde nada."}
 ]}
 ''',
 
@@ -50,30 +47,29 @@ const Map<String, String> kTelasDeLoja = {
 "blocks":[
 {"id":"b_2","type":"tituloDaPagina","props":{"titulo":"Para quem você vai transferir?","subtitulo":""}},
 {"id":"b_3","type":"campoDeBusca","props":{"placeholder":"Chave Pix, nome ou Pix copia e cola","acaoDireita":"qrcodeLight"}},
-{"id":"b_4","type":"cabecalhoDeSecao","props":{"rotulo":"Contatos","verTodos":true}},
-{"id":"b_5","type":"fileiraDeAvatares","props":{"iniciais":"AM, BL, RS, CF, LT","rotulos":"Ana, Bruno, Rita, Caio, Lia","subrotulos":"BOLD, Nubank, Itaú, Inter, C6","adiciona":true}},
-{"id":"b_6","type":"cabecalhoDeSecao","props":{"rotulo":"Menu","verTodos":false}},
-{"id":"b_7","type":"grade","props":{"colunas":"fluida","vao":"s2"},"slots":{"itens":[
-  {"id":"b_8","type":"ladrilhoDeMenu","props":{"icone":"arrowRightArrowLeftLight","rotulo":"Transferir","porte":"compacto"}},
-  {"id":"b_9","type":"ladrilhoDeMenu","props":{"icone":"qrcodeLight","rotulo":"Ler QR Code","porte":"compacto"}},
-  {"id":"b_10","type":"ladrilhoDeMenu","props":{"icone":"fileInvoiceLight","rotulo":"Cobrar","porte":"compacto"}},
-  {"id":"b_11","type":"ladrilhoDeMenu","props":{"icone":"cloneLight","rotulo":"Copia e cola","porte":"compacto"}},
-  {"id":"b_12","type":"ladrilhoDeMenu","props":{"icone":"arrowDownToLineLight","rotulo":"Depositar","porte":"compacto"}},
-  {"id":"b_13","type":"ladrilhoDeMenu","props":{"icone":"landmarkLight","rotulo":"Agência e conta","porte":"compacto"}}
+{"id":"b_4","type":"cabecalhoDeSecao","props":{"rotulo":"Menu","verTodos":false}},
+{"id":"b_5","type":"grade","props":{"colunas":"fluida","vao":"s2"},"slots":{"itens":[
+  {"id":"b_6","type":"ladrilhoDeMenu","props":{"icone":"arrowRightArrowLeftLight","rotulo":"Transferir","porte":"compacto"}},
+  {"id":"b_7","type":"ladrilhoDeMenu","props":{"icone":"qrcodeLight","rotulo":"Ler QR Code","porte":"compacto"}},
+  {"id":"b_8","type":"ladrilhoDeMenu","props":{"icone":"fileInvoiceLight","rotulo":"Cobrar","porte":"compacto"}},
+  {"id":"b_9","type":"ladrilhoDeMenu","props":{"icone":"cloneLight","rotulo":"Copia e cola","porte":"compacto"}},
+  {"id":"b_10","type":"ladrilhoDeMenu","props":{"icone":"arrowDownToLineLight","rotulo":"Depositar","porte":"compacto"}},
+  {"id":"b_11","type":"ladrilhoDeMenu","props":{"icone":"landmarkLight","rotulo":"Agência e conta","porte":"compacto"}}
 ]}},
-{"id":"b_14","type":"lista","props":{"titulo":"Outros","idioma":"menu"},"slots":{"itens":[
-  {"id":"b_15","type":"linha","props":{"icone":"keyLight","titulo":"Minhas chaves Pix","subtitulo":""}},
-  {"id":"b_16","type":"linha","props":{"icone":"arrowRotateLeftLight","titulo":"PIX Automático","subtitulo":""}},
-  {"id":"b_17","type":"linha","props":{"icone":"slidersLight","titulo":"Meus limites Pix","subtitulo":""}},
-  {"id":"b_18","type":"linha","props":{"icone":"userLight","titulo":"Contatos","subtitulo":""}},
-  {"id":"b_19","type":"linha","props":{"icone":"messagesQuestionLightFull","titulo":"Contestar transações Pix","subtitulo":""}}
+{"id":"b_12","type":"cabecalhoDeSecao","props":{"rotulo":"OUTROS","verTodos":false}},
+{"id":"b_13","type":"lista","props":{"titulo":"","idioma":"carded"},"slots":{"itens":[
+  {"id":"b_14","type":"linha","props":{"icone":"keyLight","titulo":"Minhas chaves Pix","subtitulo":""}},
+  {"id":"b_15","type":"linha","props":{"icone":"arrowRotateLeftLight","titulo":"PIX Automático","subtitulo":""}},
+  {"id":"b_16","type":"linha","props":{"icone":"slidersLight","titulo":"Meus limites Pix","subtitulo":""}},
+  {"id":"b_17","type":"linha","props":{"icone":"userLight","titulo":"Contatos","subtitulo":""}},
+  {"id":"b_18","type":"linha","props":{"icone":"messagesQuestionLightFull","titulo":"Contestar transações Pix","subtitulo":""}}
 ]}}
 ],
-"bottom":[{"id":"b_20","type":"barraDeBaixo","props":{"variante":"nav","label":"","labelSecundario":"","abas":"Início:houseLight, Câmera:cameraLight, Lia:sparklesLightFull","abaAtiva":"0"}}],
+"bottom":[],
 "notes":[
 {"kind":"decisao","text":"A busca e o QR são UMA linha, não dois blocos: o campo ocupa o que sobra e o botão vive ao lado. Declarar como blocos vizinhos empilharia o QR debaixo da busca, que não é o que a tela faz."},
-{"kind":"regra","text":"O menu compacto é 3 colunas porque o rótulo mais longo (\"Agência e conta\") precisa de duas linhas em 85 de largura. Em 2 colunas os ladrilhos ficariam largos demais pro que carregam."},
-{"kind":"borda","text":"Digitando: a tela troca contatos por RESULTADOS e, quando reconhece chave ou copia-e-cola, acende a CTA no rodapé. É o mesmo campo — o estado é da busca, não da tela."},
+{"kind":"regra","text":"O menu é FLUXO e não grade de colunas: os seis ladrilhos têm 85 de largura PRÓPRIA e quebram quando não cabem. Coluna com `Expanded` estica cada um pra um terço da tela, que é outro desenho — foi o argumento que fez o `DilettaFrame.flow` entrar na linguagem (`ds v0.67.0`)."},
+{"kind":"borda","text":"Sem favoritos a tela não tem a fileira de contatos, que é o estado do print. Com favoritos ela entra entre a busca e o Menu, com \"Ver todos\" no cabeçalho."},
 {"kind":"a11y","text":"O que não coube: a sugestão de COLAR do clipboard. O ícone dela é o `clipboard-list-check-light`, que diz *documento conferido* em 7 sítios do app e não corresponde a nada aqui — o conserto é o `clipboard-light`, pedido aceito e travado na arte."}
 ]}
 ''',
@@ -120,30 +116,26 @@ const Map<String, String> kTelasDeLoja = {
 {"formato":1,"name":"PF7 · Extrato","form":"phone","contentGap":"s4","scrollableContent":true,
 "top":[{"id":"b_1","type":"cascaDeTopo","props":{"titulo":"Extrato","esquerda":"voltar","direita":"fileInvoiceLight, eyeLight"}}],
 "blocks":[
-{"id":"b_2","type":"saldo","props":{"valor":"R$ 2.912,47","entradas":"R$ 4.180,00","saidas":"R$ 1.267,53","oculto":false},"bindings":{"valor":"saldoFormatado","entradas":"entradasDoMes","saidas":"saidasDoMes"}},
+{"id":"b_2","type":"saldo","props":{"valor":"R$ 0,14","entradas":"R$ 2.925,49","saidas":"R$ 2.925,70","oculto":false}},
 {"id":"b_3","type":"texto","props":{"conteudo":"Transações","preset":"headlineSm"}},
 {"id":"b_4","type":"campoDeBusca","props":{"placeholder":"Buscar","acaoDireita":"slidersLight"}},
-{"id":"b_5","type":"grade","props":{"colunas":"fileira","vao":"s2"},"slots":{"itens":[
-  {"id":"b_6","type":"chipDeFiltro","props":{"rotulo":"Tudo","escolhido":true}},
-  {"id":"b_7","type":"chipDeFiltro","props":{"rotulo":"Entradas","escolhido":false}},
-  {"id":"b_8","type":"chipDeFiltro","props":{"rotulo":"Saídas","escolhido":false}}
+{"id":"b_5","type":"grupoDoDia","props":{"rotulo":"Sexta","acessorio":"Saldo R$ 0,14"},"slots":{"itens":[
+  {"id":"b_6","type":"linhaDeValor","props":{"icone":"pixLight","titulo":"RANTER SOARES DO CARMO","origem":"Pix","hora":"06:12","valor":"R$ 634,00","saida":true}},
+  {"id":"b_7","type":"linhaDeValor","props":{"icone":"pixLight","titulo":"GRPQA LTDA","origem":"Pix","hora":"06:07","valor":"R$ 2.291,70","saida":true}}
 ]}},
-{"id":"b_9","type":"grupoDoDia","props":{"rotulo":"Hoje, 11 de agosto","acessorio":"R$ 2.912,47"},"slots":{"itens":[
-  {"id":"b_10","type":"linhaDeValor","props":{"icone":"pixLight","titulo":"Ana Maria Silva","origem":"Pix recebido","hora":"14:32","valor":"R$ 1.240,00","saida":false}},
-  {"id":"b_11","type":"linhaDeValor","props":{"icone":"barcodeLight","titulo":"Enel Distribuição","origem":"Boleto pago","hora":"11:07","valor":"R$ 318,44","saida":true}},
-  {"id":"b_12","type":"linhaDeValor","props":{"icone":"pixLight","titulo":"Bruno Lopes","origem":"Pix enviado","hora":"09:15","valor":"R$ 120,00","saida":true}}
+{"id":"b_8","type":"grupoDoDia","props":{"rotulo":"Quinta","acessorio":"Saldo R$ 2.925,84"},"slots":{"itens":[
+  {"id":"b_9","type":"linhaDeValor","props":{"icone":"arrowRightArrowLeftLight","titulo":"DILETTA APLICATIVOS E","origem":"Interno","hora":"18:47","valor":"R$ 2.925,49","saida":false}}
 ]}},
-{"id":"b_13","type":"grupoDoDia","props":{"rotulo":"Ontem, 10 de agosto","acessorio":"R$ 2.110,91"},"slots":{"itens":[
-  {"id":"b_14","type":"linhaDeValor","props":{"icone":"arrowRightArrowLeftLight","titulo":"Rita Souza","origem":"TED recebida","hora":"16:48","valor":"R$ 2.940,00","saida":false}},
-  {"id":"b_15","type":"linhaDeValor","props":{"icone":"mobileLight","titulo":"Recarga de celular","origem":"Recarga","hora":"08:22","valor":"R$ 30,00","saida":true}}
+{"id":"b_10","type":"grupoDoDia","props":{"rotulo":"24 de jul","acessorio":"Saldo R$ 0,35"},"slots":{"itens":[
+  {"id":"b_11","type":"linhaDeValor","props":{"icone":"pixLight","titulo":"RANTER SOARES DO CARMO","origem":"Pix","hora":"16:38","valor":"R$ 0,35","saida":false}}
 ]}}
 ],
-"bottom":[{"id":"b_16","type":"barraDeBaixo","props":{"variante":"nav","label":"","labelSecundario":"","abas":"Início:houseLight, Câmera:cameraLight, Lia:sparklesLightFull","abaAtiva":"0"}}],
+"bottom":[],
 "notes":[
 {"kind":"decisao","text":"O saldo é o MESMO componente da home, e não uma versão de extrato: quem abre o extrato veio do saldo, e um segundo desenho do mesmo número cria duas fontes de verdade visual."},
-{"kind":"regra","text":"N lançamentos no dia dão N-1 fios, E o dia de lançamento ÚNICO leva fio — ali ele fecha o grupo por baixo em vez de separar dois itens. Foi um print do dono que achou o defeito: a regra estava certa e a COR estava errada, branco a 12% cravado, invisível no claro."},
-{"kind":"borda","text":"Buscando ou com filtro ativo, a seção \"Próximos pagamentos\" some: agendado não é histórico, e mostrá-lo dentro de um filtro de período mente sobre o recorte."},
-{"kind":"a11y","text":"O chip escolhido inverte fundo E peso (400 → 600). Cor sozinha não é informação, e a fila inteira muda de tom entre os temas."}
+{"kind":"regra","text":"O rótulo do dia é o DIA DA SEMANA enquanto ele está na semana corrente (\"Sexta\", \"Quinta\") e vira data quando sai dela (\"24 de jul\"). O acessório à direita diz \"Saldo\" por extenso — é o consolidado DAQUELE dia, não do mês."},
+{"kind":"borda","text":"N lançamentos no dia dão N-1 fios, E o dia de lançamento ÚNICO leva fio — ali ele fecha o grupo por baixo. Foi um print do dono que achou o defeito: a regra estava certa e a COR estava errada, branco a 12% cravado, invisível no claro."},
+{"kind":"a11y","text":"A fila de filtros (Tudo · Entradas · Saídas) só existe com filtro ATIVO, e por isso não está aqui: ela nasce da folha de filtro. O chip escolhido inverte fundo E peso — cor sozinha não é informação."}
 ]}
 ''',
 
