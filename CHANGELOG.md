@@ -20,6 +20,41 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.38.0] — 2026-08-11
+
+### Corrigido — as TRÊS divergências que sobraram entre o desenho e o aparelho
+
+Todas as três apareceram comparando o PNG com o print, e nenhuma delas seria achada lendo código.
+
+**1 · a linha do extrato emitia uma fábrica que o app não usa.** O aparelho escreve `06:12 • Pix` e
+o bloco desenhava `Pix • 06:12`. A causa não era ordem de prop, era composição: o bloco emitia
+`DilettaAppListRow.transactionItem`, e o `grep` dessa fábrica neste produto dá **zero**. O extrato
+compõe `spotIcon(outline)` + `titleSubtitleSubtitle(subtitle: HORA, accessorySubtitle: método)` +
+`amount(cashIn/cashOut)`.
+
+**Uma fábrica com zero uso no produto é uma fábrica que o catálogo estava ensinando errado.** O bloco
+perdeu o `ctor`/`args` (a tabela lê `Ctor(args)`, e isto é composição de três acessórios) e ganhou
+entrada no leitor.
+
+**2 · o card de saldo mostrava `Extrato ›` dentro do extrato.** Quem já está lá não tem pra onde ir.
+O componente já sabia — atalho nulo esconde o link, e é requisito escrito no contrato dele desde que
+ele nasceu. O BLOCO é que cravava o callback. Virou prop.
+
+**3 · o fundo é por TELA e o gancho é por produto.** Este produto tem sete fundos e escolhe por tela:
+a aba Início pinta a arte, as outras abas mostram o secundário, a Área Pix crava sólido. O extrato
+com a cidade atrás **não é estilo, é a tela errada**.
+
+Pintar o fundo certo por fora não resolve: o `buildScreenLayout` pinta o gancho por dentro e vence.
+Está pedido ao motor; enquanto não vem, `fundoDaTelaEmFoco` — variável mutável de biblioteca, que é
+exatamente o que este repo evita, **declarada com prazo** no `///` dela.
+
+### O que fica da rodada
+
+As três divergências tinham a mesma forma: **o componente estava certo e a DECLARAÇÃO estava
+errada.** O contrato do saldo já exigia o atalho opcional; o extrato do app já compunha a linha; a
+regra do fundo já estava escrita num comentário do shell há meses. Nenhuma das três era uma peça
+faltando — as três eram o catálogo dizendo uma coisa que o produto não diz.
+
 ## [0.37.0] — 2026-08-11
 
 ### Recebeu — `ds-diletta` **v0.66.1 → v0.67.0**, os dois pedidos do dia

@@ -7,6 +7,27 @@
 /// como nota — divergência declarada é melhor que divergência silenciosa.
 library;
 
+/// O FUNDO DE CADA TELA, e por que ele mora aqui e não na spec.
+///
+/// O gancho do motor é `fundoDoFrame(BuildContext)` — **um por produto**, sem saber qual tela está
+/// desenhando. Isso valia enquanto todo mundo tinha o mesmo fundo; não vale mais, e o aparelho é
+/// quem diz: a Área Pix declara `BoldBackdrop.solido` no próprio `build`, e o shell das abas pinta
+/// o fundo SECUNDÁRIO (sólido + brilho) — só a aba Início pinta a arte por cima, e é ela que faz a
+/// skyline ser o efetivo de quem nunca escolheu.
+///
+/// O extrato e a aprovação com a cidade atrás não é estilo: **é a tela errada.**
+///
+/// Está pedido ao motor (`o fundo é por TELA e o gancho é por produto`). Enquanto não vem, o mapa
+/// vive ao lado das telas com a regra escrita — e ele é DERIVADO dela, não uma escolha nova:
+/// quem pinta a própria arte é a home; quem herda o shell é o resto.
+const Map<String, bool> kArteNaTela = {
+  'pf1-home': true,   // a aba Início pinta o próprio fundo, e o default dele é a skyline
+  'pf5-pix-hub': false, // `BoldBackground(estilo: BoldBackdrop.solido)`, cravado na tela
+  'pf6-conta': true,  // rota empilhada com `BoldBackground()` sem estilo: vale a escolha da pessoa
+  'pf7-extrato': false, // aba do shell, transparente: mostra o fundo secundário
+  'pj2-aprovacao': true, // rota empilhada com `BoldBackground()` sem estilo
+};
+
 const Map<String, String> kTelasDeLoja = {
   // ── HOME ────────────────────────────────────────────────────────────────────
   // Medida em `home_tab_redesign.dart`. A ordem é a do app: cabeçalho com saudação, saldo, "Enviar
@@ -116,7 +137,7 @@ const Map<String, String> kTelasDeLoja = {
 {"formato":1,"name":"PF7 · Extrato","form":"phone","contentGap":"s4","scrollableContent":true,
 "top":[{"id":"b_1","type":"cascaDeTopo","props":{"titulo":"Extrato","esquerda":"voltar","direita":"fileInvoiceLight, eyeLight"}}],
 "blocks":[
-{"id":"b_2","type":"saldo","props":{"valor":"R$ 0,14","entradas":"R$ 2.925,49","saidas":"R$ 2.925,70","oculto":false}},
+{"id":"b_2","type":"saldo","props":{"valor":"R$ 0,14","entradas":"R$ 2.925,49","saidas":"R$ 2.925,70","oculto":false,"atalhoDoExtrato":false}},
 {"id":"b_3","type":"texto","props":{"conteudo":"Transações","preset":"headlineSm"}},
 {"id":"b_4","type":"campoDeBusca","props":{"placeholder":"Buscar","acaoDireita":"slidersLight"}},
 {"id":"b_5","type":"grupoDoDia","props":{"rotulo":"Sexta","acessorio":"Saldo R$ 0,14"},"slots":{"itens":[
@@ -132,7 +153,7 @@ const Map<String, String> kTelasDeLoja = {
 ],
 "bottom":[],
 "notes":[
-{"kind":"decisao","text":"O saldo é o MESMO componente da home, e não uma versão de extrato: quem abre o extrato veio do saldo, e um segundo desenho do mesmo número cria duas fontes de verdade visual."},
+{"kind":"decisao","text":"O saldo é o MESMO componente da home, e não uma versão de extrato — mas SEM o atalho \"Extrato ›\": quem já está no extrato não tem pra onde ir. O componente já sabia (atalho nulo esconde o link, e é requisito escrito no contrato dele); o bloco é que cravava o callback e o board mostrava um link que o aparelho não mostra."},
 {"kind":"regra","text":"O rótulo do dia é o DIA DA SEMANA enquanto ele está na semana corrente (\"Sexta\", \"Quinta\") e vira data quando sai dela (\"24 de jul\"). O acessório à direita diz \"Saldo\" por extenso — é o consolidado DAQUELE dia, não do mês."},
 {"kind":"borda","text":"N lançamentos no dia dão N-1 fios, E o dia de lançamento ÚNICO leva fio — ali ele fecha o grupo por baixo. Foi um print do dono que achou o defeito: a regra estava certa e a COR estava errada, branco a 12% cravado, invisível no claro."},
 {"kind":"a11y","text":"A fila de filtros (Tudo · Entradas · Saídas) só existe com filtro ATIVO, e por isso não está aqui: ela nasce da folha de filtro. O chip escolhido inverte fundo E peso — cor sozinha não é informação."}

@@ -98,6 +98,31 @@ Block _bloco(String expr) {
     );
   }
 
+  // 2a-bis · A LINHA DE VALOR, que saiu da tabela quando parou de emitir a fábrica do pai.
+  //
+  // Ela compõe TRÊS acessórios (`spotIcon` + `titleSubtitleSubtitle` + `amount`), e a tabela lê
+  // `Ctor(args)` — composição de acessórios não cabe. A volta lê cada um pelo argumento dele, e o
+  // sinal de entrada/saída vem do MEMBRO do `DilettaAmount`, que é onde ele mora no código.
+  if (ehCtor(expr, 'ds.DilettaAppListRow') &&
+      expr.contains('titleSubtitleSubtitle') &&
+      expr.contains('DilettaAmount')) {
+    return Block(id: _novoId(), type: 'linhaDeValor', props: {
+      'icone': RegExp(r'DilettaIcons\.(\w+)').firstMatch(expr)?.group(1) ?? 'pixLight',
+      // `argStringEm` ancora no nome do ARGUMENTO e não no do construtor — ele procura
+      // `\bnome\s*:`. Então a âncora é `middle:` e `right:`, que são os acessórios, e não
+      // `titleSubtitleSubtitle` ou `DilettaAmount`. Foi o que me custou uma rodada aqui.
+      //
+      // `subtitle` não casa dentro de `accessorySubtitle` porque o `\b` exige fronteira de palavra
+      // antes, e ali vem uma letra.
+      'titulo': argStringEm(expr, 'middle', 'title') ?? '',
+      'hora': argStringEm(expr, 'middle', 'subtitle') ?? '',
+      'origem': argStringEm(expr, 'middle', 'accessorySubtitle') ?? '',
+      'valor': argStringEm(expr, 'right', 'value') ?? '',
+      // O sinal mora no MEMBRO do amount (`cashOut`/`cashIn`), que é onde ele vive no código.
+      'saida': expr.contains('cashOut'),
+    });
+  }
+
   // 2b · O GRUPO DO DIA, que é a segunda coleção com filhos deste vocabulário. Mesma razão da lista e
   // mesma recursão: os lançamentos voltam por `_bloco`, então a `linhaDeValor` é lida pela tabela de
   // graça. O que ele tem a mais é o acessório — que no código é um `DilettaText` inteiro, e volta

@@ -14,6 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+import 'telas_de_loja.dart';
+
 /// FERRAMENTA: desenha cada tela num PNG pra alguém OLHAR.
 ///
 /// A suíte inteira passar não é a mesma coisa que a tela estar certa — o divisor invisível do
@@ -74,6 +76,11 @@ void main() {
         t.view.devicePixelRatio = 2.0;
         addTearDown(t.view.reset);
 
+        // Ver `fundoDaTelaEmFoco`: o gancho do motor é por produto, e o fundo é por tela.
+        fundoDaTelaEmFoco =
+            kArteNaTela[slug] == false ? BoldBackdrop.solido : null;
+        addTearDown(() => fundoDaTelaEmFoco = null);
+
         final chave = GlobalKey();
         await t.pumpWidget(RepaintBoundary(
           key: chave,
@@ -91,7 +98,9 @@ void main() {
                 return ColoredBox(
                   color: s.bg,
                   child: Stack(children: [
-                    // O gancho devolve `Widget?` (nem todo DS tem fundo); aqui ele sempre tem.
+                    // O fundo é o do GANCHO, e quem escolhe qual é `fundoDaTelaEmFoco`, declarado
+                    // antes de montar. Pintar um segundo fundo aqui não resolvia: o
+                    // `buildScreenLayout` pinta o gancho por dentro, e ele vencia.
                     Positioned.fill(
                         child: Ds.fundoDoFrame(ctx) ?? const SizedBox()),
                     buildScreenLayout(_semBindings(telasDoBold()[slug]!),

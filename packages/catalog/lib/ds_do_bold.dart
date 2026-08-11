@@ -379,18 +379,27 @@ BlockDef _linha() => BlockDef(
 /// A LINHA DE VALOR — a do extrato e a do comprovante: ícone, título, origem, hora e o valor com
 /// sinal. Separada da linha de menu porque o acessório da direita é outro (valor, não seta), e o pai
 /// já expõe as duas como fábricas distintas.
+/// A LINHA DE VALOR do extrato — e ela emitia uma fábrica que o app NÃO usa.
+///
+/// Achado comparando o desenho com o print do aparelho: o app escreve `06:12 • Pix` e este bloco
+/// desenhava `Pix • 06:12`. A causa não era ordem de prop, era **composição**: o bloco emitia
+/// `DilettaAppListRow.transactionItem`, e o `grep` de `transactionItem` neste produto dá **zero**.
+///
+/// O extrato compõe a linha genérica do pai com três acessórios:
+///
+/// - **esquerda** `spotIcon` na variante `outline`, e não o ícone cheio da fábrica;
+/// - **meio** `titleSubtitleSubtitle`, com a HORA no subtítulo e o método no acessório — que é o que
+///   inverte a leitura. A razão é do produto e está escrita lá: *"título = quem enviou/recebeu; linha
+///   de baixo = hora • método"*, e sem contraparte a linha mostra só a hora;
+/// - **direita** `DilettaRightAccessory.amount` com os membros `cashIn`/`cashOut` do `DilettaAmount`,
+///   que é o vocabulário de valor do pai — o chip verde da entrada e o menos neutro da saída.
+///
+/// **Uma fábrica com zero uso no produto é uma fábrica que o catálogo estava ensinando errado.** O
+/// bloco perdeu o `ctor`/`args` (a tabela do motor lê `Ctor(args)`, e isto é composição de três
+/// acessórios) e ganhou entrada no leitor, como a lista e a grade.
 BlockDef _linhaDeValor() => BlockDef(
       type: 'linhaDeValor',
       acoes: const {'onTap': 'aoTocarNaLinha'},
-      ctor: 'ds.DilettaAppListRow.transactionItem',
-      args: const {
-        'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
-        'titulo': Arg.texto('title'),
-        'origem': Arg.texto('source'),
-        'hora': Arg.texto('time'),
-        'valor': Arg.texto('amount'),
-        'saida': Arg.bool('negative'),
-      },
       label: 'Linha de valor · AppListRow',
       props: {
         'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
@@ -403,27 +412,38 @@ BlockDef _linhaDeValor() => BlockDef(
       defaults: () => {
         'icone': 'pixLight',
         'titulo': 'Ana Maria Silva',
-        'origem': 'Pix enviado',
+        'origem': 'Pix',
         'hora': '14:32',
-        'valor': 'R\$ 120,00',
+        'valor': r'R$ 120,00',
         'saida': true,
       },
-      build: (p) => DilettaAppListRow.transactionItem(
-        icon: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
-        title: '${p['titulo']}',
-        source: '${p['origem']}',
-        time: '${p['hora']}',
-        amount: '${p['valor']}',
-        negative: p['saida'] == true,
+      build: (p) => DilettaAppListRow(
+        left: DilettaLeftAccessory.spotIcon(
+          type: DilettaSpotType.outline,
+          icon: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
+        ),
+        middle: DilettaMiddleAccessory.titleSubtitleSubtitle(
+          title: '${p['titulo']}',
+          subtitle: '${p['hora']}',
+          accessorySubtitle: _vazio(p['origem']) ? null : '${p['origem']}',
+        ),
+        right: DilettaRightAccessory.amount(
+          p['saida'] == true
+              ? DilettaAmount.cashOut(value: '${p['valor']}')
+              : DilettaAmount.cashIn(value: '${p['valor']}'),
+        ),
         onTap: () {},
       ),
-      codegen: (p) => 'ds.DilettaAppListRow.transactionItem('
-          'icon: ds.DilettaIcons.${p['icone']}'
-          ', title: ${_str(p['titulo'])}'
-          ', source: ${_str(p['origem'])}'
-          ', time: ${_str(p['hora'])}'
-          ', amount: ${_str(p['valor'])}'
-          '${p['saida'] == true ? '' : ', negative: false'}'
+      codegen: (p) => 'ds.DilettaAppListRow('
+          'left: ds.DilettaLeftAccessory.spotIcon('
+          'type: ds.DilettaSpotType.outline'
+          ', icon: ds.DilettaIcons.${p['icone']})'
+          ', middle: ds.DilettaMiddleAccessory.titleSubtitleSubtitle('
+          'title: ${_str(p['titulo'])}, subtitle: ${_str(p['hora'])}'
+          '${_vazio(p['origem']) ? '' : ', accessorySubtitle: ${_str(p['origem'])}'})'
+          ', right: ds.DilettaRightAccessory.amount('
+          '${p['saida'] == true ? 'ds.DilettaAmount.cashOut' : 'ds.DilettaAmount.cashIn'}'
+          '(value: ${_str(p['valor'])}))'
           ', onTap: aoTocarNaLinha)',
     );
 
@@ -1877,25 +1897,32 @@ BlockDef _saldo() => BlockDef(
         'entradas': PropDef('text', bindable: true, dartType: 'String'),
         'saidas': PropDef('text', bindable: true, dartType: 'String'),
         'oculto': PropDef('bool'),
+        // O ATALHO é prop porque ele SOME numa tela: no extrato o card não tem "Extrato ›", e a
+        // razão é do produto — quem já está no extrato não tem pra onde ir. O componente já sabia
+        // fazer isso (`aoAbrirExtrato` nulo esconde o atalho, e é requisito escrito no contrato);
+        // o que faltava era o bloco declarar. Ele cravava o callback e o board mostrava um link
+        // que o aparelho não mostra.
+        'atalhoDoExtrato': PropDef('bool'),
       },
       defaults: () => {
         'valor': 'R\$ 2.912,47',
         'entradas': 'R\$ 300,00',
         'saidas': 'R\$ 120,00',
         'oculto': false,
+        'atalhoDoExtrato': true,
       },
       build: (p) => BoldSaldo(
         valor: '${p['valor']}',
         entradas: _vazio(p['entradas']) ? null : '${p['entradas']}',
         saidas: _vazio(p['saidas']) ? null : '${p['saidas']}',
         oculto: p['oculto'] == true,
-        aoAbrirExtrato: () {},
+        aoAbrirExtrato: p['atalhoDoExtrato'] == false ? null : () {},
       ),
       codegen: (p) => 'ds.BoldSaldo(valor: ${_str(p['valor'])}'
           '${_vazio(p['entradas']) ? '' : ', entradas: ${_str(p['entradas'])}'}'
           '${_vazio(p['saidas']) ? '' : ', saidas: ${_str(p['saidas'])}'}'
           '${p['oculto'] == true ? ', oculto: true' : ''}'
-          ', aoAbrirExtrato: abrirExtrato)',
+          '${p['atalhoDoExtrato'] == false ? '' : ', aoAbrirExtrato: abrirExtrato'})',
     );
 
 BlockDef _seloQuantico() => BlockDef(
@@ -2596,13 +2623,13 @@ void configurarDsDoBold() {
     // HOME — 114 usos, o componente mais usado do produto — aparecia sem cidade.
     //
     // A arte é DEMO deste catálogo (cópia reduzida da do app), e está declarada como tal no `pubspec`.
-    fundoDoFrame: (ctx) => const BoldBackdropScope(
+    fundoDoFrame: (ctx) => BoldBackdropScope(
       // `estilo` é obrigatório no scope: ele é a personalização que o app faz uma vez. `imagem` é o
       // default do produto e é o fundo da home.
-      estilo: BoldBackdrop.imagem,
-      arteClara: AssetImage('assets/demo/cidade-claro.jpg'),
-      arteEscura: AssetImage('assets/demo/cidade-escuro.jpg'),
-      child: BoldBackground(child: SizedBox.expand()),
+      estilo: fundoDaTelaEmFoco ?? BoldBackdrop.imagem,
+      arteClara: const AssetImage('assets/demo/cidade-claro.jpg'),
+      arteEscura: const AssetImage('assets/demo/cidade-escuro.jpg'),
+      child: const BoldBackground(child: SizedBox.expand()),
     ),
     // Fica declarado também: o motor usa o `Color?` quando o widget está ausente, e é o que
     // pinta a cor por trás do próprio backdrop.
@@ -2796,6 +2823,24 @@ void configurarDsDoBold() {
     ),
   ));
 }
+
+/// O FUNDO DA TELA EM FOCO — e ele é uma variável global, o que é uma dívida declarada.
+///
+/// O gancho do motor é `fundoDoFrame(BuildContext)`: **um por produto**, sem saber qual tela está
+/// desenhando. Isso valia enquanto todo mundo tinha o mesmo fundo, e não vale mais — o aparelho é
+/// quem diz. A Área Pix declara `BoldBackdrop.solido` no próprio `build`; o shell das abas pinta o
+/// fundo SECUNDÁRIO e só a aba Início pinta a arte por cima.
+///
+/// **O extrato com a cidade atrás não é estilo, é a tela errada.**
+///
+/// Está pedido ao motor (`o fundo é por TELA e o gancho é por produto`). Enquanto não vem, quem
+/// desenha uma tela específica declara aqui antes de montar e limpa depois. Nulo = o default do
+/// produto, que é a arte.
+///
+/// Variável mutável de biblioteca é exatamente o que este repo evita, e ela está aqui **com prazo**:
+/// ela morre no dia em que o gancho receber a tela. Escrever isso é o que impede que ela vire
+/// paisagem.
+BoldBackdrop? fundoDaTelaEmFoco;
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // 3 · OS AUXILIARES

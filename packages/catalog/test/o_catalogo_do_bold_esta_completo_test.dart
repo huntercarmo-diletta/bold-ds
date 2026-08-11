@@ -275,7 +275,14 @@ void main() {
       expect(codigo, contains("title: 'Ajuda'"));
       expect(codigo, contains('ds.DilettaAppListRow.menuItem('));
       // Escapado, e é o certo: `'R$ 90,00'` em Dart é interpolação. O pai consertou na v0.38.1.
-      expect(codigo, contains(r"amount: 'R\$ 90,00'"));
+      //
+      // O nome do argumento mudou de `amount:` pra `value:` em 11/08, e não foi renome: a linha de
+      // valor parou de emitir `DilettaAppListRow.transactionItem` — uma fábrica com ZERO uso neste
+      // produto — e passou a compor os três acessórios que o extrato do app compõe. O valor agora
+      // mora no `DilettaAmount.cashOut(value:)`, que é o vocabulário de dinheiro do pai.
+      expect(codigo, contains(r"value: 'R\$ 90,00'"));
+      expect(codigo, contains('ds.DilettaAmount.cashOut('),
+          reason: 'o sinal da transação vive no MEMBRO do amount, não num bool solto');
 
       final volta = ler(codigo).blocks.single;
       expect(volta.type, 'lista');

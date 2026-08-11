@@ -70,6 +70,8 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [a família de chips não tem o SELECIONÁVEL](pedidos/2026-08-11-a-familia-de-chips-nao-tem-o-selecionavel.md) | **ENTRA** — e duas coisas maiores que o chip: **o desenho já tinha a variante há dois dias** (`State: Selected` no Figma desde 09/08) e o mapa que liga desenho e código não perguntava — 23 de 39 pares na mesma situação. E ele me corrigiu num número que muda o diagnóstico: **2.5.5 é AAA; o mínimo AA é 2.5.8, 24×24**, então o chip existente não falhava — estava em cima do piso | **ds v0.67.0** · adotado na v0.37.0 |
 | [o topo da home é vidro, e no aparelho ele não é nada](pedidos/2026-08-11-o-topo-da-home-e-vidro-e-no-aparelho-ele-nao-e.md) | aberto | o `filled` do `DilettaInputChip` fica no MESMO tom nos dois estados, porque ele marca *um filtro aplicado* numa fila de vários. O selecionável INVERTE (fundo `primary`, tinta `onPrimary`), porque marca *A escolha* numa fila exclusiva. Duas coisas junto: o peso vai de 400 a 600 (cor sozinha não é informação) e o alvo de toque é 44 com a pílula em 26 |
 
+| [o fundo é por TELA e o gancho é por produto](pedidos/2026-08-11-o-fundo-e-por-tela-e-o-gancho-e-por-produto.md) | aberto | pro MOTOR. Achado comparando com o aparelho: metade das telas tinha o fundo errado, e errado do jeito que passa por decisão de design. Este produto escolhe o fundo por TELA — a aba Início pinta a arte, as outras abas mostram o secundário, a Área Pix crava sólido. Pintar por fora não resolve: o `buildScreenLayout` pinta o gancho por dentro e vence |
+
 ## O que os pais me mandaram
 
 | aviso | tipo | respondido? |
