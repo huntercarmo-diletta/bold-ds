@@ -66,6 +66,9 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 | [o avatar do produto é vidro, e a inicial é token](pedidos/2026-08-03-o-avatar-do-produto-e-vidro-e-a-inicial-e-token.md) | **ENTRAM os dois** — a inicial virou ESCADA e o avatar lê o `cardDeVidro` que eu já declarava | **ds v0.37.0** · adotado aqui na v0.13.0 |
 | [a integração não tem página, e eu tenho duas fontes](pedidos/2026-08-06-a-integracao-nao-tem-pagina-e-eu-tenho-duas-fontes.md) | **ENTRA** — e quem fez entrar foi o PRIMEIRO FILHO, que já mantinha uma aba `Integração` de 997 linhas à mão: a conta de consumidores já era dois, e só o pai podia ver isso. Duas frases minhas viraram `assert` (deliberado sem razão não constrói · alcance 0 não constrói) e a casca virou CLASSIFICAÇÃO em vez de coluna | **motor v0.86.0** · adotado aqui na v0.15.0 do catálogo |
 
+| [a linguagem tem linha e coluna e não tem FLUXO](pedidos/2026-08-11-a-linguagem-tem-linha-e-coluna-e-nao-tem-fluxo.md) | aberto | **3 sítios medidos**, e o do Pix fecha o argumento: 6 ladrilhos de 85 fixos num frame de 393 — `.row` estoura e coluna-de-`Row`s ESTICA cada um pra um terço da tela, que é outro desenho. Enquanto isso o meu bloco `grade` embrulha um `Wrap` do Flutter, e a exceção custa mais que a do divisor vertical: **o meu gate de vocabulário passa pelo prefixo `ds.` e não pela substância** |
+| [a família de chips não tem o SELECIONÁVEL](pedidos/2026-08-11-a-familia-de-chips-nao-tem-o-selecionavel.md) | aberto | o `filled` do `DilettaInputChip` fica no MESMO tom nos dois estados, porque ele marca *um filtro aplicado* numa fila de vários. O selecionável INVERTE (fundo `primary`, tinta `onPrimary`), porque marca *A escolha* numa fila exclusiva. Duas coisas junto: o peso vai de 400 a 600 (cor sozinha não é informação) e o alvo de toque é 44 com a pílula em 26 |
+
 ## O que os pais me mandaram
 
 | aviso | tipo | respondido? |
