@@ -53,6 +53,25 @@ export 'src/bold_cabecalho_da_home.dart';
 export 'src/bold_contratos.dart';
 export 'src/bold_copiar.dart';
 export 'src/bold_escada_de_alcadas.dart';
+
+/// AS QUATRO LACUNAS, e as duas que estavam do lado errado da fronteira.
+///
+/// Elas entraram juntas porque a causa é uma só: o dono pediu quatro telas em alta fidelidade pro
+/// catálogo, e **as quatro paravam aqui**. `BoldMenuTile`, `BoldFilterChip`, `BoldNoticeRow` e
+/// `BoldPromoCard` eram as quatro últimas peças marcadas como LACUNA no inventário de adoção
+/// (alcance 4, 3, 2 e 2); a fileira de avatares e o grupo do dia já eram adotados, mas moravam em
+/// `app-newbold/lib/design_system/` — e o catálogo consome o PACOTE, nunca o app.
+///
+/// São duas classes de defeito diferentes com o mesmo sintoma: **peça que não dá pra desenhar em
+/// lugar nenhum**. A régua que saiu daqui: adotada e alcançável não são a mesma coisa.
+export 'src/bold_cartao_da_conta.dart';
+export 'src/bold_cartao_de_pedido.dart';
+export 'src/bold_cartao_promocional.dart';
+export 'src/bold_chip_de_filtro.dart';
+export 'src/bold_fileira_de_avatares.dart';
+export 'src/bold_grupo_do_dia.dart';
+export 'src/bold_ladrilho_de_menu.dart';
+export 'src/bold_linha_de_aviso.dart';
 export 'src/bold_resumo_da_transacao.dart';
 export 'src/bold_saldo.dart';
 export 'src/bold_segmentos.dart';

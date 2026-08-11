@@ -20,6 +20,67 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.36.0] — 2026-08-11
+
+### O pedido era screenshot de loja. Ele virou a maior auditoria de adoção deste repo.
+
+O dono pediu quatro telas em alta fidelidade pro catálogo — home, Área Pix, Gestão da conta e
+extrato — e depois a de aprovação. **As cinco travaram no mesmo lugar**: peças que só existiam
+dentro do aparelho.
+
+A frase dele é a régua desta versão: *"era pra tudo estar no catálogo porque era pra tudo estar no
+DS."*
+
+### Adicionado — **oito componentes**, e eles são três dívidas diferentes
+
+| peça | o que era | alcance no app |
+|---|---|---|
+| `BoldLadrilhoDeMenu` | **lacuna** — `BoldMenuTile`, sem par na linguagem | 4 |
+| `BoldChipDeFiltro` | **lacuna** — `BoldFilterChip` | 3 |
+| `BoldLinhaDeAviso` | **lacuna** — `BoldNoticeRow` | 2 |
+| `BoldCartaoPromocional` | **lacuna** — `BoldPromoCard` | 2 |
+| `BoldFileiraDeAvatares` | adotada, **do lado errado da fronteira** | 3 |
+| `BoldGrupoDoDia` | adotada, do lado errado da fronteira | 1 |
+| `BoldCartaoDaConta` | **classe privada dentro de uma tela** (`_AccountHeader`) | 1 |
+| `BoldCartaoDePedido` | classe privada dentro de uma tela (`_PendingCard`) | 1 |
+
+As quatro primeiras eram as **últimas lacunas** do inventário de adoção. As outras quatro não
+apareciam em inventário nenhum, e é aí que está a lição:
+
+1. **adotada e alcançável não são a mesma coisa.** A fileira de avatares compunha o `DilettaAvatar`
+   do pai desde 08/08 e ainda assim não podia ser desenhada, porque morava em
+   `app-newbold/lib/design_system/` — e o catálogo consome o PACOTE, nunca o app;
+2. **widget privado que a tela constrói é invisível pra qualquer gate.** É a quarta classe de dívida
+   que este repo achou, e a única que nenhuma varredura via: peça órfã, classe pública morta e
+   widget privado não construído aparecem em `grep`; widget privado COM uso não aparece em nada.
+
+Os oito têm contrato escrito (`kBoldSpecs` foi de 12 para 19, com o teto de ~30 ainda de pé) e gate
+próprio nas bordas que importam.
+
+### Corrigido — **o saldo oculto sumia quando era baixo**
+
+Print do dono: saldo de R$ 0,14 com o olho fechado mostrava só `R$`. A largura reservada era a do
+valor REAL, e isso só funciona enquanto ele for mais largo que a máscara — `R$ ••••••` não é.
+
+O contrato do `saldo` já exigia isso desde que foi escrito (*"SHALL manter a mesma largura do valor
+visível"*), e o gate media com `R$ 2.912,47` — um exemplo do lado confortável da desigualdade.
+**Um exemplo testa o exemplo.** Agora a largura é o máximo dos dois estados, e o gate mede no valor
+curto, com controle no valor longo.
+
+### Corrigido — o ladrilho compacto estourava 4 pixels
+
+Consequência da mudança de casa: `BoldType.tileLabel` (10/12) não existe na escada do pai e virou
+`labelSm` (11/16) — duas linhas passaram de 24 para 32, e o cartão de 80 recebeu 84. O respiro do
+compacto foi de 12 para 8, que também dá mais 8 de largura pro rótulo.
+
+O degrau de 10px saiu porque tinha **um usuário só**, e um degrau com um usuário não é escada.
+
+### Corrigido — o progresso de aprovação estourava o cartão em 85 pixels
+
+Dentro do `BoldCartaoDePedido` ele vai na forma compacta, e o afastamento do prazo é `spaceBetween` e
+não `Spacer`: `Spacer` é `Expanded`, então ele disputava o espaço livre com o `Flexible` do progresso
+meio a meio. **Espaçador que compete com conteúdo** é a causa mais silenciosa de estouro num `Row`.
+
 ## [0.35.0] — 2026-08-10
 
 ### Recebeu — **a conformidade voltou VAZIA, sem asterisco**

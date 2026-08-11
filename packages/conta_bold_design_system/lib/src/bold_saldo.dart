@@ -20,6 +20,8 @@
 /// produto, não detalhe: esconder o saldo e deixar as entradas visíveis não esconde nada.
 library;
 
+import 'dart:math' as math;
+
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
@@ -177,16 +179,22 @@ class _ValorComLarguraReservada extends StatelessWidget {
   final String mostrado;
   final TextStyle estilo;
 
+  double _largura(String texto) => (TextPainter(
+        text: TextSpan(text: texto, style: estilo),
+        textDirection: TextDirection.ltr,
+        maxLines: 1,
+      )..layout())
+          .width;
+
   @override
   Widget build(BuildContext context) {
-    final medida = TextPainter(
-      text: TextSpan(text: valor, style: estilo),
-      textDirection: TextDirection.ltr,
-      maxLines: 1,
-    )..layout();
-
+    // A largura é a do MAIOR dos dois, e não a do valor real. Reservar só o
+    // valor funciona enquanto a máscara for mais estreita que ele — e ela não é:
+    // `R$ ••••••` é mais larga que `R$ 0,14`, então o saldo baixo ocultava
+    // sumia, cortado dentro do próprio `SizedBox`. O que se quer aqui é que o
+    // card NÃO MEXA ao virar o olho, e isso é o máximo dos dois estados.
     return SizedBox(
-      width: medida.width,
+      width: math.max(_largura(valor), _largura(mostrado)),
       child: DilettaText(mostrado, style: estilo, maxLines: 1),
     );
   }

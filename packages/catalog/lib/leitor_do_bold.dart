@@ -74,6 +74,64 @@ Block _bloco(String expr) {
     );
   }
 
+  // 2a · A GRADE, que é o outro container com filhos. Ela tem DUAS formas no código — `.column` de
+  // `Row`s (colunas fixas) e `.row` direto (fileira) — e a volta distingue pela presença do
+  // `Expanded`, que é o que a forma de colunas usa e a fileira não.
+  if (ehCtor(expr, 'ds.DilettaFrame.column') || ehCtor(expr, 'ds.DilettaFrame.row')) {
+    final fileira = ehCtor(expr, 'ds.DilettaFrame.row');
+    final colunas = fileira
+        ? 'fileira'
+        : '${'Expanded(child:'.allMatches(expr).length ~/ _linhasNoCodigo(expr)}';
+    return Block(
+      id: _novoId(),
+      type: 'grade',
+      props: {
+        'colunas': colunas,
+        'vao': RegExp(r'DilettaSpacing\.(s\d)').firstMatch(expr)?.group(1) ?? 's4',
+      },
+      slots: {
+        'itens': [
+          for (final item in _dentroDosExpanded(expr))
+            if (item.isNotEmpty) _bloco(item),
+        ],
+      },
+    );
+  }
+
+  // 2b · O GRUPO DO DIA, que é a segunda coleção com filhos deste vocabulário. Mesma razão da lista e
+  // mesma recursão: os lançamentos voltam por `_bloco`, então a `linhaDeValor` é lida pela tabela de
+  // graça. O que ele tem a mais é o acessório — que no código é um `DilettaText` inteiro, e volta
+  // como o texto dele.
+  if (ehCtor(expr, 'ds.BoldGrupoDoDia')) {
+    final itens = primeiraListaDeChildren(expr);
+    return Block(
+      id: _novoId(),
+      type: 'grupoDoDia',
+      props: {
+        'rotulo': argString(expr, 'rotulo') ?? '',
+        'acessorio': argStringEm(expr, 'DilettaText', '') ?? '',
+      },
+      slots: {
+        'itens': [
+          for (final item in separaNoTopo(itens ?? ''))
+            if (semConst(item.trim()).isNotEmpty) _bloco(semConst(item.trim())),
+        ],
+      },
+    );
+  }
+
+  // A FILEIRA DE AVATARES: três listas paralelas de literais, e a tabela lê argumento escalar. Mesmo
+  // caso das abas e dos segmentos, três vezes — por isso `_rotulos` ganhou o parâmetro do argumento
+  // em vez de continuar pegando o PRIMEIRO `[...]` da expressão, que aqui seria sempre as iniciais.
+  if (ehCtor(expr, 'ds.BoldFileiraDeAvatares')) {
+    return Block(id: _novoId(), type: 'fileiraDeAvatares', props: {
+      'iniciais': _rotulos(expr, argumento: 'iniciais'),
+      'rotulos': _rotulos(expr, argumento: 'rotulos'),
+      'subrotulos': _rotulos(expr, argumento: 'subrotulos'),
+      'adiciona': expr.contains('aoAdicionar'),
+    });
+  }
+
   // 3 · Os dois blocos cujo DADO não cabe em argumento literal:
   //
   // - a escada recebe uma lista de degraus, que no código gerado é uma variável da tela (`degrausDaAlcada`).
@@ -156,10 +214,54 @@ Block _bloco(String expr) {
   return Block(id: _novoId(), type: 'cru', props: {'codigo': expr});
 }
 
+/// Quantas `Row` a grade tem no código — o denominador de "quantos `Expanded` por linha".
+///
+/// Zero vira 1 de propósito: a divisão por zero de uma grade sem linha nenhuma daria erro, e o que
+/// se quer dali é uma coluna, não uma exceção.
+int _linhasNoCodigo(String expr) {
+  final quantas = 'Row(children:'.allMatches(expr).length;
+  return quantas == 0 ? 1 : quantas;
+}
+
+/// Os blocos de dentro dos `Expanded` (forma de colunas) ou os filhos diretos (fileira).
+///
+/// A célula vazia do fim (`const Expanded(child: SizedBox())`) sai aqui: ela é preenchimento de
+/// grade, não item — devolvê-la faria a volta ganhar um bloco que ninguém declarou.
+List<String> _dentroDosExpanded(String expr) {
+  final lista = primeiraListaDeChildren(expr) ?? '';
+  final itens = <String>[];
+  for (final bruto in separaNoTopo(lista)) {
+    var item = semConst(bruto.trim());
+    if (item.isEmpty) continue;
+    if (item.startsWith('SizedBox(width:') || item.startsWith('SizedBox(height:')) continue;
+    if (item.startsWith('Row(')) {
+      itens.addAll(_dentroDosExpanded(item));
+      continue;
+    }
+    if (item.startsWith('Expanded(')) {
+      final dentro = RegExp(r'^Expanded\(child:\s*(.*)\)$', dotAll: true)
+          .firstMatch(item)
+          ?.group(1)
+          ?.trim();
+      if (dentro == null || dentro == 'SizedBox()') continue;
+      item = semConst(dentro);
+    }
+    itens.add(item);
+  }
+  return itens;
+}
+
 /// Os rótulos de uma lista curta (`const ['a', 'b']`) de volta como texto separado por vírgula, que é
-/// como o editor guarda. Vale pras abas e pros segmentos.
-String _rotulos(String expr) {
-  final lista = RegExp(r'\[(.*?)\]', dotAll: true).firstMatch(expr)?.group(1) ?? '';
+/// como o editor guarda. Vale pras abas, pros segmentos e pras três listas da fileira de avatares.
+///
+/// Sem [argumento] pega a PRIMEIRA lista da expressão, que é o que abas e segmentos precisam — eles
+/// têm uma só. Com ele, pega a lista daquele argumento nomeado: a fileira tem três, e a primeira
+/// seria sempre as iniciais.
+String _rotulos(String expr, {String? argumento}) {
+  final padrao = argumento == null
+      ? RegExp(r'\[(.*?)\]', dotAll: true)
+      : RegExp('$argumento:\\s*(?:const\\s*)?\\[(.*?)\\]', dotAll: true);
+  final lista = padrao.firstMatch(expr)?.group(1) ?? '';
   return RegExp(r"'([^']*)'")
       .allMatches(lista)
       .map((m) => m.group(1)!)

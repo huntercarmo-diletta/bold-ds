@@ -35,6 +35,22 @@ const Map<String, String> kBoldSpecs = {
   'escadaDeAlcadas': _escadaDeAlcadas,
   'progressoDeAprovacao': _progressoDeAprovacao,
   'prazoDaPendencia': _prazoDaPendencia,
+  // As seis que atravessaram a fronteira, em 11/08. Quatro eram LACUNA no inventário de adoção e
+  // duas eram peças adotadas que moravam dentro do app — invisíveis pro catálogo, que consome o
+  // pacote. O teto declarado lá em cima (~30 contratos) segue de pé: são 18.
+  'ladrilhoDeMenu': _ladrilhoDeMenu,
+  'linhaDeAviso': _linhaDeAviso,
+  'chipDeFiltro': _chipDeFiltro,
+  'cartaoPromocional': _cartaoPromocional,
+  'fileiraDeAvatares': _fileiraDeAvatares,
+  'grupoDoDia': _grupoDoDia,
+  // As duas que eram classe PRIVADA dentro de uma tela — a quarta classe de dívida deste repo, e a
+  // mais silenciosa: widget privado que a tela CONSTRÓI é invisível pra qualquer varredura.
+  'cartaoDaConta': _cartaoDaConta,
+  'cartaoDePedido': _cartaoDePedido,
+  // A grade não é componente — é o container de linha que a gramática `top/blocks/bottom` não
+  // tinha. Ela tem contrato pelo mesmo motivo que os outros: sem ele a aba desenha nome e para.
+  'grade': _grade,
 };
 
 const _seloQuantico = r'''
@@ -510,3 +526,336 @@ Estado de ESPERA (sem prazo, ou prazo largo) SHALL sair no tom `pending`; prazo 
 ela está esperando. A tinta de `pending` é a mesma da neutra de propósito (o relógio é o estado), então
 a regra é sobre DECLARAÇÃO e não sobre pixel.
 ''';
+
+const _ladrilhoDeMenu = r'''
+## Purpose
+
+O ladrilho do menu: vidro, ícone em cima, rótulo embaixo, tudo alinhado à esquerda. É a peça do menu
+2×2 da home, da grade compacta da Área Pix e dos atalhos do login recorrente.
+
+## Guidelines
+
+### Quando usar
+Numa GRADE de destinos equivalentes, onde a pessoa escolhe um. Destino único ou destino com
+subtítulo é linha de lista, não ladrilho.
+
+### Faça
+- escolha o porte pela grade, não pelo gosto: `compacto` para ~3 colunas, `largo` para 2, `alto` para
+  a fileira de atalhos do login
+- mantenha o rótulo curto — o compacto quebra em duas linhas e o largo trunca em uma
+- deixe o vidro passar a arte do fundo: é ele que separa este ladrilho de um botão
+
+### Evite
+- usar no lugar do `cartaoDeAcesso` (`DilettaQuickAccessCard`): aquele é 75×84, ícone em pill,
+  conteúdo CENTRADO e com estado `locked`. Este é alinhado à esquerda, sem pill e sem estado. Trocar
+  um pelo outro redesenha a tela por baixo
+- misturar portes na mesma grade — o porte é a coluna, e duas alturas na mesma fileira lê como erro
+
+## Compõe
+
+- DilettaGlassSurface
+- DilettaIcon
+- DilettaText
+- DilettaTappable
+
+## Requirements
+
+### Requirement: cada porte tem a sua altura
+Os três portes SHALL render alturas distintas (80 · 82 · 100). Enum cujos valores desenham igual é
+enum decorativo, e o próximo conserto o apaga sem ninguém ver.
+
+### Requirement: o compacto tem largura própria
+No porte `compacto` a peça SHALL travar em 85 de largura. Ela vive num `Wrap` de ~3 colunas, e herdar
+a largura do pai a faria ocupar a fileira inteira.
+''';
+
+const _linhaDeAviso = r'''
+## Purpose
+
+A linha-aviso da home — a das *Autorizações*: vidro de largura cheia, ladrilho da marca com o glifo
+branco, título e subtítulo, e a CONTAGEM do que está esperando.
+
+## Guidelines
+
+### Quando usar
+Quando há uma FILA esperando a pessoa, e o número dela importa. É o que separa esta peça de um item
+de menu: menu leva a um lugar, isto informa que há trabalho parado.
+
+### Faça
+- deixe a contagem nula (ou zero) quando não há fila: o disco some, e a linha continua sendo o atalho
+- use o subtítulo pra dizer o que fazer, não pra repetir o título
+- mantenha o ladrilho na cor da marca — é ele que separa "espera você" de "mais um item"
+
+### Evite
+- desenhar o disco com zero: um "0" num disco lê como *tem uma coisa aqui*
+- usar como linha de lista: a lista do pai (`DilettaAppListRow.menuItem`) tem seta, e seta e contador
+  não convivem — a pessoa lê o número como valor
+
+## Compõe
+
+- DilettaGlassSurface
+- DilettaIcon
+- DilettaText
+- DilettaTappable
+
+## Requirements
+
+### Requirement: fila vazia não mostra número
+Com contagem nula OU zero o disco SHALL não existir na árvore. A borda é o ZERO, não o nulo.
+''';
+
+const _chipDeFiltro = r'''
+## Purpose
+
+A pílula de filtro: *Todos · Entradas · Saídas*. Numa fila onde exatamente um está escolhido, e a
+leitura tem que ser instantânea.
+
+## Guidelines
+
+### Quando usar
+Filtro de escolha ÚNICA sobre uma coleção. Filtro aplicado e removível é `chipDeEntrada`
+(`DilettaInputChip`), que é outra peça e outra leitura.
+
+### Faça
+- deixe sempre um escolhido: fila sem nenhum marcado não diz o que está sendo mostrado
+- mantenha os rótulos curtos e paralelos entre si
+
+### Evite
+- usar como o `chipDeEntrada` do pai: aquele fica no mesmo tom nos dois estados (`filled` é
+  `primarySubtle`), porque ele marca um filtro numa fila de filtros aplicados. Este INVERTE — fundo
+  `primary` cheio e tinta `onPrimary` — porque ele marca A escolha numa fila de opções
+- confiar só na cor: o peso do rótulo vai de 400 a 600 junto, e é o que faz a escolha sobreviver a
+  quem não distingue as duas tintas
+
+## Compõe
+
+- DilettaText
+- DilettaTappable
+
+## Requirements
+
+### Requirement: escolhido inverte fundo E peso
+O estado escolhido SHALL trocar a tinta do rótulo e SHALL levar o peso a 600. Cor sozinha não é
+informação.
+
+### Requirement: o alvo de toque é 44 e o desenho não
+A área tocável SHALL ter 44 de altura com a pílula em ~26. O respiro mora FORA do desenho — invertê-los
+engorda a pílula e não muda o alvo.
+''';
+
+const _cartaoPromocional = r'''
+## Purpose
+
+O cartão do carrossel da home: título, subtítulo, arte de 100 à direita e um X. É a SUGESTÃO — a que
+espera ser dispensada.
+
+## Guidelines
+
+### Quando usar
+Pra oferecer algo que a pessoa pode ignorar sem custo: habilitar passkey, revisar dispositivos. Se a
+oferta precisa ser atendida, é `DilettaPromoBanner`, que tem botão e não tem X.
+
+### Faça
+- passe a arte pelo app: asset de produto não mora no DS, e sem arte o cartão desenha a moldura
+- deixe o cartão inteiro ser o alvo — ele não tem botão de propósito
+
+### Evite
+- desenhar o X sem ter o que ele faça: um X que não dispensa promete e não cumpre
+- empilhar dois destes na mesma dobra — sugestão repetida vira ruído, e o carrossel existe por isso
+
+## Compõe
+
+- DilettaGlassSurface
+- DilettaIcon
+- DilettaText
+- DilettaTappable
+
+## Requirements
+
+### Requirement: o X só existe quando fecha
+Sem `aoFechar`, o glifo de fechar SHALL não existir na árvore.
+''';
+
+const _fileiraDeAvatares = r'''
+## Purpose
+
+O *"Enviar para"*: a fileira de contatos favoritos com iniciais, primeiro nome e banco, mais o "+"
+tracejado que leva à agenda.
+
+## Guidelines
+
+### Quando usar
+Como ATALHO pra um destino frequente — home e Área Pix. Não é lista de contatos: quem procura alguém
+usa a busca.
+
+### Faça
+- passe `rotulos` pra forma rotulada; sem eles a fileira é só os círculos
+- deixe a fileira rolar na horizontal em vez de cortar a lista em N
+- mantenha o "+" no fim: ele é a saída pra agenda inteira
+
+### Evite
+- cravar cor ou tamanho de inicial: o círculo é o `DilettaAvatar` do pai, e a inicial sai do DEGRAU
+  que o diâmetro escolhe — não de uma fração dele
+
+## Compõe
+
+- DilettaAvatar
+- DilettaIcon
+- DilettaText
+- DilettaTappable
+
+## Requirements
+
+### Requirement: rótulo liga a forma
+Passar `rotulos` SHALL ligar a forma rotulada; sem eles, nome e banco SHALL não aparecer. A forma é uma
+consequência do dado, não um parâmetro à parte.
+''';
+
+const _grupoDoDia = r'''
+## Purpose
+
+O grupo de um dia no extrato: a data, o saldo consolidado do dia à direita dela, e os lançamentos
+separados por fio.
+
+## Guidelines
+
+### Quando usar
+Numa coleção agrupada por data em que o grupo carrega um VALOR no cabeçalho. É a única razão de esta
+peça existir em vez do `DilettaAppList`, que tem `title` e não tem onde pôr o valor.
+
+### Faça
+- passe os lançamentos como `linhaDeValor` — o grupo é o envelope, a linha é o dado
+- deixe o acessório mostrar o saldo do dia, não o do mês
+
+### Evite
+- usar como lista comum: sem acessório, `DilettaAppList` é a peça certa e traz o resto de graça
+
+## Compõe
+
+- DilettaDivider
+- DilettaText
+
+## Requirements
+
+### Requirement: N lançamentos, N-1 fios — e UM leva fio
+O fio SHALL vir depois de cada lançamento menos o último, E SHALL vir no dia de lançamento único,
+onde ele fecha o grupo por baixo em vez de separar dois itens.
+
+### Requirement: o fio é do tema
+O separador SHALL ser o `DilettaDivider`. Cor de fio escrita à mão foi o defeito de 10/08: branco a
+12% cravado, legível no escuro e invisível no claro.
+''';
+
+const _cartaoDaConta = r"""
+## Purpose
+
+O cabeçalho da tela de Conta: nome da conta, selo do tipo, o NÚMERO em manchete e a linha de agência
+com banco. É o cartão que a pessoa abre pra ler o número em voz alta.
+
+## Guidelines
+
+### Quando usar
+Uma vez, no topo da tela de conta. Não é resumo de conta em lista — ali a linha de lista basta.
+
+### Faça
+- passe o número já com o dígito separado: a formatação é do produto
+- deixe o nome vazio quando a listagem ainda carrega — o rótulo genérico segura o lugar
+
+### Evite
+- pôr o saldo aqui: esta tela é sobre a IDENTIDADE da conta, e saldo tem card próprio na home
+- tirar o espaçamento entre letras do número: dígito colado se lê errado quando é ditado
+
+## Compõe
+
+- DilettaGlassSurface
+- DilettaStatusTag
+- DilettaIcon
+- DilettaText
+
+## Requirements
+
+### Requirement: nome vazio não colapsa a linha
+Com nome vazio o componente SHALL desenhar "Conta". Linha que some muda a altura do cartão entre
+dois carregamentos e faz a tela pular.
+""";
+
+const _cartaoDePedido = r"""
+## Purpose
+
+O cartão de um pedido esperando assinatura, visto por quem aprova. Responde quatro perguntas na
+ordem em que elas são feitas: quem pediu e quanto, quanto falta pra sair, por que precisa de mim, e
+o que eu faço.
+
+## Guidelines
+
+### Quando usar
+Na fila de pendentes e no detalhe de uma pendência. É a peça da conta PJ com alçada.
+
+### Faça
+- deixe o CRIADOR ser o protagonista da linha de cima; o destinatário vai no detalhe
+- mostre a IDADE da pendência quando não houver prazo no contrato — contagem regressiva inventada
+  mente sobre o que o backend sabe
+- escreva o motivo com a origem e o escopo da regra: é o que responde "por que eu?"
+
+### Evite
+- desabilitar os botões pra quem já assinou: use `jaAprovei`, que troca as ações por uma linha de
+  estado. Botão cinza convida a tentar, e não há o que fazer
+- repetir o valor no detalhe — ele já está à direita, em peso 800
+
+## Compõe
+
+- BoldProgressoDeAprovacao
+- BoldPrazoDaPendencia
+- DilettaButton
+- DilettaCardSurface
+- DilettaIcon
+- DilettaText
+
+## Requirements
+
+### Requirement: já aprovei não tem botão
+Com `jaAprovei` o cartão SHALL trocar as duas ações por uma linha de estado, e SHALL não desenhar
+botão desabilitado.
+
+### Requirement: rejeitar é o tipo secundário
+A ação destrutiva SHALL sair como `secondary`, não como tipo próprio. São 16 sítios de destrutivo no
+app e nenhum deles é um tipo — a medição é do botão.
+""";
+
+const _grade = r"""
+## Purpose
+
+O container de LINHA: põe blocos lado a lado onde a gramática do catálogo empilharia. É o menu 2×2
+da home, a grade de 3 colunas da Área Pix e a fileira de chips do extrato.
+
+## Guidelines
+
+### Quando usar
+Quando os itens são EQUIVALENTES e a comparação entre eles é o ponto. Lista de destinos com
+subtítulo continua sendo lista — grade é pra item que cabe num rótulo.
+
+### Faça
+- use `2` ou `3` colunas quando os itens devem ter a MESMA largura (menu de ladrilhos)
+- use `fileira` quando cada item tem largura própria (chips, botões curtos)
+- mantenha o vão igual ao ritmo da tela — `s4` na home, `s2` entre chips
+
+### Evite
+- passar de 3 colunas: o rótulo encurta e a grade vira adivinhação
+- aninhar grade em grade — isso é layout, e layout aninhado é o que este vocabulário existe pra
+  evitar
+
+## Compõe
+
+- DilettaFrame.column
+- DilettaFrame.row
+
+## Requirements
+
+### Requirement: a última linha ímpar não estica
+Com `2` ou `3` colunas e um número ímpar de itens, o último SHALL ocupar UMA célula e não a linha
+inteira. A célula que sobra é vazia de propósito.
+
+### Requirement: fileira e colunas são coisas diferentes
+Em `fileira` o item SHALL manter a largura própria; em `2`/`3` ele SHALL herdar a da célula. Não é
+estética: no primeiro caso o item decide, no segundo a grade decide.
+""";

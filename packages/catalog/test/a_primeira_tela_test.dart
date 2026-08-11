@@ -29,7 +29,7 @@ void main() {
     configurarConteudoDoBold();
   });
 
-  test('as CINCO telas são válidas pela autoria do PAI, e são exatamente estas', () {
+  test('as NOVE telas são válidas pela autoria do PAI, e são exatamente estas', () {
     // Segundo achado da varredura do pai, e este é meu: o nome dizia "as TRÊS telas" com CINCO no mapa, e a
     // asserção era `containsAll([...])` — que não vê tela nova nem tela que sobrou. Mesma classe do
     // movimento: o número que o nome promete não estava na asserção.
@@ -42,6 +42,12 @@ void main() {
       kSlugDaRevisaoDoPix,
       kSlugDoPixEnviado,
       kSlugDasAutorizacoes,
+      // As cinco de loja, de 11/08. Ver o `///` delas em `telas_do_bold.dart`: elas são o pedido de
+      // marketing que virou a maior auditoria de adoção deste repo.
+      kSlugDoHubDePix,
+      kSlugDaConta,
+      kSlugDoExtrato,
+      kSlugDaAprovacao,
     });
   });
 
@@ -75,7 +81,7 @@ void main() {
         reason: 'espaço virou bloco — o ritmo é o contentGap');
   });
 
-  test('a seção CONSOME tem os CINCO campos, e é o conserto do pai medido daqui', () {
+  test('a seção CONSOME tem os SEIS campos, e é o conserto do pai medido daqui', () {
     // A v0.55.0 do motor consertou `leContratoDaTela`, que lia só `BoundRef` dentro de `props` e ignorava
     // o mapa `Block.bindings` — a forma que o compositor de verdade escreve. Resultado: CONSOME vazia pra
     // toda tela real, numa página recém-anunciada.
@@ -91,6 +97,9 @@ void main() {
       'saldoFormatado → saldo.valor',
       'entradasDoMes → saldo.entradas',
       'saidasDoMes → saldo.saidas',
+      // O sexto entrou com a home em alta fidelidade: a contagem de pendências é dado do backend, e
+      // deixar o "2" escrito seria o mock silencioso que o contrato de autoria existe pra impedir.
+      'pendenciasAbertas → linhaDeAviso.contagem',
     });
 
     // E as quatro notas, uma de cada tipo que o contrato distingue: o que se perde no handoff é caso de
@@ -266,8 +275,14 @@ void main() {
     t.takeException();
     expect(erros, isEmpty, reason: erros.take(3).join(' | '));
 
+    // O PIXEL prova que o board desenha o título de um grupo; o DADO prova que são dois.
+    //
+    // A asserção era `findsWidgets` nos dois títulos, e ela passava porque havia CINCO telas. Com
+    // nove, o grupo PJ fica fora do viewport do board — e `find` procura o que está MONTADO, não o
+    // que existe. Aumentar a janela até caber mediria o tamanho da janela; a pergunta é se os dois
+    // eixos chegam na aba, e essa é a linha de baixo.
     expect(find.text('Conta PF'), findsWidgets);
-    expect(find.text('Conta PJ'), findsWidgets);
+    expect(grupos.map((g) => g.title).toSet(), {'Conta PF', 'Conta PJ'});
   });
 
   test('as SETAS do fluxo de Pix dão sentido ao motionDaTransicao', () {

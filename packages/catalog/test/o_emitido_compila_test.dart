@@ -128,7 +128,7 @@ void main() {
     // Exato, e ele sobe de propósito quando alguém acrescenta opção de enum: `greaterThan(50)` com 61
     // medidos passava com 11 opções perdidas. Número que cresce é declaração, e atualizar a declaração
     // é o passo em que se percebe que a superfície mudou.
-    expect(variacoes, 61,
+    expect(variacoes, 67,
         reason: 'a superfície de variação de enum mudou: era 61 — se foi de propósito, atualize aqui');
 
     final arquivo = File('.dart_tool/gate_do_emitido/variacoes.dart');
@@ -212,6 +212,11 @@ class TelaGerada extends StatelessWidget {
   void aoMarcar(bool? v) {}
   void aoBuscar(String v) {}
   void aoFiltrar() {}
+  // Os três das peças que atravessaram a fronteira em 11/08. `aoVerTodos` é do cabeçalho de seção,
+  // que ganhou o acessório da direita; os outros dois são da fileira de avatares.
+  void aoVerTodos() {}
+  void aoAdicionar() {}
+  void aoTocarNoAvatar(int i) {}
   void onContinuar() {}
   void onVoltar() {}
   void onX() {}

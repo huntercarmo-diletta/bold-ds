@@ -63,6 +63,57 @@ void main() {
     expect(await largura(oculto: false), await largura(oculto: true));
   });
 
+  testWidgets('SALDO CURTO ocultado ainda cabe — a máscara é mais larga que ele',
+      (t) async {
+    // O defeito de 11/08, achado por print: saldo baixo, olho fechado, e o card
+    // mostrava só `R$`. A largura reservada era a do valor REAL, e isso só
+    // funciona enquanto o valor for mais largo que a máscara. `R$ 0,14` não é.
+    //
+    // O teste acima existia e passava, porque media com `R$ 2.912,47` — um
+    // exemplo do lado confortável da desigualdade. É a lição do pai outra vez:
+    // **um exemplo testa o exemplo**. O que separa "reserva o valor" de
+    // "reserva o maior dos dois" é justamente o valor curto.
+    Future<double> larguraDoTexto(String texto, {required bool oculto}) async {
+      await t.pumpWidget(montar(Align(
+        alignment: Alignment.topLeft,
+        child: BoldSaldo(valor: r'R$ 0,14', oculto: oculto),
+      )));
+      await t.pump(const Duration(milliseconds: 50));
+      return t.getSize(find.text(texto)).width;
+    }
+
+    final visivel = await larguraDoTexto(r'R$ 0,14', oculto: false);
+    final mascarado = await larguraDoTexto(r'R$ ••••••', oculto: true);
+
+    expect(mascarado, greaterThan(visivel),
+        reason: 'a máscara `R\$ ••••••` tem mais caracteres que `R\$ 0,14`; se a '
+            'caixa não cresce, os pontos são cortados e o saldo some');
+  });
+
+  testWidgets('o valor LONGO manda na largura — o controle do teste de cima',
+      (t) async {
+    // Sem este, trocar a medição do valor pela medição da máscara passaria o
+    // teste acima e reintroduziria o pulo do card em toda conta com saldo alto:
+    // a caixa encolheria de `R$ 2.912,47` para `R$ ••••••` ao fechar o olho.
+    await t.pumpWidget(montar(Align(
+      alignment: Alignment.topLeft,
+      child: const BoldSaldo(valor: r'R$ 2.912.345,67', oculto: true),
+    )));
+    await t.pump(const Duration(milliseconds: 50));
+    final comValorLongo = t.getSize(find.text(r'R$ ••••••')).width;
+
+    await t.pumpWidget(montar(Align(
+      alignment: Alignment.topLeft,
+      child: const BoldSaldo(valor: r'R$ 0,14', oculto: true),
+    )));
+    await t.pump(const Duration(milliseconds: 50));
+    final comValorCurto = t.getSize(find.text(r'R$ ••••••')).width;
+
+    expect(comValorLongo, greaterThan(comValorCurto),
+        reason: 'a mesma máscara ocupa a largura do valor que ela esconde — '
+            'é isso que impede o card de pular quando o olho vira');
+  });
+
   testWidgets('o botão de extrato só existe quando há o que abrir', (t) async {
     await t.pumpWidget(montar(const BoldSaldo(valor: r'R$ 10,00')));
     await t.pump(const Duration(milliseconds: 50));

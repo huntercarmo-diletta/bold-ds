@@ -99,10 +99,15 @@ void main() {
     final revisao = telasDoBold()[kSlugDaRevisaoDoPix]!;
     expect(gatilhoPrincipalDe(revisao)?.$2, 'Confirmar');
 
-    // A HOME é a exceção declarada: ela não tem CTA de fluxo, e a saída é o item "Pix" da lista de
-    // atalhos — dentro de um slot, que é onde a busca em profundidade importa.
+    // A HOME é a exceção declarada: ela não tem CTA de fluxo, e a saída é o LADRILHO da Área Pix —
+    // dentro de um slot da grade, que é onde a busca em profundidade importa.
+    //
+    // O rótulo passou de "Pix" para "Área Pix" quando a home foi remontada em alta fidelidade: o
+    // menu deixou de ser lista e virou a grade 2×2 que o app tem, e o rótulo é o do app
+    // (`kHomeMenuCatalog`). A asserção é `contains('Pix')` e não `startsWith` justamente por isso —
+    // ela mede que a saída da home é o Pix, e não como o produto o chama hoje.
     final home = telasDoBold()[kSlugDaHome]!;
-    expect(gatilhosDe(home).map((g) => g.label), contains(startsWith('Pix')));
+    expect(gatilhosDe(home).map((g) => g.label), contains(contains('Pix')));
   });
 
   // A PROVA no pixel, e não na spec: contar na árvore é o que fecha a porta. A spec pode parar de

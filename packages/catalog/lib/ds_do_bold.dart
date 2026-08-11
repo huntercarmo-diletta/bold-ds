@@ -308,15 +308,33 @@ BlockDef _divisor() => BlockDef(
 /// `o_emitido_compila` compila cada opção, então forma que ele remover reprova.
 const List<String> _formasDoDivisor = ['linha', 'tracejado', 'vertical'];
 
+/// O cabeçalho de seção, e o `verTodos` que ele não tinha.
+///
+/// O acessório à direita apareceu medindo as telas de loja: a home usa cabeçalho com *"Ver todos"*
+/// em **duas** seções (`Enviar para`, `Menu`) e a Área Pix numa terceira. O bloco só expunha o
+/// rótulo, então as três seções desenhavam sem a saída — e um cabeçalho que promete uma coleção sem
+/// dizer onde ela continua é meia informação.
+///
+/// É prop e não bloco novo: `trailing` já existe no cabeçalho do pai, e o `DilettaSeeAllLink` é a
+/// peça dele. O que faltava era declarar.
 BlockDef _cabecalhoDeSecao() => BlockDef(
       type: 'cabecalhoDeSecao',
       ctor: 'ds.DilettaSectionHeader',
       args: const {'rotulo': Arg.texto('label')},
       label: 'Cabeçalho de seção · SectionHeader',
-      props: const {'rotulo': PropDef('text', bindable: true, dartType: 'String')},
-      defaults: () => {'rotulo': 'DETALHES'},
-      build: (p) => DilettaSectionHeader(label: '${p['rotulo']}'),
-      codegen: (p) => 'ds.DilettaSectionHeader(label: ${_str(p['rotulo'])})',
+      props: const {
+        'rotulo': PropDef('text', bindable: true, dartType: 'String'),
+        'verTodos': PropDef('bool'),
+      },
+      defaults: () => {'rotulo': 'DETALHES', 'verTodos': false},
+      build: (p) => DilettaSectionHeader(
+        label: '${p['rotulo']}',
+        trailing: p['verTodos'] == true
+            ? DilettaSeeAllLink(onPressed: () {})
+            : null,
+      ),
+      codegen: (p) => 'ds.DilettaSectionHeader(label: ${_str(p['rotulo'])}'
+          '${p['verTodos'] == true ? ', trailing: ds.DilettaSeeAllLink(onPressed: aoVerTodos)' : ''})',
     );
 
 /// A LINHA de menu — o `preset` mais comum deste app, medido: `spotIcon + titleSubtitle + chevron`
@@ -982,12 +1000,42 @@ BlockDef _campoDeBusca() => BlockDef(
       ctor: 'ds.DilettaSearchInput',
       args: const {'placeholder': Arg.texto('placeholder')},
       label: 'Campo de busca · SearchInput',
-      props: const {'placeholder': PropDef('text')},
-      defaults: () => {'placeholder': 'Buscar contato ou chave'},
-      build: (p) => DilettaSearchInput(placeholder: '${p['placeholder']}'),
-      codegen: (p) => 'ds.DilettaSearchInput(placeholder: ${_str(p['placeholder'])}'
-          ', onChanged: aoBuscar)',
+      props: {
+        'placeholder': const PropDef('text'),
+        // A AÇÃO À DIREITA, medida em dois sítios: o QR da Área Pix e o filtro do extrato. Nos dois
+        // a busca ocupa a linha e o botão vive AO LADO dela — não é bloco vizinho, é a mesma linha,
+        // e declarar como dois blocos empilharia um sobre o outro. Vazio = sem ação.
+        'acaoDireita': PropDef('enum', options: ['', ...DilettaIcons.all.keys]),
+      },
+      defaults: () => {'placeholder': 'Buscar contato ou chave', 'acaoDireita': ''},
+      build: (p) => _campoDeBuscaWidget(p),
+      codegen: (p) => _vazio(p['acaoDireita'])
+          ? 'ds.DilettaSearchInput(placeholder: ${_str(p['placeholder'])}'
+              ', onChanged: aoBuscar)'
+          : 'ds.DilettaFrame.row(gap: ds.DilettaSpacing.s3, children: ['
+              'Expanded(child: ds.DilettaSearchInput(placeholder: ${_str(p['placeholder'])}'
+              ', onChanged: aoBuscar))'
+              ', ds.DilettaIconButton(icon: ds.DilettaIcons.${p['acaoDireita']}'
+              ", semanticLabel: 'Ação da busca'"
+              ', type: ds.DilettaIconButtonType.secondary, onPressed: aoFiltrar)])'
     );
+
+/// A busca sozinha, ou a busca com o botão ao lado. Uma função porque `build` e `codegen`
+/// precisam concordar, e duas cópias do mesmo `if` divergem no primeiro conserto.
+Widget _campoDeBuscaWidget(Map<String, Object?> p) {
+  final campo = DilettaSearchInput(placeholder: '${p['placeholder']}');
+  if (_vazio(p['acaoDireita'])) return campo;
+  return Row(children: [
+    Expanded(child: campo),
+    const SizedBox(width: DilettaSpacing.s3),
+    DilettaIconButton(
+      icon: DilettaIcons.all['${p['acaoDireita']}'] ?? '${p['acaoDireita']}',
+      semanticLabel: 'Ação da busca',
+      type: DilettaIconButtonType.secondary,
+      onPressed: () {},
+    ),
+  ]);
+}
 
 BlockDef _girando() => BlockDef(
       type: 'girando',
@@ -1563,11 +1611,27 @@ BlockDef _cascaDeTopo() => BlockDef(
       props: const {
         'titulo': PropDef('text', bindable: true, dartType: 'String'),
         'esquerda': PropDef('enum', options: ['voltar', 'fechar', 'nada']),
+        // OS ÍCONES DA DIREITA, separados por vírgula. Medidos no extrato (exportar + olho) e na
+        // aba Pix. A barra do pai aceita 1, 2 ou 3 e é ela que espaça — o que faltava era declarar.
+        'direita': PropDef('text'),
       },
-      defaults: () => {'titulo': 'Enviar Pix', 'esquerda': 'voltar'},
+      defaults: () => {'titulo': 'Enviar Pix', 'esquerda': 'voltar', 'direita': ''},
       build: (p) => DilettaTopAppBar.defaultVariant(
         navBar: DilettaNavigationTopBar(
           title: _vazio(p['titulo']) ? null : '${p['titulo']}',
+          right: _vazio(p['direita'])
+              ? null
+              : DilettaNavigationRightAccessory.icons(
+                  icons: [
+                    for (final nome in _emLista(p['direita']))
+                      DilettaNavRightIcon(
+                        icon: DilettaIcons.all[nome] ?? nome,
+                        semanticLabel: nome,
+                        type: DilettaIconButtonType.tertiary,
+                        onPressed: () {},
+                      ),
+                  ],
+                ),
           left: switch (p['esquerda']) {
             'fechar' => DilettaNavigationLeftAccessory.close(onPressed: () {}),
             'nada' => null,
@@ -1581,6 +1645,11 @@ BlockDef _cascaDeTopo() => BlockDef(
       // com entrada no leitor.
       codegen: (p) => 'ds.DilettaTopAppBar.defaultVariant(navBar: ds.DilettaNavigationTopBar('
           '${_vazio(p['titulo']) ? '' : 'title: ${_str(p['titulo'])}, '}'
+          '${_vazio(p['direita']) ? '' : 'right: ds.DilettaNavigationRightAccessory.icons(icons: ['
+              '${_emLista(p['direita']).map((n) => 'ds.DilettaNavRightIcon('
+                  'icon: ds.DilettaIcons.$n, semanticLabel: ${_str(n)}'
+                  ', type: ds.DilettaIconButtonType.tertiary, onPressed: aoTocar)').join(', ')}'
+              ']), '}'
           // Os DOIS lados deste bloco decidem igual, e antes não decidiam: o `build` estourava em valor
           // desconhecido e o `codegen` emitia `back` calado. A auditoria achou pelo `_ =>`, e a
           // assimetria é o defeito — quem lê o codegen aprendia "desconhecido vira voltar", que era
@@ -1861,6 +1930,441 @@ BlockDef _indicadorDeHome() => BlockDef(
       codegen: (p) => '',
     );
 
+// ─────────────────────────────────────────────────────────────────────────────
+// AS SEIS QUE ATRAVESSARAM A FRONTEIRA
+//
+// Elas entraram no mesmo dia e pela mesma causa: o dono pediu quatro telas de loja em alta
+// fidelidade, e as quatro paravam em peças que só existiam dentro do aparelho.
+//
+// Quatro eram LACUNA no inventário de adoção — peça que desenha sozinha, sem par na linguagem:
+// ladrilho de menu (alcance 4), chip de filtro (3), linha de aviso (2) e cartão promocional (2).
+// Duas já eram ADOTADAS e estavam do lado errado da fronteira: a fileira de avatares e o grupo do
+// dia moravam em `app-newbold/lib/design_system/`, e o catálogo consome o PACOTE, nunca o app.
+//
+// A régua que saiu daqui: **adotada e alcançável não são a mesma coisa.** O inventário media a
+// primeira e ninguém media a segunda — e o sintoma das duas é o mesmo, peça que não dá pra desenhar
+// em lugar nenhum.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// O ladrilho do menu — a maior lacuna que restava, e três telas dependiam dele.
+BlockDef _ladrilhoDeMenu() => BlockDef(
+      type: 'ladrilhoDeMenu',
+      acoes: const {'aoTocar': 'aoTocar'},
+      ctor: 'ds.BoldLadrilhoDeMenu',
+      args: const {
+        'icone': Arg.enumeracao('icone', 'ds.DilettaIcons'),
+        'rotulo': Arg.texto('rotulo'),
+        'porte': Arg.enumeracao('porte', 'ds.BoldPorteDoLadrilho'),
+      },
+      label: 'Ladrilho de menu · MenuTile',
+      props: {
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+        'rotulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'porte': PropDef('enum',
+            options: BoldPorteDoLadrilho.values.map((e) => e.name).toList()),
+      },
+      defaults: () => {'icone': 'pixLight', 'rotulo': 'Área Pix', 'porte': 'largo'},
+      build: (p) => BoldLadrilhoDeMenu(
+        icone: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
+        rotulo: '${p['rotulo']}',
+        porte: _daOpcao(p['porte'], _porNome(BoldPorteDoLadrilho.values),
+            BoldPorteDoLadrilho.largo),
+        aoTocar: () {},
+      ),
+      codegen: (p) => 'ds.BoldLadrilhoDeMenu(icone: ds.DilettaIcons.${p['icone']}'
+          ', rotulo: ${_str(p['rotulo'])}'
+          ', porte: ds.BoldPorteDoLadrilho.${p['porte']}'
+          ', aoTocar: aoTocar)',
+    );
+
+/// A linha de aviso da home — a das *Autorizações*, com a contagem.
+BlockDef _linhaDeAviso() => BlockDef(
+      type: 'linhaDeAviso',
+      acoes: const {'aoTocar': 'aoTocar'},
+      ctor: 'ds.BoldLinhaDeAviso',
+      args: const {
+        'icone': Arg.enumeracao('icone', 'ds.DilettaIcons'),
+        'titulo': Arg.texto('titulo'),
+        'subtitulo': Arg.texto('subtitulo'),
+      },
+      label: 'Linha de aviso · NoticeRow',
+      props: {
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+        'titulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'subtitulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'contagem': const PropDef('number', bindable: true, dartType: 'int'),
+      },
+      defaults: () => {
+        'icone': 'paperPlaneLight',
+        'titulo': 'Autorizações',
+        'subtitulo': 'Veja o que está esperando você.',
+        'contagem': '2',
+      },
+      build: (p) => BoldLinhaDeAviso(
+        icone: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
+        titulo: '${p['titulo']}',
+        subtitulo: _vazio(p['subtitulo']) ? null : '${p['subtitulo']}',
+        contagem: int.tryParse('${p['contagem']}'),
+        aoTocar: () {},
+      ),
+      codegen: (p) => 'ds.BoldLinhaDeAviso(icone: ds.DilettaIcons.${p['icone']}'
+          ', titulo: ${_str(p['titulo'])}'
+          '${_vazio(p['subtitulo']) ? '' : ', subtitulo: ${_str(p['subtitulo'])}'}'
+          ', contagem: ${int.tryParse('${p['contagem']}') ?? 0}'
+          ', aoTocar: aoTocar)',
+    );
+
+/// O chip de filtro — a pílula que INVERTE quando escolhida.
+BlockDef _chipDeFiltro() => BlockDef(
+      type: 'chipDeFiltro',
+      acoes: const {'aoTocar': 'aoTocar'},
+      ctor: 'ds.BoldChipDeFiltro',
+      args: const {
+        'rotulo': Arg.textoPosicional(),
+        'escolhido': Arg.bool('escolhido'),
+      },
+      label: 'Chip de filtro · FilterChip',
+      props: const {
+        'rotulo': PropDef('text', bindable: true, dartType: 'String'),
+        'escolhido': PropDef('bool'),
+      },
+      defaults: () => {'rotulo': 'Entradas', 'escolhido': false},
+      build: (p) => BoldChipDeFiltro('${p['rotulo']}',
+          escolhido: p['escolhido'] == true, aoTocar: () {}),
+      codegen: (p) => 'ds.BoldChipDeFiltro(${_str(p['rotulo'])}'
+          ', escolhido: ${p['escolhido'] == true}, aoTocar: aoTocar)',
+    );
+
+/// O cartão promocional do carrossel — o que se dispensa pelo X.
+BlockDef _cartaoPromocional() => BlockDef(
+      type: 'cartaoPromocional',
+      acoes: const {'aoFechar': 'aoFechar', 'aoTocar': 'aoTocar'},
+      ctor: 'ds.BoldCartaoPromocional',
+      args: const {
+        'titulo': Arg.texto('titulo'),
+        'subtitulo': Arg.texto('subtitulo'),
+      },
+      label: 'Cartão promocional · PromoCard',
+      props: const {
+        'titulo': PropDef('text', bindable: true, dartType: 'String'),
+        'subtitulo': PropDef('multiline', bindable: true, dartType: 'String'),
+        'fecha': PropDef('bool'),
+      },
+      defaults: () => {
+        'titulo': 'Habilite sua passkey',
+        'subtitulo': 'Login sem senha, resistente a phishing.',
+        'fecha': true,
+      },
+      build: (p) => BoldCartaoPromocional(
+        titulo: '${p['titulo']}',
+        subtitulo: _vazio(p['subtitulo']) ? null : '${p['subtitulo']}',
+        aoFechar: p['fecha'] == true ? () {} : null,
+        aoTocar: () {},
+      ),
+      codegen: (p) => 'ds.BoldCartaoPromocional(titulo: ${_str(p['titulo'])}'
+          '${_vazio(p['subtitulo']) ? '' : ', subtitulo: ${_str(p['subtitulo'])}'}'
+          '${p['fecha'] == true ? ', aoFechar: aoFechar' : ''}'
+          ', aoTocar: aoTocar)',
+    );
+
+/// A fileira de avatares — o *"Enviar para"*.
+///
+/// As três listas chegam como texto separado por vírgula, e não como slot. É a mesma escolha do
+/// `abas` e do `segmentos`: aqui os itens não são blocos com props próprias, são três strings
+/// paralelas de um item só. Slot pra isso obrigaria três blocos filhos por avatar.
+BlockDef _fileiraDeAvatares() => BlockDef(
+      type: 'fileiraDeAvatares',
+      label: 'Fileira de avatares · AvatarRow',
+      props: const {
+        'iniciais': PropDef('text'),
+        'rotulos': PropDef('text'),
+        'subrotulos': PropDef('text'),
+        'adiciona': PropDef('bool'),
+      },
+      defaults: () => {
+        'iniciais': 'CM, BL, RS',
+        'rotulos': 'Carla, Bruno, Rita',
+        'subrotulos': 'Nubank, Itaú, BOLD',
+        'adiciona': true,
+      },
+      build: (p) => BoldFileiraDeAvatares(
+        iniciais: _emLista(p['iniciais']),
+        rotulos: _vazio(p['rotulos']) ? null : _emLista(p['rotulos']),
+        subrotulos: _vazio(p['subrotulos']) ? null : _emLista(p['subrotulos']),
+        aoAdicionar: p['adiciona'] == true ? () {} : null,
+        aoTocarNoAvatar: (_) {},
+      ),
+      codegen: (p) => 'ds.BoldFileiraDeAvatares(iniciais: const '
+          '${_emLista(p['iniciais']).map(_str).toList()}'
+          '${_vazio(p['rotulos']) ? '' : ', rotulos: const ${_emLista(p['rotulos']).map(_str).toList()}'}'
+          '${_vazio(p['subrotulos']) ? '' : ', subrotulos: const ${_emLista(p['subrotulos']).map(_str).toList()}'}'
+          '${p['adiciona'] == true ? ', aoAdicionar: aoAdicionar' : ''}'
+          ', aoTocarNoAvatar: aoTocarNoAvatar)',
+    );
+
+/// O grupo do dia do extrato — rótulo da data, saldo do dia à direita, lançamentos com fio.
+///
+/// Tem SLOT, e é o segundo bloco deste filho com um: os lançamentos são `linhaDeValor` de verdade.
+/// O acessório à direita é TEXTO e não slot porque ele é sempre o mesmo — o saldo consolidado —, e
+/// slot de um tipo só é slot que só tem uma resposta.
+BlockDef _grupoDoDia() => BlockDef(
+      type: 'grupoDoDia',
+      label: 'Grupo do dia · extrato',
+      props: const {
+        'rotulo': PropDef('text', bindable: true, dartType: 'String'),
+        'acessorio': PropDef('text', bindable: true, dartType: 'String'),
+      },
+      defaults: () => {'rotulo': 'Sexta, 8 de agosto', 'acessorio': r'R$ 2.912,47'},
+      slots: const {
+        'itens': SlotDef(list: true, accepts: ['linhaDeValor']),
+      },
+      build: (p) => _grupoDoDiaWidget(p, const []),
+      slotsBuild: (p, filhos) => _grupoDoDiaWidget(p, filhos['itens'] ?? const []),
+      slotsCodegen: (p, codigos) {
+        final itens = codigos['itens'] ?? const [];
+        return 'ds.BoldGrupoDoDia(rotulo: ${_str(p['rotulo'])}'
+            '${_vazio(p['acessorio']) ? '' : ', acessorio: ds.DilettaText(${_str(p['acessorio'])}, style: ds.DilettaType.labelMd)'}'
+            ', filhos: [${itens.join(', ')}])';
+      },
+      codegen: (p) => 'ds.BoldGrupoDoDia(rotulo: ${_str(p['rotulo'])}'
+          ', filhos: const [])',
+    );
+
+Widget _grupoDoDiaWidget(Map<String, Object?> p, List<Widget> itens) =>
+    BoldGrupoDoDia(
+      rotulo: '${p['rotulo']}',
+      acessorio: _vazio(p['acessorio'])
+          ? null
+          : DilettaText('${p['acessorio']}', style: DilettaType.labelMd),
+      filhos: itens,
+    );
+
+/// Texto separado por vírgula → lista, sem item vazio.
+///
+/// Mesma leitura do `abas` e do `segmentos`, e ela mora numa função porque três props da fileira de
+/// avatares fazem a mesma coisa — três `split` copiados divergem no primeiro conserto.
+List<String> _emLista(Object? bruto) => '$bruto'
+    .split(',')
+    .map((e) => e.trim())
+    .where((e) => e.isNotEmpty)
+    .toList();
+
+
+/// A GRADE — o container de LINHA que este registro não tinha, e que três telas cobraram.
+///
+/// A gramática do motor é `top` / `blocks` / `bottom`, e dentro de `blocks` tudo empilha. Isso
+/// estava escrito como limite declarado em duas telas: *"no app os dois botões são uma LINHA; aqui
+/// eles empilham, e não é preguiça — este registro não tem container de linha"*.
+///
+/// Ele entra agora porque a medição fechou: **três sítios**, e nenhum deles é o mesmo desenho —
+/// o menu 2×2 da home, a grade de 3 colunas da Área Pix e a fileira de chips do extrato. Um caso
+/// não vira container; três com formas diferentes viram.
+///
+/// ## Ele não decide largura, ele decide COLUNAS
+///
+/// Com `colunas: 0` os itens ficam numa fileira que quebra (`Wrap`), cada um com a largura que
+/// pedir — é o caso dos chips e da grade compacta do Pix. Com `colunas: 2` ou `3` eles dividem a
+/// largura em partes iguais, que é o menu da home. A diferença não é estética: no primeiro caso o
+/// item tem largura própria, no segundo ele herda.
+BlockDef _grade() => BlockDef(
+      type: 'grade',
+      label: 'Grade · Frame',
+      props: const {
+        'colunas': PropDef('enum', options: ['fileira', 'fluida', '2', '3']),
+        'vao': PropDef('enum', options: ['s2', 's3', 's4']),
+      },
+      defaults: () => {'colunas': '2', 'vao': 's4'},
+      slots: const {
+        'itens': SlotDef(list: true, accepts: [
+          'ladrilhoDeMenu',
+          'cartaoDeAcesso',
+          'chipDeFiltro',
+          'chipDeInfo',
+          'botao',
+        ]),
+      },
+      build: (p) => _gradeWidget(p, const []),
+      slotsBuild: (p, filhos) => _gradeWidget(p, filhos['itens'] ?? const []),
+      slotsCodegen: (p, codigos) {
+        final itens = codigos['itens'] ?? const [];
+        final vao = 'ds.DilettaSpacing.${p['vao']}';
+        // A fileira é `ds.DilettaFrame.row` e não um `Wrap`: o `Wrap` é do Flutter, e o gate
+        // `o_catalogo_do_bold_esta_completo` cobra que todo bloco emita COMPONENTE do DS. A cobrança
+        // está certa — bloco que emite widget cru é bloco que ensina a sair da linguagem.
+        if ('${p['colunas']}' == 'fileira') {
+          return 'ds.DilettaFrame.row(gap: $vao, children: [${itens.join(', ')}])';
+        }
+        // A FLUIDA embrulha um `Wrap` dentro do frame do pai, e o `Wrap` é do Flutter. É a mesma
+        // exceção declarada do divisor vertical (`SizedBox` pra dar o eixo): a linguagem não tem
+        // container de FLUXO — o que ela tem é linha e coluna. Está pedido ao pai; enquanto não vem,
+        // o container é do DS e o fluxo é do framework, escrito aqui em vez de escondido.
+        if ('${p['colunas']}' == 'fluida') {
+          return 'ds.DilettaFrame.column(children: [Wrap(spacing: $vao'
+              ', runSpacing: $vao, children: [${itens.join(', ')}])])';
+        }
+        return 'ds.DilettaFrame.column(gap: $vao, children: ['
+            '${_emLinhas(itens, int.parse('${p['colunas']}'), vao).join(', ')}])';
+      },
+      codegen: (p) => 'ds.DilettaFrame.column(gap: ds.DilettaSpacing.${p['vao']}'
+          ', children: const [])',
+    );
+
+Widget _gradeWidget(Map<String, Object?> p, List<Widget> itens) {
+  final vao = _espaco('${p['vao']}');
+  final colunas = int.tryParse('${p['colunas']}') ?? 0;
+  if ('${p['colunas']}' == 'fluida') {
+    return DilettaFrame.column(
+        children: [Wrap(spacing: vao, runSpacing: vao, children: itens)]);
+  }
+  if (colunas == 0) {
+    return DilettaFrame.row(gap: vao, children: itens);
+  }
+  final linhas = <Widget>[];
+  for (var i = 0; i < itens.length; i += colunas) {
+    if (linhas.isNotEmpty) linhas.add(SizedBox(height: vao));
+    final naLinha = <Widget>[];
+    for (var c = 0; c < colunas; c++) {
+      if (c > 0) naLinha.add(SizedBox(width: vao));
+      // A célula VAZIA no fim é `Expanded(SizedBox)` e não nada: sem ela o último item de uma
+      // linha ímpar estica pra largura inteira e a grade deixa de ser grade na última fileira.
+      naLinha.add(Expanded(
+          child: i + c < itens.length ? itens[i + c] : const SizedBox()));
+    }
+    linhas.add(Row(crossAxisAlignment: CrossAxisAlignment.start, children: naLinha));
+  }
+  return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: linhas);
+}
+
+/// Os itens agrupados em `Row`s de [colunas], no CÓDIGO. Mesma regra do `build`, inclusive a
+/// célula vazia do fim — os dois lados têm que desenhar a mesma grade.
+List<String> _emLinhas(List<String> itens, int colunas, String vao) {
+  final linhas = <String>[];
+  for (var i = 0; i < itens.length; i += colunas) {
+    final celulas = <String>[];
+    for (var c = 0; c < colunas; c++) {
+      if (c > 0) celulas.add('SizedBox(width: $vao)');
+      celulas.add(i + c < itens.length
+          ? 'Expanded(child: ${itens[i + c]})'
+          : 'const Expanded(child: SizedBox())');
+    }
+    linhas.add('Row(children: [${celulas.join(', ')}])');
+  }
+  return linhas;
+}
+
+/// O CARTÃO DA CONTA — o cabeçalho da tela de Gestão da conta.
+BlockDef _cartaoDaConta() => BlockDef(
+      type: 'cartaoDaConta',
+      ctor: 'ds.BoldCartaoDaConta',
+      args: const {
+        'nomeDaConta': Arg.texto('nomeDaConta'),
+        'tipo': Arg.texto('tipo'),
+        'numero': Arg.texto('numero'),
+        'linhaDeApoio': Arg.texto('linhaDeApoio'),
+      },
+      label: 'Cartão da conta · header de Conta',
+      props: const {
+        'nomeDaConta': PropDef('text', bindable: true, dartType: 'String'),
+        'tipo': PropDef('text', bindable: true, dartType: 'String'),
+        'numero': PropDef('text', bindable: true, dartType: 'String'),
+        'linhaDeApoio': PropDef('text', bindable: true, dartType: 'String'),
+      },
+      defaults: () => {
+        'nomeDaConta': 'Minha conta',
+        'tipo': 'Conta PF',
+        'numero': '12345-6',
+        'linhaDeApoio': 'Ag 0001 · 655 – BOLD',
+      },
+      build: (p) => BoldCartaoDaConta(
+        nomeDaConta: '${p['nomeDaConta']}',
+        tipo: '${p['tipo']}',
+        numero: '${p['numero']}',
+        linhaDeApoio: '${p['linhaDeApoio']}',
+      ),
+      codegen: (p) => 'ds.BoldCartaoDaConta('
+          'nomeDaConta: ${_str(p['nomeDaConta'])}, tipo: ${_str(p['tipo'])}'
+          ', numero: ${_str(p['numero'])}, linhaDeApoio: ${_str(p['linhaDeApoio'])})',
+    );
+
+/// O CARTÃO DO PEDIDO — a tela de aprovação, vista por quem aprova.
+BlockDef _cartaoDePedido() => BlockDef(
+      type: 'cartaoDePedido',
+      acoes: const {'aoAprovar': 'aoContinuar', 'aoRejeitar': 'aoVoltar'},
+      ctor: 'ds.BoldCartaoDePedido',
+      args: const {
+        'quemPediu': Arg.texto('quemPediu'),
+        'detalhe': Arg.texto('detalhe'),
+        'valor': Arg.texto('valor'),
+        'icone': Arg.enumeracao('icone', 'ds.DilettaIcons'),
+        'colhidas': Arg.numero('colhidas'),
+        'exigidas': Arg.numero('exigidas'),
+        'exigeMaster': Arg.bool('exigeMaster'),
+        'idade': Arg.texto('idade'),
+        'aprovadaPor': Arg.texto('aprovadaPor'),
+        'motivo': Arg.texto('motivo'),
+        'justificativa': Arg.texto('justificativa'),
+        'jaAprovei': Arg.bool('jaAprovei'),
+      },
+      label: 'Cartão do pedido · aprovação',
+      props: {
+        'quemPediu': const PropDef('text', bindable: true, dartType: 'String'),
+        'detalhe': const PropDef('text', bindable: true, dartType: 'String'),
+        'valor': const PropDef('text', bindable: true, dartType: 'String'),
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+        'colhidas': const PropDef('number', bindable: true, dartType: 'int'),
+        'exigidas': const PropDef('number', bindable: true, dartType: 'int'),
+        'exigeMaster': const PropDef('bool'),
+        'idade': const PropDef('text', bindable: true, dartType: 'String'),
+        'aprovadaPor': const PropDef('text', bindable: true, dartType: 'String'),
+        'motivo': const PropDef('multiline', bindable: true, dartType: 'String'),
+        'justificativa': const PropDef('multiline', bindable: true, dartType: 'String'),
+        'jaAprovei': const PropDef('bool'),
+      },
+      defaults: () => {
+        'quemPediu': 'Marcos Almeida',
+        'detalhe': 'Pix · para Ana Maria Silva · 14:32',
+        'valor': r'R$ 8.400,00',
+        'icone': 'pixLight',
+        'colhidas': '1',
+        'exigidas': '2',
+        'exigeMaster': true,
+        'idade': 'há 3 horas',
+        'aprovadaPor': 'Marcos Almeida',
+        'motivo': 'Limite por transação (GLOBAL · 2 aprovações · Master)',
+        'justificativa': 'Pagamento do fornecedor de embalagens, NF 4471.',
+        'jaAprovei': false,
+      },
+      build: (p) => BoldCartaoDePedido(
+        quemPediu: '${p['quemPediu']}',
+        detalhe: '${p['detalhe']}',
+        valor: '${p['valor']}',
+        icone: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
+        colhidas: int.tryParse('${p['colhidas']}') ?? 0,
+        exigidas: int.tryParse('${p['exigidas']}') ?? 1,
+        exigeMaster: p['exigeMaster'] == true,
+        idade: _vazio(p['idade']) ? null : '${p['idade']}',
+        aprovadaPor: _vazio(p['aprovadaPor']) ? null : '${p['aprovadaPor']}',
+        motivo: _vazio(p['motivo']) ? null : '${p['motivo']}',
+        justificativa:
+            _vazio(p['justificativa']) ? null : '${p['justificativa']}',
+        jaAprovei: p['jaAprovei'] == true,
+        aoAprovar: () {},
+        aoRejeitar: () {},
+      ),
+      codegen: (p) => 'ds.BoldCartaoDePedido('
+          'quemPediu: ${_str(p['quemPediu'])}, detalhe: ${_str(p['detalhe'])}'
+          ', valor: ${_str(p['valor'])}, icone: ds.DilettaIcons.${p['icone']}'
+          ', colhidas: ${int.tryParse('${p['colhidas']}') ?? 0}'
+          ', exigidas: ${int.tryParse('${p['exigidas']}') ?? 1}'
+          '${p['exigeMaster'] == true ? ', exigeMaster: true' : ''}'
+          '${_vazio(p['idade']) ? '' : ', idade: ${_str(p['idade'])}'}'
+          '${_vazio(p['aprovadaPor']) ? '' : ', aprovadaPor: ${_str(p['aprovadaPor'])}'}'
+          '${_vazio(p['motivo']) ? '' : ', motivo: ${_str(p['motivo'])}'}'
+          '${_vazio(p['justificativa']) ? '' : ', justificativa: ${_str(p['justificativa'])}'}'
+          '${p['jaAprovei'] == true ? ', jaAprovei: true' : ''}'
+          ', aoAprovar: aoContinuar, aoRejeitar: aoVoltar)',
+    );
+
 // ═══════════════════════════════════════════════════════════════════════════════
 // 2 · O PLUGUE
 // ═══════════════════════════════════════════════════════════════════════════════
@@ -1943,6 +2447,16 @@ void configurarDsDoBold() {
       'bannerDeStatus': _bannerDeStatus(),
       'calendario': _calendario(),
       'teclado': _teclado(),
+      // As seis que atravessaram a fronteira — ver o bloco de prosa acima delas.
+      'ladrilhoDeMenu': _ladrilhoDeMenu(),
+      'linhaDeAviso': _linhaDeAviso(),
+      'chipDeFiltro': _chipDeFiltro(),
+      'cartaoPromocional': _cartaoPromocional(),
+      'fileiraDeAvatares': _fileiraDeAvatares(),
+      'grupoDoDia': _grupoDoDia(),
+      'grade': _grade(),
+      'cartaoDaConta': _cartaoDaConta(),
+      'cartaoDePedido': _cartaoDePedido(),
   };
 
   Ds.configurar(PlugueDoDs(
@@ -1957,22 +2471,30 @@ void configurarDsDoBold() {
         'cartaoDeDestaque', 'comprovante', 'bannerDeStatus'],
       // A lista e as duas linhas ficam juntas porque é assim que se usam: a coleção é dona do
       // separador, e linha fora de lista é linha sem vizinhança.
-      'Lista': ['lista', 'linha', 'linhaDeValor'],
+      // O grupo do dia entra aqui e não em "Marca do Bold": ele é o ENVELOPE de uma coleção, e a
+      // vizinhança que ensina é a da lista — quem procura "como agrupo lançamentos" procura em Lista.
+      'Lista': ['lista', 'linha', 'linhaDeValor', 'grupoDoDia'],
       // Retorno de sistema: o que a tela diz enquanto ou depois de algo acontecer.
       'Retorno': ['toast', 'esqueleto', 'girando'],
       // Camada: o que aparece POR CIMA da tela.
       'Camada': ['folha', 'dialogo'],
       // Grupo próprio porque é o que só o Bold tem: a vizinhança na paleta é decisão de
       // linguagem, e peça de marca não se mistura com vocabulário herdado.
-      'Marca do Bold': ['seloQuantico', 'saldo', 'cabecalhoDaHome', 'resumoDaTransacao'],
+      'Marca do Bold': ['seloQuantico', 'saldo', 'cabecalhoDaHome', 'resumoDaTransacao',
+        // As três da HOME que faltavam: o menu, o aviso das autorizações e o cartão do carrossel.
+        // Elas eram lacuna do inventário até 11/08 e não existiam em paleta nenhuma.
+        'ladrilhoDeMenu', 'linhaDeAviso', 'cartaoPromocional', 'fileiraDeAvatares',
+        'cartaoDaConta', 'cartaoDePedido'],
       'Do Bold': ['copiar', 'abas', 'segmentos', 'pontosDePagina'],
       // As três peças da conta PJ: quem pode mandar quanto, falta quanto, e até quando.
       'Alçadas': ['escadaDeAlcadas', 'progressoDeAprovacao', 'prazoDaPendencia'],
       'Leitor de código': ['visorDeCodigo'],
+      // O chip de filtro mora em Entrada e não em Conteúdo: ele é escolha, e escolha única numa
+      // fila é entrada de dado — o vizinho certo é o `listaDeRadio`, não o `chipDeInfo`.
       'Entrada': ['campo', 'campoDeBusca', 'interruptor', 'caixaDeSelecao', 'chipDeEntrada',
-        'dropdown', 'listaDeRadio', 'calendario', 'teclado'],
+        'chipDeFiltro', 'dropdown', 'listaDeRadio', 'calendario', 'teclado'],
       'Ação': ['botao', 'barraDeBaixo', 'botaoDeIcone', 'cartaoDeAcesso'],
-      'Ritmo': ['ritmo', 'divisor'],
+      'Ritmo': ['ritmo', 'divisor', 'grade'],
     },
     tema: (filho, {required escuro}) => DilettaThemeScope(
       theme: escuro ? BoldTheme.dark : BoldTheme.light,
@@ -2036,6 +2558,14 @@ void configurarDsDoBold() {
       (b) => b.type == 'botao' ? '${b.props['label'] ?? 'Botão'}' : null,
       (b) => b.type == 'cartaoDeAcesso' ? '${b.props['label'] ?? 'Acesso rápido'}' : null,
       (b) => b.type == 'linha' ? '${b.props['titulo'] ?? 'Linha'}' : null,
+      // O LADRILHO e o CARTÃO DO PEDIDO, das telas de loja. O ladrilho é a saída das telas de menu
+      // — a home sai por "Área Pix" e a Área Pix sai por "Transferir" —, e o cartão de pedido sai
+      // pelas duas ações que ele carrega dentro. Ficam por último pela mesma razão da linha: eles
+      // são saída de tela de MENU e de fila, não CTA ancorado de fluxo.
+      (b) => b.type == 'ladrilhoDeMenu' ? '${b.props['rotulo'] ?? 'Atalho'}' : null,
+      (b) => b.type == 'cartaoDePedido'
+          ? (b.props['jaAprovei'] == true ? 'Ver pedido' : 'Aprovar')
+          : null,
     ],
     acaoInterativa: _acaoInterativa,
     tiposDeChromeDeDispositivo: const {'barraDeStatus', 'indicadorDeHome'},

@@ -142,6 +142,43 @@ const String kSlugDaRevisaoDoPix = 'pf3-pix-revisar';
 /// superfície de vidro que separa a ação do conteúdo.
 const String kSlugDoPixEnviado = 'pf4-pix-enviado';
 
+/// AS TELAS DE LOJA — as quatro que o dono pediu pra virar screenshot de App Store e Play Store,
+/// mais a de aprovação que ele pediu junto.
+///
+/// Elas existem por um pedido de marketing e acabaram sendo a maior auditoria de adoção deste repo,
+/// porque **as cinco travavam em peças que só existiam dentro do aparelho**. Quatro eram lacuna do
+/// inventário (ladrilho de menu, chip de filtro, linha de aviso, cartão promocional); duas eram
+/// peças adotadas do lado errado da fronteira (fileira de avatares, grupo do dia); e duas eram
+/// classes PRIVADAS dentro das telas (`_AccountHeader`, `_PendingCard`) — a quarta classe de
+/// dívida deste repo, e a única que nenhum gate via.
+///
+/// A frase do dono é a régua: *"era pra tudo estar no catálogo porque era pra tudo estar no DS."*
+///
+/// A ÁREA PIX, medida em `pix_hub_redesign.dart`. É a mesma tela em dois papéis — a aba Pix do
+/// shell e a rota `/pix/hub` —, e o que muda entre eles é só a casca de topo.
+const String kSlugDoHubDePix = 'pf5-pix-hub';
+
+/// A GESTÃO DA CONTA, medida em `minha_conta_screen.dart`.
+///
+/// O cabeçalho dela era `_AccountHeader`, privado dentro do arquivo da tela: funcionava, tinha uso,
+/// e não existia pra ninguém de fora. Virou `BoldCartaoDaConta` no pacote.
+const String kSlugDaConta = 'pf6-conta';
+
+/// O EXTRATO, medido em `extrato_tab_redesign.dart` — e a tela que abriu esta rodada.
+///
+/// O dono mandou um print dela no tema claro: dois lançamentos no mesmo dia, sem linha entre eles.
+/// A regra do divisor estava certa e a COR estava errada — branco a 12% cravado. O grupo do dia
+/// veio pro pacote junto com o conserto, e agora tem gate nos dois temas e nos três tamanhos.
+const String kSlugDoExtrato = 'pf7-extrato';
+
+/// A APROVAÇÃO vista por QUEM APROVA, medida em `autorizacoes_screen.dart`.
+///
+/// Ela é a irmã da `pj1-autorizacoes` e não a mesma tela: aquela mostra a alçada da conta — quem
+/// pode mandar quanto —, e esta mostra a FILA, com os cartões que esperam assinatura. O cartão era
+/// `_PendingCard`, privado, e é o organismo mais denso do produto: ele responde quem pediu e
+/// quanto, quanto falta pra sair, por que precisa de mim, e o que eu faço.
+const String kSlugDaAprovacao = 'pj2-aprovacao';
+
 
 
 
