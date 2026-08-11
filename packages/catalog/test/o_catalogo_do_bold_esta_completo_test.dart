@@ -84,6 +84,109 @@ void main() {
     }
   });
 
+  /// E ele mede a SUBSTÂNCIA, não o prefixo — que era o furo que sobrava.
+  ///
+  /// O teste acima olha o começo da expressão. Isso é sintaxe: um bloco pode começar com `ds.` e
+  /// montar a tela com `Row`, `Column` e `Stack` crus por dentro, e passar. Foi exatamente o que o
+  /// bloco `grade` fez por um dia — `ds.DilettaFrame.column(children: [Row(children: [...])])`.
+  ///
+  /// Quem nomeou primeiro foi o pai, no veredito do `DilettaFrame.flow`: *"com o `.flow` entrando, o
+  /// caso concreto some; **o buraco do gate não**."* E o dono disse a mesma coisa por outro caminho
+  /// no mesmo dia: *"no catálogo não deve ter NADA fora do DS — então ou a gente enriquece."*
+  ///
+  /// ## O que é proibido, e por que é essa lista
+  ///
+  /// **Contêineres de layout crus.** `Row`, `Column`, `Stack` e `Wrap` são exatamente o que o
+  /// `DilettaFrame` substitui, e a razão não é purismo: o frame carrega o `gap` em TOKEN. Um `Row`
+  /// cru desenha a mesma coisa com espaçador entre filhos, e espaçador entre filhos é o que faz o
+  /// ritmo de uma tela virar decisão de quem escreveu a linha.
+  ///
+  /// **Superfícies cruas.** `Container` e `Padding` carregam cor, raio e respiro — as três coisas que
+  /// a linguagem existe pra decidir.
+  ///
+  /// ## O que NÃO está na lista, e é declaração e não esquecimento
+  ///
+  /// `Expanded` e `Flexible` **são** a linguagem: o `///` do `DilettaFrame` diz com todas as letras
+  /// que *"um filho 'fill' no eixo principal é um `Expanded`/`Flexible` passado como filho"*. Proibir
+  /// aqui seria o gate contradizendo o contrato do pai.
+  ///
+  /// `SizedBox` fica de fora por um caso medido e um só — o divisor vertical, que precisa de alguém
+  /// que lhe dê o eixo. Ele é exceção NOMEADA abaixo, não uma categoria aberta.
+  test('e o código gerado não monta layout CRU por dentro — substância, não prefixo', () {
+    // A busca é por FRONTEIRA DE PALAVRA, e ela custou uma rodada: `contains('Row(')` acusou o
+    // `linhaDeValor`, que emite `ds.DilettaAppListRow(` — o nome do componente do pai TERMINA em
+    // `Row`. Um gate que confunde `AppListRow` com `Row` é tão inútil quanto o que media o prefixo,
+    // só que na direção contrária: ele grita onde não há nada.
+    final proibidos = {
+      for (final nome in const [
+        'Row',
+        'Column',
+        'Stack',
+        'Wrap',
+        'Container',
+        'Padding',
+      ])
+        nome: RegExp('\\b$nome\\('),
+    };
+
+    // As exceções são por BLOCO e por NOME, e cada uma tem a razão no código que a comete. Exceção
+    // sem dono vira categoria, e categoria é o que apaga o gate por dentro.
+    const excecoes = <String, List<String>>{
+      // `const SizedBox(height: 24, child: ds.DilettaDivider.vertical())`: o divisor vertical não
+      // tem eixo próprio, e quem o dá é quem o hospeda. Está escrito no `codegen` dele.
+      'divisor': ['SizedBox'],
+    };
+
+    final violacoes = <String>[];
+    for (final def in Ds.blocos.values) {
+      if (Ds.ehChromeDeDispositivo(def.type)) continue;
+      // O CÓDIGO DE VERDADE de um bloco com slot sai pelo `slotsCodegen`, e o `emite` só chama o
+      // `codegen` — que num bloco com filhos devolve a versão VAZIA. Foi o furo que o controle vivo
+      // achou: eu pus um `Row(` cru de volta no `grade` e o gate passou verde, porque o `Row` mora
+      // no caminho com filhos e o gate media o caminho sem eles.
+      //
+      // Um gate que mede o ramo que ninguém usa é o mesmo defeito do prefixo, um andar abaixo.
+      final codigo = def.slotsCodegen == null
+          ? emite(def)
+          : '${emite(def)} ${def.slotsCodegen!(def.defaults(), {
+                for (final slot in def.slots.keys)
+                  slot: const ["ds.DilettaText('filho')"],
+              })}';
+      for (final cru in proibidos.entries) {
+        if (!cru.value.hasMatch(codigo)) continue;
+        if (excecoes[def.type]?.contains(cru.key) ?? false) continue;
+        violacoes.add('${def.type} → ${cru.key}(');
+      }
+    }
+
+    expect(violacoes, isEmpty,
+        reason: 'bloco que emite layout cru por dentro: ${violacoes.join(', ')}. '
+            'Ou compõe com o `DilettaFrame`, ou o pai ganha a peça que falta — '
+            'o que não pode é o catálogo ensinar a sair da linguagem');
+  });
+
+  test('e o gate da substância SABE ver — controle com um Row cru de propósito', () {
+    // Sem isto, a lista de proibidos podia estar vazia, ou o `contains` podia estar invertido, e o
+    // teste acima passaria verde medindo nada. O controle é uma string fixa e não um bloco vivo:
+    // controle que aponta pra um bloco de verdade morre quando aquele bloco é consertado — foi a
+    // lição de 09/08, e ela custou um gate.
+    final proibidos = [
+      for (final nome in const ['Row', 'Column', 'Stack', 'Wrap'])
+        RegExp('\\b$nome\\('),
+    ];
+    const cruDeProposito =
+        'ds.DilettaFrame.column(children: [Row(children: [ds.DilettaText(\'oi\')])])';
+
+    expect(proibidos.where((r) => r.hasMatch(cruDeProposito)), isNotEmpty,
+        reason: 'a varredura não vê um `Row(` cru dentro de um frame do DS');
+
+    // A OUTRA metade do controle, e ela é a que o falso positivo pediu: o nome de um componente do
+    // pai que TERMINA no nome proibido não pode acusar.
+    const nomeDoPai = "ds.DilettaAppListRow(title: 'x')";
+    expect(proibidos.where((r) => r.hasMatch(nomeDoPai)), isEmpty,
+        reason: '`DilettaAppListRow` foi lido como `Row` — a fronteira de palavra sumiu');
+  });
+
   testWidgets('o preview sai com a cor do BOLD, e nenhuma do CPF SEGURO', (t) async {
     // O mesmo critério do DS-filho, aplicado à ferramenta: os componentes aqui passam
     // pelo gancho `tema` do plugue, e é ele que faz a identidade chegar no preview.

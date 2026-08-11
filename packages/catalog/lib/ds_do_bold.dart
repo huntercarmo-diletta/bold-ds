@@ -2247,20 +2247,27 @@ Widget _gradeWidget(Map<String, Object?> p, List<Widget> itens) {
   if (colunas == 0) {
     return DilettaFrame.row(gap: vao, children: itens);
   }
+  // As duas metades usam o FRAME do pai, e o espaçador virou `gap` nos dois: espaçador como filho é
+  // o que o `DilettaFrame` existe pra apagar, e mantê-lo aqui era o `build` desenhando uma coisa e o
+  // `codegen` emitindo outra.
   final linhas = <Widget>[];
   for (var i = 0; i < itens.length; i += colunas) {
-    if (linhas.isNotEmpty) linhas.add(SizedBox(height: vao));
     final naLinha = <Widget>[];
     for (var c = 0; c < colunas; c++) {
-      if (c > 0) naLinha.add(SizedBox(width: vao));
       // A célula VAZIA no fim é `Expanded(SizedBox)` e não nada: sem ela o último item de uma
       // linha ímpar estica pra largura inteira e a grade deixa de ser grade na última fileira.
       naLinha.add(Expanded(
           child: i + c < itens.length ? itens[i + c] : const SizedBox()));
     }
-    linhas.add(Row(crossAxisAlignment: CrossAxisAlignment.start, children: naLinha));
+    linhas.add(DilettaFrame.row(
+        gap: vao,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: naLinha));
   }
-  return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: linhas);
+  return DilettaFrame.column(
+      gap: vao,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: linhas);
 }
 
 /// Os itens agrupados em `Row`s de [colunas], no CÓDIGO. Mesma regra do `build`, inclusive a
@@ -2270,12 +2277,15 @@ List<String> _emLinhas(List<String> itens, int colunas, String vao) {
   for (var i = 0; i < itens.length; i += colunas) {
     final celulas = <String>[];
     for (var c = 0; c < colunas; c++) {
-      if (c > 0) celulas.add('SizedBox(width: $vao)');
+
       celulas.add(i + c < itens.length
           ? 'Expanded(child: ${itens[i + c]})'
           : 'const Expanded(child: SizedBox())');
     }
-    linhas.add('Row(children: [${celulas.join(', ')}])');
+    // `ds.DilettaFrame.row` e não `Row`: o `Expanded` dentro dele É a linguagem — o `///` do frame
+    // diz com todas as letras que *"um filho fill no eixo principal é um `Expanded` passado como
+    // filho"*. O que não é linguagem é o CONTAINER cru, e era ele que estava aqui.
+    linhas.add('ds.DilettaFrame.row(gap: $vao, children: [${celulas.join(', ')}])');
   }
   return linhas;
 }

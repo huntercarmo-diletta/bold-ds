@@ -20,6 +20,44 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.38.1] — 2026-08-11
+
+### Corrigido — o gate do vocabulário media o PREFIXO, e agora mede a substância
+
+Era a dívida que eu tinha declarado com nome na v0.37.0, e ela vinha de duas frases do mesmo dia. O
+pai, no veredito do `DilettaFrame.flow`: *"com o `.flow` entrando, o caso concreto some; **o buraco
+do gate não**."* O dono, por outro caminho: *"no catálogo não deve ter NADA fora do DS — então ou a
+gente enriquece."*
+
+O gate cobrava que o bloco emitisse algo começando com `ds.`. Um bloco podia começar com `ds.` e
+montar a tela com `Row`, `Column` e `Stack` crus por dentro — e o `grade` fazia exatamente isso.
+
+**O `grade` foi consertado antes do gate**: as linhas viraram `ds.DilettaFrame.row(gap:)` nos dois
+lados (o `build` e o `codegen`), e o espaçador entre células virou `gap` do frame. Espaçador como
+filho é o que o `DilettaFrame` existe pra apagar.
+
+### Duas coisas que o gate novo achou nele mesmo
+
+**Ele confundia `DilettaAppListRow` com `Row`.** `contains('Row(')` acusou a linha de valor, que
+emite um componente do PAI cujo nome termina em `Row`. Um gate que grita onde não há nada é tão
+inútil quanto o que não grita onde há — virou busca por fronteira de palavra, com controle nas duas
+direções.
+
+**Ele media o ramo que ninguém usa.** Bloco com slot emite o código de verdade pelo `slotsCodegen`;
+o gate só chamava o `codegen`, que num bloco com filhos devolve a versão VAZIA. Descobri pondo o
+`Row(` cru de volta no `grade` de propósito: **o gate passou verde.** Um gate que mede o ramo sem
+filhos é o mesmo defeito do prefixo, um andar abaixo.
+
+### A exceção que ficou, e ela tem dono
+
+`SizedBox` no `divisor` vertical — ele não tem eixo próprio, e quem o dá é quem o hospeda. É exceção
+por BLOCO e por NOME, não uma categoria: exceção sem dono vira categoria, e categoria é o que apaga
+um gate por dentro.
+
+`Expanded` e `Flexible` não estão na lista de proibidos, e isso é declaração e não esquecimento: o
+`///` do `DilettaFrame` diz que *"um filho 'fill' no eixo principal é um `Expanded`/`Flexible`
+passado como filho"*. Proibir seria o gate contradizendo o contrato do pai.
+
 ## [0.38.0] — 2026-08-11
 
 ### Corrigido — as TRÊS divergências que sobraram entre o desenho e o aparelho
