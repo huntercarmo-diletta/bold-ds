@@ -20,6 +20,47 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.39.0] — 2026-08-11
+
+### Recebeu — os dois pedidos abertos voltaram, e os dois ENTRAM
+
+**`ds-diletta` v0.67.0 → v0.68.0 · `DilettaTopAppBar.app(vidro: false)`.** O `BoldCabecalhoDaHome`
+não cobre mais o terço superior da arte, e a home do catálogo mostra a cidade do topo ao rodapé —
+medido: o pixel do topo é `(232,247,252)`, o azul do céu, onde antes era superfície.
+
+O veredito é mais largo que o meu pedido, e a formulação fica: **a superfície da barra existe pra
+separar a navegação do conteúdo que ROLA por baixo; quando o topo da tela É a identidade, ela não
+tem trabalho — o que ela faz é cobrir.** Ele contou antes de decidir: as SETE variantes da casca
+eram de vidro, contra um Material 3 que só pinta no estado *scrolled* e uma nav bar do iOS
+transparente até a primeira rolagem. **O desvio era da casa, não da minha home.**
+
+**`catalogo-diletta` v0.90.0 → v0.94.0 · `TelaEmFoco.de(context)`.** O gancho `fundoDoFrame` agora
+sabe qual tela está desenhando, e devolve `Widget?`. Os cinco fundos conferidos em pixel: home,
+conta e aprovação com arte; Área Pix e extrato sólidos em `(255,237,243)` uniforme.
+
+### Removido — `fundoDaTelaEmFoco`, no prazo que estava escrito nela
+
+A variável mutável de biblioteca que eu tinha declarado como dívida durou **um dia**, que é o que o
+`///` dela prometia: *"ela morre no dia em que o gancho receber a tela."* O veredito registrou o que
+isso ensina, e é a linha que vale guardar: **escrever o prazo na dívida foi o que impediu ela de
+virar paisagem.**
+
+Ficou uma lápide de seis linhas no lugar dela, porque a próxima dívida temporária precisa saber que
+a anterior foi cobrada.
+
+### O que saiu do app
+
+O comentário *"SEM glass/fill/stroke — só o conteúdo"* virou uma linha que aponta pra linguagem. Ele
+era uma **divergência declarada de um lado só** — a peça do app dizia a regra num comentário e a do
+pacote fazia o contrário —, e foi exatamente isso que fez a home do catálogo não parecer com a home
+do aparelho.
+
+### Aberto, e já com nome e formato
+
+As duas versões do cabeçalho da home ainda são duas. Elas convergem quando a do pacote aceitar
+`avatarHeroTag` — é ela que faz o avatar VOAR da home pro Perfil, e adotar sem isso apaga a
+animação. Vai no formato novo de pedido, que chegou hoje, com o «Já tentei» preenchido.
+
 ## [0.38.1] — 2026-08-11
 
 ### Corrigido — o gate do vocabulário media o PREFIXO, e agora mede a substância

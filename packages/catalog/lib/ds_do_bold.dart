@@ -23,6 +23,7 @@ import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/widgets.dart';
 
 import 'leitor_do_bold.dart';
+import 'telas_do_bold.dart';
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // 1 · OS BLOCOS
@@ -2636,7 +2637,9 @@ void configurarDsDoBold() {
     fundoDoFrame: (ctx) => BoldBackdropScope(
       // `estilo` é obrigatório no scope: ele é a personalização que o app faz uma vez. `imagem` é o
       // default do produto e é o fundo da home.
-      estilo: fundoDaTelaEmFoco ?? BoldBackdrop.imagem,
+      // O FUNDO É POR TELA, e quem diz qual tela é o `TelaEmFoco` do motor (v0.94.0). A regra e o
+      // mapa moram com as telas, não aqui: o plugue sabe DESENHAR fundo, e o registro sabe qual.
+      estilo: fundoDaTela(TelaEmFoco.de(ctx)),
       arteClara: const AssetImage('assets/demo/cidade-claro.jpg'),
       arteEscura: const AssetImage('assets/demo/cidade-escuro.jpg'),
       child: const BoldBackground(child: SizedBox.expand()),
@@ -2834,23 +2837,15 @@ void configurarDsDoBold() {
   ));
 }
 
-/// O FUNDO DA TELA EM FOCO — e ele é uma variável global, o que é uma dívida declarada.
+/// A variável `fundoDaTelaEmFoco` VIVEU AQUI e morreu no mesmo dia, que era o prazo escrito nela.
 ///
-/// O gancho do motor é `fundoDoFrame(BuildContext)`: **um por produto**, sem saber qual tela está
-/// desenhando. Isso valia enquanto todo mundo tinha o mesmo fundo, e não vale mais — o aparelho é
-/// quem diz. A Área Pix declara `BoldBackdrop.solido` no próprio `build`; o shell das abas pinta o
-/// fundo SECUNDÁRIO e só a aba Início pinta a arte por cima.
+/// Ela era mutável de biblioteca — exatamente o que este repo evita — e existia porque o gancho do
+/// motor não sabia qual tela estava desenhando. O `///` dela dizia: *"ela morre no dia em que o
+/// gancho receber a tela."* O gancho recebeu (`TelaEmFoco`, motor v0.94.0), e o veredito registrou o
+/// que isso ensina: **escrever o prazo na dívida foi o que impediu ela de virar paisagem.**
 ///
-/// **O extrato com a cidade atrás não é estilo, é a tela errada.**
-///
-/// Está pedido ao motor (`o fundo é por TELA e o gancho é por produto`). Enquanto não vem, quem
-/// desenha uma tela específica declara aqui antes de montar e limpa depois. Nulo = o default do
-/// produto, que é a arte.
-///
-/// Variável mutável de biblioteca é exatamente o que este repo evita, e ela está aqui **com prazo**:
-/// ela morre no dia em que o gancho receber a tela. Escrever isso é o que impede que ela vire
-/// paisagem.
-BoldBackdrop? fundoDaTelaEmFoco;
+/// Fica esta lápide no lugar dela, porque a próxima dívida temporária precisa saber que a anterior
+/// foi cobrada.
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // 3 · OS AUXILIARES

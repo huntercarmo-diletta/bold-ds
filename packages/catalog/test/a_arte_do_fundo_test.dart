@@ -33,9 +33,12 @@ void main() {
         child: Builder(
           builder: (ctx) => Builder(
             builder: (dentro) {
+              // O gancho passou a devolver `Widget?` na v0.94.0 do motor: um filho com sete fundos
+              // tem tela em que nenhum se aplica, e aí o frame cai na cor de `fundoDaTela`. Aqui
+              // ele sempre devolve — fora de um `TelaEmFoco` o fundo é o default do produto.
               final w = Ds.atual.fundoDoFrame!(ctx);
               scope = w is BoldBackdropScope ? w : null;
-              return w;
+              return w ?? const SizedBox.shrink();
             },
           ),
         ),
@@ -62,7 +65,9 @@ void main() {
     await t.pumpWidget(MaterialApp(
       home: DilettaThemeScope(
         theme: BoldTheme.light,
-        child: Builder(builder: (ctx) => Ds.atual.fundoDoFrame!(ctx)),
+        child: Builder(
+            builder: (ctx) =>
+                Ds.atual.fundoDoFrame!(ctx) ?? const SizedBox.shrink()),
       ),
     ));
     await t.pump(const Duration(milliseconds: 100));

@@ -27,6 +27,8 @@
 /// mede que a seção não volta a esvaziar.
 library;
 
+import 'package:conta_bold_design_system/conta_bold_design_system.dart'
+    show BoldBackdrop;
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 
 import 'builder/screen_specs.g.dart';
@@ -183,6 +185,48 @@ const String kSlugDaAprovacao = 'pj2-aprovacao';
 
 
 
+
+/// O FUNDO DE CADA TELA — e este mapa é a resposta a um pedido que já voltou.
+///
+/// Este produto tem sete fundos e escolhe por TELA, com a regra escrita no app desde muito antes de
+/// eu declarar tela nenhuma:
+///
+/// > *"Fundo do SHELL = secundário (sólido + glow). A aba Início pinta o próprio `BoldBackground()`
+/// > opaco por cima — SEM estilo declarado. As demais abas (Extrato, PIX, Equipe, Perfil),
+/// > transparentes, deixam ver este fundo secundário."*
+///
+/// **O extrato com a cidade atrás não é estilo, é a tela errada.** Foi o dono quem viu, comparando o
+/// desenho com o aparelho.
+///
+/// O gancho do motor era `fundoDoFrame(BuildContext)` — um por produto, sem saber qual tela estava
+/// desenhando —, e pintar o fundo certo por fora não resolvia: o `buildScreenLayout` pinta o gancho
+/// por dentro e vence. A `v0.94.0` do motor entregou `TelaEmFoco.de(context)`, e com ela morreu a
+/// variável mutável de contorno que vivia no plugue com prazo escrito no `///` dela.
+///
+/// O mapa é DERIVADO da regra do app, não uma escolha nova: quem pinta a própria arte é a home;
+/// quem herda o shell é o resto; quem crava sólido está no `build` da própria tela.
+const Map<String, BoldBackdrop> _fundoPorSlug = {
+  kSlugDaHome: BoldBackdrop.imagem,
+  kSlugDaConta: BoldBackdrop.imagem,
+  kSlugDaAprovacao: BoldBackdrop.imagem,
+  kSlugDoHubDePix: BoldBackdrop.solido,
+  kSlugDoExtrato: BoldBackdrop.solido,
+};
+
+/// `nome da tela → fundo`, montado UMA vez.
+///
+/// A chave é o nome e não o slug porque é o que o `ScreenSpec` carrega — ele não tem id. Derivar do
+/// mapa de slugs em vez de escrever os nomes à mão é o que impede os dois de divergirem no primeiro
+/// renome de tela.
+final Map<String, BoldBackdrop> _fundoPorNome = {
+  for (final e in telasDoBold().entries)
+    if (_fundoPorSlug[e.key] != null) e.value.name: _fundoPorSlug[e.key]!,
+};
+
+/// O fundo da tela que o motor está desenhando. `null` (prévia de componente solto, mock à mão) cai
+/// no default do produto, que é a arte — e é o mesmo que o app faz com quem nunca personalizou.
+BoldBackdrop fundoDaTela(ScreenSpec? tela) =>
+    _fundoPorNome[tela?.name] ?? BoldBackdrop.imagem;
 
 /// As telas montadas, a partir do arquivo GERADO — e este arquivo deixou de ser a fonte delas.
 ///

@@ -131,6 +131,21 @@ class BoldCabecalhoDaHome extends StatelessWidget {
       },
       tokens: const ['scheme.fg', 'scheme.primary', 'type.titleMd'],
       child: DilettaTopAppBar.app(
+        // SEM VIDRO, e a linguagem passou a dizer isso na `ds v0.68.0`.
+        //
+        // O defeito apareceu comparando o desenho com o APARELHO: aqui a casca cobria o terço
+        // superior da arte, e o gêmeo desta peça no app tinha `SEM glass/fill/stroke — só o
+        // conteúdo` escrito num comentário há meses. Divergência declarada de um lado só.
+        //
+        // O veredito do pai é mais geral que o meu pedido, e é a frase que fica: **a superfície da
+        // barra existe pra separar a navegação do conteúdo que ROLA por baixo; quando o topo da tela
+        // É a identidade, ela não tem trabalho — o que ela faz é cobrir.** É a mesma regra do trilho
+        // do medidor noutra peça: o que sobra atrás não se anuncia.
+        //
+        // E o desvio era da casa, não da minha home: as SETE variantes eram de vidro, enquanto o
+        // Material 3 só pinta a barra no estado *scrolled* e a nav bar grande do iOS é transparente
+        // até a primeira rolagem. As nossas estavam permanentemente roladas.
+        vidro: false,
         // Linha 1: a barra do PAI, com a conta à esquerda no acessório livre e os ícones à direita no
         // acessório dele. Cabe nos 52 — o botão de conta tem 28.
         navBar: DilettaNavigationTopBar(

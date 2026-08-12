@@ -45,3 +45,104 @@ anuncia.* Aqui o que sobra atrás é a marca.
 
 A arte da home sobe até a status bar no catálogo, como sobe no aparelho — e o comentário *"SEM
 glass/fill/stroke"* sai do app, porque a linguagem passa a dizer isso.
+
+---
+
+## Veredito · ENTRA — e eu contei as variantes antes de decidir
+**pai**: `ds-diletta` **v0.68.0** · **data**: 2026-08-11
+
+`DilettaTopAppBar.app(navBar:, conteudo:, vidro: false)`.
+
+### Não é variante de produto: é buraco de simetria, e o número diz
+
+Eu ia tratar como preferência da sua home. Fui contar: **as SETE variantes desta casca são de
+vidro.** `.defaultVariant`, `.stepper`, `.comConteudo`, `.cobrand`, `.bottomsheet`, `.app`, `.plain`.
+A linguagem não tem barra de topo sem superfície — nenhuma.
+
+E o argumento de papel é geral, não seu:
+
+> **A superfície da barra de topo existe pra separar a navegação do conteúdo que ROLA por baixo.
+> Quando não há nada rolando por baixo — quando o topo da tela É a identidade — a superfície não tem
+> trabalho, e o que ela faz é cobrir.**
+
+Sua frase chegou perto e a minha é a mesma coisa dita como regra: *"a arte não é fundo, é
+identidade."* E você tinha razão em citar o trilho do medidor de volta: **o que sobra atrás não se
+anuncia** é literalmente esta regra noutra peça.
+
+### Aderência, que eu fui conferir e reforça mais do que eu esperava
+
+A barra transparente **em repouso** é o padrão da prática: o `topAppBar` do Material 3 só ganha
+`surfaceContainer` no estado *scrolled*, e a nav bar grande do iOS é transparente até a primeira
+rolagem. **As nossas sete estavam permanentemente roladas.** O desvio era nosso, não seu.
+
+### Por que parâmetro e não factory nova, e por que só nesta variante
+
+Factory nova seria `.appSemVidro`, e o pedido seguinte é `.comConteudoSemVidro` — catorze factories
+pra dizer um booleano. `vidro` nas sete de uma vez seria framework de variante sem pergunta atrás,
+que é o que o CLAUDE.md deste repo proíbe por nome.
+
+Então: **um sítio medido, uma variante.** Quando o segundo caso aparecer noutra casca, ele sobe pra
+lá com o número dele.
+
+### A sua terceira recusa é a que sustenta o parâmetro
+
+> *"Eu sei montar `SafeArea + NavigationTopBar + coluna`; voltar a compor é desfazer um pedido
+> aceito."*
+
+Está certa, e tem um motivo que você não escreveu: **`_comSegundaLinha` é privado, e o respiro de 6
+foi medido nesta casa** (v0.48.0, contra o frame de onde a peça saiu — 118 = 40 + 52 + 20 + 6).
+Compor por fora te devolveria o 8 em silêncio, e o gate não pegaria porque a peça seria sua.
+
+O teste que entrou mede exatamente isso: **o respiro entre a barra e a segunda linha é o mesmo com e
+sem vidro.**
+
+Suas outras duas recusas ficaram: o vidro do `.app` não saiu (ele está certo pras suas outras quatro
+telas), e cor de fundo não virou configurável.
+
+### O que você faz
+
+`ref: v0.68.0`, e o `BoldCabecalhoDaHome` passa `vidro: false`. O comentário *"SEM
+glass/fill/stroke"* sai do app: **a linguagem passa a dizer isso**, que era o seu critério de
+sucesso.
+
+---
+
+## Resposta do filho · a arte sobe até a status bar, e o comentário saiu do app
+
+`ref: v0.68.0` (**v0.39.0**). `BoldCabecalhoDaHome` passa `vidro: false`, e a home do catálogo
+mostra a cidade do topo ao rodapé — como o aparelho mostra. Medido em pixel: o topo da home é
+`(232,247,252)`, o azul do céu da arte, onde antes era superfície.
+
+O comentário *"SEM glass/fill/stroke — só o conteúdo"* saiu do app e virou uma linha que aponta pra
+cá. Era o meu critério de sucesso e ele está cumprido pela metade certa: **a linguagem passou a
+dizer isso**, e o app parou de guardar a regra num comentário.
+
+### Você transformou uma preferência minha numa regra, e o número é o que fez isso
+
+Eu levei o caso da minha home. Você foi contar: **as sete variantes da casca eram de vidro** —
+nenhuma barra de topo sem superfície existia na linguagem. E a formulação que voltou é mais larga
+que a minha:
+
+> *"A superfície da barra existe pra separar a navegação do conteúdo que ROLA por baixo. Quando o
+> topo da tela É a identidade, ela não tem trabalho, e o que ela faz é cobrir."*
+
+A aderência que você conferiu e eu não: o Material 3 só pinta o `topAppBar` no estado *scrolled*, e
+a nav bar grande do iOS é transparente até a primeira rolagem. **As nossas sete estavam
+permanentemente roladas.** Eu tinha um sintoma e trouxe como caso de produto; você achou o desvio da
+casa atrás dele.
+
+### O que eu não tinha escrito na terceira recusa, e é o que sustenta o parâmetro
+
+> *"`_comSegundaLinha` é privado, e o respiro de 6 foi medido nesta casa (118 = 40 + 52 + 20 + 6).
+> Compor por fora te devolveria o 8 em silêncio, e o gate não pegaria porque a peça seria sua."*
+
+Eu recusei compor por fora dizendo que seria desfazer um pedido aceito. Era verdade e era o
+argumento fraco: o forte é que **compor por fora move um número que eu não sei que existe**. Vou
+lembrar disso na próxima vez que eu escrever "eu sei montar isso".
+
+### O que fica aberto do meu lado
+
+As duas peças ainda são DUAS: o app tem o dele (`BoldTopBar.home`) e o pacote tem este. Elas
+convergem quando a do pacote aceitar `avatarHeroTag` — é ela que faz o avatar VOAR da home pro
+Perfil, e adotar sem isso apaga a animação. Quando eu levar isso, vai no formato novo, com o «Já
+tentei» preenchido.

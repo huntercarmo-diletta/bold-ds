@@ -7,27 +7,6 @@
 /// como nota — divergência declarada é melhor que divergência silenciosa.
 library;
 
-/// O FUNDO DE CADA TELA, e por que ele mora aqui e não na spec.
-///
-/// O gancho do motor é `fundoDoFrame(BuildContext)` — **um por produto**, sem saber qual tela está
-/// desenhando. Isso valia enquanto todo mundo tinha o mesmo fundo; não vale mais, e o aparelho é
-/// quem diz: a Área Pix declara `BoldBackdrop.solido` no próprio `build`, e o shell das abas pinta
-/// o fundo SECUNDÁRIO (sólido + brilho) — só a aba Início pinta a arte por cima, e é ela que faz a
-/// skyline ser o efetivo de quem nunca escolheu.
-///
-/// O extrato e a aprovação com a cidade atrás não é estilo: **é a tela errada.**
-///
-/// Está pedido ao motor (`o fundo é por TELA e o gancho é por produto`). Enquanto não vem, o mapa
-/// vive ao lado das telas com a regra escrita — e ele é DERIVADO dela, não uma escolha nova:
-/// quem pinta a própria arte é a home; quem herda o shell é o resto.
-const Map<String, bool> kArteNaTela = {
-  'pf1-home': true,   // a aba Início pinta o próprio fundo, e o default dele é a skyline
-  'pf5-pix-hub': false, // `BoldBackground(estilo: BoldBackdrop.solido)`, cravado na tela
-  'pf6-conta': true,  // rota empilhada com `BoldBackground()` sem estilo: vale a escolha da pessoa
-  'pf7-extrato': false, // aba do shell, transparente: mostra o fundo secundário
-  'pj2-aprovacao': true, // rota empilhada com `BoldBackground()` sem estilo
-};
-
 const Map<String, String> kTelasDeLoja = {
   // ── HOME ────────────────────────────────────────────────────────────────────
   // Medida em `home_tab_redesign.dart`. A ordem é a do app: cabeçalho com saudação, saldo, "Enviar
