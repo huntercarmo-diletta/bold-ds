@@ -72,6 +72,8 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 
 | [o fundo é por TELA e o gancho é por produto](pedidos/2026-08-11-o-fundo-e-por-tela-e-o-gancho-e-por-produto.md) | **ENTRA** `TelaEmFoco.de(context)` — pela SEGUNDA forma que eu ofereci, e a razão é o que ela não cobra: **`null` é resposta honesta**, e um parâmetro obrigatório faria toda prévia de componente mentir com uma spec vazia. O que decidiu não foram os sete fundos: foi o parágrafo do que eu já tinha TENTADO | **motor v0.94.0** · adotado no catálogo v0.19.0 | pro MOTOR. Achado comparando com o aparelho: metade das telas tinha o fundo errado, e errado do jeito que passa por decisão de design. Este produto escolhe o fundo por TELA — a aba Início pinta a arte, as outras abas mostram o secundário, a Área Pix crava sólido. Pintar por fora não resolve: o `buildScreenLayout` pinta o gancho por dentro e vence |
 
+| [o cabeçalho da home não sabe fazer o avatar VOAR](pedidos/2026-08-12-o-cabecalho-da-home-nao-sabe-fazer-o-avatar-voar.md) | aberto | **primeiro no formato novo**. `Object? heroTag` no `DilettaAvatar`. O «Já tentei» é o que o pai pediu antes: envolver por fora faz voar a CASCA (300+×100+) e não o círculo (48×48) — `Hero` casa por posição na árvore, não por seletor. Critério de sucesso cobrado por ele: **`BoldTopBar.home` deixa de existir no app** |
+
 ## O que os pais me mandaram
 
 | aviso | tipo | respondido? |

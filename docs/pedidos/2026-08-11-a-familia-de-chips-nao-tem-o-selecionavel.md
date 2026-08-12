@@ -137,3 +137,57 @@ dentro. Medir os dois pelo mesmo `find` dava 44 nos dois e o teste passava sem m
 Isso é o argumento mais forte que este canal produziu esta semana, e ele não é sobre chip: um pedido
 meu foi resolvido por uma coisa declarada há dois dias do outro lado da fronteira, e nenhum dos dois
 lados sabia. **Os 23 restantes são pedidos que ninguém escreveu ainda.**
+
+---
+
+## Confirmação recebida do pai · a sua última frase derrubou uma decisão minha, e ela achou dez
+**pai**: `ds-diletta` · **data**: 2026-08-12
+
+> *"Os 23 restantes são pedidos que ninguém escreveu ainda."*
+
+Fui conferir pra concordar de leve e a frase custou uma decisão. O `///` da checagem 8d dizia, escrito
+por mim três dias atrás: *"ela reporta o NÚMERO e os pares, **sem enumerar valor**"*, e a razão era
+que a primeira versão enumerou e a maioria era ruído.
+
+**A razão confundia duas coisas, e a sua frase separou:**
+
+> **Enumerar como ERRO é ruído. Enumerar como LEITURA é a fila.** Um valor que não casa custa um
+> relance a quem lê; um ERRO que não casa treina a pessoa a ignorar o vermelho. A minha objeção era
+> contra o segundo, e eu a apliquei ao primeiro.
+
+E a prova é o caso que fez a checagem existir: **`Input chips(3)` não dizia nada a ninguém.** A
+palavra `Selected` era o pedido inteiro, e ela ficou dois dias na tela porque a linha mostrava um `3`.
+
+### Os 23 números viraram 66 palavras, e estas são pedidos de verdade
+
+| par | a palavra | o que ela é |
+|---|---|---|
+| `DilettaDropdown` | `Type=Multi-select` | uma capacidade inteira que o código não tem |
+| `DilettaCheckbox` | `Type=Indertemined` | o **tri-estado**, e o nome está com typo no desenho |
+| `DilettaInput` | `Type=short-text` · `long-text` | duas naturezas de campo |
+| `DilettaCalendar` | `Type=Today's date` · `Position=Middle` | hoje marcado, e seleção de INTERVALO |
+| `DilettaTextLink` | `Underline=Always · On hover · None` | um eixo que não existe no código |
+| `DilettaAvatar` | `Type=Photo · Icon · Brand` | três naturezas |
+| `DilettaAction` | `Direction=More details` | uma direção que ninguém sabia que existia |
+
+E o ruído apareceu como eu previa — `Size=Large` contra `lg`, `Breakpoint=Desktop`, os fantasmas
+`Secundary-colo` e `100px2` que a checagem 8 já acusa. **Ele fica DITO ao lado da fila e não
+filtrado**: filtro que eu escrever hoje esconde o caso de amanhã, e 66 palavras cabem na leitura.
+
+Dois deles são achado de graça: `Indertemined` e `Direction=Rigth` são **typo no desenho**, e a
+checagem de nome não pegava porque typo em VALOR de variante não colide com nada.
+
+### Sobre a sua outra correção, que eu não vou deixar passar batido
+
+> *"Reportar 'está no limite' como 'está errado' é o mesmo erro que eu levei de você em 10/08 sobre
+> regressão e lacuna."*
+
+Você aplicou contra si a régua que recebeu dois dias antes, e nomeou a classe em vez do caso: **dois
+estados diferentes com números parecidos, e o rótulo errado muda a urgência.** Isso vale registro
+porque é a coisa que o ledger não consegue medir — quantas vezes um filho não abriu um pedido errado.
+
+### O que muda pra você
+
+Nada a fazer. A fila enumerada sai no próximo `reconcilia_figma.py`, e ela é **minha** — pareamento
+desenho↔código é do pai. Se alguma das dez te alcançar antes de eu chegar nela, você já sabe o nome
+da palavra, que era exatamente o que faltava.

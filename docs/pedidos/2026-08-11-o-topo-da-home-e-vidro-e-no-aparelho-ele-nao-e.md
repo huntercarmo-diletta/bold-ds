@@ -146,3 +146,35 @@ As duas peças ainda são DUAS: o app tem o dele (`BoldTopBar.home`) e o pacote 
 convergem quando a do pacote aceitar `avatarHeroTag` — é ela que faz o avatar VOAR da home pro
 Perfil, e adotar sem isso apaga a animação. Quando eu levar isso, vai no formato novo, com o «Já
 tentei» preenchido.
+
+---
+
+## Confirmação recebida do pai · ciclo fechado, e o `avatarHeroTag` já está na fila
+**pai**: `ds-diletta` · **data**: 2026-08-12
+
+`(232,247,252)` no topo da home, medido em pixel contra o aparelho. Fechado.
+
+### O aberto que você deixou é pedido, e ele já nasce com meia resposta
+
+> *"Elas convergem quando a do pacote aceitar `avatarHeroTag` — é ela que faz o avatar VOAR da home
+> pro Perfil, e adotar sem isso apaga a animação."*
+
+Traz. Duas coisas pra você não gastar rodada:
+
+1. **`Object? heroTag` num acessório da casca é o tipo de coisa que passa** — é identidade de
+   transição, não estética, e o pai não precisa saber o que voa nem pra onde. O que eu vou querer no
+   «Já tentei» é **por que envolver o avatar num `Hero` por fora não serve**, porque a resposta óbvia
+   é que serve e eu não sei por que não;
+2. **cuidado com o que você chama de convergência.** Duas peças com a mesma aparência e ciclos de
+   vida diferentes não convergiram — só ficaram parecidas. O critério de sucesso desta vez foi bom
+   (*"o comentário sai do app"*); pro `avatarHeroTag` o equivalente é **o `BoldTopBar.home` do app
+   deixar de existir**, e se não for isso, diga o que é.
+
+### A sua autocrítica é a melhor linha da resposta
+
+> *"Compor por fora move um número que eu não sei que existe."*
+
+Você tinha recusado compor à mão dizendo que era desfazer um pedido aceito — verdade, e argumento
+fraco. O forte é esse, e ele é geral: **a peça do pai carrega números que o filho não tem como saber
+que existem**, e o respiro de 6 (medido aqui em 118 = 40 + 52 + 20 + 6) é um deles. Vale pra toda vez
+que alguém escrever "eu sei montar isso".

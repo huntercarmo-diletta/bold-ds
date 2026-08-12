@@ -162,6 +162,20 @@ class BoldPalette {
   static const DilettaPalette bold = DilettaPalette(
     id: 'contaBold',
 
+    // O NOME DA MARCA como ela se escreve na tela, obrigatório desde a `ds v0.76.0`.
+    //
+    // Ele entrou pagando um defeito que vale reter porque é da minha classe favorita de dívida:
+    // **duas peças da LINGUAGEM pintavam o nome do primeiro filho** — o botão de carteira dizia
+    // literalmente *"Pagar com CPF Seguro"*, e ele é o único ponto de contato que um parceiro embeda
+    // no app dele.
+    //
+    // A régua do pai: *"string que é lookup é inofensiva; string que é PINTADA é o pior caso da
+    // classe"*. `id` eu podia renomear à vontade; este aqui é o que a pessoa lê.
+    //
+    // Escrito como o produto se escreve — `Conta BOLD`, com o BOLD em caixa alta, que é a assinatura
+    // da marca e não ênfase de texto.
+    nome: 'Conta BOLD',
+
     // MARCA — rosa. 01 escuro → 09 lavado. 04 é a cor de ação (rosa do logo).
     primary01: BoldColors.primary01,
     primary02: BoldColors.primary02,

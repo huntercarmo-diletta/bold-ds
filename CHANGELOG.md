@@ -20,6 +20,53 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.40.0] — 2026-08-12
+
+### Recebeu — `ds-diletta` v0.76.0 + `catalogo-diletta` v0.104.0
+
+**A origem de cada papel na página de Styles.** Custou as cinco linhas que o aviso prometeu, e o
+número que ela revela é a informação: **16 alias para 5 derivados**, de 21 papéis, com zero sem
+origem.
+
+> *"Alias é porta, derivação é parede. Mostrar as duas iguais convida alguém a trocar `white`
+> esperando mover a tinta de `onPrimary`."*
+
+Virou gate com o número DECLARADO em vez de `greaterThan` — papel que muda de natureza é notícia nos
+dois sentidos.
+
+**`DilettaPalette.nome` obrigatório**, e o `analyze` quebrou, que é o comportamento certo pra campo
+que a linguagem PINTA. Declarei `'Conta BOLD'`. A razão dele vale reter: **duas peças da linguagem
+pintavam o nome do primeiro filho** — um botão que um parceiro embeda no app dele dizia literalmente
+*"Pagar com CPF Seguro"*. A régua é *"string que é lookup é inofensiva; string que é PINTADA é o pior
+caso da classe"*, e eu tenho `id: 'contaBold'` desde sempre sem nunca ter pensado nele como risco.
+
+### Corrigido — DOIS defeitos meus que só as checagens novas do motor podiam achar
+
+**1 · o alinhamento não voltava.** O motor emite o `crossAlign` como um widget POR FORA do bloco —
+`Align(alignment:)` pros extremos, `Center` pro meio — e o meu leitor lia só o de dentro. Quem
+mudasse o alinhamento no compositor veria a escolha sumir na volta, **sem nada falhar**.
+
+Eu não tinha como achar: nenhuma tela minha declara alinhamento, então o defeito só existia no
+caminho que ninguém tinha andado. A armadilha veio avisada no `porQue` da violação e ela é real —
+**`AlignmentDirectional.centerEnd` contém a palavra `center`**, e testar o meio antes dos extremos
+devolve um terceiro valor errado, que é pior que falhar.
+
+**2 · onze aliases fantasmas.** A origem de `bg` aponta pra `white`, e `white` não estava na minha
+página. **Link morto numa página de referência é pior que ausência**: quem lê `alias: neutral09`
+procura o degrau, não acha, e conclui que a rampa é outra.
+
+A lista era curta porque eu escolhia por *"quais eu uso em componente"*. A origem mudou o critério:
+**publicar é obrigação de quem declara alias.**
+
+### Aberto — o primeiro pedido no formato novo
+
+`Object? heroTag` no `DilettaAvatar`, com o «Já tentei» que o pai pediu antes de eu escrever:
+envolver o cabeçalho num `Hero` por fora faz voar a CASCA (300+ × 100+) e não o círculo (48 × 48),
+porque **`Hero` casa por posição na árvore, não por seletor**. Medido em teste.
+
+O critério de sucesso é o que ele cobrou, e não é "ficarem parecidas": **`BoldTopBar.home` deixa de
+existir no app.**
+
 ## [0.39.0] — 2026-08-11
 
 ### Recebeu — os dois pedidos abertos voltaram, e os dois ENTRAM

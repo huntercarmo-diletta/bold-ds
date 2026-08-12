@@ -2985,6 +2985,20 @@ Map<String, Color> _coresDaMarca() {
     'error03': p.error03, 'error04': p.error04,
     'vinho.marca': BoldVinho.marca, 'vinho.ink': BoldVinho.ink,
     'neutral01': p.neutral01, 'neutral05': p.neutral05, 'neutral10': p.neutral10,
+    // OS ONZE QUE FALTAVAM, e eles não são gosto: são as entradas pra onde a ORIGEM dos papéis
+    // aponta. A checagem `alias-fantasma` do motor (v0.104.0) achou na primeira execução — a página
+    // dizia *"`bg` é alias de `white`"* e `white` não estava em lugar nenhum dela.
+    //
+    // **Link morto numa página de referência é pior que ausência**: quem lê `alias: neutral09`
+    // procura o degrau, não acha, e conclui que a rampa é outra. A lista era curta porque eu
+    // escolhi por "quais eu uso em componente"; a origem mudou o critério — publicar é obrigação de
+    // quem declara alias.
+    'white': p.white,
+    'neutral02': p.neutral02, 'neutral07': p.neutral07,
+    'neutral08': p.neutral08, 'neutral09': p.neutral09,
+    'success02': p.success02, 'success05': p.success05,
+    'success06': p.success06, 'success07': p.success07,
+    'warning05': p.warning05, 'error05': p.error05,
   };
 }
 
@@ -3027,6 +3041,9 @@ bool _vazio(Object? v) => v == null || '$v'.isEmpty;
 /// o falso positivo permanente que ensina a ignorar o vermelho.
 ///
 /// Quem recebe texto em cima é o `subtle` de cada estado, e esses três passam (5,19 · 6,09 · 6,05).
+/// Atalho pro gate medir a proporção alias/derivado sem passar pelo plugue.
+Map<String, PapelNosDoisModos> papeisDoBoldParaMedir() => _papeisDoBold();
+
 Map<String, PapelNosDoisModos> _papeisDoBold() {
   final c = DilettaScheme.light(BoldPalette.bold);
   final e = DilettaScheme.dark(BoldPalette.bold);
@@ -3037,7 +3054,20 @@ Map<String, PapelNosDoisModos> _papeisDoBold() {
   }) =>
       PapelNosDoisModos(ler(c), ler(e), significado: significado, tinta: tinta);
 
-  return {
+  /// A ORIGEM de cada papel — alias ou derivação —, e ela vem do pai.
+  ///
+  /// A pergunta que a página de Styles fazia sem responder: alguém vê `bg` com um hex ao lado e não
+  /// sabe **se pode trocá-lo**. Metade dos papéis é uma entrada da minha paleta (troca a entrada e o
+  /// papel segue); a outra metade é uma conta do pai que existe justamente pra ninguém escolher.
+  ///
+  /// A frase do aviso é a régua: **alias é porta, derivação é parede.** Mostrar as duas iguais
+  /// convida alguém a trocar `white` esperando mover a tinta de `onPrimary`.
+  ({String? alias, String? derivacao})? origem(String papel, {required bool escuro}) {
+    final o = origemDoPapel(papel, escuro: escuro);
+    return o == null ? null : (alias: o.alias, derivacao: o.derivacao);
+  }
+
+  final base = {
     'bg': p((s) => s.bg, significado: 'Fundo geral da tela (scaffold).', tinta: 'fg'),
     'surface': p((s) => s.surface, significado: 'Card, folha, diálogo.', tinta: 'fg'),
     'surfaceMuted': p((s) => s.surfaceMuted,
@@ -3070,6 +3100,15 @@ Map<String, PapelNosDoisModos> _papeisDoBold() {
     'error': p((s) => s.error, significado: 'Falha, destrutivo.'),
     'glassTint': p((s) => s.glassTint, significado: 'O véu do vidro — é a única cor com alfa.'),
   };
+
+  // O `p(...)` recebe VALORES e não o nome do papel, então mudar a assinatura dele custaria ~50
+  // chamadas. O motor ganhou `comOrigem` pra a ligação ser uma passada no mapa já montado — o aviso
+  // do pai diz isso com todas as letras, e é a diferença entre cinco linhas e uma tarde.
+  return base.map((papel, v) => MapEntry(
+      papel,
+      v.comOrigem(
+          clara: origem(papel, escuro: false),
+          escura: origem(papel, escuro: true))));
 }
 
 Map<String, T> _porNome<T extends Enum>(List<T> valores) =>

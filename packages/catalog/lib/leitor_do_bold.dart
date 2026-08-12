@@ -48,7 +48,86 @@ ScreenSpec lerTelaDoBold(String codigo, String nome) {
 var _id = 0;
 String _novoId() => 'lido-${_id++}';
 
+/// A expressão do `child:`, com os parênteses equilibrados.
+///
+/// O motor tem `argString` e `primeiraListaDeChildren`, e nenhum dos dois serve: o primeiro devolve
+/// literal e o segundo devolve LISTA. Aqui o filho é UM widget aninhado, então quem conta os
+/// parênteses é esta função — parar na primeira vírgula pegaria metade de um construtor.
+String? _filhoDe(String expr) {
+  final m = RegExp(r'\bchild:\s*').firstMatch(expr);
+  if (m == null) return null;
+  var nivel = 0;
+  for (var i = m.end; i < expr.length; i++) {
+    final c = expr[i];
+    if (c == '(' || c == '[') nivel++;
+    if (c == ')' || c == ']') {
+      if (nivel == 0) return expr.substring(m.end, i).trim();
+      nivel--;
+    }
+    if (c == ',' && nivel == 0) return expr.substring(m.end, i).trim();
+  }
+  return expr.substring(m.end).trim();
+}
+
+/// O ENVELOPE DE ALINHAMENTO, desembrulhado antes de tudo.
+///
+/// O motor emite o `crossAlign` como um widget POR FORA do bloco — `Align(alignment: …)` pros
+/// extremos e `Center` pro meio —, e o meu leitor lia só o de dentro. Resultado: quem mudava o
+/// alinhamento no compositor via a escolha sumir na volta, **sem nada falhar**.
+///
+/// Quem achou foi a checagem `alinhamento-nao-volta` do motor (v0.104.0), na primeira execução dela
+/// contra este filho. Eu não tinha como achar: nenhuma das minhas telas declara alinhamento, então
+/// o defeito só existia no caminho que ninguém tinha andado ainda.
+///
+/// ## A ordem dos testes é o aviso que veio junto, e ele evita um terceiro valor errado
+///
+/// `AlignmentDirectional.centerEnd` **contém a palavra `center`**. Testar `center` primeiro devolve
+/// `center` pra uma coisa que é `end` — não é falha, é resposta errada, que é pior. Então os
+/// extremos vêm antes, e as duas grafias (`Alignment` e `AlignmentDirectional`) são lidas pelo mesmo
+/// padrão porque a segunda é a que o motor VAI emitir quando o eixo de direção fechar.
+({String align, String dentro})? _envelopeDeAlinhamento(String expr) {
+  if (ehCtor(expr, 'Align')) {
+    final m = RegExp(r'Alignment(?:Directional)?\.(\w+)').firstMatch(expr);
+    final nome = m?.group(1) ?? '';
+    // Extremos ANTES do meio — ver o `///`.
+    final align = nome.contains('Right') || nome.contains('End')
+        ? 'end'
+        : (nome.contains('Left') || nome.contains('Start') ? 'start' : null);
+    if (align == null) return null;
+    final dentro = _filhoDe(expr);
+    if (dentro == null) return null;
+    return (align: align, dentro: dentro);
+  }
+  if (ehCtor(expr, 'Center')) {
+    final dentro = _filhoDe(expr);
+    if (dentro == null) return null;
+    return (align: 'center', dentro: dentro);
+  }
+  return null;
+}
+
 Block _bloco(String expr) {
+  // O envelope primeiro: o alinhamento é um widget POR FORA, e sem desembrulhar nada aqui reconhece
+  // o construtor de dentro.
+  final envelope = _envelopeDeAlinhamento(expr);
+  if (envelope != null) {
+    final dentro = _bloco(semConst(envelope.dentro.trim()));
+    return Block(
+      id: dentro.id,
+      type: dentro.type,
+      props: dentro.props,
+      slots: dentro.slots,
+      bindings: dentro.bindings,
+      listBindings: dentro.listBindings,
+      visibleBinding: dentro.visibleBinding,
+      fill: dentro.fill,
+      fixedMain: dentro.fixedMain,
+      pin: dentro.pin,
+      sticky: dentro.sticky,
+      crossAlign: envelope.align,
+    );
+  }
+
   // 1 · A TABELA primeiro: 42 dos 56 blocos declaram `ctor` + `args` (46 declaram `ctor`), e o motor
   // lê os dois lados com a mesma declaração — inclusive aceitando o construtor sem o prefixo `ds.`,
   // que é como código colado por alguém costuma chegar.
