@@ -20,6 +20,41 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.41.0] — 2026-08-12
+
+### Recebeu — o eixo de AJUSTE DE PAPEL, e ele nasce desligado
+
+`ds-diletta` v0.78.0 + `catalogo-diletta` v0.105.0. Um componente pode pedir outro degrau da MESMA
+família, por `marca` ou por `contraste`. **139 testes do pacote e 90 do catálogo verdes sem declarar
+nada** — conferido, não acreditado.
+
+### Eu não tenho caso, e a medição é que diz isso
+
+Ia responder *"não tenho parceiro, logo não tenho caso"* e parar. Medi antes, e a medição corrigiu a
+resposta: o único par que o eixo melhoraria é `primaryTrack`/`surface` (1,64 claro · 1,34 escuro) —
+que é o exemplo do próprio aviso — e **ele é baixo de propósito**, por um pedido meu que o pai
+aceitou em 10/08: *"trilho é o que sobra atrás do preenchimento, não elemento que se anuncia"*.
+
+Ajustar ali seria desfazer com um eixo novo o que a linguagem decidiu com medição.
+
+### Corrigido em mim — o terceiro erro da mesma classe em três dias
+
+A minha varredura de margem aplicou piso 4,5 a papéis que não são texto e acusou seis "REPROVA" que
+não são violação — a conformidade do pai devolve vazia, e ela é que está certa.
+
+Pior: a **primeira** versão do cálculo deu `fg/bg` = **1,70** no claro, porque eu escrevi uma
+aproximação de `pow` à mão em vez de usar `dart:math`.
+
+> **Cálculo que eu escrevo pra medir o rigor do outro precisa do mesmo rigor.** A frase que eu usei
+> contra o `razao` sem alpha — *"errado com a mesma confiança"* — voltou contra mim.
+
+### O dado que ficou, e ele não é pedido
+
+Com a fórmula certa, o claro desta paleta é muito mais apertado que o escuro (`primary`/`bg` 3,46
+contra 7,20; `error`/`bg` 3,68 contra 6,05). O rosa `#FE3976` tem luminância média: fecha pouco sobre
+o quase-branco e sobra sobre o quase-preto. A única inversão é `onPrimarySubtle`/`primarySubtle`, que
+no ESCURO está em 4,89 — acima do piso, com a menor folga da tabela.
+
 ## [0.40.0] — 2026-08-12
 
 ### Recebeu — `ds-diletta` v0.76.0 + `catalogo-diletta` v0.104.0
