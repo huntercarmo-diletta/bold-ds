@@ -181,6 +181,28 @@ const String kSlugDoExtrato = 'pf7-extrato';
 /// quanto, quanto falta pra sair, por que precisa de mim, e o que eu faço.
 const String kSlugDaAprovacao = 'pj2-aprovacao';
 
+/// A APARÊNCIA, medida em `aparencia_screen.dart` — e é a tela que EDITA este DS.
+///
+/// Ela é a primeira deste registro cujo assunto é a própria linguagem: tema do app em cima, os cinco
+/// moods de fundo embaixo. Quem escolhe o `BoldBackdrop` é esta tela, e até hoje o catálogo tinha os
+/// sete valores do enum e **nenhuma vitrine deles** — o retrato de cada mood era classe privada dentro
+/// do app (`_BgOption` + `_Swatch`), invisível pra qualquer varredura de adoção.
+///
+/// ## Ela trouxe duas peças, e nenhuma delas é peça pra fechar desenho
+///
+/// A `amostraDeFundo` é `BoldAmostraDeFundo` no pacote, e o `BoldBackground.fixo` já a citava pelo
+/// nome: o `///` daquele construtor diz que o declarado tem que vencer a escolha da pessoa **por causa
+/// do seletor**, senão as cinco opções desenham o fundo já escolhido e escolher outro muda as cinco
+/// juntas. Ou seja: o componente do seletor faltava, e o DS já sabia que ele existia.
+///
+/// A `linhaDeEscolha` fica no catálogo e não no pacote, porque ela é composição dos três acessórios do
+/// pai — a única diferença contra o `linha` é a DIREITA: check no lugar da seta. Seta numa lista de
+/// escolha promete outra tela e o toque decide ali mesmo.
+///
+/// **Um sítio no app pra cada uma, e nos dois a medição por sítio é a pergunta errada**: seletor de
+/// token é único por construção — dois seria o defeito.
+const String kSlugDaAparencia = 'pf8-aparencia';
+
 
 
 
@@ -211,6 +233,11 @@ const Map<String, BoldBackdrop> _fundoPorSlug = {
   kSlugDaAprovacao: BoldBackdrop.imagem,
   kSlugDoHubDePix: BoldBackdrop.solido,
   kSlugDoExtrato: BoldBackdrop.solido,
+  // A APARÊNCIA é a exceção da regra do shell, e ela é declarada: a tela é empurrada (fluxo
+  // secundário, que pediria `solido`), e o `aparencia_screen.dart` usa `BoldBackground` SEM estilo —
+  // ou seja, ela pinta a escolha da pessoa. Sem escolha, a arte. Desenhar sólido aqui mostraria o
+  // seletor de fundo sobre o único fundo que ele não oferece.
+  kSlugDaAparencia: BoldBackdrop.imagem,
 };
 
 /// `nome da tela → fundo`, montado UMA vez.

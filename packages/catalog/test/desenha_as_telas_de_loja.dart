@@ -68,6 +68,7 @@ void main() {
       kSlugDaConta,
       kSlugDoExtrato,
       kSlugDaAprovacao,
+      kSlugDaAparencia,
     ]) {
       testWidgets('$slug ${escuro ? "escuro" : "claro"}', (t) async {
         // 393×852 é o frame do produto. O `devicePixelRatio` 2 dá um PNG legível em tela cheia.
@@ -80,7 +81,24 @@ void main() {
           key: chave,
           child: MaterialApp(
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(fontFamily: BoldFonts.familyRaw),
+            // O BRILHO VIAJA COM O TEMA, e sem esta linha a leva escura saía com TEXTO PRETO.
+            //
+            // Achado olhando o PNG, que é a razão desta ferramenta existir: no
+            // `pf8-aparencia-escuro` as duas linhas de apoio estavam invisíveis, e no
+            // `pf7-extrato-escuro` o título "Transações" também — cinza escuro sobre arte noturna.
+            //
+            // A causa não é o bloco. O `texto` emite `ds.DilettaText(x, style: ds.DilettaType.bodySm)`,
+            // e o token de tipo NÃO carrega cor (de propósito: cor é papel, e papel vem do scheme). A
+            // cor então vem do `DefaultTextStyle`, que é fornecido pelo Material — e este `ThemeData`
+            // era CLARO nas duas voltas do laço. O `DilettaThemeScope` de dentro pintava fundo, card e
+            // acessório certos, e o texto solto ficava com a tinta do tema errado.
+            //
+            // No app isso não acontece porque lá o `MaterialApp` recebe o tema do produto por modo.
+            // Aqui a árvore é montada à mão, e montar à mão é onde o ambiente se perde.
+            theme: ThemeData(
+              fontFamily: BoldFonts.familyRaw,
+              brightness: escuro ? Brightness.dark : Brightness.light,
+            ),
             // `Scaffold` porque o campo de busca é `TextField`, e ele exige um ancestral Material.
             // O frame do board já dá um; aqui a árvore é montada à mão.
             home: Scaffold(

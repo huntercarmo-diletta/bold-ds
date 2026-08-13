@@ -20,6 +20,62 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.44.0] — 2026-08-13
+
+### A décima tela, e ela é a que EDITA este DS — `pf8-aparencia`
+
+O pedido era quatro telas em PNG pra virar screenshot de loja: home, Área Pix, extrato e **editar
+aparência**. Três já existiam e estavam certas contra o aparelho; a quarta não existia, e o motivo é o
+que interessa: **o `BoldBackdrop` tinha sete valores e nenhuma peça que os mostrasse.** O retrato de
+cada mood era `_BgOption` + `_Swatch`, classe PRIVADA dentro de `aparencia_screen.dart` — a quarta
+classe de dívida deste repo, a mesma que trouxe o `cartaoDaConta` e o `cartaoDePedido`.
+
+### `BoldAmostraDeFundo` — o componente que o próprio DS já citava pelo nome
+
+O `///` do `BoldBackground.fixo` abre com *"o SELETOR — a tela de Aparência desenha as cinco opções com
+`estilo:` em cada uma"*, e é o primeiro dos dois casos em que o declarado tem que vencer a escolha da
+pessoa. Ou seja: o construtor existia PRA esta peça, e a peça não existia. Dois números do aparelho
+viraram degrau na mudança de casa — raio 11 → `r8` (11 não é degrau, e o anel fica em `all16` pra ler
+como anel) e rótulo de 10px cravado → `DilettaType.labelSm`, o mesmo `copyWith` que o ladrilho de menu
+já pagou.
+
+**Um sítio no app, e a medição por sítio é a pergunta errada aqui**: seletor de token é único por
+construção — dois seria o defeito. O que justifica a peça é o SUJEITO, que é um token deste DS.
+
+### `linhaDeEscolha` — fica no catálogo, porque nada novo foi desenhado
+
+Composição dos três acessórios do pai (`spotIcon` + `title` + `iconAccessory`), e a única diferença
+contra o `linha` é a direita: **check no lugar da seta.** Seta numa lista de escolha promete outra tela
+e o toque decide ali — é a mesma classe do botão cinza desabilitado, que oferece o que não existe. Ela
+entra na spec `app-list` do pai pela mesma exceção da `linha` e da `linhaDeValor`.
+
+### E o PNG achou um defeito que os 90 gates não viam: a leva escura saía com TEXTO PRETO
+
+`desenha_as_telas_de_loja.dart` montava a árvore com `ThemeData(fontFamily: …)` — **claro nas duas
+voltas do laço.** O `DilettaThemeScope` de dentro pintava fundo, card e acessório certos; o texto solto
+pegava a tinta do `DefaultTextStyle`, que vem do Material.
+
+Não é defeito de bloco: o `texto` emite `ds.DilettaText(x, style: ds.DilettaType.bodySm)`, e o token de
+tipo **não carrega cor de propósito** — cor é papel, e papel vem do scheme. No app o `MaterialApp`
+recebe o tema do produto por modo; aqui a árvore é montada à mão, e é aí que o ambiente se perde.
+
+O estrago era antigo e estava nas imagens que iam pra loja: no `pf7-extrato-escuro`, **"Transações"
+invisível**; no `pf8-aparencia-escuro`, as duas linhas de apoio. Uma linha (`brightness:` no
+`ThemeData`) conserta as seis telas de uma vez.
+
+### A folha da árvore virou categoria DECLARADA no gate de saída
+
+`toda tela tem gatilho de saída` reprovou a Aparência, e reprovou com razão pela régua antiga. Só que
+nela **todo toque aplica e persiste** — tema e fundo — e a única saída é a volta da casca. Declarar a
+linha de escolha como gatilho seria desenhar seta pra tela que não existe.
+
+A lista de folhas é nominal (`{kSlugDaAparencia}`) e a asserção **inverte** pra quem está nela: folha
+que ganha gatilho reprova também. E a volta da casca segue FORA de `gatilhosDeSaida` — ela existe em
+quase toda tela, e aceitá-la faria o gate passar em tudo, inclusive na tela de fluxo que esqueceu o CTA.
+
+Gate: **90/90** no catálogo (era 83) · **139/139** no pacote. Contratos: 21, e a lacuna de cobertura
+segue em 1. Superfície de variação de enum: 68 → **74**.
+
 ## [0.43.0] — 2026-08-13
 
 ### Recebeu — `ds-diletta` v0.88.0 · `DilettaStoreBadge`

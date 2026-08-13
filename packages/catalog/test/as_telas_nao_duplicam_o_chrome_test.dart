@@ -88,7 +88,25 @@ void main() {
     // "gatilho não documentado" em vermelho. A causa não era a seta — era `gatilhosDeSaida` VAZIO no
     // plugue deste catálogo. Com a lista vazia o motor não consegue ancorar a seta num componente, sai da
     // borda do frame e escreve a falta no rótulo. Degradação honesta dele, falta minha.
+    // AS FOLHAS DA ÁRVORE, e elas são declaradas UMA POR UMA com o motivo — não é categoria aberta.
+    //
+    // `pf8-aparencia` é a primeira: nela todo toque APLICA e persiste (tema e fundo), e a única saída é
+    // a volta da casca de topo. Declarar a linha de escolha ou a amostra de fundo como gatilho seria
+    // desenhar uma seta pra uma tela que não existe — a seta é o que o board usa pra dizer "isto leva
+    // ali", e aqui não leva.
+    //
+    // A volta em si não entra em `gatilhosDeSaida` de propósito: `cascaDeTopo` com `esquerda: voltar`
+    // existe em quase toda tela, e aceitá-la como gatilho faria este gate passar em tudo — inclusive na
+    // tela de fluxo que esqueceu o CTA, que é o defeito que ele nasceu pra pegar.
+    const folhas = {kSlugDaAparencia};
+
     telasDoBold().forEach((slug, tela) {
+      if (folhas.contains(slug)) {
+        expect(gatilhosDe(tela), isEmpty,
+            reason: '$slug está declarada como folha e ganhou gatilho: '
+                'ou ela leva a alguma tela agora (saia da lista), ou o gatilho é falso');
+        return;
+      }
       expect(gatilhosDe(tela), isNotEmpty, reason: '$slug não tem componente que dispare saída');
     });
 

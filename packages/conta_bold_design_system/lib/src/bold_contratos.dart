@@ -51,6 +51,9 @@ const Map<String, String> kBoldSpecs = {
   // A grade não é componente — é o container de linha que a gramática `top/blocks/bottom` não
   // tinha. Ela tem contrato pelo mesmo motivo que os outros: sem ele a aba desenha nome e para.
   'grade': _grade,
+  // A amostra de fundo é a VITRINE de um token deste DS, e ela chegou com a tela de Aparência: o
+  // `BoldBackdrop` tinha sete valores e nenhuma peça que os mostrasse fora do aparelho.
+  'amostraDeFundo': _amostraDeFundo,
 };
 
 const _seloQuantico = r'''
@@ -859,3 +862,51 @@ inteira. A célula que sobra é vazia de propósito.
 Em `fileira` o item SHALL manter a largura própria; em `2`/`3` ele SHALL herdar a da célula. Não é
 estética: no primeiro caso o item decide, no segundo a grade decide.
 """;
+
+const _amostraDeFundo = r'''
+## Purpose
+
+O retrato de um dos moods de `BoldBackdrop`, com rótulo e marca de escolha. É a peça com que a tela de
+Aparência oferece os cinco fundos personalizáveis.
+
+## Guidelines
+
+### Quando usar
+Seletor de FUNDO, e só ele. Escolha de tema (Claro · Escuro · Do sistema) é lista de linhas com check
+(`linhaDeEscolha`), porque tema é rótulo e fundo é imagem — mostrar tema em quadradinho obriga a
+adivinhar, e mostrar fundo em lista de texto esconde o que se está escolhendo.
+
+### Faça
+- desenhe o fundo pelo `BoldBackground.fixo`: é o construtor que faz o mood DECLARADO vencer a escolha
+  da pessoa, e sem ele as cinco amostras pintam o fundo já escolhido — escolher outro muda as cinco
+- ofereça os moods de PERSONALIZAÇÃO, e não os sete valores do enum: `solido` é o fundo dos fluxos
+  empurrados, decisão de tela, não gosto de quem usa
+
+### Evite
+- marcar a escolha só pelo anel: o anel é cor, e cor sozinha não é informação
+- deixar o anel sumir no não escolhido: transparente e não ausente, senão o retrato pula 5 pixels ao
+  ser tocado
+- cravar tamanho de fonte no rótulo: ele é `DilettaType.labelSm`, e o 10px do aparelho não é degrau da
+  escada
+
+## Compõe
+
+- BoldBackground.fixo
+- DilettaIcon
+- DilettaText
+- DilettaTappable
+
+## Requirements
+
+### Requirement: o declarado vence a escolha
+A amostra SHALL desenhar o mood que recebe, ignorando o `BoldBackdropScope`. Seletor em que toda opção
+parece a atual não é seletor.
+
+### Requirement: a escolha é marcada em três canais
+O estado escolhido SHALL somar anel, check e peso 700 no rótulo. Nenhum dos três sozinho responde por
+quem não distingue as duas tintas.
+
+### Requirement: mood novo entra com amostra
+Valor novo em `BoldBackdrop` que seja personalizável SHALL ganhar amostra no mesmo commit. Mood que
+existe e ninguém consegue escolher é mood que só o código sabe que tem.
+''';

@@ -202,6 +202,22 @@ Block _bloco(String expr) {
     });
   }
 
+  // 2a-ter · A LINHA DE ESCOLHA, pela mesma razão da de valor: composição de três acessórios não cabe
+  // na tabela de `Ctor(args)`.
+  //
+  // A assinatura dela é o `title` sozinho no meio — as outras duas linhas põem subtítulo lá. Por isso a
+  // ordem importa e esta vem DEPOIS da linha de valor: `AppListRow` é o mesmo construtor nos três, e
+  // quem separa é o acessório. A escolha é lida pela PRESENÇA do check à direita, que é onde ela mora
+  // no código: linha não escolhida não tem `right:` nenhum.
+  if (ehCtor(expr, 'ds.DilettaAppListRow') &&
+      expr.contains('MiddleAccessory.title(')) {
+    return Block(id: _novoId(), type: 'linhaDeEscolha', props: {
+      'icone': RegExp(r'DilettaIcons\.(\w+)').firstMatch(expr)?.group(1) ?? 'sunLight',
+      'titulo': argStringEm(expr, 'middle', 'title') ?? '',
+      'escolhido': expr.contains('circleCheckSolid'),
+    });
+  }
+
   // 2b · O GRUPO DO DIA, que é a segunda coleção com filhos deste vocabulário. Mesma razão da lista e
   // mesma recursão: os lançamentos voltam por `_bloco`, então a `linhaDeValor` é lida pela tabela de
   // graça. O que ele tem a mais é o acessório — que no código é um `DilettaText` inteiro, e volta

@@ -168,4 +168,41 @@ const Map<String, String> kTelasDeLoja = {
 {"kind":"a11y","text":"O progresso anuncia a frase inteira (\"1 de 2 assinaturas, exige master\") em vez de dois números soltos, e o motivo diz a ORIGEM e o ESCOPO da regra — é ele que responde \"por que eu?\"."}
 ]}
 ''',
+
+  // ── APARÊNCIA ───────────────────────────────────────────────────────────────
+  // Medida em `aparencia_screen.dart`. É a tela que EDITA o DS: tema do app em cima, fundo embaixo, e
+  // cada escolha aplica na hora — não há botão salvar, e por isso não há barra de baixo.
+  //
+  // Ela trouxe as duas peças que faltavam, e as duas eram do mesmo tipo de dívida: a linha com CHECK
+  // (o app compõe três acessórios do pai porque a fábrica `menuItem` termina em seta) e a amostra de
+  // fundo, que era `_BgOption` + `_Swatch`, classe privada dentro da tela.
+  'pf8-aparencia': r'''
+{"formato":1,"name":"PF8 · Aparência","form":"phone","contentGap":"s4","scrollableContent":true,
+"top":[{"id":"b_1","type":"cascaDeTopo","props":{"titulo":"Aparência","esquerda":"voltar","direita":""}}],
+"blocks":[
+{"id":"b_2","type":"texto","props":{"conteudo":"Escolha o tema do app.","preset":"bodySm"}},
+{"id":"b_3","type":"lista","props":{"titulo":"","idioma":"carded"},"slots":{"itens":[
+  {"id":"b_4","type":"linhaDeEscolha","props":{"icone":"sunLight","titulo":"Claro","escolhido":true}},
+  {"id":"b_5","type":"linhaDeEscolha","props":{"icone":"moonStarsLight","titulo":"Escuro","escolhido":false}},
+  {"id":"b_6","type":"linhaDeEscolha","props":{"icone":"mobileLight","titulo":"Do sistema","escolhido":false}}
+]}},
+{"id":"b_7","type":"cabecalhoDeSecao","props":{"rotulo":"Fundo","verTodos":false}},
+{"id":"b_8","type":"texto","props":{"conteudo":"O fundo do app — vale na home e nas telas de dentro.","preset":"bodySm"}},
+{"id":"b_9","type":"grade","props":{"colunas":"fluida","vao":"s3"},"slots":{"itens":[
+  {"id":"b_10","type":"amostraDeFundo","props":{"estilo":"imagem","rotulo":"Cidade","escolhido":true}},
+  {"id":"b_11","type":"amostraDeFundo","props":{"estilo":"brilhoRosa","rotulo":"Brilho rosa","escolhido":false}},
+  {"id":"b_12","type":"amostraDeFundo","props":{"estilo":"vidroFrio","rotulo":"Vidro frio","escolhido":false}},
+  {"id":"b_13","type":"amostraDeFundo","props":{"estilo":"aurora","rotulo":"Aurora","escolhido":false}},
+  {"id":"b_14","type":"amostraDeFundo","props":{"estilo":"porDoSol","rotulo":"Pôr do sol","escolhido":false}}
+]}}
+],
+"bottom":[],
+"notes":[
+{"kind":"decisao","text":"ZERO barra de baixo, e é a regra da tela: cada escolha aplica na hora e persiste — não existe estado pendente pra confirmar. Um CTA \"Salvar\" aqui inventaria um passo que o app não tem, e faria a pessoa achar que o tema que ela já está vendo ainda não valeu."},
+{"kind":"regra","text":"O fundo escolhido é a CIDADE quando ninguém escolheu, e não \"nenhum\": a preferência nasce nula e a home pinta `imagem` por default, então a marca do seletor tem que dizer o que a tela está pintando. Seletor sem marca nenhuma no primeiro acesso é o mesmo que mentir sobre o estado."},
+{"kind":"borda","text":"São CINCO amostras pros SETE valores de `BoldBackdrop`: o `solido` é o fundo dos fluxos empurrados e a grade técnica não é oferecida — os dois são decisão de tela, não personalização. Mood novo entra aqui e no seletor no mesmo commit, senão ele existe e ninguém consegue escolher."},
+{"kind":"a11y","text":"A escolha é marcada em TRÊS canais, e nenhum é cor sozinha: o anel de 2,5 no retrato, o check no meio dele, e o rótulo em peso 700. A mesma régua da fila de filtros do extrato — cor sozinha não é informação."},
+{"kind":"decisao","text":"O ritmo do aparelho não é uniforme (x4 depois do apoio, x6 antes de \"Fundo\", x1 depois dele) e o registro tem UM `contentGap`. Declarado `s4`, que é o vão da maioria; o respiro maior antes da seção sairia de um bloco de `ritmo`, e bloco de espaçador numa tela de cinco blocos é ruído no board."}
+]}
+''',
 };

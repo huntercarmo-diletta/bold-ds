@@ -448,6 +448,62 @@ BlockDef _linhaDeValor() => BlockDef(
           ', onTap: aoTocarNaLinha)',
     );
 
+/// A LINHA DE ESCOLHA — a de Aparência: ícone, título, e o CHECK no lugar da seta.
+///
+/// Ela não é o `linha`, e a diferença é a única que importa numa lista de escolha: o `menuItem` do pai
+/// termina em `chevron`, que promete *"toca e vai pra outra tela"*. Aqui o toque **decide ali** e a
+/// direita diz qual é a atual. Seta numa lista de escolha é a mesma classe de defeito do botão cinza
+/// desabilitado: ela oferece um caminho que não existe.
+///
+/// Composição, e não fábrica — como o `linhaDeValor`. O pai não tem `DilettaAppListRow.choiceItem`, e
+/// os três acessórios existem: `spotIcon` em `outline` com estado `primary` à esquerda, `title` no
+/// meio, e o `iconAccessory` do check à direita. Aquele acessório nasceu no pai **exatamente** pra
+/// substituir o `custom(Icon(...))` que esta tela do app tinha — o tom é papel (`primary`), não uma cor.
+///
+/// A linha NÃO escolhida não tem acessório nenhum. Marcar as duas pontas (check verde na atual,
+/// círculo vazio nas outras) é o que o app não faz, e o print concorda: numa lista de três, o silêncio
+/// das outras duas já é a informação.
+BlockDef _linhaDeEscolha() => BlockDef(
+      type: 'linhaDeEscolha',
+      acoes: const {'onTap': 'aoTocarNaLinha'},
+      label: 'Linha de escolha · AppListRow',
+      props: {
+        'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+        'titulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'escolhido': const PropDef('bool'),
+      },
+      defaults: () => {
+        'icone': 'sunLight',
+        'titulo': 'Claro',
+        'escolhido': true,
+      },
+      build: (p) => DilettaAppListRow(
+        left: DilettaLeftAccessory.spotIcon(
+          type: DilettaSpotType.outline,
+          icon: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
+          state: DilettaSpotState.primary,
+        ),
+        middle: DilettaMiddleAccessory.title(title: '${p['titulo']}'),
+        right: p['escolhido'] == true
+            ? const DilettaRightAccessory.iconAccessory(
+                icon: DilettaIcons.circleCheckSolid,
+                tone: DilettaStatusTone.primary,
+                size: 20)
+            : null,
+        onTap: () {},
+      ),
+      codegen: (p) => 'ds.DilettaAppListRow('
+          'left: ds.DilettaLeftAccessory.spotIcon('
+          'type: ds.DilettaSpotType.outline'
+          ', icon: ds.DilettaIcons.${p['icone']}'
+          ', state: ds.DilettaSpotState.primary)'
+          ', middle: ds.DilettaMiddleAccessory.title(title: ${_str(p['titulo'])})'
+          '${p['escolhido'] == true ? ', right: const ds.DilettaRightAccessory.iconAccessory('
+              'icon: ds.DilettaIcons.circleCheckSolid'
+              ', tone: ds.DilettaStatusTone.primary, size: 20)' : ''}'
+          ', onTap: aoTocarNaLinha)',
+    );
+
 const _idiomasDeLista = ['carded', 'plain', 'menu'];
 
 /// A LISTA — o bloco mais usado deste app (172 linhas em 87 grupos) e o primeiro deste filho com
@@ -469,7 +525,8 @@ BlockDef _lista() => BlockDef(
       },
       defaults: () => {'titulo': '', 'idioma': 'carded'},
       slots: const {
-        'itens': SlotDef(list: true, accepts: ['linha', 'linhaDeValor']),
+        'itens': SlotDef(
+            list: true, accepts: ['linha', 'linhaDeValor', 'linhaDeEscolha']),
       },
       build: (p) => _listaWidget(p, const []),
       slotsBuild: (p, filhos) => _listaWidget(p, filhos['itens'] ?? const []),
@@ -2005,6 +2062,42 @@ BlockDef _ladrilhoDeMenu() => BlockDef(
           ', aoTocar: aoTocar)',
     );
 
+/// A AMOSTRA DE FUNDO — o retrato de um dos sete moods, no seletor de Aparência.
+///
+/// Ela entra pelo mesmo motivo das seis de 11/08: era classe PRIVADA dentro de uma tela do app, e
+/// classe privada é invisível pra varredura de adoção. A diferença é o que ela desenha — um TOKEN
+/// deste DS. Fundo com sete valores e nenhuma vitrine é o caso em que o catálogo não conseguia mostrar
+/// a própria linguagem.
+BlockDef _amostraDeFundo() => BlockDef(
+      type: 'amostraDeFundo',
+      acoes: const {'aoTocar': 'aoTocar'},
+      ctor: 'ds.BoldAmostraDeFundo',
+      args: const {
+        'estilo': Arg.enumeracao('estilo', 'ds.BoldBackdrop'),
+        'rotulo': Arg.texto('rotulo'),
+        'escolhido': Arg.bool('escolhido'),
+      },
+      label: 'Amostra de fundo · BackdropSwatch',
+      props: {
+        'estilo': PropDef('enum',
+            options: BoldBackdrop.values.map((e) => e.name).toList()),
+        'rotulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'escolhido': const PropDef('bool'),
+      },
+      defaults: () => {'estilo': 'imagem', 'rotulo': 'Cidade', 'escolhido': true},
+      build: (p) => BoldAmostraDeFundo(
+        estilo: _daOpcao(p['estilo'], _porNome(BoldBackdrop.values),
+            BoldBackdrop.imagem),
+        rotulo: '${p['rotulo']}',
+        escolhido: p['escolhido'] == true,
+        aoTocar: () {},
+      ),
+      codegen: (p) => 'ds.BoldAmostraDeFundo(estilo: ds.BoldBackdrop.${p['estilo']}'
+          ', rotulo: ${_str(p['rotulo'])}'
+          ', escolhido: ${p['escolhido'] == true}'
+          ', aoTocar: aoTocar)',
+    );
+
 /// A linha de aviso da home — a das *Autorizações*, com a contagem.
 BlockDef _linhaDeAviso() => BlockDef(
       type: 'linhaDeAviso',
@@ -2209,6 +2302,10 @@ BlockDef _grade() => BlockDef(
           'chipDeFiltro',
           'chipDeInfo',
           'botao',
+          // A amostra de fundo entra na grade FLUIDA: os cinco retratos têm 64 de largura PRÓPRIA e
+          // quebram quando não cabem — o mesmo caso do menu compacto da Área Pix. Em coluna cada um
+          // esticaria pra um quinto da tela e o retrato deixaria de ser quadrado.
+          'amostraDeFundo',
         ]),
       },
       build: (p) => _gradeWidget(p, const []),
@@ -2450,6 +2547,7 @@ void configurarDsDoBold() {
       'lista': _lista(),
       'linha': _linha(),
       'linhaDeValor': _linhaDeValor(),
+      'linhaDeEscolha': _linhaDeEscolha(),
       'resumoDaTransacao': _resumoDaTransacao(),
       'escadaDeAlcadas': _escadaDeAlcadas(),
       'progressoDeAprovacao': _progressoDeAprovacao(),
@@ -2488,6 +2586,7 @@ void configurarDsDoBold() {
       'teclado': _teclado(),
       // As seis que atravessaram a fronteira — ver o bloco de prosa acima delas.
       'ladrilhoDeMenu': _ladrilhoDeMenu(),
+      'amostraDeFundo': _amostraDeFundo(),
       'linhaDeAviso': _linhaDeAviso(),
       'chipDeFiltro': _chipDeFiltro(),
       'cartaoPromocional': _cartaoPromocional(),
@@ -2512,7 +2611,7 @@ void configurarDsDoBold() {
       // separador, e linha fora de lista é linha sem vizinhança.
       // O grupo do dia entra aqui e não em "Marca do Bold": ele é o ENVELOPE de uma coleção, e a
       // vizinhança que ensina é a da lista — quem procura "como agrupo lançamentos" procura em Lista.
-      'Lista': ['lista', 'linha', 'linhaDeValor', 'grupoDoDia'],
+      'Lista': ['lista', 'linha', 'linhaDeValor', 'linhaDeEscolha', 'grupoDoDia'],
       // Retorno de sistema: o que a tela diz enquanto ou depois de algo acontecer.
       'Retorno': ['toast', 'esqueleto', 'girando'],
       // Camada: o que aparece POR CIMA da tela.
@@ -2523,7 +2622,11 @@ void configurarDsDoBold() {
         // As três da HOME que faltavam: o menu, o aviso das autorizações e o cartão do carrossel.
         // Elas eram lacuna do inventário até 11/08 e não existiam em paleta nenhuma.
         'ladrilhoDeMenu', 'linhaDeAviso', 'cartaoPromocional', 'fileiraDeAvatares',
-        'cartaoDaConta', 'cartaoDePedido'],
+        'cartaoDaConta', 'cartaoDePedido',
+        // A amostra de fundo é do Bold e de mais ninguém: ela retrata o `BoldBackdrop`, que é token
+        // deste produto. Vizinha das outras peças de marca, e não do `chipDeFiltro` em Entrada —
+        // apesar de ser escolha, o que ela ensina é o fundo.
+        'amostraDeFundo'],
       'Do Bold': ['copiar', 'abas', 'segmentos', 'pontosDePagina'],
       // As três peças da conta PJ: quem pode mandar quanto, falta quanto, e até quando.
       'Alçadas': ['escadaDeAlcadas', 'progressoDeAprovacao', 'prazoDaPendencia'],
@@ -2952,6 +3055,10 @@ Map<String, String> _contratosDosBlocos(Map<String, BlockDef> blocos) {
     'lista': 'design-system-app-list',
     'linha': 'design-system-app-list',
     'linhaDeValor': 'design-system-app-list',
+    // A linha de escolha entra na mesma spec pela mesma razão das outras duas: ela é composição de
+    // acessórios do PAI (o que muda é a direita, check em vez de seta), e o contrato dele fala da
+    // coleção e da linha juntas. Peça deste filho ela não é — nada de novo foi desenhado.
+    'linhaDeEscolha': 'design-system-app-list',
     'barraDeBaixo': 'design-system-bottom-app',
     'indicadorDeHome': 'design-system-bottom-home-indicator',
     // O divisor perdeu o `ctor` quando virou UNIÃO de três formas (`DilettaDivider`,

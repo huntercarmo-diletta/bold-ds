@@ -29,7 +29,7 @@ void main() {
     configurarConteudoDoBold();
   });
 
-  test('as NOVE telas são válidas pela autoria do PAI, e são exatamente estas', () {
+  test('as DEZ telas são válidas pela autoria do PAI, e são exatamente estas', () {
     // Segundo achado da varredura do pai, e este é meu: o nome dizia "as TRÊS telas" com CINCO no mapa, e a
     // asserção era `containsAll([...])` — que não vê tela nova nem tela que sobrou. Mesma classe do
     // movimento: o número que o nome promete não estava na asserção.
@@ -48,6 +48,9 @@ void main() {
       kSlugDaConta,
       kSlugDoExtrato,
       kSlugDaAprovacao,
+      // A décima, de 13/08: a tela que EDITA este DS. Ver o `///` dela — ela trouxe as duas peças que
+      // faltavam pra um seletor existir fora do aparelho.
+      kSlugDaAparencia,
     });
   });
 
