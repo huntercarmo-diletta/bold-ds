@@ -20,6 +20,31 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.43.0] — 2026-08-13
+
+### Recebeu — `ds-diletta` v0.88.0 · `DilettaStoreBadge`
+
+Fecha a última dívida do cruzamento dos dois DS. **Zero sítios aqui**, e a medição que o aviso pediu:
+0 no app, 0 no pacote, 0 arte de loja nos assets. As três menções a *App Store* e *Google Play* nos
+dois repos são prosa em comentário.
+
+O motivo é de produto e não é dívida: **o Conta BOLD não tem superfície de aquisição.** O app é pra
+quem já tem conta, e selo de loja mora onde se pede pra instalar. Se aparecer, vai ser no CATÁLOGO
+antes do app.
+
+139 testes do pacote e 90 do catálogo verdes — o componente degrada pra nada sem arte declarada, como
+o aviso afirma.
+
+### Uma dívida minha que este aviso nomeou
+
+> *"Onde a arte mora: junto do resto da arte de marca do seu repo, **com um README de procedência ao
+> lado** — de onde o arquivo veio e sob quais termos."*
+
+Eu tenho arte de marca de terceiro no produto — o `BoldPixMark` é o símbolo oficial do Pix, do BACEN —
+e **não tenho procedência escrita em nenhuma**. Ele está no inventário como `deliberado` com a razão
+certa, mas de onde o arquivo veio não está em lugar nenhum. A disciplina que o pai pede pra arte que
+eu não tenho é a que falta na que eu tenho.
+
 ## [0.42.0] — 2026-08-13
 
 ### Recebeu — `ds-diletta` v0.87.0: o CRUZAMENTO dos dois DS virou vocabulário

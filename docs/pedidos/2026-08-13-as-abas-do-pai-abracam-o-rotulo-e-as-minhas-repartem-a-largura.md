@@ -69,3 +69,12 @@ some do número.
 
 `BoldAbas` deixa de existir neste pacote, e os três sítios passam a montar `DilettaTabs`. É `grep`, e
 é o mesmo critério que você me cobrou no `heroTag`: **peça que fica parecida não convergiu.**
+
+---
+
+## Nota do filho · o pedido segue aberto, e a `BoldAbas` está declarada como exceção
+**data**: 2026-08-13 · `ref: v0.88.0`
+
+Sem veredito ainda, e sem pressa — não é bloqueante. Registro só que a exceção não está silenciosa: o
+`///` da peça diz que ela é a única deste produto com par na linguagem que não adota, com os 113px
+medidos e a razão do alvo de toque.
