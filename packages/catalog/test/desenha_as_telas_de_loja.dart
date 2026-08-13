@@ -52,6 +52,11 @@ ScreenSpec _semBindings(ScreenSpec tela) {
   );
 }
 
+/// Os tipos declarados no TOPO da tela, em profundidade zero — chrome não mora dentro de slot. Mesma
+/// leitura que o gate `as telas não duplicam o chrome` faz, e é de propósito: as duas perguntas são a
+/// mesma ("esta tela já traz o relógio?"), vistas de lados opostos.
+Set<String> tiposDoTopo(ScreenSpec tela) => {for (final b in tela.top) b.type};
+
 void main() {
   setUpAll(() {
     configurarChromeDoBold();
@@ -75,6 +80,26 @@ void main() {
         t.view.physicalSize = const Size(393 * 2, 852 * 2);
         t.view.devicePixelRatio = 2.0;
         addTearDown(t.view.reset);
+
+        // A CASCA DE TOPO TRAZ O RELÓGIO; a casca de APP não, e aí ele é do aparelho.
+        //
+        // `cascaDeTopo` compõe `DilettaStatusBar` (o 9:41 mock) por dentro, e é por isso que as cinco
+        // telas de topo saíam com relógio. A home usa `cabecalhoDaHome`, que desde a v0.16.0 do DS é
+        // `DilettaTopAppBar.app`: ela reserva o INSET REAL da `SafeArea` em vez de desenhar o mock —
+        // *"não é uma tela minha, é um componente meu que não podia ser usado no meu app"*.
+        //
+        // Num render headless o inset é ZERO, então a home saía sem faixa nenhuma e colada no topo. Num
+        // aparelho quem pinta ali é o sistema. **Estas imagens são mock de aparelho**, então quem faz o
+        // papel do sistema é esta ferramenta: dá o inset de 40 e pinta a faixa por cima dele.
+        //
+        // Fica aqui e NÃO na spec: declarar `barraDeStatus` no `top` da home seria o catálogo dizendo
+        // que a tela desenha o relógio, e ela não desenha — o gate `as telas não duplicam o chrome`
+        // proíbe exatamente essa coexistência, e proíbe certo.
+        final chromeDoAparelho = tiposDoTopo(telasDoBold()[slug]!)
+            .intersection(const {'cascaDeTopo', 'barraDeStatus'}).isEmpty;
+        if (chromeDoAparelho) {
+          t.view.padding = const FakeViewPadding(top: 40 * 2);
+        }
 
         final chave = GlobalKey();
         await t.pumpWidget(RepaintBoundary(
@@ -115,6 +140,14 @@ void main() {
                     // Antes eu pintava por fora e o de dentro vencia — foi o que fez o pedido entrar.
                     buildScreenLayout(_semBindings(telasDoBold()[slug]!),
                         leaf: buildBlock),
+                    // A faixa do sistema, por CIMA e no inset que a linha lá em cima reservou. Ela é a
+                    // mesma peça que a casca de topo compõe (`DilettaStatusBar`, 40 de altura), então o
+                    // relógio das seis imagens é um só.
+                    if (chromeDoAparelho)
+                      const Align(
+                        alignment: Alignment.topCenter,
+                        child: DilettaStatusBar(),
+                      ),
                   ]),
                 );
               }),

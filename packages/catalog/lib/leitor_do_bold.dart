@@ -202,6 +202,36 @@ Block _bloco(String expr) {
     });
   }
 
+  // 2a-quinquies · O CARTÃO PROMOCIONAL, que saiu da tabela quando a arte entrou: a ilustração é um
+  // WIDGET aninhado, e a tabela só lê valor literal. A volta lê o TOKEN de dentro do acessório, que é
+  // onde ele mora no código; sem acessório declarado, a arte fica vazia e o cartão cai no placeholder.
+  if (ehCtor(expr, 'ds.BoldCartaoPromocional')) {
+    return Block(id: _novoId(), type: 'cartaoPromocional', props: {
+      'titulo': argString(expr, 'titulo') ?? '',
+      'subtitulo': argString(expr, 'subtitulo') ?? '',
+      'ilustracao':
+          RegExp(r'DilettaIllustration\.(\w+)').firstMatch(expr)?.group(1) ?? '',
+      // `aoFechar` presente é o X do canto: o componente esconde o botão quando o callback é nulo, e
+      // é essa presença que o bloco guarda como booleano.
+      'fecha': expr.contains('aoFechar'),
+    });
+  }
+
+  // 2a-quater · A NAV FLUTUANTE, que tem lista de filhos e por isso não cabe na tabela. Os itens não
+  // são blocos (são `BoldItemDeNav`, dado), então a volta os lê como o texto `Rótulo:icone` — o mesmo
+  // idioma em que eles foram escritos.
+  if (ehCtor(expr, 'ds.BoldNavFlutuante')) {
+    final pares = RegExp(r"BoldItemDeNav\(\s*icone:\s*ds\.DilettaIcons\.(\w+)\s*,"
+            r"\s*rotulo:\s*'([^']*)'")
+        .allMatches(expr)
+        .map((m) => '${m.group(2)}:${m.group(1)}')
+        .join(', ');
+    return Block(id: _novoId(), type: 'navFlutuante', props: {
+      'abas': pares,
+      'abaAtiva': RegExp(r'ativo:\s*(\d+)').firstMatch(expr)?.group(1) ?? '0',
+    });
+  }
+
   // 2a-ter · A LINHA DE ESCOLHA, pela mesma razão da de valor: composição de três acessórios não cabe
   // na tabela de `Ctor(args)`.
   //

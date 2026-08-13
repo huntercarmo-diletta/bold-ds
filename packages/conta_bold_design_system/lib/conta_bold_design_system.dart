@@ -67,6 +67,7 @@ export 'src/bold_escada_de_alcadas.dart';
 export 'src/bold_cartao_da_conta.dart';
 export 'src/bold_cartao_de_pedido.dart';
 export 'src/bold_amostra_de_fundo.dart';
+export 'src/bold_nav_flutuante.dart';
 export 'src/bold_cartao_promocional.dart';
 export 'src/bold_chip_de_filtro.dart';
 export 'src/bold_fileira_de_avatares.dart';

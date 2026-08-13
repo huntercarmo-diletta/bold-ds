@@ -20,6 +20,78 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.45.0] — 2026-08-13
+
+### `BoldNavFlutuante` — a navbar da home era a do PAI, e o print viu antes de qualquer gate
+
+*"A navbar da home tá diferente, parece que você redesenhou do zero"*, e depois o diagnóstico exato:
+*"você tá usando a navbar da CPF Seguro, não do Bold — no Bold a navbar não deixa a home indicator
+dentro dela."* Estava certo nas duas frases.
+
+O `barraDeBaixo` com `variante: nav` emite `DilettaBottomApp.nav`: **barra ancorada full-width**, itens
+em `Expanded`, círculo do ativo estourando a borda de cima, traço de home POR DENTRO. A home deste
+produto usa **pílula flutuante** com hug e margem de 16, e o indicador é do aparelho.
+
+E a diferença estava escrita, palavra por palavra, no `///` do `BoldBottomApp` dentro do app desde
+antes: *"não é cópia da dele com defeito — é outro desenho, e trocar é decisão de produto."* O desenho
+estava declarado, o produto tinha escolhido, e o board mostrava o outro por duas versões. **Nenhum gate
+mede qual dos dois desenhos válidos a tela usa** — é a classe de divergência mais cara deste repo,
+porque ela passa por decisão de design.
+
+Ela entra como bloco PRÓPRIO (`navFlutuante`) e não como sexta variante: a união é das factories do
+pai, e esta peça não é dele. A `nav` ancorada segue no vocabulário. Três testes novos no pacote, e o
+primeiro mede exatamente o que o dono viu: `findsNothing` pro `DilettaBottomHomeIndicator`.
+
+Na travessia: vidro montado à mão → `DilettaGlassSurface` · raio 26 → `all24` · rótulo de 10px cravado
+→ `labelSm` · vão 3 → `s1` · sombra → `DilettaElevation.medium`, e ela fica FORA do clip do vidro
+(atrás do blur ela é reamostrada e vira halo). Quarta peça a pagar o mesmo atalho de tipografia na
+travessia — o ladrilho e a amostra de fundo vieram antes.
+
+### A arte do cartão de passkey existia como TOKEN, e o bloco não passava
+
+*"A ilustração precisa estar no banner da passkey."* O `///` do componente dizia que o placeholder de
+100×100 ficava porque *"a arte do carrossel é do app, asset de produto, não do DS"* — e isso estava
+errado por um detalhe medido: o app carrega `illustrations/key_word_{tema}.svg`, e o pai tem
+`DilettaIllustration.keyWord` com base `key_word`. **É a mesma arte, e ela é token da linguagem.**
+
+### E o conserto dela achou um defeito de emissão que nada acusava
+
+Com `ctor`+`args` declarados o motor prefere a TABELA e o `codegen` fica vestigial. A ilustração é
+widget ANINHADO (`DilettaIllustrationAccessory`), e a tabela só lê valor literal — então o board
+desenhava a arte e o código emitido saía **sem ela, em silêncio**:
+
+```
+ds.BoldCartaoPromocional(titulo: '…', subtitulo: '…', aoFechar: aoFechar, aoTocar: aoTocar)
+```
+
+Terceiro bloco a sair da tabela pelo mesmo motivo (`linhaDeValor` e `divisor` vieram antes), com entrada
+no leitor pra fechar a volta.
+
+### A STATUS BAR nas imagens, e ela é chrome de APARELHO
+
+A home usa `cabecalhoDaHome` (`DilettaTopAppBar.app`), que reserva o **inset real** da `SafeArea` em vez
+de desenhar o 9:41 mock — decisão certa do DS, *"não é uma tela minha, é um componente meu que não podia
+ser usado no meu app"*. Num render headless o inset é zero, então a home saía colada no topo, sem faixa.
+
+Num aparelho quem pinta ali é o sistema. **Estas imagens são mock de aparelho**, então quem faz o papel
+do sistema é a ferramenta: `FakeViewPadding(top: 40)` mais a `DilettaStatusBar` por cima, e só nas telas
+cujo topo não traz relógio próprio. Fica no renderizador e NÃO na spec — declarar `barraDeStatus` no
+`top` da home seria o catálogo dizendo que a tela desenha o relógio, e o gate proíbe essa coexistência
+com razão.
+
+### Os dados viraram FICTÍCIOS, e a aritmética fecha
+
+*"Mocka melhor os dados! Não usa meu nome."* A home e o extrato traziam o nome e o extrato reais de uma
+conta — servia pra medir contra o aparelho, não serve pra imagem de loja.
+
+Entradas 6.150,00 − saídas 1.862,10 = saldo 4.287,90, e os saldos por dia do extrato descem na mesma
+conta (250,00 → 6.150,00 → 4.287,90). Mock que não fecha a conta é pior que mock: alguém soma na tela.
+
+Os nomes são curtos de propósito — a linha de valor **não elipsa** o título, ela trunca em silêncio, e
+"MERCADO SÃO JOÃO LTDA" encostava em "− R$ 1.228,10".
+
+Gate: **90/90** no catálogo · **142/142** no pacote (era 139).
+
 ## [0.44.0] — 2026-08-13
 
 ### A décima tela, e ela é a que EDITA este DS — `pf8-aparencia`

@@ -17,9 +17,9 @@ const Map<String, String> kTelasDeLoja = {
   // pagou o preço mais visível de a adoção parar em 99%.
   'pf1-home': r'''
 {"formato":1,"name":"PF1 · Home","form":"phone","contentGap":"s5","scrollableContent":true,
-"top":[{"id":"b_1","type":"cabecalhoDaHome","props":{"nome":"Ranter","conta":"Minha conta"}}],
+"top":[{"id":"b_1","type":"cabecalhoDaHome","props":{"nome":"Ana Maria","conta":"Minha conta"}}],
 "blocks":[
-{"id":"b_2","type":"saldo","props":{"valor":"R$ 0,14","entradas":"R$ 2.925,49","saidas":"R$ 2.925,70","oculto":false}},
+{"id":"b_2","type":"saldo","props":{"valor":"R$ 4.287,90","entradas":"R$ 6.150,00","saidas":"R$ 1.862,10","oculto":false}},
 {"id":"b_3","type":"cabecalhoDeSecao","props":{"rotulo":"Menu","verTodos":true}},
 {"id":"b_4","type":"grade","props":{"colunas":"2","vao":"s4"},"slots":{"itens":[
   {"id":"b_5","type":"ladrilhoDeMenu","props":{"icone":"pixLight","rotulo":"Área Pix","porte":"largo"}},
@@ -27,13 +27,18 @@ const Map<String, String> kTelasDeLoja = {
   {"id":"b_7","type":"ladrilhoDeMenu","props":{"icone":"barcodeLight","rotulo":"Pagar contas","porte":"largo"}},
   {"id":"b_8","type":"ladrilhoDeMenu","props":{"icone":"fileInvoiceDollarLight","rotulo":"Cobrar","porte":"largo"}}
 ]}},
-{"id":"b_9","type":"cartaoPromocional","props":{"titulo":"Habilite sua passkey","subtitulo":"Login sem senha, resistente a phishing.","fecha":true}}
+{"id":"b_9","type":"cartaoPromocional","props":{"titulo":"Habilite sua passkey","subtitulo":"Login sem senha, resistente a phishing.","ilustracao":"keyWord","fecha":true}}
 ],
-"bottom":[{"id":"b_10","type":"barraDeBaixo","props":{"variante":"nav","label":"","labelSecundario":"","abas":"Início:houseLight, Câmera:cameraLight, Letti:sparklesLightFull","abaAtiva":"0"}}],
+"bottom":[
+{"id":"b_10","type":"navFlutuante","props":{"abas":"Início:houseLight, Câmera:cameraLight, Letti:sparklesLightFull","abaAtiva":"0"}},
+{"id":"b_11","type":"indicadorDeHome","props":{}}
+],
 "notes":[
 {"kind":"decisao","text":"Redesenhada contra o PRINT do aparelho, não contra a leitura do código. A primeira versão tinha \"Enviar para\" e a linha de Autorizações, e o aparelho não tem NENHUMA das duas: as seções da home somem quando não há dado, e esta conta não tem favorito nem pendência. Ler o código dá o que a tela PODE mostrar; o print dá o que ela mostra."},
 {"kind":"regra","text":"O menu é 2×2 porque a home comporta QUATRO atalhos (`kHomeMenuSlots`), e a Área Pix é fixa no primeiro (`kHomeMenuMandatoryId`). Os outros três a pessoa escolhe na personalização — no aparelho medido são Receber, Pagar contas e Cobrar."},
 {"kind":"borda","text":"Com favoritos, entra a fileira \"Enviar para\" logo abaixo do saldo; com pendência, entra a linha de Autorizações. Em conta PJ a linha fica mesmo zerada, porque governança é rotina ali."},
+{"kind":"regra","text":"O rodapé é a PÍLULA FLUTUANTE (`navFlutuante`) e não a `nav` da barra de baixo. As duas existem e são desenhos diferentes: a do pai é ancorada full-width, com os itens em `Expanded` e o traço de home por dentro; a deste produto abraça os itens e flutua com margem de 16. O board mostrou a do pai por duas versões, e foi um print que achou — nenhum gate mede qual das duas a tela usa. Por a pílula NÃO trazer o traço de home, a tela declara o `indicadorDeHome` ao lado dela."},
+{"kind":"borda","text":"OS DADOS SÃO FICTÍCIOS e fecham a conta: entradas 6.150,00 menos saídas 1.862,10 dá o saldo de 4.287,90, e os saldos por dia do extrato descem na mesma aritmética. A versão anterior trazia o nome e o extrato REAIS de uma conta — servia pra medir contra o aparelho e não serve pra imagem de loja. Mock que não fecha a conta é pior que mock: alguém soma na tela."},
 {"kind":"a11y","text":"O olho de ocultar é o PRIMEIRO ícone da direita do cabeçalho, antes do sino, e não mora no card de saldo: é ação de tela. Ocultar cobre o saldo E os totais — meia máscara não esconde nada."}
 ]}
 ''',
@@ -116,18 +121,18 @@ const Map<String, String> kTelasDeLoja = {
 {"formato":1,"name":"PF7 · Extrato","form":"phone","contentGap":"s4","scrollableContent":true,
 "top":[{"id":"b_1","type":"cascaDeTopo","props":{"titulo":"Extrato","esquerda":"voltar","direita":"fileInvoiceLight, eyeLight"}}],
 "blocks":[
-{"id":"b_2","type":"saldo","props":{"valor":"R$ 0,14","entradas":"R$ 2.925,49","saidas":"R$ 2.925,70","oculto":false,"atalhoDoExtrato":false}},
+{"id":"b_2","type":"saldo","props":{"valor":"R$ 4.287,90","entradas":"R$ 6.150,00","saidas":"R$ 1.862,10","oculto":false,"atalhoDoExtrato":false}},
 {"id":"b_3","type":"texto","props":{"conteudo":"Transações","preset":"headlineSm"}},
 {"id":"b_4","type":"campoDeBusca","props":{"placeholder":"Buscar","acaoDireita":"slidersLight"}},
-{"id":"b_5","type":"grupoDoDia","props":{"rotulo":"Sexta","acessorio":"Saldo R$ 0,14"},"slots":{"itens":[
-  {"id":"b_6","type":"linhaDeValor","props":{"icone":"pixLight","titulo":"RANTER SOARES DO CARMO","origem":"Pix","hora":"06:12","valor":"R$ 634,00","saida":true}},
-  {"id":"b_7","type":"linhaDeValor","props":{"icone":"pixLight","titulo":"GRPQA LTDA","origem":"Pix","hora":"06:07","valor":"R$ 2.291,70","saida":true}}
+{"id":"b_5","type":"grupoDoDia","props":{"rotulo":"Sexta","acessorio":"Saldo R$ 4.287,90"},"slots":{"itens":[
+  {"id":"b_6","type":"linhaDeValor","props":{"icone":"pixLight","titulo":"LUIZA FERREIRA COSTA","origem":"Pix","hora":"06:12","valor":"R$ 634,00","saida":true}},
+  {"id":"b_7","type":"linhaDeValor","props":{"icone":"pixLight","titulo":"MERCADO SÃO JOÃO","origem":"Pix","hora":"06:07","valor":"R$ 1.228,10","saida":true}}
 ]}},
-{"id":"b_8","type":"grupoDoDia","props":{"rotulo":"Quinta","acessorio":"Saldo R$ 2.925,84"},"slots":{"itens":[
-  {"id":"b_9","type":"linhaDeValor","props":{"icone":"arrowRightArrowLeftLight","titulo":"DILETTA APLICATIVOS E","origem":"Interno","hora":"18:47","valor":"R$ 2.925,49","saida":false}}
+{"id":"b_8","type":"grupoDoDia","props":{"rotulo":"Quinta","acessorio":"Saldo R$ 6.150,00"},"slots":{"itens":[
+  {"id":"b_9","type":"linhaDeValor","props":{"icone":"arrowRightArrowLeftLight","titulo":"STUDIO CLARA","origem":"Interno","hora":"18:47","valor":"R$ 5.900,00","saida":false}}
 ]}},
-{"id":"b_10","type":"grupoDoDia","props":{"rotulo":"24 de jul","acessorio":"Saldo R$ 0,35"},"slots":{"itens":[
-  {"id":"b_11","type":"linhaDeValor","props":{"icone":"pixLight","titulo":"RANTER SOARES DO CARMO","origem":"Pix","hora":"16:38","valor":"R$ 0,35","saida":false}}
+{"id":"b_10","type":"grupoDoDia","props":{"rotulo":"24 de jul","acessorio":"Saldo R$ 250,00"},"slots":{"itens":[
+  {"id":"b_11","type":"linhaDeValor","props":{"icone":"pixLight","titulo":"JOÃO PEDRO ALVES","origem":"Pix","hora":"16:38","valor":"R$ 250,00","saida":false}}
 ]}}
 ],
 "bottom":[],
@@ -135,6 +140,8 @@ const Map<String, String> kTelasDeLoja = {
 {"kind":"decisao","text":"O saldo é o MESMO componente da home, e não uma versão de extrato — mas SEM o atalho \"Extrato ›\": quem já está no extrato não tem pra onde ir. O componente já sabia (atalho nulo esconde o link, e é requisito escrito no contrato dele); o bloco é que cravava o callback e o board mostrava um link que o aparelho não mostra."},
 {"kind":"regra","text":"O rótulo do dia é o DIA DA SEMANA enquanto ele está na semana corrente (\"Sexta\", \"Quinta\") e vira data quando sai dela (\"24 de jul\"). O acessório à direita diz \"Saldo\" por extenso — é o consolidado DAQUELE dia, não do mês."},
 {"kind":"borda","text":"N lançamentos no dia dão N-1 fios, E o dia de lançamento ÚNICO leva fio — ali ele fecha o grupo por baixo. Foi um print do dono que achou o defeito: a regra estava certa e a COR estava errada, branco a 12% cravado, invisível no claro."},
+{"kind":"borda","text":"OS DADOS SÃO FICTÍCIOS e a aritmética fecha: 250,00 no dia 24 e 5.900,00 na quinta dão os 6.150,00 de entrada; as duas saídas de sexta (634,00 e 1.228,10) dão 1.862,10; e o saldo de cada dia é o acumulado até ele. O card de saldo é o mesmo da home, com os mesmos números — duas telas da mesma conta que não somam igual é o defeito que um print acha."},
+{"kind":"borda","text":"Os nomes do mock são CURTOS de propósito: a linha de valor não elipsa o título — ela trunca em silêncio e, com valor largo, os dois se encostam. \"MERCADO SÃO JOÃO LTDA\" ao lado de \"− R$ 1.228,10\" foi o print que mostrou. Mock de imagem de loja cabe na linha; nome comprido é caso de borda, e o lugar dele é o gate, não a vitrine."},
 {"kind":"a11y","text":"A fila de filtros (Tudo · Entradas · Saídas) só existe com filtro ATIVO, e por isso não está aqui: ela nasce da folha de filtro. O chip escolhido inverte fundo E peso — cor sozinha não é informação."}
 ]}
 ''',

@@ -54,6 +54,9 @@ const Map<String, String> kBoldSpecs = {
   // A amostra de fundo é a VITRINE de um token deste DS, e ela chegou com a tela de Aparência: o
   // `BoldBackdrop` tinha sete valores e nenhuma peça que os mostrasse fora do aparelho.
   'amostraDeFundo': _amostraDeFundo,
+  // A pílula da home. Ela veio por um print — o board desenhava a barra ANCORADA do pai, e este
+  // produto usa a flutuante. Dois desenhos válidos e nenhum gate media a escolha.
+  'navFlutuante': _navFlutuante,
 };
 
 const _seloQuantico = r'''
@@ -910,3 +913,53 @@ quem não distingue as duas tintas.
 Valor novo em `BoldBackdrop` que seja personalizável SHALL ganhar amostra no mesmo commit. Mood que
 existe e ninguém consegue escolher é mood que só o código sabe que tem.
 ''';
+
+const _navFlutuante = r"""
+## Purpose
+
+A navegação da home: pílula de vidro FLUTUANTE que abraça os itens, com o ativo num spot cheio de
+`primary`. É o rodapé da home e das telas empilhadas sobre ela.
+
+## Guidelines
+
+### Quando usar
+Navegação entre abas da home. Rodapé de CTA é `barraDeBaixo` (`.button`), e barra de navegação
+ANCORADA full-width é a `nav` daquela união — que é outro desenho, do pai, e não o deste produto.
+
+### Faça
+- passe ícone em TODO item: a pílula é glifo em cima e rótulo embaixo, e item sem glifo deixa um vazio
+  redondo onde a fila tem um spot
+- declare o `indicadorDeHome` ao lado dela na tela: a pílula flutua com margem de 16 e NÃO traz o traço
+  de home por dentro, ao contrário de toda variante do `DilettaBottomApp`
+- deixe o índice ativo fora da lista quando nenhuma aba é a atual — é o caso da tela empilhada sobre a
+  home, e nenhum spot acende
+
+### Evite
+- trocar por `DilettaBottomApp.nav` achando que é a mesma peça: aquela é ancorada, full-width, com os
+  itens em `Expanded` e o círculo do ativo estourando a borda de cima. Trocar é decisão de PRODUTO, e
+  foi um print que achou a divergência — nenhum gate mede qual das duas a tela usa
+- pintar o rótulo do ativo com a cor da marca: ele fica no ink do tema nos dois estados, e quem marca a
+  escolha é o spot mais o peso
+- pôr a sombra dentro do clip do vidro: atrás de um `BackdropFilter` ela é reamostrada pelo blur e vira
+  halo
+
+## Compõe
+
+- DilettaGlassSurface
+- DilettaFrame
+- DilettaIcon
+- DilettaText
+- DilettaTappable
+
+## Requirements
+
+### Requirement: hug, e não fill
+A pílula SHALL abraçar os itens e crescer com eles, centrada, com margem de baixo. Barra que ocupa a
+largura inteira é a do pai — e é outro desenho.
+
+### Requirement: o círculo do inativo é transparente, não ausente
+O item inativo SHALL manter o mesmo espaço do spot. Sem ele a fila desalinha ao trocar de aba.
+
+### Requirement: a sombra mora FORA do clip
+A elevação SHALL ser aplicada no container externo ao `ClipRRect` do vidro.
+""";

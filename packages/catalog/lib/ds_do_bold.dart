@@ -2062,6 +2062,62 @@ BlockDef _ladrilhoDeMenu() => BlockDef(
           ', aoTocar: aoTocar)',
     );
 
+/// A NAV FLUTUANTE — a pílula da home, e ela existe porque o board mostrava a barra do PAI.
+///
+/// O print do dono: *"a navbar da home tá diferente, parece que você redesenhou do zero."* Não era
+/// redesenho — era a peça errada. A `nav` do `barraDeBaixo` emite `DilettaBottomApp.nav`, que é barra
+/// ANCORADA full-width com o traço de home por dentro; a home deste app usa **pílula flutuante** com hug
+/// e margem de 16. A diferença estava escrita no `///` do `BoldBottomApp` do app desde antes, e nenhum
+/// gate media isso: os dois desenhos são válidos, e escolher o outro não falha em lugar nenhum.
+///
+/// Bloco SEPARADO e não sexta variante da união: a união é das factories do pai, e esta peça não é dele.
+///
+/// Os itens usam o mesmo idioma do `abas` e da `nav` — `Rótulo:icone`, separados por vírgula. Aqui o
+/// ícone NÃO é opcional: a pílula é ícone em cima e rótulo embaixo, e item sem glifo deixa um buraco
+/// redondo no lugar em que a fila tem um spot.
+BlockDef _navFlutuante() => BlockDef(
+      type: 'navFlutuante',
+      acoes: const {'aoTrocar': 'aoTrocarAba'},
+      label: 'Nav flutuante · pílula da home',
+      props: const {
+        'abas': PropDef('text'),
+        'abaAtiva': PropDef('number'),
+      },
+      defaults: () => {
+        'abas': 'Início:houseLight, Câmera:cameraLight, Letti:sparklesLightFull',
+        'abaAtiva': '0',
+      },
+      build: (p) => BoldNavFlutuante(
+        itens: _itensDaPilula(p['abas']),
+        ativo: _indiceDeAba(p),
+        aoTrocar: (_) {},
+      ),
+      codegen: (p) => 'ds.BoldNavFlutuante(itens: const ['
+          '${_itensDaPilula(p['abas']).map((i) => 'ds.BoldItemDeNav('
+              'icone: ds.DilettaIcons.${_chaveDoIcone(i.icone)}'
+              ', rotulo: ${_str(i.rotulo)})').join(', ')}]'
+          ', ativo: ${_indiceDeAba(p)}'
+          ', aoTrocar: aoTrocarAba)',
+    );
+
+/// Os itens da pílula, no idioma `Rótulo:icone` — e o ícone cai na CASA quando o nome não existe no
+/// conjunto do pai. A `nav` do pai cai pro ponto neutro dela; aqui não há ponto neutro, então o
+/// fallback é a casa: um glifo errado é mais fácil de ver que um vazio redondo.
+List<BoldItemDeNav> _itensDaPilula(Object? cru) => [
+      for (final i in _itensDeNav(cru))
+        BoldItemDeNav(
+          icone: DilettaIcons.all[i.icone] ?? DilettaIcons.houseLight,
+          rotulo: i.rotulo,
+        ),
+    ];
+
+/// O caminho de volta do ARQUIVO pra CHAVE (`house-light` → `houseLight`), que é o que o código gerado
+/// escreve. Sem isto o codegen emitiria `ds.DilettaIcons.house-light`, que não é identificador.
+String _chaveDoIcone(String arquivo) => DilettaIcons.all.entries
+    .firstWhere((e) => e.value == arquivo,
+        orElse: () => const MapEntry('houseLight', ''))
+    .key;
+
 /// A AMOSTRA DE FUNDO — o retrato de um dos sete moods, no seletor de Aparência.
 ///
 /// Ela entra pelo mesmo motivo das seis de 11/08: era classe PRIVADA dentro de uma tela do app, e
@@ -2160,30 +2216,58 @@ BlockDef _chipDeFiltro() => BlockDef(
 BlockDef _cartaoPromocional() => BlockDef(
       type: 'cartaoPromocional',
       acoes: const {'aoFechar': 'aoFechar', 'aoTocar': 'aoTocar'},
-      ctor: 'ds.BoldCartaoPromocional',
-      args: const {
-        'titulo': Arg.texto('titulo'),
-        'subtitulo': Arg.texto('subtitulo'),
-      },
+      // A ARTE ENTRA COMO PROP, e o placeholder de 100×100 morreu com ela.
+      //
+      // O `///` do componente dizia *"o placeholder ficou porque a arte do carrossel é do app (asset de
+      // produto, não do DS)"*. Estava errado por um detalhe medido: o app carrega
+      // `illustrations/key_word_{tema}.svg`, e o PAI tem `DilettaIllustration.keyWord` com base
+      // `key_word` — **é a mesma arte**, e ela é token da linguagem desde antes. O que faltava era o
+      // bloco passar o token; ninguém precisava de asset novo.
+      //
+      // Foi um print do dono que cobrou: *"a ilustração precisa estar no banner da passkey."* Um
+      // quadrado cinza com ícone de imagem no meio da tela de loja passa por decisão de design.
+      // ELE SAIU DA TABELA por causa da arte, e a razão é a mesma do `linhaDeValor`.
+      //
+      // A tabela lê e emite `Ctor(arg: valor)` com valor LITERAL — texto, número, booleano ou
+      // `Tipo.membro`. A ilustração não é nenhum dos quatro: ela é um WIDGET aninhado
+      // (`ds.DilettaIllustrationAccessory(illustration: …, size: …)`), porque o componente recebe
+      // `Widget? ilustracao` e não o token.
+      //
+      // **E isto era um defeito medido, não uma preferência.** Com `ctor`+`args` declarados o motor
+      // prefere a tabela e o `codegen` fica vestigial — então o board desenhava a arte e o código
+      // emitido saía SEM ela, em silêncio. É o modo de falha que este repo já nomeou duas vezes: prop
+      // ignorada sem erro parece decisão de quem montou a tela.
+      //
+      // O par disto é a entrada no leitor (`leitor_do_bold.dart`), senão o gate `bloco-sem-leitura`
+      // cobra — e cobra certo: sem a volta, a tela colada abre como código cru.
       label: 'Cartão promocional · PromoCard',
-      props: const {
-        'titulo': PropDef('text', bindable: true, dartType: 'String'),
-        'subtitulo': PropDef('multiline', bindable: true, dartType: 'String'),
-        'fecha': PropDef('bool'),
+      props: {
+        'titulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'subtitulo': const PropDef('multiline', bindable: true, dartType: 'String'),
+        'ilustracao': PropDef('enum', options: ['', ..._nomesDeIlustracao]),
+        'fecha': const PropDef('bool'),
       },
       defaults: () => {
         'titulo': 'Habilite sua passkey',
         'subtitulo': 'Login sem senha, resistente a phishing.',
+        // `keyWord` é a arte que o app usa neste cartão, medida no `_promos()` da home.
+        'ilustracao': 'keyWord',
         'fecha': true,
       },
       build: (p) => BoldCartaoPromocional(
         titulo: '${p['titulo']}',
         subtitulo: _vazio(p['subtitulo']) ? null : '${p['subtitulo']}',
+        // Vazio continua caindo no placeholder, e isso é o contrato do componente: cartão sem arte
+        // declarada é um buraco de 100 sem explicação, e o placeholder é a explicação.
+        ilustracao: _vazio(p['ilustracao']) ? null : _arteDoCartao(p['ilustracao']),
         aoFechar: p['fecha'] == true ? () {} : null,
         aoTocar: () {},
       ),
       codegen: (p) => 'ds.BoldCartaoPromocional(titulo: ${_str(p['titulo'])}'
           '${_vazio(p['subtitulo']) ? '' : ', subtitulo: ${_str(p['subtitulo'])}'}'
+          '${_vazio(p['ilustracao']) ? '' : ', ilustracao: ds.DilettaIllustrationAccessory('
+              'illustration: ds.DilettaIllustration.${p['ilustracao']}'
+              ', size: ds.DilettaIllustrationSize.sm)'}'
           '${p['fecha'] == true ? ', aoFechar: aoFechar' : ''}'
           ', aoTocar: aoTocar)',
     );
@@ -2587,6 +2671,8 @@ void configurarDsDoBold() {
       // As seis que atravessaram a fronteira — ver o bloco de prosa acima delas.
       'ladrilhoDeMenu': _ladrilhoDeMenu(),
       'amostraDeFundo': _amostraDeFundo(),
+      // A pílula da home, que atravessou a fronteira em 13/08 por um print.
+      'navFlutuante': _navFlutuante(),
       'linhaDeAviso': _linhaDeAviso(),
       'chipDeFiltro': _chipDeFiltro(),
       'cartaoPromocional': _cartaoPromocional(),
@@ -2635,7 +2721,7 @@ void configurarDsDoBold() {
       // fila é entrada de dado — o vizinho certo é o `listaDeRadio`, não o `chipDeInfo`.
       'Entrada': ['campo', 'campoDeBusca', 'interruptor', 'caixaDeSelecao', 'chipDeEntrada',
         'chipDeFiltro', 'dropdown', 'listaDeRadio', 'calendario', 'teclado'],
-      'Ação': ['botao', 'barraDeBaixo', 'botaoDeIcone', 'cartaoDeAcesso'],
+      'Ação': ['botao', 'barraDeBaixo', 'navFlutuante', 'botaoDeIcone', 'cartaoDeAcesso'],
       'Ritmo': ['ritmo', 'divisor', 'grade'],
     },
     tema: (filho, {required escuro}) => DilettaThemeScope(
@@ -2993,6 +3079,15 @@ Widget _acaoInterativa(Block b, VoidCallback aoTocar, {required bool ultima}) {
 /// ilustração que ele não conhecia — renderizavam vazias, sem erro nenhum.
 final List<String> _nomesDeIlustracao =
     DilettaIllustration.all.map((i) => i.nome).toList();
+
+/// A arte do cartão promocional, no degrau `sm` (100) — que é o quadrado que o componente reserva.
+///
+/// O app pede 88 e o degrau mais próximo é o 100. Oitenta e oito não é degrau, e a diferença de 12 num
+/// quadrado de arte não é vista; degrau fora da escada é.
+Widget _arteDoCartao(Object? nome) => DilettaIllustrationAccessory(
+      illustration: _ilustracaoDe('$nome'),
+      size: DilettaIllustrationSize.sm,
+    );
 
 DilettaIllustration _ilustracaoDe(String nome) =>
     DilettaIllustration.all.firstWhere((i) => i.nome == nome);
