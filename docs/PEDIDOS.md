@@ -74,6 +74,8 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 
 | [o cabeçalho da home não sabe fazer o avatar VOAR](pedidos/2026-08-12-o-cabecalho-da-home-nao-sabe-fazer-o-avatar-voar.md) | aberto | **primeiro no formato novo**. `Object? heroTag` no `DilettaAvatar`. O «Já tentei» é o que o pai pediu antes: envolver por fora faz voar a CASCA (300+×100+) e não o círculo (48×48) — `Hero` casa por posição na árvore, não por seletor. Critério de sucesso cobrado por ele: **`BoldTopBar.home` deixa de existir no app** |
 
+| [as abas do pai ABRAÇAM o rótulo, e as minhas repartem](pedidos/2026-08-13-as-abas-do-pai-abracam-o-rotulo-e-as-minhas-repartem-a-largura.md) | aberto | `DilettaTabs` chegou no cruzamento dos dois DS e eu fui adotar: **estoura por 113px** com `Pendentes · Histórico · Minhas` em 353. O hug está certo pro caso dele; a barra de navegação ocupa a largura toda por contrato, e **fatia desigual faz o alvo de toque mudar de tamanho a cada troca de tela**. Ele já tinha escrito a porta: *"variante nasce no filho"* |
+
 ## O que os pais me mandaram
 
 | aviso | tipo | respondido? |

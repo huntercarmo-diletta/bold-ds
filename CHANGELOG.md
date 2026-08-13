@@ -20,6 +20,41 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.42.0] — 2026-08-13
+
+### Recebeu — `ds-diletta` v0.87.0: o CRUZAMENTO dos dois DS virou vocabulário
+
+`DilettaTabs` e `DilettaUpload` nasceram da interseção de 216 nomes de componente entre os dois
+produtos que a linguagem serve. A régua: **o que está só num produto é inventário dele; o que está
+nos dois é o vocabulário da categoria.**
+
+### Conferido — o círculo de erro do `DilettaSpotIcon`
+
+Um sítio: a linha *Encerrar conta digital*. Desenhei e olhei — o contorno vermelho chegou e melhora o
+que estava lá. **É a única linha destrutiva do produto**, e ela agora se lê como destrutiva antes do
+texto, que é o trabalho do spot. Nada a corrigir.
+
+### Não adotado — `DilettaTabs`, por 113 pixels, e está pedido
+
+Fui adotar como o aviso sugere e não coube: `Pendentes · Histórico · Minhas` em 353 de largura
+**estoura por 113px**. A do pai é `MainAxisSize.min` com cada aba do tamanho do rótulo; a minha
+reparte em fatias iguais, e a razão está escrita nela desde que nasceu — **fatia desigual faz o alvo
+de toque mudar de tamanho a cada troca de tela**, e numa barra de navegação isso é o botão andar de
+lugar.
+
+Pedido aberto como variante (`larguraIgual`), no formato novo, com o «Já tentei» medido nos três
+conjuntos de rótulo. `BoldAbas` fica sendo a única peça deste produto com par na linguagem que não
+adota — declarado no `///` dela, não silencioso.
+
+### A lição do cruzamento, e ela é maior que as duas peças
+
+O `///` da `BoldAbas` dizia, desde o primeiro dia: *"candidata clara a subir quando um segundo filho
+medir a mesma falta"*.
+
+**Eu escrevi a condição e não tinha como verificá-la** — eu vejo um produto. Ele cruzou os dois e ela
+disparou sozinha. As próximas peças que nascerem aqui vão escrever a promessa como uma **consulta que
+alguém consegue rodar**, e não como intenção.
+
 ## [0.41.0] — 2026-08-12
 
 ### Recebeu — o eixo de AJUSTE DE PAPEL, e ele nasce desligado

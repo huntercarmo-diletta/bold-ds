@@ -1,8 +1,30 @@
 /// CONTA BOLD — as ABAS sublinhadas.
 ///
-/// 3 usos. O pai não tem abas segmentadas em lugar nenhum — e o chrome do próprio catálogo teve
-/// que inventar as dele, o que é o primeiro sinal de vocabulário faltando. Nasce aqui, e é
-/// candidata clara a subir quando um segundo filho medir a mesma falta.
+/// 3 usos. O pai não tinha abas segmentadas em lugar nenhum — e o chrome do próprio catálogo teve
+/// que inventar as dele, o que é o primeiro sinal de vocabulário faltando. Nasceu aqui, e a frase
+/// que estava escrita nesta linha era *"candidata clara a subir quando um segundo filho medir a
+/// mesma falta"*.
+///
+/// ## A condição disparou em 12/08, e ela não disparou por mim
+///
+/// O pai cruzou os DOIS DS que a linguagem serve — 216 nomes de componente — e a interseção virou
+/// regra: **o que está nos dois é vocabulário da categoria**. `DilettaTabs` nasceu daí (`ds
+/// v0.87.0`).
+///
+/// **Eu escrevi a condição e não tinha como verificá-la**: eu vejo um produto. A lição que fica pras
+/// próximas peças que nascerem aqui é escrever a promessa como uma CONSULTA que alguém consegue
+/// rodar, e não como uma intenção.
+///
+/// ## E ela não foi adotada, por 113 pixels
+///
+/// A do pai é `MainAxisSize.min` com cada aba do tamanho do rótulo; esta reparte a largura em fatias
+/// iguais. Com `Pendentes · Histórico · Minhas` em 353 de largura — a tela de Autorizações — a dele
+/// **estoura por 113px**. Com rótulos curtos (`Tudo · Entradas · Saídas`) cabe.
+///
+/// As duas estão certas em contextos diferentes, e a razão de repartir está três parágrafos abaixo:
+/// **fatia desigual faz o alvo de toque mudar de tamanho a cada troca de tela.** Está pedido como
+/// variante (`larguraIgual`), com o número medido; enquanto não vier, esta peça é a única deste
+/// produto com par na linguagem que não adota — e isso está declarado em vez de silencioso.
 ///
 /// ## O que mudou
 ///
