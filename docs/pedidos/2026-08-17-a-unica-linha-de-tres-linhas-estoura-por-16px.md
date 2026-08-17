@@ -73,3 +73,66 @@ noutra) — a divergência que a peça existe pra fechar.
 O `_IdentityCard` sai do `operador_detalhe_screen.dart` e vira `DilettaAppListRow` com
 `titleBodyLabel`. O gate é o próprio teste: a row com as três linhas renderiza sem
 `RenderFlex overflowed` num frame de 393.
+
+---
+
+## Veredito · DEFEITO MEU, e nem a saída 1 nem a saída 2 — a altura sai das LINHAS DECLARADAS
+
+**pai**: `ds-diletta` **v0.110.0** · **data**: 2026-08-17
+
+```dart
+DilettaMiddleSize _sizeHint() => label == null ? DilettaMiddleSize.sm : DilettaMiddleSize.md;
+```
+
+Uma linha. E as duas saídas que você ofereceu estavam as duas erradas por meio grau cada.
+
+### A aritmética fecha, e é o que faz isto ser defeito e não pedido
+
+`subheading` 20 + `caption` 16 + `labelSm` 16 = **52** contra os 36 declarados. **16px**, o seu número,
+sem depender de conteúdo nenhum. O acessório **declarava `sm` e pintava o título em `md`** — a linha 745
+passa `DilettaMiddleSize.md` pro estilo do título e a 737 devolvia `sm` pra altura. Duas afirmações
+sobre a mesma variante, discordando dentro da mesma classe.
+
+Você tem razão no que escreveu como o ponto mais difícil de defender: o `///` da classe-mãe já avisava
+da classe do defeito, e o caso escrito lá era **conteúdo** longo. Aqui o número de linhas é declarado
+pelo próprio acessório, então não havia nem o consolo de *"o chamador pediu isso"*.
+
+### Por que não a sua saída 1 (`md` fixo)
+
+Porque **com o `label` nulo a conta dá 36 exatos** (20 + 16), e você mediu isso — *"com o `label` nulo
+passa limpo"*. `md` fixo levaria toda linha de duas linhas de 36 pra 72: mexer na altura de quem já
+funcionava, do jeito que a v0.48.0 já cobrou aqui uma vez (2px moveram tela de um filho que não pediu).
+
+### Por que não a sua saída 2 (altura elástica)
+
+Porque o mecanismo já existe e **não é o certo pra este caso**: `_cresce` faz a altura virar PISO e
+acrescenta respiro `s3`, e ele nasceu pra quando o CHAMADOR abre `maxLines` — conteúdo que não se sabe.
+Aqui o número de linhas é conhecido na construção, então piso elástico entregaria uma altura que varia
+sem ninguém precisar disso, e com um respiro que as outras linhas de 72 não têm.
+
+**A sua própria exclusão nº1 dizia o certo** — *"o que peço é que a altura acompanhe o número de linhas
+que o ACESSÓRIO declara, que é conhecido em tempo de construção"* —, e ela contradiz a sua saída 2. Eu
+implementei a exclusão, não a saída.
+
+### O que eu achei e você não podia ver
+
+**O defeito estava na vitrine do PRIMEIRO filho.** O catálogo dele pinta
+`titleBodyLabel(title:, body:, label:)` — os três campos — na tabela que documenta o acessório, rotulada
+`titleBodyLabel() · sm`. Ou seja: a variante estourava na página que existe pra ensinar a usá-la, e
+ninguém viu, porque estouro de layout na web em release não pinta a tarja.
+
+Isso responde a régua do segundo filho sem eu ter que perguntar: **dois sítios independentes, e um deles
+é documentação.**
+
+### O `titleSubtitleSubtitle` fica como está, e a sua razão entrou no teste
+
+Sua exclusão nº2 mantida: o bullet serve dois dados curtos. Medi o seu caso e ele confirma — o par
+documento + contato divide UMA linha com `maxLines: 1`. **O defeito ali é de informação, não de
+layout**, e por isso a peça não muda: quem escolhe entre empilhar e juntar é quem sabe o que os dois
+dados são.
+
+### O que você faz
+
+`ref: v0.110.0`, e o `_IdentityCard` sai do `operador_detalhe_screen.dart`. O gate que você propôs é o
+que subiu: a row com as três linhas num frame de 393, sem exceção, mais o par de duas linhas cravado em
+**36** — porque a metade do conserto que ninguém pediria de volta é a que não se move.
