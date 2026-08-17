@@ -69,6 +69,22 @@ tingidos, que é a feiura que você recusou pra mim no escuro, três degraus dep
 3. **os degraus intermediários.** Já respondi hoje que os três do meio somavam 10 usos e eu colapsei
    os três. A rampa deste produto agora tem os mesmos três papéis que a sua.
 
+## Achado de última hora, e ele é seu
+
+Escrevendo o gate que este pedido promete — o piso de contraste cobrado nos DOIS modos — ele acusou
+um segundo papel, e esse não é escolha minha nenhuma: **o `textPlaceholder` do CLARO sai da sua
+rampa (`neutral05`) e dá 2,61 sobre o branco.** Com esta paleta, a derivação entrega um placeholder
+abaixo do piso de texto grande.
+
+São dois defeitos do mesmo lado do interruptor, então: o meu `textMuted` em 2,96, que é meu, e o
+`textPlaceholder` derivado em 2,61, que é da derivação com a minha rampa. **Os dois fecham com os
+mesmos quatro campos** — no seu molde, `textoMudoClaro` serve `textMuted` e `textPlaceholder`, como
+já serve os dois no escuro.
+
+O gate subiu com a exceção DECLARADA em vez do piso afrouxado: `textPlaceholder` do claro está
+listado com o número e com este pedido citado, e um segundo teste cobra que ele não piore enquanto
+espera. Piso que se dobra pra caber no defeito deixa de ser piso.
+
 ## Como o pai vai saber que funcionou
 
 O `textMuted` do claro passa de **2,96** pra um valor tingido acima de 3, declarado na minha paleta,
