@@ -20,6 +20,31 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.49.0] — 2026-08-17
+
+### `BoldType` — a escala de tipo da marca atravessa a fronteira, e um degrau nasce da medição
+
+Terceira camada a sair do app, depois da paleta e das peças. Ela veio por último de propósito: é o
+token com mais consumidor (**644 sítios**) e o que menos perdoa erro.
+
+**Sete degraus derivam do pai** — `headlineMd` · `headlineSm` · `titleMd` · `bodyLg` · `labelMd` ·
+`bodySm` · `labelSm` —, conferidos um a um em px, altura, peso **e tracking** antes de trocar. A
+família é a única coisa que este pacote acrescenta, porque os degraus dele não fixam família de
+propósito.
+
+**Doze são declarados, e cada um tem razão escrita**: seis têm px que o pai não tem (46, 30, 17, 13,
+13, 10), cinco têm o px dele com outro peso, e o `labelLg` bate em tudo menos tracking — 1,4 contra
+0,1 do `titleSm`. Catorze com 1,4 é rótulo espaçado, não título pequeno.
+
+**`valorHeroi` (32) nasceu da medição do app**: 17 sítios escreviam `display.copyWith(fontSize: …)`,
+onze com **32** e seis com **34**. A divisão não era decisão — 34 nas telas de revisar, 32 nas de
+resultado, dois pixels que ninguém escolheu. Um degrau, e ele é o grupo maior; as seis de revisar
+encolhem 2px.
+
+**O gate mede a ESCADA, não os valores**: nenhum par de degraus a menos de 1px de distância, e
+degraus que compartilham px têm que se separar por peso ou tracking. É o que impede a terceira
+grafia de nascer no dia seguinte.
+
 ## [0.48.0] — 2026-08-17
 
 ### Pai `v0.110.0` — os dois pedidos do dia voltaram, e os dois com defeito MEU junto
