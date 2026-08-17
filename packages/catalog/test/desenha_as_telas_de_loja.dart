@@ -57,6 +57,22 @@ ScreenSpec _semBindings(ScreenSpec tela) {
 /// mesma ("esta tela já traz o relógio?"), vistas de lados opostos.
 Set<String> tiposDoTopo(ScreenSpec tela) => {for (final b in tela.top) b.type};
 
+/// O APARELHO É PARÂMETRO — a loja da Apple recusou a leva por TAMANHO e pediu 2064×2752 (iPad 13").
+///
+/// ```sh
+/// flutter test test/desenha_as_telas_de_loja.dart \
+///   --dart-define=largura=1032 --dart-define=altura=1376   # ×2 ⇒ 2064×2752
+/// ```
+///
+/// O padrão continua 393×852: quem roda sem passar nada tira a mesma leva de sempre.
+///
+/// **A tela é DESENHADA no formato, não ampliada até ele.** A primeira resposta a este pedido foi
+/// compor a imagem por fora — PNG de telefone ampliado e centrado numa arte de fundo —, e ela cabe na
+/// loja sem responder ao dono do produto: o que sai é um telefone grande, e não dá pra validar o que
+/// o produto faz na largura do iPad. Quem tinha que mudar era o frame, e mudou (`FormatoDoAparelho`).
+const _largura = int.fromEnvironment('largura', defaultValue: 393);
+const _altura = int.fromEnvironment('altura', defaultValue: 852);
+
 void main() {
   setUpAll(() {
     configurarChromeDoBold();
@@ -64,7 +80,10 @@ void main() {
     configurarConteudoDoBold();
   });
 
-  final saida = Directory('build/telas_de_loja')..createSync(recursive: true);
+  // Uma pasta por aparelho: a leva de telefone e a de iPad não se comem.
+  final saida = Directory(
+    'build/telas_de_loja${_largura == 393 ? '' : '_${_largura}x$_altura'}',
+  )..createSync(recursive: true);
 
   for (final escuro in [false, true]) {
     for (final slug in [
@@ -76,8 +95,9 @@ void main() {
       kSlugDaAparencia,
     ]) {
       testWidgets('$slug ${escuro ? "escuro" : "claro"}', (t) async {
-        // 393×852 é o frame do produto. O `devicePixelRatio` 2 dá um PNG legível em tela cheia.
-        t.view.physicalSize = const Size(393 * 2, 852 * 2);
+        // O `devicePixelRatio` 2 dá um PNG legível em tela cheia — e é o que faz 1032×1376 sair
+        // como os 2064×2752 que a loja pede.
+        t.view.physicalSize = const Size(_largura * 2.0, _altura * 2.0);
         t.view.devicePixelRatio = 2.0;
         addTearDown(t.view.reset);
 
@@ -128,7 +148,11 @@ void main() {
             // O frame do board já dá um; aqui a árvore é montada à mão.
             home: Scaffold(
               backgroundColor: const Color(0x00000000),
-              body: DilettaThemeScope(
+              // O APARELHO em que o motor vai desenhar. Sem esta linha o frame é o telefone e o
+              // `view` maior só acrescenta vazio à direita e embaixo — foi o primeiro resultado.
+              body: FormatoDoAparelho(
+                tamanho: const Size(_largura * 1.0, _altura * 1.0),
+                child: DilettaThemeScope(
               theme: escuro ? BoldTheme.dark : BoldTheme.light,
               child: Builder(builder: (ctx) {
                 final s = DilettaTheme.schemeOf(ctx);
@@ -151,6 +175,7 @@ void main() {
                   ]),
                 );
               }),
+              ),
               ),
             ),
           ),

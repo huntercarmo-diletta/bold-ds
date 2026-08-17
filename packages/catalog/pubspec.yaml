@@ -3,7 +3,7 @@ description: >-
   Catálogo do DS do Conta BOLD. É CONSUMIDOR do design system, igual ao app — não tem
   componente próprio. O motor (barra, board, compositor, codegen) vem do pai por tag.
 publish_to: none
-version: 0.24.0
+version: 0.25.0
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
@@ -27,7 +27,7 @@ dependencies:
   diletta_catalog_core:
     git:
       url: git@bitbucket.org:diletta/catalogo-diletta.git
-      ref: v0.105.0
+      ref: v0.108.0
       path: packages/diletta_catalog_core
 
 dev_dependencies:

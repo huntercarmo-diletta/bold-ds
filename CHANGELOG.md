@@ -20,6 +20,44 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.46.0] — 2026-08-17
+
+### Pai `v0.88.0` → `v0.108.0` e motor `v0.105.0` → `v0.108.0` — 20 versões do pai, zero quebras
+
+Vinte tags do pai entraram de uma vez e o pacote nem piscou: `flutter analyze` limpo e **142/142** no
+pacote, **90/90** no catálogo. Não é sorte — é o que a partição fechada em 29/07 comprou: o filho
+declara paleta e compõe, o pai constrói, e mudança de construção não atravessa a fronteira.
+
+O motor sobe junto porque a `v0.107.0` dele traz o `FormatoDoAparelho`, que era a única coisa
+segurando as telas de loja no formato de iPad — elas rodavam com `dependency_overrides` apontando pro
+disco. **O override morreu**, e as duas levas saem por `--dart-define`:
+
+```sh
+flutter test test/desenha_as_telas_de_loja.dart                              # 393×852  ⇒ 786×1704
+flutter test test/desenha_as_telas_de_loja.dart \
+  --dart-define=largura=1032 --dart-define=altura=1376                       # ⇒ 2064×2752 (iPad 13")
+```
+
+A tela é **desenhada** no formato, não ampliada até ele: a primeira resposta ao pedido da loja foi
+compor a imagem por fora — PNG de telefone centrado numa arte de fundo —, e ela cabe na loja sem
+responder à pergunta do dono, que é o que o produto faz na largura do iPad. Quem tinha que mudar era
+o frame, e mudou. Uma pasta por aparelho, pra as duas levas não se comerem.
+
+### Pedido novo ao pai — a rampa de TEXTO do escuro não viaja
+
+Medido fechando a dívida de cor do app: a derivação do `DilettaScheme` no escuro dá cinza PURO
+(distância entre canais RGB = 0 nos quatro papéis), e o texto deste produto é azulado (6 no corpo, 17
+no secundário, 22 no mudo), porque o fundo daqui é um azul-quase-preto. O `mudo` é o caso que decide:
+ele fica a **3,81** de propósito, e a derivação do pai o põe a **7,51** — mais forte que o
+`textSecondary` de muitos produtos. Mudo que grita deixa de ser mudo.
+
+O pedido é por SLOT, não por cor: quatro campos opcionais na paleta, no mesmo molde das superfícies
+do escuro da `v0.1.9`. `docs/pedidos/2026-08-17-a-rampa-de-texto-do-escuro-nao-viaja-a-minha-e-azul.md`.
+
+E um achado que foi junto: o `border` do escuro do pai é `const Color(0x14FFFFFF)` cravado no scheme,
+e é **hex por hex** o `border` deste produto, nos 127 sítios em que ele pinta. Dois caminhos
+separados chegando no mesmo valor é o sinal de token que já é da linguagem e ainda não tem nome nela.
+
 ## [0.45.0] — 2026-08-13
 
 ### `BoldNavFlutuante` — a navbar da home era a do PAI, e o print viu antes de qualquer gate
