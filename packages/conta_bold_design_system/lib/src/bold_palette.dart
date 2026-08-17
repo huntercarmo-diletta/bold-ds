@@ -134,6 +134,32 @@ class BoldColors {
   static const Color surfaceEscura = Color(0xFF14151F);
   static const Color surfaceMutedEscura = Color(0xFF1E1F2D);
 
+  // ── O TEXTO DO ESCURO (opcionais, entraram na v0.109.0 do pai, a meu pedido) ──────────
+  //
+  // Mesmo caso das superfícies, uma camada acima: a derivação do pai dá cinza PURO (distância
+  // entre canais RGB = 0 nos quatro papéis) e o texto deste produto é AZULADO — 6 no corpo, 17
+  // no secundário, 22 no mudo. Não é preferência: o fundo daqui é `#0A0B12`, um azul-quase-preto,
+  // e cinza puro sobre fundo azulado lê como sujo.
+  //
+  // O `mudo` é o degrau que decidiu o pedido: ele fica em **3,81** contra o fundo, de propósito,
+  // porque é METADADO — passa o piso de texto e não compete com o corpo. A derivação da rampa o
+  // punha em 7,51, mais forte que o `textSecondary` de muitos produtos. Mudo que grita deixa de
+  // ser mudo.
+  //
+  // Quatro campos, SETE papéis: `texto` → `fg` + `onSurface` · `mudo` → `textMuted` +
+  // `textPlaceholder` · `borda` → `border` + `divider`. E o terciário e o desabilitado chegam
+  // DERIVADOS, pela fração de luminância que o degrau ocupa entre os vizinhos desta rampa — o
+  // pai não abriu slot pros dois porque eu não tinha medição pra eles, e ele estava certo.
+  static const Color textoEscuro = Color(0xFFFFFFFF);
+  static const Color textoSecundarioEscuro = Color(0xFFB7BBC8);
+  static const Color textoMudoEscuro = Color(0xFF686D7E);
+
+  /// Branco a 8% — e ele chegou aqui por CRUZAMENTO, não por desenho: o `border` do escuro do
+  /// pai era `const Color(0x14FFFFFF)` cravado no scheme, hex por hex igual ao deste produto em
+  /// 127 sítios. Dois caminhos separados no mesmo valor é o sinal de token que já era da
+  /// linguagem e ainda não tinha nome nela.
+  static const Color bordaEscura = Color(0x14FFFFFF);
+
   // ── O VIDRO ───────────────────────────────────────────────────────────────
   //
   // O pai sabe COMO se constrói vidro (o clip colado no filtro, o tinte por cima, e nada de
@@ -247,6 +273,12 @@ class BoldPalette {
     bgEscuro: BoldColors.bgEscuro,
     surfaceEscura: BoldColors.surfaceEscura,
     surfaceMutedEscura: BoldColors.surfaceMutedEscura,
+
+    // O TEXTO E A BORDA DO ESCURO (opcionais, v0.109.0 do pai)
+    textoEscuro: BoldColors.textoEscuro,
+    textoSecundarioEscuro: BoldColors.textoSecundarioEscuro,
+    textoMudoEscuro: BoldColors.textoMudoEscuro,
+    bordaEscura: BoldColors.bordaEscura,
 
     // O VIDRO — a receita inteira, que virou do filho na v0.4.0 do pai.
     tinteDeVidroClaro: BoldColors.tinteDeVidroClaro,

@@ -20,6 +20,47 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.47.0] — 2026-08-17
+
+### O texto do escuro passa a ser DECLARADO — quatro campos, sete papéis, dois derivados
+
+O pai fechou o pedido no mesmo dia: `v0.109.0`, quatro campos opcionais na paleta
+(`textoEscuro` · `textoSecundarioEscuro` · `textoMudoEscuro` · `bordaEscura`), no molde que a
+`v0.1.9` abriu pras superfícies. Este filho declara os quatro:
+
+| campo | valor | contraste sobre `#0A0B12` | spread RGB |
+|---|---|---|---|
+| `textoEscuro` | `#FFFFFF` | 19,64 | 0 |
+| `textoSecundarioEscuro` | `#B7BBC8` | 10,24 | 17 |
+| `textoMudoEscuro` | `#686D7E` | **3,81** | 22 |
+| `bordaEscura` | branco @ 8% | — | — |
+
+O `mudo` em 3,81 é a razão do pedido inteiro: ele é METADADO e não pode competir com o corpo. A
+derivação da rampa neutra o punha em 7,51.
+
+**Dois papéis chegam derivados, e eles carregam a temperatura.** O terciário sai `#8D91A0` (6,27,
+spread 19) e o desabilitado `#3F424F` (1,96, spread 16) — ambos entre os vizinhos declarados, pela
+fração de luminância que o degrau ocupa na rampa. Isso responde a parte que eu não tinha medido: a
+correção do pai foi dizer que *matiz não sai de degrau, mas degrau sai de degrau.*
+
+**E o diagnóstico do meu pedido estava invertido**, o que ele mostrou com a régua dele: a rampa
+neutra de referência tem spread 18/21/23 — ela **não** é cinza puro. Cinza puro é a paleta DESTE
+produto (spread 0 nos três degraus neutros). A porta continua necessária, mas por outra razão: a
+derivação default fica intacta, e o outro filho não é repintado por um defeito que não é dele.
+
+### O que isso destrava no app
+
+Quatro dos hex crus do `bold_colors.dart` podem morrer: `textPrimary`, `textSecondary`, `textMuted`
+e `border` passam a vir do `DilettaScheme`. Os outros sete da rampa (o corpo, o corpo suave, o
+rótulo, a borda forte e as duas superfícies elevadas) continuam sem papel na linguagem — medidos e
+escritos, não esquecidos.
+
+### Gate
+
+`o_texto_do_escuro_test`: os quatro campos chegando nos sete papéis, e os dois derivados provados
+por TEMPERATURA (spread > 10) e por posição (luminância entre os vizinhos). Campo opcional que
+ninguém liga cai na rampa em silêncio — o gate existe pra que o silêncio faça barulho.
+
 ## [0.46.0] — 2026-08-17
 
 ### Pai `v0.88.0` → `v0.108.0` e motor `v0.105.0` → `v0.108.0` — 20 versões do pai, zero quebras
