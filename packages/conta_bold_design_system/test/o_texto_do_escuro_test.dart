@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
-import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/painting.dart';
 import 'package:flutter_test/flutter_test.dart';
 

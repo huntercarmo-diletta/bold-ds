@@ -20,6 +20,36 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.48.0] — 2026-08-17
+
+### Pai `v0.110.0` — os dois pedidos do dia voltaram, e os dois com defeito MEU junto
+
+**A linha rótulo→valor.** O `DilettaDetailRow` ganhou `enfase` · `porte` · `trailing`, e nenhuma peça
+nova nasceu — porque a peça já existia e eu li errado. Eu escrevi que ele *"empilha onde este caso
+alinha"*; ele é `Row`, com `Expanded` + `textAlign: end` no valor, e a spec dele abre dizendo
+*"horizontal: label à esquerda, valor à direita"*. **O pedido estava certo no número e errado na
+saída.**
+
+O que o veredito acrescenta e eu não tinha visto: o pai tinha **duas** receitas da mesma forma no
+próprio pacote — a pública (`subheading`/`fg` → `bodyMd`/`textTertiary`) e a privada do
+`DilettaReceipt` (`caption`/`textTertiary` → `caption`/`fg`), com a ênfase invertida entre elas.
+A minha régua apontada pra ele deu o mesmo veredito que ele me deu: 5 receitas em 16 sítios aqui,
+2 em 2 lá, e uma sem porta. O `DilettaReceipt` passou a montar a peça pública.
+
+**A row de três linhas.** Defeito dele, consertado em uma linha —
+`_sizeHint() => label == null ? sm : md`. E as duas saídas que eu ofereci estavam as duas erradas:
+`md` fixo mexeria na altura de quem já funcionava (com `label` nulo a conta dá 36 exatos), e altura
+elástica entregaria piso variável onde o número de linhas é conhecido na construção. **A minha
+própria exclusão nº1 dizia o certo, e ela contradizia a minha saída nº2** — ele implementou a
+exclusão.
+
+O achado que eu não podia ver: a variante estourava **na vitrine do primeiro filho**, na tabela que
+documenta o acessório. Estouro de layout na web em release não pinta a tarja.
+
+### O que isso destrava aqui
+
+Os 16 sítios de linha rótulo→valor do app e o `_IdentityCard`, que voltou a ter caminho.
+
 ## [0.47.0] — 2026-08-17
 
 ### O texto do escuro passa a ser DECLARADO — quatro campos, sete papéis, dois derivados
