@@ -50,4 +50,22 @@ void main() {
     expect(lum(s.textTertiary), lessThan(lum(s.textSecondary)));
     expect(lum(s.textTertiary), greaterThan(lum(s.textMuted)));
   });
+
+  test('e o CLARO também é declarado — os quatro do espelho, v0.111.0', () {
+    final s = DilettaScheme.light(BoldPalette.bold);
+
+    expect(s.fg.toARGB32(), BoldColors.textoClaro.toARGB32());
+    expect(s.onSurface.toARGB32(), BoldColors.textoClaro.toARGB32());
+    expect(s.textSecondary.toARGB32(), BoldColors.textoSecundarioClaro.toARGB32());
+    expect(s.textMuted.toARGB32(), BoldColors.textoMudoClaro.toARGB32());
+    expect(s.border.toARGB32(), BoldColors.bordaClara.toARGB32());
+
+    // O DEFEITO QUE ESTE ESPELHO CONSERTOU, cravado como número: o mudo do claro estava em 2,96
+    // sobre a superfície — abaixo do piso de texto grande — enquanto eu defendia 3,81 pro mesmo
+    // papel no escuro. Se alguém clarear este degrau de novo, esta linha acusa.
+    double _l(double c) => c <= 0.03928 ? c / 12.92 : math.pow((c + 0.055) / 1.055, 2.4) as double;
+    double lum(Color c) => 0.2126 * _l(c.r) + 0.7152 * _l(c.g) + 0.0722 * _l(c.b);
+    final contraste = (lum(s.surface) + 0.05) / (lum(s.textMuted) + 0.05);
+    expect(contraste, greaterThan(3.0), reason: 'o mudo do claro voltou a ficar invisível');
+  });
 }

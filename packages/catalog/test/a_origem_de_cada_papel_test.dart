@@ -34,7 +34,7 @@ void main() {
             'um lado só');
   });
 
-  test('a proporção é 16 alias para 5 derivados, e o número é a informação', () {
+  test('a proporção é 12 alias para 9 derivados, e o número é a informação', () {
     // A lista não é a informação — a PROPORÇÃO é. Um vocabulário em que quase tudo é derivado é um
     // que eu não consigo mover; um em que quase nada é derivado é um em que o pai não está
     // garantindo contraste nenhum.
@@ -52,8 +52,16 @@ void main() {
       }
     }
 
-    expect(alias, 16, reason: 'quantos papéis eu posso mover trocando a paleta');
-    expect(derivado, 5, reason: 'quantos são conta do pai — os que eu NÃO movo');
+    // MUDOU EM 18/08, e a mudança é a notícia que esta linha existe pra dar: era **16/5**, virou
+    // **12/9**. Quatro papéis do CLARO deixaram de ser alias de degrau e passaram a sair de campo
+    // declarado (`textoClaro` · `textoSecundarioClaro` · `textoMudoClaro` · `bordaClara`, a
+    // `ds v0.111.0`), do mesmo jeito que quatro do escuro tinham mudado dois dias antes.
+    //
+    // Ou seja: eu movo MENOS papel trocando a paleta, e é isso que eu queria — o que saiu do alias
+    // não foi pra rampa, foi pra uma porta que eu declaro. O número que encolhe aqui é o número de
+    // coisas que dependiam de qual degrau eu apontava.
+    expect(alias, 12, reason: 'quantos papéis eu posso mover trocando a paleta');
+    expect(derivado, 9, reason: 'quantos são conta do pai — os que eu NÃO movo');
     expect(alias + derivado, papeisDoBoldParaMedir().length);
   });
 }

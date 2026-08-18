@@ -20,6 +20,40 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.50.0] — 2026-08-18
+
+### O CLARO ganha o espelho da porta, e dois defeitos de contraste morrem
+
+O pai fechou o pedido de ontem à noite na `v0.111.0`: `textoClaro` · `textoSecundarioClaro` ·
+`textoMudoClaro` · `bordaClara`, mesmo molde do escuro. Este filho declara os quatro.
+
+**Os dois defeitos, e um era meu:**
+
+| | antes | agora |
+|---|---|---|
+| `textMuted` do claro (meu) | **2,96** | **3,54** |
+| `textPlaceholder` do claro (derivação dele) | **2,61** | passa o piso |
+
+O meu estava abaixo do piso de texto GRANDE enquanto eu defendia 3,81 pro mesmo papel no escuro —
+**a régua que eu apontei pro pai acusou o que eu tinha em casa.** O dele derivava por degrau fixo e
+não segurava numa rampa mais clara; ele pôs o piso dentro da própria derivação, nos dois modos.
+
+O mudo novo (`#8A8398`) mantém a temperatura (spread 21) que a rampa neutra não tem como dar — que
+foi o argumento do pedido do escuro, agora do outro lado do interruptor.
+
+### A exceção do gate morreu no dia seguinte
+
+O `o_piso_de_contraste_vale_nos_dois_modos` nasceu ontem com **uma** exceção declarada — o
+placeholder do claro, com o número e o pedido citado. Ela some hoje, e some inteira em vez de virar
+lista vazia: lista de exceção vazia é convite pra próxima entrar sem discussão.
+
+### A proporção de papéis mudou, e é notícia
+
+O gate do catálogo cravava **16 alias para 5 derivados**; agora é **12 para 9**. Quatro papéis do
+claro deixaram de ser alias de degrau e passaram a sair de campo declarado. Eu movo menos papel
+trocando a paleta — e é isso que eu queria: o que saiu do alias não foi pra rampa, foi pra uma porta
+que eu declaro.
+
 ## [0.49.0] — 2026-08-17
 
 ### `BoldType` — a escala de tipo da marca atravessa a fronteira, e um degrau nasce da medição

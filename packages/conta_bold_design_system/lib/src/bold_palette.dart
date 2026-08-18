@@ -154,6 +154,24 @@ class BoldColors {
   static const Color textoSecundarioEscuro = Color(0xFFB7BBC8);
   static const Color textoMudoEscuro = Color(0xFF686D7E);
 
+  // ── O TEXTO DO CLARO (opcionais, v0.111.0 do pai, no mesmo dia do pedido) ─────────────
+  //
+  // O espelho do escuro, e ele veio com DOIS defeitos consertados. O meu: o `textMuted` do claro
+  // estava em **2,96** sobre a superfície — abaixo do piso de texto GRANDE —, enquanto eu defendia
+  // 3,81 pro mesmo papel no escuro. A régua que eu apontei pro pai acusou o que eu tinha em casa.
+  //
+  // O dele: o `textPlaceholder` do claro derivava por degrau FIXO e dava **2,61** sobre o branco
+  // nesta rampa. O piso entrou na derivação, nos dois modos — terceira vez que a lição volta, e
+  // agora ela é conta e não convenção.
+  //
+  // Os valores: o texto e o secundário são os que este produto já usava (medidos e aprovados,
+  // 10,31 e 5,53). O MUDO subiu — `#8A8398` dá 3,54 contra os 2,96 de antes, e mantém a
+  // temperatura (spread 21) que a rampa neutra do pai não tem como dar.
+  static const Color textoClaro = Color(0xFF3D3939);
+  static const Color textoSecundarioClaro = Color(0xFF6B6678);
+  static const Color textoMudoClaro = Color(0xFF8A8398);
+  static const Color bordaClara = Color(0x12000000);
+
   /// Branco a 8% — e ele chegou aqui por CRUZAMENTO, não por desenho: o `border` do escuro do
   /// pai era `const Color(0x14FFFFFF)` cravado no scheme, hex por hex igual ao deste produto em
   /// 127 sítios. Dois caminhos separados no mesmo valor é o sinal de token que já era da
@@ -279,6 +297,12 @@ class BoldPalette {
     textoSecundarioEscuro: BoldColors.textoSecundarioEscuro,
     textoMudoEscuro: BoldColors.textoMudoEscuro,
     bordaEscura: BoldColors.bordaEscura,
+
+    // E O ESPELHO NO CLARO (v0.111.0), que consertou 2,96 -> 3,54 no mudo
+    textoClaro: BoldColors.textoClaro,
+    textoSecundarioClaro: BoldColors.textoSecundarioClaro,
+    textoMudoClaro: BoldColors.textoMudoClaro,
+    bordaClara: BoldColors.bordaClara,
 
     // O VIDRO — a receita inteira, que virou do filho na v0.4.0 do pai.
     tinteDeVidroClaro: BoldColors.tinteDeVidroClaro,

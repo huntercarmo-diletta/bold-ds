@@ -46,18 +46,16 @@ void main() {
         'textMuted': s.textMuted,
         'textPlaceholder': s.textPlaceholder,
       };
-      // A EXCEÇÃO, e ela tem número, dono e prazo: no CLARO o `textPlaceholder` sai da rampa
-      // neutra (`neutral05`) e dá **2,61** sobre o branco. Não é escolha minha — é o que a
-      // derivação do pai devolve com esta paleta, e é o mesmo defeito que o `textMuted` do claro
-      // tem em 2,96. Os dois estão no pedido de 17/08 (`o CLARO não tem a porta que o escuro
-      // ganhou`): com os quatro campos abertos, os dois passam a ser declarados e a exceção morre.
+      // A EXCEÇÃO DO CLARO MORREU EM 18/08, no dia seguinte ao gate. Ela era o
+      // `textPlaceholder` em **2,61** sobre o branco — derivação por degrau fixo com esta rampa —,
+      // listada aqui com número em vez de o piso ser afrouxado. O pai fechou o pedido na
+      // `v0.111.0`: o piso entrou na própria derivação, nos dois modos, e o `textMuted` que eu
+      // tinha em 2,96 passou a ser declarado em 3,54.
       //
-      // Ela fica listada em vez de o piso ser afrouxado, porque piso que se dobra pra caber no
-      // defeito deixa de ser piso.
-      const esperandoOPedido = {'textPlaceholder'};
+      // Nenhuma exceção sobrou, e é por isso que a lista some em vez de esvaziar: lista de exceção
+      // vazia é convite pra próxima entrar sem discussão.
       final reprovados = <String, String>{};
       papeis.forEach((nome, cor) {
-        if (!escuro && esperandoOPedido.contains(nome)) return;
         final c = contraste(cor, s.surface);
         if (c < 3.0) reprovados[nome] = c.toStringAsFixed(2);
       });
@@ -79,17 +77,6 @@ void main() {
       expect(reprovados, isEmpty, reason: 'texto abaixo de 3,0 sobre o fundo no $modo:\n$reprovados');
     });
   }
-
-  test('a exceção do claro continua sendo exceção — e o número dela não piora', () {
-    // Enquanto o pedido não fecha, o defeito fica MEDIDO: se alguém mexer na paleta e piorar o
-    // placeholder do claro, este número acusa. Exceção sem número é dívida escondida.
-    final claro = DilettaScheme.light(BoldPalette.bold);
-    final c = contraste(claro.textPlaceholder, claro.surface);
-    expect(c, greaterThan(2.5), reason: 'o placeholder do claro piorou');
-    expect(c, lessThan(3.0),
-        reason: 'o placeholder do claro passou de 3,0 — o pedido fechou? '
-            'Então tire ele da lista de exceção.');
-  });
 
   test('e o gate SABE reprovar', () {
     // Controle com um par conhecido: cinza claro sobre branco não passa.
