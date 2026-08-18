@@ -72,6 +72,28 @@ adoção paga quando o papel não serve.
 3. **piso 4,5.** Marca não é texto de corpo — 3,0 já resolveria os dois casos, e é o piso que você
    usa no `warningGrafico`.
 
+## Li o seu ledger antes de insistir, e ele tem a metade que faltava do meu argumento
+
+Eu já tinha levantado o **mesmo 3,46** em 31/07, e você fechou na `v0.22.0`. O seu veredito de lá é
+a frase que este pedido devia ter aberto citando:
+
+> *"`dilettaTintaSobre` deriva na ordem declarada → branco → cinza de texto → preto. **Tinta é
+> consequência de legibilidade; preenchimento é decisão de marca.**"*
+
+**Então isto não é o mesmo pedido de novo — é a outra metade do mesmo princípio.** Você aplicou o
+piso à tinta que vai SOBRE o `primary` (e é por isso que o `onPrimary` do meu claro é preto). O que
+não tem piso é o `primary` sendo usado **como tinta**, sobre a superfície.
+
+Pela sua própria régua, esse caso é tinta, e tinta é consequência de legibilidade. É a única linha de
+argumento que eu precisava, e ela é sua.
+
+O que continua sendo minha contribuição de hoje é só a medição do tamanho: **25 sítios** do seu
+pacote pintam `color: s.primary`, oito deles em texto ou glifo, e `primaryOnSurface` — o papel que
+existe exatamente pra esse caso — tem **um** consumidor.
+
+E registro a lição de meia hora atrás, na nota do `raioDeFolha`: eu citei o seu ledger sem checar a
+coluna de quem levantou, e a nota morreu por isso. Desta vez eu fui ler antes.
+
 ## Como o pai vai saber que funcionou
 
 O `primary` do meu claro passa de 3,46 pra ≥3,0 sem eu declarar ajuste nenhum, e os 25 sítios do seu
