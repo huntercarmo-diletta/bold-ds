@@ -39,4 +39,16 @@ abstract final class BoldVinho {
   /// Ele não é `black` com alpha, e a diferença é o ponto: preto puro sobre a arte de fundo dá
   /// cinza morto, e o matiz é o que faz o painel escuro continuar dialogando com o rosa.
   static const Color ink = Color(0xFF16060A);
+
+  /// O TERCEIRO degrau, e ele entrou em 19/08 com o caso na mão.
+  ///
+  /// Este arquivo abre dizendo *"dois, não uma rampa: degrau nasce quando um caso pede, não
+  /// antes"*. O caso pediu: o vidro da tela de ENTRADA veio do app e trouxe um `#420616` que
+  /// vivia como literal privado lá dentro, com a razão escrita ao lado — *"fica entre `primary01`
+  /// e `primary02` e não existia na escala; é cor de SUPERFÍCIE, não de marca"*.
+  ///
+  /// Ele não vira `vinho03`: não é degrau de uma rampa de vinho, é a lavagem de um material.
+  /// O nome diz o trabalho — o wash que some subindo sobre a foto da cidade, pra a imagem
+  /// aparecer no topo do card e o conteúdo ancorar embaixo.
+  static const Color lavagem = Color(0xFF420616);
 }

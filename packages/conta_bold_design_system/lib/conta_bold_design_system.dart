@@ -38,6 +38,10 @@ export 'package:diletta_design_system/diletta_design_system.dart';
 
 /// A identidade deste filho: paleta, fonte e os dois gradientes.
 export 'src/bold_palette.dart';
+export 'src/bold_scheme.dart';
+export 'src/bold_radius.dart';
+export 'src/bold_vidro.dart';
+export 'src/bold_tema_material.dart';
 export 'src/bold_pontos_de_pagina.dart';
 export 'src/bold_vinho.dart';
 export 'src/bold_fonts.dart';

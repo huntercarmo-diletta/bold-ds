@@ -20,6 +20,67 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.51.0] — 2026-08-19
+
+### O tema do Material e o vidro passam a morar aqui — e o app parava de decidir DS
+
+Duas peças que estavam do lado errado da fronteira. O critério é o mesmo dos dois lados: **decisão
+de linguagem não mora em aplicação**, e as duas eram decisão de linguagem com endereço de app.
+
+**O `ThemeData` (`BoldTemaMaterial.claro` · `.escuro`).** Enquanto ele morava no app, o app decidia
+nove superfícies do Material — a escada de tipo, o fundo do scaffold, o divisor, o ícone, o card, a
+folha, o campo, o botão de texto e a transição de página. O sintoma que provou isso não foi
+arquitetural, foi visível: até ontem quem servia o `MaterialApp` era a camada legada do app, que
+pedia **Nunito**, enquanto os 644 sítios que leem um degrau saíam em **Inter**. Duas fontes na mesma
+tela, e nenhum teste olhava, porque cada metade estava certa sozinha.
+
+Vieram **nove** das treze peças que o tema legado configurava. As quatro que ficaram — `appBar`,
+`bottomNav`, `chip`, `dialog`, `snackBar`, `elevated`, `outlined` — têm **zero consumidores** no app:
+ele instancia um `TextButton` e um `Dialog` do Material, e mais nada. Declaração sem consumidor
+envelhece igual token sem call site.
+
+**O `BoldScheme`, e ele é a razão de o tema não ter vindo antes.** É a extensão que faz
+`BoldColors.of(context)` responder, e é o tema que a registra: com o esquema no app, o tema tinha
+que ficar lá junto. Ele nunca foi decisão de aplicação — **11 dos 14 papéis do escuro e 9 dos 14 do
+claro derivam do `DilettaScheme`** do pai, e o que sobra são decisões de marca. A classe manteve o
+nome; os ~400 sítios do app não souberam da mudança.
+
+**O vidro (`BoldVidro`), e aqui não era mudança de casa: era duplicata.** A receita mora na paleta
+desde a `v0.4.0` do pai — *"o pai sabe COMO se constrói vidro; o filho diz de que material ele é"* —
+e mesmo assim o app declarava os **mesmos cinco valores** por outro caminho: `#16060A @ 50%`,
+`#FFFFFF @ 50%`, `#FF9898 @ 30%`, `primary08` e blur 15. Conferido valor por valor antes de apagar a
+segunda fonte, e o gate novo é o que impede as duas de voltarem a existir.
+
+**O vidro de ENTRADA (`BoldVidroDeEntrada`) veio junto, e ele é outro material.** Blur 5 contra 15,
+gradiente que some subindo em vez de fill chapado, base própria. Existe porque o card do login fica
+sobre uma FOTO de tela cheia, não sobre o backdrop — fill chapado ali achata a imagem. Uso restrito,
+e escrito: se aparecer um terceiro caso, a pergunta é se o PRIMEIRO vidro devia ganhar variante.
+
+### Adicionado
+
+- `BoldTemaMaterial.claro` / `.escuro` — o `ThemeData` do produto, nos dois modos;
+- `BoldScheme` — os catorze papéis mode-aware, com as duas fábricas;
+- `BoldRadius` — vieram junto porque o tema precisa de três deles; dois derivam do pai, e o `sheet`
+  de 22 é o único fora da escada dele (pergunta ABERTA no ledger do pai desde 18/08);
+- `BoldVidro` e `BoldVidroDeEntrada`;
+- `BoldVinho.lavagem` (`#420616`) — o **terceiro** degrau do vinho, e ele entrou com o caso na mão,
+  que é a régua que este arquivo declarou quando nasceu com dois. Não é `vinho03`: não é degrau de
+  rampa, é a lavagem de um material.
+
+### Gates novos
+
+- **`o_tema_do_material_mora_aqui`** — o tema pede a família da marca em toda a escada, e registra o
+  esquema do modo certo. É a metade que faltava do gate da fonte: sem a extensão,
+  `BoldColors.of(context)` cai no escuro por fallback dentro de um app claro, sem erro nenhum;
+- **`o_vidro_tem_uma_fonte_so`** — os cinco valores PINADOS na medição de 19/08, não copiados da
+  paleta. Cópia faria o teste concordar consigo mesmo; a medição é o que diz se a mudança de casa
+  mexeu num pixel.
+
+### O que o app faz ao subir
+
+Nada além de afinar as cascas: `BoldTheme.light()`/`dark()` passam a delegar, `bold_glass.dart` e o
+`BoldScheme` local viram uma linha cada. Nenhum call site muda de nome.
+
 ## [0.50.0] — 2026-08-18
 
 ### O CLARO ganha o espelho da porta, e dois defeitos de contraste morrem
