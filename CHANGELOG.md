@@ -20,6 +20,44 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.52.0] — 2026-08-19
+
+### Corrigido — o saldo oculto sumia, e eram DOIS defeitos empilhados no mesmo `SizedBox`
+
+Chegou do dono olhando o app: *"ao esconder o saldo ele desaparece, no lugar de ter algum tipo de
+máscara"*. A peça tem máscara (`R$ ••••••`) e ela funciona isolada — o que não funcionava era a
+largura reservada pra ela.
+
+**1 · O medidor media numa fonte e a tela pintava em outra.** A largura sai de um `TextPainter`
+alimentado com o degrau de tipo cru, e **degrau desta linguagem não fixa família nem escala**: ele
+herda do tema, que é como a fonte da marca chega em todo lugar sem ninguém repetir o nome dela. O
+`TextPainter` não herda nada — mede exatamente o `TextSpan` que recebe. Agora ele recebe
+`DefaultTextStyle.of(context).style.merge(estilo)` e o `textScaler` do `MediaQuery`. O scaler é o
+mesmo defeito por outra causa: com a escala do sistema aumentada o texto cresce e a caixa não.
+
+**2 · O "máximo dos dois estados" só olhava um estado por vez.** A peça recebia o texto já resolvido
+(`mostrado`) e reservava o máximo entre ele e o valor. No estado VISÍVEL os dois são a mesma string,
+então o máximo era a largura do valor: **98 com o saldo à mostra, 128 com ele oculto** — medido. A
+intenção estava escrita no `///` do arquivo (*"o card NÃO MEXE ao virar o olho"*) e a implementação
+não a cumpria. Agora a peça recebe os dois textos e mede sempre os dois.
+
+O segundo não foi achado lendo: **foi o gate novo que o encontrou**, na asserção que existia pra
+provar a outra coisa.
+
+### Gate novo — `a_mascara_do_saldo_cabe`
+
+Mede a caixa reservada contra a largura INTRÍNSECA do texto, com escala do sistema em 1× e 2×. A
+escala é o lever honesto num teste de fonte: ela reproduz o mesmo defeito por outra causa — o
+medidor ignorando algo que a tela aplica.
+
+### Mudado — uma asserção de `o_saldo_test` virou proxy de nada, e foi trocada
+
+O teste do saldo curto comparava a largura RENDERIZADA dos dois textos e exigia que a máscara fosse
+maior. Ele media o defeito por tabela: com a caixa mudando de tamanho por estado, máscara maior
+provava que a caixa crescera. Com o defeito 2 consertado a caixa é a mesma nos dois estados, e a
+comparação virou **252 contra 252** — passaria a concordar consigo mesma pra sempre. A asserção
+agora pergunta direto: a máscara cabe na caixa?
+
 ## [0.51.0] — 2026-08-19
 
 ### O tema do Material e o vidro passam a morar aqui — e o app parava de decidir DS

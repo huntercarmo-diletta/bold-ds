@@ -102,7 +102,8 @@ class BoldSaldo extends StatelessWidget {
               else
                 _ValorComLarguraReservada(
                   valor: valor,
-                  mostrado: oculto ? _mascaraDoValor : valor,
+                  mascara: _mascaraDoValor,
+                  oculto: oculto,
                   estilo: estiloDoValor,
                 ),
               if (carregandoTotais) ...[
@@ -171,31 +172,54 @@ class _Extrato extends StatelessWidget {
 class _ValorComLarguraReservada extends StatelessWidget {
   const _ValorComLarguraReservada({
     required this.valor,
-    required this.mostrado,
+    required this.mascara,
+    required this.oculto,
     required this.estilo,
   });
 
+  /// Os DOIS textos, sempre — e não "o que está na tela".
+  ///
+  /// A peça recebia `mostrado`, já resolvido pelo estado, e reservava o máximo entre ele e o valor.
+  /// No estado VISÍVEL os dois são a mesma string, então o máximo era a largura do valor: a caixa
+  /// media 98 com o saldo à mostra e 128 com ele oculto. **A intenção escrita aqui é que ela não
+  /// mexa**, e ela mexia — o `max` só via um dos dois estados de cada vez.
   final String valor;
-  final String mostrado;
+  final String mascara;
+  final bool oculto;
   final TextStyle estilo;
 
-  double _largura(String texto) => (TextPainter(
-        text: TextSpan(text: texto, style: estilo),
+  /// A largura de um texto, medida com o estilo que ele VAI TER — não com o que foi passado.
+  ///
+  /// **O `estilo` que chega aqui é incompleto de propósito.** Os degraus de [DilettaType] não fixam
+  /// família nem escala: eles herdam do tema, e é assim que a fonte da marca chega em todo lugar
+  /// sem ninguém repetir o nome dela. Só que o [TextPainter] **não herda nada** — ele mede exatamente
+  /// o `TextSpan` que recebe. Então o medidor media numa fonte e o [DilettaText] pintava em outra.
+  ///
+  /// Onde isso doía: a máscara. `R\$ ••••••` é mais larga que `R\$ 0,14`, e quando a medição
+  /// subestima a máscara o `SizedBox` sai pequeno — o valor oculto aparece cortado, ou some depois do
+  /// `R\$`. O bug não é a máscara: é o medidor não saber que a tela mudou de fonte debaixo dele.
+  ///
+  /// O `textScaler` entra pela mesma razão, e é o mesmo defeito com outra causa: com a escala do
+  /// sistema aumentada o texto cresce e a caixa não, porque a medição ignorava a escala. Este app
+  /// trava o scaler hoje, mas o pacote não é deste app.
+  double _largura(BuildContext context, String texto) => (TextPainter(
+        text: TextSpan(
+            text: texto,
+            style: DefaultTextStyle.of(context).style.merge(estilo)),
         textDirection: TextDirection.ltr,
+        textScaler: MediaQuery.textScalerOf(context),
         maxLines: 1,
       )..layout())
           .width;
 
   @override
   Widget build(BuildContext context) {
-    // A largura é a do MAIOR dos dois, e não a do valor real. Reservar só o
-    // valor funciona enquanto a máscara for mais estreita que ele — e ela não é:
-    // `R$ ••••••` é mais larga que `R$ 0,14`, então o saldo baixo ocultava
-    // sumia, cortado dentro do próprio `SizedBox`. O que se quer aqui é que o
-    // card NÃO MEXA ao virar o olho, e isso é o máximo dos dois estados.
+    // O máximo dos DOIS ESTADOS, medido nos dois sempre. `R$ ••••••` é mais larga que `R$ 0,14`,
+    // então num saldo baixo a máscara não cabe na largura do valor — e o oculto sai cortado, que na
+    // tela lê como uma peça sem máscara nenhuma.
     return SizedBox(
-      width: math.max(_largura(valor), _largura(mostrado)),
-      child: DilettaText(mostrado, style: estilo, maxLines: 1),
+      width: math.max(_largura(context, valor), _largura(context, mascara)),
+      child: DilettaText(oculto ? mascara : valor, style: estilo, maxLines: 1),
     );
   }
 }

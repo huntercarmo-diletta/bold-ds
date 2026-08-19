@@ -1,5 +1,6 @@
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// O CARD DE SALDO — composição, e a regra que ele tem que ele mesmo não escolhe.
@@ -73,21 +74,35 @@ void main() {
     // exemplo do lado confortável da desigualdade. É a lição do pai outra vez:
     // **um exemplo testa o exemplo**. O que separa "reserva o valor" de
     // "reserva o maior dos dois" é justamente o valor curto.
-    Future<double> larguraDoTexto(String texto, {required bool oculto}) async {
-      await t.pumpWidget(montar(Align(
-        alignment: Alignment.topLeft,
-        child: BoldSaldo(valor: r'R$ 0,14', oculto: oculto),
-      )));
-      await t.pump(const Duration(milliseconds: 50));
-      return t.getSize(find.text(texto)).width;
-    }
+    // **A asserção mudou em 19/08, e o motivo é que a antiga virou proxy de nada.**
+    //
+    // Ela comparava a largura RENDERIZADA dos dois textos e exigia que a máscara fosse maior. Isso
+    // media o defeito por tabela: com a caixa mudando de tamanho conforme o estado, a máscara maior
+    // provava que a caixa tinha crescido. Só que caixa que muda por estado é o defeito do teste
+    // logo acima — o card pula. Hoje a caixa é a mesma nos dois estados (o máximo dos dois textos,
+    // medido sempre nos dois), então a comparação dava 252 contra 252 e não dizia mais nada.
+    //
+    // O que se quer saber é direto: **a máscara CABE na caixa reservada?** É isso que a linha
+    // abaixo pergunta, e ela continua reprovando o defeito de 11/08.
+    await t.pumpWidget(montar(Align(
+      alignment: Alignment.topLeft,
+      child: const BoldSaldo(valor: r'R$ 0,14', oculto: true),
+    )));
+    await t.pump(const Duration(milliseconds: 50));
 
-    final visivel = await larguraDoTexto(r'R$ 0,14', oculto: false);
-    final mascarado = await larguraDoTexto(r'R$ ••••••', oculto: true);
+    final alvo = find.text(r'R$ ••••••', findRichText: true).first;
+    final precisa = t
+        .renderObject<RenderParagraph>(alvo)
+        .getMaxIntrinsicWidth(double.infinity);
+    final caixa = t
+        .renderObject<RenderBox>(
+            find.ancestor(of: alvo, matching: find.byType(SizedBox)).first)
+        .size
+        .width;
 
-    expect(mascarado, greaterThan(visivel),
+    expect(caixa, greaterThanOrEqualTo(precisa),
         reason: 'a máscara `R\$ ••••••` tem mais caracteres que `R\$ 0,14`; se a '
-            'caixa não cresce, os pontos são cortados e o saldo some');
+            'caixa não a comporta, os pontos são cortados e o saldo some');
   });
 
   testWidgets('o valor LONGO manda na largura — o controle do teste de cima',
