@@ -20,6 +20,26 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.54.1] — 2026-08-19
+
+### Declarado — o gutter do cabeçalho da home é do CHROME, e ele descobriu uma pergunta
+
+Nenhuma linha de código mudou; o que entrou foi uma medição que eu fiz tentando matar um gêmeo, e ela
+precisa ficar escrita antes de virar folclore.
+
+Convergindo o `BoldCabecalhoDaHome` com o `BoldTopBar.home` do app, medi os dois lado a lado. O único
+desalinhamento no eixo x eram **4px**, e eu ia consertar baixando o gutter desta peça de `s6` (24) pra
+`s5` (20), que é o gutter das telas do app. **Fui conferir antes, e a premissa estava errada**: a barra
+de topo, a barra de baixo e a status bar do pai usam `s6` as três. 24 não é descuido desta peça, é o
+gutter do CHROME da linguagem.
+
+O que sobra é uma pergunta que não é do DS: **as telas deste produto usam 20 de conteúdo contra 24 de
+chrome**, então todo cabeçalho fica 4px pra dentro do que vem embaixo dele. Quem move — o conteúdo pra
+24, ou o chrome virando declarável — é decisão do dono do produto, e está registrada no `///` da peça.
+
+**É a segunda vez hoje que medir os dois lados mudou a pergunta** (a primeira foi a tinta do
+gradiente), e as duas vezes a medição custou minutos e economizou uma mudança errada.
+
 ## [0.54.0] — 2026-08-19
 
 ### Três decisões do dono do produto, e duas delas REABREM decisões dele mesmo

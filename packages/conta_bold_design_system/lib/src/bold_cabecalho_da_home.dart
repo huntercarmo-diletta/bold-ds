@@ -183,6 +183,17 @@ class BoldCabecalhoDaHome extends StatelessWidget {
         // Linha 2: avatar e saudação. É ela que não cabe na barra, e é por isso que este componente
         // é a segunda linha de uma casca do pai, e não um acessório dentro da barra.
         conteudo: Padding(
+          // O GUTTER É `s6` (24), e isso é do CHROME da linguagem — não é escolha deste arquivo.
+          //
+          // Medido em 19/08 convergindo os gêmeos: a barra de topo, a barra de baixo e a status bar
+          // do pai usam `s6` as três. Então 24 aqui é a peça acompanhando o chrome, e a segunda linha
+          // ficaria fora de esquadro com a primeira se eu baixasse pra 20.
+          //
+          // **O que isso descobriu é uma pergunta que não é minha**: as telas deste produto usam 20
+          // de gutter de CONTEÚDO. Com o chrome em 24, o cabeçalho fica 4px pra dentro do que vem
+          // embaixo dele — e é essa a diferença que impede o app de trocar o gêmeo dele por esta peça
+          // sem mexer no alinhamento da home. Quem move (o conteúdo pra 24, ou o chrome virando
+          // declarável) é decisão do dono do produto.
           padding: EdgeInsets.symmetric(horizontal: DilettaSpacing.s6),
           child: Row(children: [
             _AvatarComSaudacao(
