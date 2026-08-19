@@ -84,7 +84,8 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
 
   bool get isDark => brightness == Brightness.dark;
 
-  /// O ESCURO — **e onze dos catorze papéis vêm do `DilettaScheme` desde 17/08.**
+  /// O ESCURO — **e TREZE papéis vêm do `DilettaScheme`** desde 19/08; eram onze, e os dois que entraram
+  /// são a marca e a tinta dela.
   ///
   /// Este bloco era `const` com 25 hex escritos à mão, ao lado de um `DilettaScheme` que resolve
   /// os mesmos papéis a partir da paleta do filho. Duas fontes pro mesmo valor é a definição de
@@ -94,14 +95,16 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
   /// A troca custou o `const`. É o preço certo: `const` aqui congelava a decisão no app, e a
   /// decisão é do DS.
   ///
-  /// **Os três que NÃO derivam, com o número de cada um:**
+  /// **Eram três os que não derivavam; desde 19/08 é UM.**
   ///
-  /// - `primary`: aqui `primary04` (`#FE3976`), no scheme `primary05` (`#F66FA0`). O pai clareia a
-  ///   marca no escuro de propósito — *"a marca precisa pulsar no dark"*. Este produto usa o 04, e
-  ///   trocar mexe na cor da marca em toda tela;
-  /// - `onPrimary`: aqui branco, no scheme **preto**. E o preto dele é medido: branco sobre o 05
-  ///   dá 2,73:1. Como aqui a marca é o 04, o par é outro — mas o número dele fica como aviso de
-  ///   que este par também precisa ser medido no dia em que o 05 entrar;
+  /// O `primary` e o `onPrimary` do escuro entraram: o dono do produto escolheu a marca do pai
+  /// (`primary05`, `#F66FA0`) em vez do `primary04` do logo, com a tinta derivada dele. A frase que
+  /// estava escrita aqui — *"o número dele fica como aviso de que este par precisa ser medido no dia
+  /// em que o 05 entrar"* — foi cobrada no dia em que o 05 entrou: **o par foi de 3,46 (branco sobre
+  /// o 04) pra 7,70 (tinta derivada sobre o 05)**.
+  ///
+  /// O que sobra:
+  ///
   /// - `primaryWash`: alpha da marca a 20%, contra o `primarySubtle` SÓLIDO do pai. Fill
   ///   translúcido e fill sólido são materiais diferentes, não versões.
   factory BoldScheme.dark() {
@@ -120,8 +123,22 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
       success: d.success,
       warning: d.warning,
       // ── daqui pra baixo, o que a linguagem não diz (ou diz outra coisa) ──
-      primary: const Color(0xFFFE3976), // primary04, e o scheme diz 05
-      onPrimary: const Color(0xFFFFFFFF),
+      // A MARCA DO ESCURO passou a ser a do pai em 19/08, por decisão do dono do produto.
+      //
+      // Aqui era `primary04` cravado (`#FE3976`, o rosa do logo) com tinta BRANCA, contra o
+      // `primary05` (`#F66FA0`) que a linguagem clareia de propósito — *"a marca precisa pulsar no
+      // dark"* — com a tinta derivada, que sai escura.
+      //
+      // O que decidiu foi a divergência, não o contraste: as peças do pai pintavam escuro sobre o 05
+      // e as minhas pintavam branco sobre o 04, na mesma tela. O `tintasAssumidas` fechou isso no
+      // CLARO; no escuro o teto de 3:1 barra o branco (ele dá **2,73** sobre o 05), então havia duas
+      // saídas: pedir ao pai que o escuro dele use o 04, ou adotar o 05. O dono escolheu adotar.
+      //
+      // **O preço é visível e está medido**: o rótulo do CTA no escuro deixa de ser branco (3,46) e
+      // passa a ser a tinta derivada (**7,70**), e o rosa da marca no escuro deixa de ser o do logo.
+      // Contraste melhor, marca menos literal — foi a troca escolhida.
+      primary: d.primary,
+      onPrimary: d.onPrimary,
       primaryWash: const Color(0x33FE3976), // alpha 20%, e o subtle do pai é sólido
       secondaryFlow: const Color(0xFF100913), // wine-ink dos fluxos secundários
       surfaceRaised: const Color(0xFF1A1B27),

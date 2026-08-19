@@ -35,7 +35,9 @@ import 'package:flutter/widgets.dart';
 
 /// Porte do [BoldLadrilhoDeMenu] — os três são medidos no produto, não inventados.
 enum BoldPorteDoLadrilho {
-  /// Quadrado 85×80. A grade de ~3 colunas do menu da Área Pix.
+  /// Altura 80, largura de quem posiciona. A grade de três colunas do menu da Área Pix.
+  ///
+  /// Era 85×80 fixo até 19/08, num fluxo que quebrava de linha. Ver a razão no `switch` do `build`.
   compacto,
 
   /// Largura cheia, altura 82. O menu 2×2 da home.
@@ -120,8 +122,20 @@ class BoldLadrilhoDeMenu extends StatelessWidget {
     }
 
     return switch (porte) {
-      BoldPorteDoLadrilho.compacto =>
-        SizedBox(width: 85, height: 80, child: ladrilho),
+      // **O COMPACTO PAROU DE CRAVAR LARGURA em 19/08, por decisão do dono do produto.**
+      //
+      // Era `width: 85` fixo, e o desenho em volta era um FLUXO: os ladrilhos abraçavam a própria
+      // largura e quebravam de linha quando não cabiam. Isso tinha razão escrita e defendida — foi o
+      // argumento que pôs o `DilettaFrame.flow` na linguagem do pai.
+      //
+      // O que derrubou o argumento foi o aparelho: 85×3 + 8×2 = **271 numa linha de 350**, então
+      // sobravam **79pt vazios à direita** enquanto três dos seis rótulos quebravam em duas linhas
+      // por falta de 4px. Fluxo que sobra espaço e quebra texto ao mesmo tempo não está economizando
+      // nada — e o dono decidiu a grade olhando as duas coisas juntas.
+      //
+      // Só a ALTURA fica: quem posiciona decide a largura (`Expanded` numa fila de três), e a peça
+      // continua respondendo por 80 de altura, que é o número do desenho.
+      BoldPorteDoLadrilho.compacto => SizedBox(height: 80, child: ladrilho),
       BoldPorteDoLadrilho.largo => SizedBox(height: 82, child: ladrilho),
       BoldPorteDoLadrilho.alto => SizedBox(height: 100, child: ladrilho),
     };

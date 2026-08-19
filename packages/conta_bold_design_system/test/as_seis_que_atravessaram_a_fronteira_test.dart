@@ -1,5 +1,6 @@
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// AS SEIS PEÇAS QUE ATRAVESSARAM A FRONTEIRA — as quatro lacunas e as duas exiladas.
@@ -42,22 +43,54 @@ void main() {
       expect(alturas[BoldPorteDoLadrilho.alto], 100);
     });
 
-    testWidgets('o compacto trava a largura em 85; os outros ocupam o que têm',
+    testWidgets('o compacto declara ALTURA e aceita a largura de quem posiciona',
         (t) async {
-      // `Align` e não `SizedBox`: o compacto vive num `Wrap`, que dá restrição FROUXA. Um
-      // `SizedBox(width: 300)` daria restrição apertada e forçaria 300 — o teste mediria o
-      // envelope do teste, não a peça.
-      await t.pumpWidget(montar(const Align(
-        alignment: Alignment.topLeft,
+      // **O teste inverteu em 19/08**, e a inversão é a decisão: o compacto travava 85 de largura
+      // porque vivia num FLUXO, e o dono trocou o fluxo por uma grade de três colunas. Numa grade a
+      // peça não pode ter largura própria — é o `Expanded` que reparte.
+      //
+      // O que sobrou pra medir é a altura, que é o número do desenho e continua da peça. E a largura
+      // é medida com restrição APERTADA de propósito: é o que uma coluna de grade entrega.
+      await t.pumpWidget(montar(const SizedBox(
+        width: 111,
         child: BoldLadrilhoDeMenu(
             icone: DilettaIcons.pixLight,
             rotulo: 'Pix',
             porte: BoldPorteDoLadrilho.compacto),
       )));
       await t.pump(const Duration(milliseconds: 50));
-      expect(t.getSize(find.byType(BoldLadrilhoDeMenu)).width, 85,
-          reason: 'o compacto vive numa grade de ~3 colunas: ele tem largura '
-              'própria, não a do pai');
+      final tamanho = t.getSize(find.byType(BoldLadrilhoDeMenu));
+      expect(tamanho.height, 80, reason: 'a altura é da peça');
+      expect(tamanho.width, 111,
+          reason: 'a largura é de quem posiciona — se a peça voltar a cravar 85, a grade de três '
+              'colunas volta a deixar 79pt vazios à direita');
+    });
+
+    testWidgets('e a LARGURA DISPONÍVEL pro rótulo cresce com a coluna', (t) async {
+      // O defeito que a grade conserta é o rótulo quebrando por falta de pixel. **Não dá pra afirmar
+      // isso num gate**: o ambiente de teste renderiza com a fonte de bloco, onde todo glifo é
+      // quadrado — "Agência e conta" ocuparia 165 a 11px e quebraria em qualquer largura. Teste que
+      // não vê a fonte não pode dizer se o texto quebra, e eu tentei antes de escrever isto.
+      //
+      // O que ele PODE medir é o que a decisão mudou: quanto espaço o rótulo recebe. Com 85 de
+      // ladrilho e 8 de respiro de cada lado sobravam **69**; numa coluna de 111 sobram **95**. Os
+      // 26 a mais são a folga que faltava.
+      for (final (coluna, esperado) in [(85.0, 69.0), (111.0, 95.0)]) {
+        await t.pumpWidget(montar(SizedBox(
+          width: coluna,
+          child: const BoldLadrilhoDeMenu(
+              icone: DilettaIcons.pixLight,
+              rotulo: 'Agência e conta do titular',
+              porte: BoldPorteDoLadrilho.compacto),
+        )));
+        await t.pump(const Duration(milliseconds: 50));
+        // A largura do parágrafo COM rótulo longo é a largura disponível: ele preenche a restrição
+        // e corta. Medir assim em vez de caçar o `Padding` certo na árvore — a árvore é do pai e
+        // pode mudar de forma sem mudar a decisão.
+        final texto = t.getSize(find.byType(DilettaText).first).width;
+        expect(texto, esperado,
+            reason: 'numa coluna de $coluna o rótulo deveria receber $esperado');
+      }
     });
   });
 

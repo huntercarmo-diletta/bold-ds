@@ -58,6 +58,32 @@ class BoldColors {
   static const Color primaryStateHover = Color(0xFFFFEDF2);
   static const Color onPrimary = Color(0xFFFFFFFF);
 
+  // ═══════════════════════════════════════════════════════════════════════
+  // O LOCKUP — as duas paradas do gradiente da marca que não são degrau de rampa
+  // ═══════════════════════════════════════════════════════════════════════
+  //
+  // Decisão do dono do produto (2026-08-19), e ela REABRE uma de 30/07.
+  //
+  // O gradiente da marca voltou a ser o do lockup CONTA BOLD: rosa → coral → amarelo, que é a
+  // leitura do anel do "O" do símbolo. Ele havia sido modulado pra duas paradas dentro das rampas,
+  // por duas razões medidas — e a decisão de hoje responde às duas:
+  //
+  // **1 · A legibilidade.** O argumento de 30/07 era o branco: sobre as três paradas ele dá
+  // 3,46 · 2,56 · **1,21**, e 1,21 no amarelo é conteúdo invisível. O que mudou não é a medição, é a
+  // TINTA: com o vinho-tinta da marca o gradiente dá **5,69 · 7,71 · 16,33** — pior caso 5,69, que
+  // passa AA de TEXTO. O de duas paradas com branco tinha pior caso 3,37, que passa AA-grande e
+  // **não** passa AA de texto. Trocar a tinta melhorou o pior caso em vez de piorá-lo.
+  //
+  // **2 · Os literais fora da paleta.** Esse argumento continua válido, e é por isso que os dois
+  // valores moram AQUI e não dentro do arquivo de gradiente. Eles não são degraus — são cores de
+  // MARCA declaradas, como o vinho, e um rebrand as alcança neste arquivo.
+
+  /// O CORAL do lockup — a parada do meio do gradiente da marca.
+  static const Color lockupCoral = Color(0xFFFE7B5E);
+
+  /// O AMARELO do lockup — a cauda do gradiente, e o que o símbolo tem que a rampa não tem.
+  static const Color lockupAmarelo = Color(0xFFFEED35);
+
   // ── NEUTROS ───────────────────────────────────────────────────────────────
   static const Color neutral01 = Color(0xFF3D3939);
   static const Color neutral02 = Color(0xFF525252);

@@ -51,17 +51,30 @@ uso**. Portar código morto parece progresso.
 
 | gradiente | o que é |
 |---|---|
-| `primary` | rosa indo pro laranja (`primary04` → `warning03`) |
+| `primary` | o LOCKUP: rosa → coral → amarelo (`primary04` · `lockupCoral` · `lockupAmarelo`) |
 | `accent` | só laranja (`warning03` → `warning02`) |
 
-## A modulação é medida, não estética
+## A pergunta era a TINTA, e não o gradiente
 
-A tinta sobre gradiente é `onGradient`, e ela é **branco**. O pior caso medido é **3.37:1** — que passa
-em AA para texto GRANDE e não passa para corpo. Está escrito no código: gradiente é superfície de
-título e de selo, não de parágrafo.
+Por dois meses o `primary` foi um gradiente de duas paradas dentro das rampas, e a razão estava
+medida: o amarelo do símbolo dava **1,21:1** contra branco, e rótulo em cima dele desaparecia.
 
-O amarelo que existia no fim do `primary` antigo saiu por causa dessa medição: branco sobre ele dava
-menos de 2:1, e o rótulo desaparecia.
+A medição estava certa e continua. O que estava errado era a pergunta. Medindo as DUAS tintas nas
+DUAS opções, o lockup ganha:
+
+| tinta | `primary` de três paradas | pior caso |
+|---|---|---|
+| branco | 3,46 · 2,56 · 1,21 | **1,21** — invisível no amarelo |
+| vinho-tinta (`onGradient` hoje) | 5,69 · 7,71 · 16,33 | **5,69** — passa AA de TEXTO |
+| o de duas paradas com branco | 3,46 · 3,37 | 3,37 — passa AA-grande, não passa texto |
+
+Então o desenho da marca voltou **e a regra de uso ficou mais larga**: sobre o `primary` cabe rótulo
+em qualquer tamanho, não só título e selo. O `accent` é outro caso — as duas paradas dele são âmbar
+escuro, a tinta ali é o branco, e a regra antiga vale: glifo e texto grande.
+
+O coral e o amarelo não são degraus de rampa, e por isso moram na PALETA (`BoldColors.lockupCoral`,
+`lockupAmarelo`) e não no arquivo de gradiente: cor de marca fora da paleta é cor que um rebrand não
+alcança. Esse era o segundo argumento de 30/07, e ele sobreviveu à reabertura.
 ''';
 
 const _vidro = r'''

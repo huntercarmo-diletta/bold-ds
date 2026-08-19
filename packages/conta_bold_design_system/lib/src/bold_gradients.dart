@@ -5,43 +5,45 @@
 /// `statement`, `receive`, `charge`, `balanceCard` e um alias), e os três que restavam eram
 /// estes dois com um nome a mais.
 ///
-/// ## A modulação, e o que ela ganhou
+/// ## O LOCKUP VOLTOU, e o que decidiu foi a TINTA
 ///
-/// A primeira versão destes dois era o pôr do sol de três paradas — rosa → coral → amarelo, do
-/// anel do "O" do logo. Ela caiu por duas razões medidas, e a segunda é a que importa:
+/// O `primary` era o pôr do sol de três paradas — rosa → coral → amarelo, do anel do "O" do
+/// símbolo. Em 30/07 ele foi modulado pra duas paradas dentro das rampas, por duas razões medidas.
+/// Em **19/08 o dono do produto reabriu**, e a reabertura responde às duas:
 ///
-/// **1 · Nenhuma tinta era legível ao longo dele.** Branco sobre as três paradas dava
-/// 3.46 · 2.56 · **1.21** — a última é invisível. O ink escuro resolvia o amarelo (9.43) e
-/// afundava no rosa (3.29). Não era erro de escolha: é propriedade de um gradiente que atravessa
-/// rosa e amarelo.
+/// **1 · A legibilidade era do BRANCO, não do gradiente.** O argumento de 30/07 media branco sobre
+/// as três paradas: 3,46 · 2,56 · **1,21** — a última é conteúdo invisível. A medição está certa e
+/// não mudou. O que mudou é a tinta: com o **vinho-tinta da marca** as três dão
+/// **5,69 · 7,71 · 16,33**, pior caso 5,69. O de duas paradas com branco tinha pior caso **3,37**.
+/// Então o lockup com tinta escura não é o desenho bonito custando contraste — ele tem **pior caso
+/// melhor** que o que estava no lugar dele, e é o primeiro dos dois que passa AA de TEXTO.
 ///
-/// **2 · O coral, o amarelo e o laranja não eram degraus de rampa.** Eram três literais de marca
-/// morando neste arquivo, porque a paleta não tem campo pra parada de gradiente — três valores
-/// que um rebrand não alcança.
+/// **2 · Os literais fora da paleta.** Este argumento continua de pé, e é por isso que o coral e o
+/// amarelo agora são `BoldColors.lockupCoral` e `BoldColors.lockupAmarelo` — cores de MARCA
+/// declaradas na paleta, como o vinho. Não são degraus de rampa e não fingem ser; o que se ganhou é
+/// que um rebrand as alcança.
 ///
-/// Modulando pra rosa → laranja **dentro das rampas que já existem**, os dois problemas somem
-/// juntos: o gradiente fica 100% derivado da paleta (zero literal) e o branco passa a ler nas
-/// duas paradas. A rampa `warning` é o lugar certo do laranja por decisão que o próprio produto
-/// já tinha registrado: quando a rampa `accent` coral foi descontinuada em 2026-07-16, os usos
-/// decorativos dela migraram pra `warning`.
+/// O `accent` **não mudou**: ele é o laranja inteiro, as duas paradas são da mesma rampa, e o caso
+/// dele (controle pequeno) nunca pediu o matiz do lockup.
 library;
 
 import 'package:flutter/painting.dart';
 
 import 'bold_palette.dart';
+import 'bold_vinho.dart';
 
 /// Os dois gradientes do Conta BOLD, e os dois saem da paleta.
 abstract final class BoldGradients {
   static const _p = BoldPalette.bold;
 
-  /// **PRIMARY** — o rosa da marca indo pro âmbar queimado. Gradiente de momento herói: saldo,
+  /// **PRIMARY** — o lockup CONTA BOLD: rosa → coral → amarelo. Gradiente de momento herói: saldo,
   /// avatar de convite, superfície de destaque.
   ///
-  /// `primary04 → warning03`. Branco na pior parada: **3.37:1**.
+  /// As três paradas do símbolo. Tinta: [onGradient] (vinho-tinta), pior parada **5,69:1**.
   static LinearGradient get primary => LinearGradient(
         begin: const Alignment(-0.8, -1),
         end: const Alignment(0.8, 1),
-        colors: [_p.primary04, _p.warning03],
+        colors: [_p.primary04, BoldColors.lockupCoral, BoldColors.lockupAmarelo],
       );
 
   /// **ACCENT** — só laranja, e mais fundo: o âmbar descendo pro tostado. Para controle pequeno,
@@ -61,24 +63,29 @@ abstract final class BoldGradients {
         'accent': accent,
       };
 
-  /// Conteúdo sobre gradiente: **branco**, e agora isto é medido em vez de herdado.
+  /// Conteúdo sobre gradiente: **o vinho-tinta da marca**, e a troca é o que destravou o lockup.
   ///
-  /// O produto antigo declarava `onGradient = white` e admitia, no mesmo arquivo, que "o branco
-  /// lava no amarelo". Com o amarelo fora, o branco volta a ser a escolha certa — mas pelo
-  /// número que importa, que é o PIOR caso e não parada a parada.
+  /// Enquanto a tinta era branca, o gradiente do símbolo era impossível: 1,21:1 no amarelo é
+  /// conteúdo que não existe na tela. **A pergunta certa não era qual gradiente, era qual tinta** —
+  /// e ela só apareceu porque alguém mediu as duas tintas nas duas opções em vez de medir uma tinta
+  /// nas duas.
   ///
-  /// Branco: 3.46 · 3.37 · 3.37 · 6.54. Ink: 3.29 · **3.38** · 3.38 · 1.74. No `warning03` o
-  /// ink ganha por 0.01, que é empate técnico; o que decide é `warning02`, onde o ink desaba
-  /// pra 1.74 e o branco vai a 6.54. Escolhe-se UMA tinta pro gradiente inteiro, e ela é
-  /// julgada onde é mais fraca.
+  /// Uma tinta pro gradiente inteiro, julgada onde é mais fraca:
   ///
-  /// **A regra de uso que os números impõem**, e ela não é opinião: 3.37 passa AA-grande (3.0) e
-  /// não passa AA de texto (4.5). Então sobre gradiente vale glifo, e rótulo a partir de
-  /// **18.7px em peso 600** — o piso de "texto grande" na WCAG. Rótulo de botão a 15px não cabe:
-  /// esse usa o `primary` SÓLIDO do scheme, onde a conformidade do pai já garante o par.
+  /// | tinta | `primary` (rosa · coral · amarelo) | pior |
+  /// |---|---|---|
+  /// | branco | 3,46 · 2,56 · 1,21 | **1,21** |
+  /// | vinho-tinta | 5,69 · 7,71 · 16,33 | **5,69** |
+  /// | preto puro | 6,06 · 8,21 · 17,38 | 6,06 |
   ///
-  /// Conserto que isto deixa pra adoção: as iniciais do `avatar_stack` e do `avatar_row` são
-  /// brancas sobre o meio do gradiente antigo, a 2.56:1. Com o primary novo elas vão a 3.37 —
-  /// e como iniciais são rótulo curto em peso 700, cabem se o tamanho ficar acima de 18.7px.
-  static Color get onGradient => _p.white;
+  /// **Vinho e não preto**, com 0,37 de diferença: o preto ganha por uma margem que ninguém vê, e o
+  /// vinho já é o escuro DESTA marca (é o fill do vidro e a base do fluxo secundário). Trocar 0,37
+  /// de contraste por uma tinta que pertence à identidade é a mesma escolha que este DS já faz no
+  /// vidro — *"preto puro dá cinza morto; o matiz é o que faz dialogar com o rosa"*.
+  ///
+  /// **E a regra de uso ficou mais larga, não mais estreita.** 5,69 passa AA de TEXTO (4,5), então
+  /// sobre gradiente cabe rótulo em qualquer tamanho — não só glifo e título grande, como era com
+  /// os 3,37 do gradiente anterior. O `accent` continua com pior caso 3,37 e continua com a regra
+  /// antiga: lá vale glifo e texto grande.
+  static Color get onGradient => BoldVinho.ink;
 }

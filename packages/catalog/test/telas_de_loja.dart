@@ -53,7 +53,7 @@ const Map<String, String> kTelasDeLoja = {
 {"id":"b_2","type":"tituloDaPagina","props":{"titulo":"Para quem você vai transferir?","subtitulo":""}},
 {"id":"b_3","type":"campoDeBusca","props":{"placeholder":"Chave Pix, nome ou Pix copia e cola","acaoDireita":"qrcodeLight"}},
 {"id":"b_4","type":"cabecalhoDeSecao","props":{"rotulo":"Menu","verTodos":false}},
-{"id":"b_5","type":"grade","props":{"colunas":"fluida","vao":"s2"},"slots":{"itens":[
+{"id":"b_5","type":"grade","props":{"colunas":"3","vao":"s2"},"slots":{"itens":[
   {"id":"b_6","type":"ladrilhoDeMenu","props":{"icone":"arrowRightArrowLeftLight","rotulo":"Transferir","porte":"compacto"}},
   {"id":"b_7","type":"ladrilhoDeMenu","props":{"icone":"qrcodeLight","rotulo":"Ler QR Code","porte":"compacto"}},
   {"id":"b_8","type":"ladrilhoDeMenu","props":{"icone":"fileInvoiceLight","rotulo":"Cobrar","porte":"compacto"}},
@@ -73,7 +73,7 @@ const Map<String, String> kTelasDeLoja = {
 "bottom":[],
 "notes":[
 {"kind":"decisao","text":"A busca e o QR são UMA linha, não dois blocos: o campo ocupa o que sobra e o botão vive ao lado. Declarar como blocos vizinhos empilharia o QR debaixo da busca, que não é o que a tela faz."},
-{"kind":"regra","text":"O menu é FLUXO e não grade de colunas: os seis ladrilhos têm 85 de largura PRÓPRIA e quebram quando não cabem. Coluna com `Expanded` estica cada um pra um terço da tela, que é outro desenho — foi o argumento que fez o `DilettaFrame.flow` entrar na linguagem (`ds v0.67.0`)."},
+{"kind":"regra","text":"O menu é GRADE de três colunas desde 19/08, e esta linha dizia o contrário — a regra caiu por medição do aparelho. Ela defendia o FLUXO com ladrilho de 85 de largura própria, e foi o argumento que pôs o `DilettaFrame.flow` na linguagem (`ds v0.67.0`). O que a derrubou: 85×3 + 8×2 = 271 numa linha de 350, então sobravam 79pt vazios à direita ENQUANTO três dos seis rótulos quebravam em duas linhas por falta de 4px. Fluxo que sobra espaço e corta texto ao mesmo tempo não economiza nada. Decisão do dono do produto; o `flow` do pai continua certo pros casos dele, e o que caiu foi este caso como evidência dele."},
 {"kind":"borda","text":"Sem favoritos a tela não tem a fileira de contatos, que é o estado do print. Com favoritos ela entra entre a busca e o Menu, com \"Ver todos\" no cabeçalho."},
 {"kind":"a11y","text":"O que não coube: a sugestão de COLAR do clipboard. O ícone dela é o `clipboard-list-check-light`, que diz *documento conferido* em 7 sítios do app e não corresponde a nada aqui — o conserto é o `clipboard-light`, pedido aceito e travado na arte."}
 ]}

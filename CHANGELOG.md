@@ -20,6 +20,77 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.54.0] — 2026-08-19
+
+### Três decisões do dono do produto, e duas delas REABREM decisões dele mesmo
+
+Nenhuma das três é conserto de defeito: são escolhas, tomadas com o número na frente. As duas
+primeiras derrubam razões que estavam escritas e defendidas neste repo — e o que as derrubou foi
+medição, não gosto.
+
+**1 · A MARCA DO ESCURO passou a ser a do pai.** Aqui era `primary04` cravado (`#FE3976`, o rosa do
+logo) com tinta BRANCA; agora é o `primary05` (`#F66FA0`) que a linguagem clareia de propósito, com a
+tinta derivada dele. O que decidiu foi a **divergência**: com `tintasAssumidas` o claro ficou branco
+nas duas casas, mas no escuro o teto de 3:1 barra o branco (ele dá 2,73 sobre o 05) — então ou o pai
+mudava o escuro dele, ou este produto adotava o 05. O dono adotou.
+
+Preço medido e visível: **o rótulo do CTA no escuro deixa de ser branco** (3,46) e passa a ser a tinta
+derivada (**7,70**); o rosa da marca no escuro deixa de ser o do símbolo. Contraste melhor, marca
+menos literal. E os papéis que derivam do `DilettaScheme` no escuro foram de **onze pra treze** — o
+que sobra sem derivar é UM, o `primaryWash`.
+
+**2 · O GRADIENTE DA MARCA voltou a ser o LOCKUP de três paradas** — rosa → coral → amarelo —, e o que
+destravou não foi o gradiente, foi a **tinta**. A razão de 30/07 pra matá-lo estava certa e continua:
+branco sobre as três paradas dá 3,46 · 2,56 · **1,21**, e 1,21 é conteúdo invisível. Só que a pergunta
+era *"qual gradiente sobrevive ao branco?"* quando ela era *"qual tinta sobrevive ao gradiente da
+marca?"*.
+
+| tinta | as três paradas | pior |
+|---|---|---|
+| branco (a de antes) | 3,46 · 2,56 · 1,21 | **1,21** |
+| vinho-tinta (`onGradient` agora) | 5,69 · 7,71 · 16,33 | **5,69** |
+| o gradiente de duas paradas com branco | 3,46 · 3,37 | 3,37 |
+
+**O lockup com tinta escura tem pior caso MELHOR que o que estava no lugar dele**, e é o primeiro dos
+dois que passa AA de TEXTO — então a regra de uso ficou mais larga, não mais estreita: sobre o
+`primary` cabe rótulo em qualquer tamanho, e não só glifo e título grande.
+
+Vinho e não preto puro, com 0,37 de diferença: o preto ganha por uma margem que ninguém vê, e o vinho
+já é o escuro DESTA marca. É a mesma escolha que o vidro deste DS já faz.
+
+O segundo argumento de 30/07 **sobreviveu**: o coral e o amarelo não são degraus de rampa, então eles
+moram na PALETA (`BoldColors.lockupCoral`, `lockupAmarelo`) e não no arquivo de gradiente — cor de
+marca fora da paleta é cor que um rebrand não alcança. O `accent` não mudou: as duas paradas dele são
+da mesma rampa de âmbar, a tinta ali é o branco, e o caso dele nunca pediu o matiz do lockup.
+
+**3 · O LADRILHO COMPACTO parou de cravar largura.** Era `85×80` fixo dentro de um FLUXO, com razão
+escrita — e essa razão foi o argumento que pôs o `DilettaFrame.flow` na linguagem do pai. O aparelho a
+derrubou: **85×3 + 8×2 = 271 numa linha de 350**, então sobravam **79pt vazios à direita** enquanto
+três dos seis rótulos do menu Pix quebravam em duas linhas por falta de 4px. Fluxo que sobra espaço e
+corta texto ao mesmo tempo não economiza nada.
+
+Agora a peça declara só a ALTURA (80) e aceita a largura de quem posiciona. Numa coluna de 111 o
+rótulo recebe **95** onde recebia 69. O `flow` do pai continua certo pros casos dele; o que caiu foi
+**este caso como evidência dele**, e isso vira nota pra ele.
+
+### Gates que mudaram de lado, e por quê
+
+Três gates guardavam as decisões antigas. Nenhum foi apagado — cada um passou a guardar a nova, e
+todos ficaram com o número de antes escrito ao lado:
+
+- **`o_tema_do_material_mora_aqui`** guardava o `primary04` cravado no escuro; agora guarda a
+  derivação, e reprova quem recravar o rosa do logo sem passar pela decisão;
+- **`dois_gradientes_e_so`** afirmava *"o branco passa AA-grande em toda parada"*; agora afirma que a
+  tinta escolhida passa **AA de texto** no gradiente da marca e que ela ganha do branco — com o 1,21
+  escrito, pra ninguém precisar remedir pra saber por que a tinta não é branca;
+- **`as_seis_que_atravessaram_a_fronteira`** afirmava *"o compacto trava a largura em 85"*; agora
+  afirma que ele declara altura e aceita a largura da coluna, e mede a folga do rótulo (69 → 95).
+
+**E um gate eu tentei escrever e não deu**, o que também é informação: afirmar que *"Agência e conta"
+cabe em uma linha* é impossível num widget test — o ambiente renderiza com a fonte de bloco, onde
+todo glifo é quadrado e o rótulo ocuparia 165 a 11px. Teste que não vê a fonte não pode dizer se o
+texto quebra. O que ficou mede a **largura disponível**, que é o que a decisão de fato mudou.
+
 ## [0.53.0] — 2026-08-19
 
 ### O pai julgou sete pedidos na v0.115.0, quatro eram meus, e os quatro estão adotados

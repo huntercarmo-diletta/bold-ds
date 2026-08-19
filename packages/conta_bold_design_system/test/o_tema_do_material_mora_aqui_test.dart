@@ -70,10 +70,16 @@ void main() {
     expect(claro.textMuted, doPaiClaro.textMuted);
     expect(claro.border, doPaiClaro.border);
 
-    // E o que NÃO deriva: a marca deste produto é o degrau 04 nos dois modos, contra o 05 que o
-    // pai clareia no escuro. Trocar isto muda a cor da marca em toda tela — por isso tem gate.
-    expect(escuro.primary, BoldColors.primary04);
-    expect(escuro.primary, isNot(doPaiEscuro.primary));
+    // **A marca do ESCURO passou a ser a do pai em 19/08**, por decisão do dono. O gate inverteu de
+    // lado: antes ele guardava o `primary04` cravado aqui, agora ele guarda a derivação — e é ele que
+    // reprova se alguém recravar o rosa do logo no escuro sem passar pela mesma decisão.
+    expect(escuro.primary, doPaiEscuro.primary);
+    expect(escuro.onPrimary, doPaiEscuro.onPrimary);
+    expect(escuro.primary, isNot(BoldColors.primary04),
+        reason: 'o escuro usa o degrau 05, que o pai clareia de propósito');
+
+    // E o que sobra sem derivar no escuro é UM: o wash translúcido contra o subtle sólido dele.
+    expect(escuro.primaryWash, isNot(doPaiEscuro.primarySubtle));
   });
 
   test('a TINTA ASSUMIDA é honrada no claro, derivada no escuro — e o número confere', () {
