@@ -46,6 +46,8 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 
 | [a tinta sobre a marca tem DOIS donos](pedidos/2026-08-19-a-tinta-sobre-a-marca-tem-DOIS-donos-e-eles-discordam.md) | **ENTRA DIFERENTE** — `DilettaPalette.tintasAssumidas`, e não motivo novo no ajuste: exceção com `razao` e `medida` OBRIGATÓRIAS, medida conferida pela auditoria, e teto no piso gráfico do modo (*marca decide entre legível e mais legível; ninguém decide por ilegível*). O gate 2 que eu pedi **já existia** — o `contraste-role` dele cobra o teto | **ds v0.115.0** · adotado aqui na **v0.53.0**: honrado no claro (3,46), derivado no escuro (2,73 < 3), e a divergência ANDOU pro escuro |
 
+| [o CASO que comprou o `flow` caiu — e a peça não](pedidos/2026-08-19-o-caso-que-comprou-o-flow-caiu-e-a-peca-nao.md) | **não é pedido** — retratação de evidência: o menu que justificou o `DilettaFrame.flow` virou grade por decisão do dono, e o ledger dele conta CASOS | — |
+
 ## Ao pai da FERRAMENTA (`catalogo-diletta`)
 
 | pedido | veredito | chegou em |
