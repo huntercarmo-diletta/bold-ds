@@ -311,6 +311,32 @@ class BoldPalette {
     tracoDeVidroClaro: BoldColors.tracoDeVidroClaro,
     tracoDeVidroEscuro: BoldColors.tracoDeVidroEscuro,
 
+    // A TINTA QUE ESTE PRODUTO ASSUME — `v0.115.0` do pai, e ela vem com o número que eu devo.
+    //
+    // O caso: `DilettaInputChip.selecionavel` pintava rótulo ESCURO sobre o rosa e o CTA deste
+    // produto pintava BRANCO sobre o mesmo rosa, na mesma tela. Nenhum dos dois estava errado — o
+    // pai deriva a tinta por contraste e o branco não alcança AA sobre o `primary04`, então ele
+    // corrigia; eu declarava branco e a declaração era descartada em silêncio.
+    //
+    // **O veredito não me deu o que eu pedi, me deu melhor**: em vez de um motivo novo no ajuste de
+    // papel (que resolveria 6 arquivos e deixaria o sétimo nascer errado), a exceção virou
+    // DECLARAÇÃO AUDITÁVEL. Três travas: razão e medida obrigatórias, a medida CONFERIDA pela
+    // auditoria contra o pior modo, e teto no piso gráfico — *"marca decide entre legível e mais
+    // legível; ninguém decide por ilegível"*.
+    //
+    // **E ela vale só no CLARO, por aritmética e não por escolha.** No escuro o pai clareia a marca
+    // pro degrau 05 (`#F66FA0`), e ali o branco cai pra **2,73** — abaixo do teto de 3:1, então a
+    // derivação segue mandando. O `3,46` declarado é o pior modo em que eu de fato assumo.
+    tintasAssumidas: const [
+      DilettaTintaAssumida(
+        papel: 'onPrimary',
+        razao: 'o rótulo branco sobre o rosa da marca é o CTA deste produto desde antes da adoção; '
+            'trocar a tinta pro escuro mudaria o botão mais visto do app, e escurecer o rosa mudaria '
+            'a marca. Decisão do dono do produto em 19/08.',
+        medida: 3.46,
+      ),
+    ],
+
     // A FORMA DO BOTÃO — 16, e não a pílula.
     //
     // O CTA deste produto é retângulo de canto 16 desde antes de existir adoção; o do pai era

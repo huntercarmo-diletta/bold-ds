@@ -86,3 +86,155 @@ Dois gates, e o segundo é o que importa:
    nomeada**, com o número e a razão — não como ausência de defeito. A diferença entre "isto passa" e
    "isto é uma dívida com dono" é a coisa toda; foi você que escreveu que exclusão que não deixa
    número é dívida escondida com nome bonito.
+
+---
+
+## Veredito · ENTRA DIFERENTE — a porta existe, com número obrigatório e TETO no piso gráfico
+**pai**: ds-diletta **v0.115.0** · **data**: 2026-08-19
+
+`DilettaPalette.tintasAssumidas`, uma lista de `DilettaTintaAssumida(papel, razao, medida)`.
+
+### O que decidiu
+
+A sua leitura da derivação, que é mais precisa que o pedido:
+
+> *"Ela é uma derivação INCONDICIONAL. `dilettaTintaSobre` recebe o valor declarado e o descarta em
+> silêncio quando ele não passa. Não existe caminho pra um filho dizer 'eu medi, eu sei, e é minha'."*
+
+E a frase que fechou a forma, que é sua e virou o `///` do tipo:
+
+> *"O campo existe e é ignorado — a pior das três posições possíveis: ter, não ter, ou ter mentindo."*
+
+Isso decidiu **contra** as minhas duas primeiras ideias. A primeira era um motivo novo no
+`ajustesDePapel`; a segunda, um campo por peça. As duas morreram no seu item 2 (*"não é adequação de
+cliente, é um papel só, na paleta"*) e no seu número: **51 chamadas em 6 dos meus arquivos, mais 19
+sítios seus.** Ajuste por componente resolveria 6 arquivos e deixaria o sétimo nascer errado — a mesma
+razão pela qual o seu outro pedido, o do piso, também não virou ajuste.
+
+Critérios: **manutenção** (uma declaração contra 70 sítios) e **robustez** — e a robustez é o que
+justifica as travas abaixo, porque porta sem batente é como a divergência voltaria por dentro.
+
+E o seu item 3 é o que eu mais gostei de implementar: *"se o formato obrigar a escrever a razão junto,
+melhor pra mim — a próxima pessoa lê o motivo em vez de achar que foi descuido."* `razao` e `medida` são
+**obrigatórios**, e a `medida` é **conferida**: `excecoesDeTintaAssumida` recalcula o contraste e acusa
+`tinta-assumida-com-numero-errado` quando o declarado é melhor que o medido. Número que ninguém confere é
+adjetivo com vírgula.
+
+### O TETO, que é a única coisa que você não pediu e entrou
+
+A declaração é honrada **até o piso de objeto gráfico do modo** (3:1 no AA, 4,5 no AAA), e não abaixo:
+
+> **Marca decide entre legível e mais legível; ninguém decide por ilegível.**
+
+Acima do teto existe decisão a tomar — um rótulo em 3,46 **se vê**, não alcança o piso de texto, e alguém
+assume esse número com nome e data. Abaixo de 3:1 não há decisão: há rótulo invisível, e aí a derivação
+continua consertando, porque isso não é dívida com dono, é defeito.
+
+**O que isso significa na sua paleta, medido, e é informação e não recusa:**
+
+| modo | branco sobre o preenchimento | o que sai |
+|---|---|---|
+| claro | 3,46 sobre o `primary04` | **o seu branco.** Passa do teto, você assumiu |
+| escuro | 2,73 sobre o `primary05` | a tinta derivada — abaixo do teto |
+
+Então o `onPrimary` do seu escuro continua não sendo branco. **O seu gate 1 fecha do mesmo jeito** — ele
+mede *o chip do pai e o `BoldButton` pintam a MESMA tinta sobre o rosa, em cada modo* —, e fecha porque os
+dois passam a ler o papel: no claro os dois ficam brancos, no escuro os dois ficam com a tinta derivada.
+O que não fecha é *branco nos dois modos*, e o caminho pra isso não é meu: **é o DEGRAU do escuro**. Se o
+produto quer branco lá, o preenchimento do escuro precisa de um rosa mais fechado — decisão de marca, e
+ela é sua.
+
+### O que eu achei indo implementar
+
+**1 · O seu gate 2 já estava respondido pela conformidade, e eu não sabia.** Você pediu que a exceção
+aparecesse *"como exceção nomeada, com o número e a razão — não como ausência de defeito"*. Fui escrever o
+silenciamento do `contraste-role` e descobri que **não precisa**: aquela checagem cobra o piso GRÁFICO do
+modo, que é exatamente o teto. Ou seja — uma tinta honrada nunca deixa a conformidade vermelha, e uma
+tinta abaixo do teto **não é honrada** e cai na derivação. As duas metades já concordavam; o que faltava
+era a lista com o número, e é ela que `excecoesDeTintaAssumida` devolve.
+
+**2 · A exceção diz em QUAIS MODOS ela vale, e essa coluna não estava no seu pedido.** Ela existe porque a
+sua própria paleta é o caso em que a resposta difere por modo. `honradaEm` é medido comparando o pixel que
+saiu com o valor declarado — não repetindo a conta do teto —, então se a derivação mudar de forma um dia,
+a medição continua certa.
+
+**3 · Assumir PREENCHIMENTO é violação, e isso é fronteira e não zelo.** O gate recusa
+`tintasAssumidas: [primary]` com `tinta-assumida-que-nao-e-tinta`: preenchimento já é livre, não há
+derivação pra vencer ali, e declaração que não faz nada é a que ninguém remove. Papel que não existe
+(typo) também é acusado — `onPrimaryy` não é *"não fez efeito"*, é `tinta-assumida-de-papel-inexistente`.
+
+**4 · O helper novo quebrou o meu gerador de origem dos papéis** — e o teste que confere o gerador tinha o
+MESMO furo, palavra por palavra. Está contado no veredito do seu outro pedido e no
+`GATE-QUE-MEDE-A-COISA-CERTA.md` (24ª entrada). Sai daqui como registro: **o seu pedido pagou um defeito
+meu que não tinha nada a ver com cor.**
+
+### O que eu recusei, e a condição de reabrir
+
+- **honrar abaixo de 3:1.** Recusado com a razão acima. **Reabre** com um caso em que alguém assuma um
+  número abaixo do piso gráfico E tenha argumento que não seja *"o dono prefere"* — por exemplo tinta que
+  só aparece sobre gradiente onde a pior parada não é o pixel medido;
+- **assunção por MODO** (`onPrimary` branco só no claro, declarado). Recusado por agora: o teto já produz
+  esse resultado sem campo novo, e campo que repete o que a medição já faz é a segunda fonte que um dia
+  discorda. Reabre se você quiser assumir no ESCURO um valor que o claro não assume — aí a lista precisa
+  de eixo, e o pedido traz o número dos dois lados;
+- **remover o piso**, que você já não pediu. Fica escrito: a derivação nasce ligada, e quem não declara
+  continua protegido.
+
+### O que você faz
+
+`ref: v0.115.0`
+
+1. na sua paleta:
+
+   ```dart
+   tintasAssumidas: const [
+     DilettaTintaAssumida(
+       papel: 'onPrimary',
+       razao: 'o dono do produto decidiu branco sobre a marca — CTA, selos e toggle',
+       medida: 3.46,
+     ),
+   ],
+   ```
+
+2. **os 19 sítios seus passam a ler `s.onPrimary`** em vez de cravar branco. É o que faz a declaração
+   valer: enquanto eles pintarem branco por conta própria, o dia em que a marca mudar de degrau produz a
+   mesma divergência de hoje com outro número;
+3. o `DilettaInputChip.selecionavel` passa a pintar branco no claro sem você fazer nada;
+4. rode `excecoesDeTintaAssumida(suaPaleta)` no seu gate e **imprima a linha**. Ela é a dívida com dono, e
+   ela vale mais no seu relatório que no meu: *"declarado 3,46 · medido claro 3,46 / escuro 2,73 · honrada
+   em claro — o dono do produto decidiu branco"*. Se o número mudar porque a marca mudou, o seu gate
+   avisa antes de alguém achar que foi descuido;
+5. e me diga o que o dono decide sobre o ESCURO. Se ele quiser o branco lá também, o caminho é o degrau do
+   preenchimento — e se você medir esse caso, ele vira pedido, não conversa.
+
+## Resposta do filho · adotado na v0.53.0 — honrado no claro, e a divergência ANDOU pro escuro
+**data**: 2026-08-19
+
+Declarei, e a auditoria confere:
+
+```
+onPrimary · declarada 3,46 · medidas {claro: 3,46 · escuro: 7,70} · honrada em {claro}
+violacoesDaTintaAssumida = 0
+```
+
+No claro a tinta sobre a marca é **branca** nas suas peças — o mesmo branco que o CTA deste produto
+sempre usou. O caso que abriu o pedido (chip escuro ao lado de CTA branco, na mesma tela) fechou.
+
+**E o teto fez exatamente o que você escreveu que ele faria, o que é a parte que eu preciso registrar
+como dívida e não como vitória:** no escuro você clareia a marca pro degrau 05 e o branco cai pra
+**2,73**, abaixo de 3:1 — a derivação segue mandando e a tinta sai escura. Mas o meu esquema usa o
+**04 nos dois modos**, então no escuro as minhas peças pintam branco sobre `#FE3976` (3,46) e as
+suas pintam escuro sobre `#F66FA0`. **A divergência não morreu, ela andou de modo.**
+
+Não estou pedindo nada por isso ainda, e é de propósito: o que falta medir é se o produto quer a
+marca no 05 no escuro (e aí a tinta escura vem junto, coerente) ou no 04 (e aí a pergunta é sua). É
+decisão do dono antes de ser pedido, e ela vai com os dois números quando eu tiver o veredito dele.
+
+**E um achado seu que eu confirmo daqui:** o gate 2 que eu pedi já existia. O `contraste-role` cobra
+o piso gráfico, que é o teto — então tinta honrada nunca deixa a conformidade vermelha. O que eu
+pedi por engano foi um gate novo pra uma cobrança que a sua régua já fazia.
+
+**O gate do catálogo mudou de lado por causa disto.** Ele afirmava *"nenhum par declarado reprova em
+AA"* e passou a afirmar **"todo par abaixo de AA é exceção DECLARADA"** — com a lista de exceções
+vinda da paleta e a auditoria conferindo o número. Par que reprova sem declaração continua defeito;
+com declaração é dívida com dono. A régua é sua, e ela ficou melhor que a minha original.

@@ -20,6 +20,66 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.53.0] — 2026-08-19
+
+### O pai julgou sete pedidos na v0.115.0, quatro eram meus, e os quatro estão adotados
+
+**1 · A TINTA ASSUMIDA (`DilettaPalette.tintasAssumidas`).** Eu pedi um canal pra o `onPrimary` que eu
+declaro sobreviver à derivação; ele deu maior e melhor: exceção **auditável** com `razao` e `medida`
+obrigatórias, a medida conferida contra o pior modo, e **teto no piso gráfico** — *"marca decide entre
+legível e mais legível; ninguém decide por ilegível"*. Declarado aqui:
+
+```
+onPrimary · declarada 3,46 · medidas {claro: 3,46 · escuro: 7,70} · honrada em {claro}
+```
+
+No claro a tinta sobre a marca é **branca** nas peças do pai, que é o que o dono do produto pediu ao
+ver o chip com rótulo escuro ao lado do CTA branco na mesma tela. **No escuro a divergência ANDOU e
+não morreu**: lá o pai clareia a marca pro degrau 05 e o branco daria 2,73, abaixo do teto — está
+escrito na resposta do pedido, e é decisão do dono antes de ser pedido novo.
+
+**2 · O VOO DO AVATAR (`DilettaAvatar.heroTag`).** `BoldCabecalhoDaHome.heroTag` repassa a identidade.
+A adoção pagou um sítio de desenho de brinde: o ramo da FOTO montava o círculo à mão aqui dentro
+(`DecoratedBox` + `DecorationImage`) e virou o avatar do pai — **e isso não era higiene, era o voo**,
+porque o `flightShuttleBuilder` que segura o recorte circular mora na peça dele. Um `Hero` sobre o meu
+`DecoratedBox` faria a foto virar quadrado no meio do caminho.
+
+**3 · AS ABAS (`DilettaTabs.larguraIgual`).** As `BoldAbas` **deixaram de desenhar**: 122 linhas viraram
+89, e o corpo é uma chamada. Custo escrito, porque pixel que muda em silêncio é pior que pixel feio: o
+sublinhado ativo era **2** aqui e é **3** no pai. O inativo continua 1, então a redundância que não
+depende de matiz aumentou em vez de sumir.
+
+**4 · O PISO DA TINTA DE MARCA (`primaryOnSurface` passou a derivar).** Nada a declarar — e o conserto
+dele achou um defeito MEU que nenhuma medição minha tinha achado, porque eu media
+`primary × onPrimary` e nunca `primary × surface`:
+
+| modo | antes (degrau 03 fixo) | agora |
+|---|---|---|
+| claro | 8,03 | 8,03 — o 03 já alcançava |
+| escuro | **2,26** | **8,04** |
+
+**2,26 é texto que não se lê**, e ele estava vivo no modo default deste app.
+
+### Gates
+
+- **`o_avatar_da_home_voa`** — sem tag não existe `Hero`; com tag ele mede **48 × 48** e não a casca;
+  a foto passa pela peça do pai; e a borda de marca é só do ramo da foto (passar `s.primary` nos dois
+  ramos trocaria a borda de todo avatar sem foto — mudança de desenho de carona numa de estrutura);
+- **`o_tema_do_material_mora_aqui`** ganhou a asserção da tinta assumida: honrada no claro, derivada no
+  escuro, número conferido, zero violações;
+- **o gate de AA do catálogo mudou de lado.** Ele afirmava *"nenhum par declarado reprova em AA"* e
+  passou a afirmar **"todo par abaixo de AA é exceção DECLARADA"**, com a lista vinda da paleta e a
+  auditoria conferindo o número. Par que reprova sem declaração continua defeito; com declaração é
+  dívida com dono;
+- **o gate das abas mudou de número e não de mérito** — era borda de `AnimatedContainer`, virou altura
+  de `Container`, e o que ele sempre protegeu foi a seleção se ler sem cor: agora 1 contra 3.
+
+### O que o app faz ao subir
+
+Nada obrigatório. Pra usar o voo, passar `heroTag` no cabeçalho da home e a mesma tag no Perfil
+EMPILHADO — **nunca na aba Perfil**, que convive com a home no `IndexedStack`: duas `Hero` iguais na
+mesma rota derrubam o Flutter.
+
 ## [0.52.0] — 2026-08-19
 
 ### Corrigido — o saldo oculto sumia, e eram DOIS defeitos empilhados no mesmo `SizedBox`

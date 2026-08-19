@@ -126,7 +126,7 @@ void main() {
     }
   });
 
-  test('NENHUM par declarado reprova em AA — e o gate mudou de lado', () {
+  test('todo par abaixo de AA é exceção DECLARADA — e o gate mudou de lado duas vezes', () {
     // Este gate nasceu fixando os QUATRO pares que reprovavam, com o número, pra me obrigar a atualizar o
     // pedido em vez de deixar um número velho lá. Ele fez exatamente isso: subi o `ref` pra v0.22.0 e ele
     // reprovou dizendo "a medição de AA mudou".
@@ -151,15 +151,42 @@ void main() {
       }
     });
 
-    expect(reprovam, isEmpty,
-        reason: 'par declarado abaixo de AA: $reprovam — ou é conserto, ou o `tinta:` declara um par que '
-            'este DS não desenha');
+    // **O gate mudou de lado outra vez em 19/08, e agora ele guarda uma EXCEÇÃO em vez de um número.**
+    //
+    // O par do claro voltou a 3,46 — de propósito. O dono do produto viu o chip do pai com rótulo
+    // escuro ao lado do CTA branco sobre o mesmo rosa e disse que é tudo branco; o pai respondeu com
+    // `tintasAssumidas` na `v0.115.0`, e o branco passou a ser honrado no claro.
+    //
+    // Então "nenhum par reprova" deixou de ser verdade, e a pergunta certa não é mais essa. É esta:
+    // **todo par abaixo de AA é uma exceção DECLARADA, com razão e número conferidos?** Um par que
+    // reprova sem declaração continua sendo defeito; um par que reprova com declaração é dívida com
+    // dono. A diferença é a coisa toda, e é a régua do próprio pai.
+    final assumidos = {
+      for (final t in BoldPalette.bold.tintasAssumidas)
+        for (final modo in excecoesDeTintaAssumida(BoldPalette.bold)
+            .where((e) => e.papel == t.papel)
+            .expand((e) => e.honradaEm))
+          '${familiaDoPapel(t.papel)} ($modo)'
+    };
+    expect(reprovam.keys.toSet(), assumidos,
+        reason: 'par abaixo de AA que NÃO é exceção declarada: '
+            '${reprovam.keys.toSet().difference(assumidos)} — ou é conserto, ou o `tinta:` declara '
+            'um par que este DS não desenha. E exceção declarada que PASSA em AA: '
+            '${assumidos.difference(reprovam.keys.toSet())} — declaração que não tem efeito é '
+            'exceção fantasma');
+
+    // E a declaração se sustenta pela auditoria do pai: papel que existe, papel que é tinta, e a
+    // medida conferida contra o pior modo. Sem isto, a linha acima aceitaria qualquer número.
+    expect(violacoesDaTintaAssumida(BoldPalette.bold), isEmpty);
 
     // O PAR QUE IMPORTA, com o número: o rótulo do botão primário nos dois modos.
     final primary = papeis['primary']!;
     final onPrimary = papeis[primary.tinta]!;
-    expect(Contraste.razao(onPrimary.claro, primary.claro), greaterThan(6.0));
-    expect(Contraste.razao(onPrimary.escuro, primary.escuro), greaterThan(7.0));
+    expect(Contraste.razao(onPrimary.claro, primary.claro), closeTo(3.46, 0.01),
+        reason: 'o claro é o branco assumido — 3,46, declarado e auditado');
+    expect(Contraste.razao(onPrimary.escuro, primary.escuro), greaterThan(7.0),
+        reason: 'no escuro o pai clareia a marca pro 05 e o branco daria 2,73, abaixo do teto de '
+            '3:1 — lá a derivação segue mandando, e é isso que o teto existe pra garantir');
 
     // E o rosa da marca CONTINUA sendo a superfície de ação — era o meu critério de pronto no pedido.
     expect(primary.claro.toARGB32(), BoldPalette.bold.primary04.toARGB32(),

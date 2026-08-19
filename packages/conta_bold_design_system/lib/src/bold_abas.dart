@@ -47,7 +47,24 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
-/// Abas sublinhadas, com indicador na aba ativa.
+/// Abas sublinhadas — **e desde a `v0.53.0` elas são as do pai.**
+///
+/// Esta peça existia porque a fila do pai ABRAÇAVA o rótulo e a deste produto REPARTE a largura, e
+/// aba de navegação que abraça sobra à direita. O pedido de 13/08 levou o número —
+/// `Pendentes · Histórico · Minhas` em 353 **estoura por 113px** — e o veredito
+/// (`ds v0.115.0`) foi `DilettaTabs.larguraIgual`. Com o eixo, não sobra desenho pra manter aqui.
+///
+/// **O que a troca custou, com o número, porque um pixel que muda em silêncio é pior que um pixel
+/// feio:** o sublinhado ativo era **2** aqui e é **3** no pai. Três é o número dele, e adotar é
+/// seguir o traço da linguagem — o inativo continua 1 dos dois lados, e a diferença entre ativo e
+/// inativo (que é o que faz a seleção não depender só de cor) continua existindo, maior.
+///
+/// **E a fatia estreita passa a cortar com reticências.** Aqui o `ellipsis` já existia e fazia o
+/// mesmo; o que o veredito acrescentou foi a razão escrita: quem reparte aceita que a aba comprida
+/// corte enquanto a curta sobra.
+///
+/// A API não mudou — os três nomes (`abas`, `indiceSelecionado`, `aoTrocar`) são os que as telas
+/// falam, e é pra isso que a casca fica.
 class BoldAbas extends StatelessWidget {
   const BoldAbas({
     super.key,
@@ -60,63 +77,13 @@ class BoldAbas extends StatelessWidget {
   final int indiceSelecionado;
   final ValueChanged<int> aoTrocar;
 
-  /// Espessura do sublinhado ativo. O inativo é 1 — a diferença é o que marca a seleção sem
-  /// depender só de cor, que é o que faz a aba ativa continuar legível pra quem não distingue
-  /// matiz.
-  static const double _espessuraAtiva = 2;
-
   @override
-  Widget build(BuildContext context) {
-    final s = DilettaTheme.schemeOf(context);
-
-    return DilettaDevInfo(
-      component: 'abas',
-      props: {'abas': '${abas.length}', 'selecionada': '$indiceSelecionado'},
-      tokens: const ['scheme.primary', 'scheme.border', 'type.labelLg'],
-      child: Row(
-        children: [
-          for (var i = 0; i < abas.length; i++)
-            Expanded(
-              child: Semantics(
-                button: true,
-                selected: i == indiceSelecionado,
-                label: abas[i],
-                // O toque é a ABA inteira: o padding vive DENTRO do tappable, não fora, senão a
-                // faixa acima e abaixo do rótulo não responde.
-                child: DilettaTappable(
-                  onTap: () => aoTrocar(i),
-                  child: AnimatedContainer(
-                    duration: DilettaMotion.short,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: DilettaSpacing.s4,
-                      vertical: DilettaSpacing.s3,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: i == indiceSelecionado ? s.primary : s.border,
-                          width: i == indiceSelecionado ? _espessuraAtiva : 1,
-                        ),
-                      ),
-                    ),
-                    child: DilettaText(
-                      abas[i],
-                      textAlign: TextAlign.center,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: DilettaType.labelLg.copyWith(
-                        color: s.fg,
-                        fontWeight: i == indiceSelecionado
-                            ? FontWeight.w600
-                            : FontWeight.w400,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
+  Widget build(BuildContext context) => DilettaTabs(
+        abas: abas,
+        selecionada: indiceSelecionado,
+        onSelecionar: aoTrocar,
+        // O eixo que o pedido de 13/08 comprou. Sem ele a fila abraça o rótulo e sobra à direita,
+        // que é o desenho errado pra uma barra de navegação — e é o que estourava por 113px.
+        larguraIgual: true,
+      );
 }

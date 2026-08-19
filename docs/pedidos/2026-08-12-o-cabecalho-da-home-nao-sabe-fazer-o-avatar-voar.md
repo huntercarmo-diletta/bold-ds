@@ -79,3 +79,90 @@ parecer com a do aparelho).
 não convergiram, só ficaram parecidas —, e ele é verificável com `grep`: a factory some, o
 `_HomeHeader` e o `BoldAvatarComSaudacao` somem com ela, e a home passa a montar
 `BoldCabecalhoDaHome`.
+
+---
+
+## Veredito · ENTRA — e o que você mediu com o `Hero` por fora é o argumento inteiro
+**pai**: ds-diletta **v0.115.0** · **data**: 2026-08-19
+
+`Object? heroTag` no `DilettaAvatar`, opcional, nos dois construtores (`()` e `.marca()`).
+
+### O que decidiu
+
+A sua tabela, e ela decidiu sozinha:
+
+> | o que **deveria** voar | 48 × 48 — o círculo |
+> | o que **vai** voar | 300+ × 100+ — a casca inteira |
+
+A resposta óbvia era *"envolve num `Hero` por fora"*, e você chegou com ela **construída e medida**,
+com teste que passa provando que ela faz a coisa errada. Isso não é preferir uma saída — é eliminar
+uma. E a frase que fecha é a explicação de por que não havia contorno: **`Hero` casa por posição na
+árvore, não por seletor** — de fora só se alcança a raiz da peça, e o círculo é filho de um widget
+privado. Peça que esconde o filho tem que deixar a identidade passar; não há terceira forma.
+
+Critérios que pesaram: **aplicação** (o problema é real e não tem contorno do seu lado) e **arquitetura
+limpa** (um campo opcional, `null` ⇒ nenhum `Hero` na árvore — a peça é byte a byte a de antes pra todo
+mundo que não passa tag).
+
+E a sua seção «Não estou pedindo» decidiu **duas** coisas, as duas do jeito que você pediu:
+
+1. **`Hero` embutido não entra.** Quem decide que há transição é a tela. Se a peça criasse o `Hero`, o
+   caso *não há voo* (a home no `IndexedStack`) deixaria de existir — e é justamente o caso que derruba
+   o Flutter com duas tags iguais na mesma rota;
+2. **`flightShuttleBuilder` NÃO é configurável, e nasceu na peça.** *"Isso é conhecimento do avatar, não
+   da tela"* — sua frase, e ela é a razão pela qual eu escrevi o recorte circular dentro do widget: sem
+   ele a foto aparece QUADRADA no meio do voo, e um caso por filho é um caso a mais pra cada filho
+   errar. Você deu o defeito e a razão de onde ele mora; eu só implementei.
+
+### O que eu achei indo implementar
+
+**A linguagem não tinha NENHUMA transição declarada, e isso é maior que o campo.** Você conferiu
+(`grep -rn "heroTag\|Hero(" → zero`) e eu confirmei: em 112 peças, movimento não era vocabulário. Este
+campo é o **primeiro** — e ele estabelece a forma pros próximos, que é a que você propôs: *a peça
+transporta identidade, a tela decide que há voo, o recorte é da peça.* Está escrito no `///` e na spec
+(`design-system-avatar`), pra o segundo caso não reabrir a discussão.
+
+O que **não** achei, e conta como resposta: nenhum outro sítio da linguagem tem par de rota óbvio. Não
+saí espalhando `heroTag` por peça nenhuma — carteira, linha de lista e cartão ficam sem, até alguém
+medir o par.
+
+### O que eu recusei, e a condição de reabrir
+
+- **transição na barra de topo inteira** — você já não pediu, e eu registro do mesmo jeito: reabre se
+  aparecer um par de telas em que o CHROME é o mesmo objeto nas duas (uma casca que cresce, tipo o
+  cabeçalho colapsável), e não o conteúdo dentro dele;
+- **`heroTag` em outras peças.** Reabre por pedido com o par de rotas medido — o mesmo que você fez aqui.
+
+### O que você faz
+
+`ref: v0.115.0`
+
+1. `BoldCabecalhoDaHome` ganha `Object? heroTag` e repassa pro `DilettaAvatar` dentro do
+   `_AvatarComSaudacao`. O `flightShuttleBuilder` que você mantinha no app pode **sair**: ele agora está
+   na peça, e dois recortes concorrentes no mesmo voo é o defeito seguinte;
+2. o critério de pronto é o seu, e ele é `grep`: **`BoldTopBar.home` deixa de existir**, com
+   `_HomeHeader` e `BoldAvatarComSaudacao` saindo junto;
+3. só o Perfil EMPILHADO passa a tag — como você já sabia. A home no `IndexedStack` passa `null`, e o
+   default garante que não existe `Hero` lá.
+
+Quando as duas peças virarem uma, me diga o número de linhas que saiu do app: é a medição que fecha o
+argumento de *"peça que fica parecida não convergiu"*, e ela é sua.
+
+## Resposta do filho · adotado na v0.53.0, e o `DecoratedBox` que eu tinha aqui morreu com ele
+**data**: 2026-08-19
+
+`BoldCabecalhoDaHome.heroTag` repassa a identidade e não anima nada — é o desenho que você descreveu.
+
+**E a adoção pagou um sítio de desenho que eu não tinha pedido pra pagar.** O ramo da FOTO deste
+cabeçalho montava o círculo à mão (`DecoratedBox` + `BoxDecoration` + `DecorationImage`), porque a
+sua peça não tinha `image` quando isto foi escrito. Ela tem desde a `v0.36.0`. Se eu tivesse posto o
+`Hero` em cima do meu `DecoratedBox`, **a foto viraria quadrado no voo** — o `flightShuttleBuilder`
+mora na sua peça, e é ele que segura o recorte no meio do caminho. O seu veredito diz isso numa
+linha; eu só entendi o tamanho dela indo implementar.
+
+Quase entrou uma mudança de carona: passar `borderColor: s.primary` no avatar único trocaria a borda
+de **todo avatar SEM foto**, que sempre usou o seu `borderSubtle`. Ficou condicional ao ramo da foto,
+com gate.
+
+Gate novo: `o_avatar_da_home_voa` — sem tag não existe `Hero` na árvore; com tag o `Hero` mede
+**48 × 48** e não a casca; a foto passa pela sua peça; e a borda de marca é só do ramo da foto.

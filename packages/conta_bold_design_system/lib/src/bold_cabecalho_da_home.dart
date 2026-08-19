@@ -99,7 +99,23 @@ class BoldCabecalhoDaHome extends StatelessWidget {
     this.aoTrocarConta,
     this.icones = const [],
     this.foto,
+    this.heroTag,
   });
+
+  /// A IDENTIDADE DE TRANSIÇÃO do avatar — nula por default, e aí nada muda.
+  ///
+  /// Preenchida, o círculo VOA pra a outra rota que usa a mesma tag: é o gesto de tocar o avatar e ver
+  /// ele crescer virando o cabeçalho do Perfil, em vez de a tela trocar por corte.
+  ///
+  /// **Ela vem de fora e é opcional porque duas `Hero` com a mesma tag na mesma rota derrubam o
+  /// Flutter** — e no app deste produto a aba Perfil convive com a home num `IndexedStack`, então só o
+  /// Perfil EMPILHADO pode passar a tag. Um avatar não sabe quantas cópias de si existem na árvore.
+  ///
+  /// Chegou como pedido em 12/08 e o pai entregou na `v0.115.0`: `DilettaAvatar.heroTag`, a primeira
+  /// transição declarada da linguagem. Envolver este cabeçalho num `Hero` por fora não serve, e o
+  /// número está no teste `o_heroi_por_fora`: voariam **300+ × 100+** (a casca, os ícones, a segunda
+  /// linha) onde devem voar **48 × 48**.
+  final Object? heroTag;
 
   /// Primeiro nome. Vazio cai em `?` no avatar, em vez de quebrar.
   final String nome;
@@ -173,6 +189,7 @@ class BoldCabecalhoDaHome extends StatelessWidget {
               nome: nome,
               foto: foto,
               aoAbrirPerfil: aoAbrirPerfil,
+              heroTag: heroTag,
             ),
           ]),
         ),
@@ -225,11 +242,13 @@ class _AvatarComSaudacao extends StatelessWidget {
     required this.nome,
     required this.foto,
     required this.aoAbrirPerfil,
+    required this.heroTag,
   });
 
   final String nome;
   final ImageProvider? foto;
   final VoidCallback? aoAbrirPerfil;
+  final Object? heroTag;
 
   // 48 e não 40, e o respiro 12 e não 16: ajuste pedido pelo dono do produto olhando a home —
   // *"o avatar tá menor e um pouco mais longe do Olá, Nome"*. O 40 era o número do Redesenho v.01,
@@ -249,20 +268,27 @@ class _AvatarComSaudacao extends StatelessWidget {
       width: _lado,
       height: _lado,
       child: Stack(clipBehavior: Clip.none, children: [
-        if (foto != null)
-          DecoratedBox(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(color: s.primary, width: 1),
-              image: DecorationImage(image: foto!, fit: BoxFit.cover),
-            ),
-            child: const SizedBox(width: _lado, height: _lado),
-          )
-        else
-          DilettaAvatar(
-            initials: nome.isEmpty ? '?' : nome[0].toUpperCase(),
-            size: _lado,
-          ),
+        // UM avatar do pai pros dois casos, e não um `DecoratedBox` daqui pra foto.
+        //
+        // O ramo da foto desenhava o círculo à mão — mesma decoração, mesma borda de 1px, mesmo
+        // `cover` — porque a peça dele não tinha `image` quando isto foi escrito. Ela tem desde a
+        // `v0.36.0`, pedida por um filho.
+        //
+        // A troca não é só higiene: **o voo mora na peça.** O `flightShuttleBuilder` do
+        // `DilettaAvatar` mantém o recorte circular no meio do caminho, e sem ele a foto vira
+        // QUADRADO durante a transição — medido pelo pai antes de o campo existir. Um `Hero` em cima
+        // de um `DecoratedBox` daqui não teria isso.
+        DilettaAvatar(
+          initials: nome.isEmpty ? '?' : nome[0].toUpperCase(),
+          image: foto,
+          size: _lado,
+          // A BORDA é do ramo da foto, e só dele. O círculo de iniciais sempre usou o default do pai
+          // (`borderSubtle`); passar `s.primary` nos dois teria trocado a borda de todo avatar sem
+          // foto — mudança de desenho entrando de carona numa mudança de estrutura, que é o jeito
+          // mais barato de um refactor mentir.
+          borderColor: foto != null ? s.primary : null,
+          heroTag: heroTag,
+        ),
         Positioned(
           right: -2,
           bottom: -2,

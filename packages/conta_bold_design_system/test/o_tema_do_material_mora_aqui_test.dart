@@ -75,4 +75,26 @@ void main() {
     expect(escuro.primary, BoldColors.primary04);
     expect(escuro.primary, isNot(doPaiEscuro.primary));
   });
+
+  test('a TINTA ASSUMIDA é honrada no claro, derivada no escuro — e o número confere', () {
+    // O veredito da `v0.115.0` do pai, medido dos dois lados. A exceção só vale se deixar NÚMERO, e
+    // a auditoria dele confere o declarado contra o pior modo — número melhor que a realidade
+    // transforma dívida assumida em dívida escondida.
+    final excecoes = excecoesDeTintaAssumida(BoldPalette.bold);
+    expect(excecoes, hasLength(1));
+    final t = excecoes.single;
+    expect(t.papel, 'onPrimary');
+    expect(t.honradaEm, {'claro'},
+        reason: 'no escuro o pai clareia a marca pro degrau 05 e o branco cai pra 2,73 — abaixo do '
+            'teto de 3:1, então a derivação segue mandando. Assumir ali seria decidir por ilegível');
+    expect(t.medidas['claro']!, closeTo(3.46, 0.01));
+    expect(t.declarada, lessThanOrEqualTo(t.medidas.values.reduce((a, b) => a < b ? a : b) + 0.05));
+
+    expect(violacoesDaTintaAssumida(BoldPalette.bold), isEmpty);
+
+    // E o efeito, que é o que o dono do produto vê: no claro a tinta sobre a marca é BRANCA nas
+    // peças do pai — o mesmo branco que o CTA deste produto sempre usou.
+    expect(DilettaScheme.light(BoldPalette.bold).onPrimary,
+        DilettaAbsoluteColors.white);
+  });
 }

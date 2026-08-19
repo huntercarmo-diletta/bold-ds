@@ -117,16 +117,25 @@ void main() {
         ));
         await t.pump(const Duration(milliseconds: 50));
 
-        final bordas = t
-            .widgetList<AnimatedContainer>(find.byType(AnimatedContainer))
-            .map((c) => (c.decoration! as BoxDecoration).border!.bottom)
+        // **A estrutura mudou na v0.53.0 e as duas asserções ficaram**, porque elas nunca foram sobre
+        // a estrutura. A peça virou casca do `DilettaTabs`, e o traço dele é um `Container` de altura
+        // em vez de uma borda de `AnimatedContainer` — mas o que este teste protege é a REDUNDÂNCIA:
+        // seleção que se lê sem depender de matiz.
+        //
+        // Os dois números, e não "a ativa é mais grossa": 1,1 contra 1,0 passaria num `greaterThan`
+        // sendo invisível na tela. **O ativo agora é 3 e não 2** — é o número do pai, e a razão de
+        // adotar o traço dele está escrita no `///` da peça.
+        final tracos = t
+            .widgetList<Container>(find.descendant(
+                of: find.byType(BoldAbas), matching: find.byType(Container)))
+            .where((c) => c.constraints?.maxHeight != null || c.child == null)
+            .map((c) => (altura: c.constraints?.maxHeight, cor: c.color))
+            .where((r) => r.altura != null && r.cor != null)
             .toList();
-        // Os dois números, e não "a ativa é mais grossa": o contraste de espessura é a redundância
-        // que substitui a cor pra quem não distingue matiz, e 1,1 contra 1,0 passaria no `greaterThan`
-        // sendo invisível na tela. O que se mede é o DOBRO.
-        expect([bordas[0].width, bordas[1].width], [1.0, 2.0],
-            reason: 'inativa 1, ativa 2 — o dobro é o que se vê sem cor');
-        expect(bordas[1].color, isNot(bordas[0].color));
+        expect(tracos.length, 3, reason: 'um traço por aba');
+        expect([tracos[0].altura, tracos[1].altura], [1.0, 3.0],
+            reason: 'inativa 1, ativa 3 — o triplo é o que se vê sem cor');
+        expect(tracos[1].cor, isNot(tracos[0].cor));
       }
     });
 
