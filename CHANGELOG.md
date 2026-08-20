@@ -20,6 +20,70 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.63.0] — 2026-08-20
+
+### A PORTA — um produto novo passa a conseguir montar o tema, e antes ele parava com a chave na mão
+Pergunta do dono: *"qual a fricção de um novo filho do Bold?"*. Medida, ela era **uma porta que não
+existia** e mais 22 leituras congeladas atrás dela.
+
+`BoldScheme.de(paleta, brilho:)` aceita paleta desde a v0.55.0 — e **nada acima dele aceitava**. O
+`BoldTheme.light/dark` era `static final` com `BoldPalette.bold` cravada, e o `ThemeData` saía de
+`_monta`, **privado**. Quer dizer: um produto novo montava o esquema com a paleta dele e não conseguia
+registrá-lo como `ThemeExtension`, que é de onde os ~500 `BoldColors.of(context)` leem.
+
+```dart
+final meu = BoldProduto(paleta: minhaPaleta, marca: minhaMarca);
+MaterialApp(theme: meu.materialClaro, darkTheme: meu.materialEscuro, …)
+```
+
+[BoldProduto] junta paleta e marca e devolve os quatro (dois `DilettaTheme`, dois `ThemeData`),
+cacheados por instância. A invariante que o `///` do `BoldTemaMaterial` declarava em prosa — *"os dois
+saem da mesma paleta"* — virou estrutura: não existe caminho que monte um de uma paleta e o outro de
+outra. `BoldTheme.light/dark` ficam como atalho do produto default, porque 43 cascas os escrevem.
+
+### O que estava congelado atrás da porta
+
+| onde | o que era | quantos |
+|---|---|---|
+| `BoldTemaMaterial._monta` | `BoldColors.primary04` com o esquema NA MÃO | 4 |
+| `BoldVidro` / `BoldVidroDeEntrada` | `static DilettaPalette get _p => BoldPalette.bold` | 7 |
+| `BoldBackground` | `final p = BoldPalette.bold` dentro do build | 5 |
+| `BoldVinho` | três `static const`, o segundo eixo da marca | 8 |
+| `BoldGradients` | `static const _p` + as 8 paradas do lockup | 3 |
+| `BoldSeloQuantico` · `BoldVisorDeCodigo` | `BoldPalette.bold` num widget com contexto | 2 |
+
+**Zero pixels mudaram no Conta BOLD** — as 196 asserções que existiam continuaram verdes o tempo todo, e
+é isso que separa esta mudança de um redesenho: o valor é o mesmo, quem o escolhe é que mudou.
+
+### O VINHO virou vocabulário declarável
+O rosa mora em `primary01..09` e viaja pela paleta desde a v0.55.0. O **vinho** — o segundo eixo da
+identidade, que pinta o vidro escuro, o ladrilho de ícone e o polo frio dos fundos — vivia em três
+`static const` lidas direto. Um produto novo declarava a paleta dele e recebia o vinho do Bold.
+
+Agora são `papeisExtras` (`vinhoMarca`, `vinhoTinta`, `vinhoLavagem`), que é o mecanismo que o pai criou
+pra vocabulário que a linguagem não tem — os mesmos que já carregavam superfície elevada e fluxo
+secundário. `BoldVinho` continua sendo a casa dos valores e a **reserva** de quem não declarar: paleta
+incompleta desenha em vez de estourar.
+
+### A CURVA do lockup é do produto, e não da paleta
+`BoldGradients` deixou de ser só estático. As oito paradas do símbolo não são rampa — são lista ordenada
+com offsets que saem do arquivo do logo, e forçá-las em `papeisExtras` seria oito entradas fingindo ser
+papel. Viraram campo do produto, com a curva do Bold por default.
+
+### O que o gate novo mede, e o que ele viu vermelho
+`o_neto_monta_o_tema_inteiro` monta um neto com a paleta de REFERÊNCIA do pai (que é verde) e varre 14
+sítios de cor do `ThemeData`, mais o vinho e o gradiente. Na primeira execução: **4 sítios em rosa**
+(`colorScheme.primary`, `secondary`, o botão de texto e a borda do campo focado). Tem controle — os
+mesmos sítios, no Bold, TÊM que bater no rosa, senão a varredura está olhando pro nada.
+
+### O que continua fricção, e está escrito
+- **`BoldVisorDeCodigo`** lê 5 valores semânticos e neutros da paleta que agora recebe. Semântico é
+  invariante por regra do pai — mas invariante por REGRA e congelado por LEITOR são coisas diferentes, e
+  só a primeira se mede;
+- **a paleta de um produto novo precisa declarar os 5 campos de vidro** (`blurDeVidro`,
+  `tinteDeVidro*`, `tracoDeVidro*`). São campos do pai, e sem eles o vidro estoura em `!` — não é
+  degradação silenciosa, e é de propósito.
+
 ## [0.62.0] — 2026-08-20
 
 ### MUDA PIXEL — o BLOB saiu das 14, e o kit voltou a ser uma linguagem só

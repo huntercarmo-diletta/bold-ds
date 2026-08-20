@@ -27,19 +27,24 @@ import 'bold_vinho.dart';
 abstract final class BoldVidro {
   const BoldVidro._();
 
-  static DilettaPalette get _p => BoldPalette.bold;
-
   /// `true` → vidro fosco (`BackdropFilter` ligado). `false` → superfície sólida.
   static const bool fosco = true;
 
-  /// O sigma do blur, uniforme em todo vidro — **15**, e ele vem da paleta.
+  /// O sigma do blur, uniforme em todo vidro — **15** no Bold, e ele vem da paleta.
   ///
   /// O do pai é 10; o material deste produto é mais leitoso, e essa é a frase que o campo
   /// `blurDeVidro` existe pra carregar.
-  static double get blur => _p.blurDeVidro!;
+  ///
+  /// **Recebe a PALETA em vez de ler a do Bold**, e a mudança é de 20/08.
+  ///
+  /// Este arquivo abria com `static DilettaPalette get _p => BoldPalette.bold;`, e com isso o
+  /// vidro inteiro era do Bold: um produto novo declarava `blurDeVidro`, `tinteDeVidro*` e
+  /// `tracoDeVidro*` na paleta dele — campos que o pai criou justamente pra isso — e recebia os
+  /// valores do Bold assim mesmo. Os campos viajavam; o leitor não.
+  static double blur(DilettaPalette p) => p.blurDeVidro!;
 
-  static ImageFilter get filtro =>
-      ImageFilter.blur(sigmaX: blur, sigmaY: blur, tileMode: TileMode.decal);
+  static ImageFilter filtro(DilettaPalette p) =>
+      ImageFilter.blur(sigmaX: blur(p), sigmaY: blur(p), tileMode: TileMode.decal);
 
   /// Recorte do vidro. **Tem** que ser `antiAlias` e não `antiAliasWithSaveLayer`: a variante com
   /// save-layer isola a subárvore, então o [BackdropFilter] lê a camada vazia em vez do fundo
@@ -50,15 +55,15 @@ abstract final class BoldVidro {
   ///
   /// Vinho e não preto: preto puro sobre a arte de fundo dá cinza morto, e o matiz é o que mantém
   /// o painel escuro dialogando com o rosa.
-  static Color tinte({required bool escuro}) =>
-      escuro ? _p.tinteDeVidroEscuro! : _p.tinteDeVidroClaro!;
+  static Color tinte(DilettaPalette p, {required bool escuro}) =>
+      escuro ? p.tinteDeVidroEscuro! : p.tinteDeVidroClaro!;
 
   /// O traço de 1px: escuro é o rosa claro a 30%, claro é o `primary08`.
   ///
   /// No claro a borda branca desaparecia sobre fundo claro — o traço nasceu de um defeito medido
   /// (1,06:1 é invisível), e o gate `traco-de-vidro-visivel` do pai cobra o piso.
-  static Color traco({required bool escuro}) =>
-      escuro ? _p.tracoDeVidroEscuro! : _p.tracoDeVidroClaro!;
+  static Color traco(DilettaPalette p, {required bool escuro}) =>
+      escuro ? p.tracoDeVidroEscuro! : p.tracoDeVidroClaro!;
 
   static const double espessuraDoTraco = 1;
 
@@ -99,8 +104,8 @@ abstract final class BoldVidroDeEntrada {
   static double opacidade({required bool escuro}) => escuro ? 0.60 : 0.70;
 
   /// A base do wash: claro é `primary09`, escuro é [BoldVinho.lavagem].
-  static Color base({required bool escuro}) =>
-      escuro ? BoldVinho.lavagem : BoldColors.primary09;
+  static Color base(DilettaPalette p, {required bool escuro}) =>
+      escuro ? BoldVinho.lavagemDe(p) : p.primary09;
 
   /// O gradiente do fill: opaco embaixo, transparente no topo.
   ///
@@ -108,8 +113,8 @@ abstract final class BoldVidroDeEntrada {
   /// Figma escuro: parada em 53% a 100% de alpha, 100% a 0%.
   ///
   /// O eixo é de baixo pra cima — a base ancora o conteúdo, o topo entrega a imagem.
-  static LinearGradient gradiente({required bool escuro}) {
-    final cor = base(escuro: escuro);
+  static LinearGradient gradiente(DilettaPalette p, {required bool escuro}) {
+    final cor = base(p, escuro: escuro);
     final o = opacidade(escuro: escuro);
     return escuro
         ? LinearGradient(
@@ -135,8 +140,8 @@ abstract final class BoldVidroDeEntrada {
   }
 
   /// Traço de 1px por dentro — Figma: `primary03` no escuro, `primary07` no claro.
-  static Color traco({required bool escuro}) =>
-      escuro ? BoldColors.primary03 : BoldColors.primary07;
+  static Color traco(DilettaPalette p, {required bool escuro}) =>
+      escuro ? p.primary03 : p.primary07;
 
   static const double espessuraDoTraco = 1;
 

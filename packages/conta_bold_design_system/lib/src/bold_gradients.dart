@@ -29,12 +29,61 @@ library;
 
 import 'package:flutter/painting.dart';
 
+import 'package:diletta_design_system/diletta_design_system.dart';
+
 import 'bold_palette.dart';
 import 'bold_vinho.dart';
 
 /// Os dois gradientes do Conta BOLD, e os dois saem da paleta.
-abstract final class BoldGradients {
-  static const _p = BoldPalette.bold;
+/// Os gradientes de um produto feito com este DS.
+///
+/// Deixou de ser só estático em 20/08. A classe abria com `static const _p = BoldPalette.bold` e as
+/// oito paradas do lockup vinham de `BoldColors.lockupNN` — quer dizer: **um filho deste DS recebia
+/// o rosa→amarelo do Conta BOLD** no card de destaque e no topo, depois de declarar a paleta dele.
+/// A curva do lockup é a assinatura da marca; não existe versão dela que sirva pra duas marcas.
+///
+/// As paradas são do PRODUTO e não da paleta de propósito: `DilettaPalette` é rampa (degraus
+/// nomeados), e a curva do símbolo não é rampa — é uma lista ordenada com offsets que saem do
+/// arquivo do logo. Forçá-la em `papeisExtras` seria oito entradas fingindo ser papel.
+///
+/// Os estáticos ficam como atalho do Conta BOLD, que é o caso de 4 sítios hoje.
+class BoldGradients {
+  const BoldGradients({
+    required this.paleta,
+    required this.paradasDoLockup,
+    required this.offsetsDoLockup,
+    required this.tintaSobreOGradiente,
+  });
+
+  /// As paradas do Conta BOLD — a curva do símbolo, parada por parada.
+  static const BoldGradients bold = BoldGradients(
+    paleta: BoldPalette.bold,
+    paradasDoLockup: [
+      BoldColors.lockup01,
+      BoldColors.lockup02,
+      BoldColors.lockup03,
+      BoldColors.lockup04,
+      BoldColors.lockup05,
+      BoldColors.lockup06,
+      BoldColors.lockup07,
+      BoldColors.lockup08,
+    ],
+    offsetsDoLockup: BoldColors.lockupStops,
+    tintaSobreOGradiente: BoldVinho.ink,
+  );
+
+  final DilettaPalette paleta;
+
+  /// A curva da marca, na ordem do símbolo. Mesmo comprimento que [offsetsDoLockup].
+  final List<Color> paradasDoLockup;
+
+  /// Os offsets de cada parada, de 0 a 1.
+  final List<double> offsetsDoLockup;
+
+  /// A tinta que vai POR CIMA do gradiente. No Bold é o vinho-tinta, com pior parada 5,69:1.
+  final Color tintaSobreOGradiente;
+
+  DilettaPalette get _p => paleta;
 
   /// **PRIMARY** — o lockup CONTA BOLD: rosa → coral → amarelo. Gradiente de momento herói: saldo,
   /// avatar de convite, superfície de destaque.
@@ -46,20 +95,11 @@ abstract final class BoldGradients {
   /// Flutter distribuí-las igualmente e jogar o coral pra 0,5 quando no símbolo ele está em 0,60.
   /// Medido no arquivo em 20/08: a curva da UI e a curva do logo eram diferentes no mesmo dia em
   /// que eu disse que o gradiente tinha voltado a ser o do lockup.
-  static LinearGradient get primary => LinearGradient(
+  LinearGradient get primary => LinearGradient(
         begin: const Alignment(-0.8, -1),
         end: const Alignment(0.8, 1),
-        colors: const [
-          BoldColors.lockup01,
-          BoldColors.lockup02,
-          BoldColors.lockup03,
-          BoldColors.lockup04,
-          BoldColors.lockup05,
-          BoldColors.lockup06,
-          BoldColors.lockup07,
-          BoldColors.lockup08,
-        ],
-        stops: BoldColors.lockupStops,
+        colors: paradasDoLockup,
+        stops: offsetsDoLockup,
       );
 
   /// **ACCENT** — só laranja, e mais fundo: o âmbar descendo pro tostado. Para controle pequeno,
@@ -67,14 +107,14 @@ abstract final class BoldGradients {
   /// navegação, Pix.
   ///
   /// `warning03 → warning02`. Branco na pior parada: **3.37:1**; na outra, **6.54:1**.
-  static LinearGradient get accent => LinearGradient(
+  LinearGradient get accent => LinearGradient(
         begin: const Alignment(-0.7, -1),
         end: const Alignment(0.7, 1),
         colors: [_p.warning03, _p.warning02],
       );
 
   /// Os dois, pra quem precisa iterar — o catálogo, e o gate que trava a regra em dois.
-  static Map<String, LinearGradient> get todos => {
+  Map<String, LinearGradient> get todos => {
         'primary': primary,
         'accent': accent,
       };
@@ -103,5 +143,19 @@ abstract final class BoldGradients {
   /// sobre gradiente cabe rótulo em qualquer tamanho — não só glifo e título grande, como era com
   /// os 3,37 do gradiente anterior. O `accent` continua com pior caso 3,37 e continua com a regra
   /// antiga: lá vale glifo e texto grande.
-  static Color get onGradient => BoldVinho.ink;
+  Color get onGradient => tintaSobreOGradiente;
+
+  // ── OS ATALHOS DO CONTA BOLD ───────────────────────────────────────────────
+  //
+  // Ficam porque 4 sítios os escrevem e porque o caso comum merece nome curto. Não são uma
+  // segunda fonte: os três leem `bold`, que é a única declaração.
+
+  /// O gradiente do lockup do Conta BOLD. Atalho pra `BoldGradients.bold.primary`.
+  static LinearGradient get primaryDoBold => bold.primary;
+
+  /// O gradiente âmbar do Conta BOLD. Atalho pra `BoldGradients.bold.accent`.
+  static LinearGradient get accentDoBold => bold.accent;
+
+  /// A tinta sobre gradiente do Conta BOLD. Atalho pra `BoldGradients.bold.onGradient`.
+  static Color get onGradientDoBold => bold.onGradient;
 }

@@ -73,7 +73,7 @@ class BoldLinhaDeAviso extends StatelessWidget {
               height: 34,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: BoldVinho.marca,
+                color: BoldVinho.marcaDe(s.palette),
                 borderRadius: DilettaRadius.all8,
               ),
               child: DilettaIcon(
@@ -123,8 +123,8 @@ class _Contador extends StatelessWidget {
       constraints: const BoxConstraints(minWidth: 24, minHeight: 24),
       padding: EdgeInsets.symmetric(horizontal: DilettaSpacing.s1 + 2),
       alignment: Alignment.center,
-      decoration: const BoxDecoration(
-        color: BoldVinho.marca,
+      decoration: BoxDecoration(
+        color: BoldVinho.marcaDe(s.palette),
         shape: BoxShape.circle,
       ),
       child: DilettaText('$quantas',

@@ -34,7 +34,6 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
-import 'bold_palette.dart';
 import 'bold_vinho.dart';
 
 /// Os sete fundos que o produto oferece.
@@ -142,8 +141,8 @@ class BoldBackground extends StatelessWidget {
   /// Alpha de branco e de preto não é identidade (é ausência e presença de luz), então não é
   /// dívida de paleta — é a mesma leitura que o pai faz dos alphas dele.
   static Color _veu(DilettaScheme s) => s.isDark
-      ? BoldPalette.bold.black.withValues(alpha: 0.08)
-      : BoldPalette.bold.white.withValues(alpha: 0.20);
+      ? s.palette.black.withValues(alpha: 0.08)
+      : s.palette.white.withValues(alpha: 0.20);
 
   @override
   Widget build(BuildContext context) {
@@ -173,8 +172,8 @@ class BoldBackground extends StatelessWidget {
     // seis vezes, e aí o risco passa a ser esquecer de mudar uma delas.
     final base = switch (fundo) {
       BoldBackdrop.solido =>
-        s.isDark ? BoldPalette.bold.bgEscuro! : BoldPalette.bold.primary08,
-      _ => !s.isDark && ehMood ? BoldPalette.bold.primary08 : s.bg,
+        s.isDark ? s.palette.bgEscuro! : s.palette.primary08,
+      _ => !s.isDark && ehMood ? s.palette.primary08 : s.bg,
     };
 
     return DilettaDevInfo(
@@ -196,7 +195,10 @@ class BoldBackground extends StatelessWidget {
 
   List<Widget> _camadas(
       DilettaScheme s, BoldBackdrop fundo, BoldBackdropScope? scope) {
-    final p = BoldPalette.bold;
+    // A paleta vem do ESQUEMA, não da const deste produto. Era `BoldPalette.bold` cravada, e com
+    // ela um filho deste DS recebia o fundo inteiro no rosa do Bold depois de declarar a paleta
+    // dele — 9 brilhos em 6 modos.
+    final p = s.palette;
 
     // Saturação dos brilhos. No claro SOBE **só onde a base é `primary08`** — que é o caso dos moods:
     // sobre aquele rosa quase-branco os brilhos mesclavam com o conteúdo e precisavam de corpo.
@@ -220,7 +222,7 @@ class BoldBackground extends StatelessWidget {
         ],
       BoldBackdrop.vidroFrio => [
           _brilho(const Alignment(-0.5, -1), 1.2,
-              BoldVinho.marca.withValues(alpha: 0.34 * k)),
+              BoldVinho.marcaDe(p).withValues(alpha: 0.34 * k)),
           _brilho(const Alignment(0.95, -0.6), 1.0,
               p.primary04.withValues(alpha: 0.30 * k)),
         ],
@@ -230,7 +232,7 @@ class BoldBackground extends StatelessWidget {
           _brilho(const Alignment(0.85, -0.9), 0.85,
               p.warning03.withValues(alpha: 0.30 * k)),
           _brilho(const Alignment(0.5, 0.95), 1.0,
-              BoldVinho.marca.withValues(alpha: 0.32 * k)),
+              BoldVinho.marcaDe(p).withValues(alpha: 0.32 * k)),
         ],
       BoldBackdrop.porDoSol => [
           _brilho(const Alignment(1, -1), 1.1, p.warning04.withValues(alpha: 0.22 * k)),
@@ -256,7 +258,7 @@ class BoldBackground extends StatelessWidget {
     if (arte == null) {
       return [
         _brilho(const Alignment(0, -1), 1.15,
-            BoldPalette.bold.primary04.withValues(alpha: s.isDark ? 0.22 : 0.28)),
+            s.palette.primary04.withValues(alpha: s.isDark ? 0.22 : 0.28)),
       ];
     }
     return [

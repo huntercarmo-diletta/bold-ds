@@ -452,6 +452,35 @@ class BoldPalette {
         significado: 'O fundo sólido de quem saiu da navegação principal. No escuro é o vinho-tinta '
             'da marca; a arte de fundo não acompanha fluxo, e fluxo secundário troca imagem por cor.',
       ),
+      // O VINHO — o segundo eixo da marca, e ele estava fora de qualquer contrato até 20/08.
+      //
+      // A rampa de rosa viaja pela paleta; o vinho vivia em três `static const` de `BoldVinho`, e
+      // um filho deste DS herdava o vinho do Bold depois de declarar a paleta dele. Medido: 17
+      // leituras, 8 delas dentro do pacote.
+      //
+      // Não vira rampa e não vira papel do pai: é vocabulário DESTE produto, que é exatamente o
+      // que `papeisExtras` existe pra carregar. Os três são iguais nos dois modos porque o vinho
+      // não muda com o tema — quem muda é QUEM o escolhe (o vidro pega a lavagem só no escuro).
+      //
+      // `BoldVinho` continua sendo a casa dos valores, e é a reserva de quem não declarar.
+      'vinhoMarca': DilettaPapelExtra(
+        claro: BoldVinho.marca,
+        escuro: BoldVinho.marca,
+        significado: 'O vinho da marca: ladrilho de ícone, badge, realce escuro e o polo frio dos '
+            'fundos. É o segundo eixo da identidade, ao lado do rosa de ação.',
+      ),
+      'vinhoTinta': DilettaPapelExtra(
+        claro: BoldVinho.ink,
+        escuro: BoldVinho.ink,
+        significado: 'O vinho quase preto, com o matiz da marca. Fill do vidro escuro e tinta que '
+            'vai por cima do gradiente do lockup.',
+      ),
+      'vinhoLavagem': DilettaPapelExtra(
+        claro: BoldVinho.lavagem,
+        escuro: BoldVinho.lavagem,
+        significado: 'A lavagem do vidro no escuro — não é degrau de rampa, é a base de um '
+            'material.',
+      ),
       'info': DilettaPapelExtra(
         claro: BoldColors.info,
         escuro: BoldColors.info,

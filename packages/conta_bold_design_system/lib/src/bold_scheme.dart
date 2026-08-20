@@ -18,9 +18,14 @@ import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/material.dart';
 
 import 'bold_palette.dart';
+import 'bold_vinho.dart';
 
 class BoldScheme extends ThemeExtension<BoldScheme> {
   const BoldScheme({
+    required this.paleta,
+    required this.vinho,
+    required this.vinhoTinta,
+    required this.vinhoLavagem,
     required this.brightness,
     required this.background,
     required this.secondaryFlow,
@@ -48,6 +53,18 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
   });
 
   final Brightness brightness;
+  /// A RAMPA de onde este esquema saiu.
+  ///
+  /// Entrou em 20/08 porque o `ThemeData` precisa de degraus que não são papel: o
+  /// `colorScheme.primary` do Material é o **rosa da marca** (`primary04`), e não o `primary` deste
+  /// esquema — que no claro é o degrau profundo, escolhido pra passar AA com tinta branca. Eram dois
+  /// valores diferentes com o mesmo nome, e o `BoldTemaMaterial` resolvia isso lendo a const
+  /// congelada `BoldColors.primary04`. Guardar a paleta é o que deixa ele ler o degrau **da paleta
+  /// que veio**, sem mudar um pixel deste produto.
+  ///
+  /// É o mesmo que o pai faz: `DilettaScheme` também carrega a `palette` de onde derivou.
+  final DilettaPalette paleta;
+
   final Color background, surface, surfaceRaised, field, surfacePressed;
 
   /// Fundo sólido dos fluxos secundários (fora da navegação inferior).
@@ -81,6 +98,16 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
   /// o primitivo). Dark = shades claros/vibrantes; light = shades profundos.
   final Color primary, onPrimary, primaryPressed, primaryWash;
   final Color danger, success, warning, info;
+
+  /// O VINHO — o segundo eixo da marca deste produto, em três degraus.
+  ///
+  /// [vinho] é a marca (ladrilho, badge, realce), [vinhoTinta] é o quase-preto com matiz (fill do
+  /// vidro escuro, tinta sobre o gradiente do lockup) e [vinhoLavagem] é a base do vidro no escuro.
+  ///
+  /// Vêm de `papeisExtras`, então um filho deste DS declara os dele na paleta dele. Antes de 20/08
+  /// eram três `static const` de `BoldVinho` lidas direto por 8 sítios do pacote — o rosa viajava
+  /// com a paleta e o vinho não.
+  final Color vinho, vinhoTinta, vinhoLavagem;
 
   bool get isDark => brightness == Brightness.dark;
   /// O ESQUEMA A PARTIR DE UMA PALETA — e é esta assinatura que faz o DS ser retematizável.
@@ -137,6 +164,7 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
     final fundo = d.bg;
 
     return BoldScheme(
+      paleta: paleta,
       brightness: brilho,
       // ── derivados do pai ──────────────────────────────────────────────────
       surface: d.surface,
@@ -175,6 +203,12 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
       secondaryFlow: extra('fluxoSecundario',
           escuro ? BoldColors.fluxoSecundarioEscuro : BoldColors.fluxoSecundarioClaro),
       info: extra('info', BoldColors.info),
+      // O VINHO, pelo mesmo caminho dos outros quatro extras.
+      // Pelos resolvedores do próprio `BoldVinho`, e não pelo `extra()` daqui: os dois fariam a
+      // mesma conta, e conta repetida diverge. Quem não tem esquema na mão chama lá direto.
+      vinho: BoldVinho.marcaDe(paleta),
+      vinhoTinta: BoldVinho.tintaDe(paleta),
+      vinhoLavagem: BoldVinho.lavagemDe(paleta),
       // O segundo que não viajava, e ele fechou junto: `surfaceMutedClara` na `v0.119.0`.
       field: d.surfaceMuted,
     );

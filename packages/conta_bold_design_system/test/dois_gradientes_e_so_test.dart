@@ -14,7 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// Convenção não segura isso; contagem segura.
 void main() {
   test('a marca tem exatamente DOIS gradientes', () {
-    expect(BoldGradients.todos.keys, ['primary', 'accent'],
+    expect(BoldGradients.bold.todos.keys, ['primary', 'accent'],
         reason: 'a regra é dois. Se um terceiro caso apareceu, ele se modula nos dois — e se '
             'não se modula, é pedido ao pai ou decisão de desenho, não token novo aqui');
   });
@@ -23,8 +23,8 @@ void main() {
     // O primary começa em `primary04` porque é o gradiente que representa a marca — se ele não
     // parte da cor de ação, ele deixa de acompanhar a identidade. O accent não: ele é o laranja
     // inteiro, então as duas paradas dele são da mesma rampa.
-    expect(BoldGradients.primary.colors.first, BoldPalette.bold.primary04);
-    expect(BoldGradients.accent.colors,
+    expect(BoldGradients.bold.primary.colors.first, BoldPalette.bold.primary04);
+    expect(BoldGradients.bold.accent.colors,
         everyElement(isIn([BoldPalette.bold.warning03, BoldPalette.bold.warning02])));
   });
 
@@ -37,14 +37,14 @@ void main() {
     // amostra da curva — e declaradas SEM offset, o que fez o Flutter distribuí-las igualmente e
     // jogar o coral pra 0,5 quando no símbolo ele está em 0,60. A UI e o logo tinham curvas
     // diferentes no mesmo dia em que eu disse que o gradiente era o do lockup.
-    expect(BoldGradients.primary.colors, [
+    expect(BoldGradients.bold.primary.colors, [
       BoldColors.lockup01, BoldColors.lockup02, BoldColors.lockup03, BoldColors.lockup04,
       BoldColors.lockup05, BoldColors.lockup06, BoldColors.lockup07, BoldColors.lockup08,
     ]);
-    expect(BoldGradients.primary.stops, BoldColors.lockupStops,
+    expect(BoldGradients.bold.primary.stops, BoldColors.lockupStops,
         reason: 'sem os offsets do arquivo o Flutter distribui igual, e a curva da UI deixa de ser '
             'a curva do símbolo — foi exatamente o defeito de 19/08');
-    expect(BoldGradients.accent.colors, [p.warning03, p.warning02]);
+    expect(BoldGradients.bold.accent.colors, [p.warning03, p.warning02]);
   });
 
   test('ZERO literal SOLTO: toda parada é degrau de rampa ou cor de marca DECLARADA', () {
@@ -61,7 +61,7 @@ void main() {
       BoldColors.lockup01, BoldColors.lockup02, BoldColors.lockup03, BoldColors.lockup04,
       BoldColors.lockup05, BoldColors.lockup06, BoldColors.lockup07, BoldColors.lockup08,
     };
-    for (final g in BoldGradients.todos.entries) {
+    for (final g in BoldGradients.bold.todos.entries) {
       for (final c in g.value.colors) {
         expect(permitidos, contains(c),
             reason: 'o gradiente "${g.key}" tem uma parada que não é degrau da paleta nem cor de '
@@ -83,11 +83,11 @@ void main() {
     double pior(Color tinta, LinearGradient g) =>
         g.colors.map((p) => contraste(tinta, p)).reduce((a, b) => a < b ? a : b);
 
-    expect(BoldGradients.onGradient, BoldVinho.ink);
+    expect(BoldGradients.bold.onGradient, BoldVinho.ink);
 
     // 1 · No gradiente da marca, a tinta escolhida passa AA de TEXTO — o que o par anterior
     //     (branco sobre duas paradas, pior 3,37) não fazia.
-    final piorNoPrimary = pior(BoldGradients.onGradient, BoldGradients.primary);
+    final piorNoPrimary = pior(BoldGradients.bold.onGradient, BoldGradients.bold.primary);
     expect(piorNoPrimary, greaterThanOrEqualTo(4.5),
         reason: 'a tinta sobre o gradiente da marca tem que ler como TEXTO, senão a regra de uso '
             'volta a ser "só glifo e título grande" — e foi isso que o lockup comprou');
@@ -95,13 +95,13 @@ void main() {
 
     // 2 · E ela ganha do branco, que era a tinta anterior. Sem esta linha, trocar a tinta de volta
     //     pra branco passaria calado e deixaria 1,21 no amarelo.
-    expect(piorNoPrimary, greaterThan(pior(BoldPalette.bold.white, BoldGradients.primary)));
-    expect(pior(BoldPalette.bold.white, BoldGradients.primary), closeTo(1.21, 0.02),
+    expect(piorNoPrimary, greaterThan(pior(BoldPalette.bold.white, BoldGradients.bold.primary)));
+    expect(pior(BoldPalette.bold.white, BoldGradients.bold.primary), closeTo(1.21, 0.02),
         reason: 'o número que mata o branco, escrito aqui pra ninguém precisar remedir pra saber '
             'por que a tinta não é ela');
 
     // 3 · O `accent` é outro caso e continua com a regra antiga: as duas paradas dele são âmbar
     //     escuro, então a tinta da marca ali é fraca e o branco é que lê. Ele NÃO usa `onGradient`.
-    expect(pior(BoldPalette.bold.white, BoldGradients.accent), greaterThanOrEqualTo(3.0));
+    expect(pior(BoldPalette.bold.white, BoldGradients.bold.accent), greaterThanOrEqualTo(3.0));
   });
 }

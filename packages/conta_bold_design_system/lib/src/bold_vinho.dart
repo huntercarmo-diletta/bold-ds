@@ -25,6 +25,8 @@
 /// slot de parceiro empresta dele em vez de ser a casa dele.
 library;
 
+import 'package:diletta_design_system/diletta_design_system.dart';
+
 import 'package:flutter/painting.dart';
 
 /// Os dois degraus do vinho. Dois, não uma rampa: mais que isso seria inventar escala sem
@@ -51,4 +53,27 @@ abstract final class BoldVinho {
   /// O nome diz o trabalho — o wash que some subindo sobre a foto da cidade, pra a imagem
   /// aparecer no topo do card e o conteúdo ancorar embaixo.
   static const Color lavagem = Color(0xFF420616);
+
+  // ── A PORTA DO NETO ────────────────────────────────────────────────────────
+  //
+  // Os três acima são os valores DESTE produto. Um filho deste DS declara os dele em
+  // `papeisExtras` (`vinhoMarca`, `vinhoTinta`, `vinhoLavagem`) e lê pelos três resolvedores
+  // abaixo — que caem nas constantes quando a paleta não declara nada.
+  //
+  // Existem porque nem todo sítio tem um `BoldScheme` na mão: as peças do pacote leem
+  // `DilettaTheme.schemeOf(context)`, que dá o esquema do PAI e a paleta. Com a paleta, resolve.
+  // O `BoldScheme` também expõe os três, e chama exatamente estas funções — um valor, uma
+  // implementação, dois jeitos de alcançar.
+
+  static Color _de(DilettaPalette p, String nome, Color reserva) =>
+      p.papeisExtras[nome]?.claro ?? reserva;
+
+  /// O vinho da marca desta paleta. Cai em [marca] se ela não declarar.
+  static Color marcaDe(DilettaPalette p) => _de(p, 'vinhoMarca', marca);
+
+  /// O vinho-tinta desta paleta. Cai em [ink].
+  static Color tintaDe(DilettaPalette p) => _de(p, 'vinhoTinta', ink);
+
+  /// A lavagem desta paleta. Cai em [lavagem].
+  static Color lavagemDe(DilettaPalette p) => _de(p, 'vinhoLavagem', lavagem);
 }

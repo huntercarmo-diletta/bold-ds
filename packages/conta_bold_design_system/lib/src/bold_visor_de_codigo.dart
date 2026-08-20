@@ -41,7 +41,6 @@ import 'dart:ui' as ui;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
-import 'bold_palette.dart';
 
 /// O que o leitor precisa reconhecer, e por quê.
 ///
@@ -160,6 +159,7 @@ class BoldVisorDeCodigo extends StatelessWidget {
       child: CustomPaint(
         size: Size.infinite,
         painter: _PintorDoVisor(
+          paleta: DilettaTheme.schemeOf(context).palette,
           alvos: alvos,
           fase: fase,
           descendo: descendo,
@@ -174,13 +174,14 @@ class BoldVisorDeCodigo extends StatelessWidget {
 
 class _PintorDoVisor extends CustomPainter {
   _PintorDoVisor({
+    required DilettaPalette paleta,
     required this.alvos,
     required this.fase,
     required this.descendo,
     required this.fantasmas,
     required this.tamanhoDaImagem,
     required this.estiloDoRotulo,
-  });
+  }) : _p = paleta;
 
   final List<BoldAlvo> alvos;
   final double fase;
@@ -189,7 +190,14 @@ class _PintorDoVisor extends CustomPainter {
   final Size tamanhoDaImagem;
   final TextStyle estiloDoRotulo;
 
-  static const _p = BoldPalette.bold;
+  /// A paleta de quem montou o visor.
+  ///
+  /// Era `static const _p = BoldPalette.bold`. Os cinco valores que ele lê são semânticos e
+  /// neutros (`success05`, `error05`, `warning04`, `warning06`, `black`) — a regra do pai diz que
+  /// esses são invariantes, então cravar aqui não pintava errado hoje. Mas invariante por REGRA e
+  /// congelado por LEITOR são coisas diferentes, e a segunda não se mede: um produto que declare
+  /// outro `error05` receberia o do Bold sem nada acusar.
+  final DilettaPalette _p;
 
   Color _cor(BoldAlvoEstado e) => switch (e) {
         BoldAlvoEstado.relevante => _p.success05,

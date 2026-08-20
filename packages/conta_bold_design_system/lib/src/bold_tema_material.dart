@@ -47,17 +47,27 @@ import 'bold_type.dart';
 abstract final class BoldTemaMaterial {
   const BoldTemaMaterial._();
 
-  static ThemeData get claro => _monta(BoldScheme.light());
-  static ThemeData get escuro => _monta(BoldScheme.dark());
+  static ThemeData get claro => de(BoldScheme.light());
+  static ThemeData get escuro => de(BoldScheme.dark());
 
-  static ThemeData _monta(BoldScheme s) {
+  /// O `ThemeData` de QUALQUER esquema deste DS — a porta pra um produto que não é o Bold.
+  ///
+  /// Era `_monta`, privado, e a privacidade era o bloqueio: [BoldScheme.de] aceita paleta desde a
+  /// v0.55.0 e não havia nada acima dele que aceitasse. Um produto novo montava o esquema com a
+  /// paleta dele e **não conseguia registrá-lo como `ThemeExtension`** — que é de onde os ~500
+  /// `BoldColors.of(context)` leem. Quem monta produto passa por [BoldProduto], que chama isto.
+  static ThemeData de(BoldScheme s) {
     final cores = ColorScheme(
       brightness: s.brightness,
-      primary: BoldColors.primary04,
+      // O rosa da MARCA, lido da paleta que veio — e não o `s.primary`, que no claro é o degrau
+      // profundo (escolhido pra passar AA com tinta branca). São dois valores com o mesmo nome, e
+      // o Material quer o da marca. Era `BoldColors.primary04`, const congelada: um produto novo
+      // recebia o rosa do Bold no `colorScheme` inteiro depois de declarar a paleta dele.
+      primary: s.paleta.primary04,
       // Os três `on*` saem do PAPEL e não do branco cru. O valor é o mesmo nos dois modos hoje
       // (medido: `#FFFFFF` dos dois lados); a diferença é de quem é a decisão.
       onPrimary: s.onPrimary,
-      secondary: BoldColors.primary04,
+      secondary: s.paleta.primary04,
       onSecondary: s.onPrimary,
       surface: s.surface,
       onSurface: s.textPrimary,
@@ -103,7 +113,7 @@ abstract final class BoldTemaMaterial {
       iconTheme: IconThemeData(color: s.textSecondary, size: 22),
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
-          foregroundColor: BoldColors.primary04,
+          foregroundColor: s.paleta.primary04,
           textStyle: BoldType.labelLg,
         ),
       ),
@@ -131,9 +141,10 @@ abstract final class BoldTemaMaterial {
             borderRadius: BoldRadius.fieldR, borderSide: BorderSide.none),
         enabledBorder: const OutlineInputBorder(
             borderRadius: BoldRadius.fieldR, borderSide: BorderSide.none),
-        focusedBorder: const OutlineInputBorder(
+        // Deixou de ser `const` porque a cor deixou de ser congelada. É a única diferença.
+        focusedBorder: OutlineInputBorder(
           borderRadius: BoldRadius.fieldR,
-          borderSide: BorderSide(color: BoldColors.primary04, width: 1.5),
+          borderSide: BorderSide(color: s.paleta.primary04, width: 1.5),
         ),
       ),
     );

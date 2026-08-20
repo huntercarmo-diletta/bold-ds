@@ -23,7 +23,7 @@ library conta_bold_design_system;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
-import 'src/bold_palette.dart';
+import 'src/bold_produto.dart';
 
 /// A LINGUAGEM SAI POR AQUI, e é o que faz este pacote ser "o DS do Bold" pra quem
 /// consome: o app e o catálogo importam UM caminho
@@ -47,6 +47,7 @@ export 'src/bold_vinho.dart';
 export 'src/bold_fonts.dart';
 export 'src/bold_type.dart';
 export 'src/bold_fundamentos.dart';
+export 'src/bold_produto.dart';
 export 'src/bold_gradients.dart';
 export 'src/bold_ilustracao.dart';
 
@@ -92,95 +93,22 @@ export 'src/bold_visor_de_codigo.dart';
 class BoldTheme {
   BoldTheme._();
 
-  /// ONDE OS ASSETS DO PAI MORAM — uma linha, e sem ela nenhum ícone do pai aparece.
+  /// O tema do Conta BOLD no claro. Atalho pra `BoldProduto.bold.claro`.
   ///
-  /// `DilettaAssets.assetPackage` nasce `null`, que significa "assets na raiz do bundle". Num app que
-  /// CONSOME o pacote eles moram em `packages/diletta_design_system/…`, então o `AssetBytesLoader`
-  /// procura no lugar errado. E `VectorGraphic` com asset ausente **não estoura**: desenha caixa vazia.
-  ///
-  /// Chegou como *"os ícones não estão aparecendo no app"*, depois de a adoção trocar
-  /// `BoldIconButton` por `DilettaIconButton`: as setas de voltar, os ícones da home e o `>` do extrato
-  /// sumiram juntos. Nada falhou — nem `analyze`, nem a suíte inteira, nem o console. (O número que
-  /// estava escrito aqui, `414 testes`, era de outra medição e ficou velho: hoje são 125 no pacote e 86
-  /// no catálogo. O argumento nunca dependeu do tamanho da suíte — dependeu de nada nela olhar o asset.)
-  ///
-  /// **Fica AQUI e não no `main` do app**, e a razão é a mesma que o catálogo escreveu no plugue dele:
-  /// quem liga o DS é quem sabe onde o DS guarda coisa. No `main` isso é uma linha que todo app novo
-  /// tem que lembrar de copiar — e o primeiro filho, que resolveu no `main` do catálogo dele, tem o
-  /// mesmo buraco de um lado só.
-  ///
-  /// É idempotente e roda no primeiro acesso ao tema. Não existe caminho que desenhe componente do pai
-  /// sem passar por `BoldTheme.light`/`dark`: o `DilettaThemeScope` é obrigatório pra qualquer um deles.
-  static void _garanteOsAssetsDoPai() {
-    DilettaAssets.assetPackage ??= DilettaAssets.package;
-  }
+  /// Este par de getters era o fim da linha: os dois eram `static final` montados com
+  /// `BoldPalette.bold` cravada, e não havia forma de pedir o mesmo tema com outra paleta. Desde
+  /// 20/08 quem responde é o [BoldProduto], e este nome fica porque **43 cascas e o `main` do app
+  /// já o escrevem** — atalho pro produto default não é indireção, é o nome curto do caso comum.
+  static DilettaTheme get light => BoldProduto.bold.claro;
 
-  static DilettaTheme get light {
-    _garanteOsAssetsDoPai();
-    return _claro;
-  }
-
-  static DilettaTheme get dark {
-    _garanteOsAssetsDoPai();
-    return _escuro;
-  }
+  /// O tema do Conta BOLD no escuro. Atalho pra `BoldProduto.bold.escuro`.
+  static DilettaTheme get dark => BoldProduto.bold.escuro;
 
   /// A MARCA deste produto, declarada no plugue do pai — arquivos e o mapa da arte.
   ///
-  /// Antes de 20/08 este filho não declarava nada aqui, e o custo era duplo: o `BoldLogo` vivia como
-  /// peça privada no app (5 sítios, classificado `deliberado` com a razão *"o pai tem a marca DELE"*,
-  /// que estava errada desde que o plugue existe), e as 77 ilustrações não recoloriam pra paleta
-  /// nenhuma.
-  ///
-  /// **`logoTingePorCurrentColor`** é o veredito da `v0.120.0`: as partes tingíveis do arquivo dizem
-  /// `currentColor` e o `ColorFilter` não entra. É o arquivo decidindo o alcance da tinta em vez de a
-  /// peça adivinhar por hex — e adivinhar por hex era o defeito do outro pedido do mesmo dia.
-  ///
-  /// **`hexesDaArte`** é o mapa hex→NOME do degrau, e o nome é a parte que importa: nome sobrevive à
-  /// troca de paleta, cor não. São **17 entradas em duas chaveaduras**: os 7 degraus de marca das
-  /// artes DESTE produto (38 arquivos, 1751 pinturas, 403 de marca) e os 10 hexes das artes do PAI,
-  /// que consumimos desde 20/08. Neutro e semântico ficam de fora por regra do pai — *"cor de marca
-  /// troca, erro/aviso e neutro são invariantes"*.
-  static const DilettaBrand marca = DilettaBrand(
-    pacote: 'conta_bold_design_system',
-    // O mesmo arquivo nos dois slots: este produto não tem símbolo exportado em SVG (o que existe é
-    // um `.webp` raster), então `mark` cai no lockup até o símbolo existir. Está escrito pra ser
-    // pedido ao dono da marca e não pra virar folclore de "o mark é o full aqui".
-    logo: 'assets/logos/conta-bold-lockup.svg',
-    logoFull: 'assets/logos/conta-bold-lockup.svg',
-    logoTingePorCurrentColor: true,
-    hexesDaArte: {
-      '#fe3976': 'primary04', // 343 pinturas
-      '#ff87ab': 'primary06', // 244
-      '#f66fa0': 'primary05', // 159
-      '#ffb6cb': 'primary07', // 121
-      '#600627': 'primary02', // 73
-      '#300313': 'primary01', // 27
-      '#fff6fa': 'primary09', // 4
-      // E a rampa DELE, composta e não copiada.
-      //
-      // Ontem eram 10 linhas copiadas daqui, porque `rampaDe` é exclusivo — declarar mapa próprio
-      // desliga a tabela dele, e foi o ato de declarar o nosso rosa que fez o azul dele atravessar
-      // `key_word` e `no_data` inteiras. A cópia resolvia hoje e envelhecia calada: hex que muda do
-      // lado dele continuaria traduzido pelo valor velho, e o `apply` não erra alto.
-      //
-      // O pedido voltou ENTRA DIFERENTE com uma retificação dele que vale mais que a forma: as 59
-      // artes moram no pacote DELE — foram DESENHADAS pelo primeiro filho e DOADAS ao pai. O mapa
-      // que as traduz é dado dele sobre asset dele, então ele não morre em 20/09; fica público.
-      // *"Uma preposição, e ela mudou de quem era o dado."*
-      //
-      // Vieram 3 hexes de graça na composição (`#7096ff`, `#dfe7ff`, `#f5f9ff`), que eu tinha
-      // medido como faltando na tabela dele e ele conferiu por luminância. São 13 agora, não 10 —
-      // e é exatamente por isso que a composição paga: eu não precisei saber que mudou.
-      ...DilettaIllustrationBrand.rampaDoPai,
-    },
-  );
-
-  static final DilettaTheme _claro =
-      DilettaTheme.resolve(palette: BoldPalette.bold, brand: marca);
-
-  static final DilettaTheme _escuro = DilettaTheme.resolve(
-      palette: BoldPalette.bold, brightness: Brightness.dark, brand: marca);
+  /// Mora em [BoldProduto.marcaDoBold] desde 20/08, porque marca é do PRODUTO e não do tema: um
+  /// filho do Bold troca as duas coisas juntas ou nenhuma.
+  static const DilettaBrand marca = BoldProduto.marcaDoBold;
 }
 
 /// Uma tela do Bold montada SÓ com componentes do pai.

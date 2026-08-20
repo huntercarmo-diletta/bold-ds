@@ -36,7 +36,6 @@ import 'dart:ui' as ui;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
-import 'bold_palette.dart';
 import 'bold_vinho.dart';
 
 /// Os três estados do selo. Fechado, e sem quarto caso possível.
@@ -148,7 +147,10 @@ class _BoldSeloQuanticoState extends State<BoldSeloQuantico>
   @override
   Widget build(BuildContext context) {
     final s = DilettaTheme.schemeOf(context);
-    final p = BoldPalette.bold;
+    // A paleta vem do esquema. Era `BoldPalette.bold` cravada — e mesmo numa peça que é deste
+    // produto por natureza (o selo quântico), cravar a paleta é o leitor decidindo o que o
+    // contrato já decidiu.
+    final p = s.palette;
 
     return DilettaDevInfo(
       component: 'seloQuantico',
@@ -178,7 +180,7 @@ class _BoldSeloQuanticoState extends State<BoldSeloQuantico>
                 rotulo: _negado ? widget.rotuloNegado : widget.rotuloAutorizado,
                 apoio: _negado ? 'tente novamente' : 'concluída · canal seguro',
                 cores: _CoresDoSelo(
-                  profundo: BoldVinho.marca,
+                  profundo: BoldVinho.marcaDe(p),
                   claro: p.primary05,
                   acento: p.warning05,
                   fim: _negado ? p.error05 : p.success05,
