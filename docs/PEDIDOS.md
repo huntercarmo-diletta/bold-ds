@@ -50,6 +50,8 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 
 | [o espelho do claro veio em duas partes, e falta a terceira](pedidos/2026-08-19-o-espelho-do-claro-veio-em-duas-partes-e-falta-a-terceira.md) | **sem veredito** — enviado em 19/08. `bgClaro` e `surfaceMutedClara`: são os **2 de 42** papéis que não acompanham uma paleta de neto, medidos por gate | — |
 
+| [o divisor sai 5,4× mais forte que a borda que eu declarei](pedidos/2026-08-20-o-divisor-sai-5-vezes-mais-forte-que-a-borda-que-eu-declarei.md) | **sem veredito** — enviado em 20/08. `Color.lerp` interpola o ALPHA junto: de preto@7% pra branco opaco a opacidade SOBE, e o divisor sai mais escuro que a borda. Achado pelo dono na tela | — |
+
 ## Ao pai da FERRAMENTA (`catalogo-diletta`)
 
 | pedido | veredito | chegou em |
