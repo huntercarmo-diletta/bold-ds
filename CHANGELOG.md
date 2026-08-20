@@ -20,6 +20,32 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.55.1] — 2026-08-19
+
+### Declarado — o degrau de tipo cede o PESO, e só o peso
+
+Uma varredura no app mediu **37 sítios de `FontWeight` cru**, e o que ela achou não foram 37 defeitos:
+foram **23 pedidos da mesma coisa** — o mesmo tamanho, com peso maior — porque esta escada não tem 600
+abaixo de 24px nem 800 abaixo de 30px.
+
+Dois saíram por redundância (pediam o peso que o degrau já tem) e dois trocaram pelo degrau do PAPEL
+certo. **O pixel dizia 11 e o papel disse 2**: nove cairiam no `label`, que é *"12/700 · tracking 1,5 ·
+sobrancelha em caixa alta"* — usar sobrancelha de caixa alta em rótulo de frase não é 1px de diferença,
+é pegar o degrau de outro papel.
+
+Pros 23 que sobraram, a decisão é a que não mexe em nada e não fecha porta:
+
+| eixo | a tela pode? | por quê |
+|---|---|---|
+| `fontWeight` | **pode** | peso não muda geometria — a mesma linha em 500 e em 700 ocupa a mesma caixa e quebra no mesmo ponto |
+| `fontSize` | não | é o degrau, e sobrescrever declara um degrau invisível pra quem mede a escada |
+| `letterSpacing` | não | tracking é do PAPEL |
+| `height` | não | é o ritmo vertical, e ele decide onde a linha seguinte cai |
+
+**O que isso NÃO fecha** está escrito no `///`: o eixo de ênfase nomeado, que apareceria no catálogo. A
+demanda medida fica registrada — peso 600 ×9, 700 ×9, 800 ×5 — e ela sobe quando o mesmo par (tamanho,
+peso) tiver caso repetido o bastante pra ser vocabulário em vez de escolha de tela.
+
 ## [0.55.0] — 2026-08-19
 
 ### O esquema passa a RECEBER a paleta — e a resposta pra "trocar o token troca o app?" virou 42 de 44

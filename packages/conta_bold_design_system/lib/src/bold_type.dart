@@ -36,6 +36,28 @@ import 'package:flutter/painting.dart';
 
 import 'bold_fonts.dart';
 
+/// ## O PESO é o único eixo que a tela pode sobrescrever — e os outros três não são
+///
+/// Declarado em 19/08, depois de uma varredura medir 37 sítios de `FontWeight` cru no app. O que ela
+/// achou não foram 37 defeitos: foram **23 pedidos da mesma coisa** — o mesmo tamanho, com peso maior
+/// — porque esta escada não tem peso 600 abaixo de 24px nem 800 abaixo de 30px.
+///
+/// | eixo | a tela pode? | por quê |
+/// |---|---|---|
+/// | `fontWeight` | **pode** | ênfase é decisão de contexto: a mesma linha é rótulo aqui e valor ali |
+/// | `fontSize` | **não** | é o degrau. Sobrescrever declara um degrau que ninguém aprovou, e invisível pra quem mede a escada |
+/// | `letterSpacing` | **não** | tracking é parte do papel. O `label` tem 1,5 porque é sobrancelha de caixa alta; em frase, o mesmo 1,5 lê como texto espaçado |
+/// | `height` | **não** | é o ritmo vertical do degrau, e ele decide onde a linha seguinte cai |
+///
+/// **Por que o peso é a exceção e não os outros três:** peso não muda geometria. Uma linha em 500 e a
+/// mesma em 700 ocupam a mesma caixa, quebram no mesmo ponto e empurram o que vem depois pro mesmo
+/// lugar. Tamanho, tracking e altura mudam a caixa — e caixa mudada por fora é a tela redesenhando a
+/// escada sem dizer que redesenhou.
+///
+/// **O que esta decisão NÃO fecha**: o eixo de ênfase nomeado (um `forte` por degrau, que apareceria
+/// no catálogo). A demanda medida existe e está escrita — peso 600 ×9, 700 ×9, 800 ×5 — e ela virá com
+/// a régua de sempre: quando o mesmo par (tamanho, peso) tiver caso repetido o bastante pra ser
+/// vocabulário em vez de escolha de tela.
 abstract final class BoldType {
   /// A família da UI. `BoldFonts.family` é o nome QUALIFICADO
   /// (`packages/<pacote>/Inter`) — sem o prefixo o Flutter procura no bundle do app e não acha.
