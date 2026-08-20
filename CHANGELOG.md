@@ -20,6 +20,20 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.63.1] — 2026-08-20
+
+### O RATCHET da porta — o pacote não volta a cravar a paleta do Bold
+A v0.63.0 tirou 22 leituras congeladas. Sem gate, elas voltam: nenhuma das 22 pintava errado no Conta
+BOLD, e **valor congelado no produto certo é indistinguível de valor correto** — só aparece quando existe
+um segundo produto, e aí aparece como *"declarei a paleta inteira e metade da tela continua rosa"*.
+
+`o_pacote_nao_crava_a_paleta_do_bold` varre o `lib/` inteiro e reprova `BoldPalette.bold` ou degrau de
+marca por const fora de quatro arquivos declarados (a paleta, o produto, as duas fábricas nomeadas e a
+curva do lockup). Semântico e neutro ficam de fora: o pai declara que são invariantes, e cobrar aqui
+seria inventar dívida que o contrato não reconhece.
+
+Visto vermelho: devolvi um `BoldPalette.bold` ao `BoldVidro.tinte` e ele apontou arquivo e linha.
+
 ## [0.63.0] — 2026-08-20
 
 ### A PORTA — um produto novo passa a conseguir montar o tema, e antes ele parava com a chave na mão
