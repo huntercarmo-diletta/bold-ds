@@ -1,5 +1,5 @@
 import 'package:conta_bold_design_system/conta_bold_design_system.dart';
-import 'package:flutter/material.dart';
+import 'package:diletta_design_system/diletta_design_system.dart' as p;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 
@@ -52,7 +52,14 @@ void main() {
       expect(e.value, matches(RegExp(r'^primary0[1-9]$')),
           reason: '${e.value} não é nome de degrau — o valor é o NOME, e é isso que viaja');
     }
-    expect(mapa.length, 7, reason: 'os 7 degraus de marca medidos nas 77 artes, em 971 pinturas');
+    // O tamanho do mapa não é mais um número só: desde 20/08 ele carrega DUAS chaveaduras, porque
+    // consumimos arte de dois desenhistas. O que é NOSSO se mede tirando o que é dele — assim o
+    // ratchet continua sendo sobre a nossa arte e não empata com o que o pai declara.
+    final dele = p.DilettaIllustrationBrand.rampaDe(BoldPalette.bold).keys.toSet();
+    final nossos = mapa.keys.where((h) => !dele.contains(h)).toList();
+    expect(nossos.length, 7,
+        reason: 'os 7 degraus de marca DESTE produto — medidos em 38 artes, 1751 pinturas, '
+            '403 delas de marca (o resto é neutro e semântico, fora por regra do pai)');
   });
 }
 

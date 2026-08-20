@@ -136,8 +136,9 @@ class BoldTheme {
   /// peça adivinhar por hex — e adivinhar por hex era o defeito do outro pedido do mesmo dia.
   ///
   /// **`hexesDaArte`** é o mapa hex→NOME do degrau, e o nome é a parte que importa: nome sobrevive à
-  /// troca de paleta, cor não. São os 7 degraus de marca que aparecem nas 77 artes deste produto,
-  /// medidos em 971 pinturas. Neutro e semântico ficam de fora por regra do pai — *"cor de marca
+  /// troca de paleta, cor não. São **17 entradas em duas chaveaduras**: os 7 degraus de marca das
+  /// artes DESTE produto (38 arquivos, 1751 pinturas, 403 de marca) e os 10 hexes das artes do PAI,
+  /// que consumimos desde 20/08. Neutro e semântico ficam de fora por regra do pai — *"cor de marca
   /// troca, erro/aviso e neutro são invariantes"*.
   static const DilettaBrand marca = DilettaBrand(
     pacote: 'conta_bold_design_system',
@@ -155,6 +156,22 @@ class BoldTheme {
       '#600627': 'primary02', // 73
       '#300313': 'primary01', // 27
       '#fff6fa': 'primary09', // 4
+      // E os DEZ do PAI, porque desde 20/08 a arte dele também é nossa (`key_word`, `no_data`). A
+      // chave é de quem DESENHOU: o azul está cozido no SVG dele, e declarar mapa próprio desliga a
+      // tabela de fallback inteira (`if (declarado.isNotEmpty)`) — então o mapa que declara UM lado
+      // faz o outro passar direto. Medido: 33 pinturas saíam azuis num app rosa, sem erro nenhum.
+      // O degrau de destino é o MESMO que ele usa, para a arte manter a escada tonal e trocar só a
+      // família.
+      '#002999': 'primary03',
+      '#003be0': 'primary04',
+      '#003de6': 'primary04',
+      '#255df9': 'primary05',
+      '#3369ff': 'primary05',
+      '#2861ff': 'primary05',
+      '#668fff': 'primary06',
+      '#99b4ff': 'primary06',
+      '#b8caff': 'primary07',
+      '#ccdaff': 'primary07',
     },
   );
 

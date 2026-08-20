@@ -20,6 +20,54 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.58.0] — 2026-08-20
+
+### MUDA PIXEL — a arte do pai saía AZUL, e o mapa que declara um lado desliga o outro
+Ontem `key_word` e `no_data` viraram a peça DELE, e o gate que eu escrevi pra isso se chamava *"a arte do
+pai recolore pra nossa paleta"*. **Ele nunca mediu uma cor.** Media o tipo do widget e o tamanho da caixa —
+e passava verde com as duas ilustrações desenhando o azul do primeiro filho dentro de um app rosa.
+
+O que estava errado é uma linha do pai que eu li e não liguei ao meu caso:
+
+```dart
+if (declarado.isNotEmpty) { ...devolve só o mapa do filho... }
+return { /* a tabela que traduz o azul dele */ };
+```
+
+`rampaDe` é **exclusivo, não aditivo**. Declarar os nossos 7 hexes de rosa foi exatamente o que fez o azul
+dele atravessar inteiro: a tabela de fallback deixa de rodar, e hex que o mapa não conhece **passa direto,
+sem erro** — que é o comportamento certo pra neutro e o pior possível pra marca de outra família.
+
+| | antes | agora |
+|---|---|---|
+| entradas em `hexesDaArte` | 7 | **17** |
+| pinturas de marca do pai nas 4 artes que montamos | **33 saíam azuis** | 0 |
+| gate que mede COR na arte dele | nenhum | 3 asserções, vistas vermelhas |
+
+Os 10 hexes novos vão pro **mesmo degrau que ele usa** (`#002999`→`primary03` … `#ccdaff`→`primary07`):
+a arte mantém a escada tonal e troca só a família. E a regra que fica é mais curta que o defeito:
+**o mapa é indexado por quem DESENHOU** — consumir arte de dois desenhistas é carregar as duas chaveaduras.
+
+### MUDA PIXEL — o rótulo do botão `md` vai de 13 para 14 (vem do pai, v0.123.0)
+Chega junto na subida `v0.120.0 → v0.124.0`. O `DilettaButton` era o único texto do DS fora dos 30 papéis
+de tipo; agora o `md` lê `titleSm` (14/500). São **31 sítios de `DilettaButton` no app** e 26 aqui, todos
+1px maiores no rótulo. Não há nada a fazer do nosso lado — é a direção do desenho, medida nas 78 variantes
+do Figma do primeiro filho.
+
+### Também sobe: `marca:` chega na peça montada (pai v0.122.2)
+O conserto do relato de ontem. O widget chamava `apply` sem `marca:`, então mesmo com mapa declarado a peça
+montada caía no fallback. Junto veio um achado dele maior que o relato: `didChangeDependencies` guardava só
+pelo NOME do arquivo, então **trocar de paleta com o mesmo asset não redesenhava** — a chave virou
+(asset + rampa).
+
+### Medido, e não consertado
+- **3 hexes azuis nas artes DELE que a tabela dele não declara** (`#7096ff` ×2, `#f5f9ff` ×2, `#dfe7ff` ×1,
+  em `save_quick_on_boarding`, `with_files_light`, `page_not_found_flat_light`, `sad_face_flatline`).
+  Nenhuma dessas quatro é montada aqui hoje, então não é defeito nosso — é linha pro pai;
+- **os 38 arquivos de arte deste produto carregam dois `<rect>` de moldura do Figma** (o tracejado
+  `#9747FF` e um `#ECECEC`), 76 nós no total. Provei que são invisíveis: as quatro arestas caem fora do
+  `viewBox`. Ficam medidos aqui em vez de virarem uma varredura em 38 arquivos de arte que ninguém pediu.
+
 ## [0.57.0] — 2026-08-20
 
 ### Os quatro vereditos das v0.119.0 e v0.120.0 adotados — e a marca deste produto ENTROU no plugue
