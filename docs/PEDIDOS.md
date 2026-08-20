@@ -52,6 +52,9 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 
 | [o divisor sai 5,4× mais forte que a borda que eu declarei](pedidos/2026-08-20-o-divisor-sai-5-vezes-mais-forte-que-a-borda-que-eu-declarei.md) | **sem veredito** — enviado em 20/08. `Color.lerp` interpola o ALPHA junto: de preto@7% pra branco opaco a opacidade SOBE, e o divisor sai mais escuro que a borda. Achado pelo dono na tela | — |
 
+| [o plugue de marca tinge o logo inteiro, e o meu tem duas cores](pedidos/2026-08-20-o-plugue-de-marca-tinge-o-logo-inteiro-e-o-meu-tem-duas-cores.md) | **sem veredito** — enviado em 20/08. `DilettaBrand` está pronto; o que falta é o `srcIn` ter exceção: 8 `fill` de letra que viram com o tema + 1 gradiente de 8 paradas que não vira | — |
+| [o recolor de ilustração é chaveado pelos hexes do primeiro filho](pedidos/2026-08-20-o-recolor-de-ilustracao-e-chaveado-pelos-hexes-do-primeiro-filho.md) | **sem veredito** — enviado em 20/08. O `rampaDe` é função da paleta no VALOR e tabela fixa na CHAVE: das minhas 971 pinturas de marca em 77 artes, ele acerta zero | — |
+
 ## Ao pai da FERRAMENTA (`catalogo-diletta`)
 
 | pedido | veredito | chegou em |

@@ -39,11 +39,27 @@ abstract final class BoldGradients {
   /// **PRIMARY** — o lockup CONTA BOLD: rosa → coral → amarelo. Gradiente de momento herói: saldo,
   /// avatar de convite, superfície de destaque.
   ///
-  /// As três paradas do símbolo. Tinta: [onGradient] (vinho-tinta), pior parada **5,69:1**.
+  /// **As OITO paradas do símbolo, com os offsets dele.** Tinta: [onGradient] (vinho-tinta), pior
+  /// parada **5,69:1**.
+  ///
+  /// Eram três, escolhidas em 19/08 como amostra da curva — e declaradas SEM offset, o que fez o
+  /// Flutter distribuí-las igualmente e jogar o coral pra 0,5 quando no símbolo ele está em 0,60.
+  /// Medido no arquivo em 20/08: a curva da UI e a curva do logo eram diferentes no mesmo dia em
+  /// que eu disse que o gradiente tinha voltado a ser o do lockup.
   static LinearGradient get primary => LinearGradient(
         begin: const Alignment(-0.8, -1),
         end: const Alignment(0.8, 1),
-        colors: [_p.primary04, BoldColors.lockupCoral, BoldColors.lockupAmarelo],
+        colors: const [
+          BoldColors.lockup01,
+          BoldColors.lockup02,
+          BoldColors.lockup03,
+          BoldColors.lockup04,
+          BoldColors.lockup05,
+          BoldColors.lockup06,
+          BoldColors.lockup07,
+          BoldColors.lockup08,
+        ],
+        stops: BoldColors.lockupStops,
       );
 
   /// **ACCENT** — só laranja, e mais fundo: o âmbar descendo pro tostado. Para controle pequeno,

@@ -78,8 +78,34 @@ class BoldColors {
   // valores moram AQUI e não dentro do arquivo de gradiente. Eles não são degraus — são cores de
   // MARCA declaradas, como o vinho, e um rebrand as alcança neste arquivo.
 
-  /// O CORAL do lockup — a parada do meio do gradiente da marca.
-  static const Color lockupCoral = Color(0xFFFE7B5E);
+  // A CURVA DO LOCKUP tem OITO paradas, e eu tinha declarado três sem os offsets.
+  //
+  // Medido no arquivo do símbolo em 20/08 (`bold-wordmark-brand.svg`): o "O" do BOLD carrega um
+  // gradiente de 8 stops, e as três que eu escolhi em 19/08 são as paradas 1, 5 e 8 dele. Só que
+  // **eu as declarei sem offset**, e o Flutter distribui igualmente: o coral foi pra 0,5 quando no
+  // símbolo ele está em **0,6**. A UI e o logo ficaram com curvas diferentes no mesmo dia em que eu
+  // disse que o gradiente tinha voltado a ser o do lockup.
+  //
+  // Agora são as oito, com os offsets do arquivo. Não é preciosismo: é a diferença entre a marca
+  // desenhada e uma amostra dela — e a amostra estava deslocada exatamente onde o olho pega, no meio
+  // da transição rosa→âmbar.
+
+  /// A curva do lockup, parada por parada, na ordem do símbolo.
+  static const Color lockup01 = primary04; // #FE3976 · offset 0
+  static const Color lockup02 = Color(0xFFFE3D74); // offset 0,14
+  static const Color lockup03 = Color(0xFFFE4A70); // offset 0,29
+  static const Color lockup04 = Color(0xFFFE5E69); // offset 0,45
+  static const Color lockup05 = Color(0xFFFE7B5E); // offset 0,60 — o CORAL
+  static const Color lockup06 = Color(0xFFFEA150); // offset 0,75
+  static const Color lockup07 = Color(0xFFFECE40); // offset 0,91
+  static const Color lockup08 = Color(0xFFFEED35); // offset 1 — o AMARELO
+
+  /// Os offsets do arquivo, na mesma ordem. Declarados porque a distribuição igual do Flutter é o
+  /// que desalinhou a curva da UI da curva do símbolo.
+  static const List<double> lockupStops = [0, 0.14, 0.29, 0.45, 0.60, 0.75, 0.91, 1];
+
+  /// O CORAL do lockup — a parada do meio (offset 0,60).
+  static const Color lockupCoral = lockup05;
 
   // ═══════════════════════════════════════════════════════════════════════
   // AS SUPERFÍCIES DO CLARO QUE O CONTRATO DO PAI AINDA NÃO TEM

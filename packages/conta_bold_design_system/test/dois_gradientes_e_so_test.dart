@@ -28,13 +28,22 @@ void main() {
         everyElement(isIn([BoldPalette.bold.warning03, BoldPalette.bold.warning02])));
   });
 
-  test('o primary é o LOCKUP de três paradas; o accent segue com duas de rampa', () {
+  test('o primary é o LOCKUP de OITO paradas, com os offsets do arquivo', () {
     // Reaberto em 19/08 pelo dono do produto. A terceira parada (o amarelo do símbolo) tinha caído
     // em 30/07 por tornar o gradiente ilegível — e o que a reabertura mostrou é que o ilegível era
     // o BRANCO, não o gradiente: com a tinta escura o pior caso é 5,69 contra os 3,37 de antes.
     const p = BoldPalette.bold;
-    expect(BoldGradients.primary.colors,
-        [p.primary04, BoldColors.lockupCoral, BoldColors.lockupAmarelo]);
+    // **As OITO paradas do arquivo, com os offsets dele.** Eram três até 20/08, escolhidas como
+    // amostra da curva — e declaradas SEM offset, o que fez o Flutter distribuí-las igualmente e
+    // jogar o coral pra 0,5 quando no símbolo ele está em 0,60. A UI e o logo tinham curvas
+    // diferentes no mesmo dia em que eu disse que o gradiente era o do lockup.
+    expect(BoldGradients.primary.colors, [
+      BoldColors.lockup01, BoldColors.lockup02, BoldColors.lockup03, BoldColors.lockup04,
+      BoldColors.lockup05, BoldColors.lockup06, BoldColors.lockup07, BoldColors.lockup08,
+    ]);
+    expect(BoldGradients.primary.stops, BoldColors.lockupStops,
+        reason: 'sem os offsets do arquivo o Flutter distribui igual, e a curva da UI deixa de ser '
+            'a curva do símbolo — foi exatamente o defeito de 19/08');
     expect(BoldGradients.accent.colors, [p.warning03, p.warning02]);
   });
 
@@ -46,11 +55,11 @@ void main() {
     //
     // O gate mede a POSSE, não a contagem: mudar o gradiente é livre, esconder um hex nele não é.
     final permitidos = {
-      BoldPalette.bold.primary04,
       BoldPalette.bold.warning03,
       BoldPalette.bold.warning02,
-      BoldColors.lockupCoral,
-      BoldColors.lockupAmarelo,
+      // As oito paradas do lockup, declaradas na paleta. `lockup01` É o `primary04`.
+      BoldColors.lockup01, BoldColors.lockup02, BoldColors.lockup03, BoldColors.lockup04,
+      BoldColors.lockup05, BoldColors.lockup06, BoldColors.lockup07, BoldColors.lockup08,
     };
     for (final g in BoldGradients.todos.entries) {
       for (final c in g.value.colors) {

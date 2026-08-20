@@ -20,6 +20,63 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.56.0] — 2026-08-20
+
+### Corrigido — a curva do lockup tem OITO paradas, e eu tinha declarado três SEM offset
+
+Defeito meu, de ontem, achado indo medir o logo. A `v0.54.0` trouxe o gradiente da marca de volta pro
+lockup e eu declarei três paradas: `#FE3976 → #FE7B5E → #FEED35`. Abrindo o arquivo do símbolo
+(`bold-wordmark-brand.svg`), o "O" do BOLD carrega **oito**:
+
+```
+0     #FE3976     0,45  #FE5E69     0,75  #FEA150     1     #FEED35
+0,14  #FE3D74     0,60  #FE7B5E     0,91  #FECE40
+```
+
+As três que eu escolhi são as paradas 1, 5 e 8 — uma amostra da curva, e isso seria defensável. **O que
+não é: eu as declarei sem `stops`.** O Flutter distribui igualmente, então o coral foi pra 0,5 quando no
+símbolo ele está em **0,60** — e o deslocamento cai exatamente no meio da transição rosa→âmbar, que é
+onde o olho pega.
+
+Ou seja: no mesmo dia em que eu escrevi *"o gradiente voltou a ser o do lockup"*, a curva da UI e a
+curva do logo eram diferentes. Agora são as oito, com os offsets do arquivo, declaradas na paleta
+(`BoldColors.lockup01..08` + `lockupStops`) — porque parada de gradiente de marca é valor de marca, e
+valor de marca fora da paleta é valor que o rebrand não alcança.
+
+O gate mudou de asserção junto: ele conferia três cores e agora confere as oito **e os offsets**, com
+a razão escrita de por que o offset entrou na conta.
+
+### Declarado — o que o logo e as ilustrações ainda não tokenizam, com os dois pedidos
+
+O dono do produto perguntou pelos dois, e os dois mecanismos **já existem no pai**. O que não existe é
+a forma que este produto tem:
+
+**O logo.** `DilettaBrand` é o plugue de asset de marca (`pacote`, `logo`, `logoFull`, `logoParceiro`,
+carteiras, selos) e está pronto. Mas `DilettaLogo` aplica `ColorFilter.srcIn` no arquivo inteiro, e o
+lockup deste produto tem **duas partes com regras opostas**: 8 `fill` de letra que viram com o tema, e
+1 gradiente de 8 paradas que não vira. Com `srcIn`, o gradiente morre junto. **É a única razão de
+`BoldLogo` ainda ser peça privada** — e a razão que está escrita no inventário (*"o pai tem a marca
+DELE"*) está errada desde que o plugue existe. Pedido enviado.
+
+**As ilustrações.** `DilettaIllustrationBrand.rampaDe(paleta)` recolore a arte trocando os hexes
+cozidos pelos degraus da paleta ativa — exatamente o que o dono descreveu. Medi as 77 artes deste
+produto: **3.841 pinturas**, das quais **971 são marca** (`primary01..09`, em 7 degraus) e o resto é
+neutro ou semântico, que a regra do pai deixa invariante de propósito. E o `rampaDe` acerta **zero das
+971**, porque as chaves dele são o azul do primeiro filho.
+
+O `///` dele já diz o que ele é: *"este mapa é função da PALETA, não uma tabela fixa"*. Ele é função da
+paleta no VALOR e tabela fixa na CHAVE — e a chave é dado de quem exportou o arquivo. Pedido enviado.
+
+### Medido e declarado — o roxo de placeholder do Figma nas 77 artes
+
+Todas as 77 ilustrações carregam `<rect stroke="#9747FF" stroke-dasharray="10 5">`, que é o retângulo
+tracejado de placeholder do Figma exportado junto. **Conferi os 77 antes de chamar de defeito: em
+nenhum a borda cai dentro do `viewBox`** — largura 331 num viewBox de 300, então as bordas verticais
+ficam sempre fora, e a altura de 807 põe as horizontais longe. É peso morto, não pintura.
+
+Fica declarado em vez de consertado porque a limpeza é no Figma, não aqui: apagar o `rect` de 77
+arquivos consertaria a cópia e não a exportação.
+
 ## [0.55.1] — 2026-08-19
 
 ### Declarado — o degrau de tipo cede o PESO, e só o peso
