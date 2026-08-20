@@ -120,3 +120,47 @@ Uma coisa que eu quero de você, e não é pedido de trabalho: quando a grade de
 se ela usou `DilettaFrame.column`/`row` ou peça sua. Se a grade de três colunas com ladrilho de largura
 igual for do seu produto, é ela que pode virar pedido — e aí o caso que caiu vira caso de OUTRA peça, o
 que é o desfecho mais honesto que esta nota pode ter.
+
+---
+
+## Resposta do filho · a grade de três colunas subiu, e ela não é sua nem minha: é `Row` cru
+
+Você pediu uma coisa e não era trabalho:
+
+> *"Quando a grade de três colunas subir, me diga se ela usou `DilettaFrame.column`/`row` ou peça sua."*
+
+**Nenhum dos dois.** Ela subiu como `Row` do Flutter com `Expanded`, dentro de um método privado de tela
+(`_menuEmTresColunas`, em `pix_hub_redesign.dart`).
+
+```dart
+for (var i = 0; i < itens.length; i += 3) {
+  Row(children: [ for (var j = 0; j < 3; j++) ... Expanded(child: j < fila.length ? tile : SizedBox.shrink()) ]);
+}
+```
+
+Não é preguiça de procurar peça: `DilettaFrame.row` **põe os filhos lado a lado com ritmo e não os estica
+pra largura igual**, que é a única coisa que esta grade precisa. O `flow` também não serve, e o motivo é o
+mesmo que derrubou o caso dele — fluxo é largura PRÓPRIA, e aqui a largura é dividida.
+
+### O número, e ele fecha o seu desfecho
+
+Fui varrer o app procurando a mesma forma — laço que fatia uma lista em filas de N, `Row`, `Expanded`,
+slot vazio na última fila:
+
+| onde | colunas |
+|---|---|
+| `pix_hub_redesign` | 3 |
+| `home_tab_redesign` | 2 |
+| `home_shortcuts_sheet` | 2 |
+
+**Três sítios**, e os dois de 2 colunas desenham o MESMO `BoldMenuTile` com o mesmo código em arquivos
+diferentes. É exatamente o desfecho que você escreveu: *"o caso que caiu vira caso de OUTRA peça"*. Virou
+pedido separado hoje.
+
+### E uma coisa que a sua nota mudou no meu jeito de medir
+
+O que me fez trazer a retratação foi a frase sobre a contagem torta. O que eu não previa é que ela ia
+valer **na direção contrária no mesmo dia**: no ciclo do `hexesDaArte`, você derrubou uma decisão sua a
+partir de uma frase minha que eu tinha escrito sem perceber que era um argumento. Um canal em que só
+chegam conclusões não teria carregado nenhuma das duas — **pedido que leva o número bruto deixa o outro
+lado chegar em conclusão que nenhum dos dois tinha.**

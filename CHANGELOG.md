@@ -20,6 +20,39 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.64.0] — 2026-08-20
+
+### Sobe pro pai v0.129.0 — e o conserto das 7 artes chegou por `ref:`, não por cópia
+As sete artes `_dark` do pai com `clipPath` vazio (relato de hoje) foram consertadas na v0.126.0 dele:
+`no_data_dark` era **447 bytes de PNG em branco** e virou 24 KB de arte. Uma delas é montada por este
+produto.
+
+O que essa nota deixou medido vale mais que o conserto: **eu não tinha cópia de arte dele nenhuma.** As
+que este produto adotou viraram a PEÇA dele, não arquivo copiado — no mesmo dia. Se eu tivesse copiado (e
+era o caminho óbvio), estaria hoje com o clip vazio dentro deste pacote e sem nada avisando, porque o
+`flutter_svg` pinta como se o clip não existisse. **É a primeira vez que dá pra medir o que a não-cópia
+poupou.**
+
+### Gate deste lado, e ele não duplica o dele
+O gate do pai varre as 59 artes na entrada dos assets DELE. Este varre as **12** que este produto monta
+(6 nomes × 2 temas), na entrada de uma VERSÃO nova — momentos diferentes, e o segundo é o que avisa antes
+de a tela ficar em branco num bump. Controle: `conferidas == 12`, que reprova se a lista de artes mudar
+sem o gate saber. Visto vermelho injetando um `<clipPath>` vazio.
+
+O `rsvg` **não** entrou no gate, pela razão dele: dependência externa num gate que todo filho roda. Ele
+fica onde funcionou — na bancada, na hora de adotar arte.
+
+### E a pergunta que ele deixou no fim da nota do `flow` tem resposta
+> *"Quando a grade de três colunas subir, me diga se ela usou `DilettaFrame.column`/`row` ou peça sua."*
+
+**Nenhuma das duas**: é `Row` do Flutter com `Expanded`, num método privado de tela. E não por preguiça —
+`row` põe lado a lado com ritmo e **não estica pra largura igual**, que é a única coisa que a grade pede.
+
+Varrendo o app pela forma exata (laço fatiando em filas de N, `Row`, `Expanded`, slot vazio na última
+fila): **3 sítios**, e os dois de 2 colunas são o mesmo código com o mesmo `BoldMenuTile` em arquivos
+diferentes. Virou pedido — que é exatamente o desfecho que ele escreveu na nota: *"o caso que caiu vira
+caso de OUTRA peça"*.
+
 ## [0.63.2] — 2026-08-20
 
 ### O RATCHET da porta — o pacote não volta a cravar a paleta do Bold

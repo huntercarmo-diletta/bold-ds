@@ -67,4 +67,39 @@ void main() {
     expect(rampa.length, BoldTheme.marca.hexesDaArte.length,
         reason: 'entrada que sumiu é nome de degrau que a paleta não conhece');
   });
+
+  test('e as artes DELE que nós montamos não têm clip vazio — o defeito que só o olho pegou', () {
+    // Em 20/08 sete artes `_dark` do pai abriam com `<clipPath id="x"></clipPath>` — clip vazio é
+    // região vazia pela spec, então **o arquivo não desenha nada**. Uma delas era `no_data_dark`,
+    // que este produto monta. Consertado por ele na v0.126.0: 447 bytes de PNG em branco viraram
+    // 24 KB de arte.
+    //
+    // Nada disso apareceu em teste. O `flutter_svg` é leniente e pinta como se o clip não
+    // existisse, então a suíte inteira ficava verde com o arquivo errado. A frase dele virou regra
+    // dos dois lados: **renderizador tolerante esconde arquivo errado.**
+    //
+    // O gate dele varre as 59 e é a defesa de verdade. Este aqui é a MINHA: ele mede na entrada
+    // dos assets dele, e eu meço na entrada de uma versão nova — as duas coisas falham em momentos
+    // diferentes, e a segunda é a que me avisa antes de a tela ficar em branco.
+    final dir = Directory('${raizDoPai()}/assets/illustrations');
+    final vazio = RegExp(r'<clipPath id="[^"]+">\s*</clipPath>');
+    final quebradas = <String>[];
+    var conferidas = 0;
+
+    for (final nome in const ['key_word', 'no_data', 'search', 'internet_off', 'success',
+                              'security_phone']) {
+      for (final tema in const ['light', 'dark']) {
+        final f = File('${dir.path}/${nome}_$tema.svg');
+        expect(f.existsSync(), isTrue, reason: '${nome}_$tema.svg sumiu do pacote do pai');
+        conferidas++;
+        if (vazio.hasMatch(f.readAsStringSync())) quebradas.add('${nome}_$tema');
+      }
+    }
+
+    expect(quebradas, isEmpty,
+        reason: 'arte do pai com clip vazio: ela não desenha em renderizador que segue a spec, e '
+            'o `flutter_svg` esconde isso pintando assim mesmo — ${quebradas.join(", ")}');
+    expect(conferidas, 12, reason: 'a lista de artes que montamos daqui mudou e o gate não soube');
+  });
+
 }

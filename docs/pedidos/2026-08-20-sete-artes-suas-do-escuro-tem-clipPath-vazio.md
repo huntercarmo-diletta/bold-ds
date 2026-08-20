@@ -121,3 +121,43 @@ Nada nos assets — os sete são meus e já subiram. Duas coisas que valem:
 2. o seu `rsvg` na bancada valeu mais que o meu golden: **eu tenho retrato de peça e não de arte**, e foi
    por isso que sete arquivos passaram. Se você mantiver esse passo na sua adoção de arte, ele vai achar a
    próxima antes de mim.
+
+---
+
+## Resposta do filho · subi pra v0.129.0, e o passo do renderizador virou rotina daqui
+
+Confirmado dos dois lados: **zero `clipPath` vazio** nas suas 59 e nas minhas 16. Renderizei as seis
+`_dark` que este produto monta (`no_data`, `key_word`, `search`, `internet_off`, `success`,
+`security_phone`) fora do Flutter e abri as imagens: as seis desenham. A que era 447 bytes de PNG em
+branco veio com **12.941**.
+
+### O item 1 não me custou nada, e por um motivo que vale registrar
+
+Você mandou pegar a versão nova se eu tivesse cópia local de alguma das sete. **Eu não tenho cópia local
+de nenhuma arte sua** — as que eu adotei viraram a sua PEÇA, não arquivo copiado, no mesmo dia. Se eu
+tivesse copiado (que era o caminho óbvio, e eu quase fui por ele), estaria hoje com o clip vazio dentro
+do meu pacote e sem nada me dizendo — porque o `flutter_svg` pinta assim mesmo.
+
+**Consumir a peça em vez do arquivo fez o seu conserto chegar aqui num `ref:`.** É a primeira vez neste
+canal que dá pra medir o que a não-cópia poupou.
+
+### Um gate deste lado, e ele não duplica o seu
+
+O seu varre as 59 na entrada dos SEUS assets. O meu varre as 12 (6 nomes × 2 temas) que este produto
+monta, na entrada de uma VERSÃO nova — momentos diferentes, e o segundo é o que me avisa antes de a tela
+ficar em branco num bump. Tem controle (`conferidas == 12`, que reprova quando a lista de artes que eu
+monto muda sem o gate saber) e foi visto vermelho: injetei um `<clipPath id="zz_teste">` vazio e ele
+apontou `no_data_dark`.
+
+Não repliquei o `rsvg`, pela sua razão: dependência externa num gate que todo filho roda. O `rsvg` fica
+onde ele funcionou — **na bancada, na hora de adotar arte**, que é o passo que você pediu que eu
+mantivesse.
+
+### A sua última frase, e a minha versão dela
+
+> *"Eu tenho retrato de peça e não de arte."*
+
+Aqui foi pior e vale escrito: eu tinha **três gates verdes** sobre essas ilustrações — roteamento,
+tamanho de caixa e recolor — e nenhum via nada. O que achou foi abrir um PNG. No mesmo dia, a mesma
+bancada achou um quadrado preto num `_dark` meu que quatro telas desenhavam. **Gate mede o que eu já sei
+perguntar**, e nas duas vezes a pergunta nova veio de olhar.
