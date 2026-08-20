@@ -20,6 +20,34 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.60.0] — 2026-08-20
+
+### MUDA PIXEL — `internet_off` desenhava um QUADRADO PRETO no escuro, em 4 telas
+Achado do jeito que só se acha assim: renderizando as 14 artes numa folha e **olhando**. Todas com o
+blob vinho no fundo da página, e uma com um retângulo preto sólido de canto a canto.
+
+```xml
+<g id="Theme=Dark">
+  <rect width="300" height="300" transform="translate(2)" fill="black"/>   <!-- a prancheta -->
+```
+
+É o fundo da prancheta do Figma exportado junto. O `_light` do mesmo nome não tem. Na página escura do
+app isso é um quadrado preto atrás da ilustração com a emenda aparecendo nos quatro cantos, e ele
+estava lá em `extrato`, `autorizações`, `notificações` e no sheet da Letti.
+
+**Nenhum gate podia ver.** O arquivo existe, o recolor roda, os pixels mudam, o teste de paleta passa
+igual: *"não viola"* nunca foi *"está bom"*.
+
+### O gate que nasceu disso, e ele começou CEGO
+Regra nova: nenhuma arte pinta a própria página — fundo é da TELA, e ilustração que pinta o próprio
+fundo trava o tema num valor. O gate varre os 22 arquivos procurando `<rect>` do tamanho do `viewBox`
+com `fill` opaco, ignorando o que está dentro de `clipPath`/`mask` (lá o rect é REGIÃO, não tinta:
+`success_alt` tem um branco no clip, e apagá-lo deixa o arquivo em branco — tentei).
+
+A primeira versão exigiu `width >= viewBox` e **ficou verde com o defeito na frente dela**: o `viewBox`
+do `internet_off` é 302×302 e o rect é 300×300. **Dois pixels de folga.** Passou a exigir 95%, e aí eu
+vi vermelho antes de ver verde.
+
 ## [0.59.0] — 2026-08-20
 
 ### A ARTE deste produto entrou no pacote — e agora ela segue a PALETA
