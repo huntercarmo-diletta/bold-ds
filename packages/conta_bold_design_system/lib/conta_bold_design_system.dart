@@ -111,19 +111,28 @@ class BoldTheme {
   static const DilettaBrand marca = BoldProduto.marcaDoBold;
 }
 
-/// Uma tela do Bold montada SÓ com componentes do pai.
+/// Uma tela montada SÓ com componentes do pai.
 ///
 /// Serve de exemplo e de instrumento: é o que o teste renderiza pra medir se sobrou
 /// cor do primeiro filho em algum lugar.
+///
+/// **Recebe o PRODUTO desde 20/08**, e não é generalização especulativa: esta tela é o instrumento
+/// que responde *"um filho do Bold consegue?"* com uma imagem em vez de uma asserção. Renderizada
+/// com dois produtos lado a lado, ela mostra em um quadro o que 20 `expect` afirmam em partes.
 class TelaDeExemploBold extends StatelessWidget {
-  const TelaDeExemploBold({super.key, this.escuro = false});
+  const TelaDeExemploBold({super.key, this.escuro = false, BoldProduto? produto})
+      : _produto = produto;
 
   final bool escuro;
+  final BoldProduto? _produto;
+
+  /// O produto desta tela. Sem nada declarado, é o Conta BOLD.
+  BoldProduto get produto => _produto ?? BoldProduto.bold;
 
   @override
   Widget build(BuildContext context) {
     return DilettaThemeScope(
-      theme: escuro ? BoldTheme.dark : BoldTheme.light,
+      theme: escuro ? produto.escuro : produto.claro,
       child: Builder(
         builder: (ctx) {
           final s = DilettaTheme.schemeOf(ctx);

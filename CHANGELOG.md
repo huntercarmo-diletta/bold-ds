@@ -20,7 +20,7 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
-## [0.63.1] — 2026-08-20
+## [0.63.2] — 2026-08-20
 
 ### O RATCHET da porta — o pacote não volta a cravar a paleta do Bold
 A v0.63.0 tirou 22 leituras congeladas. Sem gate, elas voltam: nenhuma das 22 pintava errado no Conta
@@ -33,6 +33,17 @@ curva do lockup). Semântico e neutro ficam de fora: o pai declara que são inva
 seria inventar dívida que o contrato não reconhece.
 
 Visto vermelho: devolvi um `BoldPalette.bold` ao `BoldVidro.tinte` e ele apontou arquivo e linha.
+
+### E a porta foi provada com o OLHO, não só com asserção
+Montei um neto de verdade — paleta verde, vinho verde, curva de três paradas — e renderizei a mesma tela
+com os dois produtos, claro e escuro: gradiente, vinho, vidro, `DilettaButton`, `TextButton` do Material,
+campo e selo de status. **Os quatro quadros saem inteiros na cor de cada um.**
+
+E o caminho até o quadro é o resto da resposta: a primeira tentativa **estourou** em
+`p.tinteDeVidroEscuro!`, porque a paleta do neto não declarava os 5 campos de vidro. É o comportamento
+documentado, e vê-lo acontecer é o que separa *"está escrito que estoura"* de *"estoura"*. O
+`TelaDeExemploBold` passou a receber `BoldProduto` pra que esse quadro seja reproduzível — ela já existia
+como *"o instrumento que mede se sobrou cor do primeiro filho"*, e agora mede o caso que importa.
 
 ## [0.63.0] — 2026-08-20
 
