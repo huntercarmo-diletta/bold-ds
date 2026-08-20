@@ -83,123 +83,106 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
   final Color danger, success, warning, info;
 
   bool get isDark => brightness == Brightness.dark;
+  /// O ESQUEMA A PARTIR DE UMA PALETA — e é esta assinatura que faz o DS ser retematizável.
+  ///
+  /// **Até 19/08 as duas fábricas cravavam `BoldPalette.bold` por dentro.** Isso quer dizer que um
+  /// neto deste DS não tinha como pedir o esquema DELE: trocar a paleta não mudava nada, porque nada
+  /// aqui lia a paleta que foi passada — não existia paleta passada.
+  ///
+  /// A pergunta que produziu esta mudança foi do dono do produto: *"se o Bold tiver um filho, apenas
+  /// mudando os tokens conseguiremos mudar toda a aplicação?"*. A resposta medida era **não**: 8
+  /// papéis cravados no escuro e 13 no claro, 21 valores dentro deste arquivo. Os componentes estavam
+  /// limpos (zero hex real nos 33 do pacote); quem decidia cor fora do contrato era o tradutor entre
+  /// paleta e papel, que é a última camada onde isso deveria acontecer.
+  ///
+  /// ## As três formas de um papel chegar aqui
+  ///
+  /// 1. **derivado do pai** — `DilettaScheme` resolve 57 papéis a partir da paleta. É o caminho da
+  ///    maioria, e o único que não precisa de nada deste arquivo;
+  /// 2. **derivado por REGRA** — o valor é uma função da paleta, não um literal: *"no claro a marca
+  ///    escreve com o degrau profundo"*, *"a borda suave é a tinta de borda a 5%"*, *"o scrim é o
+  ///    fundo a 85%"*. A regra viaja; o valor não;
+  /// 3. **`papeisExtras` da paleta** — vocabulário que o pai não tem (superfície elevada, superfície
+  ///    pressionada, fluxo secundário, informação). O neto declara os dele na paleta dele.
+  ///
+  /// ## Os DOIS que ainda não viajam, e eles têm nome
+  ///
+  /// `background` e `field` no CLARO. A paleta do pai tem os campos de override do ESCURO
+  /// (`bgEscuro`, `surfaceEscura`, `surfaceMutedEscura`) e ganhou o espelho do claro pro TEXTO e pra
+  /// BORDA na `v0.111.0` — faltou o espelho do claro pras SUPERFÍCIES. Pedido aberto em 19/08.
+  ///
+  /// Enquanto ele não vem, os dois leem constante nomeada na paleta deste filho, e é isso que os
+  /// mantém localizáveis: **2 de 44 valores**, com o motivo escrito e um gate contando.
+  factory BoldScheme.de(DilettaPalette paleta, {required Brightness brilho}) {
+    final escuro = brilho == Brightness.dark;
+    final d = escuro ? DilettaScheme.dark(paleta) : DilettaScheme.light(paleta);
 
-  /// O ESCURO — **e TREZE papéis vêm do `DilettaScheme`** desde 19/08; eram onze, e os dois que entraram
-  /// são a marca e a tinta dela.
-  ///
-  /// Este bloco era `const` com 25 hex escritos à mão, ao lado de um `DilettaScheme` que resolve
-  /// os mesmos papéis a partir da paleta do filho. Duas fontes pro mesmo valor é a definição de
-  /// drift esperando acontecer, e o `border` provou: ele e o do pai eram `0x14FFFFFF` hex por hex,
-  /// por caminhos separados.
-  ///
-  /// A troca custou o `const`. É o preço certo: `const` aqui congelava a decisão no app, e a
-  /// decisão é do DS.
-  ///
-  /// **Eram três os que não derivavam; desde 19/08 é UM.**
-  ///
-  /// O `primary` e o `onPrimary` do escuro entraram: o dono do produto escolheu a marca do pai
-  /// (`primary05`, `#F66FA0`) em vez do `primary04` do logo, com a tinta derivada dele. A frase que
-  /// estava escrita aqui — *"o número dele fica como aviso de que este par precisa ser medido no dia
-  /// em que o 05 entrar"* — foi cobrada no dia em que o 05 entrou: **o par foi de 3,46 (branco sobre
-  /// o 04) pra 7,70 (tinta derivada sobre o 05)**.
-  ///
-  /// O que sobra:
-  ///
-  /// - `primaryWash`: alpha da marca a 20%, contra o `primarySubtle` SÓLIDO do pai. Fill
-  ///   translúcido e fill sólido são materiais diferentes, não versões.
-  factory BoldScheme.dark() {
-    final d = DilettaScheme.dark(BoldPalette.bold);
+    /// Um papel que o pai não tem, lido da paleta. Sem declaração, cai no valor deste produto — o
+    /// fallback existe pra uma paleta incompleta desenhar em vez de estourar, e o gate cobra que a
+    /// paleta do Bold declare os quatro.
+    Color extra(String nome, Color reserva) {
+      final e = paleta.papeisExtras[nome];
+      return e == null ? reserva : (escuro ? e.escuro : e.claro);
+    }
+
+    /// A tinta de BORDA: branco no escuro, preto no claro. É sobre ela que os dois alphas incidem.
+    final tintaDeBorda = escuro ? paleta.white : paleta.black;
+
+    /// O fundo da página — e é aqui que mora um dos dois que não viajam.
+    final fundo = escuro ? d.bg : BoldColors.fundoClaroDaPagina;
+
     return BoldScheme(
-      brightness: Brightness.dark,
-      background: d.bg,
+      brightness: brilho,
+      // ── derivados do pai ──────────────────────────────────────────────────
       surface: d.surface,
-      field: d.surfaceMuted,
       textPrimary: d.fg,
       textSecondary: d.textSecondary,
       textMuted: d.textMuted,
       border: d.border,
-      primaryPressed: d.primaryPressed,
-      danger: d.error,
-      success: d.success,
-      warning: d.warning,
-      // ── daqui pra baixo, o que a linguagem não diz (ou diz outra coisa) ──
-      // A MARCA DO ESCURO passou a ser a do pai em 19/08, por decisão do dono do produto.
-      //
-      // Aqui era `primary04` cravado (`#FE3976`, o rosa do logo) com tinta BRANCA, contra o
-      // `primary05` (`#F66FA0`) que a linguagem clareia de propósito — *"a marca precisa pulsar no
-      // dark"* — com a tinta derivada, que sai escura.
-      //
-      // O que decidiu foi a divergência, não o contraste: as peças do pai pintavam escuro sobre o 05
-      // e as minhas pintavam branco sobre o 04, na mesma tela. O `tintasAssumidas` fechou isso no
-      // CLARO; no escuro o teto de 3:1 barra o branco (ele dá **2,73** sobre o 05), então havia duas
-      // saídas: pedir ao pai que o escuro dele use o 04, ou adotar o 05. O dono escolheu adotar.
-      //
-      // **O preço é visível e está medido**: o rótulo do CTA no escuro deixa de ser branco (3,46) e
-      // passa a ser a tinta derivada (**7,70**), e o rosa da marca no escuro deixa de ser o do logo.
-      // Contraste melhor, marca menos literal — foi a troca escolhida.
-      primary: d.primary,
       onPrimary: d.onPrimary,
-      primaryWash: const Color(0x33FE3976), // alpha 20%, e o subtle do pai é sólido
-      secondaryFlow: const Color(0xFF100913), // wine-ink dos fluxos secundários
-      surfaceRaised: const Color(0xFF1A1B27),
-      surfacePressed: const Color(0xFF2A2C3A),
-      borderSoft: const Color(0x12FFFFFF),
-      borderStrong: const Color(0x2EFFFFFF),
-      overlay: const Color(0xB30A0B12),
-      info: const Color(0xFF3B82F6),
+      success: d.success,
+      warning: d.warning,
+      // ── derivados por REGRA ───────────────────────────────────────────────
+      background: fundo,
+      // O scrim é o FUNDO com alpha, não uma cor própria: assim ele acompanha a página em qualquer
+      // paleta. 70% no escuro e 85% no claro porque o claro precisa de mais véu pra o conteúdo
+      // atrás parar de competir.
+      overlay: fundo.withValues(alpha: escuro ? 0.70 : 0.85),
+      // **No claro a marca escreve com o degrau PROFUNDO**, e não com o degrau de ação. A página é
+      // branca: link e rótulo no 04 reprovariam contraste. Medido: `primary03` dá 8,03 sobre o
+      // branco contra 3,46 do 04. A REGRA viaja; o hex não.
+      primary: escuro ? d.primary : paleta.primary03,
+      primaryPressed: escuro ? d.primaryPressed : paleta.primary02,
+      danger: escuro ? d.error : paleta.error03,
+      // Fill TRANSLÚCIDO no escuro contra o `primarySubtle` SÓLIDO do pai: são materiais diferentes,
+      // não versões — e o translúcido deixa a arte de fundo aparecer por baixo do tinte.
+      primaryWash:
+          escuro ? paleta.primary04.withValues(alpha: 0.20) : d.primarySubtle,
+      // Os dois alphas de borda. Alpha não é valor de marca: ele viaja inteiro pra qualquer paleta,
+      // porque o que muda de produto pra produto é a TINTA, e ela vem da paleta acima.
+      borderSoft: tintaDeBorda.withValues(alpha: escuro ? 0.07 : 0.05),
+      borderStrong: tintaDeBorda.withValues(alpha: escuro ? 0.18 : 0.14),
+      // ── o vocabulário que é deste produto, declarado na paleta ─────────────
+      surfaceRaised: extra('superficieElevada',
+          escuro ? BoldColors.superficieElevadaEscura : BoldColors.superficieElevadaClara),
+      surfacePressed: extra('superficiePressionada',
+          escuro ? BoldColors.superficiePressionadaEscura : BoldColors.superficiePressionadaClara),
+      secondaryFlow: extra('fluxoSecundario',
+          escuro ? BoldColors.fluxoSecundarioEscuro : BoldColors.fluxoSecundarioClaro),
+      info: extra('info', BoldColors.info),
+      // ── e o segundo que não viaja ─────────────────────────────────────────
+      field: escuro ? d.surfaceMuted : BoldColors.campoClaro,
     );
   }
 
-  /// O CLARO — **nove dos catorze derivam desde 18/08**, e os cinco que ficam têm número.
-  ///
-  /// Eram cinco derivando. O pedido do espelho fechou na `ds v0.111.0` e o filho declarou os
-  /// quatro campos do claro, então `textSecondary`, `textMuted` e `border` entraram — e o
-  /// `textMuted` entrou consertado: ele estava em **2,96** sobre a superfície, abaixo do piso de
-  /// texto grande, e agora é **3,54**. Foi a régua que este filho apontou pro pai no escuro que
-  /// acusou o defeito aqui dentro.
-  ///
-  /// **Os cinco que não derivam, com o número de cada um** (contraste sobre o branco):
-  ///
-  /// - `primary`: aqui `primary03` (**8,03**), no scheme `primary04` (**3,46**). O claro deste
-  ///   produto usa os degraus PROFUNDOS porque o fundo é branco — link e rótulo de CTA no 04
-  ///   reprovariam. A derivação do pai não está errada: ela é neutra e serve quem não declara;
-  /// - `danger`: `error03` (**6,57**) contra `error04` (**3,68**), mesma razão;
-  /// - `onPrimary`: branco aqui, preto no scheme — consequência do par acima, e o preto dele é
-  ///   medido pro 04;
-  /// - `primaryPressed`: `primary02` contra o `stateSelected` dele, que é um wash;
-  /// - `background`: `#F4F3F6` contra branco puro. A página deste produto não é a superfície.
-  ///
-  /// Os dois primeiros são caso do eixo `ajustesDePapel` (motivo `contraste`) que o pai abriu na
-  /// `v0.77.0`. É o próximo pedido, e ele vai com os pares medidos.
-  factory BoldScheme.light() {
-    final d = DilettaScheme.light(BoldPalette.bold);
-    return BoldScheme(
-      brightness: Brightness.light,
-      surface: d.surface,
-      textPrimary: d.fg,
-      success: d.success,
-      warning: d.warning,
-      primaryWash: d.primarySubtle,
-      textSecondary: d.textSecondary,
-      textMuted: d.textMuted,
-      border: d.border,
-      // ── os cinco que divergem, com o número no `///` acima ──
-      background: const Color(0xFFF4F3F6), // a página não é a superfície
-      field: const Color(0xFFF1F0F4), // o do pai é neutral09
-      primary: const Color(0xFF9E1241), // primary03 (8,03); o do pai é o 04 (3,46)
-      onPrimary: const Color(0xFFFFFFFF), // o do pai é preto
-      primaryPressed: const Color(0xFF600627), // primary02; o do pai é o stateSelected
-      danger: const Color(0xFFB42318), // error03 (6,57); o do pai é o 04 (3,68)
-      // ── e os que a linguagem não tem, iguais nos dois modos ──
-      secondaryFlow: const Color(0xFFF6F3F5),
-      surfaceRaised: const Color(0xFFFFFFFF),
-      surfacePressed: const Color(0xFFE8E7EE),
-      borderSoft: const Color(0x0D000000),
-      borderStrong: const Color(0x24000000),
-      overlay: const Color(0xD9F4F3F6),
-      info: const Color(0xFF3B82F6),
-    );
-  }
+  /// O escuro do Bold. Atalho pra [BoldScheme.de] com a paleta deste produto.
+  static BoldScheme dark() =>
+      BoldScheme.de(BoldPalette.bold, brilho: Brightness.dark);
+
+  /// O claro do Bold. Atalho pra [BoldScheme.de] com a paleta deste produto.
+  static BoldScheme light() =>
+      BoldScheme.de(BoldPalette.bold, brilho: Brightness.light);
+
 
   @override
   BoldScheme copyWith({Brightness? brightness}) => this;

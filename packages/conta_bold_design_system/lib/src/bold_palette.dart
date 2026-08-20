@@ -81,6 +81,64 @@ class BoldColors {
   /// O CORAL do lockup — a parada do meio do gradiente da marca.
   static const Color lockupCoral = Color(0xFFFE7B5E);
 
+  // ═══════════════════════════════════════════════════════════════════════
+  // AS SUPERFÍCIES DO CLARO QUE O CONTRATO DO PAI AINDA NÃO TEM
+  // ═══════════════════════════════════════════════════════════════════════
+  //
+  // A paleta do pai tem os campos do ESCURO (`bgEscuro`, `surfaceEscura`, `surfaceMutedEscura`, da
+  // `v0.1.9`) e ganhou o espelho do CLARO pro texto e pra borda na `v0.111.0`. **Faltou o espelho do
+  // claro pras SUPERFÍCIES**, e é o que estes dois esperam — pedido de 19/08.
+  //
+  // Enquanto ele não vem, os dois moram AQUI e não dentro do esquema: assim o valor tem nome, aparece
+  // na paleta como qualquer outro, e a lacuna é uma linha localizável em vez de um hex no meio de uma
+  // fábrica. **Mas eles não viajam**: um neto que trocar a paleta continua com estes dois, porque não
+  // existe campo no contrato pra ele declarar os dele. São os dois únicos de 44 nessa situação.
+
+  /// #F4F3F6 — o fundo da PÁGINA no claro, e ele não é a superfície.
+  ///
+  /// O pai deriva `bg` como branco puro no claro. Este produto tinge a página de propósito, pra o card
+  /// (branco) ler como elevado em cima dela — sem isso, card branco sobre página branca só existe pela
+  /// borda. É decisão de desenho, não desvio.
+  static const Color fundoClaroDaPagina = Color(0xFFF4F3F6);
+
+  /// #F1F0F4 — o preenchimento de CAMPO no claro.
+  ///
+  /// O candidato do pai é `neutral09` (`#ECECEC`), cinza puro. Este é o mesmo tom tintado da página,
+  /// meio degrau acima — o campo tem que se distinguir da página sem virar outra cor.
+  static const Color campoClaro = Color(0xFFF1F0F4);
+
+  // ═══════════════════════════════════════════════════════════════════════
+  // O VOCABULÁRIO QUE É DESTE PRODUTO — vai pra `papeisExtras` da paleta
+  // ═══════════════════════════════════════════════════════════════════════
+  //
+  // Quatro papéis que o pai não tem e não deveria ter: ele mede o que for declarado (contraste no gate
+  // da matriz, frase na página do catálogo, variável na biblioteca do Figma) sem precisar saber o que
+  // eles significam. *"Capacidade sobe; inventário não."*
+  //
+  // Eles estavam cravados dentro do `BoldScheme`, que é o pior lugar: um neto que trocasse a paleta
+  // herdava as superfícies elevadas, o fluxo secundário e o azul de informação do Bold sem ter onde
+  // dizer os dele. Como extras, ele declara os dele na paleta dele.
+
+  /// A superfície ELEVADA — o card sobre a página.
+  static const Color superficieElevadaClara = Color(0xFFFFFFFF);
+  static const Color superficieElevadaEscura = Color(0xFF1A1B27);
+
+  /// A superfície PRESSIONADA — o mesmo card sob o dedo.
+  static const Color superficiePressionadaClara = Color(0xFFE8E7EE);
+  static const Color superficiePressionadaEscura = Color(0xFF2A2C3A);
+
+  /// O FLUXO SECUNDÁRIO — o fundo sólido de quem saiu da navegação principal.
+  static const Color fluxoSecundarioClaro = Color(0xFFF6F3F5);
+  static const Color fluxoSecundarioEscuro = Color(0xFF100913);
+
+  /// INFORMAÇÃO — e o pai recusou a família, com contra-medição.
+  ///
+  /// Pedido de 02/08: dos 10 sítios que eu chamava de informação, **9 eram ESPERA** e viraram
+  /// `DilettaStatusTone.pending`; o 10º é codificação categórica e fica fora da rampa. O veredito foi
+  /// *"entra o TOM, a FAMÍLIA continua não"* — e ele está certo. Este azul sobrevive pro caso
+  /// categórico, e como extra ele fica medido e nomeado em vez de escondido.
+  static const Color info = Color(0xFF3B82F6);
+
   /// O AMARELO do lockup — a cauda do gradiente, e o que o símbolo tem que a rampa não tem.
   static const Color lockupAmarelo = Color(0xFFFEED35);
 
@@ -336,6 +394,37 @@ class BoldPalette {
     blurDeVidro: 15,
     tracoDeVidroClaro: BoldColors.tracoDeVidroClaro,
     tracoDeVidroEscuro: BoldColors.tracoDeVidroEscuro,
+
+    // OS QUATRO PAPÉIS QUE SÃO DESTE PRODUTO — e é aqui que um neto declara os dele.
+    //
+    // Estavam cravados dentro do `BoldScheme`, onde paleta nenhuma alcança. Como extras, eles entram
+    // no gate de contraste da matriz do pai, na página de Styles do catálogo e na biblioteca do Figma
+    // — sem que o pai precise saber o que cada um significa.
+    papeisExtras: {
+      'superficieElevada': DilettaPapelExtra(
+        claro: BoldColors.superficieElevadaClara,
+        escuro: BoldColors.superficieElevadaEscura,
+        significado: 'A superfície elevada: o card sobre a página. No claro é branco puro contra a '
+            'página tingida; no escuro é o navy um degrau acima do fundo.',
+      ),
+      'superficiePressionada': DilettaPapelExtra(
+        claro: BoldColors.superficiePressionadaClara,
+        escuro: BoldColors.superficiePressionadaEscura,
+        significado: 'O mesmo card sob o dedo — um degrau na direção oposta à elevação.',
+      ),
+      'fluxoSecundario': DilettaPapelExtra(
+        claro: BoldColors.fluxoSecundarioClaro,
+        escuro: BoldColors.fluxoSecundarioEscuro,
+        significado: 'O fundo sólido de quem saiu da navegação principal. No escuro é o vinho-tinta '
+            'da marca; a arte de fundo não acompanha fluxo, e fluxo secundário troca imagem por cor.',
+      ),
+      'info': DilettaPapelExtra(
+        claro: BoldColors.info,
+        escuro: BoldColors.info,
+        significado: 'Informação categórica — o único sítio que sobrou depois de o pai recusar a '
+            'família e provar que 9 dos meus 10 casos eram ESPERA, não informação.',
+      ),
+    },
 
     // A TINTA QUE ESTE PRODUTO ASSUME — `v0.115.0` do pai, e ela vem com o número que eu devo.
     //

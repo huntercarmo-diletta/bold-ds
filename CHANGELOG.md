@@ -20,6 +20,77 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.55.0] — 2026-08-19
+
+### O esquema passa a RECEBER a paleta — e a resposta pra "trocar o token troca o app?" virou 42 de 44
+
+A pergunta é do dono do produto: *"se o Bold tiver um filho, apenas mudando os tokens conseguiremos
+mudar toda a aplicação?"*. A resposta medida era **não**, e o defeito não estava onde se esperava.
+
+**Os componentes estavam limpos.** Varredura nos 33 do pacote: **zero hex real** — os dois que a busca
+acha são `Color(0x00000000)`, que é ausência de cor, e quatro são hex citados em `///` explicando o que
+foi removido. As telas do app têm **um**, e é o fundo da splash, que precisa casar com a splash nativa.
+
+**Quem decidia cor fora do contrato era o tradutor.** O `BoldScheme` cravava `BoldPalette.bold` por
+dentro das duas fábricas — então não existia paleta a passar — e escrevia **21 valores como literal**:
+8 papéis no escuro e 13 no claro. Um neto herdava as superfícies elevadas, as bordas, o scrim, o fluxo
+secundário, o azul de informação, e no claro o rosa do Bold no `primary` e no `danger`.
+
+### As três formas de um papel chegar ao esquema agora
+
+`BoldScheme.de(paleta, brilho:)` é a assinatura nova; `.dark()` e `.light()` viraram atalhos que passam
+a paleta deste produto, e **nenhum call site mudou**.
+
+1. **derivado do pai** — o `DilettaScheme` resolve a partir da paleta. É o caminho da maioria;
+2. **derivado por REGRA** — o valor é função da paleta, não literal: *"no claro a marca escreve com o
+   degrau profundo"* (`primary` → `primary03`, medido 8,03 contra 3,46 do 04), *"a borda suave é a
+   tinta de borda a 5%"*, *"o scrim é o fundo a 85%"*, *"o wash é a marca a 20%"*. **A regra viaja; o
+   valor não**;
+3. **`papeisExtras` da paleta** — os quatro papéis que o pai não tem e não deveria ter:
+   `superficieElevada`, `superficiePressionada`, `fluxoSecundario` e `info`. O mecanismo já existia
+   (*"capacidade sobe; inventário não"*) e cada um foi com o `significado` obrigatório.
+
+**O `info` merece a linha**: o pai recusou a FAMÍLIA em 02/08 com contra-medição — 9 dos meus 10 sítios
+eram ESPERA e viraram `DilettaStatusTone.pending`; o 10º é codificação categórica. Como extra, o azul
+que sobrou fica medido e nomeado em vez de escondido dentro de uma fábrica.
+
+### O refactor não moveu um pixel, e isso é medido
+
+Conferi os 44 valores antes e depois, um por um: **todos idênticos**. O que mudou é de onde eles vêm.
+
+### Os DOIS que ainda não viajam, com nome e pedido
+
+`background` e `field` no CLARO. A paleta do pai tem os overrides do ESCURO (`bgEscuro`,
+`surfaceEscura`, `surfaceMutedEscura`, da `v0.1.9`) e ganhou o espelho do claro pro TEXTO e pra BORDA
+na `v0.111.0` — **falta a superfície do claro, que é a última célula vazia da matriz.** Pedido enviado
+em 19/08.
+
+Enquanto ele não vem, os dois são constante nomeada na paleta (`fundoClaroDaPagina`, `campoClaro`),
+com o motivo escrito: a derivação do pai dá branco puro, e a página deste produto é tingida de
+propósito — é ela que faz o card branco ler como ELEVADO (1,105 de contraste entre os dois). Com a
+página branca, a elevação vira traço em vez de superfície.
+
+### Gate novo — `o_neto_troca_a_paleta_e_pronto`
+
+Ele monta um NETO de verdade: a `DilettaPalette.referencia` do pai, mais os quatro extras que um neto
+declararia. Não é um verde inventado aqui — é outra marca, mantida por ele.
+
+E a asserção separa três coisas que uma contagem crua confundiria:
+
+| por que saiu igual | papéis | é dívida? |
+|---|---|---|
+| **regra** que não depende de marca (alpha sobre branco/preto absoluto) | 7 | não — a resposta certa é a mesma |
+| **consequência** de um papel preso (o scrim deriva do fundo) | 1 | não, e some quando o fundo sair |
+| **dívida** — literal do pacote | **2** | sim, e é o pedido |
+| acompanham a paleta do neto | **32** | — |
+
+As três listas são fechadas: dívida nova não entra sem alguém editar o arquivo e decidir que ela entra.
+
+E o segundo gate é a causa raiz virada mecanismo: **o esquema não escreve um `Color(0x…)`**. Enquanto
+ele pudesse, qualquer conserto de retema seria desfeito pelo próximo papel que alguém cravasse ali — e
+cravar ali é mais fácil que declarar na paleta, que é o que faz a regra precisar de gate e não de
+acordo.
+
 ## [0.54.1] — 2026-08-19
 
 ### Declarado — o gutter do cabeçalho da home é do CHROME, e ele descobriu uma pergunta

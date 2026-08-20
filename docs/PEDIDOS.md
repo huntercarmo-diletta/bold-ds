@@ -48,6 +48,8 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 
 | [o CASO que comprou o `flow` caiu — e a peça não](pedidos/2026-08-19-o-caso-que-comprou-o-flow-caiu-e-a-peca-nao.md) | **não é pedido** — retratação de evidência: o menu que justificou o `DilettaFrame.flow` virou grade por decisão do dono, e o ledger dele conta CASOS | — |
 
+| [o espelho do claro veio em duas partes, e falta a terceira](pedidos/2026-08-19-o-espelho-do-claro-veio-em-duas-partes-e-falta-a-terceira.md) | **sem veredito** — enviado em 19/08. `bgClaro` e `surfaceMutedClara`: são os **2 de 42** papéis que não acompanham uma paleta de neto, medidos por gate | — |
+
 ## Ao pai da FERRAMENTA (`catalogo-diletta`)
 
 | pedido | veredito | chegou em |
