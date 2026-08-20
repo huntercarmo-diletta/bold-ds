@@ -20,6 +20,61 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.57.0] — 2026-08-20
+
+### Os quatro vereditos das v0.119.0 e v0.120.0 adotados — e a marca deste produto ENTROU no plugue
+
+**1 · O logo é do arquivo e a tinta é do tema.** `DilettaBrand` está declarado: `pacote`, os dois
+slots de logo, e `logoTingePorCurrentColor: true`. O lockup tem 8 `fill` de letra que viram com o tema
+e 1 gradiente de 8 paradas que não vira — as letras dizem `currentColor` no arquivo, e é o **arquivo**
+que decide o alcance da tinta em vez de a peça adivinhar por hex.
+
+**Dois arquivos viraram um**, que era o item 1 do meu «Não estou pedindo» e virou a especificação do
+conserto: `bold-wordmark-light.svg` e `-brand.svg` eram idênticos exceto pelos 8 fills (branco contra
+preto). Com a tinta vindo do tema, a diferença some. O `white` que sobrou é geometria de `clipPath`,
+não pintura — conferido antes de tocar.
+
+**2 · O mapa da arte está declarado**: `hexesDaArte` com os 7 degraus de marca que aparecem nas 77
+ilustrações, medidos em **971 pinturas**. O valor é o NOME do degrau e não a cor, que foi a decisão de
+forma do veredito — *nome sobrevive à troca de paleta, cor não*.
+
+**3 · As superfícies do claro fecharam a última célula da matriz.** `bgClaro` e `surfaceMutedClara`
+(`ds v0.119.0`) entraram na paleta, e o esquema deixou de ler constante: **`background` e `field` no
+claro passaram a derivar**. Eram os dois únicos papéis que não acompanhavam uma paleta de neto.
+
+| | antes | agora |
+|---|---|---|
+| papéis que viajam pra uma paleta de neto | 32 | **35** |
+| presos por dívida | 2 | **0** |
+| iguais por consequência | 1 | 0 — o scrim deriva do fundo, e o fundo soltou |
+
+**4 · O divisor voltou pro lado certo, e o conserto é do pai.** `Color.lerp` interpolava o alpha
+junto, e de preto a 7% pra branco opaco a opacidade SUBIA. Medido antes e depois, sobre branco:
+
+| | composto | contraste |
+|---|---|---|
+| o divisor de ontem | `#BBBBBB` | 1,92 |
+| **o de hoje** | `#F6F6F6` | **1,081** |
+| a borda que eu declaro | `#EDEDED` | 1,171 |
+
+O divisor voltou a ser **mais claro que a borda**, que é o que o `///` dele sempre prometeu.
+
+### Gate novo — `o_logo_e_do_arquivo_e_a_tinta_e_do_tema`
+
+Ele afirma sobre o ARQUIVO, e é isso que o torna útil: 8 `currentColor`, o gradiente presente, as 4
+paradas conferidas, e **zero `fill="black"`**. Se alguém reexportar do Figma sem a edição, o
+`currentColor` some e o logo fica preto no escuro — **sem erro nenhum, porque `black` é um fill
+válido**. É a regressão que só um teste de arquivo pega.
+
+### E uma nota ao pai: o veredito da arte chegou pela metade
+
+`DilettaIllustration` chama `apply(raw, tema.palette)` nos dois sítios, **sem o `marca:`** que a
+`v0.120.0` abriu — então o `hexesDaArte` que eu acabei de declarar cai no `?? const {}` e a tabela
+usada é a do primeiro filho. Os testes dele passam porque chamam a função direta.
+
+Não medi o efeito antes de trazer, e a razão está na nota: com a peça não passando a marca, medir me
+daria *"a arte não recoloriu"*, que é o sintoma de três causas diferentes. Ler o caminho custou menos.
+
 ## [0.56.0] — 2026-08-20
 
 ### Corrigido — a curva do lockup tem OITO paradas, e eu tinha declarado três SEM offset

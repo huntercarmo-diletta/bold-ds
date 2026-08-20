@@ -94,18 +94,22 @@ void main() {
     'borderStrong (claro)', // preto a 14%
     'borderStrong (escuro)' // branco a 18%
   };
-  const porConsequencia = {'overlay (claro)'};
+  /// **Vazia desde 20/08.** O `overlay` era o único: ele é o fundo com alpha, e o fundo estava preso.
+  /// Soltou o fundo, soltou o scrim — que é o que "consequência" queria dizer.
+  const porConsequencia = <String>{};
 
-  /// Os que NÃO viajam, e a lista é a dívida: `background` e `field` no claro.
+  /// **A lista da dívida está VAZIA desde 20/08**, e ela fica aqui vazia de propósito.
   ///
-  /// A paleta do pai tem os campos de override do ESCURO e ganhou o espelho do claro pro texto e pra
-  /// borda na `v0.111.0`; faltou o espelho do claro pras SUPERFÍCIES. Pedido aberto em 19/08.
+  /// Eram dois: `background` e `field` no claro, presos porque o contrato do pai não tinha onde
+  /// declarar a superfície clara. O pedido de 19/08 voltou ENTRA na `v0.119.0` (`bgClaro`,
+  /// `surfaceMutedClara`) e os dois passaram a derivar.
   ///
-  /// **A lista é fechada de propósito.** Se alguém cravar um valor novo aqui dentro, o teste reprova
-  /// dizendo o nome — e a dívida não cresce sem alguém decidir que ela cresça.
-  const naoViajam = {'background (claro)', 'field (claro)'};
+  /// Vazia e não removida: **a lista é o lugar de uma dívida nova precisar de decisão pra existir.**
+  /// Um papel que pare de viajar aparece na diferença abaixo com o nome dele, e quem o puser aqui
+  /// está declarando que aceitou.
+  const naoViajam = <String>{};
 
-  test('o NETO troca a paleta e recebe o esquema DELE — a dívida são DOIS de 42, e 32 viajam', () {
+  test('o NETO troca a paleta e recebe o esquema DELE — a dívida é ZERO, e 35 dos 42 viajam', () {
     var viajaram = 0;
     final iguais = <String>{};
     for (final brilho in [Brightness.light, Brightness.dark]) {
@@ -130,7 +134,10 @@ void main() {
 
     // O outro lado da conta, e ele existe pra a lista de exceções não poder crescer sozinha: se
     // alguém mover um papel de "viaja" pra qualquer das listas, este número cai e o teste diz.
-    expect(viajaram, 32,
+    // 35, e o número subiu duas vezes hoje: 32 → 34 com `bgClaro`/`surfaceMutedClara`, e 35 porque o
+    // `overlay` deriva do fundo e veio junto sem ninguém tocar nele. **Consequência funciona nos dois
+    // sentidos**, e é por isso que ela era uma lista e não uma exceção.
+    expect(viajaram, 35,
         reason: 'papéis que acompanham a paleta do neto. Caiu? Um papel deixou de derivar');
   });
 

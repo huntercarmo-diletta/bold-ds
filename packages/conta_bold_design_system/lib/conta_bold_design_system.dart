@@ -124,10 +124,45 @@ class BoldTheme {
     return _escuro;
   }
 
-  static final DilettaTheme _claro = DilettaTheme.resolve(palette: BoldPalette.bold);
+  /// A MARCA deste produto, declarada no plugue do pai — arquivos e o mapa da arte.
+  ///
+  /// Antes de 20/08 este filho não declarava nada aqui, e o custo era duplo: o `BoldLogo` vivia como
+  /// peça privada no app (5 sítios, classificado `deliberado` com a razão *"o pai tem a marca DELE"*,
+  /// que estava errada desde que o plugue existe), e as 77 ilustrações não recoloriam pra paleta
+  /// nenhuma.
+  ///
+  /// **`logoTingePorCurrentColor`** é o veredito da `v0.120.0`: as partes tingíveis do arquivo dizem
+  /// `currentColor` e o `ColorFilter` não entra. É o arquivo decidindo o alcance da tinta em vez de a
+  /// peça adivinhar por hex — e adivinhar por hex era o defeito do outro pedido do mesmo dia.
+  ///
+  /// **`hexesDaArte`** é o mapa hex→NOME do degrau, e o nome é a parte que importa: nome sobrevive à
+  /// troca de paleta, cor não. São os 7 degraus de marca que aparecem nas 77 artes deste produto,
+  /// medidos em 971 pinturas. Neutro e semântico ficam de fora por regra do pai — *"cor de marca
+  /// troca, erro/aviso e neutro são invariantes"*.
+  static const DilettaBrand marca = DilettaBrand(
+    pacote: 'conta_bold_design_system',
+    // O mesmo arquivo nos dois slots: este produto não tem símbolo exportado em SVG (o que existe é
+    // um `.webp` raster), então `mark` cai no lockup até o símbolo existir. Está escrito pra ser
+    // pedido ao dono da marca e não pra virar folclore de "o mark é o full aqui".
+    logo: 'assets/logos/conta-bold-lockup.svg',
+    logoFull: 'assets/logos/conta-bold-lockup.svg',
+    logoTingePorCurrentColor: true,
+    hexesDaArte: {
+      '#fe3976': 'primary04', // 343 pinturas
+      '#ff87ab': 'primary06', // 244
+      '#f66fa0': 'primary05', // 159
+      '#ffb6cb': 'primary07', // 121
+      '#600627': 'primary02', // 73
+      '#300313': 'primary01', // 27
+      '#fff6fa': 'primary09', // 4
+    },
+  );
 
-  static final DilettaTheme _escuro =
-      DilettaTheme.resolve(palette: BoldPalette.bold, brightness: Brightness.dark);
+  static final DilettaTheme _claro =
+      DilettaTheme.resolve(palette: BoldPalette.bold, brand: marca);
+
+  static final DilettaTheme _escuro = DilettaTheme.resolve(
+      palette: BoldPalette.bold, brightness: Brightness.dark, brand: marca);
 }
 
 /// Uma tela do Bold montada SÓ com componentes do pai.

@@ -3,7 +3,7 @@ description: >-
   O DS-FILHO do Conta BOLD. Fornece a paleta da marca (rosa → vinho) e recebe a
   linguagem inteira do ds-diletta: ~50 papéis derivados, dark mode sem escrever cor,
   354 ícones herdados. O que é só do Bold mora aqui; o que é linguagem mora no pai.
-version: 0.56.0
+version: 0.57.0
 publish_to: none
 
 environment:
@@ -26,7 +26,7 @@ dependencies:
   diletta_design_system:
     git:
       url: git@bitbucket.org:diletta/ds-diletta.git
-      ref: v0.115.0
+      ref: v0.120.0
       path: packages/diletta_design_system
 
 dev_dependencies:
@@ -43,7 +43,19 @@ flutter:
   # se aprende a ignorar, e aí o aviso seguinte também passa batido.
   uses-material-design: true
 
-  # A FONTE DA MARCA viaja neste pacote, e é o único asset que ele declara: ícone e
+  # O LOGO viaja aqui desde 20/08, e ele é o segundo asset deste pacote.
+  #
+  # O plugue do pai (`DilettaBrand`) carrega o arquivo do FILHO, e o veredito da `v0.120.0` deu o
+  # canal que faltava: `logoTingePorCurrentColor`. O lockup tem 8 `fill` de letra que viram com o
+  # tema e 1 gradiente de 8 paradas que não vira — as letras dizem `currentColor` no arquivo, e é o
+  # ARQUIVO que decide o alcance da tinta em vez de a peça adivinhar por hex.
+  #
+  # **Dois arquivos viraram um.** O app tinha `bold-wordmark-light.svg` e `-brand.svg`, idênticos
+  # exceto pelos 8 fills (branco contra preto). Com a tinta vindo do tema, a diferença some.
+  assets:
+    - assets/logos/
+
+  # A FONTE DA MARCA viaja neste pacote, e é o segundo asset que ele declara: ícone e
   # ilustração são vocabulário e vêm do pai (medido: 310 dos 354 nomes já eram os mesmos).
   #
   # Empacotada em vez de resolvida por `google_fonts` de propósito: fonte de marca que

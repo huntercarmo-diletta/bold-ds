@@ -111,14 +111,13 @@ class BoldColors {
   // AS SUPERFÍCIES DO CLARO QUE O CONTRATO DO PAI AINDA NÃO TEM
   // ═══════════════════════════════════════════════════════════════════════
   //
-  // A paleta do pai tem os campos do ESCURO (`bgEscuro`, `surfaceEscura`, `surfaceMutedEscura`, da
-  // `v0.1.9`) e ganhou o espelho do CLARO pro texto e pra borda na `v0.111.0`. **Faltou o espelho do
-  // claro pras SUPERFÍCIES**, e é o que estes dois esperam — pedido de 19/08.
+  // A paleta do pai tinha os campos do ESCURO (`v0.1.9`) e o espelho do CLARO pro texto e pra borda
+  // (`v0.111.0`). **Faltava a SUPERFÍCIE do claro** — pedido deste filho em 19/08, veredito ENTRA na
+  // `v0.119.0`: `bgClaro` e `surfaceMutedClara`.
   //
-  // Enquanto ele não vem, os dois moram AQUI e não dentro do esquema: assim o valor tem nome, aparece
-  // na paleta como qualquer outro, e a lacuna é uma linha localizável em vez de um hex no meio de uma
-  // fábrica. **Mas eles não viajam**: um neto que trocar a paleta continua com estes dois, porque não
-  // existe campo no contrato pra ele declarar os dele. São os dois únicos de 44 nessa situação.
+  // Eles continuam sendo valores DESTE produto; o que mudou é o caminho. Antes moravam só aqui e o
+  // esquema os lia direto, então um neto que trocasse a paleta herdava a página e o campo do Bold.
+  // Agora entram pelo contrato, e o esquema deriva — **44 de 44 papéis viajam.**
 
   /// #F4F3F6 — o fundo da PÁGINA no claro, e ele não é a superfície.
   ///
@@ -407,6 +406,15 @@ class BoldPalette {
     textoSecundarioEscuro: BoldColors.textoSecundarioEscuro,
     textoMudoEscuro: BoldColors.textoMudoEscuro,
     bordaEscura: BoldColors.bordaEscura,
+
+    // E AS SUPERFÍCIES DO CLARO (`v0.119.0`) — a última célula da matriz, e ela fechou por pedido
+    // deste filho em 19/08. O escuro tinha override de superfície desde a `v0.1.9` e o claro tinha o
+    // de texto desde a `v0.111.0`; faltava esta.
+    //
+    // **Com estes dois, os 2 papéis que não viajavam para um NETO passam a viajar** — era o número
+    // que o pedido levou (32 de 42) e é o que o gate `o_neto_troca_a_paleta_e_pronto` mede.
+    bgClaro: BoldColors.fundoClaroDaPagina,
+    surfaceMutedClara: BoldColors.campoClaro,
 
     // E O ESPELHO NO CLARO (v0.111.0), que consertou 2,96 -> 3,54 no mudo
     textoClaro: BoldColors.textoClaro,

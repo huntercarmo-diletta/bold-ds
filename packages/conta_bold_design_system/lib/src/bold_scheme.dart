@@ -105,14 +105,14 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
   /// 3. **`papeisExtras` da paleta** — vocabulário que o pai não tem (superfície elevada, superfície
   ///    pressionada, fluxo secundário, informação). O neto declara os dele na paleta dele.
   ///
-  /// ## Os DOIS que ainda não viajam, e eles têm nome
+  /// ## E os DOIS que não viajavam fecharam em 20/08
   ///
-  /// `background` e `field` no CLARO. A paleta do pai tem os campos de override do ESCURO
-  /// (`bgEscuro`, `surfaceEscura`, `surfaceMutedEscura`) e ganhou o espelho do claro pro TEXTO e pra
-  /// BORDA na `v0.111.0` — faltou o espelho do claro pras SUPERFÍCIES. Pedido aberto em 19/08.
+  /// Eram `background` e `field` no CLARO: a paleta do pai tinha os overrides do ESCURO (`v0.1.9`) e
+  /// o espelho do claro pro TEXTO e pra BORDA (`v0.111.0`), e faltava a SUPERFÍCIE. Pedido de 19/08,
+  /// veredito ENTRA na **`v0.119.0`** — `bgClaro` e `surfaceMutedClara`.
   ///
-  /// Enquanto ele não vem, os dois leem constante nomeada na paleta deste filho, e é isso que os
-  /// mantém localizáveis: **2 de 44 valores**, com o motivo escrito e um gate contando.
+  /// **Agora são 44 de 44.** Os dois valores continuam sendo deste produto; o que mudou é que eles
+  /// entram pela paleta, então um neto declara os dele no mesmo lugar.
   factory BoldScheme.de(DilettaPalette paleta, {required Brightness brilho}) {
     final escuro = brilho == Brightness.dark;
     final d = escuro ? DilettaScheme.dark(paleta) : DilettaScheme.light(paleta);
@@ -128,8 +128,13 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
     /// A tinta de BORDA: branco no escuro, preto no claro. É sobre ela que os dois alphas incidem.
     final tintaDeBorda = escuro ? paleta.white : paleta.black;
 
-    /// O fundo da página — e é aqui que mora um dos dois que não viajam.
-    final fundo = escuro ? d.bg : BoldColors.fundoClaroDaPagina;
+    /// O fundo da página, e ele **passou a derivar em 20/08**.
+    ///
+    /// Era o primeiro dos dois valores que não viajavam pra uma paleta de neto: no claro ele lia
+    /// `BoldColors.fundoClaroDaPagina` porque o contrato do pai não tinha onde declarar a superfície
+    /// clara. Tem desde a `v0.119.0` (`bgClaro`), e a paleta deste filho declara — então aqui virou
+    /// derivação nos dois modos.
+    final fundo = d.bg;
 
     return BoldScheme(
       brightness: brilho,
@@ -170,8 +175,8 @@ class BoldScheme extends ThemeExtension<BoldScheme> {
       secondaryFlow: extra('fluxoSecundario',
           escuro ? BoldColors.fluxoSecundarioEscuro : BoldColors.fluxoSecundarioClaro),
       info: extra('info', BoldColors.info),
-      // ── e o segundo que não viaja ─────────────────────────────────────────
-      field: escuro ? d.surfaceMuted : BoldColors.campoClaro,
+      // O segundo que não viajava, e ele fechou junto: `surfaceMutedClara` na `v0.119.0`.
+      field: d.surfaceMuted,
     );
   }
 

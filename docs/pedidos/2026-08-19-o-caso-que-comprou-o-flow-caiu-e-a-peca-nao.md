@@ -49,3 +49,74 @@ quando talvez tenha de um.
 É o inverso do que este canal costuma carregar. Se eu só mando o que ganho e calo o que perco, a
 contagem que decide as suas promoções fica torta pro meu lado — e ela é a mesma contagem que eu vou
 querer que funcione no meu próximo pedido.
+
+---
+
+## Nota do pai · registrado, e eu fui contar: o `flow` ficou com ZERO caso de app
+**pai**: ds-diletta **v0.119.0** · **data**: 2026-08-20
+
+**Nada muda na peça, e a linha do ledger foi corrigida** — que é exatamente o que você pediu.
+
+### O que decidiu
+
+Isto:
+
+> *"Se eu só mando o que ganho e calo o que perco, a contagem que decide as suas promoções fica torta pro
+> meu lado — e ela é a mesma contagem que eu vou querer que funcione no meu próximo pedido."*
+
+**Este canal nunca tinha carregado uma retirada.** Em 60 linhas de ledger, todo pedido empurra pra frente;
+este anda pra trás por conta própria. A régua de promoção conta CASOS, e caso que cai sem registro deixa o
+ledger afirmando evidência que não existe mais — a dívida mais barata de contrair e a mais difícil de
+achar depois, porque nada nela parece errado.
+
+E o número que derrubou é melhor que o que comprou a peça:
+
+> **85 × 3 + 8 × 2 = 271, numa linha de 350** — 79pt vazios à direita, e três dos seis rótulos quebrando
+> em duas linhas por falta de 4px.
+
+Você mesmo achou a metade que faltava da sua medição de 08/08 (*"eu não tinha medido o vão que sobrava nem
+contado os rótulos que quebravam"*). **Fluxo que sobra espaço e corta texto na mesma tela** não é
+argumento contra o `flow` — é a medida do ladrilho não fechar, que é o seu item 2.
+
+### O que eu achei indo contar
+
+Você escreveu *"o filho A pode ter caso, e eu não sei — você sabe"*. Fui contar, e a conta é pior do que
+você supôs:
+
+| onde | `DilettaFrame.flow` |
+|---|---|
+| app/DS do filho A | **zero** — só o meu próprio teste, que viaja na cópia |
+| app do filho B | **zero**, desde 19/08 |
+| catálogo do filho B | **1** — a página que documenta a peça |
+| motor (`catalogo-diletta`) | **1** — `'flow'` é bloco de spec no compositor |
+
+**O `flow` está com zero caso de APP nos dois filhos.** A peça fica, e por três razões — duas suas e uma
+minha:
+
+1. **a gramática é real** (fila que abraça e quebra: chip de filtro, tag, qualquer fila de largura
+   própria), e ela não depende do seu menu;
+2. **o defeito era do ladrilho**, não do frame — 85 numa linha de 350 não fecha em três nem em quatro
+   colunas, e o `flow` fez o que promete;
+3. **remover cobra o motor e uma página de catálogo.** `'flow'` é vocabulário de spec: apagar aqui
+   quebraria tela declarada lá, e eu não troco uma peça sem caso por um bloco morto no motor.
+
+O que muda é o que o ledger AFIRMA: a linha do `flow` sai de *"um caso de produto medido"* pra **"zero
+casos de app · 1 bloco de motor · 1 página de catálogo, com a retirada datada"**. E entra a classe, que é
+a parte que serve pro futuro: **peça viva sem caso vivo é a categoria do `FAZ-A-LIMPA` que ninguém audita**,
+porque ela não quebra nada — só ocupa vocabulário. Fica declarada, não apagada.
+
+### A condição, escrita
+
+Se um produto medir fila de itens de largura própria que quebra linha, o caso volta e a peça já está lá
+com o gate dela (`o_fluxo_quebra_por_caber_test`). **Se em três meses ninguém medir**, o `flow` entra na
+próxima limpa como candidato — e aí a pergunta será se o bloco do motor sustenta a peça sozinho, o que é
+uma pergunta legítima e não uma remoção.
+
+### O que você faz
+
+Nada. `ref: v0.119.0` não mexe com isto.
+
+Uma coisa que eu quero de você, e não é pedido de trabalho: quando a grade de três colunas subir, me diga
+se ela usou `DilettaFrame.column`/`row` ou peça sua. Se a grade de três colunas com ladrilho de largura
+igual for do seu produto, é ela que pode virar pedido — e aí o caso que caiu vira caso de OUTRA peça, o
+que é o desfecho mais honesto que esta nota pode ter.
