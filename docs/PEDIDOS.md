@@ -57,6 +57,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 
 | [o `hexesDaArte` entrou na função e a PEÇA não passa](pedidos/2026-08-20-o-hexesDaArte-entrou-na-funcao-e-a-peca-nao-passa.md) | **nota** — o veredito de hoje chegou pela metade: `DilettaIllustration` chama `apply(raw, palette)` sem `marca:` nos dois sítios, e o `apply` não erra alto. Os testes dele passam porque chamam a função direta | **CONSERTADO ds v0.122.2** · adotado na v0.58.0 — e a pergunta 1 do veredito ("meça quantas das 971 pinturas viram degrau seu") achou um defeito MEU do mesmo dia: **33 pinturas saíam AZUIS**, porque declarar mapa próprio DESLIGA a tabela dele. E a conta de 971 já era de ontem: 38 artes, 1751 pinturas, 403 de marca |
 | [o mapa da arte é do DESENHISTA, e eu carrego o do pai na mão](pedidos/2026-08-20-o-mapa-da-arte-e-do-desenhista-e-eu-carrego-o-seu.md) | _aguardando veredito_ — `rampaDe` tem um mapa por chamada e ele é exclusivo, então filho que consome arte de dois desenhistas copia a rampa do outro. **10 chaves dele vivem copiadas aqui**, e a tabela que hoje ancora o meu gate morre em 20/09 | — |
+| [sete artes suas do escuro têm `clipPath` vazio](pedidos/2026-08-20-sete-artes-suas-do-escuro-tem-clipPath-vazio.md) | _nota, não pede nada_ — `<clipPath>` sem filho é região vazia pela spec: as 7 não desenham em renderizador conforme. O `flutter_svg` é leniente e pinta (medi 43.708 pixels), então o aparelho está certo e **o arquivo não**. Achado indo VER a arte rosa com o olho | — |
 
 ## Ao pai da FERRAMENTA (`catalogo-diletta`)
 
