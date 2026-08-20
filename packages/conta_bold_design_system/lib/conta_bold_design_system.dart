@@ -163,6 +163,15 @@ class BoldTheme {
       // faz o outro passar direto. Medido: 33 pinturas saíam azuis num app rosa, sem erro nenhum.
       // O degrau de destino é o MESMO que ele usa, para a arte manter a escada tonal e trocar só a
       // família.
+      //
+      // MEDIDO, e escolhido assim mesmo: o rosa é mais claro que o azul no mesmo degrau, então
+      // quatro traduções que passavam AA gráfico (3,0 sobre branco) deixam de passar —
+      // `#3369ff` 4,56 → 2,73, `#255df9` 5,23 → 2,73, `#2861ff` 4,95 → 2,73, `#668fff` 3,03 → 2,26.
+      // Não é violação: 1.4.11 vale pro gráfico que CARREGA informação, e ilustração de estado
+      // vazio é decorativa — a frase está no texto ao lado dela. Descer um degrau consertaria o
+      // número e achataria a escada (o corpo e o contorno do escudo virariam a mesma cor), que é
+      // trocar um problema que não existe por um que se vê. No ESCURO a conta anda pro outro lado:
+      // 1,82 → 4,09 no `#003be0`, 3,11 → 5,19 no `#3369ff`.
       '#002999': 'primary03',
       '#003be0': 'primary04',
       '#003de6': 'primary04',
