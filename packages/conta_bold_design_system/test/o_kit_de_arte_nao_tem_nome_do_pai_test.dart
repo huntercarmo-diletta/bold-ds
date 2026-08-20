@@ -26,18 +26,17 @@ void main() {
 
     final colidem = meus.intersection(doPai);
 
-    // As TRÊS exceções declaradas, e as três são declaradas pela mesma razão: estão VIVAS.
-    // `internet_off` aparece em 4 telas, `success` em 2, `security_phone` no card da home.
+    // ZERO exceções, e a lista fechou em 20/08.
     //
-    // Medido em 20/08, olhando as artes lado a lado renderizadas: **as três são o desenho DELE com
-    // um blob rosa atrás.** Mesma figura, mesma pose, mesmos objetos — a única diferença de
-    // geometria é uma forma orgânica de fundo que a cópia daqui acrescenta (os 26% e 54% que uma
-    // comparação de string dava eram ruído de export, não desenho).
+    // Cinco artes daqui eram o desenho DELE com um blob rosa atrás. Duas não tinham uso e saíram
+    // pela regra (duplicada **e** não usada). As outras três estavam vivas em 7 telas, e aí a regra
+    // não decide — apagar o blob de uma tela em uso é decisão de quem olha a tela. O dono olhou as
+    // seis renderizadas lado a lado e escolheu a peça dele nas três.
     //
-    // Por isso elas NÃO saíram junto com `online_payment` e `timer_woman`: aquelas duas tinham as
-    // duas condições (duplicada e sem uso), estas têm uma só. Adotar a peça dele aqui apaga o blob
-    // em 7 telas vivas — isso é decisão de quem olha a tela, não consequência de inventário.
-    expect(colidem, {'internet_off', 'success', 'security_phone'},
+    // O que fechou o argumento não estava na pergunta: o `internet_off_dark` DAQUI abria com um
+    // retângulo preto de canto a canto, e o dele não. Varri as 59 artes do pai — **nenhuma** pinta
+    // a própria página. A cópia carregava um defeito que o original nunca teve.
+    expect(colidem, isEmpty,
         reason: 'arte com nome do pai voltou pro kit daqui — ela ganha do roteamento e vira cópia '
             'silenciosa. Se for de propósito, a exceção entra nesta lista com a razão');
   });

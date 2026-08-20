@@ -2,7 +2,7 @@ import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-/// AS ARTES DESTE PRODUTO — 11 nomes, claro e escuro, e a cor vem da PALETA.
+/// AS ARTES DESTE PRODUTO — 8 nomes, e nenhum deles é nome do pai, claro e escuro, e a cor vem da PALETA.
 ///
 /// Elas moravam no app como SVG cru, carregadas por caminho montado à mão
 /// (`'illustrations/${nome}_${escuro ? 'dark' : 'light'}.svg'`) e desenhadas **sem recolor
@@ -19,11 +19,22 @@ import 'package:flutter_svg/flutter_svg.dart';
 /// recolore a arte do pai ([DilettaIllustrationBrand.rampaDe]). Mesma tabela, mesma regra, dois
 /// acervos:
 ///
-/// **Duas saíram na mudança.** `online_payment` e `timer_woman` eram o desenho do PAI com um blob
-/// rosa por trás — mesma figura, mesma pose, mesmos objetos — e tinham ZERO sítio de uso no app.
-/// Duplicada e não usada é a regra do dono pra apagar, e ela se aplica sem discussão quando as duas
-/// condições batem juntas. As que colidem com o nome dele **e são usadas** (`security_phone`) ficam,
-/// porque trocar o desenho de uma tela viva é decisão de quem olha a tela.
+/// **Cinco saíram na mudança, e as duas saídas tiveram donos diferentes.**
+///
+/// `online_payment` e `timer_woman` eram o desenho do PAI com um blob rosa por trás — mesma figura,
+/// mesma pose, mesmos objetos — e tinham ZERO sítio de uso. Duplicada **e** não usada é a regra do
+/// dono pra apagar, e ela se aplica sozinha quando as duas condições batem juntas.
+///
+/// `internet_off`, `success` e `security_phone` eram a mesma coisa **em 7 telas vivas**, então a
+/// regra não bastava: apagar o blob de uma tela em uso é decisão de quem olha a tela. Foi decidido
+/// em 20/08, olhando as seis lado a lado renderizadas — **a peça dele nas três**. O que se aceita é
+/// o blob sumindo e o acento indo um degrau mais claro (o desenho dele usa o 05 onde a cópia daqui
+/// usava o 04); o que se ganha é uma cópia a menos na família e o conserto dele chegando por tag.
+///
+/// Um dado que entrou na conta e não estava na pergunta: o `internet_off_dark` **daqui** abria com
+/// um retângulo preto de canto a canto (o fundo da prancheta, exportado junto) e o dele não tem.
+/// Varri as 59 artes do pai: nenhuma pinta a própria página. A cópia carregava um defeito que o
+/// original nunca teve, que é o argumento mais forte contra manter cópia.
 ///
 /// ```dart
 /// BoldIlustracao(BoldArte.sucesso, tamanho: 200)
@@ -35,14 +46,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 enum BoldArte {
   erro('error'),
   buscaDeArquivos('files_search'),
-  semInternet('internet_off'),
   arquivoInvalido('invalid_file'),
   estadoInvalido('invalid_state'),
   semArquivos('no_files'),
   semArquivosEmLinha('no_files_line'),
   buscaEmLinha('search_line'),
-  telefoneSeguro('security_phone'),
-  sucesso('success'),
   sucessoAlternativo('success_alt');
 
   const BoldArte(this.base);

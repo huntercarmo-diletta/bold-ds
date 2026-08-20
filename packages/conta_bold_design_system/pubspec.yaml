@@ -3,7 +3,7 @@ description: >-
   O DS-FILHO do Conta BOLD. Fornece a paleta da marca (rosa → vinho) e recebe a
   linguagem inteira do ds-diletta: ~50 papéis derivados, dark mode sem escrever cor,
   354 ícones herdados. O que é só do Bold mora aqui; o que é linguagem mora no pai.
-version: 0.60.0
+version: 0.61.0
 publish_to: none
 
 environment:
@@ -58,7 +58,7 @@ flutter:
   # exceto pelos 8 fills (branco contra preto). Com a tinta vindo do tema, a diferença some.
   assets:
     - assets/logos/
-    # As 22 artes DESTE produto (11 nomes × claro/escuro). Vieram do app em 20/08 e a
+    # As 16 artes DESTE produto (8 nomes × claro/escuro). Vieram do app em 20/08 e a
     # mudança não é de pasta: aqui elas passam pelo `colorMapper`, então **a arte segue a
     # paleta**. No app eram SVG cru com o rosa cozido — trocar de paleta trocava tudo menos
     # a ilustração. As artes cujo nome é do PAI não moram aqui: `key_word` e `no_data` são a

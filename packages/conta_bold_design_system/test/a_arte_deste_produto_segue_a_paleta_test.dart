@@ -32,7 +32,7 @@ void main() {
             key: chave,
             child: const ColoredBox(
               color: Color(0xFF808080),
-              child: BoldIlustracao(BoldArte.sucesso, tamanho: 300),
+              child: BoldIlustracao(BoldArte.sucessoAlternativo, tamanho: 300),
             ),
           ),
         ),
@@ -80,13 +80,16 @@ void main() {
 
   testWidgets('e o escuro também — é outro arquivo, e ele tem os mesmos degraus', (t) async {
     final doNeto = await pintar(t, neto, escuro: true);
-    // No escuro a arte usa o 05 (é o degrau que o desenho pede sobre fundo escuro).
-    expect(quantos(doNeto, neto.primary05), greaterThan(500),
+    // O degrau medido aqui é o 06, e não é escolha de gosto: é o que ESTA arte pinta mais (51 das
+    // 105 pinturas do `_dark`). Escolher o degrau pelo que o desenho usa, em vez de pelo que soa
+    // certo, é o que impede o gate de passar por não ter o que medir — foi o que aconteceu na
+    // primeira versão, que pedia o 05 num arquivo que não tem 05 nenhum.
+    expect(quantos(doNeto, neto.primary06), greaterThan(500),
         reason: 'o `_dark` não recolore: o mapper é montado no build e o arquivo muda com o tema');
-    expect(quantos(doNeto, BoldColors.primary05), 0, reason: 'rosa do Conta BOLD no escuro do neto');
+    expect(quantos(doNeto, BoldColors.primary06), 0, reason: 'rosa do Conta BOLD no escuro do neto');
   });
 
-  testWidgets('os 11 nomes têm arquivo nos dois temas — nome sem arte é caixa vazia', (t) async {
+  testWidgets('os 8 nomes têm arquivo nos dois temas — nome sem arte é caixa vazia', (t) async {
     for (final arte in BoldArte.values) {
       for (final escuro in [false, true]) {
         await t.pumpWidget(MaterialApp(

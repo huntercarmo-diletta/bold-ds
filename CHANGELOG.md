@@ -20,6 +20,34 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.61.0] — 2026-08-20
+
+### MUDA PIXEL — `internet_off`, `success` e `security_phone` passam a ser a PEÇA do pai
+Decisão do dono, olhando as seis renderizadas lado a lado. As três eram o desenho DELE com um blob rosa
+atrás — mesma figura, mesma pose, mesmos objetos — e estavam vivas em **7 telas**, então a regra
+*"duplicada e não usada"* não alcançava: apagar o blob de uma tela em uso é decisão de quem olha a tela.
+
+O que se aceita: **o blob some** nas 7, e o acento vai um degrau mais claro (o desenho dele usa o 05
+onde a cópia daqui usava o 04). O que se ganha: 6 arquivos a menos, uma cópia a menos na família, e
+conserto que ele fizer chegando por tag.
+
+**E um dado entrou na conta depois da pergunta.** O `internet_off_dark` daqui abria com aquele
+retângulo preto que a v0.60.0 tirou. Varri as 59 artes do pai procurando o mesmo padrão: **zero.** A
+cópia carregava um defeito que o original nunca teve — que é o argumento mais forte contra manter
+cópia, e ele só existiu porque alguém foi olhar.
+
+| | v0.58.0 | v0.61.0 |
+|---|---|---|
+| artes deste produto | 26 | **16** |
+| nomes que colidem com os do pai | 5 | **0** |
+| exceções declaradas no gate | 3 | **nenhuma** |
+
+### Corrigido — o gate da paleta pedia um degrau que a arte não tem
+Ao trocar a arte de amostra (`sucesso` saiu do enum), o teste do escuro passou a pedir `primary05` num
+arquivo que não pinta nenhum 05, e foi vermelho na hora. Passou a medir o **06**, que é o degrau que
+esta arte mais usa (51 das 105 pinturas). Escolher o degrau pelo que o desenho USA, e não pelo que soa
+certo, é o que impede a asserção de ausência de passar por não ter o que medir.
+
 ## [0.60.0] — 2026-08-20
 
 ### MUDA PIXEL — `internet_off` desenhava um QUADRADO PRETO no escuro, em 4 telas
