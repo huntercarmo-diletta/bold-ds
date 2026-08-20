@@ -3,7 +3,7 @@ description: >-
   O DS-FILHO do Conta BOLD. Fornece a paleta da marca (rosa → vinho) e recebe a
   linguagem inteira do ds-diletta: ~50 papéis derivados, dark mode sem escrever cor,
   354 ícones herdados. O que é só do Bold mora aqui; o que é linguagem mora no pai.
-version: 0.58.0
+version: 0.59.0
 publish_to: none
 
 environment:
@@ -28,6 +28,10 @@ dependencies:
       url: git@bitbucket.org:diletta/ds-diletta.git
       ref: v0.124.0
       path: packages/diletta_design_system
+  # Declarado direto porque este pacote CHAMA `SvgPicture`/`ColorMapper` nas 26 artes deste
+  # produto. Vinha de carona pelo pai — e dependência de carona é dependência que some sem
+  # aviso na versão em que o pai parar de usá-la.
+  flutter_svg: ^2.0.10
 
 dev_dependencies:
   flutter_test:
@@ -54,9 +58,16 @@ flutter:
   # exceto pelos 8 fills (branco contra preto). Com a tinta vindo do tema, a diferença some.
   assets:
     - assets/logos/
+    # As 22 artes DESTE produto (11 nomes × claro/escuro). Vieram do app em 20/08 e a
+    # mudança não é de pasta: aqui elas passam pelo `colorMapper`, então **a arte segue a
+    # paleta**. No app eram SVG cru com o rosa cozido — trocar de paleta trocava tudo menos
+    # a ilustração. As artes cujo nome é do PAI não moram aqui: `key_word` e `no_data` são a
+    # peça dele.
+    - assets/illustrations/
 
-  # A FONTE DA MARCA viaja neste pacote, e é o segundo asset que ele declara: ícone e
-  # ilustração são vocabulário e vêm do pai (medido: 310 dos 354 nomes já eram os mesmos).
+  # A FONTE DA MARCA viaja neste pacote. Ícone é vocabulário e vem do pai (medido: 310 dos
+  # 354 nomes já eram os mesmos); ILUSTRAÇÃO é metade e metade — 13 nomes são deste produto
+  # e os outros vêm dele.
   #
   # Empacotada em vez de resolvida por `google_fonts` de propósito: fonte de marca que
   # depende de download é fonte que às vezes não é a da marca — no primeiro launch, no

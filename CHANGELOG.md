@@ -20,6 +20,52 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.59.0] — 2026-08-20
+
+### A ARTE deste produto entrou no pacote — e agora ela segue a PALETA
+As 26 ilustrações moravam no app, carregadas por caminho montado à mão
+(`'illustrations/${nome}_${escuro ? 'dark' : 'light'}.svg'`) e desenhadas **sem recolor nenhum**. O widget
+de lá dizia por quê, em comentário: *"a ilustração é multicor por design — então NÃO recolorimos"*.
+
+A frase está certa e a conclusão estava errada. **Multicor não quer dizer fixa.** O pai já separa, na arte
+dele, o que é marca do que é neutro e semântico, e só a marca viaja. Enquanto as artes ficaram no app com o
+rosa cozido, este produto sustentava uma afirmação furada: *"o neto troca a paleta e pronto"* valia pros 35
+papéis de cor e **não valia pra nenhuma pintura de ilustração.**
+
+`BoldIlustracao(BoldArte.sucesso, tamanho: 200)` — o recolor entra pelo `ColorMapper` do `flutter_svg`,
+alimentado pela **mesma** `DilettaIllustrationBrand.rampaDe` que recolore a arte do pai. Mesma tabela,
+mesma regra, dois acervos. Acontece no parse, não em cima da string.
+
+O gate é em pixel e em duas paletas: a mesma arte, o mesmo arquivo, dois donos. **Rosa aqui, verde no
+neto** (a paleta de referência do pai), zero rosa sobrando lá. Desliguei o mapper e rodei: `rosa=4441
+verde=0` no neto — que é exatamente o que o app fazia até hoje.
+
+### O acervo caiu de 26 pra 22, e as duas saídas tinham as DUAS condições
+| arte | duplicada do pai? | usada? | saiu? |
+|---|---|---|---|
+| `online_payment` | sim (o desenho dele + um blob rosa) | **não** | **sim** |
+| `timer_woman` | sim (idem) | **não** | **sim** |
+| `internet_off` · `success` · `security_phone` | sim (idem) | **sim** — 7 telas | não, e está escrito por quê |
+
+A regra do dono é *"duplicada **e** não usada"*, e ela só dispara com as duas juntas. As três que ficam
+apagariam um blob em 7 telas vivas se virassem a peça dele — **isso é decisão de quem olha a tela**, e o
+gate `o_kit_de_arte_nao_tem_nome_do_pai` carrega as três como exceção declarada, com a medição do lado.
+
+### Corrigido no caminho
+- **12 arquivos `_theme3` apagados.** Zero referências no app inteiro (`grep` de `theme3` dava só a linha
+  do próprio widget que sabia removê-lo do nome). Eram o `_light` com uma pintura a menos;
+- **um `<filter>` de sombra em `search_line_dark`** que o `flutter_svg` não implementa: logava
+  `unhandled element <filter/>` a cada render, não desenhava nada, e o `_light` nunca teve. 721 bytes;
+- **`flutter_svg` passou a ser dependência declarada.** Vinha de carona pelo pai, e este pacote agora
+  chama `SvgPicture`/`ColorMapper` direto.
+
+### Medido, e não consertado
+- **9 dos 11 nomes têm ZERO sítio de uso no app** (`error`, `files_search`, `invalid_file`, `no_files`,
+  `no_files_line`, `search_line`, `success_alt` e as duas que saíram). Kit de DS pode ter peça sem uso —
+  fica escrito pra não virar surpresa;
+- **os 22 arquivos ainda carregam dois `<rect>` de moldura do Figma** (o tracejado `#9747FF` e um
+  `#ECECEC`). Provei que são invisíveis: as quatro arestas caem fora do `viewBox`.
+
 ## [0.58.0] — 2026-08-20
 
 ### MUDA PIXEL — a arte do pai saía AZUL, e o mapa que declara um lado desliga o outro
