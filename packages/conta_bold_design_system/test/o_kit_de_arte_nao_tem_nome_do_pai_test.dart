@@ -102,4 +102,38 @@ void main() {
     expect(culpadas, isEmpty, reason: 'arte pintando a própria página:\n${culpadas.join("\n")}');
   });
 
+
+  test('e nenhuma arte traz o BLOB nem a moldura do Figma — o desenho é igual ao do pai', () {
+    // Decisão do dono em 20/08, depois de ver o kit inteiro renderizado: **tira o blob.** As artes
+    // deste produto abriam com uma forma orgânica pálida atrás da figura (`#FFB6CB` no claro,
+    // `#600627` no escuro, sempre o PRIMEIRO path do arquivo) e as 6 do pai não têm nada atrás. Um
+    // kit metade com fundo e metade sem é linguagem partida, e a metade que decide é a dele.
+    //
+    // Saiu junto o que o export do Figma deixava: duas molduras por arquivo (`#ECECEC` e o
+    // tracejado `#9747FF`), em coordenada negativa, fora do `viewBox`. **32 nós, e o render é
+    // idêntico pixel a pixel** — conferido nos 16 antes de apagar. Invisível não é inofensivo: era
+    // um hex que nenhuma paleta declara, dentro do acervo de um DS que mede hex.
+    final comBlob = <String>[];
+    final comMoldura = <String>[];
+    for (final f in Directory('assets/illustrations').listSync().whereType<File>()) {
+      final svg = f.readAsStringSync();
+      final nome = f.uri.pathSegments.last;
+
+      if (svg.toUpperCase().contains('#9747FF') ||
+          RegExp(r'<rect x="-[\d.]+" y="-[\d.]+"').hasMatch(svg)) {
+        comMoldura.add(nome);
+      }
+
+      // O primeiro `<path>` é o que fica ATRÁS de tudo. Se ele for um degrau claro de marca, é o
+      // blob voltando pelo mesmo caminho por onde saiu — um re-export.
+      final primeiro = RegExp(r'<path([^>]*?)/>').firstMatch(svg);
+      if (primeiro == null) continue;
+      final fill = RegExp(r'fill="([^"]+)"').firstMatch(primeiro.group(1)!)?.group(1);
+      if (fill == '#FFB6CB' || fill == '#600627') comBlob.add('$nome (fill=$fill)');
+    }
+    expect(comBlob, isEmpty, reason: 'o blob voltou no primeiro path:\n${comBlob.join("\n")}');
+    expect(comMoldura, isEmpty,
+        reason: 'moldura de prancheta do Figma no export:\n${comMoldura.join("\n")}');
+  });
+
 }

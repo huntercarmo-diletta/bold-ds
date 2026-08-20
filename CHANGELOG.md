@@ -20,6 +20,49 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.62.0] — 2026-08-20
+
+### MUDA PIXEL — o BLOB saiu das 14, e o kit voltou a ser uma linguagem só
+Decisão do dono depois de ver o kit inteiro renderizado numa folha: **tira o blob, deixa tudo igual às do
+pai.** As artes deste produto abriam com uma forma orgânica pálida atrás da figura — `#FFB6CB` no claro,
+`#600627` no escuro, sempre o **primeiro path do arquivo** — e as 6 do pai não têm nada atrás. Metade do
+kit com fundo e metade sem é linguagem partida, e a metade que decide é a dele.
+
+Sai 1 path por arquivo, em 14 dos 16 (o `no_files` nunca teve). Conferido no olho, claro e escuro, contra
+o fundo de página de cada modo.
+
+### Saiu junto a moldura do Figma — 32 nós, e o render é IDÊNTICO pixel a pixel
+Cada arte carregava dois `<rect>` em coordenada negativa que o export deixa: a borda `#ECECEC` e o
+tracejado `#9747FF` da seção. Ficavam fora do `viewBox` — invisíveis, e por isso ninguém tinha mexido.
+
+Invisível não é inofensivo: `#9747FF` é um hex que nenhuma paleta declara, vivendo dentro do acervo de um
+DS que **mede hex**. Removi com asserção por arquivo e **conferi os 16 renders antes e depois: zero
+pixels de diferença.** Kit: **760K → 544K**.
+
+### A rampa do pai deixou de ser cópia e virou composição (ds v0.126.0)
+As 10 chaves dele que a v0.58.0 copiou pra cá viraram uma linha:
+
+```dart
+hexesDaArte: { ...os 7 nossos, ...DilettaIllustrationBrand.rampaDoPai },
+```
+
+O pedido voltou `ENTRA DIFERENTE`, e o que decidiu não foi a economia — foi uma frase do próprio pedido
+(*"em 20/09 o único lugar onde a rampa das artes DELE vai estar escrita é o `hexesDaArte` dos filhos"*)
+que fez o pai ir contar: as 59 artes moram no pacote dele, foram desenhadas pelo primeiro filho e
+**doadas**. O mapa é dado dele sobre asset dele. A tabela não morre em 20/09; ficou pública.
+
+**Três hexes entraram de graça** (`#7096ff`, `#dfe7ff`, `#f5f9ff`) — os que eu tinha medido como faltando
+na tabela dele. Nenhuma das quatro artes que os usam é montada aqui, então o ganho não é pixel: é a classe
+de defeito que deixou de existir pro dia em que uma delas for adotada.
+
+E o gate que eu ofereci como critério continuou verde **sem uma linha de mudança**, porque ele nunca mediu
+a cópia — mediu a cobertura.
+
+### O gate novo, e ele foi visto vermelho
+`o_kit_de_arte_nao_tem_nome_do_pai` ganhou a terceira asserção: nenhum primeiro path com degrau claro de
+marca (o blob voltando por re-export) e nenhuma moldura de prancheta. Rodei contra os arquivos de antes:
+vermelho nas duas listas.
+
 ## [0.61.0] — 2026-08-20
 
 ### MUDA PIXEL — `internet_off`, `success` e `security_phone` passam a ser a PEÇA do pai

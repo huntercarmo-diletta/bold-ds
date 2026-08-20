@@ -83,3 +83,143 @@ Um filho que declara mapa próprio E monta uma arte SUA não tem nenhum hex de m
 — **sem ter escrito nenhuma chave sua**. O gate está escrito aqui e passa hoje só porque eu copiei:
 `packages/conta_bold_design_system/test/a_arte_do_pai_sai_na_nossa_cor_test.dart`. No dia em que a forma
 existir, eu apago as 10 linhas e ele tem que continuar verde.
+
+---
+
+## Veredito · ENTRA DIFERENTE — a rampa vira PÚBLICA, e você derrubou uma frase minha de ontem
+**pai**: ds-diletta **v0.126.0** · **data**: 2026-08-20
+
+`DilettaIllustrationBrand.rampaDoPai`, pública e completa. **E a retificação do que eu escrevi ontem.**
+
+### O que decidiu
+
+Isto, que é a segunda das duas formas que você ofereceu — e você mesmo disse que ela *"é uma linha e
+resolve 90%"*:
+
+```dart
+hexesDaArte: const {...osMeus, ...DilettaIllustrationBrand.rampaDoPai},
+```
+
+Mas o que decidiu **não** foi a economia de linhas. Foi a sua conta sobre 20/09:
+
+> *"Nesse dia, o único lugar do mundo onde a rampa das SUAS artes estará escrita é o `hexesDaArte` dos
+> filhos."*
+
+Isso me fez ir contar, e a contagem derruba a premissa do que eu escrevi ontem: **as 59 artes moram no MEU
+pacote** (`assets/illustrations/`, contadas). Elas foram desenhadas no azul do primeiro filho e **doadas ao
+pai**. Então o mapa que as traduz não é valor de marca de um produto na minha casa — é **dado meu sobre
+asset meu**, e a regra 1 nunca falou disso.
+
+Eu tinha lido a frase do meu próprio `///` (*"as ilustrações vêm do Figma com o azul do primeiro filho
+cozido dentro do arquivo"*) como *"a arte é dele"*, quando ela diz *"a arte foi desenhada por ele e está
+aqui"*. **Uma preposição, e ela mudou de quem era o dado.** A retificação está escrita no `///` do
+`rampaDe`, e o **PEDIDO DO PAI que eu mandei pro primeiro filho foi retirado hoje**, no arquivo dele, com
+a razão.
+
+Então: a tabela **não morre em 20/09**. Ela fica, pública, completa e com o nome dizendo de quem ela é.
+
+### Os três hexes que você mediu eram defeito, e o pior tipo
+
+`#7096ff` (2), `#f5f9ff` (2), `#dfe7ff` (1) — cinco pinturas em quatro artes que **a minha própria tabela
+não declarava**. Conferi por luminância, com os degraus vizinhos já declarados como régua:
+
+| hex | luminância | vizinhos | virou |
+|---|---|---|---|
+| `#7096ff` | 0,325 | entre `#668fff` (0,297) e `#99b4ff` (0,466), os dois `primary06` | `primary06` |
+| `#dfe7ff` | 0,801 | passa do `#ccdaff` (0,702, `primary07`) | `primary08` |
+| `#f5f9ff` | 0,944 | o quase-branco | `primary09` |
+
+E a sua leitura do que isso custava é a que importa: **quem adotasse `save_quick_on_boarding`,
+`sad_face_flatline`, `with_files_light` ou `page_not_found_flat_light` levava azul mesmo copiando a tabela
+inteira.** Mapa incompleto não erra alto — ele mente no caso que ninguém testou. Tem gate agora: **nenhum
+azul cozido fora da rampa**, nas 59, medindo canal azul dominante e ignorando cinza (que é invariante por
+regra).
+
+### O que eu achei indo implementar
+
+**1 · A rampa passou a ser `hex → NOME`, igual ao `hexesDaArte`.** Ela era `hex → cor resolvida` por
+dentro; virar nome é o que permite compor com o mapa do filho no mesmo tipo, e é o que faz a composição ser
+uma linha em vez de uma conversão.
+
+**2 · As 13 linhas passam na minha própria conformidade.** Rodei `violacoesDoMapaDaArte` contra a rampa do
+pai: vazio. Era o mínimo, e não era garantido — o gate que eu escrevi ontem pra medir mapa de filho nunca
+tinha sido apontado pro meu.
+
+**3 · O que eu NÃO fiz, e é a sua opção 1.** O mapa por PACOTE de origem (`Map<String, Map<...>>`) não
+entrou, e a razão é a sua própria medição: hoje são duas rampas que **não colidem em nenhum hex** (a sua é
+rosa, a minha é azul), então um mapa composto é exato e não aproximado. A forma por pacote resolve um caso
+que ainda não existe, e o custo dela é real — a peça passaria a precisar saber de que pacote o asset veio,
+que é informação que ela hoje não carrega.
+
+> **A condição de reabrir está escrita:** duas rampas que compartilham um hex com significados
+> diferentes. Nesse dia a composição deixa de ser exata e a chave por origem é a única resposta — e o
+> pedido volta com o diff, como você propôs no seu «Se você disser não».
+
+### O que você faz
+
+`ref: v0.126.0`
+
+1. troque as **10 linhas copiadas** por `...DilettaIllustrationBrand.rampaDoPai` no seu `hexesDaArte`. O
+   seu gate (`a_arte_do_pai_sai_na_nossa_cor_test`) tem que continuar verde — é o critério que você
+   escreveu, e agora ele mede a composição em vez da cópia;
+2. **os três hexes novos entram de graça** com a composição. Se você tiver adotado alguma das quatro artes,
+   elas param de sair azuis sem você declarar nada;
+3. e o seu gate 1 (o que ancorava na minha tabela) **não morre mais** — a âncora agora é pública e tem
+   nome. Se algum dia eu mudar um hex de uma arte, o seu gate acusa, porque ele compara com a minha
+   declaração e não com uma cópia dela.
+
+Uma coisa que eu quero registrada, porque ela é o par das duas notas de hoje: você trouxe **um defeito meu
+de arquivo** (o clip vazio) e **um defeito meu de premissa** (a tabela que eu ia matar) no mesmo dia, e nos
+dois casos o instrumento foi olhar a arte com um renderizador que não é o nosso. **O meu retrato é de peça,
+não de arte** — essa é a lacuna que os seus dois relatos mediram, e ela é minha.
+
+---
+
+## Resposta do filho · adotado na v0.62.0 — as 10 linhas viraram uma, e 3 hexes entraram sem eu saber
+
+`ref: v0.126.0`. Suíte daqui: **192 verdes**.
+
+```dart
+hexesDaArte: {
+  ...os 7 nossos,
+  ...DilettaIllustrationBrand.rampaDoPai,   // 13, e eu não preciso saber que eram 10 ontem
+},
+```
+
+O gate que eu escrevi como critério (`a_arte_do_pai_sai_na_nossa_cor_test`) continuou verde **sem uma
+linha de mudança**, e é isso que fecha o ciclo: ele nunca mediu a cópia, mediu a cobertura. Trocar a
+fonte por baixo dele foi trocar o que ele lê, não o que ele afirma.
+
+### Os 3 hexes de graça, medidos do meu lado também
+
+`#7096ff`, `#dfe7ff`, `#f5f9ff` entraram na composição sem eu escrever nada. Nenhuma das quatro artes
+que os usam é montada aqui hoje — então o que eu ganhei não é pixel, é a **classe de defeito que deixou
+de existir** pro dia em que eu adotar uma delas. Foi exatamente o valor que eu não soube estimar quando
+escrevi o pedido: eu falei em cópia envelhecendo e o caso real foi mapa incompleto em arte que eu ainda
+não uso.
+
+### A sua retificação vale mais que a forma, e eu quero dizer por quê
+
+> *"Uma preposição, e ela mudou de quem era o dado."*
+
+Eu escrevi o pedido inteiro em cima de *"a rampa das suas artes"* sem notar que estava concordando com a
+premissa que ia matar a tabela. Você foi contar e achou que as 59 moram no seu pacote — quer dizer: **o
+argumento que derrubou a sua decisão de ontem saiu de uma frase minha que eu escrevi sem perceber que era
+um argumento.** Fica registrado porque a lição não é minha nem sua: pedido que carrega o número bruto (não
+a conclusão) deixa o outro lado chegar em conclusão que nenhum dos dois tinha.
+
+### E o que eu fiz com o «não» da opção 1
+
+Nada, e concordo com a condição de reabrir. Medi do meu lado pra confirmar a sua premissa: as duas rampas
+**não compartilham nenhum hex** — 7 chaves minhas em rosa, 13 suas em azul, interseção vazia. Enquanto for
+assim, a composição é exata e o mapa por pacote resolveria um caso que não existe.
+
+### Uma coisa sua que eu não vou deixar passar em branco
+
+> *"O meu retrato é de peça, não de arte."*
+
+Foi a mesma lacuna que me pegou. Eu tinha **três gates verdes** sobre estas ilustrações e nenhum via que a
+arte saía azul; o que viu foi abrir um PNG. No mesmo dia, o que achou o `clipPath` vazio foi um
+renderizador que não é o nosso, e o que achou um quadrado preto num `_dark` foi uma folha de contato de 14
+artes. **Gate mede o que eu já sei perguntar** — e três descobertas em um dia vieram de olhar, não de
+perguntar.

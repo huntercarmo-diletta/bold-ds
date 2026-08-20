@@ -157,31 +157,22 @@ class BoldTheme {
       '#600627': 'primary02', // 73
       '#300313': 'primary01', // 27
       '#fff6fa': 'primary09', // 4
-      // E os DEZ do PAI, porque desde 20/08 a arte dele também é nossa (`key_word`, `no_data`). A
-      // chave é de quem DESENHOU: o azul está cozido no SVG dele, e declarar mapa próprio desliga a
-      // tabela de fallback inteira (`if (declarado.isNotEmpty)`) — então o mapa que declara UM lado
-      // faz o outro passar direto. Medido: 33 pinturas saíam azuis num app rosa, sem erro nenhum.
-      // O degrau de destino é o MESMO que ele usa, para a arte manter a escada tonal e trocar só a
-      // família.
+      // E a rampa DELE, composta e não copiada.
       //
-      // MEDIDO, e escolhido assim mesmo: o rosa é mais claro que o azul no mesmo degrau, então
-      // quatro traduções que passavam AA gráfico (3,0 sobre branco) deixam de passar —
-      // `#3369ff` 4,56 → 2,73, `#255df9` 5,23 → 2,73, `#2861ff` 4,95 → 2,73, `#668fff` 3,03 → 2,26.
-      // Não é violação: 1.4.11 vale pro gráfico que CARREGA informação, e ilustração de estado
-      // vazio é decorativa — a frase está no texto ao lado dela. Descer um degrau consertaria o
-      // número e achataria a escada (o corpo e o contorno do escudo virariam a mesma cor), que é
-      // trocar um problema que não existe por um que se vê. No ESCURO a conta anda pro outro lado:
-      // 1,82 → 4,09 no `#003be0`, 3,11 → 5,19 no `#3369ff`.
-      '#002999': 'primary03',
-      '#003be0': 'primary04',
-      '#003de6': 'primary04',
-      '#255df9': 'primary05',
-      '#3369ff': 'primary05',
-      '#2861ff': 'primary05',
-      '#668fff': 'primary06',
-      '#99b4ff': 'primary06',
-      '#b8caff': 'primary07',
-      '#ccdaff': 'primary07',
+      // Ontem eram 10 linhas copiadas daqui, porque `rampaDe` é exclusivo — declarar mapa próprio
+      // desliga a tabela dele, e foi o ato de declarar o nosso rosa que fez o azul dele atravessar
+      // `key_word` e `no_data` inteiras. A cópia resolvia hoje e envelhecia calada: hex que muda do
+      // lado dele continuaria traduzido pelo valor velho, e o `apply` não erra alto.
+      //
+      // O pedido voltou ENTRA DIFERENTE com uma retificação dele que vale mais que a forma: as 59
+      // artes moram no pacote DELE — foram DESENHADAS pelo primeiro filho e DOADAS ao pai. O mapa
+      // que as traduz é dado dele sobre asset dele, então ele não morre em 20/09; fica público.
+      // *"Uma preposição, e ela mudou de quem era o dado."*
+      //
+      // Vieram 3 hexes de graça na composição (`#7096ff`, `#dfe7ff`, `#f5f9ff`), que eu tinha
+      // medido como faltando na tabela dele e ele conferiu por luminância. São 13 agora, não 10 —
+      // e é exatamente por isso que a composição paga: eu não precisei saber que mudou.
+      ...DilettaIllustrationBrand.rampaDoPai,
     },
   );
 
