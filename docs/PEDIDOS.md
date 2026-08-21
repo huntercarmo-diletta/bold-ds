@@ -92,6 +92,22 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 
 | [as abas do pai ABRAÇAM o rótulo, e as minhas repartem](pedidos/2026-08-13-as-abas-do-pai-abracam-o-rotulo-e-as-minhas-repartem-a-largura.md) | **ENTRA** — `DilettaTabs.larguraIgual`. E não foi a simetria que decidiu, foi o **estouro de 113px**: *"o meu default falhando no caso comum de três abas é defeito de aplicação, não inventário de filho"*. A minha tabela `abraça × reparte` sozinha teria dado ESPERA | **ds v0.115.0** · adotado na **v0.53.0**: as `BoldAbas` viraram CASCA, e o traço ativo foi de 2 pra 3 — o número dele |
 
+| [o material do card é DECLARAÇÃO, e este produto tem os dois](pedidos/2026-08-21-o-material-do-card-e-declaracao-e-este-produto-tem-os-dois.md) | **sem veredito** | — |
+
+| [a linguagem tem TOAST que some e não tem AVISO que fica](pedidos/2026-08-21-a-linguagem-tem-toast-que-some-e-nao-tem-aviso-que-fica.md) | **sem veredito** | — |
+
+| [o calendário não diz qual dia é HOJE](pedidos/2026-08-21-o-calendario-nao-diz-qual-dia-e-hoje.md) | **sem veredito** | — |
+
+| [o pegador da folha é quase o DOBRO e usa a tinta cheia](pedidos/2026-08-21-o-pegador-da-folha-e-quase-o-dobro-e-usa-a-tinta-cheia.md) | **sem veredito** | — |
+
+| [a tag de status tem fill SÓLIDO e não tem PONTO](pedidos/2026-08-21-a-tag-de-status-tem-fill-solido-e-nao-tem-ponto.md) | **sem veredito** | — |
+
+**Os cinco de 2026-08-21 saíram do mesmo lugar, e é a terceira origem deste ledger**: não de ler o
+pai nem de rodar a adoção, mas de **medir as 10 cascas que ainda desenham** no app — a Fase 3 do plano
+de adoção dele. Cada um traz o número dos dois lados, porque a regra da fase é *medir antes de pedir*.
+Dois achados da mesma varredura NÃO viraram pedido, e isso é a régua funcionando: o traço em gradiente
+do card de destaque (**1 sítio**) e o avatar sem iniciais (**1 caso**) — *um caso não vira pedido*.
+
 ## O que os pais me mandaram
 
 | aviso | tipo | respondido? |
