@@ -20,6 +20,28 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.66.0] — 2026-08-21
+
+### FASE 1 do plano — duas peças mudam de casa, e a frase que as segurava é a mesma de sempre
+`BoldBusy` · `BoldBusyScope` · `BoldOperatingContext` · `BoldOperatingSlot` · `BoldOperatingStrip`.
+
+As cinco viviam no app como `deliberado`, com razões que dizem a mesma coisa: *"comportamento deste
+produto"*, *"a regra de operar em nome de outra conta, que o pai não tem como saber"*. **As razões estão
+certas e a conclusão estava errada** — "deste produto" é argumento pro PACOTE, não pro app, porque o
+pacote É o DS deste produto.
+
+É a **terceira vez** que a mesma frase muda de conclusão em três dias: aconteceu com o `BoldLogo`
+(20/08), com as 16 ilustrações (20/08) e agora com estas. Da primeira vez a razão escrita estava
+factualmente errada; das outras duas ela estava certa e apontava pro lugar errado — e a segunda forma é
+pior, porque não há nada pra desmentir.
+
+O que a mudança paga: quem monta tela com as peças do pacote trava o formulário sem depender de o app
+declarar a peça, e a regra deixa de existir em dois lugares no dia em que um segundo produto precisar
+dela.
+
+Na travessia, `BoldMotion.fast` virou `DilettaMotion.short` (era um alias de um valor só) e os
+`BoldSpace.xN` viraram `DilettaSpacing.sN` — os dois já eram derivação do pai, então nenhum valor mudou.
+
 ## [0.65.0] — 2026-08-20
 
 ### Sobe pro pai v0.141.0 — e a GRADE que faltava entrou como peça dele

@@ -53,6 +53,8 @@ export 'src/bold_ilustracao.dart';
 
 /// Componentes que só o Bold tem, nascidos aqui compondo as peças do pai.
 export 'src/bold_autorizacao.dart';
+export 'src/bold_busy.dart';
+export 'src/bold_contexto_de_operacao.dart';
 export 'src/bold_background.dart';
 export 'src/bold_dinheiro.dart';
 export 'src/bold_abas.dart';
