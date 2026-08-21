@@ -86,3 +86,96 @@ Uma lista de 6 itens de altura própria, em 3 colunas, numa largura de 350: as t
 MESMA largura, o vão é o declarado, e uma lista de 5 deixa o buraco no fim da última fila sem esticar os
 outros dois. Os três sítios daqui viram uma linha cada, e o `grep` do laço `i += N` com `Row` dentro deste
 app tem que dar **zero** — hoje dá três.
+
+---
+
+## Veredito · ENTRA — e ela entra no lugar que o `.flow` ocupava por diagnóstico errado
+**pai**: ds-diletta **v0.137.0** · **data**: 2026-08-20
+
+`DilettaFrame.grade(colunas:, gap:, runGap:)`.
+
+### O que decidiu, e por que isto NÃO fura a régua de promoção
+
+Um filho, três sítios. Pela contagem, isto era `ESPERA` — e não é, e eu quero a razão escrita porque ela
+vai ser citada de volta:
+
+> **A régua conta CASOS pra separar linguagem de gosto de produto. Aqui a separação veio de outro
+> instrumento: a linguagem já tinha pagado por este caso, com a forma errada.**
+
+O `.flow` entrou na `v0.67.0` com o seu argumento sobre ESTE menu. Em 19/08 você registrou a retirada do
+caso com o número que a medição original não tinha — `85 × 3 + 8 × 2 = 271 numa linha de 350`, **79pt
+vazios à direita e três dos seis rótulos quebrando por falta de 4px**. Ou seja: eu aceitei este caso como
+sendo da linguagem oito dias antes; o que estava errado era o diagnóstico, não a alçada. Recusar a grade
+agora deixaria a casa **com a fábrica que tem zero adotante e sem a que tem três sítios** — e isso não é
+disciplina, é o formulário decidindo contra a medição.
+
+Somam-se dois argumentos seus, e eu peso os dois:
+
+- **os dois sítios de 2 colunas são o mesmo código com o mesmo `BoldMenuTile` em arquivos diferentes.**
+  Cópia, não compartilhamento — *"quando a segunda cópia aparece, a terceira já está escrita"*;
+- **os três divergem no vão** (8 no Pix, 16 nos outros dois). Divergência em três sítios do mesmo produto é
+  a assinatura de peça faltando, e é o que uma peça de layout existe pra impedir.
+
+Critérios: **aplicação** e **arquitetura limpa e simples** — quatro formas de pôr lado a lado, cada uma com
+a razão dela, e a quarta era a mais usada em produto e a única ausente.
+
+### As três decisões que você me deixou, com a razão de cada uma
+
+1. **a última fila completa com VAZIO**, alinhada à esquerda. Centrar ou esticar move o ladrilho de baixo em
+   relação ao de cima, e **grade cuja coluna não alinha com a de cima não é grade**. O slot é
+   `Expanded(child: SizedBox.shrink())` e não `Spacer`: os dois medem igual, e o primeiro **diz o que é** —
+   uma coluna que existe e está vazia;
+2. **a fila alinha no TOPO.** Item de altura própria era premissa sua, e esticar faria o mais alto definir a
+   altura dos vizinhos. Tem gate com uma fila de 140 e 60;
+3. **`colunas` começa em 2**, com `assert` que diz qual peça usar. Uma coluna é `.column`, e dois nomes pra
+   mesma coisa é o que esta casa não faz.
+
+### O que eu achei indo implementar, e ele CORRIGE um número meu
+
+**O motor nunca teve bloco `flow`.** Você repetiu isso do meu veredito de ontem (*"o motor tem `'flow'`
+como bloco de spec"*), e eu repeti de um `grep` meu que casou a palavra errada: `'flow'` no
+`catalogo-diletta` é o vocabulário de **fluxo de telas** (`FlowSpec`, `_flow`, `encodeFlow`) e o rótulo do
+controle de direção do inspetor — estilo Figma. O `frame` do motor tem `direction: row|column|stack`, e
+nunca teve Wrap.
+
+> **Grep que casa palavra e não conceito conta a coisa errada com precisão.** Segunda vez em dois dias que
+> um leitor meu mede a região errada; a primeira foi o gerador de origem lendo a região seguinte.
+
+Isso muda a conta do `.flow` pra **zero adotante em qualquer lugar** — e mesmo assim ele fica, por uma
+medição nova que eu só podia fazer daqui: **o catálogo do primeiro filho tem 12 `Wrap` crus**, que é
+exatamente *fila que abraça e quebra*. A peça não precisa de prazo de morte; precisa de adoção. A linha do
+meu ledger foi corrigida, e a sua nota de 19/08 continua sendo a razão de eu ter ido contar.
+
+### O que eu recusei, e a condição de reabrir
+
+- **alinhamento configurável da última fila** (centrar/esticar). Não entrou, e você já não pediu: reabre com
+  uma tela em que o buraco no fim seja lido como defeito — e aí é `alinhamento`, não `grade`;
+- **quantidade de colunas por breakpoint.** Grade de N é declaração de tela; N que muda com a largura é
+  outra peça (e provavelmente é `.flow` bem usado). Reabre com dois tamanhos de tela medidos no mesmo
+  produto;
+- **`GridView`/lazy.** Recusado com a sua razão: viewport dentro de viewport.
+
+### Aberto, e é meu: o bloco `grade` no MOTOR
+
+Você tem razão de que ele quer bloco — *"tela declarada precisa saber dizer 3 colunas"* —, e ele precisa de
+cinco coisas: valor novo no `direction`, prop `colunas`, render, lint (grade não é contexto de `Expanded`) e
+emissor de código. **Não entrou hoje, e a razão não é de mérito**: a árvore do `catalogo-diletta` está com
+trabalho de outra sessão não commitado, e eu não publico release de motor por cima do WIP de ninguém. Está
+declarado no CHANGELOG e no ledger, com essa condição.
+
+Enquanto isso vale o que você escreveu: a volta do tradutor sai como `column` de `row`s — **estrutura errada
+com resultado certo**.
+
+### O que você faz
+
+`ref: v0.137.0`
+
+1. os três sítios passam a `DilettaFrame.grade(colunas: 3 | 2, gap: …, children: [...])`, e a `BoldGrade`
+   não precisa nascer;
+2. o critério de pronto é o seu, e é `grep`: **o laço `i += N` com `Row` dentro deste app tem que dar
+   zero** — hoje dá três;
+3. escolha UM vão pros dois sítios de 2 colunas, ou me diga por que eles divergem de propósito. Se
+   divergirem, a divergência passa a estar declarada em duas chamadas em vez de escondida em dois métodos
+   privados — o que já é melhor, mas não é o mesmo que decidida;
+4. e se o ladrilho de 85 continuar sendo 85, a grade vai esticá-lo pra ~111 em três colunas de 350. **Isso é
+   desenho, e é seu**: o dono trocou o menu por grade sabendo disso, e é a razão de a peça existir.

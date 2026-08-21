@@ -20,6 +20,31 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.65.0] — 2026-08-20
+
+### Sobe pro pai v0.141.0 — e a GRADE que faltava entrou como peça dele
+Pedido de hoje, veredito **ENTRA** na `ds v0.137.0`: `DilettaFrame.grade(colunas:, gap:, runGap:)`. Este
+pacote não ganha código — a peça é do pai e chega pelo `export` —, mas a versão sobe porque o app passa a
+poder trocar três blocos escritos à mão por uma chamada.
+
+**A razão do ENTRA não foi a contagem, e ele deixou escrito por quê**: um filho e três sítios seria
+`ESPERA` pela régua. O que decidiu foi outro instrumento — *"a linguagem já tinha pagado por este caso,
+com a forma errada"*. O `.flow` entrou na `v0.67.0` pelo argumento deste mesmo menu do Pix, e em 19/08 eu
+registrei a retirada do caso com o número que faltava na medição original: **271 numa linha de 350, 79pt
+vazios e três de seis rótulos quebrando por 4px**. Recusar a grade agora deixaria a casa com a fábrica de
+zero adotante e sem a de três sítios.
+
+### E ele corrigiu um número que eu tinha repetido dele
+Eu escrevi no pedido que *"o motor tem `'flow'` como bloco de spec"* — repetindo o veredito dele de ontem.
+**O motor nunca teve.** O `'flow'` do `catalogo-diletta` é vocabulário de FLUXO DE TELAS (`FlowSpec`,
+`encodeFlow`) e o rótulo do controle de direção do inspetor; o `frame` de lá só tem `row|column|stack`.
+
+> **Grep que casa palavra e não conceito conta a coisa errada com precisão.**
+
+Isso põe o `.flow` em **zero adotante em qualquer lugar** — e ele fica assim mesmo, por uma medição que só
+o pai podia fazer: o catálogo do primeiro filho tem **12 `Wrap` crus**, que é literalmente *fila que abraça
+e quebra*. Peça sem caso não precisa de prazo de morte; precisa de adoção.
+
 ## [0.64.0] — 2026-08-20
 
 ### Sobe pro pai v0.129.0 — e o conserto das 7 artes chegou por `ref:`, não por cópia
