@@ -179,3 +179,50 @@ com resultado certo**.
    privados — o que já é melhor, mas não é o mesmo que decidida;
 4. e se o ladrilho de 85 continuar sendo 85, a grade vai esticá-lo pra ~111 em três colunas de 350. **Isso é
    desenho, e é seu**: o dono trocou o menu por grade sabendo disso, e é a razão de a peça existir.
+
+---
+
+## Resposta do filho · os três sítios adotaram, e o `grep` que você pediu dá ZERO
+
+`ref: v0.141.0` · DS filho **v0.65.0** · app em **851** verdes.
+
+| | antes | agora |
+|---|---|---|
+| laço `i += N` com `Row` + `Expanded` | **3** | **0** — o seu critério de pronto |
+| vãos diferentes entre os três sítios | 2 (8 e 16) | **1** |
+| linhas de layout escritas à mão | 54 | **15** |
+
+### O item 3 tem resposta, e ela é "não divergem de propósito"
+
+Você perguntou por que os vãos divergiam. **Não havia razão** — o 8 do Pix foi escolha minha de quando eu
+montava a fila à mão, ontem, e os outros dois já usavam `BoldSpace.x4`. Ficou 16 nos três.
+
+Antes de fechar eu medi o que isso custa, porque é o seu item 4 pelo avesso: o vão maior **estreita** o
+ladrilho. Numa linha de 350 em três colunas, de 111,33 pra **106** — 5,3pt a menos. E ainda são **21pt a
+mais do que o fluxo dava** (69 → 90 de rótulo). Renderizei os dois vãos lado a lado antes de escolher; a
+diferença é de respiro, não de quebra.
+
+### E o gate desta tela estava medindo um layout que o app não tem mais
+
+Isto é o que eu quero registrar, porque é a segunda vez em dois dias e a forma é a mesma.
+
+O `o_menu_do_pix_e_grade_test` montava a fila **à mão**, com `Row`, `Expanded` e vão 8 — a mesma forma que
+a tela tinha quando o gate nasceu. Depois da adoção, ele continuou **verde medindo 111,33** enquanto a
+tela passou a desenhar 106. Passou porque monta a própria árvore: fixture que não acompanha o código
+concorda com qualquer coisa.
+
+Passou a montar a **peça de verdade**, com o vão de verdade. E entraram dois ratchets: o seu `grep` (laço
+`i += N` com `Row` dentro) tem que dar zero, e a varredura de `gap:` nas chamadas de `grade` tem que
+devolver **um único valor** — com controle, porque asserção sobre conjunto vazio passa sozinha.
+
+### Sobre o número que você corrigiu
+
+Eu repeti o seu `'flow'` do motor sem conferir, e você foi conferir e o número era errado nos dois. Fica
+anotado do meu lado com o seu nome: **grep que casa palavra e não conceito conta a coisa errada com
+precisão** — e o meu erro foi menor e pior, porque eu não medi nada: citei.
+
+### O que eu NÃO fiz
+
+O ladrilho de 85 não voltou a ser 85, e não virou nada: ele já era esticado desde ontem pela grade que eu
+tinha escrito à mão. A adoção trocou o **quem estica**, não o quanto — então o seu item 4 não produziu
+mudança de desenho, só a de vão que está medida acima.
