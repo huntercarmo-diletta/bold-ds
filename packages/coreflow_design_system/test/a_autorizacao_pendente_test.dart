@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 /// AS DUAS PEÇAS DE UMA PENDÊNCIA — falta quanto, e até quando.
 void main() {
+  eixosDoCartao();
   Widget naTela(Widget filho, {bool escuro = false}) => Directionality(
         textDirection: TextDirection.ltr,
         child: DilettaThemeScope(
@@ -167,6 +168,94 @@ void main() {
       expect(find.byType(DilettaStatusTag), findsOneWidget);
       expect(find.byType(DilettaBox), findsNothing,
           reason: 'voltou a desenhar pill próprio em vez de usar a etiqueta do pai');
+    });
+  });
+}
+
+/// OS DOIS EIXOS QUE O CARTÃO GANHOU EM 22/08, adotando-o na tela de onde ele saiu.
+///
+/// O `_PendingCard` do app foi portado pra cá semanas antes e a tela continuou evoluindo: ganhou o
+/// tom por TIPO DE TRANSAÇÃO e o MODO LOTE. Sem os dois, adotar a peça custava duas funções do
+/// produto — e peça que custa função não é adotada, é contornada.
+void eixosDoCartao() {
+  Widget naTela(Widget filho, {bool escuro = false}) => Directionality(
+        textDirection: TextDirection.ltr,
+        child: DilettaThemeScope(
+          theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+          child: Align(alignment: Alignment.topLeft, child: filho),
+        ),
+      );
+
+  Widget cartao({
+    CoreflowTomDoPedido tom = CoreflowTomDoPedido.marca,
+    bool emLote = false,
+    bool selecionada = false,
+    bool jaAprovei = false,
+  }) =>
+      CoreflowCartaoDePedido(
+        quemPediu: 'Ana',
+        detalhe: 'Pix · para João · 14:32',
+        valor: r'R$ 1.200,00',
+        icone: 'pix-mark',
+        colhidas: 1,
+        exigidas: 2,
+        tom: tom,
+        emLote: emLote,
+        selecionada: selecionada,
+        jaAprovei: jaAprovei,
+      );
+
+  group('o cartão do pedido', () {
+    testWidgets('o TOM pinta o ladrilho, e os quatro são papéis distintos', (t) async {
+      final tintes = <CoreflowTomDoPedido, int>{};
+      for (final tom in CoreflowTomDoPedido.values) {
+        await t.pumpWidget(naTela(SizedBox(width: 400, child: cartao(tom: tom))));
+        await t.pump(const Duration(milliseconds: 50));
+        final ladrilho = t
+            .widgetList<Container>(find.byType(Container))
+            .firstWhere((c) => c.constraints?.maxWidth == 46);
+        tintes[tom] = ((ladrilho.decoration! as BoxDecoration).color!).toARGB32();
+      }
+      expect(tintes.values.toSet(), hasLength(4),
+          reason: 'quatro tons, quatro tintes — se dois empatam, o tipo deixa de se ler pela cor');
+    });
+
+    testWidgets('o LOTE troca o par de botões pela caixa de marcar', (t) async {
+      await t.pumpWidget(naTela(SizedBox(width: 400, child: cartao())));
+      await t.pump(const Duration(milliseconds: 50));
+      expect(find.text('Aprovar'), findsOneWidget, reason: 'fora do lote o cartão decide');
+      expect(find.byType(DilettaCheckbox), findsNothing);
+
+      await t.pumpWidget(naTela(SizedBox(width: 400, child: cartao(emLote: true))));
+      await t.pump(const Duration(milliseconds: 50));
+      expect(find.text('Aprovar'), findsNothing,
+          reason: 'no lote a ação é da barra de baixo, não do cartão');
+      expect(find.byType(DilettaCheckbox), findsOneWidget);
+    });
+
+    testWidgets('e quem JÁ APROVOU não tem caixa: ali é estado', (t) async {
+      await t.pumpWidget(
+          naTela(SizedBox(width: 400, child: cartao(emLote: true, jaAprovei: true))));
+      await t.pump(const Duration(milliseconds: 50));
+      expect(find.byType(DilettaCheckbox), findsNothing);
+    });
+
+    testWidgets('a ESCOLHA do lote vai na borda do cartão', (t) async {
+      Color? borda(WidgetTester t) => t
+          .widgetList<DilettaCardSurface>(find.byType(DilettaCardSurface))
+          .first
+          .bordaSolida;
+
+      await t.pumpWidget(naTela(SizedBox(width: 400, child: cartao(emLote: true))));
+      await t.pump(const Duration(milliseconds: 50));
+      final normal = borda(t);
+
+      await t.pumpWidget(naTela(
+          SizedBox(width: 400, child: cartao(emLote: true, selecionada: true))));
+      await t.pump(const Duration(milliseconds: 50));
+      expect(borda(t), isNot(normal),
+          reason: 'sem a borda, o cartão escolhido é indistinguível do vizinho');
+      expect(borda(t), DilettaScheme.light(BoldPalette.bold).primary);
     });
   });
 }

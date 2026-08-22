@@ -50,6 +50,7 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
     required this.success,
     required this.warning,
     required this.info,
+    required this.infoSubtle,
   });
 
   final Brightness brightness;
@@ -98,6 +99,17 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   /// o primitivo). Dark = shades claros/vibrantes; light = shades profundos.
   final Color primary, onPrimary, primaryPressed, primaryWash;
   final Color danger, success, warning, info;
+
+  /// O TINTE de informação, e ele entrou em 22/08 porque faltava o par.
+  ///
+  /// O pai declara `primarySubtle`, `successSubtle`, `warningSubtle` e `errorSubtle` — quatro papéis
+  /// de fundo tonal. O `info` deste produto é papel EXTRA (o pai recusou a família `info` na
+  /// `v0.27.0`, e a recusa continua certa), então ele chegava sem tinte: o cartão do pedido, que
+  /// pinta o ladrilho do tipo com o tinte do tom, não tinha o que ler pra TED.
+  ///
+  /// Sem declaração na paleta, deriva do próprio `info` a **11%** — o mesmo alfa que o ladrilho já
+  /// usava cravado. Alfa derivado é pior que papel declarado e melhor que um quinto valor cru.
+  final Color infoSubtle;
 
   /// O VINHO — o segundo eixo da marca deste produto, em três degraus.
   ///
@@ -203,6 +215,8 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
       secondaryFlow: extra('fluxoSecundario',
           escuro ? BoldColors.fluxoSecundarioEscuro : BoldColors.fluxoSecundarioClaro),
       info: extra('info', BoldColors.info),
+      infoSubtle: extra('infoSubtle',
+          extra('info', BoldColors.info).withValues(alpha: 0.11)),
       // O VINHO, pelo mesmo caminho dos outros quatro extras.
       // Pelos resolvedores do próprio `BoldVinho`, e não pelo `extra()` daqui: os dois fariam a
       // mesma conta, e conta repetida diverge. Quem não tem esquema na mão chama lá direto.
@@ -215,6 +229,18 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   }
 
   /// O escuro do Bold. Atalho pra [CoreflowScheme.de] com a paleta deste produto.
+  /// O ESQUEMA DESTE PRODUTO, lido do tema — e ele entrou em 22/08, pra uma peça daqui.
+  ///
+  /// Até então só o APP tinha acessor (`BoldColors.of(context)`), e as peças deste pacote leiam
+  /// apenas o esquema do PAI. Funcionou enquanto nenhuma peça daqui precisou de papel que só existe
+  /// aqui — e o cartão do pedido precisou: o tom de INFORMAÇÃO da TED é papel extra deste produto,
+  /// e o pai recusou a família `info` na `v0.27.0`.
+  ///
+  /// Sem a extensão registrada, cai no escuro — o mesmo default que o app usa, e pela mesma razão:
+  /// peça que estoura por falta de tema é peça que ninguém consegue pôr num teste.
+  static CoreflowScheme of(BuildContext context) =>
+      Theme.of(context).extension<CoreflowScheme>() ?? CoreflowScheme.dark();
+
   static CoreflowScheme dark() =>
       CoreflowScheme.de(BoldPalette.bold, brilho: Brightness.dark);
 

@@ -68,3 +68,58 @@ componente lendo o scheme. Zero mudança pra quem não declara.
 As duas cascas ficam, com 9 primitivos somados e a razão escrita: *o canto da folha deste produto é
 22 e o da variante é 24*. E eu peço que a linha do ledger deixe de dizer que não bloqueia nada —
 porque a partir de hoje ela bloqueia, e é o número acima.
+
+## VEREDITO · ENTRA — e quem removeu o bloqueio de cima fui eu, ontem
+**pai**: ds-diletta **v0.144.0** · **data**: 2026-08-22
+
+`DilettaPalette.raioDeFolha`, nulo ⇒ 24. `DilettaScheme.formaDaFolha` deriva, e os **nove** sítios que
+cravavam `r24` no topo de folha passam a ler o scheme.
+
+### O que decidiu
+A leitura que você fez do MEU ledger, e ela é melhor que a que eu tinha. A linha de 30/07 mantinha o
+item registrado *"porque não bloqueia nada"* — e você mostrou que essa frase morreu **por causa de um
+conserto meu**, não de medição nova sua. O pegador era o que segurava a delegação; ele saiu do caminho
+na v0.143.0 e a linha de baixo apareceu.
+
+> **Conserto que remove o bloqueio de cima revela o de baixo.**
+
+Isso é uma classe, e ela entra no ledger com este nome: **razão de espera pode envelhecer sem ninguém
+medir nada.** A minha linha de 30/07 estava certa no dia em que foi escrita e ficou errada sozinha.
+
+E você não fingiu que a condição tinha sido atendida — disse antes de eu perguntar que o filho A bate
+em 24 e é a origem dos valores, então não desempata. **A condição de dois filhos continua SEM ser
+atendida**, e o que dispara é o outro eixo da mesma linha: o BLOQUEIO. O precedente é literal desta
+casa, e você o citou certo: o `raioDeBotao` subiu na v0.44.0 pelo caso bloqueante (*"isso não é
+integração, é redesenho"*), não pela segunda medição. **Mudou o custo, não o mérito.**
+
+A forma é a que você pediu e é a que eu daria: campo de paleta, scheme derivando, componente lendo. O
+parâmetro por sítio fica recusado pela sua própria terceira tentativa — forma no call site põe o
+degrau de volta na tela, que foi o argumento do veredito do botão.
+
+### O que eu achei indo implementar
+**Eu ia escrever a TERCEIRA cópia de 55 campos da paleta.** O fixture do gate precisava de uma paleta
+com `raioDeFolha` declarado, e a segunda cópia à mão já existia dentro do teste do botão — exatamente
+o defeito que o `comMaterial()` existe pra não ter, com o aviso escrito no `///` dele: *duas cópias
+divergem no primeiro conserto*. Os dois campos de forma entraram no `comMaterial()`, e aquela cópia
+virou uma linha.
+
+O nome do método ficou mais estreito que o que ele faz, e isso está declarado lá em vez de escondido:
+renomear custa aos filhos que já chamam, e a janela de depreciação está fechada por decisão do dono do
+produto. **Nome estreito com o motivo escrito é dívida; cópia a mais é defeito.**
+
+E o pin de raio mudou de alvo junto com a decisão: ele exigia `DilettaRadius.r24` DENTRO do widget da
+folha, o que agora seria exigir que o degrau voltasse pro sítio. Passou a exigir o contrário —
+**nenhum** widget cravando o canto, e o 24 num lugar só.
+
+### O que eu recusei, e a condição de reabrir
+- **Nada deste pedido.** Ele entrou na forma pedida.
+- A **classe maior** segue aberta como você disse: os outros 52 componentes cravam o degrau de raio, e
+  isto é UM degrau, não framework de forma. Reabre por bloqueio medido, um de cada vez — que é
+  exatamente como este entrou.
+
+### O que você faz
+`ref: v0.144.0`. Declare `raioDeFolha: 22` na sua paleta e apague o `_buildSheet` do `bold_top_bar`
+mais o canto do `bold_sheet`: são os 9 primitivos que você contou. As 40 chamadas de folha no app não
+mudam — o degrau chega por declaração, não por sítio.
+
+Se algum canto seu não for 22, aí é sítio e não produto, e isso é pedido novo com o número.

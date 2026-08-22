@@ -31,9 +31,22 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'bold_scheme.dart';
 import 'bold_autorizacao.dart';
 
 /// O cartão de um pedido esperando assinatura.
+/// O TOM do ladrilho do tipo, e ele é o que diz "Pix" ou "boleto" antes de o texto ser lido.
+///
+/// Entrou em 22/08, adotando o cartão na tela de onde ele saiu: lá o ladrilho já era colorido por
+/// TIPO DE TRANSAÇÃO — Pix na marca, TED em informação, boleto em aviso, transferência interna em
+/// sucesso — e a peça portada tinha o tinte da marca cravado nos quatro. Cor por tipo é vocabulário
+/// do produto, não decoração: quem aprova reconhece o tipo pela cor antes de ler a linha.
+///
+/// Não é `DilettaSpotState`: aquele enum não tem `info`, porque o pai recusou a família na
+/// `v0.27.0` — e a recusa continua certa lá. Aqui `info` é papel EXTRA declarado por este produto,
+/// e é o tom da TED.
+enum CoreflowTomDoPedido { marca, info, aviso, sucesso }
+
 class CoreflowCartaoDePedido extends StatelessWidget {
   const CoreflowCartaoDePedido({
     super.key,
@@ -49,6 +62,9 @@ class CoreflowCartaoDePedido extends StatelessWidget {
     this.motivo,
     this.justificativa,
     this.jaAprovei = false,
+    this.tom = CoreflowTomDoPedido.marca,
+    this.emLote = false,
+    this.selecionada = false,
     this.aoAprovar,
     this.aoRejeitar,
     this.aoTocar,
@@ -87,6 +103,22 @@ class CoreflowCartaoDePedido extends StatelessWidget {
   /// Liga o estado sem ações. Ver o `///`.
   final bool jaAprovei;
 
+  /// O tom do ladrilho do tipo. Ver [CoreflowTomDoPedido].
+  final CoreflowTomDoPedido tom;
+
+  /// MODO LOTE: a tela está escolhendo vários pedidos pra assinar de uma vez.
+  ///
+  /// Muda três coisas, e as três são a mesma decisão — no lote o cartão é um ITEM de seleção e não
+  /// uma tela de decisão: entra a caixa de marcar à esquerda, sai o par Rejeitar/Aprovar (a ação é
+  /// da barra de baixo, não do cartão), e o toque escolhe em vez de abrir o detalhe.
+  ///
+  /// Quem já aprovou não tem o que marcar: no lugar da caixa vai o disco de sucesso, porque ali é
+  /// ESTADO e não escolha.
+  final bool emLote;
+
+  /// Escolhida no lote: a borda do cartão vai pro `primary`.
+  final bool selecionada;
+
   final VoidCallback? aoAprovar;
   final VoidCallback? aoRejeitar;
   final VoidCallback? aoTocar;
@@ -107,25 +139,52 @@ class CoreflowCartaoDePedido extends StatelessWidget {
         child: DilettaCardSurface(
         radius: DilettaRadius.all16,
         corSolida: s.surface,
-        bordaSolida: s.border,
+        // No lote a borda diz o que está escolhido. Fora dele, a borda da superfície.
+        bordaSolida: selecionada ? s.primary : s.border,
         padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Row(children: [
-              // O ladrilho do tipo: 46 quadrado, tinta da marca a 11%. É ele que diz "Pix" ou
+              // A CAIXA DE MARCAR só existe no lote, e quem já aprovou não a tem: ali é estado, e
+              // não escolha. Eram dois glifos do Material (`Icons.check_box` e o vazio) fazendo o
+              // papel de um componente que existe.
+              if (emLote) ...[
+                if (jaAprovei)
+                  DilettaIcon(
+                      name: DilettaIcons.circleCheckLight,
+                      size: 22,
+                      color: s.success)
+                else
+                  DilettaCheckbox(checked: selecionada, onChanged: (_) {}),
+                DilettaGap.w(DilettaSpacing.s3),
+              ],
+              // O ladrilho do tipo: 46 quadrado, tinte do TOM a 11%. É ele que diz "Pix" ou
               // "boleto" antes de o texto ser lido.
               Container(
                 width: 46,
                 height: 46,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: s.primarySubtle,
+                  color: switch (tom) {
+                    CoreflowTomDoPedido.marca => s.primarySubtle,
+                    // O único que não sai do esquema do PAI: `info` é papel extra deste produto.
+                    CoreflowTomDoPedido.info => CoreflowScheme.of(context).infoSubtle,
+                    CoreflowTomDoPedido.aviso => s.warningSubtle,
+                    CoreflowTomDoPedido.sucesso => s.successSubtle,
+                  },
                   borderRadius: DilettaRadius.all16,
                 ),
-                child:
-                    DilettaIcon(name: icone, size: 20, color: s.primary),
+                child: DilettaIcon(
+                    name: icone,
+                    size: 20,
+                    color: switch (tom) {
+                      CoreflowTomDoPedido.marca => s.primary,
+                      CoreflowTomDoPedido.info => CoreflowScheme.of(context).info,
+                      CoreflowTomDoPedido.aviso => s.warning,
+                      CoreflowTomDoPedido.sucesso => s.success,
+                    }),
               ),
               DilettaGap.w(DilettaSpacing.s3),
               Expanded(
@@ -210,7 +269,7 @@ class CoreflowCartaoDePedido extends StatelessWidget {
                           DilettaType.bodySm.copyWith(color: s.success)),
                 ),
               ])
-            else
+            else if (!emLote)
               Row(children: [
                 Expanded(
                   // O destrutivo é o TIPO secundário e não um tipo próprio: 16 sítios de

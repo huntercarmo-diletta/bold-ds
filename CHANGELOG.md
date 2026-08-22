@@ -20,6 +20,40 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.69.0] — 2026-08-22
+
+### O cartão do pedido ganha os DOIS eixos que a tela dele tinha e ele não — e agora ela pode adotá-lo
+
+`CoreflowCartaoDePedido` saiu de `autorizacoes_screen.dart` semanas atrás, e **a tela continuou
+evoluindo depois do porte**. Quando fui adotá-la de volta, a peça custava duas funções do produto:
+
+| eixo | o que é | por que não dava pra contornar |
+|---|---|---|
+| **`tom`** (`CoreflowTomDoPedido`) | o ladrilho do tipo colorido por TRANSAÇÃO — Pix na marca, TED em informação, boleto em aviso, interna em sucesso | a peça cravava a marca nos quatro. Quem aprova reconhece o tipo pela cor antes de ler a linha |
+| **`emLote` · `selecionada`** | o cartão como ITEM de seleção: caixa de marcar à esquerda, sem o par Rejeitar/Aprovar, borda no `primary` quando escolhido | sem isso, adotar custava a assinatura em lote |
+
+**Peça que custa função não é adotada, é contornada** — e foi o que aconteceu por semanas, com a
+tela e a peça desenhando o mesmo cartão em dois lugares.
+
+### `CoreflowScheme.infoSubtle`, e o `CoreflowScheme.of(context)` que faltava
+
+O `info` deste produto é papel EXTRA (o pai recusou a família `info` na `v0.27.0`, e a recusa
+continua certa), então ele chegava **sem tinte**: o pai declara `primarySubtle`, `successSubtle`,
+`warningSubtle` e `errorSubtle`, e o quinto não existia. Sem declaração na paleta, o novo
+`infoSubtle` deriva do próprio `info` a **11%** — o mesmo alfa que o ladrilho já usava cravado.
+
+E as peças deste pacote não tinham como LER o esquema deste produto: só o app tinha acessor
+(`BoldColors.of(context)`). Nenhuma peça daqui havia precisado de papel que só existe aqui, até
+esta. Entrou `CoreflowScheme.of(context)`, com o mesmo default do app.
+
+### Um degrau fora da escada virou degrau
+
+O respiro entre a caixa de marcar e o ladrilho eram **10** cravados na tela. 10 não existe na escala
+— virou `s3` (12). Dois pixels, e o motivo de estarem escritos aqui é que degrau que a escada não
+tem é degrau que ninguém declarou.
+
+**Gates**: 207 testes do DS (4 novos, um por eixo) e 90 do catálogo.
+
 ## [0.68.0] — 2026-08-22
 
 ### O pai vai de `v0.141.0` a `v0.143.0`, e ele fechou os CINCO pedidos que a Fase 3 do app mediu
