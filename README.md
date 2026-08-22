@@ -63,6 +63,7 @@ quem publica, não deste repo.
 | Preciso… | Leia |
 |---|---|
 | **o que muda ao subir de versão** deste pacote | [CHANGELOG.md](CHANGELOG.md) |
+| **nascer um produto novo desta família** (uma cor, um comando, e o que você NÃO decide) | [docs/COMO-NASCE-UM-FILHO.md](docs/COMO-NASCE-UM-FILHO.md) |
 | **como a adoção foi decidida** — rename, variante, o que nasceu aqui (registro de 29/07) | [packages/coreflow_design_system/2026-07-29-adocao-do-ds-do-bold.md](packages/coreflow_design_system/2026-07-29-adocao-do-ds-do-bold.md) |
 | o que eu já pedi aos pais, e o veredito de cada um | [docs/PEDIDOS.md](docs/PEDIDOS.md) |
 | o que os pais me mandaram | [docs/avisos/](docs/avisos/) |

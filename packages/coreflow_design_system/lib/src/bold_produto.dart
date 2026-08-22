@@ -1,5 +1,5 @@
 import 'package:diletta_design_system/diletta_design_system.dart';
-import 'package:flutter/material.dart' show Brightness, ThemeData;
+import 'package:flutter/material.dart' show Brightness, Color, ThemeData;
 
 import 'bold_gradients.dart';
 import 'bold_palette.dart';
@@ -42,6 +42,83 @@ class CoreflowProduto {
     CoreflowGradients? gradientes,
   }) : _gradientes = gradientes;
 
+
+  /// UM FILHO DO COREFLOW NASCE COM **UMA COR** — e herda a gramática, não a identidade.
+  ///
+  /// ```dart
+  /// final meuBanco = CoreflowProduto.daMarca(
+  ///   marca: const Color(0xFF1B5E20),
+  ///   id: 'meuBanco',
+  ///   nome: 'Meu Banco',
+  /// );
+  ///
+  /// MaterialApp(
+  ///   theme: meuBanco.materialClaro,
+  ///   darkTheme: meuBanco.materialEscuro,
+  ///   builder: (_, filho) => DilettaThemeScope(theme: meuBanco.claro, child: filho!),
+  /// );
+  /// ```
+  ///
+  /// ## O que ele HERDA, e por que isso não é preguiça
+  ///
+  /// A **gramática do material** deste DS: card de vidro, botão de canto 16, folha de canto 22,
+  /// blur 15, e as superfícies do escuro. Essas não são identidade do Conta BOLD — são o jeito
+  /// deste sistema montar superfície, e é o que faz um produto novo PARECER Coreflow em vez de
+  /// parecer Material puro pintado de outra cor.
+  ///
+  /// Também herda o **vocabulário extra** (superfície elevada, pressionada, fluxo secundário,
+  /// informação e o vinho), como RESERVA. Quem discordar declara o dele — a paleta é o lugar, e
+  /// `comMaterial` é o caminho.
+  ///
+  /// ## O que DERIVA da cor dele
+  ///
+  /// A rampa de marca inteira, pelo [DilettaRampa] do pai — nove degraus em OKLCH com o croma
+  /// limitado ao gamute. E as três coisas de material que carregam a marca:
+  ///
+  /// | o quê | de onde sai |
+  /// |---|---|
+  /// | tinte do vidro ESCURO | o degrau 01 da marca dele a 50% — no Bold é vinho porque a marca do Bold é rosa |
+  /// | traço do vidro CLARO | o degrau 08 dele, que é a mesma regra do Bold |
+  /// | traço do vidro ESCURO | o degrau 06 dele a 30% |
+  /// | brilho do esqueleto | os degraus 05 e 02, que é o que o Bold declara na marca dele |
+  ///
+  /// ## O que ele NÃO herda
+  ///
+  /// A MARCA visual: logo, mapa da arte e os hexes. O default é a do Conta BOLD e ele existe pra a
+  /// primeira tela desenhar em vez de estourar — **um produto que for pra loja com o logo do Bold é
+  /// um produto que não declarou a marca dele**, e o `assets` do pacote diz de quem é o arquivo.
+  ///
+  /// Cor semântica também não: erro, aviso, sucesso, cofre e a rampa neutra vêm da referência do
+  /// pai, porque cor semântica é invariante nesta linguagem.
+  factory CoreflowProduto.daMarca({
+    required Color marca,
+    required String id,
+    required String nome,
+    DilettaBrand? marcaVisual,
+    CoreflowGradients? gradientes,
+  }) {
+    final rampa = DilettaRampa.daMarca(marca);
+    final paleta = DilettaPalette.daMarca(marca: marca, id: id, nome: nome).comMaterial(
+      // A GRAMÁTICA, herdada do Bold.
+      cardDeVidro: BoldPalette.bold.cardDeVidro,
+      raioDeBotao: BoldPalette.bold.raioDeBotao,
+      raioDeFolha: BoldPalette.bold.raioDeFolha,
+      blurDeVidro: BoldPalette.bold.blurDeVidro,
+      papeisExtras: BoldPalette.bold.papeisExtras,
+      // O MATERIAL QUE CARREGA A COR, derivado da marca dele.
+      tinteDeVidroClaro: BoldPalette.bold.tinteDeVidroClaro,
+      tinteDeVidroEscuro: rampa[0].withValues(alpha: 0.50),
+      tracoDeVidroClaro: rampa[7],
+      tracoDeVidroEscuro: rampa[5].withValues(alpha: 0.30),
+      brilhoDoEsqueletoClaro: rampa[4],
+      brilhoDoEsqueletoEscuro: rampa[1],
+    );
+    return CoreflowProduto(
+      paleta: paleta,
+      marca: marcaVisual ?? marcaDoBold,
+      gradientes: gradientes,
+    );
+  }
 
   /// A marca do Conta BOLD — arquivos e o mapa da arte.
   static const DilettaBrand marcaDoBold = DilettaBrand(

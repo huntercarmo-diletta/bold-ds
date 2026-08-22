@@ -20,6 +20,45 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.71.0] — 2026-08-22
+
+### UM FILHO DO COREFLOW NASCE COM UMA COR — `CoreflowProduto.daMarca` e o gerador
+
+```sh
+dart run coreflow_design_system:novo_filho --id meuBanco --nome "Meu Banco" --cor '#1B5E20'
+```
+
+Era o que faltava pra "criar filho" ser fácil de verdade. A porta existia desde 20/08
+(`CoreflowProduto` aceita paleta), e ninguém passava por ela: **a paleta tem 60 campos
+obrigatórios**, e quem precisa escolher 60 hexes copia os do vizinho e troca alguns — que é como um
+produto herda o rosa do Bold sem querer.
+
+Agora a rampa deriva de UMA cor pelo `DilettaRampa` do pai (`v0.146.0`), e o produto:
+
+- **HERDA a gramática do material** — card de vidro, canto do botão 16, canto da folha 22, blur 15,
+  superfície elevada e pressionada. Não é preguiça: é o que faz um produto novo parecer Coreflow em
+  vez de Material puro pintado de outra cor;
+- **DERIVA da cor dele** o que no Bold é vinho: tinte do vidro escuro (degrau 01 a 50%), traço claro
+  (degrau 08) e escuro (06 a 30%), e os dois brilhos do esqueleto;
+- **NÃO herda a marca visual.** O default é a do Conta BOLD e existe pra a primeira tela desenhar —
+  *produto que vai pra loja com o logo do vizinho é produto que não declarou a marca.*
+
+### O exemplo é a SAÍDA do gerador, e o gate compara
+
+`exemplos/filho_do_coreflow/` não foi escrito à mão: é o que o comando produz, versionado, e o
+`o_gerador_de_filho_tem_saida_conferida` regenera e compara byte a byte. **Gerador sem saída
+conferida é template com esperança** — envelhece calado, e quem descobre é o primeiro produto novo.
+O exemplo entra no `analyze` do repo, então se o DS quebrar o contrato, ele quebra antes do cliente.
+
+### A receita inteira: `docs/COMO-NASCE-UM-FILHO.md`
+
+Inclui a parte que não é Dart: **como o app recebe o filho como flavor de marca** — a segunda
+dimensão no Gradle, o `google-services.json` por *source set*, e a armadilha do iOS que já custou um
+dia nesta casa (o `pbxproj` escolhe o plist pelo nome da CONFIGURATION, e com marca no meio ele para
+de servir).
+
+**Gates**: 207 → 220 testes (7 do filho que nasce com uma cor, 6 do gerador).
+
 ## [0.70.0] — 2026-08-22
 
 ### Sobe pro pai `v0.145.0` — os três vereditos que faltavam, e um deles fechou um sítio MEU

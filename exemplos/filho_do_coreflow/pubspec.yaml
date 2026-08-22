@@ -1,0 +1,20 @@
+name: meu_banco_coreflow
+description: A identidade do Meu Banco — um produto do Coreflow.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # O DS. Em desenvolvimento vale `path:`; pra valer, troque por `git:` numa TAG — entrega sem
+  # versão é entrega que ninguém consegue voltar atrás.
+  coreflow_design_system:
+    path: ../../packages/coreflow_design_system
+
+flutter:
+  assets:
+    - assets/logos/
