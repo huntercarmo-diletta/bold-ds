@@ -20,6 +20,39 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.68.0] — 2026-08-22
+
+### O pai vai de `v0.141.0` a `v0.143.0`, e ele fechou os CINCO pedidos que a Fase 3 do app mediu
+
+Quatro entram, um espera com a condição escrita. Os cinco vereditos estão nos arquivos de
+`docs/pedidos/2026-08-21-*.md`, e o que o app recebe é isto:
+
+| peça | o que ganhou | onde isso fecha |
+|---|---|---|
+| **`DilettaInlineAlert`** | peça NOVA — o aviso que FICA (`titulo`, `state`, `mensagem`) | os **27 sítios** do `BoldAlert`, que não tinham peça |
+| **`DilettaCardSurface(vidro:)`** | nulo = a paleta manda · `true` força vidro · `false` força sólido | os **33 sítios sólidos** do `BoldCard`, e com eles os 10 primitivos da maior casca do app |
+| **`DilettaStatusTag(ponto:)`** | disco de 6 na tinta do tom, no mesmo eixo do `icon` | os **2 de 5** sítios de tag com ponto |
+| **`DilettaCalendar`** | passou a saber que dia é HOJE — sem parâmetro, porque hoje é fato e não escolha | a célula do `bold_date_picker`, que é 40×40 igual à dele |
+
+**O fill em gradiente da tag ESPERA**, e a razão é de tipo: `DilettaPintura.bg` é `Color` e seis peças
+leem a struct. Reabre no segundo filho que medir fill não-liso em tag, e aí entra como declaração de
+paleta. **1º caso registrado no ledger dele.**
+
+### MUDA PIXEL — duas coisas, e as duas são do pai
+
+1. **O pegador da folha**: `75 × 5` na tinta cheia virou **`40 × 4` em `textMuted`** — o número que
+   este filho já desenhava. Não virou campo de paleta, e a razão dele é boa: um único sítio no repo
+   inteiro desenha o grip, e campo pra valor com um consumidor é a forma cravada ao contrário. A
+   faixa do mercado desempatou (M3 32×4, iOS 36×5, os dois do lado do filho);
+2. **A altura do botão** (`v0.142.0`, que este filho pulou): `sm` 32 → **28**, `md` 40 → **36**. Muda
+   pixel em toda tela que tem botão.
+
+### O que ainda NÃO mudou aqui
+
+Este pacote não precisou de uma linha: **203 testes verdes e `analyze` limpo** contra o pai novo, e o
+catálogo idem (90 testes). Os quatro vereditos são para as CASCAS DO APP consumirem — quem passa
+`vidro: false`, `ponto: true` e troca a caixa do aviso é ele, não eu.
+
 ## [0.67.0] — 2026-08-22
 
 ### O PACOTE MUDA DE NOME, e o nome é o que ele virou: `coreflow_design_system`
