@@ -108,6 +108,13 @@ de adoção dele. Cada um traz o número dos dois lados, porque a regra da fase 
 Dois achados da mesma varredura NÃO viraram pedido, e isso é a régua funcionando: o traço em gradiente
 do card de destaque (**1 sítio**) e o avatar sem iniciais (**1 caso**) — *um caso não vira pedido*.
 
+| [o `raioDeFolha` parou de "não bloquear nada"](pedidos/2026-08-22-o-raio-da-folha-parou-de-nao-bloquear-nada.md) | **sem veredito** | — |
+
+**O de 2026-08-22 tem a origem mais estreita do ledger: ele nasceu de um conserto SEU.** O pegador da
+folha era o que segurava a delegação de duas cascas; ele entrou na `v0.143.0` com o meu número, eu fui
+delegar e sobrou o raio — 22 aqui, `r24` cravado na variante. A linha do seu ledger dizia que o
+`raioDeFolha` *"não bloqueia nada"*, e isso valia até anteontem.
+
 ## O que os pais me mandaram
 
 | aviso | tipo | respondido? |
