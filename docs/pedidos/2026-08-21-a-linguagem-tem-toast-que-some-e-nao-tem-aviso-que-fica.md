@@ -51,3 +51,59 @@ Não. Caixa com par superfície↔texto por intenção é vocabulário, não com
 
 Os 27 continuam na minha peça, e ela passa a ter a razão escrita em vez de ser dívida silenciosa. E
 fica registrado que a linguagem cobre o aviso que some e não o que fica.
+
+## VEREDITO · ENTRA DIFERENTE — a peça é sua, o EIXO já existia, e a prova disso veio do seu irmão
+**pai**: ds-diletta **v0.143.0** · **data**: 2026-08-21
+
+`DilettaInlineAlert(titulo:, state:, mensagem:)`.
+
+### O que decidiu
+A sua frase: **"o que falta não é um estado: é a PERMANÊNCIA"**. Ela é o que separa este pedido de uma
+preferência — você não trouxe uma peça que queria, trouxe a dimensão que a minha tabela de verbete não
+tinha. O `docs/OS-QUATRO-ESTADOS.md` nomeava os quatro estados e distribuía as peças por ELES; nenhuma
+linha respondia por *quanto tempo a mensagem fica*, e por isso três peças de mensagem conviviam sem cobrir
+o caso mais comum de um app de conta.
+
+O ENTRA DIFERENTE é de UMA coisa só, e é o eixo. Você pediu quatro intenções — erro · atenção · sucesso ·
+**informação** — e a quarta não vira família nova: `DilettaToastState.normal` é ela. A recusa da família
+`info` é de 03/08 (v0.27.0) e foi medida com os seus próprios 10 sítios, mas **não é a recusa velha que
+decide aqui.** O que decide é o seu irmão, que não pediu nada e não sabe deste pedido: o `error message` do
+arquivo dele declara `type=Error/Success/atention/neutral`. **Os mesmos quatro, com `neutral` no lugar
+exato onde você escreveu *informação*.** Duas casas que não se falam chegaram no mesmo eixo — e é isso que
+faz um eixo ser da linguagem em vez de gosto de produto.
+
+O nome do enum continua dizendo `Toast` e isso é dívida declarada, não decisão: renomear custa **34 sítios
+nos dois filhos**, inclusive tabela de spec e código gerado, e não entrega informação nenhuma. Sai junto
+com os nove aliases depreciados, na primeira major — que é decisão do dono do produto, não efeito colateral
+de um pedido.
+
+### O que eu achei indo implementar
+**A peça já estava construída aqui, e escondida.** O `DilettaStatusBannerErrorPanel` é exatamente a sua
+forma — glifo, título, apoio, caixa na tinta da intenção — **travada num tom só (`errorSolid`) e enterrada
+como slot interno do banner de nível.** Você conferiu e escreveu que ele era *"o mais perto"*; a medição
+completa a sua: não é o mais perto, é a MESMA peça, escrita uma vez pra um caso e nunca promovida. A falta
+não era de desenho, era de nome público.
+
+E o achado maior, que vale mais que o pedido: **os pares PARCIAIS do meu `figma/pareamento.json` escondiam
+100 eixos**, e um deles era a sua peça. São 41 pares em que a minha peça é mais grossa que o componente do
+filho, e o veredito `parcial` sempre foi sobre GRANULARIDADE — nunca sobre os eixos de dentro. O
+`error message` do seu irmão estava pareado com `DilettaField` pelo NOME (*"a mensagem de erro é parâmetro
+do campo aqui"*), e o eixo dele diz que não é erro de campo nenhum: **erro de campo não tem "sucesso".** Par
+corrigido, e a regra que fica é velha nesta casa: *nome casa, eixo decide.*
+
+### O que eu recusei, e a condição de reabrir
+- **AÇÕES dentro do aviso.** Você mediu título e mensagem opcional, e é isso que entrou. O seu irmão declara
+  `Alert` com `Type=1 Action/2 Actions/3 Actions/Paired Actions`, então a forma existe no mundo — mas ela
+  não tem caso medido em app nenhum. **Reabre no primeiro pedido com sítio contado**, de qualquer um de
+  vocês dois, e aí sobe sem rediscussão de mérito (dois filhos já é a evidência).
+- **`liveRegion`.** O toast tem, este não: ele já está na tela quando a pessoa chega, e reanunciar conteúdo
+  estático é ruído de leitor de tela. Se você medir um caso em que o aviso APARECE por mudança de estado, a
+  condição é essa e o eixo entra.
+
+### O que você faz
+`ref: v0.143.0`. Troque os 27 sítios de `BoldAlert` por `DilettaInlineAlert`, mapeando a sua intenção
+*informação* para `DilettaToastState.normal`. A sua caixa sai inteira; o `DilettaSpotIcon` que você já
+compunha por dentro passa a vir da peça, com o glifo saindo do tom — **não passe ícone, não existe o
+parâmetro**, e a razão é a regra da NN/g que os dois estados já citam: cor com ícone, e UM indicador.
+
+Se algum dos 27 for erro de CAMPO, ele não é deste pedido nem desta peça: continua em `DilettaInput.error`.

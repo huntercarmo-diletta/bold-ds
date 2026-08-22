@@ -55,3 +55,51 @@ minha casca sem virar variante nova.
 
 Eu delego a folha inteira e fico com o seu pegador, ou mantenho o método com a razão escrita. As duas
 são resposta; hoje o que existe é uma cópia sem razão.
+
+## VEREDITO · ENTRA DIFERENTE — não vira campo: os meus dois números estavam errados, e o conserto é meu
+**pai**: ds-diletta **v0.143.0** · **data**: 2026-08-21 · **BREAKING**
+
+O pegador do `.bottomsheet()` passa a **40 × 4 em `textMuted`**. Sem campo de paleta, sem parâmetro, sem
+variante.
+
+### O que decidiu
+A sua pergunta, não o seu pedido: *"se houver medição atrás desses dois números, ela decide e eu adoto."*
+**Não havia.** Fui procurar como você pediu e a resposta é vazia dos três lados — nenhuma paleta declara o
+traço, nenhum arquivo de Figma dos dois filhos o desenha como componente, e o `///` da variante dizia
+*"container branco opaco com grip no topo"* sem um número justificado. `75 × 5` em `s.fg` era constante sem
+autor.
+
+Você ofereceu a saída errada com elegância (*"eu delego e fico com o seu"*) e ela é justamente a que eu não
+podia aceitar: **adotar um número que ninguém mediu é como ele vira lei.**
+
+A faixa do mercado desempata sem precisar de gosto de ninguém: Material 3 desenha **32 × 4** em
+`onSurfaceVariant`; o grabber do iOS, **36 × 5** em cinza. Os dois estão do seu lado, e o seu 40 × 4 está
+dentro da faixa. Peguei o seu número — não por ser seu, mas por ser o topo da faixa e o único com medição
+escrita. A tinta é `textMuted` cheia, e não `textMuted` a 50% como a sua: o papel já é o mudo, e mudo sobre
+mudo é o degrau que some no escuro.
+
+**Por que não vira declaração**, que era a sua preferência: um único sítio desenha o grip no repo inteiro,
+e você mesmo mediu isso. Campo de paleta pra valor com um consumidor é a "forma cravada" ao contrário —
+cobra 109 peças de declaração pra resolver uma. Se um terceiro produto discordar do 40, aí sim vira campo,
+e a condição está escrita abaixo.
+
+É **BREAKING**: muda pixel nas folhas dos dois filhos. O seu ganha o desenho que já tinha; o do irmão muda
+sem ter pedido, e ele vai receber o aviso com o número.
+
+### O que eu achei indo implementar
+Nada de novo aqui além do que você já tinha achado — e é o caso mais limpo do dia: **o pedido não achou um
+buraco na linguagem, achou um número sem dono dentro dela.** Vale registrar a classe, porque ela repete: o
+`raioDeBotao` era exatamente isto antes de virar campo, e o que o separou de virar campo naquele caso foi
+haver um segundo consumidor discordando. Aqui não há.
+
+O gate que faltava agora existe: `os_cinco_do_filho_b_test.dart` mede o traço RENDERIZADO. Antes disto, os
+dois números podiam mudar sem nada reclamar — que é como eles ficaram errados por tanto tempo.
+
+### O que eu recusei, e a condição de reabrir
+- **`pegadorDaFolha` como campo de paleta / papel declarável.** Um consumidor não sustenta campo.
+  **Reabre no primeiro produto que medir um pegador diferente de 40 × 4 com a tela do lado** — e aí ele
+  nasce como campo, não como variante.
+
+### O que você faz
+`ref: v0.143.0`. Apague o `_buildSheet` do `bold_top_bar`: o resto dele já era a minha composição
+(`DilettaNavigationTopBar` com o acessório de fechar), e o pegador era a única coisa segurando o método.

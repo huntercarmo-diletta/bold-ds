@@ -1,5 +1,5 @@
 
-import 'package:conta_bold_design_system/conta_bold_design_system.dart';
+import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -14,14 +14,14 @@ import 'package:flutter_test/flutter_test.dart';
 /// algo. Então aqui a medição é de PIXEL — pinta duas vezes e compara.
 void main() {
   testWidgets('o gancho entrega o backdrop, e ele responde aos SETE fundos', (t) async {
-    // O plugue devolve o backdrop sem estilo fixo: ele resolve pelo `BoldBackdropScope`. Então o
+    // O plugue devolve o backdrop sem estilo fixo: ele resolve pelo `CoreflowBackdropScope`. Então o
     // que o preview mostra é o que a personalização do produto escolheu — os sete.
     expect(Ds.atual.fundoDoFrame, isNotNull,
         reason: 'o plugue tem que declarar o gancho, senão o motor cai no Color?');
 
-    for (final fundo in BoldBackdrop.values) {
+    for (final fundo in CoreflowBackdrop.values) {
       await t.pumpWidget(MaterialApp(
-        home: BoldBackdropScope(
+        home: CoreflowBackdropScope(
           estilo: fundo,
           child: Ds.tema(
             Builder(
@@ -36,7 +36,7 @@ void main() {
       ));
       await t.pump(const Duration(milliseconds: 50));
       expect(t.takeException(), isNull, reason: 'o fundo "${fundo.name}" estourou no frame');
-      expect(find.byType(BoldBackground), findsOneWidget);
+      expect(find.byType(CoreflowBackground), findsOneWidget);
       expect(find.text('tela'), findsOneWidget,
           reason: 'o fundo "${fundo.name}" cobriu o conteúdo');
     }
@@ -58,7 +58,7 @@ void main() {
     // olhando o catálogo, não em teste de unidade.
     await t.pumpWidget(MaterialApp(
       home: DilettaThemeScope(
-        theme: BoldTheme.dark,
+        theme: CoreflowTheme.dark,
         child: const Scaffold(
           body: DilettaGlassSurface(child: SizedBox(width: 100, height: 100)),
         ),

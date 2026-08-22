@@ -18,7 +18,7 @@
 /// escrito que entraria: por medição, tela a tela.
 library;
 
-import 'package:conta_bold_design_system/conta_bold_design_system.dart';
+import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/widgets.dart';
 
@@ -735,7 +735,7 @@ Widget _barraDeBaixoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) {
 /// área inteira em vez de entrar na coluna como um item.
 BlockDef _cabecalhoDaHome() => BlockDef(
       type: 'cabecalhoDaHome',
-      ctor: 'ds.BoldCabecalhoDaHome',
+      ctor: 'ds.CoreflowCabecalhoDaHome',
       args: const {
         'nome': Arg.texto('nome'),
         'conta': Arg.texto('conta'),
@@ -746,13 +746,13 @@ BlockDef _cabecalhoDaHome() => BlockDef(
         'conta': PropDef('text', bindable: true, dartType: 'String'),
       },
       defaults: () => {'nome': 'Ana', 'conta': 'Conta PF'},
-      build: (p) => BoldCabecalhoDaHome(
+      build: (p) => CoreflowCabecalhoDaHome(
         nome: '${p['nome']}',
         conta: _vazio(p['conta']) ? null : '${p['conta']}',
         aoAbrirPerfil: () {},
         aoTrocarConta: () {},
         icones: const [
-          BoldIconeDoCabecalho(
+          CoreflowIconeDoCabecalho(
               icone: DilettaIcons.bellLight, rotulo: 'Notificações', marcador: true),
         ],
       ),
@@ -763,12 +763,12 @@ BlockDef _cabecalhoDaHome() => BlockDef(
 /// e bloco que já é a tela não compõe com nada no compositor.
 BlockDef _resumoDaTransacao() => BlockDef(
       type: 'resumoDaTransacao',
-      ctor: 'ds.BoldResumoDaTransacao',
+      ctor: 'ds.CoreflowResumoDaTransacao',
       args: const {
         'titulo': Arg.texto('titulo'),
         'valor': Arg.texto('valor'),
         'quando': Arg.texto('quando'),
-        'estado': Arg.enumeracao('estado', 'ds.BoldEstadoDaTransacao'),
+        'estado': Arg.enumeracao('estado', 'ds.CoreflowEstadoDaTransacao'),
       },
       label: 'Resumo da transação',
       props: {
@@ -776,7 +776,7 @@ BlockDef _resumoDaTransacao() => BlockDef(
         'valor': const PropDef('text', bindable: true, dartType: 'String'),
         'quando': const PropDef('text', bindable: true, dartType: 'String'),
         'estado': PropDef('enum',
-            options: BoldEstadoDaTransacao.values.map((e) => e.name).toList()),
+            options: CoreflowEstadoDaTransacao.values.map((e) => e.name).toList()),
       },
       defaults: () => {
         'titulo': 'Pix enviado',
@@ -784,16 +784,16 @@ BlockDef _resumoDaTransacao() => BlockDef(
         'quando': '30 de julho · 14:32',
         'estado': 'concluida',
       },
-      build: (p) => BoldResumoDaTransacao(
+      build: (p) => CoreflowResumoDaTransacao(
         titulo: '${p['titulo']}',
         valor: '${p['valor']}',
         quando: '${p['quando']}',
-        estado: BoldEstadoDaTransacao.values.firstWhere((e) => e.name == p['estado']),
+        estado: CoreflowEstadoDaTransacao.values.firstWhere((e) => e.name == p['estado']),
       ),
-      codegen: (p) => 'ds.BoldResumoDaTransacao(titulo: ${_str(p['titulo'])}'
+      codegen: (p) => 'ds.CoreflowResumoDaTransacao(titulo: ${_str(p['titulo'])}'
           ', valor: ${_str(p['valor'])}'
           ', quando: ${_str(p['quando'])}'
-          ', estado: ds.BoldEstadoDaTransacao.${p['estado']})',
+          ', estado: ds.CoreflowEstadoDaTransacao.${p['estado']})',
     );
 
 /// A escada de alçadas. Os degraus vêm como TEXTO de uma linha por faixa (`5.000 | 0` …), pelo mesmo
@@ -810,23 +810,23 @@ BlockDef _escadaDeAlcadas() => BlockDef(
         'degraus': 'R\$ 5.000,00 | 0\n| 2 master',
         'densa': true,
       },
-      build: (p) => BoldEscadaDeAlcadas(
+      build: (p) => CoreflowEscadaDeAlcadas(
         degraus: _degraus(p['degraus']),
         densa: p['densa'] == true,
       ),
-      codegen: (p) => 'ds.BoldEscadaDeAlcadas(degraus: degrausDaAlcada'
+      codegen: (p) => 'ds.CoreflowEscadaDeAlcadas(degraus: degrausDaAlcada'
           '${p['densa'] == true ? ', densa: true' : ''})',
     );
 
 /// Uma linha por degrau: `<teto> | <aprovações> [master]`. Teto vazio = faixa terminal.
-List<BoldDegrauDeAlcada> _degraus(Object? v) {
-  final saida = <BoldDegrauDeAlcada>[];
+List<CoreflowDegrauDeAlcada> _degraus(Object? v) {
+  final saida = <CoreflowDegrauDeAlcada>[];
   for (final linha in '$v'.split('\n')) {
     if (linha.trim().isEmpty) continue;
     final partes = linha.split('|');
     final teto = partes.first.trim();
     final direita = partes.length > 1 ? partes[1].trim() : '0';
-    saida.add(BoldDegrauDeAlcada(
+    saida.add(CoreflowDegrauDeAlcada(
       ate: teto.isEmpty ? null : teto,
       aprovacoes: int.tryParse(direita.split(' ').first) ?? 0,
       exigeMaster: direita.contains('master'),
@@ -837,7 +837,7 @@ List<BoldDegrauDeAlcada> _degraus(Object? v) {
 
 BlockDef _progressoDeAprovacao() => BlockDef(
       type: 'progressoDeAprovacao',
-      ctor: 'ds.BoldProgressoDeAprovacao',
+      ctor: 'ds.CoreflowProgressoDeAprovacao',
       args: const {
         'colhidas': Arg.numero('colhidas'),
         'exigidas': Arg.numero('exigidas'),
@@ -852,13 +852,13 @@ BlockDef _progressoDeAprovacao() => BlockDef(
         'compacto': PropDef('bool'),
       },
       defaults: () => {'colhidas': '1', 'exigidas': '2', 'exigeMaster': false, 'compacto': false},
-      build: (p) => BoldProgressoDeAprovacao(
+      build: (p) => CoreflowProgressoDeAprovacao(
         colhidas: int.tryParse('${p['colhidas']}') ?? 0,
         exigidas: int.tryParse('${p['exigidas']}') ?? 0,
         exigeMaster: p['exigeMaster'] == true,
         compacto: p['compacto'] == true,
       ),
-      codegen: (p) => 'ds.BoldProgressoDeAprovacao(colhidas: ${p['colhidas']}'
+      codegen: (p) => 'ds.CoreflowProgressoDeAprovacao(colhidas: ${p['colhidas']}'
           ', exigidas: ${p['exigidas']})',
     );
 
@@ -872,13 +872,13 @@ BlockDef _prazoDaPendencia() => BlockDef(
         'idade': PropDef('text', bindable: true, dartType: 'String'),
       },
       defaults: () => {'horas': '3', 'idade': ''},
-      build: (p) => BoldPrazoDaPendencia(
+      build: (p) => CoreflowPrazoDaPendencia(
         restante: _horas(p['horas']),
         idade: _vazio(p['idade']) ? null : '${p['idade']}',
       ),
       codegen: (p) => _horas(p['horas']) == null
-          ? 'ds.BoldPrazoDaPendencia(idade: ${_str(p['idade'])})'
-          : 'ds.BoldPrazoDaPendencia(restante: '
+          ? 'ds.CoreflowPrazoDaPendencia(idade: ${_str(p['idade'])})'
+          : 'ds.CoreflowPrazoDaPendencia(restante: '
               'Duration(hours: ${int.tryParse('${p['horas']}') ?? 0}))',
     );
 
@@ -1816,9 +1816,9 @@ BlockDef _visorDeCodigo() => BlockDef(
       // Só `ctor`, sem `args`: os props deste bloco são de PREVIEW — no código gerado, alvo e fase
       // vêm de dado em tempo de execução. Bloco sem prop declarada continua legível pelo
       // construtor, e foi um dos três defeitos que o gate do pai achou no próprio pai.
-      ctor: 'ds.BoldVisorDeCodigo',
+      ctor: 'ds.CoreflowVisorDeCodigo',
       // Os três argumentos deste bloco vêm de RUNTIME (a câmera), e dois são obrigatórios. Sem isto a
-      // tabela emitia `const ds.BoldVisorDeCodigo()` — que não compila, e era o que o `codegen` à mão
+      // tabela emitia `const ds.CoreflowVisorDeCodigo()` — que não compila, e era o que o `codegen` à mão
       // já resolvia antes de a tabela passar a vencer.
       acoes: const {
         'alvos': 'alvosDetectados',
@@ -1828,15 +1828,15 @@ BlockDef _visorDeCodigo() => BlockDef(
       label: 'Visor de código',
       props: {
         'estado': PropDef('enum',
-            options: BoldAlvoEstado.values.map((e) => e.name).toList()),
+            options: CoreflowAlvoEstado.values.map((e) => e.name).toList()),
         'rotulo': const PropDef('text'),
       },
       defaults: () => {'estado': 'analisando', 'rotulo': 'LENDO CÓDIGO'},
-      build: (p) => BoldVisorDeCodigo(
+      build: (p) => CoreflowVisorDeCodigo(
         alvos: [
-          BoldAlvo(
+          CoreflowAlvo(
             area: const Rect.fromLTWH(80, 120, 140, 140),
-            estado: BoldAlvoEstado.values
+            estado: CoreflowAlvoEstado.values
                 .firstWhere((e) => e.name == p['estado']),
             rotulo: '${p['rotulo']}',
             centralizado: true,
@@ -1846,14 +1846,14 @@ BlockDef _visorDeCodigo() => BlockDef(
         // parado num ponto legível mostra o rastro melhor que um parado no zero.
         fase: 0.45,
       ),
-      codegen: (p) => 'ds.BoldVisorDeCodigo(alvos: alvosDetectados'
+      codegen: (p) => 'ds.CoreflowVisorDeCodigo(alvos: alvosDetectados'
           ', fase: faseDaVarredura'
           ', tamanhoDaImagem: tamanhoDoFrame)',
     );
 
 BlockDef _copiar() => BlockDef(
       type: 'copiar',
-      ctor: 'ds.BoldCopiar',
+      ctor: 'ds.CoreflowCopiar',
       args: const {'texto': Arg.texto('texto'), 'rotulo': Arg.texto('rotuloDeAcessibilidade')},
       label: 'Copiar',
       props: const {
@@ -1861,11 +1861,11 @@ BlockDef _copiar() => BlockDef(
         'rotulo': PropDef('text'),
       },
       defaults: () => {'texto': 'chave-pix-exemplo', 'rotulo': 'Copiar chave'},
-      build: (p) => BoldCopiar(
+      build: (p) => CoreflowCopiar(
         texto: '${p['texto']}',
         rotuloDeAcessibilidade: '${p['rotulo']}',
       ),
-      codegen: (p) => 'ds.BoldCopiar(texto: ${_str(p['texto'])}'
+      codegen: (p) => 'ds.CoreflowCopiar(texto: ${_str(p['texto'])}'
           ', rotuloDeAcessibilidade: ${_str(p['rotulo'])})',
     );
 
@@ -1875,7 +1875,7 @@ BlockDef _abas() => BlockDef(
       // mecanicamente ele é "argumento → identificador", não só "argumento → handler". O nome do campo
       // é mais estreito que o mecanismo, e isso está anotado no pedido.
       acoes: const {'abas': 'rotulosDasAbas', 'aoTrocar': 'aoTrocarAba'},
-      ctor: 'ds.BoldAbas',
+      ctor: 'ds.CoreflowAbas',
       args: const {'selecionada': Arg.numero('indiceSelecionado')},
       label: 'Abas',
       props: const {
@@ -1883,12 +1883,12 @@ BlockDef _abas() => BlockDef(
         'selecionada': PropDef('number'),
       },
       defaults: () => {'abas': 'Tudo, Entradas, Saídas', 'selecionada': '0'},
-      build: (p) => BoldAbas(
+      build: (p) => CoreflowAbas(
         abas: _listaDeAbas(p['abas']),
         indiceSelecionado: int.tryParse('${p['selecionada']}') ?? 0,
         aoTrocar: (_) {},
       ),
-      codegen: (p) => 'ds.BoldAbas(abas: const ['
+      codegen: (p) => 'ds.CoreflowAbas(abas: const ['
           '${_listaDeAbas(p['abas']).map((a) => "'$a'").join(', ')}]'
           ', indiceSelecionado: ${int.tryParse('${p['selecionada']}') ?? 0}'
           ', aoTrocar: aoTrocarAba)',
@@ -1912,12 +1912,12 @@ BlockDef _segmentos() => BlockDef(
         'selecionado': PropDef('number'),
       },
       defaults: () => {'segmentos': 'Claro, Escuro, Sistema', 'selecionado': '0'},
-      build: (p) => BoldSegmentos(
+      build: (p) => CoreflowSegmentos(
         segmentos: _listaDeAbas(p['segmentos']),
         indiceSelecionado: int.tryParse('${p['selecionado']}') ?? 0,
         aoTrocar: (_) {},
       ),
-      codegen: (p) => 'ds.BoldSegmentos(segmentos: const ['
+      codegen: (p) => 'ds.CoreflowSegmentos(segmentos: const ['
           '${_listaDeAbas(p['segmentos']).map((a) => "'$a'").join(', ')}]'
           ', indiceSelecionado: ${int.tryParse('${p['selecionado']}') ?? 0}'
           ', aoTrocar: aoTrocarSegmento)',
@@ -1925,7 +1925,7 @@ BlockDef _segmentos() => BlockDef(
 
 BlockDef _pontosDePagina() => BlockDef(
       type: 'pontosDePagina',
-      ctor: 'ds.BoldPontosDePagina',
+      ctor: 'ds.CoreflowPontosDePagina',
       args: const {
         'total': Arg.numero('total'),
         'ativo': Arg.numero('indiceAtivo'),
@@ -1936,18 +1936,18 @@ BlockDef _pontosDePagina() => BlockDef(
         'ativo': PropDef('number', bindable: true, dartType: 'int'),
       },
       defaults: () => {'total': '4', 'ativo': '0'},
-      build: (p) => BoldPontosDePagina(
+      build: (p) => CoreflowPontosDePagina(
         total: int.tryParse('${p['total']}') ?? 0,
         indiceAtivo: int.tryParse('${p['ativo']}') ?? 0,
       ),
-      codegen: (p) => 'ds.BoldPontosDePagina(total: ${p['total']}'
+      codegen: (p) => 'ds.CoreflowPontosDePagina(total: ${p['total']}'
           ', indiceAtivo: ${p['ativo']})',
     );
 
 BlockDef _saldo() => BlockDef(
       type: 'saldo',
       acoes: const {'aoAbrirExtrato': 'abrirExtrato'},
-      ctor: 'ds.BoldSaldo',
+      ctor: 'ds.CoreflowSaldo',
       args: const {'valor': Arg.texto('valor'), 'entradas': Arg.texto('entradas'), 'saidas': Arg.texto('saidas'), 'oculto': Arg.bool('oculto')},
       label: 'Saldo (home)',
       props: const {
@@ -1969,14 +1969,14 @@ BlockDef _saldo() => BlockDef(
         'oculto': false,
         'atalhoDoExtrato': true,
       },
-      build: (p) => BoldSaldo(
+      build: (p) => CoreflowSaldo(
         valor: '${p['valor']}',
         entradas: _vazio(p['entradas']) ? null : '${p['entradas']}',
         saidas: _vazio(p['saidas']) ? null : '${p['saidas']}',
         oculto: p['oculto'] == true,
         aoAbrirExtrato: p['atalhoDoExtrato'] == false ? null : () {},
       ),
-      codegen: (p) => 'ds.BoldSaldo(valor: ${_str(p['valor'])}'
+      codegen: (p) => 'ds.CoreflowSaldo(valor: ${_str(p['valor'])}'
           '${_vazio(p['entradas']) ? '' : ', entradas: ${_str(p['entradas'])}'}'
           '${_vazio(p['saidas']) ? '' : ', saidas: ${_str(p['saidas'])}'}'
           '${p['oculto'] == true ? ', oculto: true' : ''}'
@@ -2035,30 +2035,30 @@ BlockDef _indicadorDeHome() => BlockDef(
 BlockDef _ladrilhoDeMenu() => BlockDef(
       type: 'ladrilhoDeMenu',
       acoes: const {'aoTocar': 'aoTocar'},
-      ctor: 'ds.BoldLadrilhoDeMenu',
+      ctor: 'ds.CoreflowLadrilhoDeMenu',
       args: const {
         'icone': Arg.enumeracao('icone', 'ds.DilettaIcons'),
         'rotulo': Arg.texto('rotulo'),
-        'porte': Arg.enumeracao('porte', 'ds.BoldPorteDoLadrilho'),
+        'porte': Arg.enumeracao('porte', 'ds.CoreflowPorteDoLadrilho'),
       },
       label: 'Ladrilho de menu · MenuTile',
       props: {
         'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
         'rotulo': const PropDef('text', bindable: true, dartType: 'String'),
         'porte': PropDef('enum',
-            options: BoldPorteDoLadrilho.values.map((e) => e.name).toList()),
+            options: CoreflowPorteDoLadrilho.values.map((e) => e.name).toList()),
       },
       defaults: () => {'icone': 'pixLight', 'rotulo': 'Área Pix', 'porte': 'largo'},
-      build: (p) => BoldLadrilhoDeMenu(
+      build: (p) => CoreflowLadrilhoDeMenu(
         icone: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
         rotulo: '${p['rotulo']}',
-        porte: _daOpcao(p['porte'], _porNome(BoldPorteDoLadrilho.values),
-            BoldPorteDoLadrilho.largo),
+        porte: _daOpcao(p['porte'], _porNome(CoreflowPorteDoLadrilho.values),
+            CoreflowPorteDoLadrilho.largo),
         aoTocar: () {},
       ),
-      codegen: (p) => 'ds.BoldLadrilhoDeMenu(icone: ds.DilettaIcons.${p['icone']}'
+      codegen: (p) => 'ds.CoreflowLadrilhoDeMenu(icone: ds.DilettaIcons.${p['icone']}'
           ', rotulo: ${_str(p['rotulo'])}'
-          ', porte: ds.BoldPorteDoLadrilho.${p['porte']}'
+          ', porte: ds.CoreflowPorteDoLadrilho.${p['porte']}'
           ', aoTocar: aoTocar)',
     );
 
@@ -2087,13 +2087,13 @@ BlockDef _navFlutuante() => BlockDef(
         'abas': 'Início:houseLight, Câmera:cameraLight, Letti:sparklesLightFull',
         'abaAtiva': '0',
       },
-      build: (p) => BoldNavFlutuante(
+      build: (p) => CoreflowNavFlutuante(
         itens: _itensDaPilula(p['abas']),
         ativo: _indiceDeAba(p),
         aoTrocar: (_) {},
       ),
-      codegen: (p) => 'ds.BoldNavFlutuante(itens: const ['
-          '${_itensDaPilula(p['abas']).map((i) => 'ds.BoldItemDeNav('
+      codegen: (p) => 'ds.CoreflowNavFlutuante(itens: const ['
+          '${_itensDaPilula(p['abas']).map((i) => 'ds.CoreflowItemDeNav('
               'icone: ds.DilettaIcons.${_chaveDoIcone(i.icone)}'
               ', rotulo: ${_str(i.rotulo)})').join(', ')}]'
           ', ativo: ${_indiceDeAba(p)}'
@@ -2103,9 +2103,9 @@ BlockDef _navFlutuante() => BlockDef(
 /// Os itens da pílula, no idioma `Rótulo:icone` — e o ícone cai na CASA quando o nome não existe no
 /// conjunto do pai. A `nav` do pai cai pro ponto neutro dela; aqui não há ponto neutro, então o
 /// fallback é a casa: um glifo errado é mais fácil de ver que um vazio redondo.
-List<BoldItemDeNav> _itensDaPilula(Object? cru) => [
+List<CoreflowItemDeNav> _itensDaPilula(Object? cru) => [
       for (final i in _itensDeNav(cru))
-        BoldItemDeNav(
+        CoreflowItemDeNav(
           icone: DilettaIcons.all[i.icone] ?? DilettaIcons.houseLight,
           rotulo: i.rotulo,
         ),
@@ -2127,28 +2127,28 @@ String _chaveDoIcone(String arquivo) => DilettaIcons.all.entries
 BlockDef _amostraDeFundo() => BlockDef(
       type: 'amostraDeFundo',
       acoes: const {'aoTocar': 'aoTocar'},
-      ctor: 'ds.BoldAmostraDeFundo',
+      ctor: 'ds.CoreflowAmostraDeFundo',
       args: const {
-        'estilo': Arg.enumeracao('estilo', 'ds.BoldBackdrop'),
+        'estilo': Arg.enumeracao('estilo', 'ds.CoreflowBackdrop'),
         'rotulo': Arg.texto('rotulo'),
         'escolhido': Arg.bool('escolhido'),
       },
       label: 'Amostra de fundo · BackdropSwatch',
       props: {
         'estilo': PropDef('enum',
-            options: BoldBackdrop.values.map((e) => e.name).toList()),
+            options: CoreflowBackdrop.values.map((e) => e.name).toList()),
         'rotulo': const PropDef('text', bindable: true, dartType: 'String'),
         'escolhido': const PropDef('bool'),
       },
       defaults: () => {'estilo': 'imagem', 'rotulo': 'Cidade', 'escolhido': true},
-      build: (p) => BoldAmostraDeFundo(
-        estilo: _daOpcao(p['estilo'], _porNome(BoldBackdrop.values),
-            BoldBackdrop.imagem),
+      build: (p) => CoreflowAmostraDeFundo(
+        estilo: _daOpcao(p['estilo'], _porNome(CoreflowBackdrop.values),
+            CoreflowBackdrop.imagem),
         rotulo: '${p['rotulo']}',
         escolhido: p['escolhido'] == true,
         aoTocar: () {},
       ),
-      codegen: (p) => 'ds.BoldAmostraDeFundo(estilo: ds.BoldBackdrop.${p['estilo']}'
+      codegen: (p) => 'ds.CoreflowAmostraDeFundo(estilo: ds.CoreflowBackdrop.${p['estilo']}'
           ', rotulo: ${_str(p['rotulo'])}'
           ', escolhido: ${p['escolhido'] == true}'
           ', aoTocar: aoTocar)',
@@ -2158,7 +2158,7 @@ BlockDef _amostraDeFundo() => BlockDef(
 BlockDef _linhaDeAviso() => BlockDef(
       type: 'linhaDeAviso',
       acoes: const {'aoTocar': 'aoTocar'},
-      ctor: 'ds.BoldLinhaDeAviso',
+      ctor: 'ds.CoreflowLinhaDeAviso',
       args: const {
         'icone': Arg.enumeracao('icone', 'ds.DilettaIcons'),
         'titulo': Arg.texto('titulo'),
@@ -2177,14 +2177,14 @@ BlockDef _linhaDeAviso() => BlockDef(
         'subtitulo': 'Veja o que está esperando você.',
         'contagem': '2',
       },
-      build: (p) => BoldLinhaDeAviso(
+      build: (p) => CoreflowLinhaDeAviso(
         icone: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
         titulo: '${p['titulo']}',
         subtitulo: _vazio(p['subtitulo']) ? null : '${p['subtitulo']}',
         contagem: int.tryParse('${p['contagem']}'),
         aoTocar: () {},
       ),
-      codegen: (p) => 'ds.BoldLinhaDeAviso(icone: ds.DilettaIcons.${p['icone']}'
+      codegen: (p) => 'ds.CoreflowLinhaDeAviso(icone: ds.DilettaIcons.${p['icone']}'
           ', titulo: ${_str(p['titulo'])}'
           '${_vazio(p['subtitulo']) ? '' : ', subtitulo: ${_str(p['subtitulo'])}'}'
           ', contagem: ${int.tryParse('${p['contagem']}') ?? 0}'
@@ -2195,7 +2195,7 @@ BlockDef _linhaDeAviso() => BlockDef(
 BlockDef _chipDeFiltro() => BlockDef(
       type: 'chipDeFiltro',
       acoes: const {'aoTocar': 'aoTocar'},
-      ctor: 'ds.BoldChipDeFiltro',
+      ctor: 'ds.CoreflowChipDeFiltro',
       args: const {
         'rotulo': Arg.textoPosicional(),
         'escolhido': Arg.bool('escolhido'),
@@ -2206,9 +2206,9 @@ BlockDef _chipDeFiltro() => BlockDef(
         'escolhido': PropDef('bool'),
       },
       defaults: () => {'rotulo': 'Entradas', 'escolhido': false},
-      build: (p) => BoldChipDeFiltro('${p['rotulo']}',
+      build: (p) => CoreflowChipDeFiltro('${p['rotulo']}',
           escolhido: p['escolhido'] == true, aoTocar: () {}),
-      codegen: (p) => 'ds.BoldChipDeFiltro(${_str(p['rotulo'])}'
+      codegen: (p) => 'ds.CoreflowChipDeFiltro(${_str(p['rotulo'])}'
           ', escolhido: ${p['escolhido'] == true}, aoTocar: aoTocar)',
     );
 
@@ -2254,7 +2254,7 @@ BlockDef _cartaoPromocional() => BlockDef(
         'ilustracao': 'keyWord',
         'fecha': true,
       },
-      build: (p) => BoldCartaoPromocional(
+      build: (p) => CoreflowCartaoPromocional(
         titulo: '${p['titulo']}',
         subtitulo: _vazio(p['subtitulo']) ? null : '${p['subtitulo']}',
         // Vazio continua caindo no placeholder, e isso é o contrato do componente: cartão sem arte
@@ -2263,7 +2263,7 @@ BlockDef _cartaoPromocional() => BlockDef(
         aoFechar: p['fecha'] == true ? () {} : null,
         aoTocar: () {},
       ),
-      codegen: (p) => 'ds.BoldCartaoPromocional(titulo: ${_str(p['titulo'])}'
+      codegen: (p) => 'ds.CoreflowCartaoPromocional(titulo: ${_str(p['titulo'])}'
           '${_vazio(p['subtitulo']) ? '' : ', subtitulo: ${_str(p['subtitulo'])}'}'
           '${_vazio(p['ilustracao']) ? '' : ', ilustracao: ds.DilettaIllustrationAccessory('
               'illustration: ds.DilettaIllustration.${p['ilustracao']}'
@@ -2292,14 +2292,14 @@ BlockDef _fileiraDeAvatares() => BlockDef(
         'subrotulos': 'Nubank, Itaú, BOLD',
         'adiciona': true,
       },
-      build: (p) => BoldFileiraDeAvatares(
+      build: (p) => CoreflowFileiraDeAvatares(
         iniciais: _emLista(p['iniciais']),
         rotulos: _vazio(p['rotulos']) ? null : _emLista(p['rotulos']),
         subrotulos: _vazio(p['subrotulos']) ? null : _emLista(p['subrotulos']),
         aoAdicionar: p['adiciona'] == true ? () {} : null,
         aoTocarNoAvatar: (_) {},
       ),
-      codegen: (p) => 'ds.BoldFileiraDeAvatares(iniciais: const '
+      codegen: (p) => 'ds.CoreflowFileiraDeAvatares(iniciais: const '
           '${_emLista(p['iniciais']).map(_str).toList()}'
           '${_vazio(p['rotulos']) ? '' : ', rotulos: const ${_emLista(p['rotulos']).map(_str).toList()}'}'
           '${_vazio(p['subrotulos']) ? '' : ', subrotulos: const ${_emLista(p['subrotulos']).map(_str).toList()}'}'
@@ -2327,16 +2327,16 @@ BlockDef _grupoDoDia() => BlockDef(
       slotsBuild: (p, filhos) => _grupoDoDiaWidget(p, filhos['itens'] ?? const []),
       slotsCodegen: (p, codigos) {
         final itens = codigos['itens'] ?? const [];
-        return 'ds.BoldGrupoDoDia(rotulo: ${_str(p['rotulo'])}'
+        return 'ds.CoreflowGrupoDoDia(rotulo: ${_str(p['rotulo'])}'
             '${_vazio(p['acessorio']) ? '' : ', acessorio: ds.DilettaText(${_str(p['acessorio'])}, style: ds.DilettaType.labelMd)'}'
             ', filhos: [${itens.join(', ')}])';
       },
-      codegen: (p) => 'ds.BoldGrupoDoDia(rotulo: ${_str(p['rotulo'])}'
+      codegen: (p) => 'ds.CoreflowGrupoDoDia(rotulo: ${_str(p['rotulo'])}'
           ', filhos: const [])',
     );
 
 Widget _grupoDoDiaWidget(Map<String, Object?> p, List<Widget> itens) =>
-    BoldGrupoDoDia(
+    CoreflowGrupoDoDia(
       rotulo: '${p['rotulo']}',
       acessorio: _vazio(p['acessorio'])
           ? null
@@ -2475,7 +2475,7 @@ List<String> _emLinhas(List<String> itens, int colunas, String vao) {
 /// O CARTÃO DA CONTA — o cabeçalho da tela de Gestão da conta.
 BlockDef _cartaoDaConta() => BlockDef(
       type: 'cartaoDaConta',
-      ctor: 'ds.BoldCartaoDaConta',
+      ctor: 'ds.CoreflowCartaoDaConta',
       args: const {
         'nomeDaConta': Arg.texto('nomeDaConta'),
         'tipo': Arg.texto('tipo'),
@@ -2495,13 +2495,13 @@ BlockDef _cartaoDaConta() => BlockDef(
         'numero': '12345-6',
         'linhaDeApoio': 'Ag 0001 · 655 – BOLD',
       },
-      build: (p) => BoldCartaoDaConta(
+      build: (p) => CoreflowCartaoDaConta(
         nomeDaConta: '${p['nomeDaConta']}',
         tipo: '${p['tipo']}',
         numero: '${p['numero']}',
         linhaDeApoio: '${p['linhaDeApoio']}',
       ),
-      codegen: (p) => 'ds.BoldCartaoDaConta('
+      codegen: (p) => 'ds.CoreflowCartaoDaConta('
           'nomeDaConta: ${_str(p['nomeDaConta'])}, tipo: ${_str(p['tipo'])}'
           ', numero: ${_str(p['numero'])}, linhaDeApoio: ${_str(p['linhaDeApoio'])})',
     );
@@ -2510,7 +2510,7 @@ BlockDef _cartaoDaConta() => BlockDef(
 BlockDef _cartaoDePedido() => BlockDef(
       type: 'cartaoDePedido',
       acoes: const {'aoAprovar': 'aoContinuar', 'aoRejeitar': 'aoVoltar'},
-      ctor: 'ds.BoldCartaoDePedido',
+      ctor: 'ds.CoreflowCartaoDePedido',
       args: const {
         'quemPediu': Arg.texto('quemPediu'),
         'detalhe': Arg.texto('detalhe'),
@@ -2554,7 +2554,7 @@ BlockDef _cartaoDePedido() => BlockDef(
         'justificativa': 'Pagamento do fornecedor de embalagens, NF 4471.',
         'jaAprovei': false,
       },
-      build: (p) => BoldCartaoDePedido(
+      build: (p) => CoreflowCartaoDePedido(
         quemPediu: '${p['quemPediu']}',
         detalhe: '${p['detalhe']}',
         valor: '${p['valor']}',
@@ -2571,7 +2571,7 @@ BlockDef _cartaoDePedido() => BlockDef(
         aoAprovar: () {},
         aoRejeitar: () {},
       ),
-      codegen: (p) => 'ds.BoldCartaoDePedido('
+      codegen: (p) => 'ds.CoreflowCartaoDePedido('
           'quemPediu: ${_str(p['quemPediu'])}, detalhe: ${_str(p['detalhe'])}'
           ', valor: ${_str(p['valor'])}, icone: ds.DilettaIcons.${p['icone']}'
           ', colhidas: ${int.tryParse('${p['colhidas']}') ?? 0}'
@@ -2709,7 +2709,7 @@ void configurarDsDoBold() {
         // Elas eram lacuna do inventário até 11/08 e não existiam em paleta nenhuma.
         'ladrilhoDeMenu', 'linhaDeAviso', 'cartaoPromocional', 'fileiraDeAvatares',
         'cartaoDaConta', 'cartaoDePedido',
-        // A amostra de fundo é do Bold e de mais ninguém: ela retrata o `BoldBackdrop`, que é token
+        // A amostra de fundo é do Bold e de mais ninguém: ela retrata o `CoreflowBackdrop`, que é token
         // deste produto. Vizinha das outras peças de marca, e não do `chipDeFiltro` em Entrada —
         // apesar de ser escolha, o que ela ensina é o fundo.
         'amostraDeFundo'],
@@ -2725,7 +2725,7 @@ void configurarDsDoBold() {
       'Ritmo': ['ritmo', 'divisor', 'grade'],
     },
     tema: (filho, {required escuro}) => DilettaThemeScope(
-      theme: escuro ? BoldTheme.dark : BoldTheme.light,
+      theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
       child: filho,
     ),
     spacingTokens: const {
@@ -2823,7 +2823,7 @@ void configurarDsDoBold() {
     // HOME — 114 usos, o componente mais usado do produto — aparecia sem cidade.
     //
     // A arte é DEMO deste catálogo (cópia reduzida da do app), e está declarada como tal no `pubspec`.
-    fundoDoFrame: (ctx) => BoldBackdropScope(
+    fundoDoFrame: (ctx) => CoreflowBackdropScope(
       // `estilo` é obrigatório no scope: ele é a personalização que o app faz uma vez. `imagem` é o
       // default do produto e é o fundo da home.
       // O FUNDO É POR TELA, e quem diz qual tela é o `TelaEmFoco` do motor (v0.94.0). A regra e o
@@ -2831,7 +2831,7 @@ void configurarDsDoBold() {
       estilo: fundoDaTela(TelaEmFoco.de(ctx)),
       arteClara: const AssetImage('assets/demo/cidade-claro.jpg'),
       arteEscura: const AssetImage('assets/demo/cidade-escuro.jpg'),
-      child: const BoldBackground(child: SizedBox.expand()),
+      child: const CoreflowBackground(child: SizedBox.expand()),
     ),
     // Fica declarado também: o motor usa o `Color?` quando o widget está ausente, e é o que
     // pinta a cor por trás do próprio backdrop.
@@ -3016,7 +3016,7 @@ void configurarDsDoBold() {
     // monta tela perde a metade que importa, que é abrir o que já existe.
     leCodigoComoSpec: lerTelaDoBold,
     importNoCodigo:
-        "import 'package:conta_bold_design_system/conta_bold_design_system.dart' as ds;",
+        "import 'package:coreflow_design_system/coreflow_design_system.dart' as ds;",
     nomesNoCodigo: const NomesNoCodigo(
       coluna: 'ds.DilettaFrame.column',
       superficie: 'ds.DilettaSurface',

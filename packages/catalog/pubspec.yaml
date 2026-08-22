@@ -15,8 +15,8 @@ dependencies:
 
   # A identidade e a linguagem. Por PATH porque catálogo e DS versionam juntos dentro
   # deste repo — a entrega pro app do cliente é outra coisa (ver tool/sincroniza_pai_ds.py).
-  conta_bold_design_system:
-    path: ../conta_bold_design_system
+  coreflow_design_system:
+    path: ../coreflow_design_system
 
   # O pai FERRAMENTA, por TAG. Subir de versão é trocar o `ref` aqui, de propósito:
   # upgrade é escolha do filho.

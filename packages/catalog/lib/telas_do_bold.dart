@@ -27,8 +27,8 @@
 /// mede que a seção não volta a esvaziar.
 library;
 
-import 'package:conta_bold_design_system/conta_bold_design_system.dart'
-    show BoldBackdrop;
+import 'package:coreflow_design_system/coreflow_design_system.dart'
+    show CoreflowBackdrop;
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 
 import 'builder/screen_specs.g.dart';
@@ -126,7 +126,7 @@ const String kSlugDoValorDoPix = 'pf2-pix-valor';
 /// O passo em que o desenho para de pedir dado e passa a pedir CONFIRMAÇÃO — e é por isso que ele existe
 /// separado do valor: o mesmo Pix com o mesmo dado, numa tela que só mostra e num CTA que compromete.
 ///
-/// O app usa `BoldBackdrop.solido` aqui, e não a imagem: fluxo secundário troca o fundo de mood pelo sólido.
+/// O app usa `CoreflowBackdrop.solido` aqui, e não a imagem: fluxo secundário troca o fundo de mood pelo sólido.
 /// Isso **não** é declarável na spec — o fundo do frame é gancho do catálogo (`fundoDoFrame`), um por
 /// produto. Fica na nota, porque é diferença real entre esta tela no board e a mesma no aparelho.
 const String kSlugDaRevisaoDoPix = 'pf3-pix-revisar';
@@ -163,7 +163,7 @@ const String kSlugDoHubDePix = 'pf5-pix-hub';
 /// A GESTÃO DA CONTA, medida em `minha_conta_screen.dart`.
 ///
 /// O cabeçalho dela era `_AccountHeader`, privado dentro do arquivo da tela: funcionava, tinha uso,
-/// e não existia pra ninguém de fora. Virou `BoldCartaoDaConta` no pacote.
+/// e não existia pra ninguém de fora. Virou `CoreflowCartaoDaConta` no pacote.
 const String kSlugDaConta = 'pf6-conta';
 
 /// O EXTRATO, medido em `extrato_tab_redesign.dart` — e a tela que abriu esta rodada.
@@ -184,13 +184,13 @@ const String kSlugDaAprovacao = 'pj2-aprovacao';
 /// A APARÊNCIA, medida em `aparencia_screen.dart` — e é a tela que EDITA este DS.
 ///
 /// Ela é a primeira deste registro cujo assunto é a própria linguagem: tema do app em cima, os cinco
-/// moods de fundo embaixo. Quem escolhe o `BoldBackdrop` é esta tela, e até hoje o catálogo tinha os
+/// moods de fundo embaixo. Quem escolhe o `CoreflowBackdrop` é esta tela, e até hoje o catálogo tinha os
 /// sete valores do enum e **nenhuma vitrine deles** — o retrato de cada mood era classe privada dentro
 /// do app (`_BgOption` + `_Swatch`), invisível pra qualquer varredura de adoção.
 ///
 /// ## Ela trouxe duas peças, e nenhuma delas é peça pra fechar desenho
 ///
-/// A `amostraDeFundo` é `BoldAmostraDeFundo` no pacote, e o `BoldBackground.fixo` já a citava pelo
+/// A `amostraDeFundo` é `CoreflowAmostraDeFundo` no pacote, e o `CoreflowBackground.fixo` já a citava pelo
 /// nome: o `///` daquele construtor diz que o declarado tem que vencer a escolha da pessoa **por causa
 /// do seletor**, senão as cinco opções desenham o fundo já escolhido e escolher outro muda as cinco
 /// juntas. Ou seja: o componente do seletor faltava, e o DS já sabia que ele existia.
@@ -213,7 +213,7 @@ const String kSlugDaAparencia = 'pf8-aparencia';
 /// Este produto tem sete fundos e escolhe por TELA, com a regra escrita no app desde muito antes de
 /// eu declarar tela nenhuma:
 ///
-/// > *"Fundo do SHELL = secundário (sólido + glow). A aba Início pinta o próprio `BoldBackground()`
+/// > *"Fundo do SHELL = secundário (sólido + glow). A aba Início pinta o próprio `CoreflowBackground()`
 /// > opaco por cima — SEM estilo declarado. As demais abas (Extrato, PIX, Equipe, Perfil),
 /// > transparentes, deixam ver este fundo secundário."*
 ///
@@ -227,17 +227,17 @@ const String kSlugDaAparencia = 'pf8-aparencia';
 ///
 /// O mapa é DERIVADO da regra do app, não uma escolha nova: quem pinta a própria arte é a home;
 /// quem herda o shell é o resto; quem crava sólido está no `build` da própria tela.
-const Map<String, BoldBackdrop> _fundoPorSlug = {
-  kSlugDaHome: BoldBackdrop.imagem,
-  kSlugDaConta: BoldBackdrop.imagem,
-  kSlugDaAprovacao: BoldBackdrop.imagem,
-  kSlugDoHubDePix: BoldBackdrop.solido,
-  kSlugDoExtrato: BoldBackdrop.solido,
+const Map<String, CoreflowBackdrop> _fundoPorSlug = {
+  kSlugDaHome: CoreflowBackdrop.imagem,
+  kSlugDaConta: CoreflowBackdrop.imagem,
+  kSlugDaAprovacao: CoreflowBackdrop.imagem,
+  kSlugDoHubDePix: CoreflowBackdrop.solido,
+  kSlugDoExtrato: CoreflowBackdrop.solido,
   // A APARÊNCIA é a exceção da regra do shell, e ela é declarada: a tela é empurrada (fluxo
-  // secundário, que pediria `solido`), e o `aparencia_screen.dart` usa `BoldBackground` SEM estilo —
+  // secundário, que pediria `solido`), e o `aparencia_screen.dart` usa `CoreflowBackground` SEM estilo —
   // ou seja, ela pinta a escolha da pessoa. Sem escolha, a arte. Desenhar sólido aqui mostraria o
   // seletor de fundo sobre o único fundo que ele não oferece.
-  kSlugDaAparencia: BoldBackdrop.imagem,
+  kSlugDaAparencia: CoreflowBackdrop.imagem,
 };
 
 /// `nome da tela → fundo`, montado UMA vez.
@@ -245,15 +245,15 @@ const Map<String, BoldBackdrop> _fundoPorSlug = {
 /// A chave é o nome e não o slug porque é o que o `ScreenSpec` carrega — ele não tem id. Derivar do
 /// mapa de slugs em vez de escrever os nomes à mão é o que impede os dois de divergirem no primeiro
 /// renome de tela.
-final Map<String, BoldBackdrop> _fundoPorNome = {
+final Map<String, CoreflowBackdrop> _fundoPorNome = {
   for (final e in telasDoBold().entries)
     if (_fundoPorSlug[e.key] != null) e.value.name: _fundoPorSlug[e.key]!,
 };
 
 /// O fundo da tela que o motor está desenhando. `null` (prévia de componente solto, mock à mão) cai
 /// no default do produto, que é a arte — e é o mesmo que o app faz com quem nunca personalizou.
-BoldBackdrop fundoDaTela(ScreenSpec? tela) =>
-    _fundoPorNome[tela?.name] ?? BoldBackdrop.imagem;
+CoreflowBackdrop fundoDaTela(ScreenSpec? tela) =>
+    _fundoPorNome[tela?.name] ?? CoreflowBackdrop.imagem;
 
 /// As telas montadas, a partir do arquivo GERADO — e este arquivo deixou de ser a fonte delas.
 ///

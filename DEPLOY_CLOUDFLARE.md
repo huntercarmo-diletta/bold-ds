@@ -42,7 +42,7 @@ O `noindex` não é redundante com o Access: **Access nenhum desfaz um índice q
 ### 1 · Rodar os gates (não publique catálogo vermelho)
 
 ```bash
-(cd packages/conta_bold_design_system && flutter analyze && flutter test)   # 96
+(cd packages/coreflow_design_system && flutter analyze && flutter test)   # 96
 (cd packages/catalog && flutter analyze && flutter test)                    # 19
 ```
 

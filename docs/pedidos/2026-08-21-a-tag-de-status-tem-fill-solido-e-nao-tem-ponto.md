@@ -48,3 +48,51 @@ mais mexe. O **ponto** não.
 
 Os 2 sítios do ponto ficam embrulhados aqui e a casca não fecha — e eu escrevo no inventário que a
 tag tem 4 primitivos por causa de um disco de 6px e de um alfa no topo.
+
+## VEREDITO · o PONTO entra; o FILL espera, com a condição escrita
+**pai**: ds-diletta **v0.143.0** · **data**: 2026-08-21
+
+| item | veredito | o que é |
+|---|---|---|
+| **o ponto** | **ENTRA** | `DilettaStatusTag(ponto: true)` — disco de 6 na tinta do tom, mesmo eixo do `icon` |
+| **o fill em gradiente** | **ESPERA** | condição escrita abaixo; a razão é de TIPO, não de gosto |
+
+### O que decidiu
+No ponto, a sua frase, e ela é a melhor do lote de hoje: **"o ponto não tem glifo: ele é estado, não
+coisa."** Você recusou desenhar um círculo como ícone e escreveu por quê — *inventar um glifo pra não pedir
+um campo* poria no kit um símbolo que não simboliza nada. Isso não é pedido de peça, é higiene de
+vocabulário, e é o tipo de coisa que eu não teria como medir daqui.
+
+Você também leu o mecanismo certo antes de pedir: o `pending` já traz o próprio glifo vindo do tom, então o
+caminho do acessório existia — só era estreito. O eixo continua sendo **UM**: passar `icon` e `ponto`
+juntos é `AssertionError`, não escolha. A caixa fica em 12 nos dois casos, pela razão que você não escreveu
+e eu medi: se o ponto encolhesse a caixa, o rótulo andaria 6px entre uma tag com glifo e a vizinha com
+ponto — e é lado a lado que os seus cinco aparecem.
+
+Um custo que fica dito porque é seu de pagar: **no `pending` o disco vence o relógio**, igual ao que `icon`
+já fazia. Como `pending` e `neutral` pintam igual de propósito (v0.27.0: matiz pra espera competiria com o
+juízo sobre o desfecho), uma fileira que troca o relógio por disco perde a distinção entre *esperando* e
+*sem estado*. Na sua fileira de quatro, `Pendente` com o relógio e as outras três com disco é o que a
+linguagem sabe dizer. Se isso doer no desenho, é pedido novo — e ele é sobre a espera, não sobre a tag.
+
+### O que eu achei indo implementar
+O disco existe no vocabulário do terceiro filho como peça própria: `Active dot` com `Size=4px/8px/12px`. O
+seu 6 não está lá — e não vou promover degrau de disco por causa disso, porque o `Active dot` dele vive na
+célula de calendário, não em tag. Registro porque muda o que a próxima medição procura: **quando o segundo
+sítio de disco aparecer, a pergunta é se ele é o mesmo disco.**
+
+### O que eu recusei, e a condição de reabrir
+- **O fill em gradiente.** A razão é de tipo, e você a antecipou: `DilettaPintura.bg` é `Color`, e **seis
+  peças** leem essa struct. Trocar o tipo por `Gradient` move todas por uma decisão de redesenho de um
+  produto — e a sua própria seção «Derivável?» aponta a saída boa (declaração de paleta, no molde do
+  `tinteDeVidro`), que é exatamente o que não se faz com um caso.
+  **Reabre no segundo filho que medir fill não-liso em tag**, e aí entra como declaração de paleta, não
+  como parâmetro. **1º caso registrado no ledger.**
+- Não confunda com recusa de mérito: o resto da sua tag bate no meu em tudo (altura 20, padding 4/8, borda
+  0.5, `labelSm` 11, e o tom já é o meu enum). Você está a um alfa de distância de fechar a casca.
+
+### O que você faz
+`ref: v0.143.0`. Os 2 sítios com ponto passam a `ponto: true`. Os outros 3 já delegavam. A casca não fecha
+hoje, e o que a segura é UMA coisa com nome: o gradiente. Escreva isso no seu inventário com o número dos
+dois lados — *"a tag tem N primitivos por causa de um alfa no topo"* —, que é a forma da frase que faz a
+condição de reabrir ser verificável daqui a três meses.

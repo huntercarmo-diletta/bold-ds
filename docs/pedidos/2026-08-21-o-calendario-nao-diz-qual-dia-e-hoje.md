@@ -50,3 +50,47 @@ Não da minha parte: a data corrente é do sistema, e o desenho do marcador é s
 
 A casca continua desenhando a célula inteira (2 primitivos) por causa de um ponto, e eu escrevo isso
 no plano com o número — 40 × 40 iguais, uma diferença de 4px.
+
+## VEREDITO · ENTRA — e não custou parâmetro nenhum, porque hoje não é decisão de quem chama
+**pai**: ds-diletta **v0.143.0** · **data**: 2026-08-21
+
+Ponto de 4px em `primary` abaixo do número, **só quando o dia não está selecionado**. Sem eixo, sem
+`bool`: a peça passou a saber que dia é hoje, que é o que faltava.
+
+### O que decidiu
+A sua seção «Já tentei», e ela decidiu sozinha: *"seleção é escolha da pessoa, hoje é fato do calendário.
+Com os dois no mesmo canal, quem abre a tela não distingue 'não escolhi nada' de 'escolhi hoje'."* Isso não
+é preferência de desenho — é a razão pela qual `selectedDate: hoje` **mente**, e num agendamento de Pix a
+mentira custa um agendamento.
+
+E porque hoje é fato e não escolha, ele não vira parâmetro de sítio: **nenhum chamador precisa pedir.** A
+sua tabela de uma linha (40 × 40 iguais, uma diferença de 4px) é o que provou que o pedido cabia numa
+linha.
+
+### O que eu achei indo implementar
+**O seu irmão já tinha pedido isto, sem pedir — está desenhado no Figma dele desde antes de você existir
+como filho.** O conjunto `Calendar cell` do filho A declara `Type=Active/Inactive/**Today's date**` e um
+eixo `Active dot`; o terceiro filho declara `Active icon=False/True` na célula dele. **Dois arquivos, duas
+casas, o mesmo marcador — e o meu calendário não tinha.**
+
+Por que eu não vi: o par entre a minha peça e a dele está marcado `parcial` no `figma/pareamento.json`, com
+a razão certa (*"a dele é a célula de 40×40, o nosso é o mês inteiro"*). **O veredito era sobre
+GRANULARIDADE e eu o li como veredito sobre os EIXOS.** Fui contar a classe: são **41 pares parciais, com
+100 eixos que nunca foram cruzados** — e dois dos cinco pedidos que você mandou hoje estavam enterrados lá
+dentro, escritos há meses. Esse é o maior achado do dia, e ele é seu por consequência.
+
+### O que eu recusei, e a condição de reabrir
+- **Marcar dias com EVENTO** (o `Active dot` como marcador de agenda, que é o que o terceiro filho parece
+  usar). Não tem caso medido em app nenhum, e um conjunto de datas marcadas é API maior que a de hoje.
+  **Reabre com sítios contados**, e aí o `hoje` vira um caso particular do marcador em vez de dois
+  mecanismos.
+
+### O que você faz
+`ref: v0.143.0`. Delegue a célula inteira: a casca `bold_date_picker` perde os 2 primitivos e o método. As
+suas duas outras divergências — tipografia (`BoldType.body` 400 contra `DilettaType.button` 500) e
+desabilitado (`textMuted` contra `Opacity(0.4)`) — **continuam suas, e você mesmo escreveu que viram adoção
+e não divergência.** Se ao delegar alguma das duas doer numa tela, isso é pedido novo, com o número.
+
+Um aviso de mecanismo: `hoje` existe como parâmetro (default `DateTime.now()`) e **não é pra produto** — é
+pra quem MEDE. Marcador tirado do relógio faz golden apodrecer à meia-noite; se o seu catálogo tiver
+retrato do calendário, passe uma data fixa lá e só lá.

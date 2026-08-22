@@ -1,5 +1,5 @@
 import 'package:conta_bold_catalog/main.dart';
-import 'package:conta_bold_design_system/conta_bold_design_system.dart';
+import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -71,7 +71,7 @@ void main() {
   test('o código gerado USA o design system, e não Flutter puro', () {
     // O furo mais perigoso do plugue, porque nada falha: o catálogo geraria código que
     // compila e não usa o DS, o dev copiaria a tela, e ninguém avisaria.
-    expect(Ds.importNoCodigo, contains('conta_bold_design_system'));
+    expect(Ds.importNoCodigo, contains('coreflow_design_system'));
     expect(Ds.nomesNoCodigo.coluna, startsWith('ds.'));
 
     for (final def in Ds.blocos.values) {
@@ -268,9 +268,9 @@ void main() {
 
     test('reconhece os blocos que nasceram NESTE filho', () {
       final spec = ler('''
-        ds.BoldSaldo(valor: 'dez reais', oculto: true, aoAbrirExtrato: abrir),
+        ds.CoreflowSaldo(valor: 'dez reais', oculto: true, aoAbrirExtrato: abrir),
         ds.BoldSeloQuantico(estado: ds.BoldSeloEstado.negado, tamanho: 120),
-        ds.BoldCopiar(texto: 'chave', rotuloDeAcessibilidade: 'Copiar'),
+        ds.CoreflowCopiar(texto: 'chave', rotuloDeAcessibilidade: 'Copiar'),
       ''');
       expect(spec.blocks.map((b) => b.type), ['saldo', 'seloQuantico', 'copiar']);
       expect(spec.blocks[0].props['oculto'], isTrue);

@@ -8,7 +8,7 @@ import 'package:conta_bold_catalog/chrome_do_bold.dart';
 import 'package:conta_bold_catalog/conteudo_do_bold.dart';
 import 'package:conta_bold_catalog/ds_do_bold.dart';
 import 'package:conta_bold_catalog/telas_do_bold.dart';
-import 'package:conta_bold_design_system/conta_bold_design_system.dart';
+import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -153,7 +153,7 @@ void main() {
               body: FormatoDoAparelho(
                 tamanho: const Size(_largura * 1.0, _altura * 1.0),
                 child: DilettaThemeScope(
-              theme: escuro ? BoldTheme.dark : BoldTheme.light,
+              theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
               child: Builder(builder: (ctx) {
                 final s = DilettaTheme.schemeOf(ctx);
                 return ColoredBox(

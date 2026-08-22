@@ -10,7 +10,7 @@
 /// muito mais largo do que no produto, e quem mede LAYOUT com ela mede uma tela que não existe.
 ///
 /// Isso me pegou de cheio: os meus dois sweeps de largura e o estouro que eu reportei ao pai no
-/// `BoldSegmentos` foram medidos com a fonte quadrada. **Os números eram um teto, não o produto** — e um
+/// `CoreflowSegmentos` foram medidos com a fonte quadrada. **Os números eram um teto, não o produto** — e um
 /// gate de layout que exagera acusa componente são, o que ensina a ignorar o vermelho.
 ///
 /// Carregar o Inter aqui vale pra TODOS os testes deste pacote de uma vez, que é o que o gancho existe pra
@@ -24,7 +24,7 @@ import 'dart:io';
 import 'package:conta_bold_catalog/chrome_do_bold.dart';
 import 'package:conta_bold_catalog/conteudo_do_bold.dart';
 import 'package:conta_bold_catalog/ds_do_bold.dart';
-import 'package:conta_bold_design_system/conta_bold_design_system.dart';
+import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -32,12 +32,12 @@ import 'package:flutter_test/flutter_test.dart';
 ///
 /// Por caminho de ARQUIVO e não por `rootBundle`: o bundle de um teste não monta o asset de um pacote
 /// irmão, e o `cwd` de um teste é a raiz do pacote.
-const _pastaDasFontes = '../conta_bold_design_system/assets/fonts';
+const _pastaDasFontes = '../coreflow_design_system/assets/fonts';
 
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  // A família com o PREFIXO do pacote (`packages/conta_bold_design_system/Inter`), que é o nome pelo qual
+  // A família com o PREFIXO do pacote (`packages/coreflow_design_system/Inter`), que é o nome pelo qual
   // o `DilettaText` a pede. Registrar como `Inter` cru carrega uma família que ninguém consome: o load
   // funciona, e o texto continua saindo na fonte quadrada — a falha mais silenciosa possível num gate de
   // layout, porque tudo fica verde e os números continuam errados.

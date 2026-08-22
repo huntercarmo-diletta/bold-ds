@@ -242,11 +242,11 @@ class TelaGerada extends StatelessWidget {
   void aoTeclar(String t) {}
   void aoApagar() {}
   DateTime? get dataEscolhida => null;
-  List<ds.BoldAlvo> get alvosDetectados => const [];
+  List<ds.CoreflowAlvo> get alvosDetectados => const [];
   List<String> get rotulosDasAbas => const ['Tudo', 'Entradas'];
   double get faseDaVarredura => 0;
   Size get tamanhoDoFrame => Size.zero;
-  List<ds.BoldDegrauDeAlcada> get degrausDaAlcada => const [];
+  List<ds.CoreflowDegrauDeAlcada> get degrausDaAlcada => const [];
 
   @override
   Widget build(BuildContext context) {

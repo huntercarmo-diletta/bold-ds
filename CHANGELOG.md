@@ -20,6 +20,71 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.67.0] — 2026-08-22
+
+### O PACOTE MUDA DE NOME, e o nome é o que ele virou: `coreflow_design_system`
+
+**Isto quebra todo import.** A migração é uma substituição de texto e está escrita no fim desta
+entrada.
+
+O pacote se chamava `conta_bold_design_system` e a tabela do README dizia *"o DS-filho: a paleta como
+instância, a fonte, os gradientes e os componentes que só o Bold tem"*. Deixou de ser verdade quando o
+dono decidiu a árvore: **o Bold é a BASE da família** — a camada visual do Coreflow —, e a partir dele
+nascem produtos que herdam os componentes, adaptam os tokens e podem trazer componentes novos.
+
+Nome que descreve um dos habitantes não serve pra casa. Um produto novo escreveria
+`conta_bold_design_system` no `pubspec` pra receber uma linguagem que não é do Conta BOLD, e
+`BoldButton` numa tela que não é do Bold.
+
+### O corte: 50 viram `Coreflow*`, 6 seguem `Bold*`
+
+O critério é um e dá pra conferir: **linguagem vira Coreflow, marca segue Bold.**
+
+| ficam `Bold*` | por quê |
+|---|---|
+| `BoldColors` · `BoldPalette` | as rampas cruas e a paleta DESTE produto |
+| `BoldVinho` | o segundo eixo da marca do Bold, e o `///` dele já dizia *"deste produto"* |
+| `BoldFonts` | a fonte deste produto — um filho declara a dele |
+| `BoldSeloQuantico` · `BoldSeloEstado` | veredito do dono (29/07): os dois quânticos são **narrativa de marca**, não linguagem |
+
+Os outros 50 são componentes e infraestrutura de tema, e viraram `Coreflow*`. As **instâncias**
+continuam dizendo Bold, porque elas são o produto: `CoreflowProduto.bold`, `CoreflowGradients.bold`,
+`marcaDoBold`.
+
+**Medido:** 806 ocorrências em 88 arquivos dos dois pacotes deste repo. 203 testes do DS e 90 do
+catálogo verdes, `analyze` sem um aviso nos dois.
+
+### Por que 0.67.0 e não 1.0.0
+
+Em `0.x` quebra sobe a MINOR, e é o que este repo sempre fez (o `feat(neto)!` da porta foi minor).
+Chamar de `1.0.0` seria afirmar estabilidade de API — e a fila de pedidos sem veredito no
+`docs/PEDIDOS.md` diz o contrário.
+
+### Migração, pra quem consome
+
+```diff
+-  conta_bold_design_system:
++  coreflow_design_system:
+     git:
+       url: git@bitbucket.org:diletta/bold-ds.git
+-      ref: v0.66.0
+-      path: packages/conta_bold_design_system
++      ref: v0.67.0
++      path: packages/coreflow_design_system
+```
+
+```diff
+-import 'package:conta_bold_design_system/conta_bold_design_system.dart';
++import 'package:coreflow_design_system/coreflow_design_system.dart';
+```
+
+E os símbolos: `Bold<Nome>` → `Coreflow<Nome>`, **menos os seis da tabela acima**. Quem quiser
+atravessar sem mexer nas telas declara `typedef Bold<Nome> = Coreflow<Nome>;` numa casca — é o que o
+app fez nesta mesma data, pra as telas escreverem o nome final uma vez só, quando a casca cair.
+
+**O repositório NÃO mudou de nome** (`diletta/bold-ds` nos dois remotos), e isso é escolha: o repo é
+onde a família mora, e renomeá-lo derruba a URL que o app resolve. Fica pra quando houver razão.
+
 ## [0.66.0] — 2026-08-21
 
 ### FASE 1 do plano — duas peças mudam de casa, e a frase que as segurava é a mesma de sempre

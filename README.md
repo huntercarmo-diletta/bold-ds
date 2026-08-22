@@ -6,13 +6,13 @@ de bloco é aqui.
 
 | pacote | o que é |
 |---|---|
-| `packages/conta_bold_design_system` | **o DS-filho**: a paleta como instância, a fonte, os gradientes e os componentes que só o Bold tem |
+| `packages/coreflow_design_system` | **a BASE da família**: os 50 componentes (`Coreflow*`) mais o produto Bold — paleta, vinho, fonte e os dois do selo quântico, que seguem `Bold*` porque são a marca e não a linguagem |
 | `packages/catalog` | **o catálogo-filho**: o plugue que declara os blocos, os grupos e o leitor de código |
 
 ## O gate
 
 ```bash
-(cd packages/conta_bold_design_system && flutter analyze && flutter test)   # 105
+(cd packages/coreflow_design_system && flutter analyze && flutter test)   # 105
 (cd packages/catalog && flutter analyze && flutter test)                    # 66
 ```
 
@@ -37,11 +37,11 @@ nunca por caminho local.
 
 ```yaml
 dependencies:
-  conta_bold_design_system:
+  coreflow_design_system:
     git:
       url: git@bitbucket.org:diletta/bold-ds.git
       ref: v0.15.0
-      path: packages/conta_bold_design_system
+      path: packages/coreflow_design_system
 ```
 
 O `path:` não é detalhe: são dois pacotes num repo só, e sem ele o `pub` procura um `pubspec.yaml` na
@@ -63,7 +63,7 @@ quem publica, não deste repo.
 | Preciso… | Leia |
 |---|---|
 | **o que muda ao subir de versão** deste pacote | [CHANGELOG.md](CHANGELOG.md) |
-| **como a adoção foi decidida** — rename, variante, o que nasceu aqui (registro de 29/07) | [packages/conta_bold_design_system/2026-07-29-adocao-do-ds-do-bold.md](packages/conta_bold_design_system/2026-07-29-adocao-do-ds-do-bold.md) |
+| **como a adoção foi decidida** — rename, variante, o que nasceu aqui (registro de 29/07) | [packages/coreflow_design_system/2026-07-29-adocao-do-ds-do-bold.md](packages/coreflow_design_system/2026-07-29-adocao-do-ds-do-bold.md) |
 | o que eu já pedi aos pais, e o veredito de cada um | [docs/PEDIDOS.md](docs/PEDIDOS.md) |
 | o que os pais me mandaram | [docs/avisos/](docs/avisos/) |
 | **publicar o catálogo** (Cloudflare Worker + Access) | [DEPLOY_CLOUDFLARE.md](DEPLOY_CLOUDFLARE.md) |

@@ -10,7 +10,7 @@
 /// macros declaradas.
 library;
 
-import 'package:conta_bold_design_system/conta_bold_design_system.dart';
+import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 
@@ -80,7 +80,7 @@ CatalogoConfig configDoCatalogoDoBold() {
       // medindo por que os meus gates de layout mediam texto 76% mais largo que o real.
       //
       // Com o PREFIXO do pacote, e não `familyRaw`: o arquivo mora no pacote do DS, então pro engine a
-      // família é `packages/conta_bold_design_system/Inter`. `Inter` cru só resolveria se o catálogo
+      // família é `packages/coreflow_design_system/Inter`. `Inter` cru só resolveria se o catálogo
       // declarasse as fontes de novo — cópia de asset, que é o que a fronteira existe pra evitar.
       fonte: BoldFonts.family,
       abas: [

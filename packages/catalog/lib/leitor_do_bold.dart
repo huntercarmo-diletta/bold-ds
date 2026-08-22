@@ -205,7 +205,7 @@ Block _bloco(String expr) {
   // 2a-quinquies · O CARTÃO PROMOCIONAL, que saiu da tabela quando a arte entrou: a ilustração é um
   // WIDGET aninhado, e a tabela só lê valor literal. A volta lê o TOKEN de dentro do acessório, que é
   // onde ele mora no código; sem acessório declarado, a arte fica vazia e o cartão cai no placeholder.
-  if (ehCtor(expr, 'ds.BoldCartaoPromocional')) {
+  if (ehCtor(expr, 'ds.CoreflowCartaoPromocional')) {
     return Block(id: _novoId(), type: 'cartaoPromocional', props: {
       'titulo': argString(expr, 'titulo') ?? '',
       'subtitulo': argString(expr, 'subtitulo') ?? '',
@@ -218,10 +218,10 @@ Block _bloco(String expr) {
   }
 
   // 2a-quater · A NAV FLUTUANTE, que tem lista de filhos e por isso não cabe na tabela. Os itens não
-  // são blocos (são `BoldItemDeNav`, dado), então a volta os lê como o texto `Rótulo:icone` — o mesmo
+  // são blocos (são `CoreflowItemDeNav`, dado), então a volta os lê como o texto `Rótulo:icone` — o mesmo
   // idioma em que eles foram escritos.
-  if (ehCtor(expr, 'ds.BoldNavFlutuante')) {
-    final pares = RegExp(r"BoldItemDeNav\(\s*icone:\s*ds\.DilettaIcons\.(\w+)\s*,"
+  if (ehCtor(expr, 'ds.CoreflowNavFlutuante')) {
+    final pares = RegExp(r"CoreflowItemDeNav\(\s*icone:\s*ds\.DilettaIcons\.(\w+)\s*,"
             r"\s*rotulo:\s*'([^']*)'")
         .allMatches(expr)
         .map((m) => '${m.group(2)}:${m.group(1)}')
@@ -252,7 +252,7 @@ Block _bloco(String expr) {
   // mesma recursão: os lançamentos voltam por `_bloco`, então a `linhaDeValor` é lida pela tabela de
   // graça. O que ele tem a mais é o acessório — que no código é um `DilettaText` inteiro, e volta
   // como o texto dele.
-  if (ehCtor(expr, 'ds.BoldGrupoDoDia')) {
+  if (ehCtor(expr, 'ds.CoreflowGrupoDoDia')) {
     final itens = primeiraListaDeChildren(expr);
     return Block(
       id: _novoId(),
@@ -273,7 +273,7 @@ Block _bloco(String expr) {
   // A FILEIRA DE AVATARES: três listas paralelas de literais, e a tabela lê argumento escalar. Mesmo
   // caso das abas e dos segmentos, três vezes — por isso `_rotulos` ganhou o parâmetro do argumento
   // em vez de continuar pegando o PRIMEIRO `[...]` da expressão, que aqui seria sempre as iniciais.
-  if (ehCtor(expr, 'ds.BoldFileiraDeAvatares')) {
+  if (ehCtor(expr, 'ds.CoreflowFileiraDeAvatares')) {
     return Block(id: _novoId(), type: 'fileiraDeAvatares', props: {
       'iniciais': _rotulos(expr, argumento: 'iniciais'),
       'rotulos': _rotulos(expr, argumento: 'rotulos'),
@@ -289,13 +289,13 @@ Block _bloco(String expr) {
   //   motor sabe disso: prop de PREVIEW não é prop de código;
   // - o prazo recebe `Duration`, e `Arg` não tem kind de duração. O bloco declara HORAS e o codegen monta
   //   o `Duration`, então a volta desmonta.
-  if (ehCtor(expr, 'ds.BoldEscadaDeAlcadas')) {
+  if (ehCtor(expr, 'ds.CoreflowEscadaDeAlcadas')) {
     return Block(id: _novoId(), type: 'escadaDeAlcadas', props: {
       ...Ds.blocos['escadaDeAlcadas']!.defaults(),
       'densa': argBool(expr, 'densa') ?? false,
     });
   }
-  if (ehCtor(expr, 'ds.BoldPrazoDaPendencia')) {
+  if (ehCtor(expr, 'ds.CoreflowPrazoDaPendencia')) {
     return Block(id: _novoId(), type: 'prazoDaPendencia', props: {
       'horas': argNumeroComoTexto(expr, 'hours') ?? '',
       'idade': argString(expr, 'idade') ?? '',
@@ -304,7 +304,7 @@ Block _bloco(String expr) {
 
   // Os segmentos: lista curta de rótulos, que a tabela não declara (mesmo caso das abas). O bloco lê
   // os rótulos de volta do próprio literal.
-  if (ehCtor(expr, 'ds.BoldSegmentos')) {
+  if (ehCtor(expr, 'ds.CoreflowSegmentos')) {
     return Block(id: _novoId(), type: 'segmentos', props: {
       'segmentos': _rotulos(expr),
       'selecionado': argNumeroComoTexto(expr, 'indiceSelecionado') ?? '0',

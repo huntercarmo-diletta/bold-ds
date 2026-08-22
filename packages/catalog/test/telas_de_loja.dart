@@ -81,7 +81,7 @@ const Map<String, String> kTelasDeLoja = {
 
   // ── GESTÃO DA CONTA ─────────────────────────────────────────────────────────
   // Medida em `minha_conta_screen.dart`. O cabeçalho era `_AccountHeader`, classe privada dentro da
-  // tela — ela virou `BoldCartaoDaConta` pra esta tela poder existir aqui.
+  // tela — ela virou `CoreflowCartaoDaConta` pra esta tela poder existir aqui.
   'pf6-conta': r'''
 {"formato":1,"name":"PF6 · Gestão da conta","form":"phone","contentGap":"s6","scrollableContent":true,
 "top":[{"id":"b_1","type":"cascaDeTopo","props":{"titulo":"Conta","esquerda":"voltar","direita":""}}],
@@ -148,7 +148,7 @@ const Map<String, String> kTelasDeLoja = {
 
   // ── APROVAÇÃO ───────────────────────────────────────────────────────────────
   // Medida em `autorizacoes_screen.dart` (1.216 linhas). O cartão era `_PendingCard`, classe privada
-  // dentro da tela — virou `BoldCartaoDePedido` pra esta tela poder existir aqui.
+  // dentro da tela — virou `CoreflowCartaoDePedido` pra esta tela poder existir aqui.
   //
   // É a tela vista por QUEM APROVA, e não a do solicitante: os dois cartões são diferentes, e o que
   // muda é a pergunta que cada um responde.
@@ -207,7 +207,7 @@ const Map<String, String> kTelasDeLoja = {
 "notes":[
 {"kind":"decisao","text":"ZERO barra de baixo, e é a regra da tela: cada escolha aplica na hora e persiste — não existe estado pendente pra confirmar. Um CTA \"Salvar\" aqui inventaria um passo que o app não tem, e faria a pessoa achar que o tema que ela já está vendo ainda não valeu."},
 {"kind":"regra","text":"O fundo escolhido é a CIDADE quando ninguém escolheu, e não \"nenhum\": a preferência nasce nula e a home pinta `imagem` por default, então a marca do seletor tem que dizer o que a tela está pintando. Seletor sem marca nenhuma no primeiro acesso é o mesmo que mentir sobre o estado."},
-{"kind":"borda","text":"São CINCO amostras pros SETE valores de `BoldBackdrop`: o `solido` é o fundo dos fluxos empurrados e a grade técnica não é oferecida — os dois são decisão de tela, não personalização. Mood novo entra aqui e no seletor no mesmo commit, senão ele existe e ninguém consegue escolher."},
+{"kind":"borda","text":"São CINCO amostras pros SETE valores de `CoreflowBackdrop`: o `solido` é o fundo dos fluxos empurrados e a grade técnica não é oferecida — os dois são decisão de tela, não personalização. Mood novo entra aqui e no seletor no mesmo commit, senão ele existe e ninguém consegue escolher."},
 {"kind":"a11y","text":"A escolha é marcada em TRÊS canais, e nenhum é cor sozinha: o anel de 2,5 no retrato, o check no meio dele, e o rótulo em peso 700. A mesma régua da fila de filtros do extrato — cor sozinha não é informação."},
 {"kind":"decisao","text":"O ritmo do aparelho não é uniforme (x4 depois do apoio, x6 antes de \"Fundo\", x1 depois dele) e o registro tem UM `contentGap`. Declarado `s4`, que é o vão da maioria; o respiro maior antes da seção sairia de um bloco de `ritmo`, e bloco de espaçador numa tela de cinco blocos é ruído no board."}
 ]}

@@ -3,7 +3,7 @@ import 'package:conta_bold_catalog/conteudo_do_bold.dart';
 import 'package:conta_bold_catalog/ds_do_bold.dart';
 import 'package:conta_bold_catalog/main.dart';
 import 'package:conta_bold_catalog/telas_do_bold.dart';
-import 'package:conta_bold_design_system/conta_bold_design_system.dart';
+import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -157,7 +157,7 @@ void main() {
 
     // O saldo é o que a tela existe pra mostrar. Com binding, o preview usa o PLACEHOLDER do pai
     // (`{saldoFormatado}`) — então o que se prova aqui é que o bloco chegou na árvore, não o valor.
-    expect(find.byType(BoldSaldo), findsOneWidget);
+    expect(find.byType(CoreflowSaldo), findsOneWidget);
   });
 
   for (final slug in [kSlugDoValorDoPix, kSlugDaRevisaoDoPix, kSlugDoPixEnviado]) {
@@ -207,8 +207,8 @@ void main() {
     t.takeException();
 
     expect(erros, isEmpty, reason: erros.take(3).join(' | '));
-    expect(find.byType(BoldEscadaDeAlcadas), findsOneWidget);
-    expect(find.byType(BoldProgressoDeAprovacao), findsOneWidget);
+    expect(find.byType(CoreflowEscadaDeAlcadas), findsOneWidget);
+    expect(find.byType(CoreflowProgressoDeAprovacao), findsOneWidget);
   });
 
   testWidgets('e com DADO DE VERDADE ela não vaza em nada', (t) async {
