@@ -110,7 +110,10 @@ do card de destaque (**1 sítio**) e o avatar sem iniciais (**1 caso**) — *um 
 
 | [o `raioDeFolha` parou de "não bloquear nada"](pedidos/2026-08-22-o-raio-da-folha-parou-de-nao-bloquear-nada.md) | **sem veredito** | — |
 
-**O de 2026-08-22 tem a origem mais estreita do ledger: ele nasceu de um conserto SEU.** O pegador da
+**Os três de 2026-08-22 saíram de UMA pergunta do dono do app** — *"há algo no design system que o
+app ainda não consome?"*. A varredura que ela obrigou achou três peças da BASE feitas pra este
+produto e nunca adotadas (as três entraram no mesmo dia) e dois GÊMEOS de peças suas, que viraram os
+dois pedidos acima. O terceiro tem a origem mais estreita do ledger: ele nasceu de um conserto SEU.** O pegador da
 folha era o que segurava a delegação de duas cascas; ele entrou na `v0.143.0` com o meu número, eu fui
 delegar e sobrou o raio — 22 aqui, `r24` cravado na variante. A linha do seu ledger dizia que o
 `raioDeFolha` *"não bloqueia nada"*, e isso valia até anteontem.
