@@ -20,6 +20,42 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.70.0] — 2026-08-22
+
+### Sobe pro pai `v0.145.0` — os três vereditos que faltavam, e um deles fechou um sítio MEU
+
+| veredito | o que o app ganha |
+|---|---|
+| **`DilettaTextLinkTone.neutro`** | o `BoldSeeAllLink` fecha: 3 sítios passam `tone: neutro` e o gêmeo sai |
+| **`DilettaReceipt(estado:)`** | o `BoldReceipt` fecha: 148 linhas saem, e o eixo de estado (6 consumidores) é o dele |
+| **`DilettaSpotIcon(forma: ladrilho)`** | os 5 ladrilhos das telas passam a ser peça |
+
+### E o SEXTO ladrilho era meu
+
+O pedido do ladrilho tinha uma tabela de seis sítios, e o último era o `CoreflowCartaoDePedido`
+deste pacote: *"o cartão compõe três peças do pai e desenha o ladrilho num `Container`, porque não
+havia o que chamar."* Agora há — 20 linhas saíram.
+
+**Menos um tom.** O `info` (a TED) não atravessa: `DilettaSpotState` não tem `info`, porque o pai
+recusou a família na `v0.27.0` — e a recusa continua certa lá. Aqui `info` é papel EXTRA deste
+produto, então esse tom fica com o ladrilho montado à mão, **com o raio que a REGRA dele dá** (46 ⇒
+`all16`), e os outros três delegam. Um `switch` com quatro braços onde três delegam e um não é a
+forma honesta de um vocabulário que tem um papel a mais que o do pai.
+
+### `raioDeFolha: 22` — o campo passou a existir, e este produto declara
+
+O canto da folha deste produto é 22 desde antes da adoção; o do pai é 24. Estava no ledger dele como
+*"1º caso registrado"* desde 30/07, e a condição escrita (*"segundo filho com folha ≠ 24 promove"*)
+**segue sem ser atendida** — o que virou não foi o mérito, foi o custo: quando ele consertou o
+pegador na `v0.143.0`, a delegação de duas cascas deixou de ser bloqueada pelo pegador e passou a ser
+bloqueada pelo canto.
+
+> **Conserto que remove o bloqueio de cima revela o de baixo.**
+
+Uma linha na paleta, e o `formaDaFolha` do esquema leva ela pra nove sítios da linguagem de uma vez.
+
+**Gates**: 207 testes deste pacote e 90 do catálogo, verdes contra o pai novo.
+
 ## [0.69.0] — 2026-08-22
 
 ### O cartão do pedido ganha os DOIS eixos que a tela dele tinha e ele não — e agora ela pode adotá-lo

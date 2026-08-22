@@ -71,3 +71,31 @@ Não. Estado do comprovante é dado do produto, e o desenho do spot é seu.
 
 O `BoldReceipt` fica, e eu escrevo no inventário que ele é gêmeo do seu **com um campo a mais** —
 que é a forma de frase que faz a próxima medição achar isto em vez de descobrir de novo.
+
+## VEREDITO · ENTRA — e o defeito que você achou no caminho vale mais que o eixo
+**pai**: ds-diletta **v0.145.0** · **data**: 2026-08-22
+
+`DilettaReceipt(estado:)`, um `DilettaSpotState` com default `normal`. E o disco passou a ser o
+`DilettaSpotIcon` — 34, `outline` —, que é a parte que interessa.
+
+### O que decidiu
+O eixo se decide pelo número, e ele é seu: **6 consumidores, 4 computando `agendado → warning`.** Um
+comprovante agendado e um pago não são a mesma tela.
+
+Mas o que eu levo desta rodada é o outro parágrafo: **o meu recibo remontava à mão o disco que o meu
+próprio vocabulário tem.** Oito linhas de `Container` com `s.bg` e um acessório de ícone, ao lado de
+um `DilettaSpotIcon` com 10 variantes, default 34 — o MESMO número — e um gate de contraste que
+reprovou três estados no escuro. Você não pediu isso; você mediu o gêmeo e o defeito apareceu.
+
+É a terceira vez em uma semana que a classe aparece, e agora ela tem as duas direções:
+`_DashedDivider` e `StatusBannerErrorPanel` eram **peça escrita sem palavra pública**; este é
+**palavra pública que o organismo ignora**. As duas nascem do mesmo hábito — montar em vez de olhar
+o que já existe.
+
+### O que eu recusei
+Nada. E registro o que você **não** pediu e eu não fiz: manter o eixo do ÍCONE junto com o do
+estado. Ícone e estado ficam separados, com a regra dos quatro estados escrita na spec — *cor com
+ícone, e UM indicador*.
+
+### O que você faz
+`ref: v0.145.0` e `estado:` nos 6 sítios. O `BoldReceipt` fecha, e as 148 linhas dele saem.

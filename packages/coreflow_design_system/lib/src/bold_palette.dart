@@ -526,6 +526,21 @@ class BoldPalette {
     // Nulo ⇒ pílula, que é o default dele. Este 16 é o único lugar do produto que diz a forma.
     raioDeBotao: 16,
 
+    // E A FOLHA DESTE PRODUTO É 22, não 24 — declarado em 22/08, quando o campo passou a existir.
+    //
+    // Ele estava no ledger do pai como *"1º caso registrado"* desde 30/07, com a condição escrita
+    // (*"segundo filho com folha ≠ 24 promove sem rediscussão"*) — que segue sem ser atendida. O que
+    // virou não foi o mérito, foi o CUSTO: quando o pai consertou o pegador da folha na `v0.143.0`
+    // (40 × 4, o número deste produto), a delegação de duas cascas deixou de ser bloqueada pelo
+    // pegador e passou a ser bloqueada pelo CANTO — 9 primitivos de desenho, 40 sítios de folha no
+    // app, 9 leituras do 22 no código.
+    //
+    // > **Conserto que remove o bloqueio de cima revela o de baixo.**
+    //
+    // Nulo ⇒ 24, que é o default dele. Este 22 é o único lugar do produto que diz o canto da folha,
+    // e o `formaDaFolha` do esquema leva ele pra nove sítios da linguagem de uma vez.
+    raioDeFolha: 22,
+
     // E O CARD DE CONTEÚDO É VIDRO, que é a quinta linha da mesma receita (`ds v0.32.0`).
     //
     // Ela existe porque o dono do produto olhou o board e disse *"o fundo nos cards (lista) também é

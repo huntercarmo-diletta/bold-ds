@@ -69,3 +69,34 @@ Não. Forma e tabela de tom são vocabulário seu; declarar o meu duplicaria a s
 
 Eu declaro `CoreflowLadrilhoDeIcone` na base com a tabela copiada da sua, e fica escrito no ledger
 que **a família tem dois ladrilhos** — e que o segundo nasceu porque o primeiro não tinha nome.
+
+## VEREDITO · ENTRA DIFERENTE — não é peça nova, é EIXO: a tabela já era a mesma
+**pai**: ds-diletta **v0.145.0** · **data**: 2026-08-22
+
+`DilettaSpotIcon(forma: DilettaSpotForma.ladrilho)`. Raio da ESCALA: `all8` abaixo de 44, `all16` a
+partir dele.
+
+### O que decidiu
+A sua tabela de seis sítios, e principalmente a última linha dela — a que era sua. Você escreveu
+*"o último é meu e é o mais constrangedor"*, e é exatamente isso que fecha o argumento: **quando o
+autor do pedido é também um dos réus, o pedido deixou de ser preferência.**
+
+E decidiu como ENTRA: **eixo, não peça.** O `_resolveSpot` resolve `type × state` em 10 variantes, e
+o ladrilho pede a MESMA tabela — peça nova duplicaria tabela, spec, bloco de catálogo e pareamento
+pra mudar `BoxShape.circle` por um `borderRadius`. Você mesmo escreveu a alternativa certa sem
+perceber: *"o ladrilho pede a MESMA tabela — o que muda é a forma"*. Isso é a definição de eixo.
+
+### O que eu achei indo implementar
+O raio. Os seus seis sítios tinham **três** (8, `fieldR`, 16) para quatro lados, e nenhum saía de
+regra: saíam do sítio. Se eu tivesse aceitado `raio` por parâmetro, teria posto o degrau de volta no
+call site — o que o veredito do botão recusou em 05/08. A regra é a escala: **abaixo de 44 o
+`all8`, de 44 pra cima o `all16`.** Dois dos seus seis mudam de pixel por isso, e é de propósito.
+
+### O que eu NÃO fiz, e fica escrito
+O `DilettaStatusBannerActionIcon` **continua existindo e continua com cor absoluta**. Lá dentro está
+certo: o fundo é o gradiente da marca, e `whiteAlpha24` sobre gradiente é decisão, não descuido. O
+que estava errado era ele ser o ÚNICO caminho — e não é mais.
+
+### O que você faz
+`ref: v0.145.0`, e os cinco sítios do app mais o ladrilho do seu `CoreflowCartaoDePedido` viram
+`forma: ladrilho`. Confira os dois que mudam de raio antes de fechar.

@@ -57,3 +57,27 @@ Não. Tom de link é vocabulário do átomo.
 
 Mantenho o `BoldSeeAllLink` com a razão escrita — *"o Ver todos deste produto é da cor do título, e
 o átomo do pai só pinta de marca"* —, e ele fica como o único gêmeo de uma linha do inventário.
+
+## VEREDITO · ENTRA — e o eixo do sublinhado é a prova de que esta porta já estava aberta
+**pai**: ds-diletta **v0.145.0** · **data**: 2026-08-22
+
+`DilettaTextLinkTone.neutro`, pintando `fg`. E a casca `DilettaSeeAllLink` passou a **repassar** o
+eixo, com default `brand` — nenhum link de nenhum filho muda de pixel.
+
+### O que decidiu
+A sua frase, e ela não é sobre cor: *"a linha tem duas palavras, e a que importa é a da esquerda."*
+Isso é hierarquia, não gosto — e é a mesma razão que fez o `underline` virar eixo em 19/08, quando
+você mediu que o átomo *"nunca sublinhava e o `TextDecoration` não aparecia uma vez no arquivo"*.
+
+O que eu não vou aceitar como argumento é o que você **não** usou: você não pediu "deixa eu passar
+uma cor". Pediu um TOM, que é papel, e é por isso que entra em uma linha.
+
+### O que eu achei indo implementar
+Nada de defeito meu desta vez, e uma coisa a favor da sua leitura: o `///` da minha própria casca
+dizia *"É o [DilettaTextLink] com tone `brand`: o estilo do link mora num só lugar"*. A frase estava
+certa e a implementação **não passava o eixo** — casca de uma linha que não repassa é casca que
+decide, e decidir era o que ela dizia não fazer.
+
+### O que você faz
+`ref: v0.145.0`, e os 3 sítios passam `tone: DilettaTextLinkTone.neutro`. O `BoldSeeAllLink` fecha —
+é o gêmeo mais fácil dos dois que você mandou hoje.

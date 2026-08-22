@@ -160,32 +160,44 @@ class CoreflowCartaoDePedido extends StatelessWidget {
                   DilettaCheckbox(checked: selecionada, onChanged: (_) {}),
                 DilettaGap.w(DilettaSpacing.s3),
               ],
-              // O ladrilho do tipo: 46 quadrado, tinte do TOM a 11%. É ele que diz "Pix" ou
-              // "boleto" antes de o texto ser lido.
-              Container(
-                width: 46,
-                height: 46,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: switch (tom) {
-                    CoreflowTomDoPedido.marca => s.primarySubtle,
-                    // O único que não sai do esquema do PAI: `info` é papel extra deste produto.
-                    CoreflowTomDoPedido.info => CoreflowScheme.of(context).infoSubtle,
-                    CoreflowTomDoPedido.aviso => s.warningSubtle,
-                    CoreflowTomDoPedido.sucesso => s.successSubtle,
+              // O LADRILHO É A PEÇA desde 22/08 — `DilettaSpotIcon(forma: ladrilho)`.
+              //
+              // Aqui moravam 20 linhas montando um quadrado de 46 com o tinte do tom, e elas eram o
+              // SEXTO sítio da tabela do meu próprio pedido: *"o último é meu e é o mais
+              // constrangedor — o cartão compõe três peças do pai e desenha o ladrilho num
+              // Container, porque não havia o que chamar."* Agora há.
+              //
+              // O `info` é o único tom que não atravessa: `DilettaSpotState` não tem `info`, porque
+              // o pai recusou a família na `v0.27.0` — e a recusa continua certa lá. Aqui `info` é
+              // papel EXTRA deste produto, então esse tom fica com o ladrilho montado à mão, com o
+              // raio que a REGRA do pai dá (46 ⇒ `all16`), e o resto delega.
+              if (tom == CoreflowTomDoPedido.info)
+                Container(
+                  width: 46,
+                  height: 46,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: CoreflowScheme.of(context).infoSubtle,
+                    borderRadius: DilettaRadius.all16,
+                  ),
+                  child: DilettaIcon(
+                      name: icone,
+                      size: 20,
+                      color: CoreflowScheme.of(context).info),
+                )
+              else
+                DilettaSpotIcon(
+                  icon: icone,
+                  forma: DilettaSpotForma.ladrilho,
+                  type: DilettaSpotType.outline,
+                  state: switch (tom) {
+                    CoreflowTomDoPedido.marca => DilettaSpotState.primary,
+                    CoreflowTomDoPedido.aviso => DilettaSpotState.warning,
+                    CoreflowTomDoPedido.sucesso => DilettaSpotState.success,
+                    CoreflowTomDoPedido.info => DilettaSpotState.normal,
                   },
-                  borderRadius: DilettaRadius.all16,
+                  size: 46,
                 ),
-                child: DilettaIcon(
-                    name: icone,
-                    size: 20,
-                    color: switch (tom) {
-                      CoreflowTomDoPedido.marca => s.primary,
-                      CoreflowTomDoPedido.info => CoreflowScheme.of(context).info,
-                      CoreflowTomDoPedido.aviso => s.warning,
-                      CoreflowTomDoPedido.sucesso => s.success,
-                    }),
-              ),
               DilettaGap.w(DilettaSpacing.s3),
               Expanded(
                 child: Column(
