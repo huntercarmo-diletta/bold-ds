@@ -129,6 +129,13 @@ class CoreflowProduto {
     logo: 'assets/logos/conta-bold-lockup.svg',
     logoFull: 'assets/logos/conta-bold-lockup.svg',
     logoTingePorCurrentColor: true,
+    // A PROPORÇÃO DO LOCKUP — 164,5 × 84, medido no arquivo.
+    //
+    // Ela morava em duas constantes privadas de uma casca do app (`BoldLogo`), que existia só pra
+    // dividir largura por altura. O campo entrou no pai na `v0.147.0` com a razão que decidiu o
+    // endereço: **proporção não é decisão de produto, é medida do arquivo** — e quem declara o
+    // arquivo declara a medida dele.
+    proporcaoDoLockup: 164.5 / 84,
     hexesDaArte: {
       '#fe3976': 'primary04', // 343 pinturas
       '#ff87ab': 'primary06', // 244

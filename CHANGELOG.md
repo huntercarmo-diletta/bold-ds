@@ -20,6 +20,19 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.72.0] — 2026-08-23
+
+### A proporção do lockup passa a ser declarada — `proporcaoDoLockup: 164.5 / 84`
+
+Ela morava em duas constantes privadas de uma casca do APP (`BoldLogo`), que existia só pra dividir
+largura por altura porque o `DilettaLogo` mede por altura e as telas medem por largura.
+
+O campo entrou no pai na `v0.147.0` (`DilettaBrand.proporcaoDoLockup` + `DilettaLogo.comLargura`), com
+a razão que decidiu o endereço: **proporção não é decisão de produto, é medida do arquivo** — e quem
+declara o arquivo declara a medida dele.
+
+Sobe pro pai `v0.147.0`. 220 testes verdes.
+
 ## [0.71.0] — 2026-08-22
 
 ### UM FILHO DO COREFLOW NASCE COM UMA COR — `CoreflowProduto.daMarca` e o gerador
