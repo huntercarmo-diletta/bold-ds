@@ -116,6 +116,8 @@ do card de destaque (**1 sítio**) e o avatar sem iniciais (**1 caso**) — *um 
 
 | [o LADRILHO de ícone só tem nome dentro do banner](pedidos/2026-08-22-o-ladrilho-de-icone-so-tem-nome-dentro-do-banner.md) | **sem veredito** | — |
 
+| [a etiqueta GRANDE é uma classe de tamanho que a linguagem não tem](pedidos/2026-08-23-a-etiqueta-grande-e-uma-classe-de-tamanho-que-a-linguagem-nao-tem.md) | **sem veredito** | — |
+
 **Os três de 2026-08-22 saíram de UMA pergunta do dono do app** — *"há algo no design system que o
 app ainda não consome?"*. A varredura que ela obrigou achou três peças da BASE feitas pra este
 produto e nunca adotadas (as três entraram no mesmo dia) e dois GÊMEOS de peças suas, que viraram os
