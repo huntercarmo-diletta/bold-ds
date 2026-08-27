@@ -20,6 +20,16 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.73.0] — 2026-08-27
+
+### Sobe pro pai `v0.148.0` — a etiqueta ganhou PORTE, e o app tem seis sítios esperando
+
+`DilettaStatusTag(porte: ampla)`: padding `s3`/`s1_5`, `label` 14, acessório 16, altura pelo
+conteúdo. É o veredito do pedido de 23/08 — as seis pílulas do app que carregam FRASE tinham padding
+vertical de 4 a 8 contra a altura declarada de 20.
+
+Este pacote não muda: o `BoldStatusTag` do app é que passa a ter onde chegar. 220 testes verdes.
+
 ## [0.72.0] — 2026-08-23
 
 ### A proporção do lockup passa a ser declarada — `proporcaoDoLockup: 164.5 / 84`

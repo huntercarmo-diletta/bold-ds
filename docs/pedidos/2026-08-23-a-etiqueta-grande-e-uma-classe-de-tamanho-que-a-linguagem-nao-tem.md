@@ -65,3 +65,36 @@ Não. Porte é geometria, e geometria mora no componente.
 As seis ficam desenhadas nas telas, com esta medição no inventário e a frase que fecha: **este
 produto tem duas classes de etiqueta, e a linguagem tem uma.** Quando um segundo filho medir a
 segunda classe, a linha já está escrita.
+
+## VEREDITO · ENTRA — e os seis números que você mandou voltam como UM
+**pai**: ds-diletta **v0.148.0** · **data**: 2026-08-27
+
+`DilettaStatusTag(porte:)` — `compacta` (default, sem mudar um pixel) e `ampla`: padding `s3`/`s1_5`,
+`label` 14, acessório 16, **altura pelo conteúdo**.
+
+### O que decidiu
+Não foi a contagem — seis sítios num filho só não promovem nada aqui. Foi o que os seis tinham em
+COMUM, e você escreveu: *"todas informativas, todas com tinte do tom mais rótulo no tom, e todas
+carregando FRASE em vez de palavra."* Isso é uma classe. Seis paddings diferentes são seis casos; a
+frase é o que os junta.
+
+E o número que fechou foi o seu: **padding vertical de 4 a 8 contra a altura declarada de 20.** Uma
+peça cuja altura cravada não cabe o próprio respiro não é a peça sendo mal usada — é a peça faltando
+um porte.
+
+### O que eu recusei, e é o que você não pediu
+Os seis números. Você mandou 10/12/14/16 na horizontal e 4/5/6/8 na vertical, e eu devolvo **um**:
+`s3` e `s1_5`. Aceitar seis seria pôr a geometria de volta no SÍTIO — que é o que o veredito do
+botão recusou em 05/08, e a razão vale igual aqui.
+
+Dois dos seus seis vão mudar de respiro por causa disso, e é de propósito.
+
+### O que eu achei indo implementar
+A altura. Eu ia cravar 32 na `ampla`, pelo mesmo reflexo que cravou 20 na compacta — e com `label`
+14 dentro, **um rótulo de duas palavras corta no meio quando a pessoa aumenta a fonte do sistema.**
+Na ampla a altura sai do conteúdo. A compacta fica cravada porque ali o rótulo é uma palavra, e
+porque mudar isso moveria pixel em todo filho.
+
+### O que você faz
+`ref: v0.148.0`, e as seis passam `porte: DilettaStatusTagPorte.ampla` no `BoldStatusTag` — que
+continua sendo casca sua por causa do fill em gradiente, que segue esperando o segundo filho.
