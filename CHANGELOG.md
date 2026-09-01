@@ -20,6 +20,35 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.74.0] — 2026-09-01
+
+### O glifo deste produto entra no pacote — `CoreflowIcone`, com o mapa e a caixa
+
+Ele morava em `lib/design_system/widgets/bold_icon.dart` do app, com **68 arquivos** chamando. Não
+era casca tradutora: carregava duas decisões que o `DilettaIcon` do pai não tem, e nenhuma é desenho.
+
+**1 · o mapa de apelidos.** As telas falam `home`, `pay`, `eye-off`; o conjunto do pai fala
+`house-light`, `file-invoice-light`, `eye-slash-light-full`. Nome que o pai não tem **desenha NADA** —
+não estoura, não avisa —, e foi assim que as setas de voltar e o `>` do extrato sumiram um dia. A
+tradução fica numa fronteira só, e `comoOPaiChama` é a função dela.
+
+**2 · a caixa EXATA.** `DilettaIcon` passa `width`/`height` pro `VectorGraphic`; dentro de um pai com
+constraint apertado o glifo estica. Medido no gate: um ícone de 18 num chip de 40 sai **40 × 40** sem
+o `UnconstrainedBox` e **18 × 18** com ele. Resolve por composição aqui, e não virou mudança na peça
+do pai, que todo consumidor dele sentiria.
+
+**Um filho herda o mapa inteiro** — apelido é vocabulário de interface, não de marca.
+
+### O que saiu junto: a escotilha do asset local
+
+`BoldIcon.soAqui` era a lista fechada de glifos que este produto tinha e o pai não, desenhados por
+`SvgPicture` de asset local. Ela encheu e esvaziou duas vezes em dois dias e terminou **vazia** — o
+pai entregou os dois pesos do microfone na `v0.52.0`. A pasta de SVG do app já estava em zero.
+
+Então o segundo ramo do `build` era código morto com uma dependência viva (`flutter_svg`), e ele saiu.
+O gate do app que vigiava a lista virou o gate que impede ela de voltar: **o app não pode voltar a
+empacotar glifo próprio.**
+
 ## [0.73.0] — 2026-08-27
 
 ### Sobe pro pai `v0.148.0` — a etiqueta ganhou PORTE, e o app tem seis sítios esperando
