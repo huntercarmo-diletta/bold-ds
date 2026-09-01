@@ -50,7 +50,14 @@ export 'src/bold_fundamentos.dart';
 export 'src/bold_produto.dart';
 export 'src/bold_gradients.dart';
 export 'src/bold_icone.dart';
+export 'src/bold_avatar.dart';
+export 'src/bold_aviso.dart';
+export 'src/bold_busca.dart';
+export 'src/bold_campo_de_texto.dart';
+export 'src/bold_cartao.dart';
+export 'src/bold_etiqueta.dart';
 export 'src/bold_ilustracao.dart';
+export 'src/bold_lista.dart';
 
 /// Componentes que só o Bold tem, nascidos aqui compondo as peças do pai.
 export 'src/bold_autorizacao.dart';

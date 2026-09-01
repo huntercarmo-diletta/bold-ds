@@ -20,6 +20,29 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.78.0] — 2026-09-01
+
+### Oito peças de uma vez — e o gate da paleta pegou a etiqueta na porta
+
+`CoreflowAviso` + `CoreflowToast` + `CoreflowIntencao` · `CoreflowAvatar` · `CoreflowCartao` ·
+`CoreflowSpot` + `CoreflowLinhaDeLista` + `CoreflowGrupoDeLista` · `CoreflowBusca` ·
+`CoreflowEtiqueta` · `CoreflowCampoDeTexto`. E o vidro (`BoldGlass`/`BoldGlassAuth` do app) some:
+ele era tradução de nome do `CoreflowVidro`, que já morava aqui.
+
+**O gate `o pacote não crava a paleta do Bold` reprovou a etiqueta assim que ela cruzou a porta**, e
+o achado é o melhor argumento a favor de mudar de casa.
+
+A tabela de tom da etiqueta tem sete braços. Seis são semânticos — sucesso, perigo, aviso, neutro,
+cofre, espera — e cor semântica é invariante por regra do pai: um produto novo não inventa outro
+vermelho de erro. O sétimo é o tom de **marca**, e ele lia `BoldColors.primary04/05/08`.
+
+No app isso não mentia: a paleta era uma só. Aqui mente na hora, e o gate viu — **a etiqueta de marca
+de qualquer filho sairia rosa Bold.** Os quatro degraus passaram a sair de `s.paleta`, que é a
+paleta que o esquema carrega.
+
+É a dívida que o plano do app chamava de `degraus_de_marca_em_tabela_de_espec` e nunca fechava,
+porque do lado de lá ela não tinha como aparecer. Mudar de casa foi o que a tornou visível.
+
 ## [0.77.0] — 2026-09-01
 
 ### O BOTÃO deste produto entra, e com ele o comportamento que ninguém tinha olhado
