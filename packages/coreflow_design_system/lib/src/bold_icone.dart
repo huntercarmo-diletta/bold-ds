@@ -24,11 +24,21 @@ import 'bold_scheme.dart';
 /// Veio de `lib/design_system/widgets/bold_icon.dart` do app em 01/09, quando a camada de DS do app
 /// se desfez. **Um filho herda o mapa inteiro** — apelido é vocabulário de interface, não de marca.
 class CoreflowIcone extends StatelessWidget {
-  const CoreflowIcone(this.name, {super.key, this.size = 18, this.color});
+  const CoreflowIcone(this.name, {super.key, this.size = md, this.color});
 
   final String name;
   final double size;
   final Color? color;
+
+  /// A ESCADA DE TAMANHO deste produto: 16 · 18 · 20.
+  ///
+  /// Ela morava numa classe `BoldIconSize` do app, ao lado das sombras, e é pequena de propósito — o
+  /// chrome deste produto usa três tamanhos e nada entre eles. Fica aqui, e não numa classe própria,
+  /// porque tamanho de ícone sem o ícone é um número solto: quem escreve `size:` já está escrevendo
+  /// `CoreflowIcone`.
+  static const double sm = 16;
+  static const double md = 18;
+  static const double lg = 20;
 
   /// Nome semântico → arquivo do conjunto do pai (kebab, pesos light/solid do FontAwesome).
   static const Map<String, String> alias = {

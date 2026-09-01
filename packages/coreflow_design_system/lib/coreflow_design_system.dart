@@ -62,7 +62,9 @@ export 'src/bold_abas.dart';
 export 'src/bold_cabecalho_da_home.dart';
 export 'src/bold_contratos.dart';
 export 'src/bold_copiar.dart';
+export 'src/bold_elevacao.dart';
 export 'src/bold_escada_de_alcadas.dart';
+export 'src/bold_espaco.dart';
 
 /// AS QUATRO LACUNAS, e as duas que estavam do lado errado da fronteira.
 ///

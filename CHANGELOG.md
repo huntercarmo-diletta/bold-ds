@@ -20,6 +20,49 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.75.0] — 2026-09-01
+
+### Os tokens que o app inventava entram — elevação, escada de ícone e os dois respiros com NOME
+
+Continuação da mesma passada: `lib/design_system/theme/` do app tinha cinco arquivos, e três deles
+eram `export show` puro (tipografia, gradiente, tema). Os outros dois declaravam valor, e valor
+declarado fora do DS é o DS em outro lugar.
+
+**`CoreflowElevacao`** — três sombras, e elas eram hex cru dentro de uma classe de métrica:
+
+- `rente` (preto a 40% · blur 2), `destacada` (preto a **55%** · blur 30) e `auroleo(cor)`, a
+  auréola da marca sob um spot herói;
+- a `nav({dark})` **não veio**: zero chamada em 155 telas;
+- os seis sítios do `auroleo` passam o papel `primary` do esquema, então **um filho já ganha a
+  auréola dele** sem tocar na função. Sombra de marca com cor cravada é a única que não viaja.
+
+**`CoreflowIcone.sm/md/lg`** (16 · 18 · 20) — a escada de tamanho, que morava numa classe própria do
+app ao lado das sombras. Fica junto do ícone porque tamanho de ícone sem o ícone é número solto.
+
+**`CoreflowEspaco.gutter` e `.respiroDoRodape`** — e estes têm história.
+
+Na primeira passada eu troquei os dois pelo degrau da grade (`gutter` → `DilettaSpacing.s6`), porque
+é o mesmo 24. **O gate do app reprovou na hora**, e ele estava certo: `s6` e `gutter` valem o mesmo e
+não dizem a mesma coisa. Um é um degrau; o outro é a resposta a *"qual é a margem lateral de uma tela
+deste produto?"* — decisão do dono em 19/08, que desempatou uma medição de **38 telas em 20 contra 38
+em 24**. Trocar o nome pelo valor apaga a resposta e deixa a próxima tela livre pra escolher 20 de
+novo.
+
+Os 94 sítios voltaram a dizer o nome, e ele mora aqui.
+
+### O que isso ensinou sobre a régua das cascas
+
+*Tradutora sai, decisão fica* já estava escrito. O que faltava era: **uma constante com nome próprio
+é decisão, mesmo quando o corpo dela é uma linha apontando pra grade do pai.** O corpo não é o que se
+mede — o nome é.
+
+### Um AVISO ao pai saiu daqui
+
+O `DilettaElevation.heroLift(base)` está `@Deprecated` desde 30/07 com a razão *"API de ponte, zero
+chamada na família"*. **Este produto tem seis chamadas da mesma forma**, com outro alfa (0,40 contra
+0,35) e outro blur (26 contra 24) — então a contagem que sustentou a depreciação não viu a forma, viu
+o nome. Escrito em `docs/avisos/`.
+
 ## [0.74.0] — 2026-09-01
 
 ### O glifo deste produto entra no pacote — `CoreflowIcone`, com o mapa e a caixa
