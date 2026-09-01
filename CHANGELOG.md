@@ -20,6 +20,32 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.77.0] — 2026-09-01
+
+### O BOTÃO deste produto entra, e com ele o comportamento que ninguém tinha olhado
+
+`CoreflowBotao`, `CoreflowBotoesDeNavegacao` + `CoreflowAcaoDeNavegacao` + `CoreflowAcoesDoPai`, e
+`CoreflowCampoDeValor`. As três cascas maiores do app, e nenhuma era tradutora:
+
+- **a trava de reentrada.** `onPressedAsync` com um CTA que navega: o segundo toque dispara de novo
+  antes do primeiro resolver. O `CoreflowBotao` guarda `_running`, e o mixin guarda o SLOT em voo
+  (um só de cada vez, os outros travados);
+- **a tabela variante → tipo, com troca no ESCURO.** `secondary` vira `secondaryWhite` e `text` vira
+  `tertiaryWhite` quando o tema é escuro. É decisão de produto sobre a paleta do pai, e ela vale
+  para qualquer filho;
+- **o zera-ao-focar do campo de valor.** Quem toca num valor formatado quer digitar OUTRO. O gancho é
+  um `Focus` POR FORA, porque `DilettaAmountField` não expõe o nó — e não precisa.
+
+### E um pedido de 22/08 fechou sem código novo
+
+O `BoldReceipt` do app era gêmeo do `DilettaReceipt` com um campo a mais (`statusTone`, 6
+consumidores). O veredito do pai foi **ENTRA**, entregue na `v0.145.0`, e o filho consome a
+`v0.148.0` desde então: **a peça estava disponível há dez dias e a casca continuava viva.**
+
+Fica escrito porque é a forma de dívida que este ledger já nomeou uma vez — *"o débito de ADOÇÃO se
+esconde no veredito que ninguém registrou"*. Aqui o veredito estava registrado; o que faltou foi
+alguém voltar pra aplicá-lo.
+
 ## [0.76.0] — 2026-09-01
 
 ### A ilustração passa a ser ENUM nos dois acervos — e isso achou duas telas quebradas
