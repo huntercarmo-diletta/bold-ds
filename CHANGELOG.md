@@ -20,6 +20,40 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.76.0] — 2026-09-01
+
+### A ilustração passa a ser ENUM nos dois acervos — e isso achou duas telas quebradas
+
+`CoreflowIlustracao.doPai(DilettaIllustration.x, tamanho:)` e `.estadoVazio(...)`.
+
+O acessório do pai dimensiona por degrau canônico (100 · 200 · 300 · 400) e as telas deste produto
+pedem **88, 150 e 200**. O app resolvia com uma casca que embrulhava num `SizedBox` + `FittedBox` e
+mantinha dois mapas de nome — **e um caminho de asset cru como último recurso.**
+
+**O caminho cru estava desenhando errado, em produção, com tudo verde.**
+
+Em 20/08 duas artes saíram do app por serem duplicata do pai *"com ZERO sítio de uso"*. A varredura
+procurou os NOMES `timer_woman` e `online_payment` e achou zero — porque os dois sítios que existiam
+passavam o **caminho inteiro**:
+
+```dart
+BoldIllustration.asset('lib/design_system/assets/illustrations/timer_woman_${escuro}.svg')
+```
+
+Dois fluxos de chave Pix ficaram doze dias desenhando `Image.asset` de arquivo inexistente, com
+`analyze` limpo e 854 testes verdes. **Gate que conta nome não vê caminho** — e o furo estava dentro
+da peça que o gate media.
+
+O conserto não foi ensinar o gate a ler caminho: foi tirar o caminho de circulação. As duas fontes de
+arte são enum, e não sobra string pra digitar errado. O gate do app virou o inverso — *nenhuma tela
+pede ilustração por caminho*.
+
+### E o `.estadoVazio` guarda um número que ia se espalhar
+
+150 é o tamanho da ilustração num estado vazio deste produto, e vale em **11 telas**. Ele morava na
+casca que só fazia isso; apagá-la sem o nome espalharia o 150 por 11 chamadas, e a décima segunda
+tela escolheria outro. Mesma lição do `gutter`, uma versão depois.
+
 ## [0.75.0] — 2026-09-01
 
 ### Os tokens que o app inventava entram — elevação, escada de ícone e os dois respiros com NOME

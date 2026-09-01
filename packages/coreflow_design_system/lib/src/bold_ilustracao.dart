@@ -61,11 +61,51 @@ enum CoreflowArte {
   final String base;
 }
 
-/// Uma arte deste produto, no tamanho pedido, na cor da paleta ATIVA.
+/// Uma ilustração no tamanho pedido, na cor da paleta ATIVA — de qualquer um dos dois acervos.
+///
+/// **O segundo construtor entrou em 01/09, e ele fecha um buraco que estava DESENHADO na tela.**
+///
+/// O acessório do pai tem um knob só, e é o degrau canônico: 100 · 200 · 300 · 400. As telas deste
+/// produto pedem **88, 150 e 200** — o 88 é a ilustração do cartão promocional da home, e os outros
+/// dois são estados de fim de fluxo. Dois dos três não são degrau dele.
+///
+/// O app resolvia isso com uma casca que embrulhava o acessório num `SizedBox` + `FittedBox`, e essa
+/// casca também mantinha um mapa de nome pra arte **e um caminho de asset cru como último recurso**.
+/// O caminho cru é onde o defeito morava: dois fluxos de chave Pix chamavam
+/// `'lib/design_system/assets/illustrations/timer_woman_dark.svg'`, e esse arquivo **saiu do app em
+/// 20/08** — a varredura que o apagou procurou o NOME `timer_woman` e achou zero sítio, porque os
+/// dois sítios passavam o caminho inteiro.
+///
+/// Resultado: duas telas vivas desenhando `Image.asset` de um arquivo que não existe, com `analyze`
+/// limpo e 854 testes verdes. **Gate que conta nome não vê caminho** — a mesma família de furo que o
+/// mapa de apelido do ícone existe pra fechar.
+///
+/// Com os dois construtores aqui, não sobra caminho cru pra passar: ou é [CoreflowArte], ou é
+/// `DilettaIllustration`, e as duas são enum.
 class CoreflowIlustracao extends StatelessWidget {
-  const CoreflowIlustracao(this.arte, {super.key, this.tamanho = 300});
+  const CoreflowIlustracao(this.arte, {super.key, this.tamanho = 300}) : doPai = null;
 
-  final CoreflowArte arte;
+  /// A arte do PAI, no tamanho livre deste produto.
+  ///
+  /// O `FittedBox` existe porque o acessório dele dimensiona por degrau: pede-se o degrau mais
+  /// próximo e encolhe-se por escala, que é o que a casca do app fazia. Não é desenho — é a conversão
+  /// entre uma escada e um número.
+  const CoreflowIlustracao.doPai(DilettaIllustration this.doPai,
+      {super.key, this.tamanho = 300})
+      : arte = null;
+
+  /// A ARTE DE UM ESTADO VAZIO: 150, de qualquer um dos dois acervos.
+  ///
+  /// O 150 não é degrau do pai nem número solto: é a decisão deste produto sobre o tamanho da
+  /// ilustração num `DilettaEmptyState`, e ela vale em **11 telas**. Morava numa casca do app que
+  /// não fazia mais nada além disso; se ela fosse apagada sem o nome, o 150 se espalharia por 11
+  /// chamadas e a próxima tela escolheria outro.
+  const CoreflowIlustracao.estadoVazio({super.key, this.arte, this.doPai})
+      : tamanho = 150,
+        assert(arte != null || doPai != null, 'um estado vazio sem arte não pede esta peça');
+
+  final CoreflowArte? arte;
+  final DilettaIllustration? doPai;
 
   /// Lado do quadrado. Livre de propósito: as telas deste produto pedem 88, 150 e 200, e
   /// nenhum dos três é degrau canônico do acessório do pai (100/200/300/400).
@@ -73,6 +113,25 @@ class CoreflowIlustracao extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final doPai = this.doPai;
+    if (doPai != null) {
+      return Semantics(
+        label: doPai.base,
+        image: true,
+        child: SizedBox(
+          width: tamanho,
+          height: tamanho,
+          child: FittedBox(
+            fit: BoxFit.contain,
+            child: DilettaIllustrationAccessory(
+              illustration: doPai,
+              size: DilettaIllustrationSize.md,
+            ),
+          ),
+        ),
+      );
+    }
+    final arte = this.arte!;
     final tema = DilettaTheme.of(context);
     final escuro = tema.scheme.brightness == Brightness.dark;
     return Semantics(
