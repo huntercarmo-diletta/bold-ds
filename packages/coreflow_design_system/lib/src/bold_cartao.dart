@@ -26,6 +26,7 @@ class CoreflowCartao extends StatelessWidget {
     this.onTap,
     this.color,
     this.borderColor,
+    this.semBorda = false,
     this.radius = CoreflowRadius.card,
     this.glass = false,
     this.highlight = false,
@@ -36,6 +37,21 @@ class CoreflowCartao extends StatelessWidget {
   final VoidCallback? onTap;
   final Color? color;
   final Color? borderColor;
+
+  /// **SEM BORDA — e este eixo nasceu de um defeito que eu mesmo escrevi.**
+  ///
+  /// O cartão tem hairline por default, e isso está certo: um cartão deste produto tem borda, e
+  /// [borderColor] existe pra trocar a cor dela, não pra tirá-la. `null` significa *a cor padrão*.
+  ///
+  /// Em 01/09 uma varredura converteu 49 `BoxDecoration` das telas em `CoreflowCartao`. Metade
+  /// delas — as `borderRadius + color` sem `border:` — **não tinha borda nenhuma**, e a conversão
+  /// omitia `borderColor`, que o default preencheu. Vinte e cinco telas ganharam um fio que
+  /// ninguém pediu, com 848 testes verdes: **gate não vê pixel.**
+  ///
+  /// A API não sabia dizer "sem borda", e é isso que este campo conserta. Não é
+  /// `borderColor: transparent`: transparente é uma cor, e cor transparente ainda ocupa 1 lógico de
+  /// espessura no layout.
+  final bool semBorda;
   final double radius;
 
   /// Card surface treatment from [_CardSurface] (the "no-fundo" look, no
@@ -126,7 +142,7 @@ class CoreflowCartao extends StatelessWidget {
       vidro: false,
       radius: br,
       corSolida: color ?? c.surface,
-      bordaSolida: borderColor ?? c.border,
+      bordaSolida: semBorda ? null : (borderColor ?? c.border),
       child: inner,
     );
   }

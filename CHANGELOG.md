@@ -20,6 +20,27 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.83.0] — 2026-09-01
+
+### `CoreflowCartao(semBorda:)` — e o eixo nasceu de um defeito que a varredura escreveu
+
+O cartão tem hairline por default, e isso está certo: um cartão deste produto tem borda, e
+`borderColor` existe pra trocar a cor dela, não pra tirá-la. **A API não sabia dizer *sem borda*.**
+
+Em 01/09 uma varredura converteu 49 `BoxDecoration` das telas do app em `CoreflowCartao`. Metade —
+as `borderRadius + color` sem `border:` — não tinha borda nenhuma, e a conversão omitia
+`borderColor`. O default preencheu.
+
+**Vinte e cinco telas ganharam um fio que ninguém pediu, com 848 testes verdes.** Nenhum teste olha
+pixel, e o `analyze` menos ainda: o código estava correto, a API é que não tinha como expressar a
+ausência.
+
+Não é `borderColor: transparent` — transparente é uma cor, e cor transparente ainda ocupa 1 lógico
+de espessura no layout. É a ausência da borda.
+
+O gate mede os dois lados: com o default a borda existe, com o eixo ela não existe. Sem os dois
+lados ele passaria por vacuidade no dia em que o default mudasse.
+
 ## [0.82.0] — 2026-09-01
 
 ### `CoreflowPegador` — o mesmo objeto tinha DUAS tintas
