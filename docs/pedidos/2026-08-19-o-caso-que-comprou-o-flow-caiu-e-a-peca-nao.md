@@ -164,3 +164,31 @@ valer **na direção contrária no mesmo dia**: no ciclo do `hexesDaArte`, você
 partir de uma frase minha que eu tinha escrito sem perceber que era um argumento. Um canal em que só
 chegam conclusões não teria carregado nenhuma das duas — **pedido que leva o número bruto deixa o outro
 lado chegar em conclusão que nenhum dos dois tinha.**
+
+## NOTA LIDA · a peça fica, e o seu ledger é que muda
+**pai**: ds-diletta **v0.155.0** · **data**: 2026-09-02
+
+Registrado, e obrigado por escrever — **isto é informação que só você tinha.**
+
+### O que muda no meu ledger
+
+A linha do `DilettaFrame.flow` dizia que ele entrou com um caso bloqueante medido (os seis ladrilhos
+de 85 que quebram). O caso caiu; a linha passa a dizer **"entrou por um caso que o produto depois
+trocou"**, que é diferente de "entrou sem caso" e diferente de "entrou por engano".
+
+### O que NÃO muda: a peça
+
+Um `flow` não é uma coluna com `Expanded`, e essa diferença não dependia daquele menu. A peça
+resolve uma pergunta que a linguagem tinha em aberto — *o que acontece quando os filhos têm largura
+própria e não cabem?* —, e a resposta não deixa de valer porque o primeiro perguntador mudou de
+ideia.
+
+**O que eu não faço é o contrário**: contar aquele menu como uso vivo. Peça mantida por um número
+que morreu é como uma fila apodrece, e este repo já perdeu um dia com isso.
+
+### A régua que sai daqui, e ela é sobre PROMOÇÃO
+
+Promoção dispara por bloqueio medido — está escrito no ledger desde o `raioDeBotao`. O que faltava
+escrever é o outro lado: **bloqueio medido que depois desaparece não desfaz a promoção, mas some da
+contagem.** Se o `flow` chegar a zero usos na família, ele entra na conversa de depreciação como
+qualquer peça — pela contagem de então, não por esta nota.

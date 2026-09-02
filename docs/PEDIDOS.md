@@ -160,6 +160,28 @@ delegar e sobrou o raio — 22 aqui, `r24` cravado na variante. A linha do seu l
 Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
 pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedido novo.
 
+## O ESTADO EM 2026-09-02: 85 arquivos, 84 fechados, 1 aberto
+
+O único aberto é **`a seleção engrossa a borda em cinco telas`**, e ele não é para o pai: é para o
+DONO. Cinco telas dizem "escolhido" com quatro espessuras diferentes — 1,3 · 1,4 · 1,5 · 2 — e uma
+delas invertida, enquanto o `CoreflowCartaoDePedido` deste pacote já respondeu a mesma pergunta por
+COR. Converter as cinco é uma linha em cada, e muda a affordance de seleção em cinco telas: não é
+minha para dar.
+
+### Os quatro que fecharam em 01–02/09, e três fecharam sem código novo
+
+| pedido | fecho |
+|---|---|
+| o comprovante não diz o estado | **ENTRA**, e já estava entregue na `v0.145.0` do pai — a casca viveu dez dias a mais porque ninguém voltou pra aplicar o veredito |
+| o `heroLift` foi depreciado por contagem | **a depreciação fica, a RAZÃO muda**: não é desuso, é forma — API de ponte que recebe cor crua não viaja. A frase antiga era verdadeira por nome e escondia um gêmeo |
+| o `info` é papel do esquema e não é estado do spot | **MORA NO SEU DS** — e quem respondeu foi a medição: o pai não tem o PAPEL `info`, então pedir o estado seria pedir uma família nova por causa de um disco |
+| o gradiente da marca tem três stops | **nenhuma das três saídas** — a marca virou a CURVA (oito paradas do lockup), não um número de stops |
+
+**O do `info` é o mais útil de ler**, porque a resposta contradiz quem perguntou: eu ia pedir e, ao
+conferir o pai antes de escrever, achei que o pedido não se sustentava. O trabalho de medir antes de
+pedir devolveu um "não" que eu mesmo assinei — e a peça nasceu em casa, com o gate de contraste que
+o pai cobraria (3,95:1 no escuro, 4,69:1 no claro).
+
 ## Dois números que este ledger deixa ver
 
 **40 pedidos, 39 com veredito, 39 ENTRARAM** (18 ao pai da linguagem, 17 ao da ferramenta; recontado

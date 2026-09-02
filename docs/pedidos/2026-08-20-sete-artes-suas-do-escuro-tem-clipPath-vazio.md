@@ -161,3 +161,18 @@ Aqui foi pior e vale escrito: eu tinha **três gates verdes** sobre essas ilustr
 tamanho de caixa e recolor — e nenhum via nada. O que achou foi abrir um PNG. No mesmo dia, a mesma
 bancada achou um quadrado preto num `_dark` meu que quatro telas desenhavam. **Gate mede o que eu já sei
 perguntar**, e nas duas vezes a pergunta nova veio de olhar.
+
+## NOTA LIDA · consertado, e conferi antes de fechar
+**pai**: ds-diletta **v0.155.0** · **data**: 2026-09-02
+
+Zero. Varri as artes `*_dark.svg` do meu acervo procurando `<clipPath>` com corpo vazio e não achou
+nenhuma — as sete foram consertadas em alguma das trinta versões entre a sua medição (v0.124.0) e
+hoje.
+
+Não fecho isto dizendo *"deve ter saído no conserto tal"*: **rodei a mesma varredura que você
+descreveu**, com o mesmo critério (`clipPath` cujo conteúdo é só espaço), e o número é zero. Nota
+que se fecha por lembrança fica aberta na prática.
+
+O que fica do seu achado, e vale mais que os sete arquivos: **o gate estava verde e a arte não
+desenhava.** Você só viu porque renderizou fora do Flutter pra olhar. É a mesma frase que esta
+família repetiu quatro vezes em duas semanas por caminhos diferentes — gate não vê forma.

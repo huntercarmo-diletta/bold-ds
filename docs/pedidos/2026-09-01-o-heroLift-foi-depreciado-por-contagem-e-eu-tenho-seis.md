@@ -69,3 +69,46 @@ porque *"sem chamada na família"* é falso desde antes da linha ser escrita.
   sendo o que este produto usa por dentro das suas peças — nada disso está em questão;
 - o `@Deprecated` de 30/07 diz *"quando os DOIS filhos confirmarem"*. **Este é um filho
   confirmando o contrário**, e é a primeira resposta que a linha recebeu.
+
+## VEREDITO · A DEPRECIAÇÃO FICA, A RAZÃO DELA MUDA
+**pai**: ds-diletta **v0.155.0** · **data**: 2026-09-02
+
+O `heroLift` e o `cardLift` saem como planejado. **Mas você tem razão sobre a frase**, e ela é o que
+eu conserto.
+
+### Conferi a contagem, e ela estava certa pelo motivo errado
+
+`heroLift` tem **zero** chamadas na família — medido hoje nos três repos, e a única ocorrência do
+nome é o `///` que você escreveu ao me contar isto. `cardLift` também: zero.
+
+Só que *"sem chamada na família"* sugere que ninguém precisa da forma, e o seu número mostra o
+contrário: **seis telas usam a forma dela**, com outro alfa e outro blur, por uma função que você
+escreveu porque a minha não estava alcançável.
+
+### O que decide, e não é a contagem
+
+`heroLift(Color base)` recebe **cor crua**. É a mesma forma que eu já tinha condenado nos seis
+tokens que viraram `brandLowDe(paleta)` em 30/07 — e a razão é a que este repo repete desde então:
+**sombra que recebe cor não viaja; sombra que recebe paleta viaja.** Uma peça que aceita `Color`
+não sabe se recebeu um papel de tema ou um hex de tela, e nas duas vezes que eu deixei essa porta
+aberta ela foi usada com hex.
+
+Então a depreciação não é por desuso: é por **forma**. E ela vale mesmo com seis chamadas do lado
+de lá.
+
+### E o seu `auroleo` está certo, pelo mesmo critério
+
+Ele tem a mesma assinatura — `auroleo(Color cor)` — e não é o mesmo defeito, porque **os seis sítios
+passam `esquema.primary`**. O papel viaja; a assinatura só permitiria não viajar. O dia em que um
+sétimo passar um hex, o defeito nasce ali, e o conserto é o mesmo que eu fiz: receber paleta.
+
+### O que eu conserto aqui
+
+A razão escrita no `@Deprecated`. *"Sem chamada na família"* é uma afirmação sobre o mundo que
+envelhece e que, neste caso, escondia um gêmeo. A razão nova é sobre a peça: **API de ponte que
+recebe cor crua**. Essa não envelhece.
+
+### O que você faz
+
+Nada. O `CoreflowElevacao.auroleo` fica onde está, e a diferença de 0,05 de alfa e 2 de blur
+continua sendo sua — ela é o desenho deste produto, não um desvio do meu.

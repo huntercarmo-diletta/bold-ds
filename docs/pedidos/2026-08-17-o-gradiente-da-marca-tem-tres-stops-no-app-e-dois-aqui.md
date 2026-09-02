@@ -85,3 +85,40 @@ que é: **limpeza de token com número.**
 
 Nada a adotar. Quando o dono decidir, se a decisão criar necessidade minha (um gradiente de superfície com
 piso declarado, por exemplo), aí vira pedido e eu julgo.
+
+
+## DECIDIDO · nenhuma das três saídas — a marca virou a CURVA, não os stops
+**data**: 2026-09-02 · DS filho **v0.92.0**
+
+A nota oferecia três caminhos: o pacote ganha o terceiro stop, o app adota os dois, ou viram dois
+gradientes com nomes diferentes. **O que aconteceu foi um quarto**, e ele é melhor que os três.
+
+`CoreflowGradients.primaryDoBold` hoje é `paradasDoLockup` — **oito paradas**, `lockup01` a
+`lockup08`, com os offsets do próprio arquivo. Não é "rosa → coral → amarelo" aproximado em três
+degraus: é a curva do símbolo, parada por parada.
+
+### Por que isso encerra a pergunta em vez de responder
+
+A nota perguntava *quantos stops a marca tem*, e a pergunta tinha um pressuposto: que alguém
+escolheria um número. **A marca não tem um número de stops — ela tem um arquivo**, e o arquivo tem a
+curva. Declarar oito paradas lidas do lockup tira a escolha de quem escreve código e devolve pra
+quem desenhou.
+
+É a mesma forma do `proporcaoDoLockup` (pai `v0.147.0`): *proporção não é decisão de produto, é
+medida do arquivo — e quem declara o arquivo declara a medida.* Aqui: **a curva também.**
+
+### E o `brandYellow` que sobrevivia num lugar só
+
+A nota apontava que o amarelo `#FEED35` existia apenas dentro daquele gradiente, e que *"um valor de
+marca que existe em um lugar só é exatamente o que a paleta deveria declarar"*. Ele é `lockup08`
+agora — declarado na rampa do lockup, com os outros sete.
+
+### O que ficou sem resposta, e fica escrito
+
+**O contraste das paradas novas.** A nota media 3,37:1 na pior parada do `accent` e avisava que o
+amarelo neon contra branco é pior que o âmbar. As oito paradas do lockup **não passaram por gate de
+contraste** — o que existe é a tinta sobre o gradiente (`onGradientDoBold`, o vinho-tinta, pior caso
+5,69 medido em 19/08), e ela cobre o TEXTO sobre a curva, não a curva contra o branco.
+
+Fica como o que falta medir, e não como coisa medida: quem puser conteúdo escuro sobre a parada 08
+deve medir antes.
