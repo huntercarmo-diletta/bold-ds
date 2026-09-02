@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 // pacote, e o fechar abaixo monta com `DilettaIconButton`.
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaSpacing;
-import 'bold_palette.dart' show BoldColors;
 import 'bold_background.dart' show CoreflowBackground;
 import 'bold_espaco.dart' show CoreflowEspaco;
 import 'bold_radius.dart' show CoreflowRadius;

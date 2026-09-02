@@ -72,7 +72,7 @@ class CoreflowAmostraDeFundo extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: DilettaRadius.all16,
               border: Border.all(
-                color: escolhido ? s.primary : const Color(0x00000000),
+                color: escolhido ? s.primary : DilettaAbsoluteColors.transparent,
                 width: 2.5,
               ),
             ),

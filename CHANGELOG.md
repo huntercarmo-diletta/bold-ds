@@ -20,6 +20,40 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.80.0] — 2026-09-01
+
+### As duas PÁGINAS deste produto entram — e elas nunca estiveram na pasta que o gate media
+
+`CoreflowPagina` (37 sítios) · `CoreflowPaginaComRodapeFlutuante` (5) · `CoreflowAcaoDeRodape` (26).
+
+Elas moravam em `lib/shared/widgets/bold_scaffold.dart` do app — **fora** de `design_system/`. Por
+isso o gate que esvaziou aquela pasta nunca as viu: ele media um diretório, e o que define
+vocabulário não é o endereço.
+
+O que as entregou foi a régua nova, escrita no gate que fechou a camada: **uma classe `Bold*` que
+estende `Widget` é vocabulário**, e vocabulário com nome de marca é o que impede um filho de
+existir. A varredura por nome achou quatro; três eram estas.
+
+O par não é claro × escuro, apesar dos nomes antigos (`BoldLightScaffold`/`BoldDarkScaffold`): as
+duas usam o `CoreflowBackground`, que resolve por tema. **A diferença é o rodapé** — uma põe o
+conteúdo por baixo dele (`extendBody`), a outra não.
+
+### O gate de varredura veio do app, e achou defeito na primeira execução
+
+`a_peca_deste_pacote_nao_desenha_sozinha_test.dart`. Três testes do app varriam
+`lib/design_system/` cobrando `Colors.*` do Material, hex cru num widget, raio cravado e degrau
+tipográfico inventado. Com a pasta desfeita, **a regra morreria com ela** — e isso é pior que nunca
+ter tido a regra, porque o zero que ela protegia continuaria escrito em três documentos como se
+alguém ainda estivesse conferindo.
+
+A régua muda de um lado pro outro, e a diferença é a fronteira: **aqui a cor NASCE.** Hex é
+permitido onde ela é declarada — a rampa, os gradientes, as sombras, o vinho, o material do vidro —
+e proibido onde ela é usada, dentro de um widget.
+
+Na primeira execução ele achou **três `Color(0x00000000)`** — transparente escrito em hex, no nav
+flutuante, na amostra de fundo e no contexto de operação. Os três viraram
+`DilettaAbsoluteColors.transparent`.
+
 ## [0.79.0] — 2026-09-01
 
 ### O CHROME entra — barra de topo, rodapé, folha e a página de resumo

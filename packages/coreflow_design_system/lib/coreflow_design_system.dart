@@ -55,6 +55,7 @@ export 'src/bold_aviso.dart';
 export 'src/bold_barra_de_topo.dart';
 export 'src/bold_busca.dart';
 export 'src/bold_folha.dart';
+export 'src/bold_pagina.dart';
 export 'src/bold_pagina_de_resumo.dart';
 export 'src/bold_rodape.dart';
 export 'src/bold_campo_de_texto.dart';

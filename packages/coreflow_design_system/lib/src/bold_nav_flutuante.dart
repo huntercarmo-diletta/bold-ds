@@ -141,7 +141,7 @@ class _Item extends StatelessWidget {
         // inativo sobe 12 pixels e a fila desalinha.
         DecoratedBox(
           decoration: BoxDecoration(
-            color: ativo ? s.primary : const Color(0x00000000),
+            color: ativo ? s.primary : DilettaAbsoluteColors.transparent,
             shape: BoxShape.circle,
           ),
           child: Padding(

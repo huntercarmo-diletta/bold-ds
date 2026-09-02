@@ -74,7 +74,7 @@ class CoreflowOperatingStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = DilettaTheme.schemeOf(context);
     return Material(
-      color: Color(0x00000000),
+      color: DilettaAbsoluteColors.transparent,
       child: InkWell(
         onTap: onTap,
         child: Container(

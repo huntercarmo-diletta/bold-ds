@@ -3,7 +3,7 @@ description: >-
   O DS-FILHO do Conta BOLD. Fornece a paleta da marca (rosa → vinho) e recebe a
   linguagem inteira do ds-diletta: ~50 papéis derivados, dark mode sem escrever cor,
   354 ícones herdados. O que é só do Bold mora aqui; o que é linguagem mora no pai.
-version: 0.79.0
+version: 0.80.0
 publish_to: none
 
 environment:
