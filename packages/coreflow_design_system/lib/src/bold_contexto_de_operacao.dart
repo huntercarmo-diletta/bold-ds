@@ -5,6 +5,7 @@
 /// **regra deste produto é vocabulário DESTE produto, e o pacote é o DS dele.** Terceira peça a
 /// mudar de casa pela mesma frase relida, depois do logo e das 16 ilustrações.
 import 'package:diletta_design_system/diletta_design_system.dart';
+import 'bold_scheme.dart' show CoreflowScheme;
 import 'package:flutter/material.dart';
 
 import 'bold_type.dart';
@@ -72,7 +73,15 @@ class CoreflowOperatingStrip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final c = DilettaTheme.schemeOf(context);
+    // **O esquema é o DESTE produto, e a diferença só aparece no CLARO.** Os dois esquemas da casa
+    // têm um `primary`: o do pai é o rosa da MARCA (`#fe3976`) e o daqui é o degrau PROFUNDO
+    // (`#9e1241`), escolhido justamente pra ser tinta sobre claro. Esta faixa pintava o texto com o
+    // rosa da marca sobre a lavagem dele mesmo: **2,63:1**, abaixo dos dois pisos — 4,5 de texto
+    // pequeno e 3,0 de objeto gráfico. Com o degrau profundo dá 6,09:1.
+    //
+    // No ESCURO os dois `primary` são o mesmo hex, então nada muda lá — o defeito era de um modo só,
+    // que é o jeito mais fácil de um defeito de cor sobreviver.
+    final c = CoreflowScheme.of(context);
     return Material(
       color: DilettaAbsoluteColors.transparent,
       child: InkWell(
@@ -81,7 +90,10 @@ class CoreflowOperatingStrip extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.symmetric(
               horizontal: DilettaSpacing.s5, vertical: DilettaSpacing.s1),
-          color: c.primary.withValues(alpha: 0.14),
+          // A LAVAGEM continua sendo da MARCA e não do degrau profundo: 14% do vinho profundo sobre
+          // branco dá um cinza-rosado que não parece marca nenhuma. Fundo é marca, tinta é
+          // legibilidade — e é exatamente por serem dois papéis que os dois `primary` existem.
+          color: c.paleta.primary04.withValues(alpha: 0.14),
           child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             DilettaIcon(name: 'users-light', size: 12, color: c.primary),
             const SizedBox(width: DilettaSpacing.s2),
@@ -96,7 +108,11 @@ class CoreflowOperatingStrip extends StatelessWidget {
             ),
             if (onTap != null) ...[
               const SizedBox(width: DilettaSpacing.s2),
-              DilettaIcon(name: 'chevron-right', size: 11, color: c.primary),
+              // `chevron-right-light` e não `chevron-right`: o apelido curto é do `CoreflowIcone`
+              // deste pacote, e o `DilettaIcon` fala com o pai direto. Sem o sufixo o pai pedia
+              // `assets/icons/chevron-right.svg.vec`, que não existe, e **a seta simplesmente não
+              // desenhava** — sem erro, sem log. A affordância de "isto é tocável" era invisível.
+              DilettaIcon(name: 'chevron-right-light', size: 11, color: c.primary),
             ],
           ]),
         ),

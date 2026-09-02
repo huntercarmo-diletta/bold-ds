@@ -20,6 +20,50 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.95.0] — 2026-09-02
+
+### Dois defeitos na mesma faixa, e os dois só se viam olhando
+
+A pergunta era outra: *"os dois esquemas da casa discordam — converge os 25 arquivos?"*. Medi antes
+de converter, e **a premissa estava errada**. Montando cada modo separado (a primeira medição
+reaproveitava a árvore e lia o tema anterior — o mesmo erro que já custou caro nesta adoção):
+
+| campo | claro | escuro |
+|---|---|---|
+| `primary` | `#9e1241` aqui contra `#fe3976` no pai | **igual** |
+| `error` | `#b42318` contra `#ef4757` | **igual** |
+| `textTertiary`/`textMuted` | difere | difere |
+
+Não são 25 arquivos. São **três campos**, e só **cinco peças** deste pacote leem `primary` do pai.
+**Quatro estavam certas** — pintura, anel sobre foto, barra cheia, ponto de página: fundo e objeto
+grande querem o rosa da MARCA. E não é bug ter dois: são dois PAPÉIS. O profundo existe pra ser
+TINTA sobre claro, escolhido pra passar contraste; o da marca existe pra ser PINTURA.
+
+**A quinta estava errada, e grosso.** `CoreflowOperatingStrip` escrevia `labelSm` com o rosa da marca
+sobre a lavagem dele mesmo: **2,63:1**, abaixo dos dois pisos (4,5 de texto pequeno, 3,0 de objeto
+gráfico). Com o degrau profundo dá **6,09:1**. A lavagem continua sendo da marca — 14% do vinho
+profundo sobre branco vira um cinza-rosado que não parece marca nenhuma.
+
+**No escuro os dois `primary` são o mesmo hex**, e é por isso que isso viveu: era defeito de um modo
+só, e o modo escuro é o que se olha.
+
+### E a seta dessa faixa nunca desenhou
+
+`DilettaIcon(name: 'chevron-right')`. O apelido curto é do `CoreflowIcone` **deste** pacote, que
+traduz `chevron-right` → `angle-right-light`; o `DilettaIcon` fala com o pai direto. O pai foi buscar
+`assets/icons/chevron-right.svg.vec`, que não existe, e a seta **simplesmente não apareceu — sem
+erro, sem log**. A affordância de "isto é tocável" era invisível, e nenhum teste via: widget que não
+pinta continua na árvore.
+
+Achei no retrato, não no gate. Foi abrir o PNG da faixa e faltar a seta que estava no código.
+
+### O gate: `os_dois_primary_da_casa_test.dart`
+
+Contraste real da tinta sobre a lavagem composta, nos dois modos, **com o controle junto** — o mesmo
+cálculo com o rosa da marca tem que reprovar, senão o piso não está pegando nada. E uma varredura das
+DUAS portas de glifo: `DilettaIcon` tem que pedir nome que o pai tem; `CoreflowIcone` tem que pedir
+nome que o pai tem **ou** apelido que o mapa traduz.
+
 ## [0.94.0] — 2026-09-02
 
 ### O pai sobe pra `v0.160.0`, e vem a linha de apoio no rádio
