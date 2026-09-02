@@ -20,6 +20,49 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.84.0] — 2026-09-01
+
+### `CoreflowCorpoDeFolha` — treze folhas montadas à mão, e o raio errado nas treze
+
+O `CoreflowFolha` é o LANÇADOR: abre o modal, desenha o painel, o pegador e o título. Só que treze
+folhas deste produto não são lançadas por ele — são `DraggableScrollableSheet` dentro da tela,
+porque precisam de rolagem própria e tamanho arrastável. Elas remontavam o painel:
+
+```dart
+Container(decoration: BoxDecoration(
+  color: cs.surface,
+  borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+))
+```
+
+**E o 24 é o número do PAI, não deste produto.** O raio de folha daqui é `CoreflowRadius.sheet`, que
+vale **22**, declarado desde a `v0.44.0` — e o pedido de 22/08 ao pai é exatamente sobre o `r24`
+cravado na variante `.bottomsheet` dele. As folhas à mão copiaram o número do pai em vez de ler o do
+produto, e dois pixels numa folha por vez não se veem.
+
+A superfície também variava entre `surface` e `background`, com uma delas carregando um comentário
+explicando que branco fixo apagava o título.
+
+### `CoreflowCartao(sombra:)`
+
+Doze telas desenhavam a caixa inteira à mão só pra ter onde pendurar uma sombra. O eixo não tem
+default, e isso é regra deste produto: **ele eleva por MATERIAL** — o vidro, a superfície elevada da
+paleta — e sombra é a exceção com sítio contado.
+
+### A `CoreflowPilula` nasceu e morreu no mesmo dia, e a razão fica escrita
+
+Escrevi a cápsula tingida a partir de uma contagem que dizia **treze sítios**. Aí medi as cores: dos
+nove candidatos, só **dois** tinham fundo e borda derivando da mesma cor. Os outros não têm fundo,
+têm cores independentes, ou o par é condicional.
+
+Dois sítios não pagam uma peça, e uma cápsula é o `CoreflowCartao` com `radius: CoreflowRadius.pill`
+— cor, borda e respiro já são eixos dele. O erro foi de método: **agrupei por FORMA (`pillR`) e
+concluí sobre CONTEÚDO.** Treze coisas com o mesmo raio não são treze da mesma coisa.
+
+É o segundo erro do mesmo tipo em duas versões — o primeiro foi a escada de degraus do
+`CoreflowPonto`, declarada antes da contagem. A regra que sai: **contar a forma abre a pergunta;
+quem responde é abrir os sítios.**
+
 ## [0.83.0] — 2026-09-01
 
 ### `CoreflowCartao(semBorda:)` — e o eixo nasceu de um defeito que a varredura escreveu

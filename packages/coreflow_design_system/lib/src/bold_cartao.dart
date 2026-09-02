@@ -27,6 +27,7 @@ class CoreflowCartao extends StatelessWidget {
     this.color,
     this.borderColor,
     this.semBorda = false,
+    this.sombra,
     this.radius = CoreflowRadius.card,
     this.glass = false,
     this.highlight = false,
@@ -52,6 +53,27 @@ class CoreflowCartao extends StatelessWidget {
   /// `borderColor: transparent`: transparente é uma cor, e cor transparente ainda ocupa 1 lógico de
   /// espessura no layout.
   final bool semBorda;
+
+  /// A SOMBRA, quando a superfície precisa sair da página.
+  ///
+  /// Ela não tem default, e isso é a regra deste produto: **este produto eleva por MATERIAL** — o
+  /// vidro, a superfície elevada da paleta — e sombra é a exceção com sítio contado. Doze telas
+  /// pediam uma (`CoreflowElevacao.destacada`, quase todas), e antes de o eixo existir elas
+  /// desenhavam a caixa inteira à mão só pra ter onde pendurá-la.
+  final List<BoxShadow>? sombra;
+
+  /// ## A PÍLULA É ESTE CARTÃO COM `radius: CoreflowRadius.pill`
+  ///
+  /// Em 01/09 eu escrevi uma `CoreflowPilula` — cápsula tingida com glifo e rótulo — a partir de uma
+  /// contagem que dizia **treze sítios**. Aí medi as cores, e a contagem não se sustentou: dos nove
+  /// candidatos, só **dois** tinham fundo e borda derivando da mesma cor. Os outros ou não têm
+  /// fundo, ou têm cores independentes, ou o par é condicional.
+  ///
+  /// Dois sítios não pagam uma peça. Uma cápsula é este cartão com o raio pill, e o que ela precisa
+  /// — cor, borda, respiro — já são eixos daqui. A peça foi apagada no mesmo dia em que nasceu, e a
+  /// razão fica escrita porque o erro foi de método e não de gosto: **eu agrupei por FORMA
+  /// (`pillR`) e concluí sobre CONTEÚDO.** Treze coisas com o mesmo raio não são treze da mesma
+  /// coisa.
   final double radius;
 
   /// Card surface treatment from [_CardSurface] (the "no-fundo" look, no
@@ -138,12 +160,20 @@ class CoreflowCartao extends StatelessWidget {
     // propriedade do produto e passou a ser do FUNDO, que é por sítio. O `corSolida`/`bordaSolida`
     // que eu não alcançava — porque o ramo do vidro retornava antes deles — agora chega, e o
     // `clipBehavior: Clip.antiAlias` do `Container` dele faz o que o `ClipRRect` fazia aqui.
-    return DilettaCardSurface(
+    final solida = DilettaCardSurface(
       vidro: false,
       radius: br,
       corSolida: color ?? c.surface,
       bordaSolida: semBorda ? null : (borderColor ?? c.border),
       child: inner,
+    );
+    if (sombra == null) return solida;
+    // A sombra vai POR FORA e não dentro da superfície do pai: ela é do sítio, não do material, e
+    // `DilettaCardSurface` não tem eixo pra ela — nem deveria, porque a escada de elevação dele já
+    // existe e este produto não a usa em cartão.
+    return DecoratedBox(
+      decoration: BoxDecoration(borderRadius: br, boxShadow: sombra),
+      child: solida,
     );
   }
 }

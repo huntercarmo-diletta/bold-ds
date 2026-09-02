@@ -70,6 +70,7 @@ export 'src/bold_lista.dart';
 export 'src/bold_autorizacao.dart';
 export 'src/bold_busy.dart';
 export 'src/bold_contexto_de_operacao.dart';
+export 'src/bold_corpo_de_folha.dart';
 export 'src/bold_background.dart';
 export 'src/bold_botao.dart';
 export 'src/bold_botoes_de_navegacao.dart';
