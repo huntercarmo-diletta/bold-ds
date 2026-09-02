@@ -20,6 +20,49 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.86.0] — 2026-09-01
+
+### O VINHO de um filho é dele — e o defeito estava vivo desde que a porta do neto abriu
+
+`CoreflowProduto.daMarca` copiava `BoldPalette.bold.papeisExtras` inteiro pro filho, e três daqueles
+papéis são o vinho: `vinhoMarca`, `vinhoLavagem`, `vinhoTinta`. Eles são a marca do Bold escurecida
+— então **um banco verde nascia com o vidro escuro vermelho.**
+
+O `///` do `daMarca` dizia, e continua dizendo, que o vocabulário extra vem como RESERVA e *"quem
+discordar declara o dele"*. Isso vale pra superfície elevada, pra pressionada, pro fluxo secundário
+e pra informação, que são gramática do material. **Não vale pro vinho**, e a diferença é que um filho
+que nasce de UMA cor não discordou de nada — ele nunca teve chance de declarar.
+
+O mesmo `///` já dizia que o tinte do vidro escuro DERIVA (*"o degrau 01 da marca dele a 50% — no
+Bold é vinho porque a marca do Bold é rosa"*). Eram **duas rotas pro mesmo material, e só uma
+derivava.**
+
+### A regra é medida, não escolhida
+
+Os três valores do Bold caem em pontos definidos da rampa dele, e é a posição que viaja:
+
+| valor | onde cai na rampa do Bold | erro de claridade |
+|---|---|---|
+| `marca` `#90093A` | entre o 02 e o 03, em **0,69** | 0,000 |
+| `lavagem` `#420616` | entre o 01 e o 02, em **0,41** | 0,000 |
+| `ink` `#16060A` | entre o PRETO e o 01, em **0,54** | 0,000 |
+
+As três reproduzem a claridade dos hexes do Bold com erro zero na terceira casa — então elas
+**descrevem** os valores dele em vez de aproximá-los, e aplicadas a outra rampa dão o vinho daquela
+marca.
+
+**Não muda um pixel do Bold**: ele declara os três, e o declarado sempre ganha.
+
+### Quem achou foi o gate do outro lado
+
+`app-newbold/test/o_app_recebe_um_filho_test.dart` monta o mesmo pedaço de tela com os dois produtos
+e mede o que o esquema resolve. As peças resolviam o verde em `primary*` e o vinho do Bold em
+`vinhoTinta` — e o sítio que sofria era o login recorrente, que tinha acabado de migrar pra
+`c.vinhoTinta` no mesmo dia.
+
+O gate `o_neto_troca_a_paleta_e_pronto` deste pacote não pegava: ele mede os 22 papéis do esquema
+contra uma paleta que **declara** os extras. O filho de verdade não declara.
+
 ## [0.85.0] — 2026-09-01
 
 ### `CoreflowHeroi` — cinco telas escreviam a mesma coisa, caractere por caractere

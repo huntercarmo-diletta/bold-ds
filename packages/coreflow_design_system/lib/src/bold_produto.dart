@@ -5,6 +5,7 @@ import 'bold_gradients.dart';
 import 'bold_palette.dart';
 import 'bold_scheme.dart';
 import 'bold_tema_material.dart';
+import 'bold_vinho.dart' show BoldVinho;
 
 /// UM PRODUTO FEITO COM ESTE DS — paleta e marca, e tudo o mais deriva.
 ///
@@ -104,7 +105,15 @@ class CoreflowProduto {
       raioDeBotao: BoldPalette.bold.raioDeBotao,
       raioDeFolha: BoldPalette.bold.raioDeFolha,
       blurDeVidro: BoldPalette.bold.blurDeVidro,
-      papeisExtras: BoldPalette.bold.papeisExtras,
+      // O vocabulário extra vem do Bold como RESERVA — superfície elevada, pressionada, fluxo
+      // secundário e informação são gramática do material, e não identidade. **Menos o vinho**: os
+      // três valores dele são a marca do Bold escurecida, e um banco verde herdando-os teria vidro
+      // escuro vermelho. `derivadosDe` refaz os três na rampa de quem está nascendo, nas mesmas
+      // posições em que eles caem na rampa do Bold.
+      papeisExtras: {
+        ...BoldPalette.bold.papeisExtras,
+        ...BoldVinho.derivadosDe(DilettaPalette.daMarca(marca: marca, id: id, nome: nome)),
+      },
       // O MATERIAL QUE CARREGA A COR, derivado da marca dele.
       tinteDeVidroClaro: BoldPalette.bold.tinteDeVidroClaro,
       tinteDeVidroEscuro: rampa[0].withValues(alpha: 0.50),

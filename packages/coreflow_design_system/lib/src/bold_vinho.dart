@@ -76,4 +76,48 @@ abstract final class BoldVinho {
 
   /// A lavagem desta paleta. Cai em [lavagem].
   static Color lavagemDe(DilettaPalette p) => _de(p, 'vinhoLavagem', lavagem);
+
+  // ── O VINHO DE UM FILHO, e ele não é o meu ─────────────────────────────────
+  //
+  // A reserva acima é o vinho do BOLD, e ela é reserva de verdade só pra quem esqueceu de
+  // declarar. Um filho que nasce de UMA cor não esqueceu de nada — ele nunca teve chance de
+  // declarar —, e herdar o meu vinho quer dizer que **o vidro escuro de um banco verde sai
+  // vermelho**.
+  //
+  // O defeito foi medido em 01/09 pelo gate `o_app_recebe_um_filho_test` do filho: as peças
+  // resolviam o verde dele em `primary*` e o vinho do Bold em `vinhoTinta`. Duas rotas pro mesmo
+  // material — o `CoreflowVidro.tinte` já derivava, e estas três não.
+  //
+  // ## A regra, e ela é medida e não escolhida
+  //
+  // Os três valores do Bold ficam em pontos definidos da rampa DELE, e é essa posição que viaja:
+  //
+  // | valor | onde ele cai na rampa do Bold | erro de claridade |
+  // |---|---|---|
+  // | `marca` (#90093A) | entre o 02 e o 03, em **0,69** | 0,000 |
+  // | `lavagem` (#420616) | entre o 01 e o 02, em **0,41** | 0,000 |
+  // | `ink` (#16060A) | entre o PRETO e o 01, em **0,54** | 0,000 |
+  //
+  // As três posições reproduzem a claridade dos três hexes do Bold com erro zero na terceira casa
+  // — então elas descrevem os valores dele em vez de aproximá-los, e aplicadas à rampa de outra
+  // marca dão o vinho DAQUELA marca.
+  //
+  // Isto **não muda um pixel do Bold**: ele declara os três em `papeisExtras`, e o declarado
+  // sempre ganha. Quem usa é quem não declarou.
+
+  /// O vinho de uma paleta que não declarou o dela — derivado da rampa de marca DELA.
+  static Map<String, DilettaPapelExtra> derivadosDe(DilettaPalette p) => {
+        'vinhoMarca': DilettaPapelExtra(
+            claro: Color.lerp(p.primary02, p.primary03, 0.69)!,
+            escuro: Color.lerp(p.primary02, p.primary03, 0.69)!,
+            significado: 'o vinho da marca, derivado da rampa dela'),
+        'vinhoLavagem': DilettaPapelExtra(
+            claro: Color.lerp(p.primary01, p.primary02, 0.41)!,
+            escuro: Color.lerp(p.primary01, p.primary02, 0.41)!,
+            significado: 'a lavagem do material, derivada da rampa da marca'),
+        'vinhoTinta': DilettaPapelExtra(
+            claro: Color.lerp(const Color(0xFF000000), p.primary01, 0.54)!,
+            escuro: Color.lerp(const Color(0xFF000000), p.primary01, 0.54)!,
+            significado: 'o quase-preto com o matiz da marca'),
+      };
 }
