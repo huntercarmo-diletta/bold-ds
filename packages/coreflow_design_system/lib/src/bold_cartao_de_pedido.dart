@@ -32,6 +32,7 @@ import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
 import 'bold_scheme.dart';
+import 'bold_cartao.dart';
 import 'bold_autorizacao.dart';
 
 /// O cartão de um pedido esperando assinatura.
@@ -136,11 +137,13 @@ class CoreflowCartaoDePedido extends StatelessWidget {
       tokens: const ['radius.all16', 'type.labelMd', 'type.labelLg'],
       child: DilettaTappable(
         onTap: aoTocar,
-        child: DilettaCardSurface(
-        radius: DilettaRadius.all16,
-        corSolida: s.surface,
-        // No lote a borda diz o que está escolhido. Fora dele, a borda da superfície.
-        bordaSolida: selecionada ? s.primary : s.border,
+        child: CoreflowCartao(
+        radius: 16,
+        // No lote, o ESCOLHIDO é o eixo do cartão — a mesma borda `primary` de sempre, e desde
+        // 02/09 com o fundo `primaryWash` junto. Esta peça já dizia escolhido por COR quando cinco
+        // telas diziam por espessura; o veredito do dono foi manter a decisão no DS, então ela
+        // parou de ter uma resposta PRÓPRIA e passou a usar a da casa.
+        selecionado: selecionada,
         padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

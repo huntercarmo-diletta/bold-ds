@@ -100,6 +100,7 @@ export 'src/bold_espaco.dart';
 /// lugar nenhum**. A régua que saiu daqui: adotada e alcançável não são a mesma coisa.
 export 'src/bold_cartao_da_conta.dart';
 export 'src/bold_cartao_de_pedido.dart';
+export 'src/bold_anel_de_escolha.dart';
 export 'src/bold_amostra_de_fundo.dart';
 export 'src/bold_nav_flutuante.dart';
 export 'src/bold_cartao_promocional.dart';

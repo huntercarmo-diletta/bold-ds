@@ -53,3 +53,73 @@ O campo é declaradamente temporário: **quando a pergunta for respondida, ele s
 *Seleção neste produto é COR de borda (como o cartão de pedido faz) ou ESPESSURA (como as cinco
 telas fazem)?* Se for cor, eu converto as cinco e apago o eixo. Se for espessura, o cartão de pedido
 é que está fora do padrão, e aí a espessura precisa de um número só — não de quatro.
+
+---
+
+## VEREDITO DO DONO · 2026-09-02 — *"vamos manter tudo no DS"*
+
+A pergunta oferecia duas saídas — cor ou espessura — e a resposta escolheu o EIXO em vez do valor: a
+decisão mora aqui. Então não é só que seleção virou cor; é que ela deixou de ser algo que uma tela
+escreve.
+
+### O que entrou
+
+`CoreflowCartao(selecionado:)` — **borda `primary`, fundo `primaryWash`**, que é a resposta que o
+`CoreflowCartaoDePedido` já dava. `larguraDaBorda` saiu e no lugar dela ficou `bordaReforcada`, um
+BOOLEANO: o produto tem duas espessuras de fio, 1 e 1,5, e as duas moram no cartão. Número livre foi
+o que deixou cinco telas inventarem quatro valores em quatro dias.
+
+### O que a conversão achou, e não estava no pedido
+
+Contar cinco divergências abriu mais três, e as três são do mesmo tipo — **peças que respondiam
+sozinhas uma pergunta que a casa já tinha respondido**:
+
+| onde | o que dizia |
+|---|---|
+| `CoreflowAmostraDeFundo` | um SEXTO jeito: anel de 2,5, transparente quando não escolhido |
+| `CoreflowCartaoDePedido` | escolhia com o `primary` **do PAI** enquanto o resto do produto escolhia com o deste DS — dois rosas diferentes, e ninguém tinha os dois na mesma tela pra ver |
+| `tipo_conta` × `home_menu_editor` | dois banhos pra mesma seleção: `primary.withAlpha(15)` contra `primaryWash`, ~3,4× de diferença |
+
+O da amostra de fundo **fica**, e é o único: a peça retrata uma ARTE DE FUNDO num quadrado de 52, e
+tingir o miolo pintaria por cima justamente do que a pessoa está escolhendo. Está declarado no gate
+com essa razão, pra ser reencontrado no dia em que alguém contar de novo.
+
+O do cartão de pedido é o achado que paga a passada. Ele foi apontado no pedido como *"a peça mais
+nova, desenhada olhando o problema"* — e ela era. Estava certa na forma e errada na fonte.
+
+### O olho, que era a razão de isso ser pergunta
+
+Os dois pares foram renderizados e abertos, claro e escuro. O que se vê: no CLARO, `alpha 15` sobre
+branco lê **cinza sujo**, não rosa — a tela de tipo de conta marcava a escolha com uma sujeira. Com
+`primaryWash` ela marca com a marca. No escuro a diferença é de força, e a favor.
+
+### O que ficou de gate
+
+`test/o_escolhido_se_diz_de_um_jeito_test.dart`, e ele defende a **unicidade**, não o valor: quatro
+fios com espessura própria declarados com a razão de cada um, entrada nova falhando, entrada morta
+falhando, e um teste de PIXEL provando que o miolo muda e muda para a MARCA — um filho verde tem que
+ler escolha em verde, e um gate que só lesse `border` passaria com a seleção invisível a um braço de
+distância.
+
+### Onde estava a sétima cópia, e por que nenhum gate a via
+
+Na tela de preferências do Letti — **dentro da zona isenta**. O gate das razões escreve a isenção com
+todas as letras (*"a Letti é app à parte e não se refaz nesta adoção"*), então não é buraco, é porta
+declarada. Mas o que passou por ela foi uma cópia de uma forma do DS, com `Colors.transparent` no
+lugar do token, num `foregroundDecoration` que o gate lista entre os pintores e não lê ali.
+
+Zona isenta é onde forma se reproduz sem ninguém contar. A conversão foi feita mesmo assim: a peça
+existe agora, e usá-la custou menos que manter a cópia.
+
+### O que a passada NÃO fez, e fica escrito pra não virar surpresa
+
+Este pacote lê **dois esquemas**: `CoreflowScheme.of` em 16 arquivos e `DilettaTheme.schemeOf` em
+25. Eles concordam no escuro e **discordam no claro** — `primary` 0,620/0,071/0,255 num,
+0,996/0,224/0,463 no outro. Medido em árvore montada como a do app (`CoreflowTemaMaterial` +
+`DilettaThemeScope`), não em construtor solto.
+
+Duas peças leem os dois ao mesmo tempo: `bold_barra_de_topo.dart` e `bold_cartao_de_pedido.dart`.
+
+Não converti os 25. Varredura global conserta um padrão e destrói outro, e aqui ela mexeria na cor
+de tudo que é claro — sem retrato de nenhuma tela pra comparar. Fica como o próximo trabalho, e ele
+é de olho e não de script.

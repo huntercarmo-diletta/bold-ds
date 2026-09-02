@@ -160,15 +160,21 @@ delegar e sobrou o raio — 22 aqui, `r24` cravado na variante. A linha do seu l
 Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
 pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedido novo.
 
-## O ESTADO EM 2026-09-02: 85 arquivos, 84 fechados, 1 aberto
+## O ESTADO EM 2026-09-02: 85 arquivos, 85 fechados, NENHUM aberto
 
-O único aberto é **`a seleção engrossa a borda em cinco telas`**, e ele não é para o pai: é para o
-DONO. Cinco telas dizem "escolhido" com quatro espessuras diferentes — 1,3 · 1,4 · 1,5 · 2 — e uma
-delas invertida, enquanto o `CoreflowCartaoDePedido` deste pacote já respondeu a mesma pergunta por
-COR. Converter as cinco é uma linha em cada, e muda a affordance de seleção em cinco telas: não é
-minha para dar.
+O último a fechar foi **`a seleção engrossa a borda em cinco telas`**, e ele não era para o pai: era
+para o DONO. A resposta dele foi *"vamos manter tudo no DS"* — que não escolheu entre as duas saídas
+oferecidas (cor ou espessura), escolheu o **eixo**: a decisão para de morar na tela.
 
-### Os quatro que fecharam em 01–02/09, e três fecharam sem código novo
+Saiu na `v0.93.0`: `CoreflowCartao(selecionado:)`, `larguraDaBorda` apagado, `bordaReforcada` no
+lugar dele (bool, porque número livre foi o que deixou cinco telas inventarem quatro valores em
+quatro dias), e `CoreflowAnelDeEscolha` pro caso em que tingir o miolo pintaria por cima da escolha.
+
+**Contar cinco divergências abriu sete.** O `CoreflowCartaoDePedido` — a peça citada no pedido como
+a que estava CERTA — escolhia com o `primary` do PAI enquanto o resto do produto escolhia com o
+deste DS, e no claro os dois rosas são diferentes. Ele estava certo na forma e errado na fonte.
+
+### Os cinco que fecharam em 01–02/09, e três fecharam sem código novo
 
 | pedido | fecho |
 |---|---|
@@ -176,6 +182,7 @@ minha para dar.
 | o `heroLift` foi depreciado por contagem | **a depreciação fica, a RAZÃO muda**: não é desuso, é forma — API de ponte que recebe cor crua não viaja. A frase antiga era verdadeira por nome e escondia um gêmeo |
 | o `info` é papel do esquema e não é estado do spot | **MORA NO SEU DS** — e quem respondeu foi a medição: o pai não tem o PAPEL `info`, então pedir o estado seria pedir uma família nova por causa de um disco |
 | o gradiente da marca tem três stops | **nenhuma das três saídas** — a marca virou a CURVA (oito paradas do lockup), não um número de stops |
+| a seleção engrossa a borda em cinco telas | **do DONO, e não do pai**: *"vamos manter tudo no DS"*. Virou `selecionado` + `bordaReforcada` + `CoreflowAnelDeEscolha` na `v0.93.0` |
 
 **O do `info` é o mais útil de ler**, porque a resposta contradiz quem perguntou: eu ia pedir e, ao
 conferir o pai antes de escrever, achei que o pedido não se sustentava. O trabalho de medir antes de

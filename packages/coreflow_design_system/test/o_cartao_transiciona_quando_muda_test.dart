@@ -32,7 +32,7 @@ void main() {
     await t.pumpWidget(naTela(const CoreflowCartao(
       transicao: Duration(milliseconds: 200),
       borderColor: Color(0xFFFE3976),
-      larguraDaBorda: 2,
+      bordaReforcada: true,
       child: SizedBox(width: 60, height: 30),
     )));
     final a = t.widget<AnimatedContainer>(find.descendant(
@@ -46,7 +46,9 @@ void main() {
             of: find.byType(AnimatedContainer), matching: find.byType(Container)))
         .decoration as BoxDecoration?;
     final borda = (d?.border as Border?)?.top;
-    expect(borda?.width, 2);
+    // 1,5: desde 02/09 o produto tem DUAS espessuras de fio e as duas moram no cartão. O que este
+    // teste guarda é que a borda entra na decoração ANIMADA, não qual número ela tem.
+    expect(borda?.width, 1.5);
     expect(borda?.color, const Color(0xFFFE3976));
   });
 }

@@ -28,7 +28,8 @@ class CoreflowCartao extends StatelessWidget {
     this.borderColor,
     this.semBorda = false,
     this.sombra,
-    this.larguraDaBorda,
+    this.selecionado = false,
+    this.bordaReforcada = false,
     this.transicao,
     this.gradiente,
     this.forma,
@@ -67,27 +68,38 @@ class CoreflowCartao extends StatelessWidget {
   /// desenhavam a caixa inteira à mão só pra ter onde pendurá-la.
   final List<BoxShadow>? sombra;
 
-  /// A ESPESSURA da borda, quando ela não é 1 — e este eixo é uma pergunta em aberto, não uma
-  /// resposta.
+  /// **ESCOLHIDO** — e este eixo é uma pergunta que foi respondida, não um eixo que nasceu pronto.
   ///
-  /// A varredura das telas em 01/09 achou **nove** bordas com espessura diferente de 1, e cinco
-  /// delas são CONDICIONAIS: `selected ? 2 : 1`, `selected ? 2 : 1.5`, `selected ? 1.5 : 2`,
-  /// `uploaded ? 1.4 : 1`, `golden ? 1.3 : 1`. Cinco telas dizendo *"escolhido"* com **quatro
-  /// espessuras diferentes** — 1.3, 1.4, 1.5 e 2 —, e uma delas com a lógica invertida em relação
-  /// às outras.
+  /// Em 01/09 a varredura das telas achou **cinco** superfícies dizendo *"escolhido"* com **quatro
+  /// espessuras de borda** — 1,3 · 1,4 · 1,5 · 2 —, e uma delas invertida: escolhido ficava mais
+  /// FINO. As cinco JÁ trocavam a cor também, então a espessura não carregava informação nenhuma;
+  /// ela só variava.
   ///
-  /// **Este pacote já respondeu essa pergunta uma vez**, e a resposta foi outra: o
-  /// `CoreflowCartaoDePedido` marca `selecionada` trocando a COR da borda (`s.primary` contra
-  /// `s.border`), não a espessura. Uma linguagem que diz a mesma coisa de dois jeitos tem um jeito
-  /// a mais.
+  /// O dono respondeu em 02/09: **a decisão mora aqui.** Então a espessura livre saiu, e a peça
+  /// passou a dizer escolhido de UM jeito — o mesmo que o `CoreflowCartaoDePedido` já dizia desde
+  /// que foi desenhado: **borda `primary`, fundo `primaryWash`**.
   ///
-  /// O eixo entra assim mesmo, e de propósito: converter as cinco telas pra cor **mudaria pixel em
-  /// cinco lugares numa passada que ninguém abriu pra olhar**, e a régua desta casa é que gate não
-  /// vê forma. Com ele, o desenho sai das telas hoje e a pergunta fica em pé pra quem olha — em
-  /// `docs/pedidos/`, com os cinco números.
+  /// [color] e [borderColor] explícitos continuam vencendo. Um estado que NÃO é escolha —
+  /// `concluído` em verde, `destaque` em âmbar, `passo ativo` — passa a cor dele e não mente
+  /// dizendo `selecionado`.
+  final bool selecionado;
+
+  /// A borda REFORÇADA — 1,5 —, e ela existe por FUNDO e não por estado.
   ///
-  /// Quando a pergunta for respondida, este campo sai e as cinco viram `borderColor`.
-  final double? larguraDaBorda;
+  /// Dois sítios, os dois com o fio sobre algo que come fio de 1: a pílula do scanner sobre vídeo
+  /// ao vivo, e o passo do KYC, cuja borda é `surfacePressed` sobre `surfaceRaised` (dois degraus
+  /// vizinhos da mesma rampa).
+  ///
+  /// É um BOOLEANO e não um `double` de propósito. Enquanto foi número livre, cinco telas
+  /// inventaram quatro valores em quatro dias. O produto tem **duas** espessuras de fio, e as duas
+  /// moram aqui.
+  final bool bordaReforcada;
+
+  Color _caixa(CoreflowScheme c) =>
+      color ?? (selecionado ? c.primaryWash : c.surface);
+  Color _fio(CoreflowScheme c) =>
+      borderColor ?? (selecionado ? c.primary : c.border);
+  double get _largura => bordaReforcada ? 1.5 : 1.0;
 
   /// **A TRANSIÇÃO da superfície** — quando o cartão MUDA, e não quando ele aparece.
   ///
@@ -235,17 +247,17 @@ class CoreflowCartao extends StatelessWidget {
     // Com espessura própria a borda sai daqui e não do material do pai: o `DilettaCardSurface`
     // declara `width: 1` e não tem eixo — nem deveria ganhar um por causa de uma pergunta que este
     // produto ainda não respondeu.
-    final larguraPropria = larguraDaBorda != null && larguraDaBorda != 1;
+    final larguraPropria = bordaReforcada;
     // Gradiente, forma livre ou fio de aresta: a superfície é desenhada aqui, porque o
     // `DilettaCardSurface` do pai recebe cor chapada, raio uniforme e borda de quatro lados.
     if (gradiente != null || forma != null || fio != null) {
       final caixa = DecoratedBox(
         decoration: BoxDecoration(
-          color: gradiente == null ? (color ?? c.surface) : null,
+          color: gradiente == null ? _caixa(c) : null,
           gradient: gradiente,
           borderRadius: forma ?? (radius == 0 ? null : br),
           border: fio ??
-              (semBorda ? null : Border.all(color: borderColor ?? c.border, width: larguraDaBorda ?? 1)),
+              (semBorda ? null : Border.all(color: _fio(c), width: _largura)),
           boxShadow: sombra,
         ),
         child: inner,
@@ -256,15 +268,15 @@ class CoreflowCartao extends StatelessWidget {
     final solida = DilettaCardSurface(
       vidro: false,
       radius: br,
-      corSolida: color ?? c.surface,
-      bordaSolida: (semBorda || larguraPropria) ? null : (borderColor ?? c.border),
+      corSolida: _caixa(c),
+      bordaSolida: (semBorda || larguraPropria) ? null : _fio(c),
       child: inner,
     );
     if (larguraPropria) {
       final comBorda = DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: br,
-          border: Border.all(color: borderColor ?? c.border, width: larguraDaBorda!),
+          border: Border.all(color: _fio(c), width: _largura),
         ),
         child: solida,
       );
@@ -297,12 +309,12 @@ extension on CoreflowCartao {
         duration: transicao!,
         curve: Curves.easeOut,
         decoration: BoxDecoration(
-          color: color ?? c.surface,
+          color: _caixa(c),
           borderRadius: br,
           border: semBorda
               ? null
               : Border.all(
-                  color: borderColor ?? c.border, width: larguraDaBorda ?? 1),
+                  color: _fio(c), width: _largura),
           boxShadow: sombra,
         ),
         child: filho,

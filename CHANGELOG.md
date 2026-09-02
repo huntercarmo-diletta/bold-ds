@@ -20,6 +20,64 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.93.0] — 2026-09-02
+
+### `selecionado` entra, `larguraDaBorda` sai, e o produto passa a dizer ESCOLHIDO de um jeito só
+
+O pedido de 01/09 achou cinco telas dizendo *"escolhido"* com quatro espessuras de borda — 1,3 · 1,4
+· 1,5 · 2 — e uma delas invertida. As cinco já trocavam a cor junto, então a espessura não carregava
+informação; ela só variava. Foi perguntado ao dono em vez de consertado, porque trocar a affordance
+de seleção em cinco telas precisa de olho. **A resposta foi *"vamos manter tudo no DS"*.**
+
+- **`CoreflowCartao(selecionado:)`** — borda `primary`, fundo `primaryWash`. `color` e `borderColor`
+  explícitos continuam vencendo, pra que um estado que NÃO é escolha (`concluído` em verde,
+  `destaque` em âmbar, `passo ativo`) passe a cor dele em vez de mentir;
+- **`CoreflowCartao(bordaReforcada:)`** substitui `larguraDaBorda` — booleano, 1,5. Dois sítios, os
+  dois com o fio sobre fundo que come fio de 1: a pílula do scanner sobre vídeo ao vivo e o passo do
+  KYC. **É bool e não `double` de propósito**: enquanto foi número livre, cinco telas inventaram
+  quatro valores em quatro dias;
+- **`CoreflowCartaoDePedido` perdeu a resposta própria.** Ele já dizia escolhido por COR — era a
+  peça citada no pedido como a que estava certa — e estava certo na forma e errado na fonte:
+  escolhia com o `primary` **do PAI** enquanto o resto do produto escolhia com o deste DS. Dois
+  rosas, e ninguém tinha os dois na mesma tela pra ver.
+
+**Quebra:** `larguraDaBorda` não existe mais. Um `larguraDaBorda: 2` vira `selecionado: true` (se o
+sítio é escolha) ou some (se a cor já dizia tudo, que era o caso de quatro dos cinco).
+
+### O olho, que era a razão de o pedido existir
+
+Os pares foram renderizados e abertos, claro e escuro. No CLARO, o `primary.withAlpha(15)` da tela
+de tipo de conta lê **cinza sujo** sobre branco — a tela marcava a escolha com uma sujeira. Com
+`primaryWash` ela marca com a marca.
+
+### `CoreflowAnelDeEscolha` — o segundo jeito, e o último
+
+Converter as cinco telas abriu mais duas cópias da MESMA forma, uma dentro deste pacote
+(`CoreflowAmostraDeFundo`) e uma na tela de preferências do Letti: anel de 2,5 por cima da arte,
+transparente quando não escolhido pra a peça não pular 5 pixels ao ser tocada. Uma com o token de
+transparente, a outra com `Colors.transparent`.
+
+Ele existe porque `selecionado` **não serve** quando o miolo é o que a pessoa está escolhendo — um
+retrato de fundo, uma foto de avatar. Tingir ali pinta por cima da escolha. É o único segundo jeito,
+e está declarado como tal.
+
+**E ele trouxe um defeito junto, que só apareceu porque a forma virou peça.** O anel lê o esquema
+DESTE pacote; a peça que o hospeda lia o do PAI. No claro os dois `primary` são rosas diferentes —
+0,620/0,071 aqui contra 0,996/0,224 lá —, então a amostra sairia com o anel de um rosa e o visto de
+dentro dele de outro. Enquanto o anel era pintado à mão na própria peça, não havia vizinho pra
+discordar. `CoreflowAmostraDeFundo` passou a ler um esquema só.
+
+### O gate defende a UNICIDADE, não o valor
+
+`test/o_escolhido_se_diz_de_um_jeito_test.dart`: quatro fios com espessura própria declarados com a
+razão de cada um, entrada nova falhando, entrada morta falhando. E um teste de **pixel** provando
+que o miolo muda e que muda para a MARCA — um gate que só lesse `border` passaria com a seleção
+invisível a um braço de distância, que é exatamente o que as cinco telas compensavam ao engrossar.
+
+O sexto jeito que a varredura achou — `CoreflowAmostraDeFundo`, anel de 2,5 — **fica**, declarado com
+a razão: a peça retrata uma arte de fundo num quadrado de 52, e tingir o miolo pintaria por cima do
+que a pessoa está escolhendo.
+
 ## [0.92.0] — 2026-09-02
 
 ### As seis peças que fecharam o desenho das telas — de 22 decorações para 5

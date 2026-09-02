@@ -255,7 +255,17 @@ void eixosDoCartao() {
       await t.pump(const Duration(milliseconds: 50));
       expect(borda(t), isNot(normal),
           reason: 'sem a borda, o cartão escolhido é indistinguível do vizinho');
-      expect(borda(t), DilettaScheme.light(BoldPalette.bold).primary);
+      // O rosa é o do COREFLOW, e a troca é de 02/09: o cartão parou de responder sozinho e passou
+      // a usar `CoreflowCartao(selecionado:)`. Os dois esquemas têm um `primary` e eles NÃO são o
+      // mesmo hex — o do pai é 0.9647/0.4353/0.6275, o deste produto é 0.9961/0.2235/0.4627. Esta
+      // peça era a única da casa escolhendo pelo rosa do pai, e ninguém tinha as duas na tela ao
+      // mesmo tempo pra ver. Quem escolhe em NOVE sítios agora escolhe com um rosa só.
+      // O rosa lido DA ÁRVORE e não de um construtor: os dois esquemas desta casa têm um
+      // `primary` e eles não são o mesmo hex. Cravar um deles no teste é escolher o esquema pelo
+      // que o harness monta, e foi assim que esta peça passou meses escolhendo com o rosa do PAI
+      // enquanto o resto do produto escolhia com o dele. Ninguém tinha as duas na mesma tela.
+      expect(borda(t),
+          CoreflowScheme.of(t.element(find.byType(DilettaCardSurface).first)).primary);
     });
   });
 }

@@ -28,6 +28,8 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'bold_anel_de_escolha.dart';
+import 'bold_scheme.dart';
 import 'bold_background.dart';
 
 /// O retrato de um [CoreflowBackdrop] no seletor de Aparência.
@@ -55,7 +57,12 @@ class CoreflowAmostraDeFundo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final s = DilettaTheme.schemeOf(context);
+    // O esquema é o DESTE pacote e não o do pai, e a diferença é visível: no CLARO os dois têm um
+    // `primary` e eles não são o mesmo rosa — 0,620/0,071 aqui contra 0,996/0,224 lá. Enquanto o
+    // anel desta peça era pintado à mão com o rosa do pai, o vizinho não existia pra comparar;
+    // desde que ele virou `CoreflowAnelDeEscolha` (que lê o esquema daqui), a peça teria o anel de
+    // um rosa e o visto de dentro dele de outro.
+    final s = CoreflowScheme.of(context);
 
     Widget amostra = DilettaDevInfo(
       component: 'amostraDeFundo',
@@ -64,19 +71,13 @@ class CoreflowAmostraDeFundo extends StatelessWidget {
       child: SizedBox(
         width: _larguraDaColuna,
         child: Column(children: [
-          // O ANEL é um `Container` com borda, e ele é o único desta peça: o que a linguagem tem pra
-          // anel de escolha é o estado `selected` de componentes que desenham conteúdo próprio, e
-          // aqui o conteúdo é a arte do fundo. Anel transparente quando não escolhido, e não anel
-          // ausente — sem ele o quadrado pula 5 pixels ao ser escolhido.
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: DilettaRadius.all16,
-              border: Border.all(
-                color: escolhido ? s.primary : DilettaAbsoluteColors.transparent,
-                width: 2.5,
-              ),
-            ),
-            padding: const EdgeInsets.all(2),
+          // O ANEL saiu daqui em 02/09 e virou `CoreflowAnelDeEscolha`: a mesma forma estava escrita
+          // aqui e no seletor de avatar do Letti, e a varredura dos jeitos de dizer "escolhido"
+          // achou as duas cópias no mesmo dia. O que se perdeu foi o respiro de 2 entre o anel e a
+          // arte — o anel agora corre POR CIMA da borda do retrato, que é como o do Letti já era.
+          CoreflowAnelDeEscolha(
+            escolhido: escolhido,
+            raio: 12,
             child: ClipRRect(
               borderRadius: DilettaRadius.all8,
               child: SizedBox(
