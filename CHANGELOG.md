@@ -57,12 +57,17 @@ pinta continua na árvore.
 
 Achei no retrato, não no gate. Foi abrir o PNG da faixa e faltar a seta que estava no código.
 
-### O gate: `os_dois_primary_da_casa_test.dart`
+### O gate: `os_dois_primary_da_casa_test.dart`, com os quatro legítimos declarados
 
-Contraste real da tinta sobre a lavagem composta, nos dois modos, **com o controle junto** — o mesmo
-cálculo com o rosa da marca tem que reprovar, senão o piso não está pegando nada. E uma varredura das
-DUAS portas de glifo: `DilettaIcon` tem que pedir nome que o pai tem; `CoreflowIcone` tem que pedir
-nome que o pai tem **ou** apelido que o mapa traduz.
+Três coisas, e cada uma com o controle que prova que ela sabe reprovar:
+
+- **contraste real** da tinta sobre a lavagem composta, nos dois modos — e o mesmo cálculo com o rosa
+  da marca tem que reprovar, senão o piso não está pegando nada;
+- **os quatro leitores legítimos do `primary` do pai, declarados com a razão de cada um.** Um quinto
+  falha o gate e tem que se explicar: se PINTA, entra na lista; se ESCREVE, o `primary` é o daqui.
+  Testado injetando um quinto leitor — reprova, e volta verde ao tirar;
+- **as duas portas de glifo**: `DilettaIcon` tem que pedir nome que o pai tem; `CoreflowIcone` tem que
+  pedir nome que o pai tem **ou** apelido que o mapa traduz.
 
 ## [0.94.0] — 2026-09-02
 

@@ -111,15 +111,30 @@ lugar do token, num `foregroundDecoration` que o gate lista entre os pintores e 
 Zona isenta é onde forma se reproduz sem ninguém contar. A conversão foi feita mesmo assim: a peça
 existe agora, e usá-la custou menos que manter a cópia.
 
-### O que a passada NÃO fez, e fica escrito pra não virar surpresa
+### O que a passada NÃO fez, e o que a medição devolveu depois
 
-Este pacote lê **dois esquemas**: `CoreflowScheme.of` em 16 arquivos e `DilettaTheme.schemeOf` em
-25. Eles concordam no escuro e **discordam no claro** — `primary` 0,620/0,071/0,255 num,
-0,996/0,224/0,463 no outro. Medido em árvore montada como a do app (`CoreflowTemaMaterial` +
-`DilettaThemeScope`), não em construtor solto.
+Escrevi aqui que este pacote lê **dois esquemas** — `CoreflowScheme.of` em 16 arquivos e
+`DilettaTheme.schemeOf` em 25 —, que eles discordam no claro, e que converter os 25 era o próximo
+trabalho.
 
-Duas peças leem os dois ao mesmo tempo: `bold_barra_de_topo.dart` e `bold_cartao_de_pedido.dart`.
+**A parte dos 25 estava errada, e a correção veio de medir melhor.** A primeira medição reaproveitou
+a árvore entre os dois modos e leu o tema anterior; montando cada modo separado, o que diverge são
+**três campos**:
 
-Não converti os 25. Varredura global conserta um padrão e destrói outro, e aqui ela mexeria na cor
-de tudo que é claro — sem retrato de nenhuma tela pra comparar. Fica como o próximo trabalho, e ele
-é de olho e não de script.
+| campo | claro | escuro |
+|---|---|---|
+| `primary` | `#9e1241` aqui contra `#fe3976` no pai | **igual** |
+| `error` | `#b42318` contra `#ef4757` | **igual** |
+| `textTertiary` | difere | difere |
+
+E ninguém neste pacote lê `error` nem `textTertiary` do pai. Sobram **cinco** peças lendo `primary`,
+e **quatro estão certas**: pintura, anel sobre foto, barra cheia e ponto de página querem o rosa da
+MARCA. Não é bug ter dois `primary` — são dois PAPÉIS, o profundo pra ser tinta e o da marca pra ser
+pintura.
+
+A quinta era defeito de verdade: a faixa de contexto de operação escrevia texto pequeno com o rosa
+da marca sobre a lavagem dele mesmo, **2,63:1**. Consertada na `v0.95.0`, com o gate junto.
+
+**A lição não é sobre cor.** Eu ia converter 25 arquivos por causa de um número que eu mesmo tinha
+medido errado — e a varredura global teria mexido na cor de tudo que é claro pra consertar um sítio.
+Medir de novo custou dez minutos.

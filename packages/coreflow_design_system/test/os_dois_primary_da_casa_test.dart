@@ -76,6 +76,39 @@ void main() {
         reason: 'era o que estava no ar até 02/09');
   });
 
+  test('quem lê o `primary` do PAI está declarado, e o quinto tem que se explicar', () {
+    // Os quatro legítimos, e o que os torna legítimos é o mesmo: nenhum deles é TINTA sobre claro.
+    const legitimos = {
+      'lib/src/bold_autorizacao.dart': 'o tom da barra de progresso — superfície CHEIA, e o que '
+          'precisa de contraste é o que vai por cima dela, não ela contra o fundo.',
+      'lib/src/bold_cabecalho_da_home.dart': 'o anel do avatar quando há foto. O contraste é contra '
+          'a FOTO, que é conteúdo arbitrário: nenhum dos dois rosas ganha essa por número.',
+      'lib/src/bold_nav_flutuante.dart': 'o preenchimento da aba ativa — pintura, e a marca é o que '
+          'ela tem que dizer.',
+      'lib/src/bold_pontos_de_pagina.dart': 'o ponto da página atual. Objeto gráfico, piso 3,0, e o '
+          'rosa da marca dá 3,46:1 sobre branco.',
+    };
+    final lendo = <String>{};
+    for (final f in Directory('lib').listSync(recursive: true).whereType<File>()) {
+      if (!f.path.endsWith('.dart')) continue;
+      final s = f.readAsStringSync();
+      final vars = RegExp(r'final\s+(\w+)\s*=\s*DilettaTheme\.scheme\w*\(')
+          .allMatches(s)
+          .map((m) => m.group(1)!)
+          .toSet();
+      for (final v in vars) {
+        if (RegExp('\\b$v\\.primary\\b').hasMatch(s)) lendo.add(f.path);
+      }
+      if (RegExp(r'DilettaTheme\.scheme\w*\([^)]*\)\.primary\b').hasMatch(s)) lendo.add(f.path);
+    }
+    expect(lendo.difference(legitimos.keys.toSet()), isEmpty,
+        reason: 'peça nova lendo o `primary` do PAI. Se ela PINTA, declare aqui com a razão; se ela '
+            'escreve, o `primary` é o daqui — o profundo — e o gate de contraste acima é o motivo.');
+    expect(legitimos.keys.toSet().difference(lendo), isEmpty,
+        reason: 'declarado aqui e não lê mais — razão escrita sobre peça que mudou é documentação '
+            'mentindo');
+  });
+
   test('todo glifo que este pacote pede do PAI existe no pai', () {
     // Duas portas, e só uma tem tradutor. `CoreflowIcone` passa pelo mapa de apelidos deste produto
     // (`chevron-right` → `angle-right-light`); `DilettaIcon` fala com o pai DIRETO.
