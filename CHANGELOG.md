@@ -20,6 +20,36 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.87.0] — 2026-09-01
+
+### `CoreflowCartao(larguraDaBorda:)` — um eixo que é uma PERGUNTA, e ele sai quando ela for respondida
+
+A varredura das telas achou **nove** bordas com espessura diferente de 1, e cinco delas são
+condicionais e significam a mesma coisa: *escolhido*.
+
+| tela | o que ela escreve |
+|---|---|
+| editor de menu da home | `selected ? 2 : 1` |
+| tipo de conta | `selected ? 2 : 1.5` |
+| documentos da empresa | `uploaded ? 1.4 : 1` |
+| alçadas — faixa dourada | `golden ? 1.3 : 1` |
+| autorizações — cartão do pedido | `selected ? 1.5 : 2` |
+
+Quatro espessuras de "escolhido" — 1,3 · 1,4 · 1,5 · 2 — e a última **inverte a lógica das outras**:
+escolhido fica mais fino.
+
+**E este pacote já respondeu essa pergunta uma vez, de outro jeito.** O `CoreflowCartaoDePedido`
+marca `selecionada` trocando a COR da borda (`s.primary` contra `s.border`), não a espessura. Uma
+linguagem que diz a mesma coisa de dois jeitos tem um jeito a mais.
+
+Converter as cinco pra cor seria uma linha em cada. **Não fiz**, e a razão é a régua que já custou
+caro três vezes hoje: trocar a affordance de seleção em cinco telas numa passada que ninguém abriu
+pra olhar é exatamente o tipo de mudança que `analyze` limpo e 852 testes verdes não pegam.
+
+O eixo entra pra o desenho sair das telas **sem mudar pixel**, e a pergunta vai pro dono em
+`docs/pedidos/2026-09-01-a-selecao-engrossa-a-borda...`. Ele é declaradamente temporário: quando a
+pergunta for respondida, o campo sai e as cinco viram `borderColor`.
+
 ## [0.86.0] — 2026-09-01
 
 ### O VINHO de um filho é dele — e o defeito estava vivo desde que a porta do neto abriu

@@ -28,6 +28,7 @@ class CoreflowCartao extends StatelessWidget {
     this.borderColor,
     this.semBorda = false,
     this.sombra,
+    this.larguraDaBorda,
     this.radius = CoreflowRadius.card,
     this.glass = false,
     this.highlight = false,
@@ -61,6 +62,28 @@ class CoreflowCartao extends StatelessWidget {
   /// pediam uma (`CoreflowElevacao.destacada`, quase todas), e antes de o eixo existir elas
   /// desenhavam a caixa inteira à mão só pra ter onde pendurá-la.
   final List<BoxShadow>? sombra;
+
+  /// A ESPESSURA da borda, quando ela não é 1 — e este eixo é uma pergunta em aberto, não uma
+  /// resposta.
+  ///
+  /// A varredura das telas em 01/09 achou **nove** bordas com espessura diferente de 1, e cinco
+  /// delas são CONDICIONAIS: `selected ? 2 : 1`, `selected ? 2 : 1.5`, `selected ? 1.5 : 2`,
+  /// `uploaded ? 1.4 : 1`, `golden ? 1.3 : 1`. Cinco telas dizendo *"escolhido"* com **quatro
+  /// espessuras diferentes** — 1.3, 1.4, 1.5 e 2 —, e uma delas com a lógica invertida em relação
+  /// às outras.
+  ///
+  /// **Este pacote já respondeu essa pergunta uma vez**, e a resposta foi outra: o
+  /// `CoreflowCartaoDePedido` marca `selecionada` trocando a COR da borda (`s.primary` contra
+  /// `s.border`), não a espessura. Uma linguagem que diz a mesma coisa de dois jeitos tem um jeito
+  /// a mais.
+  ///
+  /// O eixo entra assim mesmo, e de propósito: converter as cinco telas pra cor **mudaria pixel em
+  /// cinco lugares numa passada que ninguém abriu pra olhar**, e a régua desta casa é que gate não
+  /// vê forma. Com ele, o desenho sai das telas hoje e a pergunta fica em pé pra quem olha — em
+  /// `docs/pedidos/`, com os cinco números.
+  ///
+  /// Quando a pergunta for respondida, este campo sai e as cinco viram `borderColor`.
+  final double? larguraDaBorda;
 
   /// ## A PÍLULA É ESTE CARTÃO COM `radius: CoreflowRadius.pill`
   ///
@@ -160,13 +183,31 @@ class CoreflowCartao extends StatelessWidget {
     // propriedade do produto e passou a ser do FUNDO, que é por sítio. O `corSolida`/`bordaSolida`
     // que eu não alcançava — porque o ramo do vidro retornava antes deles — agora chega, e o
     // `clipBehavior: Clip.antiAlias` do `Container` dele faz o que o `ClipRRect` fazia aqui.
+    // Com espessura própria a borda sai daqui e não do material do pai: o `DilettaCardSurface`
+    // declara `width: 1` e não tem eixo — nem deveria ganhar um por causa de uma pergunta que este
+    // produto ainda não respondeu.
+    final larguraPropria = larguraDaBorda != null && larguraDaBorda != 1;
     final solida = DilettaCardSurface(
       vidro: false,
       radius: br,
       corSolida: color ?? c.surface,
-      bordaSolida: semBorda ? null : (borderColor ?? c.border),
+      bordaSolida: (semBorda || larguraPropria) ? null : (borderColor ?? c.border),
       child: inner,
     );
+    if (larguraPropria) {
+      final comBorda = DecoratedBox(
+        decoration: BoxDecoration(
+          borderRadius: br,
+          border: Border.all(color: borderColor ?? c.border, width: larguraDaBorda!),
+        ),
+        child: solida,
+      );
+      if (sombra == null) return comBorda;
+      return DecoratedBox(
+        decoration: BoxDecoration(borderRadius: br, boxShadow: sombra),
+        child: comBorda,
+      );
+    }
     if (sombra == null) return solida;
     // A sombra vai POR FORA e não dentro da superfície do pai: ela é do sítio, não do material, e
     // `DilettaCardSurface` não tem eixo pra ela — nem deveria, porque a escada de elevação dele já
