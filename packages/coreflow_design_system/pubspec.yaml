@@ -3,7 +3,7 @@ description: >-
   O DS-FILHO do Conta BOLD. Fornece a paleta da marca (rosa → vinho) e recebe a
   linguagem inteira do ds-diletta: ~50 papéis derivados, dark mode sem escrever cor,
   354 ícones herdados. O que é só do Bold mora aqui; o que é linguagem mora no pai.
-version: 0.89.0
+version: 0.90.0
 publish_to: none
 
 environment:
@@ -26,7 +26,7 @@ dependencies:
   diletta_design_system:
     git:
       url: git@bitbucket.org:diletta/ds-diletta.git
-      ref: v0.152.0
+      ref: v0.155.0
       path: packages/diletta_design_system
   # Declarado direto porque este pacote CHAMA `SvgPicture`/`ColorMapper` nas 26 artes deste
   # produto. Vinha de carona pelo pai — e dependência de carona é dependência que some sem

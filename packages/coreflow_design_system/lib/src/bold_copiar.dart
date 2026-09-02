@@ -23,6 +23,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 /// Botão de copiar com aviso flutuante.
+/// **DUAS VEZES A MESMA PEÇA, e a segunda chegou por merge em 02/09.**
+///
+/// O time do app escreveu um `BoldCopyButton` dentro de `lib/design_system/widgets/` — campo por
+/// campo esta peça, incluindo os **1800 ms** de permanência do aviso. Não é cópia por descuido: é o
+/// que acontece quando o barril do app esconde o pacote e a peça de cá fica invisível de lá.
+///
+/// É a terceira duplicata do mesmo dia (com o pegador da folha e o teto de largura), e as três
+/// dizem a mesma coisa sobre a causa: **um app que fala com o DS por um barril próprio não consegue
+/// ver o que o DS já tem.** A adoção que apagou o barril é o conserto dessa causa, não só da dívida.
 class CoreflowCopiar extends StatefulWidget {
   const CoreflowCopiar({
     super.key,
@@ -108,8 +117,24 @@ class _BoldCopiarState extends State<CoreflowCopiar> {
                 ),
               ),
             ),
+            // O AVISO CRESCE PRA ESQUERDA, e isso é conserto de um bug com número.
+            //
+            // Era `Positioned(top: 22)` sem `right`: o aviso ficava com largura natural e
+            // CENTRALIZADO no ícone pelo alinhamento do stack. O ícone tem 19 lógicos e o aviso tem
+            // uns 100 — sobravam ~40 pra cada lado. O botão de copiar mora no FIM da linha de valor
+            // nas telas que o usam, então os 40 da direita caíam fora do cartão, e quem cortava era
+            // o clip da borda arredondada do comprovante. **A pessoa lia "ID copia".**
+            //
+            // Bug #102 do feedback da 3.4.0, achado e consertado pelo time do app numa cópia desta
+            // peça; chegou aqui por merge em 02/09, junto com os três testes que medem a geometria.
+            //
+            // `right: 0` ancora pela direita do ícone e o aviso cresce pra esquerda, por cima do
+            // conteúdo, que é onde há espaço. **Nada de `OverflowBox`** — a primeira tentativa deles
+            // usou um, e ele estoura em *"given an infinite size during layout"*, porque se
+            // dimensiona pela restrição recebida e aqui ela é ilimitada nos dois eixos.
             Positioned(
               top: 22,
+              right: 0,
               child: IgnorePointer(
                 child: AnimatedScale(
                   scale: _copiado ? 1 : 0.85,

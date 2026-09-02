@@ -55,7 +55,6 @@ export 'src/bold_icone.dart';
 export 'src/bold_avatar.dart';
 export 'src/bold_aviso.dart';
 export 'src/bold_barra_de_topo.dart';
-export 'src/bold_botao_de_copiar.dart';
 export 'src/bold_busca.dart';
 export 'src/bold_cabecalho_de_folha.dart';
 export 'src/bold_folha.dart';
@@ -72,6 +71,7 @@ export 'src/bold_lista.dart';
 /// Componentes que só o Bold tem, nascidos aqui compondo as peças do pai.
 export 'src/bold_autorizacao.dart';
 export 'src/bold_busy.dart';
+export 'src/bold_comprovante.dart';
 export 'src/bold_contexto_de_operacao.dart';
 export 'src/bold_corpo_de_folha.dart';
 export 'src/bold_background.dart';

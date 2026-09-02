@@ -7,6 +7,7 @@ import 'bold_etiqueta.dart' show CoreflowEtiqueta;
 import 'bold_busy.dart' show CoreflowBusy;
 import 'bold_espaco.dart' show CoreflowEspaco;
 import 'bold_scheme.dart' show CoreflowScheme;
+import 'bold_largura.dart' show CoreflowLarguraDeConteudo;
 
 /// AS DUAS PÁGINAS DESTE PRODUTO, e o rodapé de ação que elas carregam.
 ///
@@ -83,7 +84,10 @@ class CoreflowPaginaComRodapeFlutuante extends StatelessWidget {
         ]),
       ),
       floatingActionButton: floatingActionButton,
-      bottomNavigationBar: bottomBar,
+      // O TETO alcança o rodapé, e não só o corpo: numa tela larga um CTA de ponta a ponta com o
+      // conteúdo parado em 600 lê como duas colunas diferentes. Veio do time do app por merge.
+      bottomNavigationBar:
+          bottomBar == null ? null : CoreflowLarguraDeConteudo(child: bottomBar!),
     );
   }
 }

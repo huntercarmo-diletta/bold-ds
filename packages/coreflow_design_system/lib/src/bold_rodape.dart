@@ -63,6 +63,7 @@ class CoreflowRodape extends StatelessWidget {
   const CoreflowRodape.child({
     super.key,
     required this.child,
+    this.acima,
     this.primary,
     this.secondary,
     this.tertiary,
@@ -107,11 +108,21 @@ class CoreflowRodape extends StatelessWidget {
   /// **Muda pixel em 55 sítios**: com 34 de safe area a barra sai de **134 pra
   /// 122**, porque o respiro de 32 + inset dá lugar ao indicador de 34 e o padding
   /// vertical vai de 12/0 pra 16/16.
+  /// [acima] renderiza um widget **colado no CTA**, dentro da mesma barra.
+  ///
+  /// Escrito pelo time do app e chegado por merge em 02/09, com a razão dele: *"um aviso sobre a
+  /// assinatura precisa estar onde a pessoa assina, não no topo da tela onde ela já rolou para
+  /// longe"*. O caso é o selo de garantia reduzida do Tier C.
+  ///
+  /// Nulo — o default — não muda nada pra nenhum chamador. Com conteúdo, a barra usa o vidro
+  /// genérico desta casca em vez do envelope de CTA do pai, porque o `.livre` dele exige altura
+  /// fixa e não recebe conteúdo além do botão.
   const CoreflowRodape.button({
     super.key,
     this.primary,
     this.secondary,
     this.tertiary,
+    this.acima,
   })  : child = const SizedBox.shrink(),
         glass = true,
         safeBottom = true,
@@ -125,6 +136,9 @@ class CoreflowRodape extends StatelessWidget {
   // `DilettaBottomApp.keyboard` e `DilettaKeyboard` prontos.
 
   final Widget child;
+
+  /// O widget colado ACIMA do CTA, dentro da mesma barra. Só na variante `.button`. Ver o construtor.
+  final Widget? acima;
 
   /// As três ações do rodapé de CTA. Não-nulas só na variante `.button`, e é a
   /// presença delas que diz ao `build` pra usar o envelope do pai.
@@ -143,8 +157,24 @@ class CoreflowRodape extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (primary != null || secondary != null || tertiary != null) {
-      return _RodapeDoPai(
-          primary: primary, secondary: secondary, tertiary: tertiary);
+      if (acima == null) {
+        return _RodapeDoPai(
+            primary: primary, secondary: secondary, tertiary: tertiary);
+      }
+      // Com conteúdo acima, o envelope do pai não serve: o `.livre` dele exige altura fixa e não
+      // recebe nada além do botão. Cai no vidro genérico desta casca.
+      return CoreflowRodape.child(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            acima!,
+            const SizedBox(height: DilettaSpacing.s3),
+            _RodapeDoPai(
+                primary: primary, secondary: secondary, tertiary: tertiary),
+          ],
+        ),
+      );
     }
     if (bare) return child;
 

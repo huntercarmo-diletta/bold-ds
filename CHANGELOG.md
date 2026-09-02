@@ -20,6 +20,40 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.90.0] — 2026-09-02
+
+### O que o merge de 736 commits trouxe — e as três duplicatas que ele revelou
+
+O `CoreflowComprovante` (o recibo do pai com copiar quando o ID é real), o `acima:` no rodapé de
+CTA, o `enableDrag` na folha, o teto de 600 alcançando rodapé e gaveta, e o fechar canônico.
+
+**Três peças foram escritas DUAS VEZES no mesmo dia, por dois lados que não se falavam:**
+
+| peça | aqui | no app |
+|---|---|---|
+| o pegador da folha | `CoreflowPegador` | `BoldSheetGrip` — mesma tinta, mesmo `pillR`, mesmos 5 sítios |
+| copiar com aviso | `CoreflowCopiar` | `BoldCopyButton` — campo por campo, **incluindo os 1800 ms** |
+| o teto de largura | — | `BoldContentWidth`, e a casca dele **sombreava** o `CoreflowBackground` daqui |
+
+A causa é uma só, e ela é estrutural: **um app que fala com o DS por um barril próprio não consegue
+ver o que o DS já tem.** A adoção que apagou o barril é o conserto dessa causa, não só da dívida.
+
+### E a cópia do time trazia um conserto que a minha não tinha
+
+O `CoreflowCopiar` posicionava o aviso centralizado no ícone (`Positioned(top: 22)` sem `right`). O
+ícone tem 19 lógicos e o aviso uns 100: sobravam ~40 pra cada lado, e como o botão mora no FIM da
+linha de valor, os 40 da direita caíam fora do cartão. **A pessoa lia "ID copia"** — bug #102 da
+3.4.0, achado e consertado por eles.
+
+O `right: 0` veio junto com os três testes que medem a geometria. Duplicata que conserta defeito da
+original é o melhor argumento possível a favor de ler o que o outro lado escreveu antes de descartar.
+
+### E a folha sem título não tinha fechar
+
+O bloco do fechar morava dentro de `if (title != null)`. Gaveta sem título perdia o botão junto, e
+quem abrisse uma dessas só saía por gesto. Defeito meu, achado por um teste deles: o `if` amarrava
+duas coisas que não dependem uma da outra.
+
 ## [0.89.0] — 2026-09-02
 
 ### O TETO DE 600 entra — e ele vinha sombreando esta peça sem ninguém saber

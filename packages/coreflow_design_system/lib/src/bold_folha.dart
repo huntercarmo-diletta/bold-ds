@@ -1,5 +1,5 @@
 import 'package:diletta_design_system/diletta_design_system.dart'
-    show DilettaAbsoluteColors, DilettaIconButton, DilettaIconButtonSize, DilettaIconButtonType;
+    show DilettaAbsoluteColors;
 import 'package:flutter/material.dart';
 // `bold_background` vem da development (o sheet com papel de parede do app). O
 // `bold_icon_button` NÃO volta: o botão de ícone é peça do pai desde a v0.13.0 do
@@ -12,6 +12,8 @@ import 'bold_radius.dart' show CoreflowRadius;
 import 'bold_scheme.dart' show CoreflowScheme;
 import 'bold_type.dart' show CoreflowType;
 import 'bold_pegador.dart' show CoreflowPegador;
+import 'bold_largura.dart' show CoreflowLarguraDeConteudo;
+import 'bold_cabecalho_de_folha.dart' show CoreflowFecharFolha;
 
 /// Conta BOLD — BottomSheet (organismo). O CONTAINER de sheet que faltava:
 /// o [CoreflowBarraDeTopo.sheet] só dava o cabeçalho e o [BoldDialog] é modal central.
@@ -110,10 +112,15 @@ class CoreflowFolha extends StatelessWidget {
     bool centerTitle = false,
     bool fundoDoApp = false,
     bool fecharEmCirculo = false,
-  }) {
+    /// `false` trava o arrasto — a folha só fecha pelo botão. Veio do time do app por merge em
+    /// 02/09: o caso é a folha que confirma uma ação irreversível, onde fechar por gesto acidental
+    /// é perder o contexto no meio de uma decisão.
+    bool enableDrag = true,
+}) {
     return showModalBottomSheet<T>(
       context: context,
-      isScrollControlled: true,
+      enableDrag: enableDrag,
+    isScrollControlled: true,
       useSafeArea: true,
       // O grip é do próprio CoreflowFolha — desliga o handle do Material pra não
       // duplicar (o tema global pode ligá-lo).
@@ -122,14 +129,19 @@ class CoreflowFolha extends StatelessWidget {
       backgroundColor: DilettaAbsoluteColors.transparent,
       barrierColor: DilettaAbsoluteColors.blackAlpha40,
       isDismissible: dismissible,
-      builder: (ctx) => CoreflowFolha(
+      // O PAINEL entra no teto; o scrim, não. Numa tela larga uma gaveta de ponta a ponta separa
+      // do conteúdo que ela interrompe — e o véu tem que cobrir a tela inteira, senão a interrupção
+      // não lê como interrupção. Veio do time do app por merge em 02/09.
+      builder: (ctx) => CoreflowLarguraDeConteudo(
+        child: CoreflowFolha(
         title: title,
         onClose: dismissible ? () => Navigator.of(ctx).maybePop() : null,
         padding: padding ?? const EdgeInsets.fromLTRB(CoreflowEspaco.gutter, DilettaSpacing.s1, CoreflowEspaco.gutter, DilettaSpacing.s5),
         centerTitle: centerTitle,
         fundoDoApp: fundoDoApp,
         fecharEmCirculo: fecharEmCirculo,
-        child: builder(ctx),
+          child: builder(ctx),
+        ),
       ),
     );
   }
@@ -151,13 +163,16 @@ class CoreflowFolha extends StatelessWidget {
     // `close` era o do app, `xmark-light` é o do vocabulário do pai.
     final fechar = onClose == null
         ? null
-        : DilettaIconButton(
-            icon: 'xmark-light',
-            semanticLabel: 'Fechar',
-            type: fecharEmCirculo
-                ? DilettaIconButtonType.secondary
-                : DilettaIconButtonType.tertiary,
-            size: DilettaIconButtonSize.sm,
+        // O FECHAR CANÔNICO é o [CoreflowFecharFolha] — disco cinza, à direita.
+        //
+        // Aqui havia um `DilettaIconButton` montado à mão, com `fecharEmCirculo` escolhendo entre
+        // `secondary` (disco) e `tertiary` (só o xis). O time do app extraiu a peça e **decidiu o
+        // disco em todas**, e o teste `bold_sheet_fundo_do_app` cobra isso: uma gaveta com dois
+        // jeitos de fechar é uma gaveta em que a pessoa procura o fechar toda vez.
+        //
+        // O `fecharEmCirculo` fica na assinatura sem efeito por enquanto — remover parâmetro é
+        // major, e o que ele pedia agora é o default. Sai na próxima major com os chamadores.
+        : CoreflowFecharFolha(
             onPressed: onClose,
           );
     final conteudo = Padding(
@@ -173,6 +188,18 @@ class CoreflowFolha extends StatelessWidget {
             padding: EdgeInsets.only(top: 10, bottom: 6),
             child: CoreflowPegador(),
           ),
+          // SEM TÍTULO, o fechar continua existindo — e este ramo faltava.
+          //
+          // O bloco abaixo é `if (title != null)`, então uma gaveta sem título perdia o botão
+          // junto: quem abrisse uma dessas só saía por gesto. O time do app pegou isso num teste
+          // (`gaveta sem título ainda tem o fechar no canto direito`), e o defeito é meu — o `if`
+          // amarrava duas coisas que não dependem uma da outra.
+          if (title == null && fechar != null)
+            Padding(
+              padding: const EdgeInsets.fromLTRB(
+                  DilettaSpacing.s5, DilettaSpacing.s2, DilettaSpacing.s3, DilettaSpacing.s1),
+              child: Align(alignment: Alignment.centerRight, child: fechar),
+            ),
           if (title != null)
             Padding(
               padding: const EdgeInsets.fromLTRB(DilettaSpacing.s5, DilettaSpacing.s2, DilettaSpacing.s3, DilettaSpacing.s1),
