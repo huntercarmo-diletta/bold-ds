@@ -20,6 +20,55 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.89.0] — 2026-09-02
+
+### O TETO DE 600 entra — e ele vinha sombreando esta peça sem ninguém saber
+
+Entre 27/08 e 01/09 o time do app construiu um sistema de largura máxima dentro de
+`lib/design_system/widgets/`, **no mesmo intervalo em que a adoção esvaziava aquela pasta.** As duas
+coisas estavam certas e nenhuma sabia da outra; o encontro foi um merge de 736 commits.
+
+O que veio, com o nome desta casa:
+
+- **`CoreflowLargura.teto` = 600** — o ponto em que o conteúdo para de esticar;
+- **`CoreflowLarguraDeConteudo`** · **`CoreflowBarraComTeto`** (a versão `PreferredSizeWidget`, pra
+  barra de topo de `Scaffold`) · **`CoreflowSemTeto`** (a fuga, por nome) ·
+  **`coreflowSobraLateral`** (quanto sobrou de cada lado — o que um overlay posicionado por
+  coordenada absoluta precisa saber pra não colar na borda da TELA em vez da do conteúdo);
+- **`CoreflowBackground(limitarConteudo:)`**, default `true`.
+
+### O pedido estava escrito na casca que eu apaguei
+
+A peça deles se chamava `CoreflowBackground` e **sombreava esta**: o barril do app escondia a minha e
+exportava a dele, e os ~130 sítios ganhavam o teto sem mudar uma linha. O `///` dela dizia:
+
+> *"Morre no dia em que o pai aceitar um `limitarConteudo` (pedido a registrar no bold-ds) — aí o
+> barrel volta a exportar o do pacote direto."*
+
+**É esse dia.** O campo entrou, a casca morreu, e o pedido nunca precisou ser escrito porque quem ia
+escrever já tinha deixado a razão dentro do código.
+
+A arte continua sangrando de ponta a ponta e só o conteúdo é capado — as duas metades da regra, e
+cada uma sozinha é um defeito diferente: sem o teto o texto atravessa um tablet, sem o sangramento o
+produto vira uma coluna estreita entre duas faixas vazias.
+
+### E as outras três peças do time
+
+- **`CoreflowBotaoDeCopiar`** — copiar com confirmação que fica alguns segundos. Um
+  `Clipboard.setData` cru não diz que copiou;
+- **`CoreflowCabecalhoDeFolha`** + **`CoreflowFecharFolha`** — o topo da gaveta;
+- **`CoreflowBotaoDeCopiar`** trouxe junto o `_idCopiavel` do comprovante deles: seis caracteres e ao
+  menos um alfanumérico, pra descartar os marcadores de ausência (`—`, `-`, `N/A`) sem cada chamador
+  ter que dizer se o ID dele é real.
+
+### A coincidência que vale mais que as quatro peças
+
+**O `BoldSheetGrip` do time e o `CoreflowPegador` desta casa são a mesma peça, extraída no mesmo dia,
+dos mesmos cinco sítios, com a mesma tinta** (`textMuted` a 50%) e o mesmo `pillR`.
+
+Dois lados chegando ao mesmo pixel sem combinar é a melhor evidência que este DS já teve de que a
+peça estava faltando. O `CoreflowPegador` fica; o nome do time some.
+
 ## [0.88.0] — 2026-09-01
 
 ### O pai sobe de `v0.148.0` pra `v0.152.0` — quatro versões de uma vez, e uma delas era um teste vermelho

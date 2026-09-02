@@ -35,6 +35,7 @@ import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
 import 'bold_vinho.dart';
+import 'bold_largura.dart' show CoreflowLarguraDeConteudo;
 
 /// Os sete fundos que o produto oferece.
 ///
@@ -105,7 +106,8 @@ class CoreflowBackdropScope extends InheritedWidget {
 /// CoreflowBackground.fixo(estilo: CoreflowBackdrop.aurora, child: …)  // ESTE mood, sempre
 /// ```
 class CoreflowBackground extends StatelessWidget {
-  const CoreflowBackground({super.key, required this.child, this.estilo})
+  const CoreflowBackground(
+      {super.key, required this.child, this.estilo, this.limitarConteudo = true})
       : declaradoVence = false;
 
   /// FIXA o [estilo]: desenha o que foi pedido e ignora a escolha da pessoa.
@@ -123,7 +125,11 @@ class CoreflowBackground extends StatelessWidget {
   ///
   /// O nome é `fixo` e não `amostra` porque o conceito é um só: **o declarado vence a escolha.** Amostra
   /// era o primeiro caso que apareceu, e nome de caso vira nome errado no segundo.
-  const CoreflowBackground.fixo({super.key, required this.child, required CoreflowBackdrop this.estilo})
+  const CoreflowBackground.fixo(
+      {super.key,
+      required this.child,
+      required CoreflowBackdrop this.estilo,
+      this.limitarConteudo = true})
       : declaradoVence = true;
 
   final Widget child;
@@ -134,6 +140,25 @@ class CoreflowBackground extends StatelessWidget {
 
   /// `true` ⇒ o [estilo] declarado ganha da escolha da pessoa. Ver [CoreflowBackground.fixo].
   final bool declaradoVence;
+
+  /// **A ARTE SANGRA, O CONTEÚDO NÃO** — e este campo é um pedido do time do app, atendido.
+  ///
+  /// Numa tela larga o conteúdo deste produto para em `CoreflowLargura.teto` (600) e centraliza; a
+  /// arte de fundo continua indo de ponta a ponta. Sem separar as duas coisas, capar a largura
+  /// deixaria o produto como uma coluna estreita entre duas faixas vazias.
+  ///
+  /// **Como isso chegou aqui:** entre 27/08 e 01/09 o time do app escreveu, dentro de
+  /// `lib/design_system/widgets/`, uma casca que se chamava `CoreflowBackground` e **sombreava esta**
+  /// — o barril do app escondia a minha e exportava a dele, e os ~130 sítios ganhavam o teto sem
+  /// mudar uma linha. O `///` dela já dizia o que devia acontecer:
+  ///
+  /// > *"Morre no dia em que o pai aceitar um `limitarConteudo` (pedido a registrar no bold-ds) — aí
+  /// > o barrel volta a exportar o do pacote direto."*
+  ///
+  /// É esse dia. O campo entra com default `true` porque é o que os ~130 sítios querem, e quem
+  /// precisa da largura cheia diz `limitarConteudo: false` — que é a mesma forma do
+  /// [CoreflowSemTeto], por nome em vez de por acidente.
+  final bool limitarConteudo;
 
   /// O véu sobre a arte. Claro: branco a 20% — a arte é diurna e o ink escuro precisa ler por
   /// cima. Escuro: preto a 8%, porque a arte noturna já é escura.
@@ -188,7 +213,11 @@ class CoreflowBackground extends StatelessWidget {
       ],
       child: ColoredBox(
         color: base,
-        child: Stack(children: [..._camadas(s, fundo, scope), child]),
+        child: Stack(children: [
+          ..._camadas(s, fundo, scope),
+          // A arte fica nas camadas acima, em largura cheia; só o CONTEÚDO passa pelo teto.
+          limitarConteudo ? CoreflowLarguraDeConteudo(child: child) : child,
+        ]),
       ),
     );
   }
