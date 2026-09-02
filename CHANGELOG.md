@@ -20,6 +20,21 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.96.0] — 2026-09-02
+
+### O pai sobe pra `v0.163.0` e traz o conserto do OTP
+
+`DilettaOtpInput` herdava o `InputDecorationTheme` do app no campo transparente que fica por cima
+das seis caixas. **Este produto tem tema de campo** — `filled: true` com `fillColor: s.field`, mais o
+anel de foco rosa que entrou aqui —, então a peça virava uma pílula cheia no lugar dos seis boxes, e
+quem digitava não via nada aparecer.
+
+Sete telas deste produto usam o `OtpBoxesField`, que é casca desta peça. A tela onde o defeito
+apareceu foi a de parear aparelho.
+
+Vem junto, das `v0.161.0` e `v0.162.0` do pai: o piso da folha (o botão do rodapé ficava debaixo da
+barra) e o que a `v0.162.0` trouxe.
+
 ## [0.95.1] — 2026-09-02
 
 **Só teste. `lib/` é byte a byte a mesma da `v0.95.0`** — quem já está na `v0.95.0` não precisa subir,
