@@ -11,6 +11,7 @@ import 'bold_espaco.dart' show CoreflowEspaco;
 import 'bold_radius.dart' show CoreflowRadius;
 import 'bold_scheme.dart' show CoreflowScheme;
 import 'bold_type.dart' show CoreflowType;
+import 'bold_pegador.dart' show CoreflowPegador;
 
 /// Conta BOLD — BottomSheet (organismo). O CONTAINER de sheet que faltava:
 /// o [CoreflowBarraDeTopo.sheet] só dava o cabeçalho e o [BoldDialog] é modal central.
@@ -165,15 +166,12 @@ class CoreflowFolha extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Grip iOS.
-          Container(
-            width: 40,
-            height: 4,
-            margin: const EdgeInsets.only(top: 10, bottom: 6),
-            decoration: BoxDecoration(
-              color: c.textMuted.withValues(alpha: 0.5),
-              borderRadius: CoreflowRadius.pillR,
-            ),
+          // Grip iOS — a peça, desde 01/09. Ele era desenhado aqui E em cinco folhas montadas à
+          // mão nas telas do app, com DUAS tintas: esta (`textMuted` a 50%) e `textPrimary` a 16%.
+          // O respiro sai por fora, que é a regra do dono.
+          const Padding(
+            padding: EdgeInsets.only(top: 10, bottom: 6),
+            child: CoreflowPegador(),
           ),
           if (title != null)
             Padding(

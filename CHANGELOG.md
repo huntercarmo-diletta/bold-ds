@@ -20,6 +20,31 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.82.0] — 2026-09-01
+
+### `CoreflowPegador` — o mesmo objeto tinha DUAS tintas
+
+40 × 4, canto pill: a barrinha de arrastar no topo de uma folha. Ela era desenhada aqui dentro do
+`CoreflowFolha` **e** em cinco folhas montadas à mão nas telas do app, com cinzas diferentes:
+
+| onde | tinta |
+|---|---|
+| `CoreflowFolha` (o lançador) | `textMuted` @ 50% |
+| as cinco folhas à mão | `textPrimary` @ 40 de 255 (≈16%) |
+
+Nenhum dos dois está errado sozinho; ter os dois é o defeito. Uma folha aberta pelo lançador e uma
+montada à mão na tela seguinte mostravam pegadores diferentes, e ninguém tinha como ver os dois lado
+a lado.
+
+A tinta que ficou é a do lançador, porque ela é **papel**: acompanha o tema e a paleta. O
+`textPrimary` a 16% é a mesma ideia derivada à mão — e derivar à mão é como se chega a dois valores.
+
+O respiro fica de fora, na regra do dono: *"o padding a gente arruma por fora, na tela, não dentro do
+componente"*.
+
+**Isto não fecha o pedido do pegador de 21/08** — aquele é sobre o pegador DELE, o porte e a tinta
+cheia. Este resolve a divergência interna deste produto.
+
 ## [0.81.0] — 2026-09-01
 
 ### `CoreflowPonto` — e a peça nasceu errada porque eu declarei antes de contar
