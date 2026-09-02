@@ -20,6 +20,35 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.79.0] — 2026-09-01
+
+### O CHROME entra — barra de topo, rodapé, folha e a página de resumo
+
+`CoreflowBarraDeTopo` · `CoreflowRodape` + `CoreflowItemDeAba` · `CoreflowFolha` ·
+`CoreflowPaginaDeResumo` + `CoreflowLinhaDeResumo`/`SecaoDeResumo`/`AcaoDeResumo`.
+
+São as quatro peças que emolduram toda tela deste produto, e a última era um TEMPLATE de página:
+compõe a barra, o `CoreflowResumoDaTransacao` que já morava aqui, as seções e o rodapé de CTA.
+
+### O gate da paleta pegou a SEGUNDA, e o padrão agora tem nome
+
+A folha pintava o fundo claro com `BoldColors.primary08` — o wash de marca, cravado na rampa do
+Bold. Mesma classe de defeito da etiqueta na versão anterior, e a segunda ocorrência é o que
+transforma um achado em regra:
+
+**cor de MARCA lida por `const` só é inofensiva onde existe uma paleta.** No app existia. Aqui não —
+e as duas peças passariam a tingir a folha e a etiqueta de um filho com o rosa do Bold. As duas
+passaram a ler `c.paleta`.
+
+Este é o valor de mudar de casa que nenhuma auditoria do lado de lá daria: **o gate do pacote é o
+primeiro leitor que não tem a paleta do Bold como pressuposto.**
+
+### E um gate veio junto com a peça
+
+`a_barra_de_topo_nao_tem_slot_cru_test.dart` morava no app e lia um arquivo de `lib/design_system/`.
+Gate que lê fonte só funciona no repo onde a fonte está — do outro lado ele viraria um caminho
+relativo que depende de quem tem os dois repos lado a lado. Mudou de repo com a peça.
+
 ## [0.78.0] — 2026-09-01
 
 ### Oito peças de uma vez — e o gate da paleta pegou a etiqueta na porta
