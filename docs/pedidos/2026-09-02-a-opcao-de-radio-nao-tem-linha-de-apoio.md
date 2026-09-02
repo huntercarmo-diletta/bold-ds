@@ -48,3 +48,26 @@ vocabulário novo na linguagem: é o vocabulário que a lista de opções não r
 - **um** sítio já usava `DilettaRadioList` inteira e não precisa de nada.
 
 Não peço a lista inteira mais flexível. Peço a linha de apoio na OPÇÃO, que é onde o dado mora.
+
+---
+
+## VEREDITO · ENTRA — pai `v0.160.0`, no mesmo dia
+
+`DilettaRadioOption(subtitle:)`, nulo por default.
+
+**Um sítio, e entra assim mesmo** — e o que decidiu foi justamente o argumento contrário: a tela já
+estava ENTREGUE por composição. Peça que só se justifica porque nada mais funciona é peça que se
+paga sozinha; esta se paga pelo que a composição perde, que é o que só ela sabe.
+
+Vieram três coisas junto, e nenhuma é o campo:
+
+- **o marcador sobe pro rótulo** quando há apoio. Centrado, ele desce pro meio do bloco e deixa de
+  apontar pra linha que NOMEIA a opção;
+- **o leitor de tela recebe as duas linhas** (`'Ag. 0252 · 925241, Empresa LTDA'`). Sem isso o apoio
+  resolveria só pra quem enxerga — e seria enfeite com nome de acessibilidade, porque quem não vê
+  continuaria escolhendo entre duas coisas iguais, que é o defeito inteiro;
+- **o apoio é `DilettaText` e não `Text` cru.** O gate de encapsulamento do pai pegou na hora, 161
+  contra o teto de 160, e estava certo.
+
+O gate do pai (`o_radio_diz_as_duas_coisas_test.dart`) inclui o caso SEM apoio: nada muda pra quem
+não pede.
