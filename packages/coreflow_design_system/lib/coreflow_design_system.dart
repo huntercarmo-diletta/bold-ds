@@ -79,6 +79,7 @@ export 'src/bold_botao.dart';
 export 'src/bold_botoes_de_navegacao.dart';
 export 'src/bold_campo_de_valor.dart';
 export 'src/bold_dinheiro.dart';
+export 'src/bold_disco.dart';
 export 'src/bold_abas.dart';
 export 'src/bold_cabecalho_da_home.dart';
 export 'src/bold_contratos.dart';

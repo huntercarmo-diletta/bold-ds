@@ -19,6 +19,8 @@ import 'package:flutter/material.dart';
 
 import 'bold_palette.dart';
 import 'bold_vinho.dart';
+import 'bold_radius.dart' show CoreflowRadius;
+import 'bold_scheme.dart' show CoreflowScheme;
 
 /// O vidro do app inteiro: fill chapado, traço de 1px, blur uniforme, zero sombra.
 ///
@@ -155,4 +157,53 @@ abstract final class CoreflowVidroDeEntrada {
   /// Lista vazia em vez de remover o símbolo: o call site continua legível, e quem procurar a
   /// sombra acha esta explicação.
   static const List<BoxShadow> sombra = [];
+}
+
+
+/// **CoreflowPainelDeEntrada** — a receita do [CoreflowVidroDeEntrada], montada.
+///
+/// A classe acima tem cinco membros — filtro, gradiente, traço, espessura, sombra — e **um único
+/// lugar no produto os junta**: o painel do login recorrente. Cinco estáticos com um cozinheiro só
+/// é receita que esqueceu de virar peça, e o `///` daquela tela já dizia o que faltava: *"deixarem
+/// de ser desenho de uma tela só"*.
+///
+/// A montagem tem uma ordem que não é óbvia e por isso vale morar aqui: o `ClipRRect` vem ANTES do
+/// `BackdropFilter`, porque o filtro sem recorte borra o retângulo inteiro e o canto arredondado
+/// aparece com o fundo vazando por fora.
+///
+/// Os estáticos ficam: quem precisar só do traço, ou só do filtro, continua alcançando.
+class CoreflowPainelDeEntrada extends StatelessWidget {
+  const CoreflowPainelDeEntrada({
+    super.key,
+    required this.child,
+    this.raio = CoreflowRadius.cardR,
+    this.padding = const EdgeInsets.all(DilettaSpacing.s4),
+  });
+
+  final Widget child;
+  final BorderRadius raio;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    final c = CoreflowScheme.of(context);
+    return ClipRRect(
+      borderRadius: raio,
+      child: BackdropFilter(
+        filter: CoreflowVidroDeEntrada.filtro,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            borderRadius: raio,
+            border: Border.all(
+                color: CoreflowVidroDeEntrada.traco(c.paleta, escuro: c.isDark),
+                width: CoreflowVidroDeEntrada.espessuraDoTraco),
+            gradient:
+                CoreflowVidroDeEntrada.gradiente(c.paleta, escuro: c.isDark),
+            boxShadow: CoreflowVidroDeEntrada.sombra,
+          ),
+          child: Padding(padding: padding, child: child),
+        ),
+      ),
+    );
+  }
 }

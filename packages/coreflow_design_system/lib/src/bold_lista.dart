@@ -1,11 +1,5 @@
 import 'package:diletta_design_system/diletta_design_system.dart'
-    show
-        DilettaDivider,
-        DilettaListTile,
-        DilettaSpotForma,
-        DilettaSpotIcon,
-        DilettaSpotState,
-        DilettaSpotType;
+    show DilettaAbsoluteColors, DilettaDivider, DilettaListTile, DilettaSpotForma, DilettaSpotIcon, DilettaSpotState, DilettaSpotType;
 import 'package:flutter/material.dart';
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaSpacing;
@@ -24,7 +18,36 @@ import 'bold_scheme.dart' show CoreflowScheme;
 
 /// Tom do [CoreflowSpot]. Semânticos usam as escalas (wash 07/08 + base 04).
 /// `secure` = ouro de blindagem (CPF Seguro / selo quântico).
-enum CoreflowTomDoSpot { primary, neutral, success, warning, danger, secure }
+enum CoreflowTomDoSpot {
+  primary,
+  neutral,
+  success,
+  warning,
+  danger,
+  secure,
+
+  /// **INFORMAÇÃO — o único tom que este produto pinta sozinho, e a razão é de contrato.**
+  ///
+  /// Os seis acima viram `DilettaSpotState` do pai e herdam o gate de contraste dele. O `info` não
+  /// tem estado lá, e o pedido que eu ia escrever se respondeu sozinho ao medir: **o pai não tem o
+  /// PAPEL `info`.** As famílias semânticas dele são sucesso, aviso, erro, cofre e parceiro; o
+  /// `info` é `papelExtra` da paleta DESTE produto, com 39 usos entre o pacote e o app.
+  ///
+  /// Pedir o estado sem o papel seria pedir uma família nova na linguagem por causa de um disco. O
+  /// veredito é o que o próprio protocolo chama de **MORA NO SEU DS** — e é este o seu DS.
+  ///
+  /// ## Os dois pares, medidos
+  ///
+  /// | modo | fundo | tinta | contraste |
+  /// |---|---|---|---|
+  /// | escuro | `info` a 18% | `info` | **3,95:1** |
+  /// | claro | `info` a 12% | `info` escurecido 20% | **4,69:1** |
+  ///
+  /// O piso é 3:1 (objeto gráfico), o mesmo que o pai cobra. Os 18% do escuro não são escolha: são
+  /// o número que `warning`, `success` e `secure` usam no outline dele — o tom novo entra na
+  /// receita que já existe em vez de inventar a dele.
+  info,
+}
 
 /// Conta BOLD — SpotIcon. **CASCA desde 21/08**: o desenho é o `DilettaSpotIcon` do pai.
 ///
@@ -73,7 +96,10 @@ class CoreflowSpot extends StatelessWidget {
   final double size;
 
   @override
-  Widget build(BuildContext context) => DilettaSpotIcon(
+  Widget build(BuildContext context) {
+    // O `info` não passa pelo pai: ele não tem o papel. Ver o `///` do enum.
+    if (tone == CoreflowTomDoSpot.info) return _info(context);
+    return DilettaSpotIcon(
         icon: CoreflowIcone.alias[icon] ?? icon,
         type: filled ? DilettaSpotType.fill : DilettaSpotType.outline,
         forma: forma,
@@ -84,9 +110,37 @@ class CoreflowSpot extends StatelessWidget {
           CoreflowTomDoSpot.warning => DilettaSpotState.warning,
           CoreflowTomDoSpot.danger => DilettaSpotState.error,
           CoreflowTomDoSpot.secure => DilettaSpotState.secure,
+          // Inalcançável: o `info` retorna antes, no `_info`. Escrito como caso e não como `_ =>`
+          // porque o `_` esconderia o próximo tom que entrar sem estado no pai.
+          CoreflowTomDoSpot.info => DilettaSpotState.normal,
         },
         size: size,
       );
+  }
+
+  /// O disco de INFORMAÇÃO, pintado aqui porque o papel é deste produto.
+  ///
+  /// Segue a mesma gramática dos outros seis: `filled` é o tom cheio com a tinta por cima, `outline`
+  /// é o tinte com a tinta no tom. Os alfas e o escurecimento estão medidos no `///` do enum.
+  Widget _info(BuildContext context) {
+    final c = CoreflowScheme.of(context);
+    final fundo = filled
+        ? c.info
+        : c.info.withValues(alpha: c.isDark ? 0.18 : 0.12);
+    final tinta = filled
+        ? DilettaAbsoluteColors.white
+        : (c.isDark ? c.info : Color.lerp(c.info, DilettaAbsoluteColors.black, 0.20)!);
+    return SizedBox(
+      width: size,
+      height: size,
+      child: DecoratedBox(
+        decoration: BoxDecoration(color: fundo, shape: BoxShape.circle),
+        child: Center(
+          child: CoreflowIcone(icon, size: size * 0.58, color: tinta),
+        ),
+      ),
+    );
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════════════════

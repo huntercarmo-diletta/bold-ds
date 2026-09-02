@@ -30,6 +30,9 @@ class CoreflowCartao extends StatelessWidget {
     this.sombra,
     this.larguraDaBorda,
     this.transicao,
+    this.gradiente,
+    this.forma,
+    this.fio,
     this.radius = CoreflowRadius.card,
     this.glass = false,
     this.highlight = false,
@@ -100,6 +103,36 @@ class CoreflowCartao extends StatelessWidget {
   /// não muda não tem o que transicionar, e animar por padrão custaria um `AnimatedContainer` em
   /// cada um dos ~90 sítios que nunca mudam.
   final Duration? transicao;
+
+  /// O GRADIENTE, quando a superfície é pintura de marca e não cor chapada.
+  ///
+  /// Três sítios: o cartão de tipo de conta quando escolhido, a arte do cartão físico e o vidro da
+  /// tela de entrada. Os três passam um valor de `CoreflowGradients` — o eixo existe pra que a
+  /// CAIXA seja a peça, não pra que o gradiente seja inventado na tela.
+  ///
+  /// Quando presente, ele vence [color]: um gradiente e uma cor chapada na mesma superfície é uma
+  /// das duas sendo ignorada, e melhor que seja por contrato do que por ordem de pintura.
+  final Gradient? gradiente;
+
+  /// A FORMA, quando o raio não é uniforme.
+  ///
+  /// [radius] cobre o caso comum — um `double` que vira os quatro cantos — e não cobre dois sítios
+  /// deste produto: o balão do trilho de aprovações (cantos vivos onde ele aponta) e a barra de
+  /// faixa da alçada (arredondada só à esquerda, porque ela é o COMEÇO de uma faixa contínua).
+  ///
+  /// Não é escada nova: é a mesma escada montada em quatro cantos diferentes. Quando presente,
+  /// vence [radius].
+  final BorderRadiusGeometry? forma;
+
+  /// O FIO DE UMA ARESTA SÓ — o divisor colado numa barra.
+  ///
+  /// Dois sítios, com o mesmo hairline em `c.border` e arestas opostas: o cabeçalho da lista de
+  /// personalização (embaixo) e a barra de seleção das notificações (em cima).
+  ///
+  /// **Por que não é `DilettaDivider`**: o divisor é um widget IRMÃO, e usá-lo trocaria a caixa por
+  /// `Column(barra + divisor)` — reestruturar a árvore por um fio. Aqui ele é o que já era: uma
+  /// aresta da própria superfície.
+  final BoxBorder? fio;
 
   /// ## A PÍLULA É ESTE CARTÃO COM `radius: CoreflowRadius.pill`
   ///
@@ -203,6 +236,22 @@ class CoreflowCartao extends StatelessWidget {
     // declara `width: 1` e não tem eixo — nem deveria ganhar um por causa de uma pergunta que este
     // produto ainda não respondeu.
     final larguraPropria = larguraDaBorda != null && larguraDaBorda != 1;
+    // Gradiente, forma livre ou fio de aresta: a superfície é desenhada aqui, porque o
+    // `DilettaCardSurface` do pai recebe cor chapada, raio uniforme e borda de quatro lados.
+    if (gradiente != null || forma != null || fio != null) {
+      final caixa = DecoratedBox(
+        decoration: BoxDecoration(
+          color: gradiente == null ? (color ?? c.surface) : null,
+          gradient: gradiente,
+          borderRadius: forma ?? (radius == 0 ? null : br),
+          border: fio ??
+              (semBorda ? null : Border.all(color: borderColor ?? c.border, width: larguraDaBorda ?? 1)),
+          boxShadow: sombra,
+        ),
+        child: inner,
+      );
+      return caixa;
+    }
     if (transicao != null) return _animado(context, c, br, inner);
     final solida = DilettaCardSurface(
       vidro: false,

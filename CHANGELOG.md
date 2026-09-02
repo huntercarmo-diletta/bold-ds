@@ -20,6 +20,48 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.92.0] — 2026-09-02
+
+### As seis peças que fecharam o desenho das telas — de 22 decorações para 5
+
+A adoção do app tinha parado em 22 decorações "declaradas com razão". Medindo o que cada uma era, a
+maioria não precisava de razão: precisava de peça. Ficaram **cinco**, e as cinco são `CustomPainter`.
+
+**`CoreflowDisco`** — o círculo que SEGURA alguma coisa, com anel opcional. Seis sítios desenhavam
+esta forma à mão e nenhum cabia no `CoreflowPonto` (que não tem dentro) nem no `CoreflowSpot` (que
+só segura glifo): dois nós de trilho, dois selos de canto, um passo numerado e o anel do radar.
+
+A divergência entre eles — 18, 24, 26, 26, 34 de diâmetro; anel de 1, 1,4, 1,5 e 2 — **está nos
+números, e número é parâmetro.** Foi essa a pergunta que fez a peça nascer depois de eu ter recusado
+duas vezes: os dois trilhos continuam sendo componentes diferentes (um conta quem aprovou, o outro
+onde está a disputa), mas o NÓ dos dois é o mesmo objeto, e ele estava desenhado quatro vezes além
+deles.
+
+`tamanho` nulo dimensiona pelo filho, e isso não é conveniência: o anel do radar envolve o avatar, e
+quem sabe o tamanho do avatar é o avatar. **O `Center` sai junto quando o tamanho é nulo** — ele
+expande pro espaço disponível, e o disco que devia medir 48 media 800 × 600.
+
+**`CoreflowTomDoSpot.info`** — e a resposta veio de medir, não de pedir. Eu ia escrever um pedido ao
+pai por `DilettaSpotState.info`, e ao conferir achei que **o pai não tem o PAPEL `info`**: as
+famílias dele são sucesso, aviso, erro, cofre e parceiro. O `info` é `papelExtra` deste produto, com
+39 usos. Pedir o estado sem o papel seria pedir uma família nova na linguagem por causa de um disco,
+e o veredito honesto do meu próprio pedido é **MORA NO SEU DS**.
+
+Os dois pares vêm medidos, porque pintar aqui é não herdar o gate de lá: escuro `info` a 18% →
+**3,95:1**; claro `info` a 12% com a tinta escurecida 20% → **4,69:1**. Piso de 3:1, o mesmo do pai.
+Os 18% não são escolha: é o número que `warning`, `success` e `secure` já usam no outline dele.
+
+**`CoreflowCartao`: `gradiente`, `forma` e `fio`** — as três formas que a escada não cobre. Três
+gradientes (tipo de conta escolhido, arte do cartão, vidro da entrada), dois raios não uniformes (o
+balão do trilho, que aponta pelo canto vivo; a barra de faixa, arredondada só à esquerda porque é o
+COMEÇO de uma faixa contínua) e dois fios de uma aresta só.
+
+**`CoreflowPainelDeEntrada`** — o `CoreflowVidroDeEntrada` tinha cinco estáticos e **um único lugar
+que os juntava**. Receita com um cozinheiro só é peça que esqueceu de virar widget, e o `///` da
+tela já dizia o que faltava: *"deixarem de ser desenho de uma tela só"*. A ordem da montagem mora
+aqui porque não é óbvia: o `ClipRRect` vem ANTES do `BackdropFilter`, senão o filtro borra o
+retângulo inteiro e o canto arredondado vaza.
+
 ## [0.91.0] — 2026-09-02
 
 ### `CoreflowCartao(transicao:)` — a superfície que MUDA, e só ela
