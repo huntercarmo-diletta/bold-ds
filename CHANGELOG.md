@@ -20,6 +20,36 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.88.0] — 2026-09-01
+
+### O pai sobe de `v0.148.0` pra `v0.152.0` — quatro versões de uma vez, e uma delas era um teste vermelho
+
+O salto veio junto com o pedido do rádio, e o que ele traz não é só a peça nova:
+
+- **`v0.149.0`** — a pílula de nível estava duplicada dentro do banner de status, e as duas
+  divergiam em cinco pontos. A borda do chip SOME (ela nunca foi da linguagem) e o véu passa de cor
+  absoluta pra papel;
+- **`v0.150.0`** — `DilettaEscalaDoEstado { tela, item }`: o estado tem ESCALA, e o que faltava não
+  era um quinto irmão;
+- **`v0.151.0`** — a barra de topo virou `PreferredSizeWidget`, a co-marca aceita logo de parceiro,
+  o stepper ganhou o terceiro estado, e três degraus entraram na grade;
+- **`v0.151.1`** — **o calendário abria no mês do RELÓGIO**. O `///` dele prometia o mês do `hoje`
+  injetado e o código caía em `DateTime.now()`. O teste `o CALENDÁRIO diz qual dia é hoje` vinha
+  falhando *"nos dois repos que consomem esta linguagem"* desde a virada do mês — e este era um
+  deles, com o conserto disponível e ninguém tendo subido.
+
+235 testes verdes contra o pai novo, sem uma linha de migração.
+
+### `DilettaRadioMark` chegou, e ele fecha três receitas em uma
+
+Pedido escrito e atendido no mesmo dia (`ds-diletta v0.152.0`): o marcador de rádio era privado
+dentro do `DilettaRadioList`, e nem toda escolha cabe numa lista. Duas telas deste produto
+desenhavam o anel do zero, com receitas diferentes da dele e **diferentes entre si** — e uma delas
+engrossava o anel quando escolhido enquanto a outra engrossava quando NÃO escolhido.
+
+Duas telas do mesmo app discordando sobre o que a espessura significa é o argumento inteiro a favor
+da peça.
+
 ## [0.87.0] — 2026-09-01
 
 ### `CoreflowCartao(larguraDaBorda:)` — um eixo que é uma PERGUNTA, e ele sai quando ela for respondida
