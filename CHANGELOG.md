@@ -20,6 +20,22 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.85.0] — 2026-09-01
+
+### `CoreflowHeroi` — cinco telas escreviam a mesma coisa, caractere por caractere
+
+O spot grande com a auréola da marca por trás. O aguardo do KYC, a conta aprovada, os dois convites
+de operador e a configuração de passkey abriam com ele, e as cinco escreviam o mesmo
+`DecoratedBox` circular com `CoreflowElevacao.auroleo(esquema.primary)` embrulhando um
+`DilettaSpotIcon.heroi` no estado `primary`.
+
+**Cinco cópias idênticas não são cinco decisões, são uma peça que faltou.**
+
+A razão de a auréola ficar por FORA continua valendo, e ela estava escrita em comentário nas cinco:
+sombra de marca é receita da paleta, não da peça do pai — ele não tem eixo pra ela e nem deveria,
+porque a escada de elevação dele não é esta. A cor sai do papel `primary` do esquema, então **um
+filho já ganha a auréola dele** sem tocar nesta peça.
+
 ## [0.84.0] — 2026-09-01
 
 ### `CoreflowCorpoDeFolha` — treze folhas montadas à mão, e o raio errado nas treze

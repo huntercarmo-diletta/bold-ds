@@ -63,6 +63,7 @@ export 'src/bold_rodape.dart';
 export 'src/bold_campo_de_texto.dart';
 export 'src/bold_cartao.dart';
 export 'src/bold_etiqueta.dart';
+export 'src/bold_heroi.dart';
 export 'src/bold_ilustracao.dart';
 export 'src/bold_lista.dart';
 
