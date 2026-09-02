@@ -160,7 +160,7 @@ delegar e sobrou o raio — 22 aqui, `r24` cravado na variante. A linha do seu l
 Resposta a CHAMADO e a CONSELHO fica **anexada ao próprio aviso**, e não em `pedidos/` — o ledger do
 pai conta o que está em `pedidos/`, e resposta ali entra na contagem como pedido novo.
 
-## O ESTADO EM 2026-09-02: 86 arquivos, 86 fechados, NENHUM aberto
+## O ESTADO EM 2026-09-02: 87 arquivos, 86 fechados, 1 registrado sem urgência
 
 O último a fechar foi **`a seleção engrossa a borda em cinco telas`**, e ele não era para o pai: era
 para o DONO. A resposta dele foi *"vamos manter tudo no DS"* — que não escolheu entre as duas saídas
@@ -184,6 +184,7 @@ deste DS, e no claro os dois rosas são diferentes. Ele estava certo na forma e 
 | o gradiente da marca tem três stops | **nenhuma das três saídas** — a marca virou a CURVA (oito paradas do lockup), não um número de stops |
 | a seleção engrossa a borda em cinco telas | **do DONO, e não do pai**: *"vamos manter tudo no DS"*. Virou `selecionado` + `bordaReforcada` + `CoreflowAnelDeEscolha` na `v0.93.0` |
 | a opção de rádio não tem linha de apoio | **ENTRA no mesmo dia** (pai `v0.160.0`). Pedido de manhã, respondido de tarde: um sítio, e entrou porque a tela já estava ENTREGUE por composição — e é o que a composição PERDE que paga a peça |
+| não há glifo de LUGAR no conjunto | **registrado, não pedido.** O substituto (`wave-light`) diz MELHOR que o alfinete que faltava, porque a linha fala de região aproximada. Fica o número — zero em 332 nomes — pra quando o pedido chegar de verdade |
 
 **O do `info` é o mais útil de ler**, porque a resposta contradiz quem perguntou: eu ia pedir e, ao
 conferir o pai antes de escrever, achei que o pedido não se sustentava. O trabalho de medir antes de
