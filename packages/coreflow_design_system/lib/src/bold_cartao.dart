@@ -29,6 +29,7 @@ class CoreflowCartao extends StatelessWidget {
     this.semBorda = false,
     this.sombra,
     this.larguraDaBorda,
+    this.transicao,
     this.radius = CoreflowRadius.card,
     this.glass = false,
     this.highlight = false,
@@ -84,6 +85,21 @@ class CoreflowCartao extends StatelessWidget {
   ///
   /// Quando a pergunta for respondida, este campo sai e as cinco viram `borderColor`.
   final double? larguraDaBorda;
+
+  /// **A TRANSIÇÃO da superfície** — quando o cartão MUDA, e não quando ele aparece.
+  ///
+  /// Três superfícies de escolha deste produto eram `AnimatedContainer` desenhado à mão: o cartão de
+  /// tipo de conta, o ladrilho do editor de menu e o passo da selfie do KYC. As três animam a mesma
+  /// coisa — cor de fundo e cor de borda mudando quando a pessoa escolhe —, com 150 e 200 ms.
+  ///
+  /// Não é enfeite: uma superfície que troca de cor sem transição LÊ como redesenho, e a pessoa
+  /// perde o vínculo entre o toque dela e o que mudou. Com transição, o toque e a mudança são o
+  /// mesmo evento.
+  ///
+  /// `null` — o default — não anima, que é o comportamento de todos os outros cartões. Um cartão que
+  /// não muda não tem o que transicionar, e animar por padrão custaria um `AnimatedContainer` em
+  /// cada um dos ~90 sítios que nunca mudam.
+  final Duration? transicao;
 
   /// ## A PÍLULA É ESTE CARTÃO COM `radius: CoreflowRadius.pill`
   ///
@@ -187,6 +203,7 @@ class CoreflowCartao extends StatelessWidget {
     // declara `width: 1` e não tem eixo — nem deveria ganhar um por causa de uma pergunta que este
     // produto ainda não respondeu.
     final larguraPropria = larguraDaBorda != null && larguraDaBorda != 1;
+    if (transicao != null) return _animado(context, c, br, inner);
     final solida = DilettaCardSurface(
       vidro: false,
       radius: br,
@@ -217,6 +234,30 @@ class CoreflowCartao extends StatelessWidget {
       child: solida,
     );
   }
+}
+
+extension on CoreflowCartao {
+  /// A versão que TRANSICIONA, e ela desenha a superfície aqui em vez de delegar.
+  ///
+  /// `DilettaCardSurface` monta um `Container` comum: pra animar a decoração seria preciso um
+  /// `AnimatedContainer` lá dentro, e isso é um eixo do pai por causa de três sítios deste produto.
+  /// Aqui a superfície sólida é uma `BoxDecoration` de três campos — cor, raio, borda —, e os três
+  /// são os mesmos que o `corSolida`/`bordaSolida` dele recebe.
+  Widget _animado(BuildContext context, CoreflowScheme c, BorderRadius br, Widget filho) =>
+      AnimatedContainer(
+        duration: transicao!,
+        curve: Curves.easeOut,
+        decoration: BoxDecoration(
+          color: color ?? c.surface,
+          borderRadius: br,
+          border: semBorda
+              ? null
+              : Border.all(
+                  color: borderColor ?? c.border, width: larguraDaBorda ?? 1),
+          boxShadow: sombra,
+        ),
+        child: filho,
+      );
 }
 
 /// O material do card de vidro deste app: o tinte e o traço em gradiente do destaque.

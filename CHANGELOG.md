@@ -20,6 +20,25 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.91.0] — 2026-09-02
+
+### `CoreflowCartao(transicao:)` — a superfície que MUDA, e só ela
+
+Três superfícies de escolha do app eram `AnimatedContainer` desenhado à mão: o cartão de tipo de
+conta, o ladrilho do editor de menu e o passo da selfie do KYC. As três animam a mesma coisa — fundo
+e borda mudando quando a pessoa escolhe —, com 150 e 200 ms.
+
+Não é enfeite: **uma superfície que troca de cor sem transição LÊ como redesenho**, e a pessoa perde
+o vínculo entre o toque dela e o que mudou.
+
+`null` é o default e não anima, que é o comportamento dos outros ~90 cartões. Um cartão que não muda
+não tem o que transicionar, e animar por padrão custaria um `AnimatedContainer` em cada um deles.
+
+A versão que transiciona desenha a superfície aqui em vez de delegar ao `DilettaCardSurface` — ele
+monta um `Container` comum, e animar a decoração lá dentro seria um eixo do pai por causa de três
+sítios deste produto. A borda entra na decoração animada junto: sem isso o fundo transiciona e o
+contorno pula, que é pior que não animar nada.
+
 ## [0.90.0] — 2026-09-02
 
 ### O que o merge de 736 commits trouxe — e as três duplicatas que ele revelou
