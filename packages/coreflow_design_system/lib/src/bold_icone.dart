@@ -42,8 +42,12 @@ class CoreflowIcone extends StatelessWidget {
 
   /// Nome semântico → arquivo do conjunto do pai (kebab, pesos light/solid do FontAwesome).
   static const Map<String, String> alias = {
-    // marca Pix — `pix` pro chrome de ícone, `pix-solid` pra marca grande/herói
-    'pix': 'pix-light', 'pix-solid': 'pix-solid',
+    // marca Pix — `pix` pro chrome de ícone. O `'pix-solid': 'pix-solid'` SAIU em 01/09: era
+    // entrada de identidade, e ela não traduzia nada. Pior que inútil — um gate do app cobra que
+    // apelido não atravesse pra campo de ícone de peça do pai (lá ele desenha NADA em silêncio), e
+    // não tem como distinguir uma chave que traduz de uma que não traduz. `comoOPaiChama` devolve o
+    // nome cru pra quem não está no mapa, então o `pix-solid` continua funcionando por todo lado.
+    'pix': 'pix-light',
     // chrome / navegação
     'home': 'house-light', 'home-solid': 'house-solid',
     'pay': 'file-invoice-light', 'pay-solid': 'file-invoice-solid',

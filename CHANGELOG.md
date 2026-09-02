@@ -20,6 +20,30 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.81.0] — 2026-09-01
+
+### `CoreflowPonto` — e a peça nasceu errada porque eu declarei antes de contar
+
+O sinal redondo, sem conteúdo, ao lado de um rótulo que diz o quê. Ele apareceu na varredura das
+telas do app: **126 `BoxDecoration`**, e o terceiro maior grupo era `círculo · color + shape`. Abrindo
+os quinze, três coisas usavam a mesma forma — spot com glifo (que é `DilettaSpotIcon`), disco de
+seleção de calendário (que é `DilettaCalendar`), e o ponto, que não existia.
+
+**A primeira versão saiu com uma escada de três degraus (6 · 8 · 10) que eu escrevi ANTES de medir.**
+A contagem veio **3 · 6 · 7 · 7 · 8 · 10**. Snapar os seis numa escada de três mudaria pixel em
+quatro telas pra ganhar uma escada que ninguém pediu.
+
+O diâmetro ficou livre, com o default no valor mais comum, e a dispersão ficou escrita como dívida
+aberta: **um produto com seis valores é um produto sem padrão, não uma linguagem sem escada.** Se um
+segundo produto medir a mesma dispersão, aí a escada tem número dos dois lados e vira pedido.
+
+### O apelido de identidade saiu do mapa do ícone
+
+`'pix-solid': 'pix-solid'` não traduzia nada, e era pior que inútil: um gate do app cobra que apelido
+não atravesse pra campo de ícone de peça do pai — lá ele desenha NADA em silêncio — e o gate não tem
+como distinguir a chave que traduz da que não traduz. `comoOPaiChama` devolve o nome cru pra quem não
+está no mapa, então o `pix-solid` segue funcionando.
+
 ## [0.80.0] — 2026-09-01
 
 ### As duas PÁGINAS deste produto entram — e elas nunca estiveram na pasta que o gate media
