@@ -22,7 +22,15 @@ void main() {
     final cfg = jsonDecode(File('.dart_tool/package_config.json').readAsStringSync());
     final pkg = (cfg['packages'] as List)
         .firstWhere((e) => e['name'] == 'diletta_design_system');
-    return Uri.parse(pkg['rootUri'] as String).toFilePath();
+    // `rootUri` relativo é relativo ao ARQUIVO `package_config.json`, e não ao diretório de onde o
+    // teste roda — está no spec. Com o pai vindo do cache do git a diferença não aparece, porque
+    // ali ele é absoluto; com um `pubspec_overrides.yaml` de caminho ele é `../../…` e resolver
+    // contra o CWD erra por níveis — e o teste acusa que "a arte sumiu do pacote do pai".
+    return File('.dart_tool/package_config.json')
+        .absolute
+        .uri
+        .resolve('${pkg['rootUri']}/')
+        .toFilePath();
   }
 
   final rampa = p.DilettaIllustrationBrand.rampaDe(BoldPalette.bold, marca: CoreflowTheme.marca);
@@ -39,7 +47,7 @@ void main() {
 
   test('e nenhuma das artes dele que nós montamos sai com azul de marca', () {
     // As duas que adotamos, nos dois temas. Arte de verdade, do caminho de verdade.
-    final dir = Directory('${raizDoPai()}/assets/illustrations');
+    final dir = Directory('${raizDoPai()}assets/illustrations');
     final arquivos = ['key_word_light', 'key_word_dark', 'no_data_light', 'no_data_dark'];
     var pinturasTraduzidas = 0;
 
@@ -81,7 +89,7 @@ void main() {
     // O gate dele varre as 59 e é a defesa de verdade. Este aqui é a MINHA: ele mede na entrada
     // dos assets dele, e eu meço na entrada de uma versão nova — as duas coisas falham em momentos
     // diferentes, e a segunda é a que me avisa antes de a tela ficar em branco.
-    final dir = Directory('${raizDoPai()}/assets/illustrations');
+    final dir = Directory('${raizDoPai()}assets/illustrations');
     final vazio = RegExp(r'<clipPath id="[^"]+">\s*</clipPath>');
     final quebradas = <String>[];
     var conferidas = 0;

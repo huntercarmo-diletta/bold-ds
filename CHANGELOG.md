@@ -20,6 +20,28 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.94.0] — 2026-09-02
+
+### O pai sobe pra `v0.160.0`, e vem a linha de apoio no rádio
+
+`DilettaRadioOption(subtitle:)`, pedida hoje e respondida hoje. A tela de proximidade do app parou
+de compor a linha de rádio à mão e passou a usar `DilettaRadioList` inteira — o
+`inMutuallyExclusiveGroup` e o alinhamento do marcador com duas linhas voltaram a ser da peça.
+
+Vêm junto, das `v0.156.0` a `v0.159.0` do pai: o logo que pintava com a cor do parceiro (corrigido),
+a cor do logo saindo do plugue de marca, a tinta assumida declarada por modo, e a razão do
+`@Deprecated` do `heroLift` reescrita.
+
+### Um teste deste pacote lia o pai pelo caminho errado
+
+`a_arte_do_pai_sai_na_nossa_cor_test.dart` resolvia o `rootUri` do `package_config.json` contra o
+CWD. O spec diz que ele é relativo ao ARQUIVO. Com o pai vindo do cache do git a diferença não
+aparece — ali o `rootUri` é absoluto —, mas com um override de caminho ele erra por níveis, e o
+teste acusava *"a arte sumiu do pacote do pai"* sobre um arquivo que está lá.
+
+**É o segundo teste da família com o mesmo defeito hoje**; o outro é o dos glifos, no app. Os dois
+diziam que o pai tinha perdido um arquivo, e os dois estavam lendo a pasta errada.
+
 ## [0.93.0] — 2026-09-02
 
 ### `selecionado` entra, `larguraDaBorda` sai, e o produto passa a dizer ESCOLHIDO de um jeito só

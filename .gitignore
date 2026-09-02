@@ -54,3 +54,4 @@ packages/*/pubspec.lock
 # fora daqui. Commitado, ele já produziu o modo de falha exato: conta de TRABALHO no cache versionado e
 # token PESSOAL no global dá `Authentication error [code: 10000]`, que não diz nada sobre conta trocada.
 .wrangler/
+pubspec_overrides.yaml
