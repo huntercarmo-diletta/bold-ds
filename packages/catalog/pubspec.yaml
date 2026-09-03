@@ -3,7 +3,7 @@ description: >-
   Catálogo do DS do Conta BOLD. É CONSUMIDOR do design system, igual ao app — não tem
   componente próprio. O motor (barra, board, compositor, codegen) vem do pai por tag.
 publish_to: none
-version: 0.26.0
+version: 0.27.0
 
 environment:
   sdk: ">=3.4.0 <4.0.0"
