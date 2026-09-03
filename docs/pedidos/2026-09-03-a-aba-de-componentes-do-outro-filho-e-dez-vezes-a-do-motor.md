@@ -107,3 +107,21 @@ piorar dois filhos pra igualar um.
    escrita à mão mostra o componente que quem escreveu quis mostrar, do jeito que ele quis; uma
    seção derivada mostra o que o `BlockDef` declara. **Isso é medição a fazer, não promessa a dar** —
    e é a razão de eu não estar prometendo "100%", que é a palavra do pedido.
+
+---
+
+## ENTREGUE · motor `v0.110.0`, e este filho já consome
+
+O dono decidiu com a contradição na mesa: *"a vitrine do CPF vira o novo motor"*. A aba passou a ter
+dois modos, com a **vitrine por default** — todo componente da categoria desenhado, um debaixo do
+outro, com cabeçalho de grupo e contagem. O índice ficou, atrás de uma pílula.
+
+Este filho subiu pra `v0.110.0` sem mudar **uma linha** do plugue: 92 testes verdes. É a prova de
+que a forma era derivável — se ela dependesse de declaração nova, a subida teria custado trabalho
+aqui, e aí não seria forma, seria outro pedido.
+
+### O que continua faltando, e não é meu
+
+**O filho A precisa passar a usar a aba do motor.** Enquanto ele tiver as 3.844 linhas dele, "igual
+pra todos" é uma frase sobre um filho só — e o pedido inteiro nasceu de os dois catálogos não se
+parecerem. Metade disso o motor resolveu; a outra metade é ele adotar.
