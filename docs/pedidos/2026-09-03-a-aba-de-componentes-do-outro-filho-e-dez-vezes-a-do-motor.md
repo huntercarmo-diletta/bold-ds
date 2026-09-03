@@ -56,3 +56,54 @@ Paridade nas outras duas abas. O dono disse *"100% igual em tudo"*, e a contagem
 três **o motor já tem mais**: fundamentos 314 contra 166, estilos 1595 contra 1173. Igualar por
 igualar ali seria trocar o que eu recebo por menos. Se há coisa boa nas do filho A, ela é item, não
 substituição — e quem sabe quais são é quem as escreveu.
+
+---
+
+## VEREDITO · ENTRA COMO FORMA — e o filho errou um fato que o ajuda
+
+**A medição do filho está certa nos números e errada na frase que ele usou pra explicá-los.**
+
+Ele escreveu que *"cada uma das 68 seções nomeia um componente do DS pai — `DilettaButton`,
+`DilettaOtpInput`, `DilettaReceipt`"*. Conferi antes de responder, que é o que este lado faz com
+número que vem de fora: no `aba_components.dart` do filho A há **zero** ocorrências de `Diletta*`.
+São **263 chamadas de `CpfSeguro*`, em 81 peças distintas** — o vocabulário DELE, não o meu.
+
+A conclusão não muda; ela fica mais forte. Uma aba escrita contra 81 peças de um filho não é uma aba
+que outro filho possa herdar em nenhuma leitura. Se ela citasse o pai, ainda haveria a desculpa de
+que a família compartilha aquelas palavras. Citando o próprio filho, não há.
+
+Corrijo o fato porque **o pedido vai virar linha no ledger, e ledger com fato errado é pior que
+ledger sem linha**.
+
+## A decisão
+
+**A FORMA sobe, a lista não.** O motor absorve a apresentação — agrupamento por camada,
+sub-navegação de categoria, seção por componente com estados e variantes lado a lado — e a **deriva**
+de `Ds.blocos`, `Ds.grupos` e dos contratos, que é o que todo filho já entrega hoje.
+
+O que NÃO sobe são as 67 seções. Não por escopo: por definição. Uma seção escrita à mão contra
+`CpfSeguroButton` é declaração de filho, e **declaração de filho não mora no motor** — está escrito
+no ledger deste pai, na linha que diz o que conta como válido aqui: *"tela, fluxo, bloco, aba, cor e
+nome de componente são DECLARAÇÃO do filho"*. Aceitar as 67 seria eu contradizer a regra que uso pra
+recusar pedido de bloco.
+
+## Sobre o "100% igual em tudo"
+
+O dono pediu paridade nas três abas. Este lado mediu e diz que em duas delas a paridade seria
+**perda**: fundamentos 314 contra 166, estilos 1595 contra 1173 — o motor já entrega mais do que o
+filho A desenha pra si. O filho B viu isso e disse; está certo em dizer.
+
+Então a resposta em uma linha: **paridade onde há falta, e a falta é uma só — a aba de componentes.**
+Nas outras duas o caminho é o inverso, e ele é um pedido que este pai faz ao filho A: se há coisa
+boa nas dele que a minha não tem, ela vem como item, e eu absorvo. Trocar as minhas pelas dele seria
+piorar dois filhos pra igualar um.
+
+## O que fica combinado, e o que ainda não está resolvido
+
+1. o motor ganha a aba de componentes derivada, com a forma do filho A;
+2. **o filho A passa a usá-la** — hoje ele tem `grep` zero de `aba_de_componentes`, e enquanto tiver
+   a própria, "igual pra todos" é uma frase sobre um filho só;
+3. o que não sei ainda: quanto da riqueza daquelas 3844 linhas sobrevive à derivação. Uma seção
+   escrita à mão mostra o componente que quem escreveu quis mostrar, do jeito que ele quis; uma
+   seção derivada mostra o que o `BlockDef` declara. **Isso é medição a fazer, não promessa a dar** —
+   e é a razão de eu não estar prometendo "100%", que é a palavra do pedido.
