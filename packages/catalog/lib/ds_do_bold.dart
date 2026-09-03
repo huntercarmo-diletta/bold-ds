@@ -41,8 +41,8 @@ import 'telas_do_bold.dart';
 // | `icone` | `CoreflowIcone` **185** | `DilettaIcon` 0 | produto |
 // | `campo` | `CoreflowCampoDeTexto` **95** | `DilettaInput` 0 | produto |
 // | `avatar` | `CoreflowAvatar` 6 | `DilettaAvatar` 8 | produto (o vidro é o default daqui) |
-// | `comprovante` | `CoreflowComprovante` **2** | `DilettaReceipt` 0 | produto |
-// | `ilustracao` | `CoreflowIlustracao` 0 | acessório do pai 0 | produto (nenhum dos dois tem sítio) |
+// | `comprovante` | `CoreflowComprovante` **2** | `DilettaReceipt` 0 | produto (as ~90 `DilettaReceiptRow` são o DADO que ele recebe) |
+// | `ilustracao` | `CoreflowIlustracao` **34** | `DilettaIllustration` é a ARTE, não rival | produto |
 // | `linha` | `CoreflowLinhaDeLista` 16 | `DilettaAppListRow` **215** | **o PAI** |
 // | `lista` | `CoreflowGrupoDeLista` 1 | `DilettaAppList` **106** | **o PAI** |
 //
@@ -52,6 +52,11 @@ import 'telas_do_bold.dart';
 //
 // O nono par não era par: o `aviso` é o banner COM ILUSTRAÇÃO do pai e o `CoreflowAviso` é alerta em
 // linha com intenção. Papéis diferentes, blocos diferentes.
+//
+// **Duas células desta tabela nasceram erradas e foram corrigidas em 03/09.** `CoreflowIlustracao`
+// estava com 0 e tem 34 sítios: a régua contava `Nome(` e a peça só se escreve por construtor
+// nomeado (`.estadoVazio`, `.doPai`). Contar a forma errada não acusa — devolve zero e parece
+// resposta.
 
 /// Nomes de preset de texto que o editor oferece. Só os que uma tela usa de verdade —
 /// oferecer 28 estilos num seletor é oferecer nenhum.

@@ -20,6 +20,34 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.98.0] — 2026-09-03
+
+### Removido — `CoreflowAlvoFantasma`, a única peça do DS que nenhuma tela alimentava
+
+O pedido foi "limpa o que não é usado". A medida: **95 tipos públicos**, 88 escritos no app, 7 que só
+existem por dentro (as classes de token e as peças que outra peça compõe). Sobrou **uma**, e ela não
+era peça inteira parada: era um recurso ligado a um componente vivo. O `CoreflowVisorDeCodigo` aceitava
+uma lista de alvos FANTASMA — detecções falsas e decorativas, pra o scanner não parecer travado
+enquanto procura. O scanner do app existe, chama o visor, e **nunca passou `fantasmas`** desde que a
+peça entrou no pacote em 22/08. O único lugar que construía a classe era um teste deste repo.
+
+Saíram 66 linhas: a classe, o parâmetro nas duas pontas e `_desenhaFantasmas`. Sai junto o
+`DateTime.now()` que morava dentro do `CustomPainter` — o cabeçalho do arquivo diz que o visor *"não
+tem controlador próprio, o que o deixa testável sem relógio"*, e essa era a única coisa dentro dele
+que lia relógio. **Recurso que nada alimenta não é capacidade, é doc mentindo sobre o componente.**
+
+E com ele sai o quarto papel: os literais de cor viraram `warning04`, `success05`, `error05` e
+`warning06`, e o `warning06` só era lido pelo fantasma. O visor lê **três** cores de estado agora.
+
+Quem já usa `fantasmas:` quebra na compilação — ninguém usa, e é isso que o app confirma ao subir.
+
+### O `0` que a régua devolveu, e não era zero
+
+A tabela do plugue (v0.97.0) dizia `CoreflowIlustracao` **0 sítios**. A peça tem **34**. A régua
+contava `Nome(`, e essa peça só se escreve por construtor nomeado: `.estadoVazio` (28) e `.doPai` (6).
+**Contar a forma errada não acusa — devolve zero e parece resposta.** A célula está corrigida na
+tabela, com a razão do erro escrita ao lado dela.
+
 ## [0.97.0] — 2026-09-03
 
 ### O catálogo passou a falar o DS inteiro: 23 peças de 62 viraram 60

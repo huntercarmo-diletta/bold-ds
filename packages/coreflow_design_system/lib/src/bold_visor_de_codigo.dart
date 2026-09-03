@@ -12,7 +12,7 @@
 /// O que entra é o que é DESENHO e o que é CONHECIMENTO:
 ///
 /// - **[CoreflowVisorDeCodigo]**, o overlay: cantos em colchete, varredura com rastro, o segundo quadro
-///   em saltos de câmera de cinema, o rótulo com linha de chamada, e os alvos fantasma. 100%
+///   em saltos de câmera de cinema e o rótulo com linha de chamada. 100%
 ///   `CustomPainter`, zero dependência;
 /// - **[CoreflowFormatosDeCodigo]**, a lista de formatos que este produto precisa ler. É a peça de
 ///   conhecimento mais fácil de perder e a que já custou um bug de QA — o boleto brasileiro é ITF
@@ -23,7 +23,7 @@
 ///
 /// **Quatro literais de cor viraram zero.** Eram âmbar `#FFB300`, verde neon `#39FF14`, vermelho
 /// `#FF3B30` e um amarelo claro de fantasma. Viraram `warning04`, `success05`, `error05` e
-/// `warning06`.
+/// `warning06` — e em 03/09 sobraram três: o alvo fantasma saiu, e com ele o `warning06`.
 ///
 /// O verde neon é a mudança que se vê: ele era estética de "visão de máquina" e passa a ser o
 /// verde da marca. Está registrado porque é escolha, não descuido — a alternativa era um quinto
@@ -107,26 +107,6 @@ class CoreflowAlvo {
   DateTime? _adquiridoEm;
 }
 
-/// Uma detecção FALSA e decorativa: a caixa externa fecha sobre um retângulo hipotético e some no
-/// meio do movimento, como se concluísse que não há nada ali.
-///
-/// Existe porque um visor que só reage quando acha código parece quebrado enquanto procura.
-class CoreflowAlvoFantasma {
-  CoreflowAlvoFantasma({
-    required this.cx,
-    required this.cy,
-    required this.largura,
-    required this.altura,
-    required this.inicio,
-  });
-
-  /// Centro e tamanho normalizados (0..1) pela LARGURA da tela.
-  final double cx, cy, largura, altura;
-  final DateTime inicio;
-
-  static const Duration duracao = Duration(milliseconds: 950);
-}
-
 /// O visor. Overlay puramente visual, desenhado sobre o preview da câmera.
 class CoreflowVisorDeCodigo extends StatelessWidget {
   const CoreflowVisorDeCodigo({
@@ -134,7 +114,6 @@ class CoreflowVisorDeCodigo extends StatelessWidget {
     required this.alvos,
     required this.fase,
     this.descendo = true,
-    this.fantasmas = const [],
     this.tamanhoDaImagem = Size.zero,
   });
 
@@ -145,7 +124,6 @@ class CoreflowVisorDeCodigo extends StatelessWidget {
   final double fase;
 
   final bool descendo;
-  final List<CoreflowAlvoFantasma> fantasmas;
 
   /// Tamanho do frame analisado, pra mapear os cantos. `Size.zero` ⇒ retículo central.
   final Size tamanhoDaImagem;
@@ -154,7 +132,7 @@ class CoreflowVisorDeCodigo extends StatelessWidget {
   Widget build(BuildContext context) {
     return DilettaDevInfo(
       component: 'visorDeCodigo',
-      props: {'alvos': '${alvos.length}', 'fantasmas': '${fantasmas.length}'},
+      props: {'alvos': '${alvos.length}'},
       tokens: const ['palette.warning04', 'palette.success05', 'palette.error05'],
       child: CustomPaint(
         size: Size.infinite,
@@ -163,7 +141,6 @@ class CoreflowVisorDeCodigo extends StatelessWidget {
           alvos: alvos,
           fase: fase,
           descendo: descendo,
-          fantasmas: fantasmas,
           tamanhoDaImagem: tamanhoDaImagem,
           estiloDoRotulo: DilettaType.numericXs,
         ),
@@ -178,7 +155,6 @@ class _PintorDoVisor extends CustomPainter {
     required this.alvos,
     required this.fase,
     required this.descendo,
-    required this.fantasmas,
     required this.tamanhoDaImagem,
     required this.estiloDoRotulo,
   }) : _p = paleta;
@@ -186,14 +162,13 @@ class _PintorDoVisor extends CustomPainter {
   final List<CoreflowAlvo> alvos;
   final double fase;
   final bool descendo;
-  final List<CoreflowAlvoFantasma> fantasmas;
   final Size tamanhoDaImagem;
   final TextStyle estiloDoRotulo;
 
   /// A paleta de quem montou o visor.
   ///
-  /// Era `static const _p = BoldPalette.bold`. Os cinco valores que ele lê são semânticos e
-  /// neutros (`success05`, `error05`, `warning04`, `warning06`, `black`) — a regra do pai diz que
+  /// Era `static const _p = BoldPalette.bold`. Os quatro valores que ele lê são semânticos e
+  /// neutros (`success05`, `error05`, `warning04`, `black`) — a regra do pai diz que
   /// esses são invariantes, então cravar aqui não pintava errado hoje. Mas invariante por REGRA e
   /// congelado por LEITOR são coisas diferentes, e a segunda não se mede: um produto que declare
   /// outro `error05` receberia o do Bold sem nada acusar.
@@ -271,8 +246,6 @@ class _PintorDoVisor extends CustomPainter {
         _rotulo(canvas, size, r, rotulo, cor);
       }
     }
-
-    _desenhaFantasmas(canvas, size);
   }
 
   /// Varredura estilo radar: uma linha atravessa a caixa carregando um rastro atrás dela.
@@ -426,45 +399,6 @@ class _PintorDoVisor extends CustomPainter {
             .toDouble(),
       ),
     );
-  }
-
-  void _desenhaFantasmas(Canvas canvas, Size size) {
-    final agora = DateTime.now();
-    for (final f in fantasmas) {
-      final t = agora.difference(f.inicio).inMilliseconds /
-          CoreflowAlvoFantasma.duracao.inMilliseconds;
-      if (t < 0 || t > 1) continue;
-
-      final centro = Offset(f.cx * size.width, f.cy * size.height);
-      final largura = f.largura * size.width;
-      final altura = f.altura * size.width;
-      final destino =
-          Rect.fromCenter(center: centro, width: largura, height: altura);
-
-      const passos = 5;
-      final fechamento =
-          ((t * passos).floor().clamp(0, passos - 1)) / (passos - 1);
-      final grande = math.max(largura, altura) * 2.4;
-      final atual = Rect.lerp(
-          Rect.fromCenter(center: centro, width: grande, height: grande),
-          destino,
-          fechamento)!;
-
-      // Entra rápido, fica cheio até a metade, some na segunda — "nada aqui".
-      final opacidade =
-          t < 0.12 ? t / 0.12 : (1 - (t - 0.5) / 0.5).clamp(0.0, 1.0);
-      if (opacidade <= 0.02) continue;
-
-      final traco = Paint()
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 3
-        ..color = _p.warning06.withValues(alpha: 0.9 * opacidade);
-      final len = math.min(atual.width, atual.height) * 0.24;
-      _colchete(canvas, atual.topLeft, const Offset(1, 0), const Offset(0, 1), len, traco);
-      _colchete(canvas, atual.topRight, const Offset(-1, 0), const Offset(0, 1), len, traco);
-      _colchete(canvas, atual.bottomLeft, const Offset(1, 0), const Offset(0, -1), len, traco);
-      _colchete(canvas, atual.bottomRight, const Offset(-1, 0), const Offset(0, -1), len, traco);
-    }
   }
 
   void _colchete(

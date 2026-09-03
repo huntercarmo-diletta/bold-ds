@@ -72,35 +72,10 @@ void main() {
     expect(t.takeException(), isNull);
   });
 
-  testWidgets('fantasma com tempo fora da janela não desenha, e não quebra', (t) async {
-    await t.pumpWidget(montar(CoreflowVisorDeCodigo(
-      alvos: const [],
-      fase: 0.2,
-      fantasmas: [
-        // Um no meio da animação, um vencido, e um do futuro.
-        CoreflowAlvoFantasma(
-            cx: 0.5, cy: 0.4, largura: 0.3, altura: 0.3, inicio: DateTime.now()),
-        CoreflowAlvoFantasma(
-            cx: 0.2,
-            cy: 0.2,
-            largura: 0.2,
-            altura: 0.2,
-            inicio: DateTime.now().subtract(const Duration(seconds: 5))),
-        CoreflowAlvoFantasma(
-            cx: 0.8,
-            cy: 0.8,
-            largura: 0.2,
-            altura: 0.2,
-            inicio: DateTime.now().add(const Duration(seconds: 5))),
-      ],
-    )));
-    await t.pump(const Duration(milliseconds: 30));
-    expect(t.takeException(), isNull);
-  });
-
   test('a cor do estado sai da PALETA, não de literal', () {
     // Eram quatro literais: âmbar #FFB300, verde neon #39FF14, vermelho #FF3B30 e o amarelo do
-    // fantasma. O verde neon virar `success05` é a mudança que se vê, e está registrada no
+    // fantasma — este último saiu junto com o alvo fantasma em 03/09, que nenhuma tela alimentava.
+    // O verde neon virar `success05` é a mudança que se vê, e está registrada no
     // componente — era estética de "visão de máquina", e a alternativa seria um quinto valor de
     // marca fora da rampa.
     const foraDaRampa = [0xFFFFB300, 0xFF39FF14, 0xFFFF3B30, 0xFFFFF3B0];
