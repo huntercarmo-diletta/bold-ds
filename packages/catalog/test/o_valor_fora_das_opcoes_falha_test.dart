@@ -12,9 +12,12 @@ void main() {
 
   test('prop de enum com valor DESCONHECIDO estoura em debug', () {
     // Sem o `assert`, isto desenhava um botão primário e ninguém sabia que o tipo pedido não existe.
+    // `variante` e não `tipo`: o bloco passou a emitir a peça DESTE produto em 03/09, e o eixo dela
+    // se chama assim. Com a chave velha o teste ficava verde por passar um prop que ninguém lê —
+    // gate medindo o vazio, que é pior que gate ausente.
     final botao = Ds.blocos['botao']!;
     expect(
-      () => botao.build({...botao.defaults(), 'tipo': 'nao-existe'}),
+      () => botao.build({...botao.defaults(), 'variante': 'nao-existe'}),
       throwsA(isA<AssertionError>()),
     );
   });

@@ -252,6 +252,118 @@ Block _bloco(String expr) {
   // mesma recursão: os lançamentos voltam por `_bloco`, então a `linhaDeValor` é lida pela tabela de
   // graça. O que ele tem a mais é o acessório — que no código é um `DilettaText` inteiro, e volta
   // como o texto dele.
+  // O RODAPÉ, o CORPO DE FOLHA e a LARGURA INTEIRA: contêineres cujo filho é slot. O rodapé traz o
+  // rótulo do primário junto, que é a única coisa editável nele.
+  if (ehCtor(expr, 'ds.CoreflowRodape.button')) {
+    return Block(
+      id: _novoId(),
+      type: 'rodapeDoProduto',
+      props: {
+        'rotuloPrimario': RegExp(r"CoreflowAcaoDeNavegacao\(\s*label:\s*'([^']*)'")
+                .firstMatch(expr)
+                ?.group(1) ??
+            'Continuar',
+      },
+    );
+  }
+  for (final par in const [
+    ('ds.CoreflowCorpoDeFolha', 'corpoDeFolha'),
+    ('ds.CoreflowSemTeto', 'larguraInteira'),
+  ]) {
+    if (!ehCtor(expr, par.$1)) continue;
+    final itens = primeiraListaDeChildren(expr);
+    return Block(
+      id: _novoId(),
+      type: par.$2,
+      props: const {},
+      slots: {
+        'conteudo': [
+          for (final item in separaNoTopo(itens ?? ''))
+            if (semConst(item.trim()).isNotEmpty) _bloco(semConst(item.trim())),
+        ],
+      },
+    );
+  }
+
+  // A PÁGINA, a FOLHA e o TETO DE LARGURA são contêineres sem prop na tabela — o corpo deles é
+  // slot, e a tabela lê prop, não filho. A volta é escrita, como a do painel de entrada.
+  for (final par in const [
+    ('ds.CoreflowPaginaComRodapeFlutuante', 'paginaComRodapeFlutuante', 'title'),
+    ('ds.CoreflowPagina', 'pagina', 'title'),
+    ('ds.CoreflowFolha', 'folhaDoProduto', 'title'),
+    ('ds.CoreflowLarguraDeConteudo', 'larguraDeConteudo', null),
+  ]) {
+    if (!ehCtor(expr, par.$1)) continue;
+    final itens = primeiraListaDeChildren(expr);
+    // A ordem do laço importa: `CoreflowPaginaComRodapeFlutuante` vem ANTES da `CoreflowPagina`
+    // porque o nome dela COMEÇA com o da outra, e `ehCtor` casaria a irmã curta primeiro.
+    final chaveDoSlot = par.$2.startsWith('pagina') ? 'corpo' : 'conteudo';
+    return Block(
+      id: _novoId(),
+      type: par.$2,
+      props: {
+        if (par.$3 != null) 'titulo': argString(expr, par.$3!) ?? '',
+        if (par.$2 == 'pagina') 'mostrarVoltar': argBool(expr, 'showBackButton') ?? true,
+        if (par.$2 == 'paginaComRodapeFlutuante')
+          'rotuloDoVoltar': argString(expr, 'backLabel') ?? '← Voltar',
+      },
+      slots: {
+        chaveDoSlot: [
+          for (final item in separaNoTopo(itens ?? ''))
+            if (semConst(item.trim()).isNotEmpty) _bloco(semConst(item.trim())),
+        ],
+      },
+    );
+  }
+
+  // O PAINEL DE ENTRADA é superfície com filho: sem prop nenhuma no código, e a tabela precisa de
+  // pelo menos uma pra reconhecer. Quem lê o miolo é a mesma função que lê a tela.
+  if (ehCtor(expr, 'ds.CoreflowPainelDeEntrada')) {
+    // O miolo vem como `Column(children: [...])` quando há mais de um; a lista de filhos é o que
+    // interessa, e ela é a mesma coisa que o leitor já sabe extrair de qualquer coleção.
+    final itens = primeiraListaDeChildren(expr);
+    return Block(
+      id: _novoId(),
+      type: 'painelDeEntrada',
+      props: const {},
+      slots: {
+        'conteudo': [
+          for (final item in separaNoTopo(itens ?? ''))
+            if (semConst(item.trim()).isNotEmpty) _bloco(semConst(item.trim())),
+        ],
+      },
+    );
+  }
+
+  // O PAR DE BOTÕES não cai na tabela: os dois lados são `CoreflowAcaoDeNavegacao`, e a tabela sabe
+  // ler texto, número e enum — não objeto aninhado. A volta pega os dois rótulos, que é o que o
+  // compositor edita.
+  if (ehCtor(expr, 'ds.CoreflowBotoesDeNavegacao')) {
+    final rotulos = RegExp(r"CoreflowAcaoDeNavegacao\(\s*label:\s*'([^']*)'")
+        .allMatches(expr)
+        .map((m) => m.group(1)!)
+        .toList();
+    return Block(
+      id: _novoId(),
+      type: 'botoesDeNavegacao',
+      props: {
+        'rotuloPrimario': rotulos.isNotEmpty ? rotulos.first : 'Continuar',
+        'rotuloSecundario': rotulos.length > 1 ? rotulos[1] : '',
+      },
+    );
+  }
+
+  // O PONTO não tem tabela — a `cor` dele é obrigatória e sai do esquema, o que a tabela não sabe
+  // emitir (ver o bloco). Sem tabela não há volta automática, então ela é escrita aqui: é o preço,
+  // e ele é de UMA prop.
+  if (ehCtor(expr, 'ds.CoreflowPonto')) {
+    return Block(
+      id: _novoId(),
+      type: 'ponto',
+      props: {'tamanho': argNumeroComoTexto(expr, 'tamanho') ?? '8'},
+    );
+  }
+
   if (ehCtor(expr, 'ds.CoreflowGrupoDoDia')) {
     final itens = primeiraListaDeChildren(expr);
     return Block(

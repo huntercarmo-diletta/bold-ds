@@ -57,6 +57,36 @@ const Map<String, String> kBoldSpecs = {
   // A pílula da home. Ela veio por um print — o board desenhava a barra ANCORADA do pai, e este
   // produto usa a flutuante. Dois desenhos válidos e nenhum gate media a escolha.
   'navFlutuante': _navFlutuante,
+  // ── As peças que entraram no catálogo em 03/09 ────────────────────────────────────────────────
+  //
+  // Elas existiam no DS e não no plugue: quem compunha uma tela não tinha como pedir um cartão, um
+  // disco ou o pegador de uma folha sem sair do design system. Contrato escrito junto porque é o
+  // mínimo que o `COMPONENTE-DO-FILHO.md` do pai pede — componente sem contrato funciona, só não se
+  // explica.
+  'cartao': _cartao,
+  'disco': _disco,
+  'ponto': _ponto,
+  'pegador': _pegador,
+  'heroi': _heroi,
+  'busca': _busca,
+  'campoDeValor': _campoDeValor,
+  'botoesDeNavegacao': _botoesDeNavegacao,
+  'painelDeEntrada': _painelDeEntrada,
+  'anelDeEscolha': _anelDeEscolha,
+  'faixaDeOperacao': _faixaDeOperacao,
+  // O chrome de página e de folha, que entrou no catálogo em 03/09.
+  'pagina': _pagina,
+  'folhaDoProduto': _folhaDoProduto,
+  'acaoDeRodape': _acaoDeRodape,
+  'cabecalhoDeFolha': _cabecalhoDeFolha,
+  'fecharFolha': _fecharFolha,
+  'larguraDeConteudo': _larguraDeConteudo,
+  'esperando': _esperando,
+  'rodapeDoProduto': _rodapeDoProduto,
+  'corpoDeFolha': _corpoDeFolha,
+  'larguraInteira': _larguraInteira,
+  'paginaDeResumo': _paginaDeResumo,
+  'paginaComRodapeFlutuante': _paginaComRodapeFlutuante,
 };
 
 const _seloQuantico = r'''
@@ -963,3 +993,543 @@ O item inativo SHALL manter o mesmo espaço do spot. Sem ele a fila desalinha ao
 ### Requirement: a sombra mora FORA do clip
 A elevação SHALL ser aplicada no container externo ao `ClipRRect` do vidro.
 """;
+
+const _cartao = r'''
+## Purpose
+
+A superfície padrão deste produto: fundo, hairline e raio 24. É onde quase todo conteúdo mora, e é o
+componente com mais sítios no app.
+
+## Guidelines
+
+### Quando usar
+Sempre que um bloco de conteúdo precisa se separar do fundo. Se a superfície é a página inteira, o
+componente é a página; se é um pedaço dela, é este.
+
+### Faça
+- diga ESCOLHIDO por `selecionado`, e não engrossando a borda à mão: é borda `primary` mais fundo
+  `primaryWash`, e é o jeito único desta linguagem desde 02/09
+- use `semBorda` quando o cartão for só agrupamento de fundo — a borda é o default porque um cartão
+  deste produto tem fio, mas nem todo agrupamento é cartão
+- deixe a elevação por MATERIAL (o vidro, a superfície elevada); a sombra é exceção com sítio contado
+
+### Evite
+- passar `borderColor` pra dizer escolhido: dois jeitos de dizer a mesma coisa é um jeito a mais, e
+  foi assim que cinco telas acabaram com quatro espessuras diferentes
+- desenhar um `BoxDecoration` equivalente na tela: o que se perde é o material do pai e o raio da
+  escada
+
+## Compõe
+
+- DilettaCardSurface
+''';
+
+const _disco = r'''
+## Purpose
+
+O círculo que SEGURA alguma coisa, com anel opcional. Ele não sabe de estado — só de forma.
+
+## Guidelines
+
+### Quando usar
+Quando o conteúdo é redondo por decisão de layout: avatar improvisado, número dentro de um círculo,
+glifo que não é de estado.
+
+### Faça
+- deixe `tamanho` nulo quando o filho já tem tamanho próprio — o disco se ajusta a ele
+- use o anel pra marcar presença sem preencher: preencher esconde o que está dentro
+
+### Evite
+- usá-lo onde o conteúdo é um GLIFO DE ESTADO: aí a peça é o spot, que carrega o tom junto
+- substituir o `CircleAvatar` do Material por um disco com foto sem conferir o recorte
+
+## Compõe
+
+- DilettaBox
+''';
+
+const _ponto = r'''
+## Purpose
+
+O marcador redondo, do tamanho que o sítio pedir. Nasceu de seis lugares desenhando o mesmo círculo
+com números diferentes.
+
+## Guidelines
+
+### Quando usar
+Como marcador de presença ou de item numa lista curta — o ponto ao lado de um nome, o sinal de "há
+algo novo".
+
+### Faça
+- passe a cor pelo esquema; o ponto não tem cor própria porque o significado é do sítio
+- mantenha o 8 quando não houver razão medida pra outro número
+
+### Evite
+- montar uma fileira deles à mão pra indicar página: a peça disso é o indicador de página, que sabe
+  alongar o ativo
+- inventar um tamanho novo sem medir o sítio: os seis que existiam mediam 3 · 6 · 7 · 7 · 8 · 10, e
+  foi por isso que este eixo é número livre e não escada
+
+## Compõe
+
+- DilettaBox
+''';
+
+const _pegador = r'''
+## Purpose
+
+A alça da folha: a barrinha que diz "isto arrasta". Sem eixo nenhum, de propósito.
+
+## Guidelines
+
+### Quando usar
+No topo de qualquer folha que a pessoa possa arrastar pra fechar.
+
+### Faça
+- deixe-a no topo, centrada, antes do cabeçalho
+- confie no componente: ele tinha DOIS cinzas diferentes no app antes de virar peça, e o eixo que
+  não existe é o que impede o terceiro
+
+### Evite
+- desenhá-la à mão pra "ajustar um pouco" a cor ou a largura
+- pôr alça em folha que não arrasta: a alça é promessa de gesto
+
+## Compõe
+
+- DilettaBox
+''';
+
+const _heroi = r'''
+## Purpose
+
+O disco grande do topo de uma folha de confirmação — o glifo que resume o que acabou de acontecer.
+
+## Guidelines
+
+### Quando usar
+Uma vez por folha, no topo, quando o desfecho precisa ser lido antes do texto.
+
+### Faça
+- escolha o estado pelo DESFECHO e não pela cor que fica bonita: sucesso, erro e atenção têm papel
+- deixe-o sozinho na sua linha; ele é o ponto de entrada visual da folha
+
+### Evite
+- usar dois na mesma tela — dois heróis não são hierarquia, são confusão
+- usá-lo como ícone de lista: o tamanho dele é a razão de ele existir
+
+## Compõe
+
+- DilettaSpotIcon
+''';
+
+const _busca = r'''
+## Purpose
+
+Campo de uma linha com a lupa dentro. Filtra o que já está na tela — não busca no servidor sem
+aviso.
+
+## Guidelines
+
+### Quando usar
+Numa lista longa o bastante para a pessoa não achar o item rolando.
+
+### Faça
+- deixe o controller na tela: o texto é estado dela, não do componente
+- use `error` pra pintar a borda; a MENSAGEM de uma busca sem resultado é a lista vazia, e ela mora
+  abaixo
+
+### Evite
+- pôr texto de erro sob o campo: duplica o que o resultado vazio já diz
+- usá-lo com menos de dez itens — buscar em cinco é mais trabalho que ler cinco
+
+## Compõe
+
+- DilettaInput
+''';
+
+const _campoDeValor = r'''
+## Purpose
+
+O campo de dinheiro. Formata enquanto se digita e devolve número, não texto.
+
+## Guidelines
+
+### Quando usar
+Sempre que a pessoa digitar um valor em reais.
+
+### Faça
+- use `large` na tela em que o valor É a tela — transferência, recarga, cobrança
+- deixe o teclado numérico abrir com a tela: o campo é a única coisa a fazer ali
+
+### Evite
+- montar máscara à mão em cima de um campo de texto: a formatação e o cursor são o trabalho todo
+- usar o porte grande dentro de um formulário com outros campos, onde ele vira grito
+
+## Compõe
+
+- DilettaInput
+''';
+
+const _botoesDeNavegacao = r'''
+## Purpose
+
+O par de ações do rodapé: primária, secundária e uma terceira em texto. A ORDEM e o respiro são da
+peça.
+
+## Guidelines
+
+### Quando usar
+No fim de um passo que continua ou volta.
+
+### Faça
+- ponha a ação que AVANÇA como primária, sempre — mesmo quando voltar é mais provável
+- deixe a secundária nula quando não houver volta: um botão sozinho é o par com um lado
+
+### Evite
+- empilhar dois botões à mão: quatro espaçamentos diferentes foi o que existia antes desta peça
+- usar a terceira em texto para algo destrutivo — texto não carrega peso de aviso
+
+## Compõe
+
+- CoreflowBotao
+''';
+
+const _painelDeEntrada = r'''
+## Purpose
+
+O vidro da tela de entrada: a superfície que segura o formulário sobre a arte de fundo.
+
+## Guidelines
+
+### Quando usar
+Uma vez por tela de entrada, envolvendo o que a pessoa preenche.
+
+### Faça
+- deixe a arte aparecer por baixo — é o motivo de a superfície ser vidro e não cor chapada
+- mantenha o conteúdo curto: o painel é a dobra inteira em telas pequenas
+
+### Evite
+- usá-lo como cartão genérico: o vidro é do momento de entrar, e repetido vira textura
+- empilhar dois na mesma tela
+
+## Compõe
+
+- DilettaGlassSurface
+''';
+
+const _anelDeEscolha = r'''
+## Purpose
+
+O SEGUNDO jeito de dizer escolhido, e o único que se justifica: quando o miolo é justamente o que a
+pessoa está escolhendo.
+
+## Guidelines
+
+### Quando usar
+Sobre um retrato, uma foto ou uma arte que a pessoa seleciona. Se o conteúdo é texto, o jeito é o
+`selecionado` do cartão.
+
+### Faça
+- deixe o anel transparente quando não escolhido, e não ausente: sem isso a peça pula cinco pixels
+  ao ser tocada e a fileira inteira se reorganiza
+- combine o raio com o do recorte de dentro
+
+### Evite
+- usá-lo onde o `selecionado` do cartão serve: dois jeitos de dizer escolhido é um jeito a mais
+- deixá-lo fino demais — ele compete com uma imagem embaixo, não com cor chapada
+
+## Compõe
+
+- DilettaBox
+''';
+
+const _faixaDeOperacao = r'''
+## Purpose
+
+"Usando a conta de X." Avisa que o que se fizer nesta tela é em nome de outra pessoa.
+
+## Guidelines
+
+### Quando usar
+Em toda tela de uma sessão operada — o aviso não é por fluxo, é por contexto.
+
+### Faça
+- deixe-a acima do conteúdo, ocupando a linha: ela é condição da tela, não item dela
+- dê o toque de trocar de conta quando houver para onde trocar
+
+### Evite
+- escondê-la em telas "sem risco": o que define o risco é quem opera, não o que a tela faz
+- repeti-la dentro do conteúdo
+
+## Compõe
+
+- DilettaIcon
+''';
+
+const _pagina = r'''
+## Purpose
+
+A moldura de uma tela deste produto: barra de topo, corpo com teto de largura e rodapé opcional.
+
+## Guidelines
+
+### Quando usar
+Em toda tela que não é folha nem overlay.
+
+### Faça
+- deixe o teto de largura fazer o trabalho: o corpo já não atravessa um tablet
+- ponha a ação principal no rodapé da página, não no fim do scroll — teclado aberto cobre o fim do
+  scroll e não cobre o rodapé
+
+### Evite
+- desenhar uma barra de topo dentro do corpo: a página já tem uma, e duas barras é o defeito que o
+  gate de chrome existe pra pegar
+- usá-la dentro de outra página
+
+## Compõe
+
+- DilettaNavigationTopBar
+''';
+
+const _folhaDoProduto = r'''
+## Purpose
+
+O cartão que sobe de baixo: pegador, título e fechar, com o corpo rolando dentro.
+
+## Guidelines
+
+### Quando usar
+Para uma decisão curta que não merece trocar de tela — confirmar, escolher entre poucos, explicar.
+
+### Faça
+- dê sempre um jeito de fechar: o X e o arrasto são a mesma promessa em dois gestos
+- mantenha o conteúdo curto o bastante para caber sem rolar em telas médias
+
+### Evite
+- pôr um formulário longo numa folha: com o teclado aberto sobra meia tela
+- abrir folha sobre folha
+
+## Compõe
+
+- DilettaSheetOverlay
+''';
+
+const _acaoDeRodape = r'''
+## Purpose
+
+A ação da base da página, com o par secundário opcional.
+
+## Guidelines
+
+### Quando usar
+No rodapé de uma página que tem uma ação principal.
+
+### Faça
+- desligue por `enabled` quando o passo não está pronto: botão que some muda a altura da tela
+- use `accent` só onde a ação é a razão da tela
+
+### Evite
+- dois primários no mesmo rodapé
+- esconder a secundária quando ela é a saída: sem ela a página vira beco
+
+## Compõe
+
+- CoreflowBotao
+''';
+
+const _cabecalhoDeFolha = r'''
+## Purpose
+
+Pegador mais fechar, sem título — o topo de uma folha cujo conteúdo já se explica.
+
+## Guidelines
+
+### Quando usar
+Em folha cujo primeiro elemento do corpo já diz o que ela é: um herói, um valor grande, uma arte.
+
+### Faça
+- prefira a folha com título quando o conteúdo não se apresenta sozinho
+
+### Evite
+- usá-lo e repetir o título logo abaixo, com outro tamanho: aí o título é da folha
+
+## Compõe
+
+- CoreflowPegador
+''';
+
+const _fecharFolha = r'''
+## Purpose
+
+O X da folha, com o rótulo de leitor de tela embutido.
+
+## Guidelines
+
+### Quando usar
+Sempre que uma camada precisar de saída explícita.
+
+### Faça
+- deixe o rótulo acessível dizendo o que fecha quando "Fechar" for ambíguo
+
+### Evite
+- trocá-lo por um "Cancelar" em texto no topo: o X é o gesto que a pessoa procura no canto
+
+## Compõe
+
+- DilettaIconButton
+''';
+
+const _larguraDeConteudo = r'''
+## Purpose
+
+O teto de largura do corpo: o que impede uma linha de texto de atravessar um tablet inteiro.
+
+## Guidelines
+
+### Quando usar
+Em volta de conteúdo de leitura, quando a página não o aplica sozinha.
+
+### Faça
+- deixe-o envolver o conteúdo, não a tela: o fundo continua indo de borda a borda
+
+### Evite
+- usá-lo em volta de uma lista que já rola com padding próprio — dois tetos é um a mais
+
+## Compõe
+
+- DilettaBox
+''';
+
+const _esperando = r'''
+## Purpose
+
+A cortina que escurece o conteúdo enquanto algo carrega, sem tirá-lo da tela.
+
+## Guidelines
+
+### Quando usar
+Numa espera curta em que a pessoa precisa continuar vendo o que pediu.
+
+### Faça
+- mantenha o conteúdo por baixo: sumir com ele e voltar é troca de tela, não espera
+- deixe o escurecimento padrão; ele foi escolhido pra dizer "bloqueado" sem apagar
+
+### Evite
+- usá-lo em espera longa — acima de alguns segundos o certo é um estado com texto
+- empilhar dois
+
+## Compõe
+
+- DilettaBox
+''';
+
+const _rodapeDoProduto = r'''
+## Purpose
+
+A base fixa da página: os botões que não somem quando o conteúdo rola nem quando o teclado abre.
+
+## Guidelines
+
+### Quando usar
+Em toda página com uma ação que conclui o passo.
+
+### Faça
+- deixe a ação aqui e não no fim do scroll: com o teclado aberto, o fim do scroll fica embaixo dele
+- use a linha `acima` para o que precisa ser lido ANTES de decidir — saldo, taxa, prazo
+
+### Evite
+- encher o rodapé: acima de duas ações ele deixa de ser base e vira menu
+- repetir no rodapé um botão que já está no corpo
+
+## Compõe
+
+- CoreflowBotao
+''';
+
+const _corpoDeFolha = r'''
+## Purpose
+
+A superfície interna da folha, com a cor dela — o que separa o conteúdo do fundo da camada.
+
+## Guidelines
+
+### Quando usar
+Dentro de uma folha montada peça a peça, quando a folha inteira não serve.
+
+### Faça
+- prefira a folha completa quando ela couber: ela já traz pegador, título e fechar
+
+### Evite
+- usá-lo fora de uma folha: a cor dele é da camada, e sobre a página ele lê como cartão errado
+
+## Compõe
+
+- DilettaBox
+''';
+
+const _larguraInteira = r'''
+## Purpose
+
+Devolve a largura de borda a borda a um filho que está dentro de uma região com teto de leitura.
+
+## Guidelines
+
+### Quando usar
+Para o que NÃO é texto: uma faixa, um divisor, uma arte de fundo, um carrossel.
+
+### Faça
+- use-o só no elemento que precisa atravessar, e não em volta de um bloco inteiro
+
+### Evite
+- usá-lo em texto: o teto existe porque linha longa não se lê, e devolvê-lo desfaz a razão dele
+
+## Compõe
+
+- DilettaBox
+''';
+
+const _paginaDeResumo = r'''
+## Purpose
+
+A tela de comprovante inteira: valor grande, estado da transação e as seções de detalhe.
+
+## Guidelines
+
+### Quando usar
+No desfecho de um pagamento ou transferência, quando a pessoa precisa ver o que aconteceu e guardar.
+
+### Faça
+- deixe o ESTADO decidir a cor e o glifo: comprovante de coisa que falhou não sai com disco verde
+- mantenha as seções vindo de dado — um comprovante é o que o servidor devolveu
+
+### Evite
+- inventar campo que o servidor não mandou pra "ficar completo"
+- usá-la como página de revisão ANTES de confirmar: ali a decisão ainda é da pessoa, e o valor
+  grande com estado sugere que já acabou
+
+## Compõe
+
+- CoreflowComprovante
+''';
+
+const _paginaComRodapeFlutuante = r'''
+## Purpose
+
+A variante em que a ação PAIRA sobre o conteúdo em vez de sentar numa base opaca.
+
+## Guidelines
+
+### Quando usar
+Quando a base da tela é conteúdo que não pode ser tapado: mapa, câmera, lista que continua embaixo.
+
+### Faça
+- use-a só nessas telas; na página comum a base opaca é melhor, porque separa a ação do conteúdo
+
+### Evite
+- pôr texto pequeno atrás do botão flutuante: o que fica atrás dele não se lê
+- usá-la e depois somar um rodapé fixo — a ação passa a existir duas vezes
+
+## Compõe
+
+- CoreflowPagina
+''';

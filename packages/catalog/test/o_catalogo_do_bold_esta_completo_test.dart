@@ -258,7 +258,7 @@ void main() {
       final spec = ler('''
         ds.DilettaPageTitle(title: 'Abrir conta', subtitle: 'Rápido'),
         ds.DilettaText('Olá', style: ds.DilettaType.bodyMd),
-        ds.DilettaButton(label: 'Continuar', onPressed: onX, fullWidth: true),
+        ds.CoreflowBotao('Continuar', onPressed: onX),
       ''');
       expect(spec.blocks.map((b) => b.type),
           ['tituloDaPagina', 'texto', 'botao']);

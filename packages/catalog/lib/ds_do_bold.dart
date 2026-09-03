@@ -28,6 +28,30 @@ import 'telas_do_bold.dart';
 // ═══════════════════════════════════════════════════════════════════════════════
 // 1 · OS BLOCOS
 // ═══════════════════════════════════════════════════════════════════════════════
+//
+// ## QUAL PEÇA O BLOCO EMITE — a do pai ou a deste produto?
+//
+// A pergunta virou decisão em 03/09, e a resposta não é "sempre a nossa": é **a que o app escreve**.
+// O catálogo existe pra que quem compõe uma tela leve embora o código que o produto usa de verdade,
+// e isso se mede contando sítio no app, não escolhendo por princípio.
+//
+// | bloco | peça do produto | peça do pai | quem emite |
+// |---|---|---|---|
+// | `botao` | `CoreflowBotao` **189** | `DilettaButton` 1 | produto |
+// | `icone` | `CoreflowIcone` **185** | `DilettaIcon` 0 | produto |
+// | `campo` | `CoreflowCampoDeTexto` **95** | `DilettaInput` 0 | produto |
+// | `avatar` | `CoreflowAvatar` 6 | `DilettaAvatar` 8 | produto (o vidro é o default daqui) |
+// | `comprovante` | `CoreflowComprovante` **2** | `DilettaReceipt` 0 | produto |
+// | `ilustracao` | `CoreflowIlustracao` 0 | acessório do pai 0 | produto (nenhum dos dois tem sítio) |
+// | `linha` | `CoreflowLinhaDeLista` 16 | `DilettaAppListRow` **215** | **o PAI** |
+// | `lista` | `CoreflowGrupoDeLista` 1 | `DilettaAppList` **106** | **o PAI** |
+//
+// As duas últimas linhas são a correção que a contagem impôs ao plano. A intenção declarada era
+// trocar as nove; medindo, em duas delas a peça que o app escreve É a do pai — trocar ali faria o
+// catálogo emitir o que quase ninguém usa, que é o defeito ao contrário.
+//
+// O nono par não era par: o `aviso` é o banner COM ILUSTRAÇÃO do pai e o `CoreflowAviso` é alerta em
+// linha com intenção. Papéis diferentes, blocos diferentes.
 
 /// Nomes de preset de texto que o editor oferece. Só os que uma tela usa de verdade —
 /// oferecer 28 estilos num seletor é oferecer nenhum.
@@ -99,81 +123,116 @@ BlockDef _tituloDaPagina() => BlockDef(
 /// As quatro que sobram do pai (`secondaryPrimary`, `tertiaryPrimary`, `secondaryWhite`, `tertiaryWhite`)
 /// têm ZERO uso no app, e por isso não entram: seletor com opção que ninguém escolhe é seletor que pede
 /// leitura antes de cada escolha. Se alguma aparecer numa tela nova, é uma linha aqui.
-const _tiposDeBotao = ['primary', 'secondary', 'tertiary', 'white'];
+/// As variantes que o BOTÃO DESTE PRODUTO tem. Saíram do enum dele e não de uma lista à mão: a
+/// escada é `primary · secondary · text · destructive · white`, e o `tertiary` do pai não existe
+/// aqui — o lugar dele é o `text`.
+final _variantesDeBotao =
+    CoreflowVarianteDeBotao.values.map((e) => e.name).toList();
 
 BlockDef _botao() => BlockDef(
       type: 'botao',
       acoes: const {'onPressed': 'aoContinuar'},
-      ctor: 'ds.DilettaButton',
-      args: const {'label': Arg.texto('label'), 'tipo': Arg.enumeracao('type', 'ds.DilettaButtonType'), 'tamanho': Arg.enumeracao('size', 'ds.DilettaButtonSize'), 'estado': Arg.enumeracao('state', 'ds.DilettaButtonState'), 'larguraTotal': Arg.bool('fullWidth')},
-      label: 'Botão · Button',
+      // **O BOTÃO DESTE PRODUTO, e não o do pai** — decisão do dono em 03/09.
+      //
+      // Até aqui o bloco emitia `ds.DilettaButton`, e o app escreve `ds.CoreflowBotao` em todos os
+      // sítios. Quem compunha uma tela no catálogo levava embora um código que compila, usa o DS da
+      // FAMÍLIA e não usa o do PRODUTO — e o que se perde nessa diferença são os defaults deste
+      // banco: `expand` verdadeiro por padrão, o destrutivo como eixo próprio e a variante `text`
+      // no lugar do `tertiary`, que aqui não existe.
+      ctor: 'ds.CoreflowBotao',
+      args: const {
+        'label': Arg.textoPosicional(),
+        'variante': Arg.enumeracao('variant', 'ds.CoreflowVarianteDeBotao'),
+        'tamanho': Arg.enumeracao('size', 'ds.CoreflowTamanhoDeBotao'),
+        'destrutivo': Arg.bool('error'),
+        'larguraTotal': Arg.bool('expand'),
+      },
+      label: 'Botão · CoreflowBotao',
       props: {
         'label': const PropDef('text', bindable: true, dartType: 'String'),
-        'tipo': const PropDef('enum', options: _tiposDeBotao),
-        'tamanho': PropDef('enum', options: DilettaButtonSize.values.map((e) => e.name).toList()),
-        // O DESTRUTIVO do app são 16 sítios, e ele não é um tipo: é o estado `error`, que troca a paleta
-        // sem mudar a estrutura. Como tipo eu nunca poderia oferecê-lo — como estado, ele combina com
-        // qualquer um dos quatro, que é o que a tela de revogar acesso faz (secundário + destrutivo).
-        'estado': PropDef('enum', options: DilettaButtonState.values.map((e) => e.name).toList()),
+        'variante': PropDef('enum', options: _variantesDeBotao),
+        'tamanho':
+            PropDef('enum', options: CoreflowTamanhoDeBotao.values.map((e) => e.name).toList()),
+        // O DESTRUTIVO são 16 sítios do app, e ele não é uma variante: é um eixo que troca a paleta
+        // sem mudar a estrutura. Como variante eu nunca poderia oferecê-lo junto do secundário —
+        // como eixo, ele combina com qualquer uma, que é o que a tela de revogar acesso faz.
+        'destrutivo': const PropDef('bool'),
         'larguraTotal': const PropDef('bool'),
       },
       defaults: () => {
         'label': 'Continuar',
-        'tipo': 'primary',
+        'variante': 'primary',
         'tamanho': 'lg',
-        'estado': 'normal',
+        'destrutivo': false,
+        // `true` porque é o default DA PEÇA: no Bold o botão ocupa a linha, e o bloco mentiria
+        // sobre o componente se nascesse diferente dele.
         'larguraTotal': true,
       },
       build: (p) => _botaoWidget(p, aoTocar: null),
-      codegen: (p) => 'ds.DilettaButton(label: ${_str(p['label'])}, onPressed: aoContinuar'
-          ', type: ds.DilettaButtonType.${p['tipo']}'
-          ', size: ds.DilettaButtonSize.${p['tamanho']}'
-          '${p['estado'] == 'normal' ? '' : ', state: ds.DilettaButtonState.${p['estado']}'}'
-          '${p['larguraTotal'] == true ? ', fullWidth: true' : ''})',
+      codegen: (p) => 'ds.CoreflowBotao(${_str(p['label'])}, onPressed: aoContinuar'
+          ', variant: ds.CoreflowVarianteDeBotao.${p['variante']}'
+          ', size: ds.CoreflowTamanhoDeBotao.${p['tamanho']}'
+          '${p['destrutivo'] == true ? ', error: true' : ''}'
+          '${p['larguraTotal'] == true ? '' : ', expand: false'})',
     );
 
-Widget _botaoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) => DilettaButton(
-      label: '${p['label']}',
+Widget _botaoWidget(Map<String, dynamic> p, {VoidCallback? aoTocar}) => CoreflowBotao(
+      '${p['label']}',
       onPressed: aoTocar ?? () {},
-      // Os três mapas escritos à mão saíram: `_porNome` lê o enum do pai, e o subconjunto de tipos é
-      // filtrado pelo `options` do prop — não por uma segunda lista que envelhece sozinha.
-      type: _daOpcao(p['tipo'], _porNome(DilettaButtonType.values), DilettaButtonType.primary),
-      size: _daOpcao(p['tamanho'], _porNome(DilettaButtonSize.values), DilettaButtonSize.lg),
-      state: _daOpcao(p['estado'], _porNome(DilettaButtonState.values), DilettaButtonState.normal),
-      fullWidth: p['larguraTotal'] == true,
+      // `_porNome` lê o enum da PEÇA: subconjunto escrito à mão é uma segunda lista que envelhece
+      // sozinha, e foi assim que o `tertiary` do pai sobreviveu aqui depois de não existir mais.
+      variant: _daOpcao(
+          p['variante'], _porNome(CoreflowVarianteDeBotao.values), CoreflowVarianteDeBotao.primary),
+      size: _daOpcao(
+          p['tamanho'], _porNome(CoreflowTamanhoDeBotao.values), CoreflowTamanhoDeBotao.lg),
+      error: p['destrutivo'] == true,
+      expand: p['larguraTotal'] == true,
     );
 
 BlockDef _campo() => BlockDef(
       type: 'campo',
-      ctor: 'ds.DilettaInput',
-      args: const {'rotulo': Arg.texto('label'), 'placeholder': Arg.texto('placeholder'), 'ajuda': Arg.texto('helper'), 'erro': Arg.texto('error'), 'desabilitado': Arg.bool('disabled')},
-      label: 'Campo de texto · Input',
+      // **O CAMPO DESTE PRODUTO** (03/09). O `ajuda` e o `desabilitado` saíram da superfície porque
+      // a peça daqui não os tem — e isso não é perda de eixo, é o inventário ficando honesto: os
+      // dois estavam no editor, ninguém no app os usava, e o código emitido não compilaria contra o
+      // componente que o app escreve. Prop que só existe no catálogo é promessa que a tela quebra.
+      //
+      // O que entrou no lugar é o que a peça TEM: `mono` (o dígito monoespaçado dos campos de
+      // código) e `readOnly`.
+      ctor: 'ds.CoreflowCampoDeTexto',
+      args: const {
+        'rotulo': Arg.texto('label'),
+        'placeholder': Arg.texto('hint'),
+        'erro': Arg.texto('errorText'),
+        'mono': Arg.bool('mono'),
+        'somenteLeitura': Arg.bool('readOnly'),
+      },
+      label: 'Campo de texto · CoreflowCampoDeTexto',
       props: const {
         'rotulo': PropDef('text'),
         'placeholder': PropDef('text'),
-        'ajuda': PropDef('text'),
         'erro': PropDef('text'),
-        'desabilitado': PropDef('bool'),
+        'mono': PropDef('bool'),
+        'somenteLeitura': PropDef('bool'),
       },
       defaults: () => {
         'rotulo': 'CPF',
         'placeholder': '000.000.000-00',
-        'ajuda': '',
         'erro': '',
-        'desabilitado': false,
+        'mono': false,
+        'somenteLeitura': false,
       },
-      build: (p) => DilettaInput(
+      build: (p) => CoreflowCampoDeTexto(
         label: '${p['rotulo']}',
-        placeholder: '${p['placeholder']}',
-        helper: _vazio(p['ajuda']) ? null : '${p['ajuda']}',
-        error: _vazio(p['erro']) ? null : '${p['erro']}',
-        disabled: p['desabilitado'] == true,
+        hint: '${p['placeholder']}',
+        errorText: _vazio(p['erro']) ? null : '${p['erro']}',
+        mono: p['mono'] == true,
+        readOnly: p['somenteLeitura'] == true,
       ),
-      codegen: (p) => 'ds.DilettaInput(label: ${_str(p['rotulo'])}'
-          ', placeholder: ${_str(p['placeholder'])}'
-          '${_vazio(p['ajuda']) ? '' : ', helper: ${_str(p['ajuda'])}'}'
-          '${_vazio(p['erro']) ? '' : ', error: ${_str(p['erro'])}'}'
-          '${p['desabilitado'] == true ? ', disabled: true' : ''})',
+      codegen: (p) => 'ds.CoreflowCampoDeTexto(label: ${_str(p['rotulo'])}'
+          ', hint: ${_str(p['placeholder'])}'
+          '${_vazio(p['erro']) ? '' : ', errorText: ${_str(p['erro'])}'}'
+          '${p['mono'] == true ? ', mono: true' : ''}'
+          '${p['somenteLeitura'] == true ? ', readOnly: true' : ''})',
     );
 
 BlockDef _valor() => BlockDef(
@@ -554,18 +613,26 @@ Widget _listaWidget(Map<String, dynamic> p, List<Widget> itens) {
 
 BlockDef _icone() => BlockDef(
       type: 'icone',
-      ctor: 'ds.DilettaIcon',
-      args: const {'nome': Arg.enumeracao('name', 'ds.DilettaIcons'), 'tamanho': Arg.numero('size')},
-      label: 'Ícone · Icon',
+      // **O ÍCONE DESTE PRODUTO** (03/09), e a diferença não é cosmética: o `CoreflowIcone` recebe
+      // o nome como TEXTO e traduz apelido pelo mapa daqui (`chevron-right` → `angle-right-light`),
+      // enquanto o do pai recebe a constante e não traduz nada.
+      //
+      // Foi essa diferença que deixou três telas do app com disco vazio em 02/09: um apelido nosso
+      // entregue a uma peça do pai vira pedido de asset que não existe, sem erro na tela. Um bloco
+      // que emite a peça do pai leva o compositor pela mesma porta.
+      //
+      // As opções são os nomes DE ARQUIVO do pai, e não os apelidos: apelido é atalho de quem
+      // escreve à mão, e o que o catálogo emite deve ser o nome que existe em disco.
+      ctor: 'ds.CoreflowIcone',
+      args: const {'nome': Arg.textoPosicional(), 'tamanho': Arg.numero('size')},
+      label: 'Ícone · CoreflowIcone',
       props: {
-        'nome': PropDef('enum', options: DilettaIcons.all.keys.toList()),
+        'nome': PropDef('enum', options: DilettaIcons.all.values.toList()..sort()),
         'tamanho': const PropDef('enum', options: ['16', '20', '24', '32']),
       },
-      defaults: () => {'nome': 'bellLight', 'tamanho': '24'},
-      build: (p) =>
-          _desenhaIcone('${p['nome']}', tamanho: double.parse('${p['tamanho']}')),
-      codegen: (p) => "ds.DilettaIcon(name: ds.DilettaIcons.${p['nome']}"
-          ', size: ${p['tamanho']})',
+      defaults: () => {'nome': DilettaIcons.all['bellLight'] ?? 'bell-light', 'tamanho': '24'},
+      build: (p) => CoreflowIcone('${p['nome']}', size: double.parse('${p['tamanho']}')),
+      codegen: (p) => 'ds.CoreflowIcone(${_str(p['nome'])}, size: ${p['tamanho']})',
     );
 
 BlockDef _barraDeStatusBloco() => BlockDef(
@@ -1009,29 +1076,36 @@ BlockDef _botaoDeIcone() => BlockDef(
 
 BlockDef _avatar() => BlockDef(
       type: 'avatar',
-      ctor: 'ds.DilettaAvatar',
+      // **O AVATAR DESTE PRODUTO** (03/09). A `variante` do pai saiu e o `vidro` entrou, e a troca é
+      // literal: aqui o avatar é de VIDRO por padrão — é assim que ele senta sobre a arte de fundo
+      // da home, e a variante `outlined` do pai não descreve isso. O `engrenagem` é o selo de
+      // ajustes que o cabeçalho usa.
+      ctor: 'ds.CoreflowAvatar',
       args: const {
         'iniciais': Arg.texto('initials'),
-        'variante': Arg.enumeracao('variant', 'ds.DilettaAvatarVariant'),
         'tamanho': Arg.numero('size'),
+        'vidro': Arg.bool('glass'),
+        'engrenagem': Arg.bool('gear'),
       },
-      label: 'Avatar',
-      props: {
-        'iniciais': const PropDef('text', bindable: true, dartType: 'String'),
-        'variante': PropDef('enum',
-            options: DilettaAvatarVariant.values.map((e) => e.name).toList()),
-        'tamanho': const PropDef('enum', options: ['32', '40', '56']),
+      label: 'Avatar · CoreflowAvatar',
+      props: const {
+        'iniciais': PropDef('text', bindable: true, dartType: 'String'),
+        'tamanho': PropDef('enum', options: ['32', '40', '44', '56']),
+        'vidro': PropDef('bool'),
+        'engrenagem': PropDef('bool'),
       },
-      defaults: () => {'iniciais': 'AM', 'variante': 'outlined', 'tamanho': '40'},
-      build: (p) => DilettaAvatar(
+      // 44 e não 40: é o default DA PEÇA, e bloco que nasce diferente do componente mente sobre ele.
+      defaults: () => {'iniciais': 'AM', 'tamanho': '44', 'vidro': true, 'engrenagem': false},
+      build: (p) => CoreflowAvatar(
         initials: '${p['iniciais']}',
-        variant: _daOpcao(p['variante'], _porNome(DilettaAvatarVariant.values),
-            DilettaAvatarVariant.outlined),
-        size: double.tryParse('${p['tamanho']}') ?? 40,
+        size: double.tryParse('${p['tamanho']}') ?? 44,
+        glass: p['vidro'] == true,
+        gear: p['engrenagem'] == true,
       ),
-      codegen: (p) => 'ds.DilettaAvatar(initials: ${_str(p['iniciais'])}'
-          ', variant: ds.DilettaAvatarVariant.${p['variante']}'
-          ', size: ${p['tamanho']})',
+      codegen: (p) => 'ds.CoreflowAvatar(initials: ${_str(p['iniciais'])}'
+          ', size: ${p['tamanho']}'
+          '${p['vidro'] == true ? '' : ', glass: false'}'
+          '${p['engrenagem'] == true ? ', gear: true' : ''})',
     );
 
 BlockDef _interruptor() => BlockDef(
@@ -1074,7 +1148,6 @@ BlockDef _interruptor() => BlockDef(
 
 BlockDef _campoDeBusca() => BlockDef(
       type: 'campoDeBusca',
-      acoes: const {'onChanged': 'aoBuscar'},
       ctor: 'ds.DilettaSearchInput',
       args: const {'placeholder': Arg.texto('placeholder')},
       label: 'Campo de busca · SearchInput',
@@ -1131,28 +1204,833 @@ BlockDef _girando() => BlockDef(
       codegen: (p) => 'ds.DilettaLoadingSpinner(size: ds.DilettaSpinnerSize.${p['tamanho']})',
     );
 
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// 1-B · AS PEÇAS DESTE PRODUTO QUE FALTAVAM (03/09)
+// ═══════════════════════════════════════════════════════════════════════════════
+//
+// O DS tem 62 widgets e o plugue declarava 23 deles. Os que entram aqui não são peça do pai com
+// outro nome: são o vocabulário que este produto criou e que o catálogo não sabia falar — quem
+// compunha uma tela não tinha como pedir um cartão, uma etiqueta ou um disco sem sair do DS.
+
+/// O CARTÃO, que é a superfície mais usada deste produto e a que mais rendeu defeito.
+///
+/// Os dois eixos que ele expõe aqui são os que a casa mediu e nomeou: `selecionado` — borda
+/// `primary` mais fundo `primaryWash`, o jeito ÚNICO de dizer escolhido desde 02/09 — e `semBorda`,
+/// que nasceu de 25 telas ganharem um fio que ninguém pediu numa conversão em massa.
+BlockDef _cartao() => BlockDef(
+      type: 'cartao',
+      ctor: 'ds.CoreflowCartao',
+      args: const {
+        'selecionado': Arg.bool('selecionado'),
+        'semBorda': Arg.bool('semBorda'),
+        'vidro': Arg.bool('glass'),
+      },
+      label: 'Cartão · CoreflowCartao',
+      props: const {
+        'selecionado': PropDef('bool'),
+        'semBorda': PropDef('bool'),
+        'vidro': PropDef('bool'),
+      },
+      defaults: () => {'selecionado': false, 'semBorda': false, 'vidro': false},
+      slots: const {'conteudo': SlotDef(list: true)},
+      build: (p) => _cartaoWidget(p, const []),
+      slotsBuild: (p, filhos) => _cartaoWidget(p, filhos['conteudo'] ?? const []),
+      slotsCodegen: (p, codigos) {
+        final filhos = codigos['conteudo'] ?? const [];
+        return 'ds.CoreflowCartao('
+            '${p['selecionado'] == true ? 'selecionado: true, ' : ''}'
+            '${p['semBorda'] == true ? 'semBorda: true, ' : ''}'
+            '${p['vidro'] == true ? 'glass: true, ' : ''}'
+            'child: ${filhos.isEmpty ? 'const SizedBox.shrink()' : filhos.length == 1 ? filhos.single : 'Column(children: [${filhos.join(', ')}])'})';
+      },
+      // Nunca chamado (o motor prefere `slotsCodegen`), e obrigatório pelo contrato: um cartão sem
+      // filho é a superfície vazia, que é o que o preview mostra.
+      codegen: (p) => 'ds.CoreflowCartao(child: const SizedBox.shrink())',
+    );
+
+Widget _cartaoWidget(Map<String, dynamic> p, List<Widget> filhos) => CoreflowCartao(
+      selecionado: p['selecionado'] == true,
+      semBorda: p['semBorda'] == true,
+      glass: p['vidro'] == true,
+      child: filhos.isEmpty
+          ? const SizedBox(height: 40, width: double.infinity)
+          : Column(crossAxisAlignment: CrossAxisAlignment.start, children: filhos),
+    );
+
+/// O AVISO EM LINHA, e ele não é o banner com ilustração do pai.
+///
+/// São dois papéis diferentes que o catálogo tratava como um: o `NoticeBanner` convida (arte grande,
+/// título, descrição) e este AVISA (intenção, uma linha, sem arte). A tela de pareamento usa o
+/// segundo; nenhuma tela usa os dois no mesmo lugar.
+BlockDef _avisoEmLinha() => BlockDef(
+      type: 'avisoEmLinha',
+      ctor: 'ds.CoreflowAviso',
+      args: const {
+        'intencao': Arg.enumeracao('intent', 'ds.CoreflowIntencao'),
+        'titulo': Arg.texto('title'),
+        'mensagem': Arg.texto('message'),
+      },
+      label: 'Aviso em linha · CoreflowAviso',
+      props: {
+        'intencao': PropDef('enum', options: CoreflowIntencao.values.map((e) => e.name).toList()),
+        'titulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'mensagem': const PropDef('multiline', bindable: true, dartType: 'String'),
+      },
+      defaults: () => {
+        'intencao': 'error',
+        'titulo': 'O código expirou.',
+        'mensagem': 'Gere um novo no aparelho confiável.',
+      },
+      build: (p) => CoreflowAviso(
+        intent: _daOpcao(p['intencao'], _porNome(CoreflowIntencao.values), CoreflowIntencao.error),
+        title: '${p['titulo']}',
+        message: _vazio(p['mensagem']) ? null : '${p['mensagem']}',
+      ),
+      codegen: (p) => 'ds.CoreflowAviso(intent: ds.CoreflowIntencao.${p['intencao']}'
+          ', title: ${_str(p['titulo'])}'
+          '${_vazio(p['mensagem']) ? '' : ', message: ${_str(p['mensagem'])}'})',
+    );
+
+/// A ETIQUETA de estado. Dois portes, e o menor existe porque a fileira dela vira grade quando cada
+/// uma tem fio inteiro — ver o meio-fio declarado no gate de espessura do DS.
+BlockDef _etiqueta() => BlockDef(
+      type: 'etiqueta',
+      ctor: 'ds.CoreflowEtiqueta',
+      args: const {
+        'rotulo': Arg.texto('label'),
+        'tom': Arg.enumeracao('tone', 'ds.DilettaStatusTone'),
+        'porte': Arg.enumeracao('porte', 'ds.DilettaStatusTagPorte'),
+        'ponto': Arg.bool('dot'),
+      },
+      label: 'Etiqueta · CoreflowEtiqueta',
+      props: {
+        'rotulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'tom': PropDef('enum', options: DilettaStatusTone.values.map((e) => e.name).toList()),
+        'porte': PropDef('enum', options: DilettaStatusTagPorte.values.map((e) => e.name).toList()),
+        'ponto': const PropDef('bool'),
+      },
+      defaults: () => {
+        'rotulo': 'Aguardando',
+        'tom': DilettaStatusTone.neutral.name,
+        'porte': DilettaStatusTagPorte.compacta.name,
+        'ponto': false,
+      },
+      build: (p) => CoreflowEtiqueta(
+        label: '${p['rotulo']}',
+        tone: _daOpcao(p['tom'], _porNome(DilettaStatusTone.values), DilettaStatusTone.neutral),
+        porte: _daOpcao(
+            p['porte'], _porNome(DilettaStatusTagPorte.values), DilettaStatusTagPorte.compacta),
+        dot: p['ponto'] == true,
+      ),
+      codegen: (p) => 'ds.CoreflowEtiqueta(label: ${_str(p['rotulo'])}'
+          ', tone: ds.DilettaStatusTone.${p['tom']}'
+          ', porte: ds.DilettaStatusTagPorte.${p['porte']}'
+          '${p['ponto'] == true ? ', dot: true' : ''})',
+    );
+
+/// O DISCO — o círculo que SEGURA algo, com anel opcional.
+///
+/// Ele não é o spot: o spot carrega um glifo do conjunto e tem tom de estado; o disco carrega
+/// QUALQUER coisa e só sabe de forma. Foi o que substituiu o `CircleAvatar` do Material em 02/09.
+BlockDef _disco() => BlockDef(
+      type: 'disco',
+      ctor: 'ds.CoreflowDisco',
+      args: const {'tamanho': Arg.numero('tamanho'), 'larguraDoAnel': Arg.numero('larguraDoAnel')},
+      label: 'Disco · CoreflowDisco',
+      props: const {
+        'tamanho': PropDef('enum', options: ['28', '40', '56', '80']),
+        'larguraDoAnel': PropDef('enum', options: ['1', '2']),
+      },
+      defaults: () => {'tamanho': '56', 'larguraDoAnel': '1'},
+      slots: const {'conteudo': SlotDef()},
+      build: (p) => _discoWidget(p, null),
+      slotsBuild: (p, filhos) => _discoWidget(p, (filhos['conteudo'] ?? const []).firstOrNull),
+      slotsCodegen: (p, codigos) {
+        final filho = (codigos['conteudo'] ?? const []).firstOrNull;
+        return 'ds.CoreflowDisco(tamanho: ${p['tamanho']}'
+            ', larguraDoAnel: ${p['larguraDoAnel']}'
+            '${filho == null ? '' : ', child: $filho'})';
+      },
+      codegen: (p) => 'ds.CoreflowDisco(tamanho: ${p['tamanho']})',
+    );
+
+Widget _discoWidget(Map<String, dynamic> p, Widget? filho) => Builder(
+      builder: (c) => CoreflowDisco(
+        tamanho: double.tryParse('${p['tamanho']}') ?? 56,
+        anel: CoreflowScheme.of(c).primary,
+        larguraDoAnel: double.tryParse('${p['larguraDoAnel']}') ?? 1,
+        child: filho,
+      ),
+    );
+
+/// O SPOT — o disco COM glifo e COM tom de estado.
+///
+/// O `info` é o sétimo tom, e ele é deste produto: o pai não tem o PAPEL `info`, então a peça o
+/// pinta em casa com o contraste medido (3,95:1 no escuro, 4,69:1 no claro).
+BlockDef _spot() => BlockDef(
+      type: 'spot',
+      ctor: 'ds.CoreflowSpot',
+      args: const {
+        'glifo': Arg.textoPosicional(),
+        'tom': Arg.enumeracao('tone', 'ds.CoreflowTomDoSpot'),
+        'cheio': Arg.bool('filled'),
+        'tamanho': Arg.numero('size'),
+      },
+      label: 'Spot · CoreflowSpot',
+      props: {
+        'glifo': PropDef('enum', options: DilettaIcons.all.values.toList()..sort()),
+        'tom': PropDef('enum', options: CoreflowTomDoSpot.values.map((e) => e.name).toList()),
+        'cheio': const PropDef('bool'),
+        'tamanho': const PropDef('enum', options: ['28', '38', '44', '56']),
+      },
+      defaults: () => {
+        'glifo': DilettaIcons.all['circleCheckLight'] ?? 'circle-check-light',
+        'tom': 'success',
+        'cheio': false,
+        'tamanho': '38',
+      },
+      build: (p) => CoreflowSpot(
+        '${p['glifo']}',
+        tone: _daOpcao(p['tom'], _porNome(CoreflowTomDoSpot.values), CoreflowTomDoSpot.neutral),
+        filled: p['cheio'] == true,
+        size: double.tryParse('${p['tamanho']}') ?? 38,
+      ),
+      codegen: (p) => 'ds.CoreflowSpot(${_str(p['glifo'])}'
+          ', tone: ds.CoreflowTomDoSpot.${p['tom']}'
+          '${p['cheio'] == true ? ', filled: true' : ''}'
+          ', size: ${p['tamanho']})',
+    );
+
+/// O PONTO — o marcador redondo, e o tamanho é livre com default medido.
+///
+/// A escada de três degraus que eu ia declarar não existia: os sítios reais mediam 3 · 6 · 7 · 7 · 8
+/// · 10, e inventar `pequeno/medio/grande` teria empurrado seis números pra três caixas.
+BlockDef _ponto() => BlockDef(
+      type: 'ponto',
+      // SEM `ctor`, e é o mesmo motivo do esqueleto: com `ctor` + `args` quem emite é o motor, pela
+      // tabela — e a tabela só sabe passar texto, número e enum. A `cor` desta peça é obrigatória e
+      // é um `Color` que sai do esquema, então o código da tabela sairia sem ela e não compilaria.
+      // Com o `codegen` à mão, a linha emitida lê o esquema do contexto, que é como a tela escreve.
+      //
+      // O preço é a VOLTA: sem tabela, o leitor de código não reconhece este bloco e o traz como
+      // `cru`. É o preço certo — código que não compila é pior que código que não volta.
+      label: 'Ponto · CoreflowPonto',
+      props: const {'tamanho': PropDef('enum', options: ['3', '6', '8', '10'])},
+      defaults: () => {'tamanho': '8'},
+      build: (p) => Builder(
+        builder: (c) => CoreflowPonto(
+          cor: CoreflowScheme.of(c).primary,
+          tamanho: double.tryParse('${p['tamanho']}') ?? 8,
+        ),
+      ),
+      codegen: (p) =>
+          'ds.CoreflowPonto(cor: ds.CoreflowScheme.of(context).primary, tamanho: ${p['tamanho']})',
+    );
+
+/// O PEGADOR da folha. Sem eixo nenhum, e é o ponto: ele tinha DOIS cinzas diferentes no app antes
+/// de virar peça.
+BlockDef _pegador() => BlockDef(
+      type: 'pegador',
+      ctor: 'ds.CoreflowPegador',
+      args: const {},
+      label: 'Pegador de folha · CoreflowPegador',
+      props: const {},
+      defaults: () => {},
+      build: (p) => const CoreflowPegador(),
+      codegen: (p) => 'ds.CoreflowPegador()',
+    );
+
+/// O HERÓI — o disco grande do topo de uma folha de confirmação.
+BlockDef _heroi() => BlockDef(
+      type: 'heroi',
+      ctor: 'ds.CoreflowHeroi',
+      args: const {
+        'glifo': Arg.textoPosicional(),
+        'estado': Arg.enumeracao('estado', 'ds.DilettaSpotState'),
+      },
+      label: 'Herói · CoreflowHeroi',
+      props: {
+        'glifo': PropDef('enum', options: DilettaIcons.all.values.toList()..sort()),
+        'estado': PropDef('enum', options: DilettaSpotState.values.map((e) => e.name).toList()),
+      },
+      defaults: () => {
+        'glifo': DilettaIcons.all['circleCheckLight'] ?? 'circle-check-light',
+        'estado': 'primary',
+      },
+      build: (p) => CoreflowHeroi(
+        '${p['glifo']}',
+        estado: _daOpcao(p['estado'], _porNome(DilettaSpotState.values), DilettaSpotState.primary),
+      ),
+      codegen: (p) => 'ds.CoreflowHeroi(${_str(p['glifo'])}'
+          ', estado: ds.DilettaSpotState.${p['estado']})',
+    );
+
+
+/// A BUSCA. Campo de uma linha com a lupa dentro, e o `error` pinta a borda sem mensagem — numa
+/// busca a mensagem é o resultado vazio, não um texto sob o campo.
+BlockDef _busca() => BlockDef(
+      type: 'busca',
+      acoes: const {'controller': 'controleDaBusca', 'onChanged': 'aoBuscar'},
+      ctor: 'ds.CoreflowBusca',
+      args: const {'placeholder': Arg.texto('placeholder'), 'erro': Arg.bool('error')},
+      label: 'Busca · CoreflowBusca',
+      props: const {'placeholder': PropDef('text'), 'erro': PropDef('bool')},
+      defaults: () => {'placeholder': 'Pesquisar', 'erro': false},
+      // O `controller` é obrigatório na peça, e o preview precisa de um só dele: quem monta a tela
+      // recebe no código o nome `controleDaBusca`, que é o que o app declara no `State`.
+      build: (p) => CoreflowBusca(
+        controller: TextEditingController(),
+        placeholder: '${p['placeholder']}',
+        error: p['erro'] == true,
+        onChanged: (_) {},
+      ),
+      codegen: (p) => 'ds.CoreflowBusca(controller: controleDaBusca'
+          ', placeholder: ${_str(p['placeholder'])}'
+          '${p['erro'] == true ? ', error: true' : ''}'
+          ', onChanged: aoBuscar)',
+    );
+
+/// O CAMPO DE VALOR — o campo de dinheiro, com o `large` para a tela em que o valor É a tela.
+BlockDef _campoDeValor() => BlockDef(
+      type: 'campoDeValor',
+      ctor: 'ds.CoreflowCampoDeValor',
+      acoes: const {'onChanged': 'aoMudarOValor'},
+      args: const {'valorInicial': Arg.numero('initialValue'), 'grande': Arg.bool('large')},
+      label: 'Campo de valor · CoreflowCampoDeValor',
+      props: const {
+        'valorInicial': PropDef('enum', options: ['0', '120', '1500']),
+        'grande': PropDef('bool'),
+      },
+      defaults: () => {'valorInicial': '0', 'grande': true},
+      build: (p) => CoreflowCampoDeValor(
+        initialValue: double.tryParse('${p['valorInicial']}'),
+        large: p['grande'] == true,
+        onChanged: (_) {},
+      ),
+      codegen: (p) => 'ds.CoreflowCampoDeValor(initialValue: ${p['valorInicial']}'
+          '${p['grande'] == true ? ', large: true' : ''}'
+          ', onChanged: aoMudarOValor)',
+    );
+
+/// O PAR DE BOTÕES do rodapé — primário, secundário e um terceiro em texto.
+///
+/// Ele existe porque a ORDEM e o respiro entre eles são decisão da linguagem, não de cada tela: dois
+/// botões empilhados à mão saíram com quatro espaçamentos diferentes antes desta peça.
+BlockDef _botoesDeNavegacao() => BlockDef(
+      type: 'botoesDeNavegacao',
+      acoes: const {'primary': 'aoContinuar', 'secondary': 'aoVoltar'},
+      label: 'Par de botões · CoreflowBotoesDeNavegacao',
+      props: const {
+        'rotuloPrimario': PropDef('text'),
+        'rotuloSecundario': PropDef('text'),
+      },
+      defaults: () => {'rotuloPrimario': 'Continuar', 'rotuloSecundario': 'Voltar'},
+      // A ação é `CoreflowAcaoDeNavegacao` e não um botão pronto: quem decide a VARIANTE de cada um
+      // é a peça, e é isso que faz o par sair sempre com a mesma hierarquia.
+      build: (p) => CoreflowBotoesDeNavegacao(
+        primary: CoreflowAcaoDeNavegacao(label: '${p['rotuloPrimario']}', onPressed: () {}),
+        secondary: _vazio(p['rotuloSecundario'])
+            ? null
+            : CoreflowAcaoDeNavegacao(label: '${p['rotuloSecundario']}', onPressed: () {}),
+      ),
+      codegen: (p) => 'ds.CoreflowBotoesDeNavegacao('
+          'primary: ds.CoreflowAcaoDeNavegacao(label: ${_str(p['rotuloPrimario'])}, onPressed: aoContinuar)'
+          '${_vazio(p['rotuloSecundario']) ? '' : ', secondary: ds.CoreflowAcaoDeNavegacao(label: ${_str(p['rotuloSecundario'])}, onPressed: aoVoltar)'})',
+    );
+
+/// O PAINEL DE ENTRADA — o vidro da tela de login. Superfície, não conteúdo.
+BlockDef _painelDeEntrada() => BlockDef(
+      type: 'painelDeEntrada',
+      label: 'Painel de entrada · CoreflowPainelDeEntrada',
+      props: const {},
+      defaults: () => {},
+      slots: const {'conteudo': SlotDef(list: true)},
+      build: (p) => _painelWidget(const []),
+      slotsBuild: (p, filhos) => _painelWidget(filhos['conteudo'] ?? const []),
+      slotsCodegen: (p, codigos) {
+        final filhos = codigos['conteudo'] ?? const [];
+        return 'ds.CoreflowPainelDeEntrada(child: '
+            '${filhos.isEmpty ? 'const SizedBox.shrink()' : filhos.length == 1 ? filhos.single : 'Column(children: [${filhos.join(', ')}])'})';
+      },
+      codegen: (p) => 'ds.CoreflowPainelDeEntrada(child: const SizedBox.shrink())',
+    );
+
+Widget _painelWidget(List<Widget> filhos) => CoreflowPainelDeEntrada(
+      child: filhos.isEmpty
+          ? const SizedBox(height: 80, width: double.infinity)
+          : Column(mainAxisSize: MainAxisSize.min, children: filhos),
+    );
+
+/// O ANEL DE ESCOLHA — o segundo jeito de dizer ESCOLHIDO, e o único que se justifica.
+///
+/// Quando o miolo é o que a pessoa está escolhendo (um retrato de fundo, uma foto), tingir com
+/// `primaryWash` pinta por cima da escolha. Aí a marca é um anel de 2,5 por fora.
+BlockDef _anelDeEscolha() => BlockDef(
+      type: 'anelDeEscolha',
+      ctor: 'ds.CoreflowAnelDeEscolha',
+      args: const {'escolhido': Arg.bool('escolhido'), 'raio': Arg.numero('raio')},
+      label: 'Anel de escolha · CoreflowAnelDeEscolha',
+      props: const {
+        'escolhido': PropDef('bool'),
+        'raio': PropDef('enum', options: ['8', '12', '16', '24']),
+      },
+      defaults: () => {'escolhido': true, 'raio': '16'},
+      slots: const {'conteudo': SlotDef()},
+      build: (p) => _anelWidget(p, null),
+      slotsBuild: (p, filhos) => _anelWidget(p, (filhos['conteudo'] ?? const []).firstOrNull),
+      slotsCodegen: (p, codigos) {
+        final filho = (codigos['conteudo'] ?? const []).firstOrNull;
+        return 'ds.CoreflowAnelDeEscolha(escolhido: ${p['escolhido'] == true}'
+            ', raio: ${p['raio']}'
+            ', child: ${filho ?? 'const SizedBox.shrink()'})';
+      },
+      codegen: (p) => 'ds.CoreflowAnelDeEscolha(escolhido: ${p['escolhido'] == true}'
+          ', raio: ${p['raio']}, child: const SizedBox.shrink())',
+    );
+
+Widget _anelWidget(Map<String, dynamic> p, Widget? filho) => CoreflowAnelDeEscolha(
+      escolhido: p['escolhido'] == true,
+      raio: double.tryParse('${p['raio']}') ?? 16,
+      child: filho ??
+          const SizedBox(height: 52, width: 52, child: ColoredBox(color: Color(0x22808080))),
+    );
+
+/// A FAIXA DE CONTEXTO DE OPERAÇÃO — "usando a conta de X". Ela avisa que o que se fizer aqui é em
+/// nome de outra pessoa, e por isso ocupa a linha inteira acima do conteúdo.
+BlockDef _faixaDeOperacao() => BlockDef(
+      type: 'faixaDeOperacao',
+      acoes: const {'onTap': 'aoTrocarDeConta'},
+      ctor: 'ds.CoreflowOperatingStrip',
+      args: const {'conta': Arg.texto('accountName'), 'papel': Arg.texto('role')},
+      label: 'Faixa de operação · CoreflowOperatingStrip',
+      props: const {
+        'conta': PropDef('text', bindable: true, dartType: 'String'),
+        'papel': PropDef('text', bindable: true, dartType: 'String'),
+      },
+      defaults: () => {'conta': 'Empresa LTDA', 'papel': 'Operador'},
+      build: (p) => CoreflowOperatingStrip(
+        accountName: '${p['conta']}',
+        role: _vazio(p['papel']) ? null : '${p['papel']}',
+        onTap: () {},
+      ),
+      codegen: (p) => 'ds.CoreflowOperatingStrip(accountName: ${_str(p['conta'])}'
+          '${_vazio(p['papel']) ? '' : ', role: ${_str(p['papel'])}'}'
+          ', onTap: aoTrocarDeConta)',
+    );
+
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// 1-C · O CHROME DE PÁGINA E DE FOLHA (03/09)
+// ═══════════════════════════════════════════════════════════════════════════════
+//
+// Estes treze são a MOLDURA da tela, e o dono decidiu que eles entram como bloco. A decisão tem um
+// custo declarado: o frame do catálogo já desenha barra de status e indicador de home, e o gate
+// `as_telas_nao_duplicam_o_chrome` existe pra que uma tela montada não desenhe a mesma barra duas
+// vezes. Ele continua valendo, e continua medindo o que sempre mediu — o que muda é que agora dá
+// pra montar a página inteira dentro do frame, e quem monta é quem responde por não duplicar.
+//
+// A `CoreflowPagina` e a `CoreflowFolha` são CONTÊINERES: o corpo delas é slot. Sem isso o bloco
+// seria uma moldura vazia, que não é o que ninguém quer colocar numa tela.
+
+/// A PÁGINA — barra de topo, corpo com teto de largura e rodapé opcional.
+BlockDef _pagina() => BlockDef(
+      type: 'pagina',
+      label: 'Página · CoreflowPagina',
+      props: const {
+        'titulo': PropDef('text'),
+        'mostrarVoltar': PropDef('bool'),
+      },
+      defaults: () => {'titulo': 'Transferir', 'mostrarVoltar': true},
+      slots: const {'corpo': SlotDef(list: true)},
+      build: (p) => _paginaWidget(p, const []),
+      slotsBuild: (p, filhos) => _paginaWidget(p, filhos['corpo'] ?? const []),
+      slotsCodegen: (p, codigos) {
+        final filhos = codigos['corpo'] ?? const [];
+        return 'ds.CoreflowPagina(title: ${_str(p['titulo'])}'
+            '${p['mostrarVoltar'] == true ? '' : ', showBackButton: false'}'
+            ', body: ${filhos.isEmpty ? 'const SizedBox.shrink()' : filhos.length == 1 ? filhos.single : 'Column(children: [${filhos.join(', ')}])'})';
+      },
+      codegen: (p) => 'ds.CoreflowPagina(title: ${_str(p['titulo'])}'
+          ', body: const SizedBox.shrink())',
+    );
+
+/// O PREVIEW da página vai dentro de uma ALTURA, e o codegen não.
+///
+/// A página é a moldura de uma tela: ela monta um `Scaffold` e pede altura ilimitada, o que na tela
+/// de verdade vem do aparelho. No card da aba de componentes não vem — o gate mediu isso na hora,
+/// com *"RenderCustomMultiChildLayoutBox object was given an infinite size"*, e ele está certo em
+/// medir: bloco que não sobrevive ao card não pode ser oferecido no card.
+///
+/// Os 420 são do PREVIEW e não da peça. Por isso moram aqui e não no `codegen`: o que se emite é a
+/// página, que dentro da tela recebe a altura do aparelho como sempre recebeu.
+Widget _paginaWidget(Map<String, dynamic> p, List<Widget> filhos) => SizedBox(
+      height: 420,
+      child: CoreflowPagina(
+        title: '${p['titulo']}',
+        showBackButton: p['mostrarVoltar'] == true,
+        body: filhos.isEmpty
+            ? const SizedBox(height: 120, width: double.infinity)
+            : Column(crossAxisAlignment: CrossAxisAlignment.start, children: filhos),
+      ),
+    );
+
+/// A FOLHA — o cartão que sobe de baixo, com pegador, título e fechar.
+BlockDef _folhaDoProduto() => BlockDef(
+      type: 'folhaDoProduto',
+      acoes: const {'onClose': 'aoFechar'},
+      label: 'Folha · CoreflowFolha',
+      props: const {'titulo': PropDef('text')},
+      defaults: () => {'titulo': 'Confirmar transferência'},
+      slots: const {'conteudo': SlotDef(list: true)},
+      build: (p) => _folhaDoProdutoWidget(p, const []),
+      slotsBuild: (p, filhos) => _folhaDoProdutoWidget(p, filhos['conteudo'] ?? const []),
+      slotsCodegen: (p, codigos) {
+        final filhos = codigos['conteudo'] ?? const [];
+        return 'ds.CoreflowFolha(title: ${_str(p['titulo'])}, onClose: aoFechar'
+            ', child: ${filhos.isEmpty ? 'const SizedBox.shrink()' : filhos.length == 1 ? filhos.single : 'Column(mainAxisSize: MainAxisSize.min, children: [${filhos.join(', ')}])'})';
+      },
+      codegen: (p) => 'ds.CoreflowFolha(title: ${_str(p['titulo'])}'
+          ', onClose: aoFechar, child: const SizedBox.shrink())',
+    );
+
+Widget _folhaDoProdutoWidget(Map<String, dynamic> p, List<Widget> filhos) => CoreflowFolha(
+      title: '${p['titulo']}',
+      onClose: () {},
+      child: filhos.isEmpty
+          ? const SizedBox(height: 80, width: double.infinity)
+          : Column(mainAxisSize: MainAxisSize.min, children: filhos),
+    );
+
+/// A AÇÃO DE RODAPÉ — o botão da base, com o par secundário e o `accent`.
+BlockDef _acaoDeRodape() => BlockDef(
+      type: 'acaoDeRodape',
+      acoes: const {'onTap': 'aoContinuar', 'onSecondaryTap': 'aoVoltar'},
+      ctor: 'ds.CoreflowAcaoDeRodape',
+      args: const {
+        'label': Arg.texto('label'),
+        'rotuloSecundario': Arg.texto('secondaryLabel'),
+        'destaque': Arg.bool('accent'),
+        'habilitado': Arg.bool('enabled'),
+      },
+      label: 'Ação de rodapé · CoreflowAcaoDeRodape',
+      props: const {
+        'label': PropDef('text', bindable: true, dartType: 'String'),
+        'rotuloSecundario': PropDef('text'),
+        'destaque': PropDef('bool'),
+        'habilitado': PropDef('bool'),
+      },
+      defaults: () => {
+        'label': 'Continuar',
+        'rotuloSecundario': '',
+        'destaque': false,
+        'habilitado': true,
+      },
+      build: (p) => CoreflowAcaoDeRodape(
+        label: '${p['label']}',
+        onTap: () {},
+        accent: p['destaque'] == true,
+        enabled: p['habilitado'] == true,
+        secondaryLabel: _vazio(p['rotuloSecundario']) ? null : '${p['rotuloSecundario']}',
+      ),
+      codegen: (p) => 'ds.CoreflowAcaoDeRodape(label: ${_str(p['label'])}, onTap: aoContinuar'
+          '${p['destaque'] == true ? ', accent: true' : ''}'
+          '${p['habilitado'] == true ? '' : ', enabled: false'}'
+          '${_vazio(p['rotuloSecundario']) ? '' : ', secondaryLabel: ${_str(p['rotuloSecundario'])}, onSecondaryTap: aoVoltar'})',
+    );
+
+/// O FECHAR da folha — o X, com rótulo de leitor de tela embutido.
+BlockDef _fecharFolha() => BlockDef(
+      type: 'fecharFolha',
+      acoes: const {'onPressed': 'aoFechar'},
+      ctor: 'ds.CoreflowFecharFolha',
+      args: const {'rotuloAcessivel': Arg.texto('semanticLabel')},
+      label: 'Fechar folha · CoreflowFecharFolha',
+      props: const {'rotuloAcessivel': PropDef('text')},
+      defaults: () => {'rotuloAcessivel': 'Fechar'},
+      build: (p) => CoreflowFecharFolha(
+        onPressed: () {},
+        semanticLabel: '${p['rotuloAcessivel']}',
+      ),
+      codegen: (p) => 'ds.CoreflowFecharFolha(onPressed: aoFechar'
+          ', semanticLabel: ${_str(p['rotuloAcessivel'])})',
+    );
+
+/// O CABEÇALHO DE FOLHA — pegador mais fechar, sem título.
+BlockDef _cabecalhoDeFolha() => BlockDef(
+      type: 'cabecalhoDeFolha',
+      acoes: const {'onClose': 'aoFechar'},
+      ctor: 'ds.CoreflowCabecalhoDeFolha',
+      args: const {},
+      label: 'Cabeçalho de folha · CoreflowCabecalhoDeFolha',
+      props: const {},
+      defaults: () => {},
+      build: (p) => CoreflowCabecalhoDeFolha(onClose: () {}),
+      codegen: (p) => 'ds.CoreflowCabecalhoDeFolha(onClose: aoFechar)',
+    );
+
+/// O TETO DE LARGURA — o que impede a linha de texto de atravessar um tablet.
+BlockDef _larguraDeConteudo() => BlockDef(
+      type: 'larguraDeConteudo',
+      label: 'Teto de largura · CoreflowLarguraDeConteudo',
+      props: const {},
+      defaults: () => {},
+      slots: const {'conteudo': SlotDef(list: true)},
+      build: (p) => _tetoWidget(const []),
+      slotsBuild: (p, filhos) => _tetoWidget(filhos['conteudo'] ?? const []),
+      slotsCodegen: (p, codigos) {
+        final filhos = codigos['conteudo'] ?? const [];
+        return 'ds.CoreflowLarguraDeConteudo(child: '
+            '${filhos.isEmpty ? 'const SizedBox.shrink()' : filhos.length == 1 ? filhos.single : 'Column(children: [${filhos.join(', ')}])'})';
+      },
+      codegen: (p) => 'ds.CoreflowLarguraDeConteudo(child: const SizedBox.shrink())',
+    );
+
+Widget _tetoWidget(List<Widget> filhos) => CoreflowLarguraDeConteudo(
+      child: filhos.isEmpty
+          ? const SizedBox(height: 60, width: double.infinity)
+          : Column(crossAxisAlignment: CrossAxisAlignment.start, children: filhos),
+    );
+
+/// O ESPERANDO — a cortina que escurece o conteúdo enquanto algo carrega, sem tirá-lo da tela.
+BlockDef _esperando() => BlockDef(
+      type: 'esperando',
+      ctor: 'ds.CoreflowBusy',
+      args: const {'esperando': Arg.bool('busy'), 'escurecimento': Arg.numero('dim')},
+      label: 'Esperando · CoreflowBusy',
+      props: const {
+        'esperando': PropDef('bool'),
+        'escurecimento': PropDef('enum', options: ['0.35', '0.55', '0.75']),
+      },
+      defaults: () => {'esperando': true, 'escurecimento': '0.55'},
+      slots: const {'conteudo': SlotDef()},
+      build: (p) => _esperandoWidget(p, null),
+      slotsBuild: (p, filhos) => _esperandoWidget(p, (filhos['conteudo'] ?? const []).firstOrNull),
+      slotsCodegen: (p, codigos) {
+        final filho = (codigos['conteudo'] ?? const []).firstOrNull;
+        return 'ds.CoreflowBusy(busy: ${p['esperando'] == true}'
+            ', dim: ${p['escurecimento']}'
+            ', child: ${filho ?? 'const SizedBox.shrink()'})';
+      },
+      codegen: (p) => 'ds.CoreflowBusy(busy: ${p['esperando'] == true}'
+          ', child: const SizedBox.shrink())',
+    );
+
+Widget _esperandoWidget(Map<String, dynamic> p, Widget? filho) => CoreflowBusy(
+      busy: p['esperando'] == true,
+      dim: double.tryParse('${p['escurecimento']}') ?? 0.55,
+      child: filho ?? const SizedBox(height: 80, width: double.infinity),
+    );
+
+
+/// A BARRA DE TOPO deste produto, no idioma `page` — título, voltar e vidro.
+BlockDef _barraDeTopoDoProduto() => BlockDef(
+      type: 'barraDeTopoDoProduto',
+      acoes: const {'onBack': 'aoVoltar'},
+      ctor: 'ds.CoreflowBarraDeTopo.page',
+      args: const {'titulo': Arg.texto('title'), 'vidro': Arg.bool('glass')},
+      label: 'Barra de topo · CoreflowBarraDeTopo',
+      props: const {'titulo': PropDef('text'), 'vidro': PropDef('bool')},
+      defaults: () => {'titulo': 'Transferir', 'vidro': true},
+      build: (p) => CoreflowBarraDeTopo.page(
+        title: '${p['titulo']}',
+        onBack: () {},
+        glass: p['vidro'] == true,
+      ),
+      codegen: (p) => 'ds.CoreflowBarraDeTopo.page(title: ${_str(p['titulo'])}'
+          ', onBack: aoVoltar'
+          '${p['vidro'] == true ? '' : ', glass: false'})',
+    );
+
+/// O RODAPÉ com botões — a base fixa da página, no idioma `button`.
+BlockDef _rodapeDoProduto() => BlockDef(
+      type: 'rodapeDoProduto',
+      acoes: const {'primary': 'aoContinuar'},
+      label: 'Rodapé · CoreflowRodape',
+      props: const {'rotuloPrimario': PropDef('text')},
+      defaults: () => {'rotuloPrimario': 'Continuar'},
+      build: (p) => CoreflowRodape.button(
+        primary: CoreflowAcaoDeNavegacao(label: '${p['rotuloPrimario']}', onPressed: () {}),
+      ),
+      codegen: (p) => 'ds.CoreflowRodape.button(primary: '
+          'ds.CoreflowAcaoDeNavegacao(label: ${_str(p['rotuloPrimario'])}, onPressed: aoContinuar))',
+    );
+
+/// O CORPO DE FOLHA — a superfície interna, com a cor da folha.
+BlockDef _corpoDeFolha() => BlockDef(
+      type: 'corpoDeFolha',
+      label: 'Corpo de folha · CoreflowCorpoDeFolha',
+      props: const {},
+      defaults: () => {},
+      slots: const {'conteudo': SlotDef(list: true)},
+      build: (p) => _corpoDeFolhaWidget(const []),
+      slotsBuild: (p, filhos) => _corpoDeFolhaWidget(filhos['conteudo'] ?? const []),
+      slotsCodegen: (p, codigos) {
+        final filhos = codigos['conteudo'] ?? const [];
+        return 'ds.CoreflowCorpoDeFolha(child: '
+            '${filhos.isEmpty ? 'const SizedBox.shrink()' : filhos.length == 1 ? filhos.single : 'Column(mainAxisSize: MainAxisSize.min, children: [${filhos.join(', ')}])'})';
+      },
+      codegen: (p) => 'ds.CoreflowCorpoDeFolha(child: const SizedBox.shrink())',
+    );
+
+Widget _corpoDeFolhaWidget(List<Widget> filhos) => CoreflowCorpoDeFolha(
+      child: filhos.isEmpty
+          ? const SizedBox(height: 60, width: double.infinity)
+          : Column(mainAxisSize: MainAxisSize.min, children: filhos),
+    );
+
+/// A LARGURA INTEIRA — o que devolve borda a borda a um filho dentro de uma região que tem teto.
+///
+/// Serve pra faixa, divisor e arte de fundo: o teto é do TEXTO, e o que não é texto não deveria
+/// parar onde a linha de leitura para.
+///
+/// **O irmão dele não vira bloco, e a razão é de tipo**: `CoreflowBarraComTeto` recebe um
+/// `PreferredSizeWidget` — ele é invólucro de BARRA, não par deste. Um slot que só aceita barra é um
+/// slot que o compositor não sabe preencher, e oferecer o bloco seria oferecer um encaixe que não
+/// encaixa.
+BlockDef _larguraInteira() => BlockDef(
+      type: 'larguraInteira',
+      label: 'Largura inteira · CoreflowSemTeto',
+      props: const {},
+      defaults: () => {},
+      slots: const {'conteudo': SlotDef()},
+      build: (p) => _larguraInteiraWidget(null),
+      slotsBuild: (p, filhos) =>
+          _larguraInteiraWidget((filhos['conteudo'] ?? const []).firstOrNull),
+      slotsCodegen: (p, codigos) {
+        final filho = (codigos['conteudo'] ?? const []).firstOrNull ?? 'const SizedBox.shrink()';
+        return 'ds.CoreflowSemTeto(child: $filho)';
+      },
+      codegen: (p) => 'ds.CoreflowSemTeto(child: const SizedBox.shrink())',
+    );
+
+Widget _larguraInteiraWidget(Widget? filho) => CoreflowSemTeto(
+      child: filho ?? const SizedBox(height: 40, width: double.infinity),
+    );
+
+/// O ENCAIXE DA FAIXA DE OPERAÇÃO — onde a faixa entra quando a sessão é operada, e nada quando não
+/// é. Ele lê o contexto publicado; o bloco existe pra que a tela possa RESERVAR o lugar dela.
+BlockDef _encaixeDeOperacao() => BlockDef(
+      type: 'encaixeDeOperacao',
+      ctor: 'ds.CoreflowOperatingSlot',
+      args: const {'respeitaOTopo': Arg.bool('safeTop')},
+      label: 'Encaixe de operação · CoreflowOperatingSlot',
+      props: const {'respeitaOTopo': PropDef('bool')},
+      defaults: () => {'respeitaOTopo': false},
+      build: (p) => CoreflowOperatingSlot(safeTop: p['respeitaOTopo'] == true),
+      codegen: (p) => 'ds.CoreflowOperatingSlot('
+          '${p['respeitaOTopo'] == true ? 'safeTop: true' : ''})',
+    );
+
+
+/// A PÁGINA DE RESUMO — a tela de comprovante inteira: valor grande, estado e seções.
+///
+/// Ela é a página COMPLETA e não um pedaço dela: as seções vêm de dado, e é por isso que o bloco
+/// oferece o cabeçalho e deixa a lista pro binding.
+BlockDef _paginaDeResumo() => BlockDef(
+      type: 'paginaDeResumo',
+      acoes: const {'onBack': 'aoVoltar', 'sections': 'secoesDoResumo'},
+      ctor: 'ds.CoreflowPaginaDeResumo',
+      args: const {
+        'titulo': Arg.texto('title'),
+        'valor': Arg.texto('amountText'),
+        'subtitulo': Arg.texto('subtitle'),
+        'estado': Arg.enumeracao('estado', 'ds.CoreflowEstadoDaTransacao'),
+      },
+      label: 'Página de resumo · CoreflowPaginaDeResumo',
+      props: {
+        'titulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'valor': const PropDef('text', bindable: true, dartType: 'String'),
+        'subtitulo': const PropDef('text', bindable: true, dartType: 'String'),
+        'estado': PropDef('enum',
+            options: CoreflowEstadoDaTransacao.values.map((e) => e.name).toList()),
+      },
+      defaults: () => {
+        'titulo': 'Transferência concluída',
+        'valor': r'R$ 120,00',
+        'subtitulo': 'para Ana Maria Silva',
+        'estado': 'concluida',
+      },
+      build: (p) => SizedBox(
+        // Os 420 são do PREVIEW: é página, e página pede a altura do aparelho. Mesma razão da
+        // `CoreflowPagina` — ver o comentário lá.
+        height: 420,
+        child: CoreflowPaginaDeResumo(
+          title: '${p['titulo']}',
+          amountText: '${p['valor']}',
+          subtitle: '${p['subtitulo']}',
+          estado: _daOpcao(p['estado'], _porNome(CoreflowEstadoDaTransacao.values),
+              CoreflowEstadoDaTransacao.concluida),
+          onBack: () {},
+        ),
+      ),
+      codegen: (p) => 'ds.CoreflowPaginaDeResumo(title: ${_str(p['titulo'])}'
+          ', amountText: ${_str(p['valor'])}'
+          ', subtitle: ${_str(p['subtitulo'])}'
+          ', estado: ds.CoreflowEstadoDaTransacao.${p['estado']}'
+          ', sections: secoesDoResumo, onBack: aoVoltar)',
+    );
+
+/// A PÁGINA COM RODAPÉ FLUTUANTE — a variante em que a ação paira sobre o conteúdo em vez de sentar
+/// na base. Existe pra tela de mapa e de câmera, onde a base é conteúdo.
+BlockDef _paginaComRodapeFlutuante() => BlockDef(
+      type: 'paginaComRodapeFlutuante',
+      acoes: const {'onBack': 'aoVoltar'},
+      label: 'Página com rodapé flutuante · CoreflowPaginaComRodapeFlutuante',
+      props: const {
+        'titulo': PropDef('text'),
+        'rotuloDoVoltar': PropDef('text'),
+      },
+      defaults: () => {'titulo': 'Por perto', 'rotuloDoVoltar': '← Voltar'},
+      slots: const {'corpo': SlotDef(list: true)},
+      build: (p) => _paginaFlutuanteWidget(p, const []),
+      slotsBuild: (p, filhos) => _paginaFlutuanteWidget(p, filhos['corpo'] ?? const []),
+      slotsCodegen: (p, codigos) {
+        final filhos = codigos['corpo'] ?? const [];
+        return 'ds.CoreflowPaginaComRodapeFlutuante(title: ${_str(p['titulo'])}'
+            ', backLabel: ${_str(p['rotuloDoVoltar'])}'
+            ', body: ${filhos.isEmpty ? 'const SizedBox.shrink()' : filhos.length == 1 ? filhos.single : 'Column(children: [${filhos.join(', ')}])'})';
+      },
+      codegen: (p) => 'ds.CoreflowPaginaComRodapeFlutuante(title: ${_str(p['titulo'])}'
+          ', body: const SizedBox.shrink())',
+    );
+
+Widget _paginaFlutuanteWidget(Map<String, dynamic> p, List<Widget> filhos) => SizedBox(
+      height: 420,
+      child: CoreflowPaginaComRodapeFlutuante(
+        title: '${p['titulo']}',
+        backLabel: '${p['rotuloDoVoltar']}',
+        body: filhos.isEmpty
+            ? const SizedBox(height: 120, width: double.infinity)
+            : Column(crossAxisAlignment: CrossAxisAlignment.start, children: filhos),
+      ),
+    );
+
 BlockDef _ilustracao() => BlockDef(
       type: 'ilustracao',
-      ctor: 'ds.DilettaIllustrationAccessory',
+      // **A ILUSTRAÇÃO DESTE PRODUTO** (03/09), pelo construtor `.doPai`: a arte continua sendo a
+      // dele, o que muda é o TAMANHO. O acessório do pai dimensiona por degrau (`sm`/`md`/`lg`) e
+      // aqui o número é livre — a peça encolhe a arte por escala, que é o que a casca do app fazia.
+      //
+      // 300 é o default dela. O `.estadoVazio` fixa 150 e vale em 11 telas; ele não vira opção aqui
+      // porque é um construtor com nome, e nome é o que impede o 150 de virar número solto.
+      ctor: 'ds.CoreflowIlustracao.doPai',
       args: const {
-        'arte': Arg.enumeracao('illustration', 'ds.DilettaIllustration'),
-        'tamanho': Arg.enumeracao('size', 'ds.DilettaIllustrationSize'),
+        'arte': Arg.enumeracaoPosicional('ds.DilettaIllustration'),
+        'tamanho': Arg.numero('tamanho'),
       },
-      label: 'Ilustração · Illustration',
+      label: 'Ilustração · CoreflowIlustracao',
       props: {
         'arte': PropDef('enum', options: _nomesDeIlustracao),
-        'tamanho': PropDef('enum',
-            options: DilettaIllustrationSize.values.map((e) => e.name).toList()),
+        'tamanho': const PropDef('enum', options: ['150', '200', '300']),
       },
-      defaults: () => {'arte': _nomesDeIlustracao.first, 'tamanho': 'md'},
-      build: (p) => DilettaIllustrationAccessory(
-        illustration: _ilustracaoDe('${p['arte']}'),
-        size: _daOpcao(p['tamanho'], _porNome(DilettaIllustrationSize.values),
-            DilettaIllustrationSize.md),
+      defaults: () => {'arte': _nomesDeIlustracao.first, 'tamanho': '300'},
+      build: (p) => CoreflowIlustracao.doPai(
+        _ilustracaoDe('${p['arte']}'),
+        tamanho: double.tryParse('${p['tamanho']}') ?? 300,
       ),
-      codegen: (p) => 'ds.DilettaIllustrationAccessory('
-          'illustration: ds.DilettaIllustration.${p['arte']}'
-          ', size: ds.DilettaIllustrationSize.${p['tamanho']})',
+      codegen: (p) => 'ds.CoreflowIlustracao.doPai(ds.DilettaIllustration.${p['arte']}'
+          ', tamanho: ${p['tamanho']})',
     );
 
 BlockDef _estadoVazio() => BlockDef(
@@ -1349,12 +2227,17 @@ BlockDef _caixaDeSelecao() => BlockDef(
 
 BlockDef _comprovante() => BlockDef(
       type: 'comprovante',
-      ctor: 'ds.DilettaReceipt',
+      // **O COMPROVANTE DESTE PRODUTO** (03/09). Ele embrulha o do pai e acrescenta o `estado`, que
+      // é o eixo que o app usa: comprovante de coisa que FALHOU não pode sair com o mesmo disco
+      // verde de coisa que deu certo. Era pedido desta casa, voltou ENTRA, e ficou de fora do
+      // catálogo — o bloco mostrava só o caminho feliz.
+      ctor: 'ds.CoreflowComprovante',
       args: const {
         'titulo': Arg.texto('title'),
         'carimbo': Arg.texto('timestamp'),
         'icone': Arg.enumeracao('icon', 'ds.DilettaIcons'),
         'idDaTransacao': Arg.texto('transactionId'),
+        'estado': Arg.enumeracao('estado', 'ds.DilettaSpotState'),
       },
       // As linhas e as seções vêm de dado: um comprovante é o que o backend devolveu.
       acoes: const {'rows': 'linhasDoComprovante', 'sections': 'secoesDoComprovante'},
@@ -1364,16 +2247,19 @@ BlockDef _comprovante() => BlockDef(
         'carimbo': const PropDef('text', bindable: true, dartType: 'String'),
         'icone': PropDef('enum', options: DilettaIcons.all.keys.toList()),
         'idDaTransacao': const PropDef('text', bindable: true, dartType: 'String'),
+        'estado': PropDef('enum', options: DilettaSpotState.values.map((e) => e.name).toList()),
       },
       defaults: () => {
         'titulo': 'Comprovante de pagamento',
         'carimbo': '30/07/2026 às 14:32',
         'icone': 'circleCheckLight',
         'idDaTransacao': 'E1234567890',
+        'estado': 'success',
       },
-      build: (p) => DilettaReceipt(
+      build: (p) => CoreflowComprovante(
         title: '${p['titulo']}',
         timestamp: '${p['carimbo']}',
+        estado: _daOpcao(p['estado'], _porNome(DilettaSpotState.values), DilettaSpotState.success),
         icon: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
         transactionId: _vazio(p['idDaTransacao']) ? null : '${p['idDaTransacao']}',
         rows: const [
@@ -1388,8 +2274,9 @@ BlockDef _comprovante() => BlockDef(
           ),
         ],
       ),
-      codegen: (p) => 'ds.DilettaReceipt(title: ${_str(p['titulo'])}'
+      codegen: (p) => 'ds.CoreflowComprovante(title: ${_str(p['titulo'])}'
           ', timestamp: ${_str(p['carimbo'])}'
+          ', estado: ds.DilettaSpotState.${p['estado']}'
           ', rows: linhasDoComprovante, sections: secoesDoComprovante)',
     );
 
@@ -2647,6 +3534,36 @@ void configurarDsDoBold() {
       'campoDeBusca': _campoDeBusca(),
       'girando': _girando(),
       'ilustracao': _ilustracao(),
+      // As peças deste produto que faltavam (03/09) — ver o cabeçalho da seção 1-B.
+      'cartao': _cartao(),
+      'avisoEmLinha': _avisoEmLinha(),
+      'etiqueta': _etiqueta(),
+      'disco': _disco(),
+      'spot': _spot(),
+      'ponto': _ponto(),
+      'pegador': _pegador(),
+      'heroi': _heroi(),
+      'busca': _busca(),
+      'campoDeValor': _campoDeValor(),
+      'botoesDeNavegacao': _botoesDeNavegacao(),
+      'painelDeEntrada': _painelDeEntrada(),
+      'anelDeEscolha': _anelDeEscolha(),
+      'faixaDeOperacao': _faixaDeOperacao(),
+      // O chrome de página e de folha — ver o cabeçalho da seção 1-C.
+      'pagina': _pagina(),
+      'folhaDoProduto': _folhaDoProduto(),
+      'acaoDeRodape': _acaoDeRodape(),
+      'fecharFolha': _fecharFolha(),
+      'cabecalhoDeFolha': _cabecalhoDeFolha(),
+      'larguraDeConteudo': _larguraDeConteudo(),
+      'esperando': _esperando(),
+      'barraDeTopoDoProduto': _barraDeTopoDoProduto(),
+      'rodapeDoProduto': _rodapeDoProduto(),
+      'corpoDeFolha': _corpoDeFolha(),
+      'larguraInteira': _larguraInteira(),
+      'encaixeDeOperacao': _encaixeDeOperacao(),
+      'paginaDeResumo': _paginaDeResumo(),
+      'paginaComRodapeFlutuante': _paginaComRodapeFlutuante(),
       'estadoVazio': _estadoVazio(),
       'logo': _logo(),
       'chipDeInfo': _chipDeInfo(),
@@ -2689,19 +3606,22 @@ void configurarDsDoBold() {
     // grupo existe e ninguém acha. A conformidade do pai cobra.
     grupos: const {
       'Estrutura': ['barraDeStatus', 'cascaDeTopo', 'barraDeNavegacao', 'tituloDaPagina',
-        'indicadorDeHome'],
-      'Conteúdo': ['texto', 'valor', 'selo', 'aviso', 'icone', 'cabecalhoDeSecao',
+        'indicadorDeHome', 'pagina', 'larguraDeConteudo', 'acaoDeRodape',
+        'barraDeTopoDoProduto', 'rodapeDoProduto', 'larguraInteira', 'encaixeDeOperacao', 'paginaDeResumo', 'paginaComRodapeFlutuante'],
+      'Conteúdo': ['texto', 'valor', 'selo', 'aviso', 'avisoEmLinha', 'icone', 'cabecalhoDeSecao',
         'ilustracao', 'logo', 'chipDeInfo', 'estadoVazio', 'avatar', 'criterios', 'expansivel',
-        'cartaoDeDestaque', 'comprovante', 'bannerDeStatus'],
+        'cartaoDeDestaque', 'comprovante', 'bannerDeStatus', 'cartao', 'etiqueta', 'disco', 'spot',
+        'ponto', 'heroi'],
       // A lista e as duas linhas ficam juntas porque é assim que se usam: a coleção é dona do
       // separador, e linha fora de lista é linha sem vizinhança.
       // O grupo do dia entra aqui e não em "Marca do Bold": ele é o ENVELOPE de uma coleção, e a
       // vizinhança que ensina é a da lista — quem procura "como agrupo lançamentos" procura em Lista.
       'Lista': ['lista', 'linha', 'linhaDeValor', 'linhaDeEscolha', 'grupoDoDia'],
       // Retorno de sistema: o que a tela diz enquanto ou depois de algo acontecer.
-      'Retorno': ['toast', 'esqueleto', 'girando'],
+      'Retorno': ['toast', 'esqueleto', 'girando', 'esperando'],
       // Camada: o que aparece POR CIMA da tela.
-      'Camada': ['folha', 'dialogo'],
+      'Camada': ['folha', 'dialogo', 'pegador', 'folhaDoProduto', 'cabecalhoDeFolha',
+        'fecharFolha', 'corpoDeFolha'],
       // Grupo próprio porque é o que só o Bold tem: a vizinhança na paleta é decisão de
       // linguagem, e peça de marca não se mistura com vocabulário herdado.
       'Marca do Bold': ['seloQuantico', 'saldo', 'cabecalhoDaHome', 'resumoDaTransacao',
@@ -2713,15 +3633,18 @@ void configurarDsDoBold() {
         // deste produto. Vizinha das outras peças de marca, e não do `chipDeFiltro` em Entrada —
         // apesar de ser escolha, o que ela ensina é o fundo.
         'amostraDeFundo'],
-      'Do Bold': ['copiar', 'abas', 'segmentos', 'pontosDePagina'],
+      'Do Bold': ['copiar', 'abas', 'segmentos', 'pontosDePagina', 'painelDeEntrada',
+        'faixaDeOperacao'],
       // As três peças da conta PJ: quem pode mandar quanto, falta quanto, e até quando.
       'Alçadas': ['escadaDeAlcadas', 'progressoDeAprovacao', 'prazoDaPendencia'],
       'Leitor de código': ['visorDeCodigo'],
       // O chip de filtro mora em Entrada e não em Conteúdo: ele é escolha, e escolha única numa
       // fila é entrada de dado — o vizinho certo é o `listaDeRadio`, não o `chipDeInfo`.
       'Entrada': ['campo', 'campoDeBusca', 'interruptor', 'caixaDeSelecao', 'chipDeEntrada',
-        'chipDeFiltro', 'dropdown', 'listaDeRadio', 'calendario', 'teclado'],
-      'Ação': ['botao', 'barraDeBaixo', 'navFlutuante', 'botaoDeIcone', 'cartaoDeAcesso'],
+        'chipDeFiltro', 'dropdown', 'listaDeRadio', 'calendario', 'teclado', 'busca',
+        'campoDeValor', 'anelDeEscolha'],
+      'Ação': ['botao', 'barraDeBaixo', 'navFlutuante', 'botaoDeIcone', 'cartaoDeAcesso',
+        'botoesDeNavegacao'],
       'Ritmo': ['ritmo', 'divisor', 'grade'],
     },
     tema: (filho, {required escuro}) => DilettaThemeScope(
@@ -3111,14 +4034,46 @@ double _espaco(String token) => _daOpcao(token, const {
 ///
 /// Os componentes NASCIDOS aqui ainda não têm contrato escrito, e essa dívida é minha: o
 /// `COMPONENTE-DO-FILHO.md` do pai passou a pedir contrato como parte do mínimo na v0.16.1.
+/// A PEÇA DESTE PRODUTO HERDA A SPEC DA FAMÍLIA para o mesmo papel.
+///
+/// Quando um bloco passou a emitir `ds.CoreflowBotao` no lugar de `ds.DilettaButton` (03/09), o
+/// contrato sumiu junto: a derivação lia o nome `Diletta*` do construtor, e `Coreflow*` não casa com
+/// nada no `kDilettaSpecs`. O gate do pai acusou na hora, e estava certo em acusar — bloco sem
+/// contrato desenha nome e matriz e para ali.
+///
+/// Só que a spec não sumiu: `CoreflowBotao` **é** o botão deste produto, e "quando usar um botão
+/// primário" é a mesma frase para os dois. O que muda entre eles é o default, não o papel.
+///
+/// Esta tabela é curta de propósito, e cada linha é uma peça do produto que ocupa o papel de uma
+/// peça da família. Peça NASCIDA aqui — `CoreflowSaldo`, `CoreflowHeroi` — não entra: ela não tem
+/// papel equivalente lá, e o contrato dela é dívida escrita, não herança.
+const _specDaPecaDoProduto = <String, String>{
+  'CoreflowBotao': 'Button',
+  'CoreflowCampoDeTexto': 'Input',
+  'CoreflowAvatar': 'Avatar',
+  'CoreflowComprovante': 'Receipt',
+  'CoreflowIcone': 'Icon',
+  'CoreflowAviso': 'NoticeBanner',
+  'CoreflowIlustracao': 'IllustrationAccessory',
+  'CoreflowLinhaDeLista': 'AppListRow',
+  'CoreflowGrupoDeLista': 'AppList',
+};
+
 Map<String, String> _contratosDosBlocos(Map<String, BlockDef> blocos) {
   final mapa = <String, String>{};
   for (final def in blocos.values) {
     final ctor = def.ctor;
-    if (ctor == null || !ctor.contains('Diletta')) continue;
-    final classe =
+    if (ctor == null) continue;
+    var classe =
         ctor.split('.').firstWhere((p) => p.startsWith('Diletta'), orElse: () => '');
-    if (classe.isEmpty) continue;
+    if (classe.isEmpty) {
+      // Peça do produto: cai na tabela acima, e o que se procura no pai é o PAPEL dela.
+      final nossa =
+          ctor.split('.').firstWhere((p) => p.startsWith('Coreflow'), orElse: () => '');
+      final papel = _specDaPecaDoProduto[nossa];
+      if (papel == null) continue;
+      classe = 'Diletta$papel';
+    }
     final kebab = classe
         .replaceFirst('Diletta', '')
         .replaceAllMapped(RegExp(r'[A-Z]'), (m) => '-${m.group(0)!.toLowerCase()}')
@@ -3163,6 +4118,19 @@ Map<String, String> _contratosDosBlocos(Map<String, BlockDef> blocos) {
     // O esqueleto perdeu o `ctor` quando virou PAR (`Shimmer(child: Skeleton)`), porque a forma do pai
     // não anima sozinha. O contrato continua sendo o dele — a spec do pai fala das duas peças juntas.
     'esqueleto': 'design-system-skeleton',
+    // ── As peças que entraram em 03/09 e ocupam um PAPEL da família ──────────────────────────────
+    //
+    // Só estas duas herdam: o alerta em linha e a etiqueta de estado são a mesma palavra que o pai
+    // já escreveu, com o default deste produto. `cartao`, `disco`, `ponto`, `pegador` e `heroi`
+    // nasceram AQUI e têm contrato próprio no `kBoldSpecs` — herdar a spec do papel neles seria
+    // dizer que a peça é do pai quando ela não é.
+    'avisoEmLinha': 'design-system-inline-alert',
+    'etiqueta': 'design-system-status-tag',
+    'spot': 'design-system-spot-icon',
+    // O chrome que ocupa papel da família: a barra de topo e o encaixe da faixa. O rodapé, o corpo
+    // de folha e a largura inteira nasceram aqui e têm contrato próprio no `kBoldSpecs`.
+    'barraDeTopoDoProduto': 'design-system-top-app-bar',
+    'encaixeDeOperacao': 'design-system-top-app-bar',
   };
   excecoes.forEach((tipo, slug) {
     if (!blocos.containsKey(tipo)) return;

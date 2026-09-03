@@ -20,6 +20,60 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.97.0] — 2026-09-03
+
+### O catálogo passou a falar o DS inteiro: 23 peças de 62 viraram 60
+
+O plugue declarava **68 blocos** e conhecia **23 dos 62 widgets** do design system. Trinta e nove
+peças existiam aqui e não lá: quem compunha uma tela no catálogo não tinha como pedir um cartão, uma
+etiqueta, um disco ou o pegador de uma folha sem sair do DS. Agora são **96 blocos** e **60 peças**.
+
+As duas que ficam de fora são `InheritedWidget` — `CoreflowBusyScope` e `CoreflowOperatingContext`
+publicam estado pra subárvore e não desenham nada. Bloco é coisa que se põe numa tela e se vê.
+
+### Cinco blocos trocaram de peça, e DOIS não trocaram — a contagem decidiu
+
+A pergunta era "o bloco emite a peça do pai ou a deste produto?", e a resposta não é "sempre a
+nossa": é **a que o app escreve**, medida em sítio.
+
+| bloco | produto | pai | quem emite |
+|---|---|---|---|
+| `botao` | `CoreflowBotao` **189** | `DilettaButton` 1 | produto |
+| `icone` | `CoreflowIcone` **185** | `DilettaIcon` 0 | produto |
+| `campo` | `CoreflowCampoDeTexto` **95** | `DilettaInput` 0 | produto |
+| `avatar` | `CoreflowAvatar` 6 | `DilettaAvatar` 8 | produto |
+| `comprovante` | `CoreflowComprovante` 2 | `DilettaReceipt` 0 | produto |
+| `linha` | `CoreflowLinhaDeLista` 16 | `DilettaAppListRow` **215** | **o PAI** |
+| `lista` | `CoreflowGrupoDeLista` 1 | `DilettaAppList` **106** | **o PAI** |
+
+As duas últimas são a correção que a medição impôs ao plano: trocar ali faria o catálogo emitir o
+que quase ninguém usa, que é o defeito ao contrário. E o nono par não era par — o `aviso` é o banner
+COM ILUSTRAÇÃO do pai, o `CoreflowAviso` é alerta em linha; viraram dois blocos.
+
+### O que a troca do ícone evita
+
+`CoreflowIcone` recebe o nome como TEXTO e traduz apelido (`chevron-right` → `angle-right-light`); o
+do pai recebe a constante e não traduz. Foi essa diferença que deixou três telas do app com **disco
+vazio** em 02/09 — apelido nosso entregue a uma peça do pai vira pedido de asset inexistente, sem
+erro na tela. Um bloco que emitia a peça do pai levava o compositor pela mesma porta.
+
+### Doze contratos novos, porque componente sem contrato não se explica
+
+`kBoldSpecs` foi de 23 pra 35. Peça nascida aqui — cartão, disco, ponto, pegador, herói, busca,
+campo de valor, par de botões, painel de entrada, anel de escolha, faixa de operação e o chrome de
+página — ganhou spec escrita: propósito, quando usar, faça e evite. É o mínimo que o
+`COMPONENTE-DO-FILHO.md` do pai pede, e o gate dele cobrou cada uma no minuto em que o bloco entrou.
+
+### O gate: `o_plugue_fala_o_ds_inteiro_test.dart`
+
+Ele mede a DISTÂNCIA entre o DS e o plugue, não um número. Peça nova aqui que não chega lá acende, e
+a resposta é uma das duas: declarar o bloco, ou declarar por que ela não é bloco — com o porquê
+escrito. Testado tirando o herói do plugue: acusa pelo nome e volta verde ao repor.
+
+O buraco não apareceu de uma vez; cresceu peça a peça, cada uma com uma razão boa pra ficar pra
+depois. É o tipo de dívida que precisa de régua porque **nada falha enquanto ela existe** — o
+catálogo continua desenhando, só que menos do que o produto tem.
+
 ## [0.96.0] — 2026-09-02
 
 ### O pai sobe pra `v0.163.0` e traz o conserto do OTP

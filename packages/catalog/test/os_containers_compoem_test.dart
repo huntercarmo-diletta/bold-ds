@@ -33,7 +33,7 @@ void main() {
       final codigo = codigoDoBloco(container(tipo, slot));
 
       expect(codigo, startsWith(marca));
-      expect(codigo, contains('ds.DilettaButton'),
+      expect(codigo, contains('ds.CoreflowBotao'),
           reason: 'o filho do slot não entrou no código emitido');
 
       // E o campo de runtime SAIU: se ele voltar, o código volta a pedir um dado que o compositor não

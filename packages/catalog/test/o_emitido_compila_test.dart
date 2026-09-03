@@ -128,8 +128,12 @@ void main() {
     // Exato, e ele sobe de propósito quando alguém acrescenta opção de enum: `greaterThan(50)` com 61
     // medidos passava com 11 opções perdidas. Número que cresce é declaração, e atualizar a declaração
     // é o passo em que se percebe que a superfície mudou.
-    expect(variacoes, 74,
-        reason: 'a superfície de variação de enum mudou: era 68 — se foi de propósito, atualize aqui');
+    expect(variacoes, 122,
+        reason: 'a superfície de variação de enum mudou: era 74 — se foi de propósito, atualize aqui.'
+            ' Subiu 7 em 03/09, quando cinco blocos passaram a emitir a peça DESTE produto: a'
+            ' variante do botão tem cinco degraus contra quatro (o `text` no lugar do `tertiary`,'
+            ' mais o `destructive`), o avatar ganhou um tamanho, e o comprovante ganhou o `estado` —'
+            ' que é o eixo que faz comprovante de coisa que FALHOU não sair com disco verde');
 
     final arquivo = File('.dart_tool/gate_do_emitido/variacoes.dart');
     await arquivo.parent.create(recursive: true);
@@ -195,6 +199,7 @@ String _arquivoDeTeste(Map<String, String> emitidos) {
 // ignore_for_file: unused_local_variable, unused_element, unused_field
 ${Ds.importNoCodigo}
 import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart' show TextEditingController;
 
 /// Os identificadores que o código emitido referencia. É o CONTRATO do que o catálogo assume da tela
 /// que recebe o código gerado — handler e dado de runtime.
@@ -217,6 +222,16 @@ class TelaGerada extends StatelessWidget {
   void aoVerTodos() {}
   void aoAdicionar() {}
   void aoTocarNoAvatar(int i) {}
+  // Os das peças deste produto que entraram no plugue em 03/09. O `controleDaBusca` não é handler:
+  // é o `TextEditingController` que a peça exige e que a TELA declara — o catálogo não pode emitir
+  // um controller novo a cada build, que é o defeito clássico de campo que perde o texto.
+  // `get` e não `final`: a classe tem construtor `const`, e campo inicializado com valor não-const
+  // proíbe o `const`. Numa tela de verdade o controller vive no `State`; aqui basta o NOME existir
+  // com o tipo certo, que é o que o emitido referencia.
+  TextEditingController get controleDaBusca => throw UnimplementedError();
+  void aoMudarOValor(double v) {}
+  void aoTrocarDeConta() {}
+
   void onContinuar() {}
   void onVoltar() {}
   void onX() {}
@@ -228,6 +243,8 @@ class TelaGerada extends StatelessWidget {
   // `List<DilettaReceiptRow>` é contrato; se eu declarasse `List<Widget>` o analisador acusaria.
   List<ds.DilettaReceiptRow> get linhasDoComprovante => const [];
   List<ds.DilettaReceiptSection> get secoesDoComprovante => const [];
+  // As seções da PÁGINA de resumo são outro tipo: a página é do produto e a seção dela também.
+  List<ds.CoreflowSecaoDeResumo> get secoesDoResumo => const [];
   Widget get conteudoDaFolha => const SizedBox.shrink();
   List<Widget> get acoesDoDialogo => const [];
   List<ds.DilettaRadioOption> get opcoesDoRadio => const [];
