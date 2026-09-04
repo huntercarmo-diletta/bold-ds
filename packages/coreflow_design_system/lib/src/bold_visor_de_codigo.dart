@@ -41,6 +41,8 @@ import 'dart:ui' as ui;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'bold_fonts.dart';
+
 
 /// O que o leitor precisa reconhecer, e por quê.
 ///
@@ -145,7 +147,7 @@ class CoreflowVisorDeCodigo extends StatelessWidget {
           // Com a família: o painter não vê tema, e sem ela o rótulo do visor
           // saía na fonte do sistema. Mesmo defeito do selo quântico.
           estiloDoRotulo:
-              DilettaType.numericXs.copyWith(fontFamily: BoldFonts.monoFamily),
+              DilettaType.numericXs.copyWith(fontFamily: BoldFonts.family),
         ),
       ),
     );
