@@ -28,6 +28,7 @@ void main() {
     'bold_selo_quantico.dart',// narrativa de marca (veredito do dono, 29/07)
     'bold_produto.dart',      // as instâncias de produto
     'bold_vinho.dart',        // o vinho da marca — três degraus, e é aqui que eles nascem
+    'coreflow_vocabulario.dart', // o azul de informação de referência da linguagem
   };
 
   Iterable<File> pecas() => Directory('lib/src')

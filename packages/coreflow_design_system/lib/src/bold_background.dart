@@ -1,6 +1,6 @@
 /// CONTA BOLD — o BACKDROP das telas, e o componente mais usado do produto.
 ///
-/// 114 chamadas no app antigo, contra 9 do segundo colocado. Ele é o que faz o vidro do Bold
+/// 114 chamadas no app antigo, contra 9 do segundo colocado. Ele é o que faz o vidro do produto
 /// parecer vidro: sem algo atrás, `BackdropFilter` desfoca o nada.
 ///
 /// ## O que mudou na adaptação, e por quê
@@ -23,7 +23,7 @@
 /// pertencia a rampa nenhuma deste produto. O dono do produto resolveu com o VINHO, que faz o
 /// mesmo trabalho — dar um polo frio e profundo contra o rosa — com cor que é da marca. Então
 /// este componente passou a ter **zero** valor de cor solto: tudo sai da paleta ou de
-/// [BoldVinho].
+/// [CoreflowVinho].
 ///
 /// **3 · Os sete moods continuam sete.** Medi antes de cortar: `CoreflowBackdrop.values` alimenta a
 /// tela de personalização, então os cinco de gradiente são FEATURE (o usuário escolhe o fundo), e
@@ -34,7 +34,7 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
-import 'bold_vinho.dart';
+import 'coreflow_vinho.dart';
 import 'bold_largura.dart' show CoreflowLarguraDeConteudo;
 
 /// Os sete fundos que o produto oferece.
@@ -224,9 +224,9 @@ class CoreflowBackground extends StatelessWidget {
 
   List<Widget> _camadas(
       DilettaScheme s, CoreflowBackdrop fundo, CoreflowBackdropScope? scope) {
-    // A paleta vem do ESQUEMA, não da const deste produto. Era `BoldPalette.bold` cravada, e com
-    // ela um filho deste DS recebia o fundo inteiro no rosa do Bold depois de declarar a paleta
-    // dele — 9 brilhos em 6 modos.
+    // A paleta vem do ESQUEMA, não da const de um produto. Era a paleta do primeiro produto
+    // cravada, e com ela um filho deste DS recebia o fundo inteiro na cor daquele depois de declarar
+    // a paleta dele — 9 brilhos em 6 modos.
     final p = s.palette;
 
     // Saturação dos brilhos. No claro SOBE **só onde a base é `primary08`** — que é o caso dos moods:
@@ -251,7 +251,7 @@ class CoreflowBackground extends StatelessWidget {
         ],
       CoreflowBackdrop.vidroFrio => [
           _brilho(const Alignment(-0.5, -1), 1.2,
-              BoldVinho.marcaDe(p).withValues(alpha: 0.34 * k)),
+              CoreflowVinho.marcaDe(p).withValues(alpha: 0.34 * k)),
           _brilho(const Alignment(0.95, -0.6), 1.0,
               p.primary04.withValues(alpha: 0.30 * k)),
         ],
@@ -261,7 +261,7 @@ class CoreflowBackground extends StatelessWidget {
           _brilho(const Alignment(0.85, -0.9), 0.85,
               p.warning03.withValues(alpha: 0.30 * k)),
           _brilho(const Alignment(0.5, 0.95), 1.0,
-              BoldVinho.marcaDe(p).withValues(alpha: 0.32 * k)),
+              CoreflowVinho.marcaDe(p).withValues(alpha: 0.32 * k)),
         ],
       CoreflowBackdrop.porDoSol => [
           _brilho(const Alignment(1, -1), 1.1, p.warning04.withValues(alpha: 0.22 * k)),

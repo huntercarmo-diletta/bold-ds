@@ -1,24 +1,25 @@
-/// CONTA BOLD — o ESQUEMA, e ele saiu do app em 19/08.
+/// O ESQUEMA de um produto feito com este DS — e ele saiu do app em 19/08.
 ///
-/// Os catorze papéis mode-aware deste produto: superfície, texto, borda e os papéis de marca que
-/// viram entre claro e escuro. As cores estáveis moram em [BoldColors]; estas leem-se por
-/// `BoldColors.of(context)`, que é o `ThemeExtension` que o tema registra.
+/// Os papéis mode-aware do produto: superfície, texto, borda e os papéis de marca que viram entre
+/// claro e escuro. As cores estáveis moram na PALETA do produto; estas leem-se por
+/// `CoreflowScheme.of(context)`, que é o `ThemeExtension` que o tema registra.
 ///
 /// **Por que ele mora AQUI e não no app**: enquanto o esquema morava lá, o app não podia receber
 /// o `ThemeData` pronto do pacote — o tema precisa registrar a extensão, e a extensão era do app.
 /// Era a peça que trancava a porta por dentro. E ele nunca foi decisão de aplicação: onze dos
 /// catorze papéis do escuro e nove dos catorze do claro **derivam do `DilettaScheme`** do pai; o
-/// que sobra são decisões de MARCA do Bold, que é exatamente o que um DS filho existe pra dizer.
+/// que sobra são decisões de MARCA do produto, que é exatamente o que um DS filho existe pra dizer.
 ///
-/// A classe manteve o nome. Os ~400 sítios que chamam `BoldColors.of(context).surface` no app não
-/// souberam da mudança, e é assim que uma mudança de dono deve chegar.
+/// A classe manteve o nome. Os ~400 sítios que leem `.surface` do esquema no app não souberam da
+/// mudança, e é assim que uma mudança de dono deve chegar.
 library;
 
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/material.dart';
 
 import 'bold_palette.dart';
-import 'bold_vinho.dart';
+import 'coreflow_vinho.dart';
+import 'coreflow_vocabulario.dart';
 
 class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   const CoreflowScheme({
@@ -60,8 +61,8 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   /// `colorScheme.primary` do Material é o **rosa da marca** (`primary04`), e não o `primary` deste
   /// esquema — que no claro é o degrau profundo, escolhido pra passar AA com tinta branca. Eram dois
   /// valores diferentes com o mesmo nome, e o `CoreflowTemaMaterial` resolvia isso lendo a const
-  /// congelada `BoldColors.primary04`. Guardar a paleta é o que deixa ele ler o degrau **da paleta
-  /// que veio**, sem mudar um pixel deste produto.
+  /// congelada do primeiro produto. Guardar a paleta é o que deixa ele ler o degrau **da paleta
+  /// que veio**, sem mudar um pixel de produto nenhum.
   ///
   /// É o mesmo que o pai faz: `DilettaScheme` também carrega a `palette` de onde derivou.
   final DilettaPalette paleta;
@@ -69,7 +70,6 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   final Color background, surface, surfaceRaised, field, surfacePressed;
 
   /// Fundo sólido dos fluxos secundários (fora da navegação inferior).
-  /// Ver [BoldColors.secondaryFlow].
   final Color secondaryFlow;
   /// A RAMPA DE TEXTO, e ela tem TRÊS degraus desde 17/08 — os mesmos papéis que a linguagem tem.
   ///
@@ -116,15 +116,16 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   /// [vinho] é a marca (ladrilho, badge, realce), [vinhoTinta] é o quase-preto com matiz (fill do
   /// vidro escuro, tinta sobre o gradiente do lockup) e [vinhoLavagem] é a base do vidro no escuro.
   ///
-  /// Vêm de `papeisExtras`, então um filho deste DS declara os dele na paleta dele. Antes de 20/08
-  /// eram três `static const` de `BoldVinho` lidas direto por 8 sítios do pacote — o rosa viajava
+  /// Vêm de `papeisExtras`, então um filho deste DS declara os dele na paleta dele; quem não declara
+  /// recebe os três derivados da rampa DELE ([CoreflowVinho.derivadosDe]). Antes de 20/08 eram três
+  /// `static const` do primeiro produto lidas direto por 8 sítios do pacote — a cor de ação viajava
   /// com a paleta e o vinho não.
   final Color vinho, vinhoTinta, vinhoLavagem;
 
   bool get isDark => brightness == Brightness.dark;
   /// O ESQUEMA A PARTIR DE UMA PALETA — e é esta assinatura que faz o DS ser retematizável.
   ///
-  /// **Até 19/08 as duas fábricas cravavam `BoldPalette.bold` por dentro.** Isso quer dizer que um
+  /// **Até 19/08 as duas fábricas cravavam a paleta do primeiro produto por dentro.** Isso quer dizer que um
   /// neto deste DS não tinha como pedir o esquema DELE: trocar a paleta não mudava nada, porque nada
   /// aqui lia a paleta que foi passada — não existia paleta passada.
   ///
@@ -156,12 +157,12 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
     final escuro = brilho == Brightness.dark;
     final d = escuro ? DilettaScheme.dark(paleta) : DilettaScheme.light(paleta);
 
-    /// Um papel que o pai não tem, lido da paleta. Sem declaração, cai no valor deste produto — o
-    /// fallback existe pra uma paleta incompleta desenhar em vez de estourar, e o gate cobra que a
-    /// paleta do Bold declare os quatro.
-    Color extra(String nome, Color reserva) {
+    /// Um papel que o pai não tem, lido da paleta. Sem declaração, cai na REGRA da linguagem sobre
+    /// a paleta que veio ([CoreflowVocabulario.reserva]) — nunca no valor de outro produto. O
+    /// fallback existe pra uma paleta incompleta desenhar em vez de estourar.
+    Color extra(String nome) {
       final e = paleta.papeisExtras[nome];
-      return e == null ? reserva : (escuro ? e.escuro : e.claro);
+      return e == null ? CoreflowVocabulario.reserva(nome, paleta, d) : (escuro ? e.escuro : e.claro);
     }
 
     /// A tinta de BORDA: branco no escuro, preto no claro. É sobre ela que os dois alphas incidem.
@@ -169,9 +170,9 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
 
     /// O fundo da página, e ele **passou a derivar em 20/08**.
     ///
-    /// Era o primeiro dos dois valores que não viajavam pra uma paleta de neto: no claro ele lia
-    /// `BoldColors.fundoClaroDaPagina` porque o contrato do pai não tinha onde declarar a superfície
-    /// clara. Tem desde a `v0.119.0` (`bgClaro`), e a paleta deste filho declara — então aqui virou
+    /// Era o primeiro dos dois valores que não viajavam pra uma paleta de neto: no claro ele lia a
+    /// const do primeiro produto porque o contrato do pai não tinha onde declarar a superfície
+    /// clara. Tem desde a `v0.119.0` (`bgClaro`), e a paleta do produto declara — então aqui virou
     /// derivação nos dois modos.
     final fundo = d.bg;
 
@@ -208,21 +209,22 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
       borderSoft: tintaDeBorda.withValues(alpha: escuro ? 0.07 : 0.05),
       borderStrong: tintaDeBorda.withValues(alpha: escuro ? 0.18 : 0.14),
       // ── o vocabulário que é deste produto, declarado na paleta ─────────────
-      surfaceRaised: extra('superficieElevada',
-          escuro ? BoldColors.superficieElevadaEscura : BoldColors.superficieElevadaClara),
-      surfacePressed: extra('superficiePressionada',
-          escuro ? BoldColors.superficiePressionadaEscura : BoldColors.superficiePressionadaClara),
-      secondaryFlow: extra('fluxoSecundario',
-          escuro ? BoldColors.fluxoSecundarioEscuro : BoldColors.fluxoSecundarioClaro),
-      info: extra('info', BoldColors.info),
-      infoSubtle: extra('infoSubtle',
-          extra('info', BoldColors.info).withValues(alpha: 0.11)),
+      surfaceRaised: extra('superficieElevada'),
+      surfacePressed: extra('superficiePressionada'),
+      secondaryFlow: extra('fluxoSecundario'),
+      info: extra('info'),
+      // Sem declaração na paleta, deriva do próprio `info` a 11% — ver o `///` do campo.
+      infoSubtle: paleta.papeisExtras['infoSubtle'] == null
+          ? extra('info').withValues(alpha: 0.11)
+          : (escuro
+              ? paleta.papeisExtras['infoSubtle']!.escuro
+              : paleta.papeisExtras['infoSubtle']!.claro),
       // O VINHO, pelo mesmo caminho dos outros quatro extras.
-      // Pelos resolvedores do próprio `BoldVinho`, e não pelo `extra()` daqui: os dois fariam a
-      // mesma conta, e conta repetida diverge. Quem não tem esquema na mão chama lá direto.
-      vinho: BoldVinho.marcaDe(paleta),
-      vinhoTinta: BoldVinho.tintaDe(paleta),
-      vinhoLavagem: BoldVinho.lavagemDe(paleta),
+      // Pelos resolvedores de [CoreflowVinho], e não pelo `extra()` daqui: os dois fariam a mesma
+      // conta, e conta repetida diverge. Quem não tem esquema na mão chama lá direto.
+      vinho: CoreflowVinho.marcaDe(paleta),
+      vinhoTinta: CoreflowVinho.tintaDe(paleta),
+      vinhoLavagem: CoreflowVinho.lavagemDe(paleta),
       // O segundo que não viajava, e ele fechou junto: `surfaceMutedClara` na `v0.119.0`.
       field: d.surfaceMuted,
     );
@@ -231,7 +233,7 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   /// O escuro do Bold. Atalho pra [CoreflowScheme.de] com a paleta deste produto.
   /// O ESQUEMA DESTE PRODUTO, lido do tema — e ele entrou em 22/08, pra uma peça daqui.
   ///
-  /// Até então só o APP tinha acessor (`BoldColors.of(context)`), e as peças deste pacote leiam
+  /// Até então só o APP tinha acessor (um alias homônimo deste `of`), e as peças deste pacote leiam
   /// apenas o esquema do PAI. Funcionou enquanto nenhuma peça daqui precisou de papel que só existe
   /// aqui — e o cartão do pedido precisou: o tom de INFORMAÇÃO da TED é papel extra deste produto,
   /// e o pai recusou a família `info` na `v0.27.0`.

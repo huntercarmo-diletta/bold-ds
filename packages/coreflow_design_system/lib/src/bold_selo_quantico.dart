@@ -25,7 +25,7 @@
 ///
 /// **4 · Nove literais de cor viraram zero.** Dois eram exatos da paleta (`#2FD27A` é
 /// `success05`, `#FF4D5E` é `error05`) e os outros sete eram violeta, roxo, laranja claro e três
-/// pares de tinta escura. Tudo derivado agora: o polo profundo é [BoldVinho], o claro é o rosa, o
+/// pares de tinta escura. Tudo derivado agora: o polo profundo é o vinho da paleta ([CoreflowVinho]), o claro é o rosa, o
 /// acento é a rampa de laranja, e as tintas escuras são o degrau 01 do estado aprofundado por
 /// função — não por hex novo.
 library;
@@ -37,7 +37,7 @@ import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
 import 'bold_fonts.dart';
-import 'bold_vinho.dart';
+import 'coreflow_vinho.dart';
 
 /// Os três estados do selo. Fechado, e sem quarto caso possível.
 enum BoldSeloEstado {
@@ -181,7 +181,7 @@ class _BoldSeloQuanticoState extends State<BoldSeloQuantico>
                 rotulo: _negado ? widget.rotuloNegado : widget.rotuloAutorizado,
                 apoio: _negado ? 'tente novamente' : 'concluída · canal seguro',
                 cores: _CoresDoSelo(
-                  profundo: BoldVinho.marcaDe(p),
+                  profundo: CoreflowVinho.marcaDe(p),
                   claro: p.primary05,
                   acento: p.warning05,
                   fim: _negado ? p.error05 : p.success05,

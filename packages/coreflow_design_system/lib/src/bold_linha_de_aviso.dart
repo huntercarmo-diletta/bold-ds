@@ -15,7 +15,7 @@
 ///
 /// ## O que a mudança de casa alterou
 ///
-/// **O ladrilho perdeu o `Color(0xFF90093A)` cravado** e passou a ser `BoldVinho.marca`, que é o
+/// **O ladrilho perdeu o `Color(0xFF90093A)` cravado** e passou a ser o vinho da paleta, que é o
 /// mesmo valor com dono. O branco do glifo virou `s.palette.white`.
 ///
 /// **O badge virou um `DilettaStatusTag`?** Não — e a razão é medida: o selo do pai tem tom, borda e
@@ -26,7 +26,7 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
-import 'bold_vinho.dart';
+import 'coreflow_vinho.dart';
 
 /// A linha-aviso da home.
 class CoreflowLinhaDeAviso extends StatelessWidget {
@@ -73,7 +73,7 @@ class CoreflowLinhaDeAviso extends StatelessWidget {
               height: 34,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: BoldVinho.marcaDe(s.palette),
+                color: CoreflowVinho.marcaDe(s.palette),
                 borderRadius: DilettaRadius.all8,
               ),
               child: DilettaIcon(
@@ -124,7 +124,7 @@ class _Contador extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: DilettaSpacing.s1 + 2),
       alignment: Alignment.center,
       decoration: BoxDecoration(
-        color: BoldVinho.marcaDe(s.palette),
+        color: CoreflowVinho.marcaDe(s.palette),
         shape: BoxShape.circle,
       ),
       child: DilettaText('$quantas',

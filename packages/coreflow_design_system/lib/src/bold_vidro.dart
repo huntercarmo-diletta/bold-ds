@@ -1,7 +1,7 @@
-/// CONTA BOLD — o VIDRO, e ele parou de ser declarado duas vezes em 19/08.
+/// O VIDRO, e ele parou de ser declarado duas vezes em 19/08.
 ///
 /// A receita já morava aqui desde a `v0.4.0` do pai: `tinteDeVidroClaro`, `tinteDeVidroEscuro`,
-/// `blurDeVidro`, `tracoDeVidroClaro` e `tracoDeVidroEscuro` são campos de [BoldPalette.bold], e a
+/// `blurDeVidro`, `tracoDeVidroClaro` e `tracoDeVidroEscuro` são campos da PALETA do produto, e a
 /// regra que os pôs lá é do pai — *"o pai sabe COMO se constrói vidro; o filho diz de que material
 /// ele é"*.
 ///
@@ -17,8 +17,7 @@ import 'dart:ui' show ImageFilter, TileMode;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/material.dart';
 
-import 'bold_palette.dart';
-import 'bold_vinho.dart';
+import 'coreflow_vinho.dart';
 import 'bold_radius.dart' show CoreflowRadius;
 import 'bold_scheme.dart' show CoreflowScheme;
 
@@ -32,17 +31,17 @@ abstract final class CoreflowVidro {
   /// `true` → vidro fosco (`BackdropFilter` ligado). `false` → superfície sólida.
   static const bool fosco = true;
 
-  /// O sigma do blur, uniforme em todo vidro — **15** no Bold, e ele vem da paleta.
+  /// O sigma do blur, uniforme em todo vidro — **15** no primeiro produto, e ele vem da paleta.
   ///
   /// O do pai é 10; o material deste produto é mais leitoso, e essa é a frase que o campo
   /// `blurDeVidro` existe pra carregar.
   ///
-  /// **Recebe a PALETA em vez de ler a do Bold**, e a mudança é de 20/08.
+  /// **Recebe a PALETA em vez de ler a de um produto**, e a mudança é de 20/08.
   ///
-  /// Este arquivo abria com `static DilettaPalette get _p => BoldPalette.bold;`, e com isso o
-  /// vidro inteiro era do Bold: um produto novo declarava `blurDeVidro`, `tinteDeVidro*` e
+  /// Este arquivo abria com um getter que devolvia a paleta do primeiro produto, e com isso o
+  /// vidro inteiro era dele: um produto novo declarava `blurDeVidro`, `tinteDeVidro*` e
   /// `tracoDeVidro*` na paleta dele — campos que o pai criou justamente pra isso — e recebia os
-  /// valores do Bold assim mesmo. Os campos viajavam; o leitor não.
+  /// valores do outro assim mesmo. Os campos viajavam; o leitor não.
   static double blur(DilettaPalette p) => p.blurDeVidro!;
 
   static ImageFilter filtro(DilettaPalette p) =>
@@ -53,7 +52,7 @@ abstract final class CoreflowVidro {
   /// real e o blur simplesmente some.
   static const Clip recorte = Clip.antiAlias;
 
-  /// O tinte: escuro é vinho-tinta a 50% ([BoldVinho.ink]), claro é branco a 50%.
+  /// O tinte: escuro é o vinho-tinta da marca a 50%, claro é branco a 50%.
   ///
   /// Vinho e não preto: preto puro sobre a arte de fundo dá cinza morto, e o matiz é o que mantém
   /// o painel escuro dialogando com o rosa.
@@ -105,9 +104,9 @@ abstract final class CoreflowVidroDeEntrada {
   /// inteiro, não por parada.
   static double opacidade({required bool escuro}) => escuro ? 0.60 : 0.70;
 
-  /// A base do wash: claro é `primary09`, escuro é [BoldVinho.lavagem].
+  /// A base do wash: claro é `primary09`, escuro é a lavagem do vinho ([CoreflowVinho.lavagemDe]).
   static Color base(DilettaPalette p, {required bool escuro}) =>
-      escuro ? BoldVinho.lavagemDe(p) : p.primary09;
+      escuro ? CoreflowVinho.lavagemDe(p) : p.primary09;
 
   /// O gradiente do fill: opaco embaixo, transparente no topo.
   ///

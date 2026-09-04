@@ -112,11 +112,17 @@ void main() {
     expect(CoreflowProduto.bold.esquemaClaro.vinho, BoldVinho.marca);
   });
 
-  test('e quem NÃO declara o vinho cai no do Bold, em vez de estourar', () {
-    // Degradação, não exceção: uma paleta incompleta desenha com o valor deste produto. É a mesma
-    // regra dos outros quatro `papeisExtras`, e o gate existe porque a alternativa silenciosa
-    // (`null` virando transparente) some na tela em vez de aparecer no console.
-    expect(neto.esquemaClaro.vinho, BoldVinho.marca);
+  test('e quem NÃO declara o vinho recebe o DELE, derivado da rampa — nunca o do Bold', () {
+    // Degradação, não exceção: uma paleta incompleta desenha. Até 04/09 ela desenhava com o vinho do
+    // Bold — e um neto verde saía com o polo profundo vermelho. Agora a reserva é a regra sobre a
+    // rampa dele (`CoreflowVinho.derivadosDe`), a mesma que o `daMarca` declara.
+    expect(neto.esquemaClaro.vinho, isNot(BoldVinho.marca));
+    expect(neto.esquemaClaro.vinho,
+        CoreflowVinho.derivadosDe(DilettaPalette.referencia)['vinhoMarca']!.claro);
+    // E o mesmo vale pros quatro extras: a superfície elevada de quem não declara é a do pai, não o
+    // navy do Bold.
+    expect(neto.esquemaEscuro.surfaceRaised, isNot(BoldColors.superficieElevadaEscura));
+    expect(neto.esquemaEscuro.surfaceRaised, DilettaScheme.dark(DilettaPalette.referencia).surface);
   });
 
   test('o GRADIENTE do neto é o dele — a curva do símbolo não serve duas marcas', () {

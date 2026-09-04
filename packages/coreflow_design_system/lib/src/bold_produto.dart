@@ -5,7 +5,8 @@ import 'bold_gradients.dart';
 import 'bold_palette.dart';
 import 'bold_scheme.dart';
 import 'bold_tema_material.dart';
-import 'bold_vinho.dart' show BoldVinho;
+import 'coreflow_vinho.dart';
+import 'coreflow_vocabulario.dart';
 
 /// UM PRODUTO FEITO COM ESTE DS — paleta e marca, e tudo o mais deriva.
 ///
@@ -62,14 +63,16 @@ class CoreflowProduto {
   ///
   /// ## O que ele HERDA, e por que isso não é preguiça
   ///
-  /// A **gramática do material** deste DS: card de vidro, botão de canto 16, folha de canto 22,
-  /// blur 15, e as superfícies do escuro. Essas não são identidade do Conta BOLD — são o jeito
-  /// deste sistema montar superfície, e é o que faz um produto novo PARECER Coreflow em vez de
-  /// parecer Material puro pintado de outra cor.
+  /// A **gramática do material** deste DS ([CoreflowGramatica]): card de vidro, botão de canto 16,
+  /// folha de canto 22, blur 15. Essas não são identidade de produto nenhum — são o jeito deste
+  /// sistema montar superfície, e é o que faz um produto novo PARECER Coreflow em vez de parecer
+  /// Material puro pintado de outra cor.
   ///
-  /// Também herda o **vocabulário extra** (superfície elevada, pressionada, fluxo secundário,
-  /// informação e o vinho), como RESERVA. Quem discordar declara o dele — a paleta é o lugar, e
-  /// `comMaterial` é o caminho.
+  /// Também nasce com o **vocabulário extra** (superfície elevada, pressionada, fluxo secundário,
+  /// informação e o vinho) DECLARADO, pela regra da linguagem sobre a rampa dele
+  /// ([CoreflowVocabulario.extrasDe], [CoreflowVinho.derivadosDe]). Até 04/09 esses vinham copiados
+  /// do primeiro produto como reserva — um navy que era decisão de marca dele. Quem discordar declara
+  /// o seu — a paleta é o lugar, e `comMaterial` é o caminho.
   ///
   /// ## O que DERIVA da cor dele
   ///
@@ -78,10 +81,10 @@ class CoreflowProduto {
   ///
   /// | o quê | de onde sai |
   /// |---|---|
-  /// | tinte do vidro ESCURO | o degrau 01 da marca dele a 50% — no Bold é vinho porque a marca do Bold é rosa |
-  /// | traço do vidro CLARO | o degrau 08 dele, que é a mesma regra do Bold |
+  /// | tinte do vidro ESCURO | o degrau 01 da marca dele a 50% |
+  /// | traço do vidro CLARO | o degrau 08 dele |
   /// | traço do vidro ESCURO | o degrau 06 dele a 30% |
-  /// | brilho do esqueleto | os degraus 05 e 02, que é o que o Bold declara na marca dele |
+  /// | brilho do esqueleto | os degraus 05 e 02 |
   ///
   /// ## O que ele NÃO herda
   ///
@@ -99,23 +102,23 @@ class CoreflowProduto {
     CoreflowGradients? gradientes,
   }) {
     final rampa = DilettaRampa.daMarca(marca);
-    final paleta = DilettaPalette.daMarca(marca: marca, id: id, nome: nome).comMaterial(
-      // A GRAMÁTICA, herdada do Bold.
-      cardDeVidro: BoldPalette.bold.cardDeVidro,
-      raioDeBotao: BoldPalette.bold.raioDeBotao,
-      raioDeFolha: BoldPalette.bold.raioDeFolha,
-      blurDeVidro: BoldPalette.bold.blurDeVidro,
-      // O vocabulário extra vem do Bold como RESERVA — superfície elevada, pressionada, fluxo
-      // secundário e informação são gramática do material, e não identidade. **Menos o vinho**: os
-      // três valores dele são a marca do Bold escurecida, e um banco verde herdando-os teria vidro
-      // escuro vermelho. `derivadosDe` refaz os três na rampa de quem está nascendo, nas mesmas
-      // posições em que eles caem na rampa do Bold.
+    final so = DilettaPalette.daMarca(marca: marca, id: id, nome: nome);
+    final paleta = so.comMaterial(
+      // A GRAMÁTICA, da linguagem.
+      cardDeVidro: CoreflowGramatica.cardDeVidro,
+      raioDeBotao: CoreflowGramatica.raioDeBotao,
+      raioDeFolha: CoreflowGramatica.raioDeFolha,
+      blurDeVidro: CoreflowGramatica.blurDeVidro,
+      // O vocabulário extra, DECLARADO pela regra da linguagem sobre a rampa dele: superfície
+      // elevada, pressionada, fluxo secundário, informação — e o vinho, refeito nos mesmos pontos da
+      // rampa em que ele cai na do primeiro produto. Nada aqui é copiado de outro produto: um banco
+      // verde herdando o vinho de um banco rosa teria vidro escuro vermelho.
       papeisExtras: {
-        ...BoldPalette.bold.papeisExtras,
-        ...BoldVinho.derivadosDe(DilettaPalette.daMarca(marca: marca, id: id, nome: nome)),
+        ...CoreflowVocabulario.extrasDe(so),
+        ...CoreflowVinho.derivadosDe(so),
       },
       // O MATERIAL QUE CARREGA A COR, derivado da marca dele.
-      tinteDeVidroClaro: BoldPalette.bold.tinteDeVidroClaro,
+      tinteDeVidroClaro: CoreflowGramatica.tinteDeVidroClaro,
       tinteDeVidroEscuro: rampa[0].withValues(alpha: 0.50),
       tracoDeVidroClaro: rampa[7],
       tracoDeVidroEscuro: rampa[5].withValues(alpha: 0.30),

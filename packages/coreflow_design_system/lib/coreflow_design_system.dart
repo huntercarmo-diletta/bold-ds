@@ -46,6 +46,8 @@ export 'src/bold_pegador.dart';
 export 'src/bold_ponto.dart';
 export 'src/bold_pontos_de_pagina.dart';
 export 'src/bold_vinho.dart';
+export 'src/coreflow_vinho.dart';
+export 'src/coreflow_vocabulario.dart';
 export 'src/bold_fonts.dart';
 export 'src/bold_type.dart';
 export 'src/bold_fundamentos.dart';
