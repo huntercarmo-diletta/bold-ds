@@ -36,6 +36,7 @@ import 'dart:ui' as ui;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'bold_fonts.dart';
 import 'bold_vinho.dart';
 
 /// Os três estados do selo. Fechado, e sem quarto caso possível.
@@ -192,8 +193,17 @@ class _BoldSeloQuanticoState extends State<BoldSeloQuantico>
                 ),
                 // O estilo chega PRONTO: painter não vê tema, então resolver fonte lá dentro é
                 // o que prendia a família num estático.
-                estiloRotulo: DilettaType.labelLg.copyWith(color: s.fg),
-                estiloApoio: DilettaType.labelSm,
+                // A FAMÍLIA vai junto, e é o que faltava. `DilettaType` não carrega
+                // família de propósito — ela chega pelo `ThemeData.fontFamily` do app.
+                // Só que `TextPainter` dentro de `CustomPainter` não vê tema nenhum:
+                // sem família explícita, o rótulo do selo saía na fonte do SISTEMA
+                // enquanto o resto do produto sai em Inter. Era o único texto do app
+                // fora da fonte da marca, e não aparecia em teste porque ninguém
+                // media a fonte de um painter.
+                estiloRotulo: DilettaType.labelLg
+                    .copyWith(color: s.fg, fontFamily: BoldFonts.family),
+                estiloApoio:
+                    DilettaType.labelSm.copyWith(fontFamily: BoldFonts.family),
               ),
             );
           },

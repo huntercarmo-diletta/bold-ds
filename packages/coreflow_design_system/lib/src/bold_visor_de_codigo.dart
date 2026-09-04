@@ -142,7 +142,10 @@ class CoreflowVisorDeCodigo extends StatelessWidget {
           fase: fase,
           descendo: descendo,
           tamanhoDaImagem: tamanhoDaImagem,
-          estiloDoRotulo: DilettaType.numericXs,
+          // Com a família: o painter não vê tema, e sem ela o rótulo do visor
+          // saía na fonte do sistema. Mesmo defeito do selo quântico.
+          estiloDoRotulo:
+              DilettaType.numericXs.copyWith(fontFamily: BoldFonts.monoFamily),
         ),
       ),
     );

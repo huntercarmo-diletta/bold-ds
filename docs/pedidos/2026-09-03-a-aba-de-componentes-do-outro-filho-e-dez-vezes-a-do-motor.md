@@ -125,3 +125,53 @@ aqui, e aí não seria forma, seria outro pedido.
 **O filho A precisa passar a usar a aba do motor.** Enquanto ele tiver as 3.844 linhas dele, "igual
 pra todos" é uma frase sobre um filho só — e o pedido inteiro nasceu de os dois catálogos não se
 parecerem. Metade disso o motor resolveu; a outra metade é ele adotar.
+
+---
+
+## FECHADO · o filho A adotou, e a medição que eu prometi tem número
+
+As duas metades fecharam no mesmo dia.
+
+### 1 · o filho A adotou — `aba_components.dart` foi de 3.844 pra 122 linhas
+
+Ele passou a declarar `constroi: (_) => const AbaDeComponentes()`. O que sobrou do arquivo é uma
+casca de apresentação que outras duas páginas dele usam. Seis classes `State` órfãs saíram junto.
+
+### 2 · a medição que este pedido deixou em aberto, e ela desmente o medo
+
+O item 3 dizia: *"o que não sei ainda: quanto da riqueza daquelas 3.844 linhas sobrevive à
+derivação. Isso é medição a fazer, não promessa a dar."* Fica medido:
+
+| | a aba escrita à mão | a vitrine derivada |
+|---|---|---|
+| peças distintas mostradas | 128 | **171** |
+| chamadas de componente | 618 | 110 blocos |
+
+**A derivação não perdeu riqueza, ganhou 43 peças** — porque a mão desenha o que quem escreveu
+lembrou de desenhar, e o registro desenha o que está declarado.
+
+De 128, **sete** ficaram fora do registro. Três eram nome de enum, três seguem desenhadas em outra
+aba, e **uma era perda de verdade**: o `Shimmer`, o EFEITO separado da FORMA. `skeleton` é o
+retângulo cinza; `shimmer` é o sweep que passa por cima. Estavam juntos na página escrita à mão e só
+o primeiro tinha bloco. Virou o bloco 103 do filho A, com contêiner de um slot.
+
+> **Um em cento e vinte e oito.** Era o número que faltava pra esta decisão parar de ser aposta.
+
+### 3 · e o eixo mudou de novo — a estrutura atômica passou a mandar
+
+Pedido do dono, dias depois: *"prefiro que na página de componentes eles sejam organizados por
+átomo-molécula-organismo, com o chaveamento de quem está dentro de quem."* Motor `v0.112.0`: as
+pílulas de cima são as três camadas, derivadas da profundidade do `## Compõe`; o grupo funcional do
+filho desce pra segunda fileira.
+
+Este filho subiu **de novo sem mudar uma linha do plugue** — 94 testes verdes, 61 átomos, 16
+moléculas, 17 organismos. É a segunda vez que a forma sobe sem custo aqui, e as duas juntas dizem o
+mesmo: **o que se deriva do que o filho já declarou não cobra nada do filho.**
+
+O filho A precisou de uma linha, e ela é o achado que vale guardar: ele nunca declarava
+`contratosDisponiveis`, então a ponte de slug não existia e a árvore tinha **zero arestas** — os 101
+blocos dele caíam em ÁTOMO, porque quem não compõe ninguém é átomo por definição. **Nada acusava.**
+Com a linha: 46 · 28 · 27, e 117 arestas.
+
+> Gancho opcional que ninguém declara não avisa que falta: ele devolve uma resposta plausível. A
+> conformidade deste pai cobra bloco sem grupo e bloco sem contrato — e não cobrava isto.
