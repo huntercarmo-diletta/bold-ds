@@ -139,9 +139,16 @@ void main() {
 
     expect(dele.gradientes.primary.colors, curvaDele.paradasDoLockup);
     expect(dele.gradientes.onGradient, const Color(0xFF04160F));
-    // Controle: sem declarar, ele recebe a curva do Bold — 8 paradas, e a primeira é o rosa.
-    expect(neto.gradientes.primary.colors.length, 8);
-    expect(neto.gradientes.primary.colors.first, BoldColors.lockup01);
+    // Sem declarar, ele recebe o DERIVADO da rampa dele — dois degraus, o 04 e o 05 — e nunca a
+    // curva do Bold. Até 04/09 o default era o lockup rosa→amarelo, 8 paradas, no card de destaque de
+    // qualquer neto que não passasse curva.
+    expect(neto.gradientes.primary.colors,
+        [DilettaPalette.referencia.primary04, DilettaPalette.referencia.primary05]);
+    expect(neto.gradientes.primary.colors, isNot(contains(BoldColors.lockup01)));
+    expect(neto.gradientes.onGradient, DilettaPalette.referencia.onPrimary);
+    // E o Bold continua com a curva DELE, porque passa: 8 paradas, a primeira é o rosa.
+    expect(CoreflowProduto.bold.gradientes.primary.colors.length, 8);
+    expect(CoreflowProduto.bold.gradientes.primary.colors.first, BoldColors.lockup01);
   });
 
 }

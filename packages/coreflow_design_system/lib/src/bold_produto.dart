@@ -177,8 +177,11 @@ class CoreflowProduto {
 
 
   /// O Conta BOLD, que é o primeiro produto feito com este DS e o default de tudo.
-  static final CoreflowProduto bold =
-      CoreflowProduto(paleta: BoldPalette.bold, marca: marcaDoBold);
+  static final CoreflowProduto bold = CoreflowProduto(
+    paleta: BoldPalette.bold,
+    marca: marcaDoBold,
+    gradientes: CoreflowGradients.bold,
+  );
 
   /// A rampa deste produto. Todo papel de cor sai dela.
   final DilettaPalette paleta;
@@ -273,9 +276,11 @@ class CoreflowProduto {
 
   /// Os gradientes deste produto — a curva do símbolo e a tinta que vai por cima.
   ///
-  /// Vem com a curva do Conta BOLD por default, e é o único campo do produto que **não** deriva da
-  /// paleta: a curva do lockup é uma lista ordenada com offsets que saem do arquivo do logo, não
-  /// uma rampa de degraus nomeados. Um produto com símbolo próprio passa a dele.
-  late final CoreflowGradients gradientes = _gradientes ?? CoreflowGradients.bold;
+  /// É o único campo do produto que **não** deriva inteiro da paleta: a curva do lockup é uma lista
+  /// ordenada com offsets que saem do arquivo do logo, não uma rampa de degraus nomeados. Um produto
+  /// com símbolo próprio passa a dele; quem não passa recebe [CoreflowGradients.daPaleta] — dois
+  /// degraus da rampa DELE. Até 04/09 o default era a curva do primeiro produto, e um filho recebia o
+  /// rosa→amarelo do outro no card de destaque.
+  late final CoreflowGradients gradientes = _gradientes ?? CoreflowGradients.daPaleta(paleta);
   final CoreflowGradients? _gradientes;
 }

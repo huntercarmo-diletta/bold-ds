@@ -1,4 +1,4 @@
-/// CONTA BOLD — os gradientes da marca, e são DOIS.
+/// OS GRADIENTES de um produto deste DS, e são DOIS.
 ///
 /// Regra do dono do produto (2026-07-30): **no máximo dois — `primary` e `accent`** — e todo o
 /// resto se modula neles. O produto antigo declarava dez; sete tinham ZERO uso (`pay`, `ted`,
@@ -19,9 +19,8 @@
 /// melhor** que o que estava no lugar dele, e é o primeiro dos dois que passa AA de TEXTO.
 ///
 /// **2 · Os literais fora da paleta.** Este argumento continua de pé, e é por isso que o coral e o
-/// amarelo agora são `BoldColors.lockupCoral` e `BoldColors.lockupAmarelo` — cores de MARCA
-/// declaradas na paleta, como o vinho. Não são degraus de rampa e não fingem ser; o que se ganhou é
-/// que um rebrand as alcança.
+/// amarelo são cores de MARCA declaradas na paleta do produto, como o vinho. Não são degraus de rampa
+/// e não fingem ser; o que se ganhou é que um rebrand as alcança.
 ///
 /// O `accent` **não mudou**: ele é o laranja inteiro, as duas paradas são da mesma rampa, e o caso
 /// dele (controle pequeno) nunca pediu o matiz do lockup.
@@ -34,19 +33,20 @@ import 'package:diletta_design_system/diletta_design_system.dart';
 import 'bold_palette.dart';
 import 'bold_vinho.dart';
 
-/// Os dois gradientes do Conta BOLD, e os dois saem da paleta.
-/// Os gradientes de um produto feito com este DS.
+/// Os gradientes de um produto feito com este DS, e os dois saem da paleta.
 ///
-/// Deixou de ser só estático em 20/08. A classe abria com `static const _p = BoldPalette.bold` e as
-/// oito paradas do lockup vinham de `BoldColors.lockupNN` — quer dizer: **um filho deste DS recebia
-/// o rosa→amarelo do Conta BOLD** no card de destaque e no topo, depois de declarar a paleta dele.
-/// A curva do lockup é a assinatura da marca; não existe versão dela que sirva pra duas marcas.
+/// Deixou de ser só estático em 20/08. A classe abria com a paleta do primeiro produto cravada e as
+/// oito paradas do lockup vinham das consts dele — quer dizer: **um filho deste DS recebia a curva do
+/// símbolo do outro** no card de destaque e no topo, depois de declarar a paleta dele. A curva do
+/// lockup é a assinatura da marca; não existe versão dela que sirva pra duas marcas.
 ///
 /// As paradas são do PRODUTO e não da paleta de propósito: `DilettaPalette` é rampa (degraus
 /// nomeados), e a curva do símbolo não é rampa — é uma lista ordenada com offsets que saem do
 /// arquivo do logo. Forçá-la em `papeisExtras` seria oito entradas fingindo ser papel.
 ///
-/// Os estáticos ficam como atalho do Conta BOLD, que é o caso de 4 sítios hoje.
+/// Quem não tem símbolo próprio recebe [CoreflowGradients.daPaleta]: dois degraus da rampa DELE, com
+/// a tinta que a paleta dele declara pra cima da marca. Até 04/09 o default era a curva do primeiro
+/// produto.
 class CoreflowGradients {
   const CoreflowGradients({
     required this.paleta,
@@ -55,19 +55,28 @@ class CoreflowGradients {
     required this.tintaSobreOGradiente,
   });
 
-  /// As paradas do Conta BOLD — a curva do símbolo, parada por parada.
+  /// O GRADIENTE DERIVADO — pra um produto que ainda não tem símbolo, ou não quer curva própria.
+  ///
+  /// Dois degraus da rampa de marca dele, do 04 (ação) ao 05, e a tinta é a que a paleta declara pra
+  /// cima da marca (`onPrimary`). É o mínimo que se pode chamar de gradiente sem inventar curva por
+  /// quem não a desenhou — um produto com símbolo passa a dele em `CoreflowProduto(gradientes:)`.
+  factory CoreflowGradients.daPaleta(DilettaPalette p) => CoreflowGradients(
+        paleta: p,
+        paradasDoLockup: [p.primary04, p.primary05],
+        offsetsDoLockup: const [0, 1],
+        tintaSobreOGradiente: p.onPrimary,
+      );
+
+  // ── A CURVA DO PRIMEIRO PRODUTO, e os atalhos que o app chama ─────────────────
+  //
+  // Esta é a única declaração de produto que sobra neste arquivo, e ela fica porque `primaryDoBold`
+  // e `onGradientDoBold` são chamados no app (4 sítios). Sai daqui com a sombra homônima do filho,
+  // na fase 2 do ADR — não antes.
+
+  /// A curva do símbolo do primeiro produto, parada por parada, com a tinta dele por cima.
   static const CoreflowGradients bold = CoreflowGradients(
     paleta: BoldPalette.bold,
-    paradasDoLockup: [
-      BoldColors.lockup01,
-      BoldColors.lockup02,
-      BoldColors.lockup03,
-      BoldColors.lockup04,
-      BoldColors.lockup05,
-      BoldColors.lockup06,
-      BoldColors.lockup07,
-      BoldColors.lockup08,
-    ],
+    paradasDoLockup: BoldColors.lockupParadas,
     offsetsDoLockup: BoldColors.lockupStops,
     tintaSobreOGradiente: BoldVinho.ink,
   );
@@ -85,11 +94,11 @@ class CoreflowGradients {
 
   DilettaPalette get _p => paleta;
 
-  /// **PRIMARY** — o lockup CONTA BOLD: rosa → coral → amarelo. Gradiente de momento herói: saldo,
-  /// avatar de convite, superfície de destaque.
+  /// **PRIMARY** — a curva do símbolo do produto. Gradiente de momento herói: saldo, avatar de
+  /// convite, superfície de destaque.
   ///
-  /// **As OITO paradas do símbolo, com os offsets dele.** Tinta: [onGradient] (vinho-tinta), pior
-  /// parada **5,69:1**.
+  /// **As paradas do símbolo, com os offsets dele.** No primeiro produto são oito, rosa → coral →
+  /// amarelo, tinta [onGradient] (vinho-tinta), pior parada **5,69:1**.
   ///
   /// Eram três, escolhidas em 19/08 como amostra da curva — e declaradas SEM offset, o que fez o
   /// Flutter distribuí-las igualmente e jogar o coral pra 0,5 quando no símbolo ele está em 0,60.
@@ -119,7 +128,8 @@ class CoreflowGradients {
         'accent': accent,
       };
 
-  /// Conteúdo sobre gradiente: **o vinho-tinta da marca**, e a troca é o que destravou o lockup.
+  /// Conteúdo sobre gradiente. No primeiro produto é **o vinho-tinta da marca**, e a troca é o que
+  /// destravou o lockup.
   ///
   /// Enquanto a tinta era branca, o gradiente do símbolo era impossível: 1,21:1 no amarelo é
   /// conteúdo que não existe na tela. **A pergunta certa não era qual gradiente, era qual tinta** —
@@ -145,17 +155,14 @@ class CoreflowGradients {
   /// antiga: lá vale glifo e texto grande.
   Color get onGradient => tintaSobreOGradiente;
 
-  // ── OS ATALHOS DO CONTA BOLD ───────────────────────────────────────────────
-  //
-  // Ficam porque 4 sítios os escrevem e porque o caso comum merece nome curto. Não são uma
-  // segunda fonte: os três leem `bold`, que é a única declaração.
+  // Os três atalhos leem `bold`, que é a única declaração — não são uma segunda fonte.
 
-  /// O gradiente do lockup do Conta BOLD. Atalho pra `CoreflowGradients.bold.primary`.
+  /// Atalho pra `CoreflowGradients.bold.primary`.
   static LinearGradient get primaryDoBold => bold.primary;
 
-  /// O gradiente âmbar do Conta BOLD. Atalho pra `CoreflowGradients.bold.accent`.
+  /// Atalho pra `CoreflowGradients.bold.accent`.
   static LinearGradient get accentDoBold => bold.accent;
 
-  /// A tinta sobre gradiente do Conta BOLD. Atalho pra `CoreflowGradients.bold.onGradient`.
+  /// Atalho pra `CoreflowGradients.bold.onGradient`.
   static Color get onGradientDoBold => bold.onGradient;
 }

@@ -104,6 +104,12 @@ class BoldColors {
   /// que desalinhou a curva da UI da curva do símbolo.
   static const List<double> lockupStops = [0, 0.14, 0.29, 0.45, 0.60, 0.75, 0.91, 1];
 
+  /// As oito paradas, na ordem do símbolo — a curva do lockup como UMA lista, pra o gradiente do
+  /// produto ser declarado de uma vez (`CoreflowGradients.bold`). Mesmo comprimento que [lockupStops].
+  static const List<Color> lockupParadas = [
+    lockup01, lockup02, lockup03, lockup04, lockup05, lockup06, lockup07, lockup08,
+  ];
+
   /// O CORAL do lockup — a parada do meio (offset 0,60).
   static const Color lockupCoral = lockup05;
 
