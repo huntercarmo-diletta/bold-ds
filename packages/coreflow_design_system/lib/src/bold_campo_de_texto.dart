@@ -5,7 +5,7 @@ import 'bold_icone.dart' show CoreflowIcone;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// Conta BOLD — Text field.
+/// Text field.
 ///
 /// Pill-ish field (16 radius) with a label sitting ABOVE it (the system
 /// standard — not a floating label). Focus lights a violet ring; errors switch

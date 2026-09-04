@@ -120,7 +120,7 @@ mixin CoreflowAcoesDoPai<T extends StatefulWidget> on State<T> {
   }
 }
 
-/// Conta BOLD — NavigationButton. Coluna de 1–3 CTAs empilhados. É o CONTEÚDO
+/// NavigationButton. Coluna de 1–3 CTAs empilhados. É o CONTEÚDO
 /// do rodapé — sem glass nem home indicator (isso é papel do [BoldBottomApp]).
 ///
 /// **CASCA**: o desenho é do [DilettaNavigationButton]. O que fica aqui é a

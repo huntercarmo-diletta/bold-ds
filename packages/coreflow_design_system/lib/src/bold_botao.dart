@@ -8,7 +8,7 @@ import 'package:diletta_design_system/diletta_design_system.dart'
 import 'package:flutter/material.dart';
 
 
-/// Conta BOLD — Button. **CASCA do `DilettaButton` do pai.**
+/// Button. **CASCA do `DilettaButton` do pai.**
 ///
 /// Eram 300 linhas de desenho próprio (quatro braços de pintura, spec de
 /// densidade, glow, opacidade de desabilitado) pra uma peça que o pacote entrega

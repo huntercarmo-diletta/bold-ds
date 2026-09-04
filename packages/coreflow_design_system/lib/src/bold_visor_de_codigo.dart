@@ -41,7 +41,7 @@ import 'dart:ui' as ui;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
-import 'bold_fonts.dart';
+import 'bold_type.dart' show CoreflowType;
 
 
 /// O que o leitor precisa reconhecer, e por quê.
@@ -147,7 +147,7 @@ class CoreflowVisorDeCodigo extends StatelessWidget {
           // Com a família: o painter não vê tema, e sem ela o rótulo do visor
           // saía na fonte do sistema. Mesmo defeito do selo quântico.
           estiloDoRotulo:
-              DilettaType.numericXs.copyWith(fontFamily: BoldFonts.family),
+              DilettaType.numericXs.copyWith(fontFamily: CoreflowType.fontFamily),
         ),
       ),
     );
@@ -172,11 +172,11 @@ class _PintorDoVisor extends CustomPainter {
 
   /// A paleta de quem montou o visor.
   ///
-  /// Era `static const _p = BoldPalette.bold`. Os quatro valores que ele lê são semânticos e
+  /// Era a paleta do primeiro produto, cravada em `static const`. Os quatro valores que ele lê são semânticos e
   /// neutros (`success05`, `error05`, `warning04`, `black`) — a regra do pai diz que
   /// esses são invariantes, então cravar aqui não pintava errado hoje. Mas invariante por REGRA e
   /// congelado por LEITOR são coisas diferentes, e a segunda não se mede: um produto que declare
-  /// outro `error05` receberia o do Bold sem nada acusar.
+  /// outro `error05` receberia o do outro sem nada acusar.
   final DilettaPalette _p;
 
   Color _cor(CoreflowAlvoEstado e) => switch (e) {

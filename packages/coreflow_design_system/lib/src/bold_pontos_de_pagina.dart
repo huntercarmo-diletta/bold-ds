@@ -1,4 +1,4 @@
-/// CONTA BOLD — os PONTOS DE PÁGINA.
+/// Os PONTOS DE PÁGINA.
 ///
 /// Onde a pessoa está num carrossel ou num onboarding: pontos numa linha, e o ativo alonga em pílula.
 /// O pai não tem indicador de página — `grep` em `lib/src/widgets` não acha nenhum — e o chrome do
@@ -7,7 +7,7 @@
 ///
 /// ## O que mudou, e é a mesma classe de defeito duas vezes
 ///
-/// **O ponto ativo cravava a cor da marca** (`BoldColors.primary04`) e **o inativo fazia conta de alpha
+/// **O ponto ativo cravava a cor da marca** (o `primary04` do primeiro produto, em const) e **o inativo fazia conta de alpha
 /// por modo** (`white@30%` no escuro, `neutral07` no claro). Os dois viraram papel: `primary` e
 /// `borderSubtle` — que é exatamente o papel de "traço discreto que muda com o modo", e existe pra não
 /// precisar do `if (isDark)`.

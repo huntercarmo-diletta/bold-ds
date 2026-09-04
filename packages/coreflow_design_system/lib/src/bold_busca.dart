@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'bold_radius.dart' show CoreflowRadius;
 import 'bold_scheme.dart' show CoreflowScheme;
 
-/// Conta BOLD — SearchInput (molécula). Campo de busca compacto (lupa +
+/// SearchInput (molécula). Campo de busca compacto (lupa +
 /// placeholder inline, h48 pill).
 ///
 /// **Composição** — CoreflowIcone (átomo) + TextField + tokens.

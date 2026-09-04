@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'bold_dinheiro.dart';
 
-/// Conta BOLD — CurrencyField. Campo de valor: `R$` à esquerda, número grande e
+/// CurrencyField. Campo de valor: `R$` à esquerda, número grande e
 /// centralizado, sem moldura.
 ///
 /// **CASCA do [DilettaAmountField]** desde 2026-08-08 (`ds v0.61.0`), e o pedido

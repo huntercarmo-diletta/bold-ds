@@ -30,7 +30,7 @@ class CoreflowItemDeAba<T> {
   final String glifo;
 }
 
-/// Conta BOLD — BottomApp. ÚNICO ponto de entrada pro slot INFERIOR da tela: navegação, CTAs, teclado
+/// BottomApp. ÚNICO ponto de entrada pro slot INFERIOR da tela: navegação, CTAs, teclado
 /// e combinações, numa [DilettaGlassSurface] com o respiro de 32 + safe-area.
 ///
 /// Variantes:

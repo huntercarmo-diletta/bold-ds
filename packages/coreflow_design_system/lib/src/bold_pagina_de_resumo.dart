@@ -42,7 +42,7 @@ class CoreflowAcaoDeResumo {
   final VoidCallback onTap;
 }
 
-/// Conta BOLD — Resumo de transação (organismo). Layout estilo lista do modelo
+/// Resumo de transação (organismo). Layout estilo lista do modelo
 /// CPF Seguro: top bar (voltar) + título + spot de status + valor em destaque +
 /// subtítulo (data) + seções (Para/De, Detalhes) + Ajuda + CTA inferior.
 ///

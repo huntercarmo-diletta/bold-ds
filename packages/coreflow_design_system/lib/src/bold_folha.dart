@@ -15,7 +15,7 @@ import 'bold_pegador.dart' show CoreflowPegador;
 import 'bold_largura.dart' show CoreflowLarguraDeConteudo;
 import 'bold_cabecalho_de_folha.dart' show CoreflowFecharFolha;
 
-/// Conta BOLD — BottomSheet (organismo). O CONTAINER de sheet que faltava:
+/// BottomSheet (organismo). O CONTAINER de sheet que faltava:
 /// o [CoreflowBarraDeTopo.sheet] só dava o cabeçalho e o [BoldDialog] é modal central.
 ///
 /// Painel ancorado no rodapé, cantos superiores arredondados, com grip iOS +

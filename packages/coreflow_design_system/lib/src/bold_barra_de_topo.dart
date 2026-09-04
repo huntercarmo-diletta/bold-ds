@@ -14,7 +14,7 @@ import 'bold_radius.dart' show CoreflowRadius;
 import 'bold_scheme.dart' show CoreflowScheme;
 
 
-/// Conta BOLD — TopBar. Único ponto de entrada pro slot superior da tela, e o que ele faz hoje é
+/// TopBar. Único ponto de entrada pro slot superior da tela, e o que ele faz hoje é
 /// DELEGAR: a casca é a [DilettaTopAppBar] do pai (`.app` — inset real, não a status bar mock), a
 /// linha é a [DilettaNavigationTopBar] dele, e o que fica aqui é o que é do produto:
 ///

@@ -2,7 +2,7 @@ import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaInlineAlert, DilettaToast, DilettaToastState;
 import 'package:flutter/material.dart';
 
-/// Conta BOLD — a INTENÇÃO do aviso, e ela é o que sobrou deste arquivo.
+/// a INTENÇÃO do aviso, e ela é o que sobrou deste arquivo.
 ///
 /// O `CoreflowAviso` era uma peça de 75 linhas com receita de cor própria; virou casca do
 /// `DilettaInlineAlert` em 22/08. O que fica aqui é o nome que as 30 telas escrevem e este enum de

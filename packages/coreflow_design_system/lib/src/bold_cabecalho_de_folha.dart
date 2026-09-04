@@ -14,7 +14,7 @@ import 'bold_pegador.dart' show CoreflowPegador;
 /// Dois lados chegando ao mesmo pixel sem combinar é a melhor evidência que este DS já teve de que
 /// a peça estava faltando. O `CoreflowPegador` fica; o nome do time some.
 
-/// Conta BOLD — peças canônicas do TOPO de uma gaveta (bottom sheet): o grip
+/// peças canônicas do TOPO de uma gaveta (bottom sheet): o grip
 /// iOS e o botão de fechar.
 ///
 /// Regra do DS (única, sem exceção): **toda gaveta fecha pelo canto superior

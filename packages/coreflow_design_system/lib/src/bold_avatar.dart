@@ -6,7 +6,7 @@ import 'bold_vidro.dart';
 import 'bold_gradients.dart' show CoreflowGradients;
 import 'bold_scheme.dart' show CoreflowScheme;
 
-/// Conta BOLD — top-bar building blocks.
+/// top-bar building blocks.
 ///
 /// [CoreflowAvatar] é o que sobrou: o avatar do usuário dentro do [BoldTopBar],
 /// theme-aware (light/dark) via [CoreflowScheme.of].
@@ -17,7 +17,7 @@ import 'bold_scheme.dart' show CoreflowScheme;
 
 /// Profile avatar. Shows [image] if given, otherwise gradient [initials].
 /// Set [gear] to attach a small settings badge (taps open the profile).
-/// Conta BOLD — Avatar (átomo) UNIFICADO do usuário. Superfície de **vidro**
+/// Avatar (átomo) UNIFICADO do usuário. Superfície de **vidro**
 /// (default, o look do Redesenho: BoldGlass fill/stroke/blur + inicial em
 /// textPrimary) OU **gradiente da marca** ([glass] = false, inicial branca);
 /// [image] cobre o disco com a foto real. Badge de canto opcional ([badge]

@@ -33,7 +33,7 @@ class CoreflowLargura {
 
 
 
-/// Conta BOLD — Teto de largura do conteúdo.
+/// Teto de largura do conteúdo.
 ///
 /// Limita o conteúdo de interface a [CoreflowLargura.teto] e centraliza a sobra.
 /// Em tela mais estreita que o teto é **transparente**: a largura continua sendo
@@ -116,7 +116,7 @@ class CoreflowBarraComTeto extends StatelessWidget
 double coreflowSobraLateral(BuildContext context) =>
     math.max(0.0, MediaQuery.of(context).size.width - CoreflowLargura.teto) / 2;
 
-/// Conta BOLD — Escape do teto: pinta o filho na largura INTEIRA da tela, de
+/// Escape do teto: pinta o filho na largura INTEIRA da tela, de
 /// dentro do conteúdo já limitado.
 ///
 /// Depois do teto, um elemento dentro do conteúdo não alcança mais as bordas da

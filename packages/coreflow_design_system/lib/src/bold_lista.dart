@@ -9,12 +9,12 @@ import 'bold_icone.dart' show CoreflowIcone;
 import 'bold_scheme.dart' show CoreflowScheme;
 
 
-/// Conta BOLD — list primitives (portados do "App list" do cpf-seguro).
+/// List primitives (portados do "App list" do cpf-seguro).
 ///
 /// [CoreflowGrupoDeLista] é o card que empilha [CoreflowLinhaDeLista]s com hairline; cada tile
 /// é `leading + título/subtítulo + trailing`. Leading típico: [CoreflowSpot].
-/// Trailing típico: chevron (default com onTap), [BoldListTime],
-/// [BoldListTimeStatus], [BoldListAmount] ou uma [CoreflowEtiqueta].
+/// Trailing típico: chevron (default com onTap), as peças de hora, hora com status e valor do
+/// app, ou uma [CoreflowEtiqueta].
 
 /// Tom do [CoreflowSpot]. Semânticos usam as escalas (wash 07/08 + base 04).
 /// `secure` = ouro de blindagem (CPF Seguro / selo quântico).
@@ -49,7 +49,7 @@ enum CoreflowTomDoSpot {
   info,
 }
 
-/// Conta BOLD — SpotIcon. **CASCA desde 21/08**: o desenho é o `DilettaSpotIcon` do pai.
+/// SpotIcon. **CASCA desde 21/08**: o desenho é o `DilettaSpotIcon` do pai.
 ///
 /// Os cinco eixos batem um a um — `filled` ↔ `type` (fill/outline), `tone` ↔ `state`, `size` ↔
 /// `size` —, e o que a troca paga é a TABELA: eram 12 pares de degrau escritos aqui (04 sólido com
@@ -149,8 +149,8 @@ class CoreflowSpot extends StatelessWidget {
 
 /// Uma row de lista: `leading + título (+ subtítulo) + trailing`. Componha
 /// dentro de um [CoreflowGrupoDeLista]. Com [onTap], um chevron aparece por default;
-/// passe [trailing] custom ([BoldListTime], [BoldListTimeStatus],
-/// [BoldListAmount], [CoreflowEtiqueta], "Em breve"…) pra sobrepor, e
+/// passe [trailing] custom (hora, hora com status, valor, [CoreflowEtiqueta], "Em breve"…) pra
+/// sobrepor, e
 /// [enabled] = false pra esmaecer.
 class CoreflowLinhaDeLista extends StatelessWidget {
   const CoreflowLinhaDeLista({
@@ -211,7 +211,7 @@ class CoreflowGrupoDeLista extends StatelessWidget {
     for (var i = 0; i < children.length; i++) {
       if (i > 0) {
         // O DIVISOR É O DO PAI. Era `Divider` do Material com
-        // `BoldColors.hairline` — token, mas token FIXO (neutral-09): a linha
+        // o `hairline` da paleta do produto — token, mas token FIXO (neutral-09): a linha
         // não virava com o tema, e sobre o card de vidro claro ela é cinza-claro
         // sobre branco.
         //
