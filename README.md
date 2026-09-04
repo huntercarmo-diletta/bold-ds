@@ -27,25 +27,37 @@ Por **tag**, nunca por caminho local — `pubspec.yaml` de cada pacote fixa o `r
 
 | pai | versão de hoje |
 |---|---|
-| `ds-diletta` | `v0.39.0` |
-| `catalogo-diletta` | `v0.77.0` |
+| `ds-diletta` | `v0.163.0` |
+| `catalogo-diletta` | `v0.115.0` |
 
-## Como ESTE filho chega no app — `v0.15.0`
+## Como ESTE filho chega no app — `v0.98.1`
 
-A primeira tag saiu em 2026-08-01; a de hoje é a `v0.15.0`. Mesma regra que eu cobro dos pais: por tag,
-nunca por caminho local.
+A primeira tag saiu em 2026-08-01; a de hoje é a `v0.98.1`. A entrega é a TAG, e isso não mudou. O que
+mudou em 04/09 foi o **transporte até o app**, e a razão foi medida na revisão da PR da adoção: com a
+conta de outro dev do time, `diletta/bold-ds` e `diletta/ds-diletta` respondem *"does not exist or you
+do not have access"*, o `pub get` do app morre no `git clone --mirror`, e **quem não tem acesso aos dois
+repos não compila o app**. A CI, nunca — container não tem chave.
+
+Então o app **materializa a tag**: `tool/ds_vendor.sh <tag>` (no repo do app) escreve o conteúdo desta
+tag em `packages/` de lá e commita, com um recibo em `packages/ds_vendor.json` — repo, tag, commit e id
+de árvore git das duas peças. O `pubspec` do app resolve por `path`:
 
 ```yaml
 dependencies:
   coreflow_design_system:
-    git:
-      url: git@bitbucket.org:diletta/bold-ds.git
-      ref: v0.15.0
-      path: packages/coreflow_design_system
+    path: packages/coreflow_design_system
 ```
 
-O `path:` não é detalhe: são dois pacotes num repo só, e sem ele o `pub` procura um `pubspec.yaml` na
-raiz que não existe.
+**Isso não é "caminho local" no sentido que este arquivo condena.** Caminho local é apontar pro disco de
+quem trabalha, e é o que faz "funciona na minha máquina" existir — continua proibido, e o
+`pubspec_overrides.yaml` (fora do git, e temporário) é a única forma dele. Aqui o caminho aponta pro
+conteúdo de uma tag imutável, versionado junto com o app: quem clona o app tem exatamente a peça que a
+tag carrega, sem credencial nenhuma.
+
+O que isso cobra do lado de lá: a cópia **não** é fonte. Conserto vem pra cá, sai numa tag, e volta pelo
+script — e editar a cópia reprova no gate `o_ds_vendorizado_e_a_tag` do app, que compara a árvore
+commitada com o id do recibo. Quando quem publica quiser voltar pro `git:`, é uma linha no `pubspec`
+mais apagar o gate, no mesmo commit (o gate cobra isso também).
 
 **O lar é o Bitbucket da Diletta**, o mesmo dos dois pais — `diletta/bold-ds`. O
 `git@github-huntdiletta:huntercarmo-diletta/bold-ds.git` é espelho, e carrega a mesma tag.
@@ -55,8 +67,8 @@ local cravando a chave do GitHub com `-F /dev/null`, então **todo** remoto daqu
 o Bitbucket respondia `Permission denied (publickey)` como se o repo não existisse. A regra é a de
 sempre: a chave sai do alias na URL (`~/.ssh/config`), não de um override que ignora o arquivo.
 
-O que a tag carrega está no [CHANGELOG](CHANGELOG.md), e **o app ainda não adotou** — isso é decisão de
-quem publica, não deste repo.
+O que a tag carrega está no [CHANGELOG](CHANGELOG.md). O app **adotou**: `lib/design_system/` chegou a
+zero arquivo, e o inventário medido mora no `docs/INTEGRACAO.md` de lá, conferido por gate.
 
 ## Os documentos
 
