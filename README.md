@@ -82,6 +82,7 @@ zero arquivo, e o inventário medido mora no `docs/INTEGRACAO.md` de lá, confer
 | **publicar o catálogo** (Cloudflare Worker + Access) | [DEPLOY_CLOUDFLARE.md](DEPLOY_CLOUDFLARE.md) |
 | a auditoria que precedeu esta arquitetura (histórico) | [docs/2026-07-30-paridade-do-ds-app-x-catalogo.md](docs/2026-07-30-paridade-do-ds-app-x-catalogo.md) |
 | a **auditoria de arquitetura** de hoje — os 10 achados, com a leitura de cada um | [docs/2026-08-03-auditoria-de-arquitetura.md](docs/2026-08-03-auditoria-de-arquitetura.md) |
+| **o Coreflow virar o PAI e o Bold o primeiro filho**, sem retrabalhar o app (ADR de 04/09, com o levantamento medido) | [docs/2026-09-04-adr-o-coreflow-e-o-pai.md](docs/2026-09-04-adr-o-coreflow-e-o-pai.md) |
 
 O protocolo de conversa com os pais (formato do pedido, os quatro vereditos, como o pai responde)
 mora no DS pai: `ds-diletta/docs/PEDIDO-DO-FILHO.md` e `AVISO-DO-PAI.md`.
