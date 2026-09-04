@@ -1,3 +1,4 @@
+import 'package:diletta_catalog_core/camadas_da_linguagem.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -26,14 +27,18 @@ void main() {
     await t.pumpWidget(const MaterialApp(home: Scaffold(body: AbaDeComponentes())));
     await t.pump();
 
+    // **A VARREDURA É POR CAMADA desde o motor `v0.115.0`**, e não mais por grupo: o dono pediu
+    // *"só átomos, moléculas e organismos, sem mais filtros"*, e o grupo virou cabeçalho dentro da
+    // camada. Varrer as três camadas cobre MAIS que as doze categorias antigas — cada camada desenha
+    // vários grupos de uma vez, então cada iteração põe mais peça na mesma página.
     final problemas = <String>[];
-    for (final categoria in Ds.grupos.keys) {
-      await t.tap(find.text(categoria));
+    for (final camada in camadasDeComponente) {
+      await t.tap(find.text(camada).first);
       await t.pump();
       await t.pump(const Duration(milliseconds: 300));
       Object? e;
       while ((e = t.takeException()) != null) {
-        problemas.add('$categoria: $e');
+        problemas.add('$camada: $e');
       }
     }
     expect(problemas, isEmpty,
@@ -46,5 +51,11 @@ void main() {
     expect(Ds.grupos, isNotEmpty);
     expect(Ds.grupos.length, greaterThan(5),
         reason: 'este produto declara 12 grupos; se caiu, ou o plugue mudou ou a régua está cega');
+    // E as três camadas TÊM peça: se a derivação parasse de funcionar, `camadaDeCadaBloco` voltaria
+    // vazia, o laço acima varreria pílula que não existe, e o gate ficaria verde sobre nada.
+    final camada = camadaDeCadaBloco();
+    for (final c in camadasDeComponente) {
+      expect(camada.values, contains(c), reason: 'a camada $c ficou sem peça neste plugue');
+    }
   });
 }

@@ -27,7 +27,7 @@ dependencies:
   diletta_catalog_core:
     git:
       url: git@bitbucket.org:diletta/catalogo-diletta.git
-      ref: v0.114.0
+      ref: v0.116.0
       path: packages/diletta_catalog_core
 
 dev_dependencies:
