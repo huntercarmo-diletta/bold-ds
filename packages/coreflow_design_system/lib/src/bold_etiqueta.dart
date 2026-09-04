@@ -6,14 +6,13 @@ import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaSpacing;
 import 'bold_radius.dart' show CoreflowRadius;
 import 'bold_type.dart' show CoreflowType;
-import 'bold_palette.dart' show BoldColors;
 import 'bold_scheme.dart' show CoreflowScheme;
 
 // O TOM é o do pai. Ele tinha 5 valores aqui e 7 lá, e os 5 eram os mesmos
 // nomes — vocabulário duplicado, não vocabulário próprio. Os dois que faltavam
 // (`secure`, `pending`) entram na receita tonal, que é a mesma conta.
 
-/// Conta BOLD — StatusTag (molécula). Spec Redesenho v.01 (Figma):
+/// StatusTag (molécula). Spec Redesenho v.01 (Figma):
 ///
 /// - pill **h20 · radius 200 · padding start 4 / end 8**;
 /// - fill = gradiente linear `branco@37–42% → wash do tom` (o pill fica
@@ -171,45 +170,47 @@ _ToneSpec _toneSpec(DilettaStatusTone t, CoreflowScheme s) {
 
   return switch (t) {
     DilettaStatusTone.success => _ToneSpec(
-        fg: isDark ? BoldColors.success05 : BoldColors.success04,
+        fg: isDark ? s.paleta.success05 : s.paleta.success04,
         fill: glassFill(),
         stroke: glassStroke()),
     DilettaStatusTone.danger => _ToneSpec(
-        fg: isDark ? BoldColors.error05 : BoldColors.error04,
+        fg: isDark ? s.paleta.error05 : s.paleta.error04,
         fill: glassFill(),
         stroke: glassStroke()),
     DilettaStatusTone.warning => tinted(
-        base: BoldColors.warning04,
-        washLight: BoldColors.warning07,
-        fgLight: BoldColors.warning03,
-        fgDark: BoldColors.warning05),
-    // O ÚNICO tom que sai da PALETA e não da rampa do Bold, e é a diferença que define filho.
+        base: s.paleta.warning04,
+        washLight: s.paleta.warning07,
+        fgLight: s.paleta.warning03,
+        fgDark: s.paleta.warning05),
+    // TODOS os tons saem da PALETA do esquema, e desde 04/09 sem exceção.
     //
-    // Os outros seis são semânticos — sucesso, perigo, aviso, neutro, cofre, espera —, e cor
-    // semântica é invariante por regra do pai: um produto novo não inventa outro vermelho de erro.
-    // O tom de MARCA é o oposto: se ele ler `BoldColors.primary04`, a etiqueta de marca de qualquer
-    // filho sai rosa Bold. Foi assim que o gate deste pacote pegou esta tabela na mudança de casa —
-    // ela veio do app, onde a paleta era uma só e a const não mentia.
+    // Seis são semânticos — sucesso, perigo, aviso, neutro, cofre, espera —, e cor semântica é
+    // invariante por regra do pai: um produto novo não inventa outro vermelho de erro. Por isso eles
+    // eram lidos da const do primeiro produto e ninguém via defeito: o valor era o mesmo. Mas
+    // invariante por REGRA e congelado por LEITOR são coisas diferentes, e a segunda não se mede —
+    // um produto que declarasse outro `success05` receberia o do outro sem nada acusar. O tom de
+    // MARCA nunca teve essa desculpa: lido da const, a etiqueta de marca de qualquer filho saía na cor
+    // do primeiro. Foi assim que o gate deste pacote pegou esta tabela na mudança de casa.
     DilettaStatusTone.primary => tinted(
         base: s.paleta.primary04,
         washLight: s.paleta.primary08,
         fgLight: s.paleta.primary04,
         fgDark: s.paleta.primary05),
     DilettaStatusTone.neutral => tinted(
-        base: BoldColors.neutral05,
-        washLight: BoldColors.neutral10,
-        fgLight: BoldColors.neutral03,
-        fgDark: BoldColors.neutral05),
+        base: s.paleta.neutral05,
+        washLight: s.paleta.neutral10,
+        fgLight: s.paleta.neutral03,
+        fgDark: s.paleta.neutral05),
     DilettaStatusTone.secure => tinted(
-        base: BoldColors.secure04,
-        washLight: BoldColors.secure07,
-        fgLight: BoldColors.secure03,
-        fgDark: BoldColors.secure05),
+        base: s.paleta.secure04,
+        washLight: s.paleta.secure07,
+        fgLight: s.paleta.secure03,
+        fgDark: s.paleta.secure05),
     // `pending` não é cor nova: é o amarelo do aviso com o papel de espera.
     DilettaStatusTone.pending => tinted(
-        base: BoldColors.warning04,
-        washLight: BoldColors.warning07,
-        fgLight: BoldColors.warning03,
-        fgDark: BoldColors.warning05),
+        base: s.paleta.warning04,
+        washLight: s.paleta.warning07,
+        fgLight: s.paleta.warning03,
+        fgDark: s.paleta.warning05),
   };
 }

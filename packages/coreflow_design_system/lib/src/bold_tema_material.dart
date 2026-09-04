@@ -1,4 +1,4 @@
-/// CONTA BOLD — o `ThemeData` do Flutter, e ele veio do app em 19/08.
+/// O `ThemeData` do Flutter de um produto deste DS, e ele veio do app em 19/08.
 ///
 /// ## Por que um DS entrega o tema do Material
 ///
@@ -30,12 +30,11 @@ import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/cupertino.dart' show CupertinoPageTransitionsBuilder;
 import 'package:flutter/material.dart';
 
-import 'bold_palette.dart';
 import 'bold_radius.dart';
 import 'bold_scheme.dart';
 import 'bold_type.dart';
 
-/// O `ThemeData` do Conta BOLD, nos dois modos.
+/// O `ThemeData` do produto, nos dois modos — os dois atalhos são do primeiro produto.
 ///
 /// ```dart
 /// MaterialApp(
@@ -50,19 +49,19 @@ abstract final class CoreflowTemaMaterial {
   static ThemeData get claro => de(CoreflowScheme.light());
   static ThemeData get escuro => de(CoreflowScheme.dark());
 
-  /// O `ThemeData` de QUALQUER esquema deste DS — a porta pra um produto que não é o Bold.
+  /// O `ThemeData` de QUALQUER esquema deste DS — a porta pra um produto que não é o primeiro.
   ///
   /// Era `_monta`, privado, e a privacidade era o bloqueio: [CoreflowScheme.de] aceita paleta desde a
   /// v0.55.0 e não havia nada acima dele que aceitasse. Um produto novo montava o esquema com a
   /// paleta dele e **não conseguia registrá-lo como `ThemeExtension`** — que é de onde os ~500
-  /// `BoldColors.of(context)` leem. Quem monta produto passa por [CoreflowProduto], que chama isto.
+  /// `CoreflowScheme.of(context)` leem. Quem monta produto passa por [CoreflowProduto], que chama isto.
   static ThemeData de(CoreflowScheme s) {
     final cores = ColorScheme(
       brightness: s.brightness,
       // O rosa da MARCA, lido da paleta que veio — e não o `s.primary`, que no claro é o degrau
       // profundo (escolhido pra passar AA com tinta branca). São dois valores com o mesmo nome, e
-      // o Material quer o da marca. Era `BoldColors.primary04`, const congelada: um produto novo
-      // recebia o rosa do Bold no `colorScheme` inteiro depois de declarar a paleta dele.
+      // o Material quer o da marca. Era a const congelada do primeiro produto: um produto novo
+      // recebia a cor daquele no `colorScheme` inteiro depois de declarar a paleta dele.
       primary: s.paleta.primary04,
       // Os três `on*` saem do PAPEL e não do branco cru. O valor é o mesmo nos dois modos hoje
       // (medido: `#FFFFFF` dos dois lados); a diferença é de quem é a decisão.
@@ -71,7 +70,9 @@ abstract final class CoreflowTemaMaterial {
       onSecondary: s.onPrimary,
       surface: s.surface,
       onSurface: s.textPrimary,
-      error: BoldColors.error04,
+      // Semântico e invariante por regra do pai — e mesmo assim lido da paleta que veio, porque
+      // invariante por regra e congelado por leitor são coisas diferentes.
+      error: s.paleta.error04,
       onError: DilettaAbsoluteColors.white,
     );
 
@@ -101,7 +102,7 @@ abstract final class CoreflowTemaMaterial {
       // fica). Na web e no desktop isto também serve; volte atrás se um dia existir um produto
       // guiado por hover em cima deste DS.
       hoverColor: DilettaAbsoluteColors.transparent,
-      // **A linha que trancava a porta.** É esta extensão que faz `BoldColors.of(context)`
+      // **A linha que trancava a porta.** É esta extensão que faz `CoreflowScheme.of(context)`
       // responder, e enquanto o esquema morava no app, o tema tinha que morar lá junto.
       extensions: [s],
       dividerTheme: DividerThemeData(color: s.border, thickness: 1, space: 1),

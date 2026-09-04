@@ -5,10 +5,9 @@ import 'bold_vidro.dart';
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaSpacing;
 import 'bold_radius.dart' show CoreflowRadius;
-import 'bold_produto.dart' show CoreflowProduto;
 import 'bold_scheme.dart' show CoreflowScheme;
 
-/// Conta BOLD — Card surface.
+/// Card surface.
 ///
 /// The default container: dark surface, hairline border, 24 radius. Wrap any
 /// content. Set [onTap] to make it a tappable block (action cards), [gradient]
@@ -223,10 +222,10 @@ class CoreflowCartao extends StatelessWidget {
         borderRadius: br,
         clipBehavior: Clip.antiAlias,
         child: BackdropFilter(
-          filter: CoreflowVidro.filtro(CoreflowProduto.bold.paleta),
+          filter: CoreflowVidro.filtro(c.paleta),
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: _CardSurface.fill(c.isDark),
+              color: _CardSurface.fill(c),
               borderRadius: br,
             ),
             child: CustomPaint(
@@ -323,7 +322,7 @@ extension on CoreflowCartao {
 
 /// O material do card de vidro deste app: o tinte e o traço em gradiente do destaque.
 ///
-/// Era `BoldCardSurface`, PÚBLICA, e virou privada em 21/08 pela frase que a exceção do gate já
+/// Era pública, com o nome do produto na frente, e virou privada em 21/08 pela frase que a exceção do gate já
 /// dizia sobre ela: *"o que ela tem de errado é o nome público, não a vida"*. Depois que o caminho
 /// de vidro sem destaque passou a delegar pro pai e as props mortas saíram, o que sobrou tem UM
 /// chamador, no mesmo arquivo. Peça com um chamador dentro de casa não é palavra pública.
@@ -332,15 +331,15 @@ class _CardSurface {
   ///
   /// Eram os mesmos dois valores por um terceiro caminho: `glassFill @ 50%` no escuro e
   /// `glassFillLight @ 50%` no claro. A receita do vidro mora na paleta desde a `v0.4.0` do pai
-  /// (`tinteDeVidroEscuro`/`Claro`), o `BoldGlass` daqui já passou a lê-la em 19/08 — e este ficou
+  /// (`tinteDeVidroEscuro`/`Claro`), a casca de vidro daqui já passou a lê-la em 19/08 — e este ficou
   /// atrás, remontando o mesmo tinte com o mesmo alpha.
   ///
   /// **Terceira fonte do mesmo material.** Conferido byte a byte antes de trocar: idêntico.
-  // A paleta é a do produto Bold: estes dois helpers recebem `bool isDark` e não o esquema, e
-  // trocar a assinatura por aqui atravessaria 4 sítios de tela pra ganhar o que a casca já é —
-  // o adaptador DESTE app.
-  static Color fill(bool isDark) =>
-      CoreflowVidro.tinte(CoreflowProduto.bold.paleta, escuro: isDark);
+  ///
+  /// E a paleta é a do ESQUEMA em contexto, desde 04/09. Era a do primeiro produto, lida da const —
+  /// a única leitura direta de produto que sobrava num componente: um filho deste DS declarava o
+  /// tinte de vidro dele e o card saía com o do outro.
+  static Color fill(CoreflowScheme c) => CoreflowVidro.tinte(c.paleta, escuro: c.isDark);
 
   /// Destaque no DARK — stroke rosa, mais forte no topo-esquerdo (gradiente).
   static const LinearGradient strokeGradient = LinearGradient(
