@@ -1,9 +1,12 @@
-/// OS CONTRATOS DOS COMPONENTES NASCIDOS AQUI.
+/// OS CONTRATOS DOS COMPONENTES DA LINGUAGEM NASCIDOS AQUI.
 ///
-/// O pai entrega **77 specs** (`kDilettaSpecs`, medido em 2026-08-06) pros componentes DELE. Os 12 que
-/// nasceram neste filho não tinham contrato nenhum, e o gate `bloco-sem-contrato` (v0.36.0 do motor)
+/// O pai entrega **77 specs** (`kDilettaSpecs`, medido em 2026-08-06) pros componentes DELE. Os que
+/// nasceram nesta casa não tinham contrato nenhum, e o gate `bloco-sem-contrato` (v0.36.0 do motor)
 /// estava certo em cobrar: sem
 /// contrato, a aba de componentes desenha nome e matriz e para ali — sem "quando usar", sem faça/evite.
+///
+/// Aqui moram só os contratos de componente `Coreflow*` — linguagem sem produto. O contrato do selo
+/// quântico, que é peça de MARCA, mora com o selo; `kBoldSpecs` (o que o catálogo lê) junta os dois.
 ///
 /// ## Por que Dart e não markdown em `docs/`
 ///
@@ -22,8 +25,7 @@
 library;
 
 /// `slug → markdown`. O slug é o TIPO DO BLOCO no catálogo, porque é por ele que o motor pergunta.
-const Map<String, String> kBoldSpecs = {
-  'seloQuantico': _seloQuantico,
+const Map<String, String> kCoreflowSpecs = {
   'saldo': _saldo,
   'copiar': _copiar,
   'abas': _abas,
@@ -88,50 +90,6 @@ const Map<String, String> kBoldSpecs = {
   'paginaDeResumo': _paginaDeResumo,
   'paginaComRodapeFlutuante': _paginaComRodapeFlutuante,
 };
-
-const _seloQuantico = r'''
-## Purpose
-
-O selo de autorização do Conta BOLD: a peça que diz se uma transação foi autorizada pelo par
-quântico. É marca e é estado ao mesmo tempo — o desenho é do produto, e o que ele comunica é
-irreversível (autorizado, negado, aguardando).
-
-## Guidelines
-
-### Quando usar
-Numa tela cujo assunto É a autorização quântica: pareamento, confirmação, comprovante de transação
-autorizada. Fora desse assunto, o estado se comunica com `selo` (status tag), que é vocabulário.
-
-### Faça
-- deixe o rótulo aparecer quando a tela não disser o estado em outro lugar
-- use os três estados do enum; o desenho de cada um é decisão de marca, não de tela
-- reserve o tamanho grande (200) pra tela cujo único assunto é o selo
-
-### Evite
-- usar como ícone de status genérico — é marca, e marca repetida deixa de significar
-- passar cor por fora: o estado escolhe a cor, e é isso que impede "autorizado em vermelho"
-- animar em lista: o selo tem movimento próprio, e vinte deles numa lista competem com o conteúdo
-
-## Compõe
-
-- DilettaBox
-- DilettaText
-- CustomPaint (o anel é desenho, não composição)
-
-## Requirements
-
-### Requirement: o estado é um enum FECHADO, e o switch é exaustivo
-O componente SHALL receber `BoldSeloEstado` e resolver cor, ícone e rótulo por `switch` sem `_ =>`.
-Estado novo SHALL quebrar a compilação em vez de cair no visual de outro estado.
-
-### Requirement: três estados, não dois booleanos
-O componente SHALL expressar `autorizado`/`negado`/`aguardando` como UM valor. A versão anterior usava
-dois booleanos, e a combinação impossível (`autorizado && negado`) era representável.
-
-### Requirement: o rótulo respeita o tema
-O texto SHALL sair de papel do scheme, não de branco cravado — o selo aparece sobre fundo claro e sobre
-arte escura.
-''';
 
 const _saldo = r'''
 ## Purpose

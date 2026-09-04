@@ -85,6 +85,7 @@ export 'src/bold_disco.dart';
 export 'src/bold_abas.dart';
 export 'src/bold_cabecalho_da_home.dart';
 export 'src/bold_contratos.dart';
+export 'src/bold_specs.dart';
 export 'src/bold_copiar.dart';
 export 'src/bold_elevacao.dart';
 export 'src/bold_escada_de_alcadas.dart';

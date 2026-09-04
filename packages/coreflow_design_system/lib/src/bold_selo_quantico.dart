@@ -504,3 +504,51 @@ class _PintorDoSelo extends CustomPainter {
       old.negado != negado ||
       old.mostrarRotulo != mostrarRotulo;
 }
+
+/// O CONTRATO do selo — no formato de `kDilettaSpecs`, servido ao catálogo por `kBoldSpecs`.
+///
+/// Mora aqui e não em `bold_contratos.dart` porque o selo é peça de MARCA, e aquele arquivo é a
+/// linguagem: contrato que cita o enum de estado do selo mora com quem o declara.
+const String kSeloQuanticoSpec = r'''
+## Purpose
+
+O selo de autorização do Conta BOLD: a peça que diz se uma transação foi autorizada pelo par
+quântico. É marca e é estado ao mesmo tempo — o desenho é do produto, e o que ele comunica é
+irreversível (autorizado, negado, aguardando).
+
+## Guidelines
+
+### Quando usar
+Numa tela cujo assunto É a autorização quântica: pareamento, confirmação, comprovante de transação
+autorizada. Fora desse assunto, o estado se comunica com `selo` (status tag), que é vocabulário.
+
+### Faça
+- deixe o rótulo aparecer quando a tela não disser o estado em outro lugar
+- use os três estados do enum; o desenho de cada um é decisão de marca, não de tela
+- reserve o tamanho grande (200) pra tela cujo único assunto é o selo
+
+### Evite
+- usar como ícone de status genérico — é marca, e marca repetida deixa de significar
+- passar cor por fora: o estado escolhe a cor, e é isso que impede "autorizado em vermelho"
+- animar em lista: o selo tem movimento próprio, e vinte deles numa lista competem com o conteúdo
+
+## Compõe
+
+- DilettaBox
+- DilettaText
+- CustomPaint (o anel é desenho, não composição)
+
+## Requirements
+
+### Requirement: o estado é um enum FECHADO, e o switch é exaustivo
+O componente SHALL receber `BoldSeloEstado` e resolver cor, ícone e rótulo por `switch` sem `_ =>`.
+Estado novo SHALL quebrar a compilação em vez de cair no visual de outro estado.
+
+### Requirement: três estados, não dois booleanos
+O componente SHALL expressar `autorizado`/`negado`/`aguardando` como UM valor. A versão anterior usava
+dois booleanos, e a combinação impossível (`autorizado && negado`) era representável.
+
+### Requirement: o rótulo respeita o tema
+O texto SHALL sair de papel do scheme, não de branco cravado — o selo aparece sobre fundo claro e sobre
+arte escura.
+''';
