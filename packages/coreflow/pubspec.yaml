@@ -1,0 +1,36 @@
+name: coreflow
+description: >-
+  O PAI da família Coreflow: a linguagem de produto sem produto. Só os componentes
+  `Coreflow*`, os contratos e a forma dos esquemas — nenhuma cor, fonte, logo ou arte
+  de marca mora aqui. O primeiro filho mora em `packages/coreflow_design_system`.
+  Decisão: `docs/2026-09-04-adr-o-coreflow-e-o-pai.md`.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # A MESMA tag que o filho pina. O pai re-exporta a linguagem do avô, e o filho passa a
+  # recebê-la por aqui — um `ref:` só na família, ou dois pacotes do mesmo build carregam
+  # duas versões do mesmo `DilettaTheme`.
+  diletta_design_system:
+    git:
+      url: git@bitbucket.org:diletta/ds-diletta.git
+      ref: v0.163.0
+      path: packages/diletta_design_system
+  # Declarado direto porque os componentes que vêm pra cá chamam `SvgPicture`/`ColorMapper`.
+  # Dependência de carona é dependência que some sem aviso.
+  flutter_svg: ^2.0.10
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  # O avô declara `uses-material-design: true`; sem a chave aqui o `flutter test` avisa em
+  # toda execução.
+  uses-material-design: true

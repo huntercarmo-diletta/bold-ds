@@ -6,15 +6,22 @@ de bloco é aqui.
 
 | pacote | o que é |
 |---|---|
+| `packages/coreflow` | **o PAI, nascendo** (`feat/coreflow-e-o-pai`): a linguagem de produto sem produto. Na fase 0 só re-exporta o `ds-diletta`; os `Coreflow*` chegam depois do veredito — `docs/2026-09-04-adr-o-coreflow-e-o-pai.md` |
 | `packages/coreflow_design_system` | **a BASE da família**: os 50 componentes (`Coreflow*`) mais o produto Bold — paleta, vinho, fonte e os dois do selo quântico, que seguem `Bold*` porque são a marca e não a linguagem |
 | `packages/catalog` | **o catálogo-filho**: o plugue que declara os blocos, os grupos e o leitor de código |
 
 ## O gate
 
 ```bash
-(cd packages/coreflow_design_system && flutter analyze && flutter test)   # 105
-(cd packages/catalog && flutter analyze && flutter test)                    # 66
+(cd packages/coreflow && flutter analyze && flutter test)                   # 3
+(cd packages/coreflow_design_system && flutter analyze && flutter test)     # 271
+(cd packages/catalog && flutter analyze && flutter test)                    # 94
 ```
+
+Dois gates medem a separação (`docs/2026-09-04-adr-o-coreflow-e-o-pai.md`), com a MESMA régua de
+`packages/coreflow_design_system/tool/levanta_a_separacao.sh`: no pai, `o_coreflow_nao_cita_bold` tem que
+dar **zero** em `lib/`, comentário incluído; no filho, `a_separacao_tem_numero` escreve o teto de
+referências ao Bold em `lib/` (**300** em 04/09) e ele só desce.
 
 A conformidade dos dois pais roda dentro desses testes (`violacoesDeConformidade` e
 `violacoesDoFilho`), e as duas baselines estão **vazias**: dívida declarada aqui é dívida que alguém
