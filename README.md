@@ -21,7 +21,7 @@ de bloco é aqui.
 Dois gates medem a separação (`docs/2026-09-04-adr-o-coreflow-e-o-pai.md`), com a MESMA régua de
 `packages/coreflow_design_system/tool/levanta_a_separacao.sh`: no pai, `o_coreflow_nao_cita_bold` tem que
 dar **zero** em `lib/`, comentário incluído; no filho, `a_separacao_tem_numero` escreve o teto de
-referências ao Bold em `lib/` (**300** em 04/09) e ele só desce.
+referências ao Bold em `lib/` — o número mora no teste — e ele só desce.
 
 A conformidade dos dois pais roda dentro desses testes (`violacoesDeConformidade` e
 `violacoesDoFilho`), e as duas baselines estão **vazias**: dívida declarada aqui é dívida que alguém

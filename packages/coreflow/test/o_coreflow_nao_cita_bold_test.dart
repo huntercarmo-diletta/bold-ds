@@ -16,7 +16,7 @@ void main() {
   // A mesma `P=` do script. Se o script mudar, este literal muda no mesmo commit.
   final regua = RegExp(
     r'BoldColors|BoldPalette|BoldSeloQuantico|BoldSeloEstado|BoldFonts|BoldVinho|marcaDoBold|'
-    r'CoreflowProduto\.bold\b|Conta BOLD|hexesDaArte|assets/logos|vinho(Marca|Lavagem|Tinta)',
+    r'CoreflowProduto\.bold\b|Conta BOLD|hexesDaArte|assets/logos',
   );
 
   // Mais larga que a régua: QUALQUER símbolo `Bold` com inicial maiúscula. Fecha a classe "a regex
@@ -54,11 +54,13 @@ void main() {
       "  /// No Conta BOLD isto era rosa.",
       '  static final bold = CoreflowProduto.bold;',
       "  'assets/logos/conta-bold-lockup.svg',",
-      '  final tinta = BoldVinho.vinhoTinta;',
+      '      vinhoTinta: BoldVinho.tintaDe(paleta),',
     ]) {
       expect(regua.hasMatch(l), isTrue, reason: 'a régua não casa com: $l');
     }
     expect(regua.hasMatch('FontWeight.bold'), isFalse);
+    // O campo do esquema que o app lê não é referência ao Bold — é a API que o pai carrega.
+    expect(regua.hasMatch('    final c = CoreflowScheme.of(context).vinhoTinta;'), isFalse);
     expect(qualquerBold.hasMatch('FontWeight.bold'), isFalse);
     expect(qualquerBold.hasMatch('BoldNomeNovo.x'), isTrue);
   });
