@@ -20,6 +20,27 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.98.1] — 2026-09-04
+
+### Corrigido — dois textos do produto saíam na fonte do SISTEMA, e não na da marca
+
+`DilettaType` não carrega família de propósito: ela chega pelo `ThemeData.fontFamily` do app, e é
+assim que a mesma escada tipográfica serve dois produtos. Só que `TextPainter` dentro de
+`CustomPainter` **não vê tema nenhum** — recebe o `TextStyle` pronto e desenha. Estilo sem família
+ali cai na fonte do sistema.
+
+Dois sítios estavam nessa: o rótulo do `BoldSeloQuantico` (`Autorização Quântica`, no meio da
+cerimônia que assina dinheiro) e o rótulo do `CoreflowVisorDeCodigo`. Eram os **únicos dois textos
+do produto fora do Inter**, e ninguém viu porque teste de widget não mede fonte de painter e o olho
+não separa SF Pro de Inter num rótulo de 14px. Os dois agora declaram `fontFamily: BoldFonts.family`
+no `copyWith`.
+
+### Adicionado — gate `o_painter_nao_herda_fonte`
+
+Varre `lib/src` procurando `estilo*: DilettaType.` sem `fontFamily` nas três linhas seguintes. A
+régua é o nome do parâmetro: `estilo*` é como este pacote entrega estilo PRONTO, e estilo pronto vai
+para painter. Fecha a classe, não a ocorrência.
+
 ## [0.98.0] — 2026-09-03
 
 ### Removido — `CoreflowAlvoFantasma`, a única peça do DS que nenhuma tela alimentava
