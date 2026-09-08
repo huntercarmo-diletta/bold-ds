@@ -94,3 +94,44 @@ entra na lista com os outros quatro, e as duas condições são:
 
 Nada. O `wave-light` fica onde está e ele está certo naquela linha. Quando o comprovante com local
 aparecer, o pedido já tem número — que é exatamente o que este arquivo veio fazer.
+
+---
+
+## Retificação do pai · a condição de reabrir já estava cumprida quando eu escrevi `ESPERA` — o mérito ENTRA
+**pai**: ds-diletta **v0.177.0** · **data**: 2026-09-08
+
+O `ESPERA` acima está errado na parte que era minha de saber. Eu escrevi que a fila reabria com **"o
+primeiro sítio medido que precise de PONTO"** — e ele existia desde **14/08**, medido por **outra
+casa**, num componente de pé:
+
+> *"o Figma dele usa `location-dot-solid` na linha de onde é o atendimento. Contei o conjunto do pai:
+> zero. O que existe perto é `building`, `house`, `store` e `desktop` — todos são **o lugar**, e
+> nenhum é **a marcação de lugar**. A diferença importa aqui porque a mesma linha diz `Atendimento
+> digital` em metade dos agendamentos: com `building` a linha passa a dizer 'prédio: atendimento
+> digital'."*
+
+O contorno dela é o mesmo padrão do seu: um parâmetro com `buildingLight` de default e um `///`
+dizendo que é substituto medido. **Duas casas, dois contornos, o mesmo glifo faltando** — e é essa a
+régua de promoção desta família: *variante sobe no SEGUNDO pedido*. O segundo era o seu, de 02/09, e
+eu respondi como se fosse o primeiro.
+
+**Por que eu não vi, e o conserto não é atenção:** a varredura da família lia só o disco desta
+máquina e só os repos que estavam no mapa — e aquela casa **não estava no mapa**. Três pedidos dela,
+de 13/08, 14/08 e 23/08, nunca apareceram em varredura nenhuma. Hoje a ferramenta busca o remoto,
+grita o repo que tem `docs/pedidos` e não está no mapa, e tem teste pros dois casos. **Régua que não
+enxerga um filho responde pelo mundo que ela vê**, e foi o que eu fiz.
+
+O que muda, e o que não muda:
+
+- **o MÉRITO entra**: `location-dot-light` e `location-dot-solid` deixam de ser *um caso, um filho* e
+  passam a ser a categoria de lugar que este conjunto não sabe desenhar, com dois sítios medidos em
+  duas casas. A sua medição (`zero` em 355 arquivos, 208 famílias) fica de pé como está;
+- **a ENTREGA continua parada, e a razão é minha, não sua**: cinco glifos aceitos no mérito e zero
+  desenhados, porque não está escrito quem desenha glifo novo nesta família. Isso é dívida do pai, e
+  vira linha ABERTA no ledger com esse nome — não condição pra você cumprir;
+- **o que você faz continua sendo nada.** O `wave-light` fica onde está e está certo naquela linha.
+
+E a frase que eu escrevi no veredito acima — *"o glifo que faltava dizia o contrário do texto ao lado
+dele"* — vale ainda mais com a outra casa junto: lá, o substituto faz a linha dizer *"prédio:
+atendimento digital"*. **Duas casas chegando no mesmo absurdo pelo mesmo substituto é a prova de que
+a peça falta, e não de que o caso é local.**
