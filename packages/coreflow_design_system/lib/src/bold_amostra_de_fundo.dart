@@ -20,7 +20,7 @@
 /// entre os dois raios é o que faz o anel LER como anel: mesmo raio nos dois deixa o quadrado
 /// encostado na borda por dentro.
 ///
-/// O rótulo era `CoreflowType.labelSm` com `fontSize: 10` cravado por cima. Dez não existe na escada, e
+/// O rótulo era o `labelSm` da escala com `fontSize: 10` cravado por cima. Dez não existe na escada, e
 /// esse `copyWith` era o mesmo atalho que o ladrilho de menu já pagou quando mudou de casa: fica
 /// `DilettaType.labelSm` (11/16), sem sobrescrita.
 library;

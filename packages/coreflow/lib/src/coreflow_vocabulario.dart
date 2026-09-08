@@ -31,24 +31,20 @@ abstract final class CoreflowVocabulario {
     'info',
   ];
 
-  /// O azul de INFORMAÇÃO de referência da linguagem.
-  ///
-  /// Cor semântica é invariante por regra do pai — um produto novo não inventa outro vermelho de
-  /// erro, nem outro azul de informação. É o único dos quatro que não deriva da paleta, pela mesma
-  /// razão que `error04` não deriva: informação não é marca.
-  static const Color infoDeReferencia = Color(0xFF3B82F6);
-
   /// A regra de um papel extra que a paleta não declarou, sobre o esquema do pai daquele modo.
   ///
   /// - elevada: no claro é o branco da paleta contra a página tingida; no escuro é a superfície do pai;
   /// - pressionada: a superfície muda do pai — um degrau na direção oposta à elevação;
   /// - fluxo secundário: no claro é a página; no escuro é o vinho-tinta da marca;
-  /// - informação: [infoDeReferencia].
+  /// - informação: a tinta SECUNDÁRIA do avô. O avô recusou a família `info` (v0.27.0) e pinta
+  ///   *espera* e *neutro* com o mesmo valor — *"o que separa pendente de informativo é o relógio,
+  ///   não o matiz"*. Quem quer informação com matiz próprio declara o azul dele; o degrau do meio
+  ///   não declara cor crua (regra do ADR-003 do avô, adendo de 08/09).
   static Color reserva(String nome, DilettaPalette p, DilettaScheme d) => switch (nome) {
         'superficieElevada' => d.isDark ? d.surface : p.white,
         'superficiePressionada' => d.surfaceMuted,
         'fluxoSecundario' => d.isDark ? CoreflowVinho.tintaDe(p) : d.bg,
-        'info' => infoDeReferencia,
+        'info' => d.textSecondary,
         _ => throw ArgumentError.value(nome, 'nome', 'não é papel extra desta linguagem'),
       };
 
@@ -60,7 +56,7 @@ abstract final class CoreflowVocabulario {
       'superficieElevada': 'A superfície elevada: o card sobre a página.',
       'superficiePressionada': 'O mesmo card sob o dedo — um degrau na direção oposta à elevação.',
       'fluxoSecundario': 'O fundo sólido de quem saiu da navegação principal.',
-      'info': 'Informação categórica — o azul de referência da linguagem.',
+      'info': 'Informação categórica — sem declaração, anda com a tinta secundária.',
     };
     return {
       for (final n in nomes)

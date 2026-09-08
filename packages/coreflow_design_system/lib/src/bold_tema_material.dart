@@ -31,7 +31,7 @@ import 'package:flutter/material.dart';
 import 'package:coreflow/coreflow.dart';
 
 import 'bold_scheme.dart';
-import 'bold_type.dart';
+import 'bold_type.dart' show CoreflowType;
 
 /// O `ThemeData` do produto, nos dois modos — os dois atalhos são do primeiro produto.
 ///
@@ -42,11 +42,67 @@ import 'bold_type.dart';
 ///   themeMode: seuModo,
 /// )
 /// ```
+/// A TIPOGRAFIA de um produto — os degraus que o `ThemeData` recebe, e a família, uma vez.
+///
+/// Veredito de 08/09 (`docs/pedidos/2026-09-04-…`): *família é do app, uma vez* — a `DilettaBrand`
+/// não ganha campo, e o canal já existia: o `ThemeData` que [CoreflowTemaMaterial] monta. O que
+/// faltava era a família ter UMA fonte em vez de duas: ela viaja aqui, é aplicada em
+/// `ThemeData(fontFamily:)`, e o `textTheme` inteiro a herda. Os degraus de escala também são
+/// declaração de produto — *o pai entrega o mecanismo e o GATE; o filho declara os passos* (ADR-005
+/// do avô) —, então este objeto é o que um produto declara e [doAvo] é o que quem não declara recebe:
+/// a escala do avô, sem família (herda a do app).
+class CoreflowTipografia {
+  const CoreflowTipografia({
+    this.familia,
+    required this.displayLarge,
+    required this.headlineLarge,
+    required this.headlineMedium,
+    required this.titleLarge,
+    required this.bodyLarge,
+    required this.bodyMedium,
+    required this.labelLarge,
+    required this.labelSmall,
+    required this.botaoDeTexto,
+    required this.dica,
+    required this.rotuloDeCampo,
+  });
+
+  /// A escala do avô, degrau a degrau, e nenhuma família: quem não declara herda a do app.
+  static const CoreflowTipografia doAvo = CoreflowTipografia(
+    displayLarge: DilettaType.displaySm,
+    headlineLarge: DilettaType.headlineLg,
+    headlineMedium: DilettaType.headlineMd,
+    titleLarge: DilettaType.titleLg,
+    bodyLarge: DilettaType.bodyLg,
+    bodyMedium: DilettaType.bodyMd,
+    labelLarge: DilettaType.labelLg,
+    labelSmall: DilettaType.labelSm,
+    botaoDeTexto: DilettaType.labelLg,
+    dica: DilettaType.bodyMd,
+    rotuloDeCampo: DilettaType.bodySm,
+  );
+
+  /// A família tipográfica do produto, QUALIFICADA (`packages/<pacote>/<Família>`). `null` herda a
+  /// do app — que é o que o avô faz com a dele.
+  final String? familia;
+
+  /// Os oito slots do `textTheme` que este DS declara. Sem cor: a cor vem do esquema, na montagem.
+  final TextStyle displayLarge, headlineLarge, headlineMedium, titleLarge;
+  final TextStyle bodyLarge, bodyMedium, labelLarge, labelSmall;
+
+  /// Os três estilos fora do `textTheme`: o rótulo do `TextButton`, a dica e o rótulo do campo.
+  final TextStyle botaoDeTexto, dica, rotuloDeCampo;
+
+  /// Um estilo com a família do produto aplicada — pros três sítios que o `ThemeData` não alcança
+  /// sozinho (o `apply(fontFamily:)` do Material só cobre o `textTheme`).
+  TextStyle comFamilia(TextStyle s) => familia == null ? s : s.copyWith(fontFamily: familia);
+}
+
 abstract final class CoreflowTemaMaterial {
   const CoreflowTemaMaterial._();
 
-  static ThemeData get claro => de(CoreflowScheme.light());
-  static ThemeData get escuro => de(CoreflowScheme.dark());
+  static ThemeData get claro => de(CoreflowScheme.light(), tipografia: CoreflowType.tipografia);
+  static ThemeData get escuro => de(CoreflowScheme.dark(), tipografia: CoreflowType.tipografia);
 
   /// O `ThemeData` de QUALQUER esquema deste DS — a porta pra um produto que não é o primeiro.
   ///
@@ -54,7 +110,8 @@ abstract final class CoreflowTemaMaterial {
   /// v0.55.0 e não havia nada acima dele que aceitasse. Um produto novo montava o esquema com a
   /// paleta dele e **não conseguia registrá-lo como `ThemeExtension`** — que é de onde os ~500
   /// `CoreflowScheme.of(context)` leem. Quem monta produto passa por [CoreflowProduto], que chama isto.
-  static ThemeData de(CoreflowScheme s) {
+  static ThemeData de(CoreflowScheme s, {CoreflowTipografia tipografia = CoreflowTipografia.doAvo}) {
+    final t = tipografia;
     final cores = ColorScheme(
       brightness: s.brightness,
       // O rosa da MARCA, lido da paleta que veio — e não o `s.primary`, que no claro é o degrau
@@ -75,17 +132,19 @@ abstract final class CoreflowTemaMaterial {
       onError: DilettaAbsoluteColors.white,
     );
 
+    // A ESCADA é do produto (`tipografia`), a COR é do esquema. A família entra uma vez, em
+    // `ThemeData(fontFamily:)`, e o Material a aplica em todo o `textTheme`.
     final escada = TextTheme(
-      displayLarge: CoreflowType.display.copyWith(color: s.textPrimary),
-      headlineLarge: CoreflowType.h1.copyWith(color: s.textPrimary),
-      headlineMedium: CoreflowType.h2.copyWith(color: s.textPrimary),
-      titleLarge: CoreflowType.title.copyWith(color: s.textPrimary),
-      bodyLarge: CoreflowType.body.copyWith(color: s.textPrimary),
+      displayLarge: t.displayLarge.copyWith(color: s.textPrimary),
+      headlineLarge: t.headlineLarge.copyWith(color: s.textPrimary),
+      headlineMedium: t.headlineMedium.copyWith(color: s.textPrimary),
+      titleLarge: t.titleLarge.copyWith(color: s.textPrimary),
+      bodyLarge: t.bodyLarge.copyWith(color: s.textPrimary),
       // O DEFAULT do `Text` sem estilo, e ele já esteve SECUNDÁRIO. Texto sem estilo é o corpo da
       // tela — quem quer metadado pede metadado.
-      bodyMedium: CoreflowType.bodySmall.copyWith(color: s.textPrimary),
-      labelLarge: CoreflowType.button.copyWith(color: s.textPrimary),
-      labelSmall: CoreflowType.label.copyWith(color: s.textSecondary),
+      bodyMedium: t.bodyMedium.copyWith(color: s.textPrimary),
+      labelLarge: t.labelLarge.copyWith(color: s.textPrimary),
+      labelSmall: t.labelSmall.copyWith(color: s.textSecondary),
     );
 
     return ThemeData(
@@ -94,7 +153,7 @@ abstract final class CoreflowTemaMaterial {
       colorScheme: cores,
       scaffoldBackgroundColor: s.background,
       canvasColor: s.background,
-      fontFamily: CoreflowType.fontFamily,
+      fontFamily: t.familia,
       textTheme: escada,
       splashFactory: InkRipple.splashFactory,
       // App primeiro: toque não tem hover. Mata o realce de hover no app inteiro (o ripple do toque
@@ -114,7 +173,7 @@ abstract final class CoreflowTemaMaterial {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: s.paleta.primary04,
-          textStyle: CoreflowType.labelLg,
+          textStyle: t.comFamilia(t.botaoDeTexto),
         ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
@@ -135,8 +194,8 @@ abstract final class CoreflowTemaMaterial {
         filled: true,
         fillColor: s.field,
         contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
-        hintStyle: CoreflowType.body.copyWith(color: s.textMuted),
-        labelStyle: CoreflowType.bodySmall.copyWith(color: s.textSecondary),
+        hintStyle: t.comFamilia(t.dica).copyWith(color: s.textMuted),
+        labelStyle: t.comFamilia(t.rotuloDeCampo).copyWith(color: s.textSecondary),
         border: const OutlineInputBorder(
             borderRadius: CoreflowRadius.fieldR, borderSide: BorderSide.none),
         enabledBorder: const OutlineInputBorder(

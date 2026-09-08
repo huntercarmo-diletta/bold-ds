@@ -20,7 +20,6 @@ void main() {
   /// Onde a cor NASCE. Fora daqui, hex num widget é uma cor que ninguém encontra depois.
   const declaram = {
     'bold_elevacao.dart',        // as sombras
-    'coreflow_vocabulario.dart', // o azul de informação de referência da linguagem
   };
 
 

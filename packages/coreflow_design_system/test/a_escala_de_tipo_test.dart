@@ -7,11 +7,26 @@ import 'package:flutter_test/flutter_test.dart';
 /// Ela atravessou do app pra cá em 17/08, depois da paleta e das peças, e chegou por último de
 /// propósito: é o token com mais consumidor (644 sítios) e o que menos perdoa erro.
 void main() {
-  test('todo degrau carrega a família da marca', () {
+  test('a família viaja UMA vez — na tipografia do produto, não em cada degrau', () {
+    // Até 08/09 cada degrau repetia `fontFamily: fontFamily`, e o `ThemeData` repetia de novo: duas
+    // fontes da mesma verdade (veredito do pai, decisão 2). Agora a família entra em
+    // `CoreflowType.tipografia.familia`, o `ThemeData(fontFamily:)` a aplica ao `textTheme` inteiro,
+    // e os degraus herdam. Os dois `mono` são a exceção declarada: são OUTRA família em potencial.
+    expect(CoreflowType.tipografia.familia, CoreflowType.fontFamily);
+    expect(CoreflowType.tipografia.familia, startsWith('packages/'),
+        reason: 'família sem o prefixo do pacote não resolve no app consumidor');
     for (final e in CoreflowType.todos.entries) {
-      expect(e.value.fontFamily, CoreflowType.fontFamily, reason: e.key);
-      expect(e.value.fontFamily, startsWith('packages/'),
-          reason: '${e.key}: família sem o prefixo do pacote não resolve no app consumidor');
+      if (e.key.startsWith('mono')) {
+        expect(e.value.fontFamily, CoreflowType.monoFamily, reason: e.key);
+        continue;
+      }
+      expect(e.value.fontFamily, isNull,
+          reason: '${e.key} repete a família — a segunda fonte da mesma verdade voltou');
+    }
+    // E o ThemeData do Bold entrega a família em todo degrau do textTheme — é o canal.
+    final t = CoreflowProduto.bold.materialClaro;
+    for (final d in [t.textTheme.displayLarge, t.textTheme.bodyMedium, t.textTheme.labelSmall]) {
+      expect(d?.fontFamily, CoreflowType.fontFamily);
     }
   });
 

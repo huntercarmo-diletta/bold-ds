@@ -1,7 +1,7 @@
 import 'package:coreflow/coreflow.dart';
 import 'bold_icone.dart' show CoreflowIcone;
+import 'package:flutter/material.dart' show Theme;
 import 'package:flutter/widgets.dart';
-import 'bold_type.dart' show CoreflowType;
 import 'bold_scheme.dart' show CoreflowScheme;
 
 // O TOM é o do pai. Ele tinha 5 valores aqui e 7 lá, e os 5 eram os mesmos
@@ -113,12 +113,21 @@ class CoreflowEtiqueta extends StatelessWidget {
               // Era `bodySmall` (13) reescrito campo a campo até virar 11/16 · 500 · 0,5 —
               // que é exatamente o `labelSm`. Quatro sobrescritas pra chegar num degrau que já
               // existia.
-              style: (ampla ? CoreflowType.label : CoreflowType.labelSm)
+              // O degrau da AMPLA é decisão de produto (`labelSmall` do `ThemeData` que o produto
+              // montou); sem produto registrado, é o do avô. A compacta é `labelSm` do avô nos dois.
+              style: (ampla ? _rotuloDoProduto(context) : DilettaType.labelSm)
                   .copyWith(color: t.fg)),
         ],
       ),
     );
   }
+}
+
+/// O `labelSmall` que o PRODUTO declarou no `ThemeData` — se o tema em contexto é de um produto deste
+/// DS (carrega o `CoreflowScheme`). Fora dele, o degrau do avô: o pai não declara degrau de marca.
+TextStyle _rotuloDoProduto(BuildContext context) {
+  final tema = Theme.of(context);
+  return tema.extension<CoreflowScheme>() == null ? DilettaType.label : tema.textTheme.labelSmall!;
 }
 
 class _ToneSpec {

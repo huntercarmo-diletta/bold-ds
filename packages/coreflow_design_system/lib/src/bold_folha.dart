@@ -1,5 +1,5 @@
 import 'package:diletta_design_system/diletta_design_system.dart'
-    show DilettaAbsoluteColors;
+    show DilettaAbsoluteColors, DilettaType;
 import 'package:flutter/material.dart';
 import 'package:coreflow/coreflow.dart' show CoreflowBackground, CoreflowEspaco, CoreflowLarguraDeConteudo, CoreflowRadius;
 // `bold_background` vem da development (o sheet com papel de parede do app). O
@@ -8,7 +8,6 @@ import 'package:coreflow/coreflow.dart' show CoreflowBackground, CoreflowEspaco,
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaSpacing;
 import 'bold_scheme.dart' show CoreflowScheme;
-import 'bold_type.dart' show CoreflowType;
 import 'bold_pegador.dart' show CoreflowPegador;
 import 'bold_cabecalho_de_folha.dart' show CoreflowFecharFolha;
 
@@ -213,7 +212,7 @@ class CoreflowFolha extends StatelessWidget {
                           child: Text(
                             title!,
                             textAlign: TextAlign.center,
-                            style: CoreflowType.titleMd
+                            style: DilettaType.titleMd
                                 .copyWith(color: c.textPrimary),
                           ),
                         ),
@@ -228,7 +227,7 @@ class CoreflowFolha extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(title!,
-                              style: CoreflowType.headlineSm
+                              style: DilettaType.headlineSm
                                   .copyWith(color: c.textPrimary)),
                         ),
                         if (fechar != null) fechar,

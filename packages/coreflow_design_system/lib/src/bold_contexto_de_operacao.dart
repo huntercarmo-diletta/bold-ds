@@ -8,7 +8,6 @@ import 'package:diletta_design_system/diletta_design_system.dart';
 import 'bold_scheme.dart' show CoreflowScheme;
 import 'package:flutter/material.dart';
 
-import 'bold_type.dart';
 
 /// **CoreflowOperatingContext** — declara, uma vez só no topo da árvore, que o
 /// usuário está agindo em nome de OUTRA conta.
@@ -104,7 +103,7 @@ class CoreflowOperatingStrip extends StatelessWidget {
                       : 'Usando a conta de $accountName · $role',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: CoreflowType.labelSm.copyWith(color: c.primary)),
+                  style: DilettaType.labelSm.copyWith(color: c.primary)),
             ),
             if (onTap != null) ...[
               const SizedBox(width: DilettaSpacing.s2),

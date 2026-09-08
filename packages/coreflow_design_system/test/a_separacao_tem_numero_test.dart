@@ -13,7 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// que dar o mesmo número, e a única forma de dois medidores concordarem sempre é serem um só.
 void main() {
   /// O teto de hoje. Desce a cada corte, no mesmo commit; nunca sobe.
-  const teto = 164;
+  const teto = 163;
 
   late final RegExp regua;
 

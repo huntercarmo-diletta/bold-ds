@@ -41,7 +41,6 @@ import 'dart:ui' as ui;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
-import 'bold_type.dart' show CoreflowType;
 
 
 /// O que o leitor precisa reconhecer, e por quê.
@@ -144,10 +143,11 @@ class CoreflowVisorDeCodigo extends StatelessWidget {
           fase: fase,
           descendo: descendo,
           tamanhoDaImagem: tamanhoDaImagem,
-          // Com a família: o painter não vê tema, e sem ela o rótulo do visor
-          // saía na fonte do sistema. Mesmo defeito do selo quântico.
-          estiloDoRotulo:
-              DilettaType.numericXs.copyWith(fontFamily: CoreflowType.fontFamily),
+          // Com a família DO CONTEXTO: o painter não vê tema, e sem ela o rótulo do visor
+          // saía na fonte do sistema. A família é a que o `ThemeData` do produto aplicou na
+          // árvore — o pai não declara nome de família.
+          estiloDoRotulo: DilettaType.numericXs
+              .copyWith(fontFamily: DefaultTextStyle.of(context).style.fontFamily),
         ),
       ),
     );

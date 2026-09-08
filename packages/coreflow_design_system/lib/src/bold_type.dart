@@ -35,6 +35,7 @@ import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/painting.dart';
 
 import 'bold_fonts.dart';
+import 'bold_tema_material.dart' show CoreflowTipografia;
 
 /// ## O PESO é o único eixo que a tela pode sobrescrever — e os outros três não são
 ///
@@ -66,6 +67,25 @@ abstract final class CoreflowType {
   /// tocar em 644 sítios.
   static String fontFamily = BoldFonts.family;
 
+  /// A TIPOGRAFIA DESTE PRODUTO, declarada uma vez — é o que o `CoreflowProduto` do Bold carrega e o
+  /// que o `ThemeData` recebe. A família entra aqui e só aqui; os degraus abaixo NÃO a repetem
+  /// desde 08/09 (veredito: *ela parar de ter duas fontes*) — dentro da árvore do `MaterialApp` eles
+  /// herdam do tema, e quem pinta fora da árvore (painter) declara a família na mão.
+  static CoreflowTipografia get tipografia => CoreflowTipografia(
+        familia: fontFamily,
+        displayLarge: display,
+        headlineLarge: h1,
+        headlineMedium: h2,
+        titleLarge: title,
+        bodyLarge: body,
+        bodyMedium: bodySmall,
+        labelLarge: button,
+        labelSmall: label,
+        botaoDeTexto: labelLg,
+        dica: body,
+        rotuloDeCampo: bodySmall,
+      );
+
   /// Dado técnico (CPF, chave, valor) é a MESMA família, com dígitos tabulares. Código é outra
   /// coisa, e aí o pacote registra o [BoldFonts.monoRaw].
   static String get monoFamily => fontFamily;
@@ -77,39 +97,31 @@ abstract final class CoreflowType {
   /// `fontFeatures` explícito é a única diferença contra o degrau do pai, e ela é medida: sem
   /// dígito TABULAR a largura do algarismo muda e o saldo "pula" a cada atualização.
   static TextStyle get headlineMd => DilettaType.headlineMd.copyWith(
-        fontFamily: fontFamily,
         fontFeatures: const [FontFeature.tabularFigures()],
       );
 
   /// 24/32 · 600. Título de banner e card grande.
-  static TextStyle get headlineSm =>
-      DilettaType.headlineSm.copyWith(fontFamily: fontFamily);
+  static TextStyle get headlineSm => DilettaType.headlineSm;
 
   /// 16/24 · 500 · tracking 0,15.
-  static TextStyle get titleMd =>
-      DilettaType.titleMd.copyWith(fontFamily: fontFamily);
+  static TextStyle get titleMd => DilettaType.titleMd;
 
   /// 16/24 · 400 · tracking 0,5.
-  static TextStyle get bodyLg =>
-      DilettaType.bodyLg.copyWith(fontFamily: fontFamily);
+  static TextStyle get bodyLg => DilettaType.bodyLg;
 
   /// 12/16 · 500 · tracking 0,5.
-  static TextStyle get labelMd =>
-      DilettaType.labelMd.copyWith(fontFamily: fontFamily);
+  static TextStyle get labelMd => DilettaType.labelMd;
 
   /// 12/16 · 400 · tracking 0,4.
-  static TextStyle get bodySm =>
-      DilettaType.bodySm.copyWith(fontFamily: fontFamily);
+  static TextStyle get bodySm => DilettaType.bodySm;
 
   /// 11/16 · 500 · tracking 0,5.
-  static TextStyle get labelSm =>
-      DilettaType.labelSm.copyWith(fontFamily: fontFamily);
+  static TextStyle get labelSm => DilettaType.labelSm;
 
   // ── OS DECLARADOS, COM RAZÃO ──────────────────────────────────────────────
 
   /// 46 · 800 · tracking -1. O número herói de tela cheia (saldo em destaque).
-  static TextStyle get display => TextStyle(
-        fontFamily: fontFamily,
+  static TextStyle get display => const TextStyle(
         fontSize: 46,
         fontWeight: FontWeight.w800,
         letterSpacing: -1,
@@ -121,8 +133,7 @@ abstract final class CoreflowType {
   ///
   /// Nasceu medindo o app: 17 sítios escreviam `display.copyWith(fontSize: 32 | 34)`. O degrau
   /// existe pra que o décimo oitavo não invente o terceiro número.
-  static TextStyle get valorHeroi => TextStyle(
-        fontFamily: fontFamily,
+  static TextStyle get valorHeroi => const TextStyle(
         fontSize: 32,
         fontWeight: FontWeight.w800,
         letterSpacing: -1,
@@ -131,8 +142,7 @@ abstract final class CoreflowType {
       );
 
   /// 30 · 800 · tracking -0,5. Título de tela.
-  static TextStyle get h1 => TextStyle(
-        fontFamily: fontFamily,
+  static TextStyle get h1 => const TextStyle(
         fontSize: 30,
         fontWeight: FontWeight.w800,
         letterSpacing: -0.5,
@@ -140,39 +150,34 @@ abstract final class CoreflowType {
       );
 
   /// 22 · 700. Título de seção. O pai tem 22 em peso 600 (`titleLg`); este produto usa 700.
-  static TextStyle get h2 => TextStyle(
-        fontFamily: fontFamily,
+  static TextStyle get h2 => const TextStyle(
         fontSize: 22,
         fontWeight: FontWeight.w700,
         height: 1.15,
       );
 
   /// 17 · 700. Título de lista e de card. O pai não tem 17.
-  static TextStyle get title => TextStyle(
-        fontFamily: fontFamily,
+  static TextStyle get title => const TextStyle(
         fontSize: 17,
         fontWeight: FontWeight.w700,
       );
 
   /// 15 · 500 · altura 1,6. Corpo de texto.
-  static TextStyle get body => TextStyle(
-        fontFamily: fontFamily,
+  static TextStyle get body => const TextStyle(
         fontSize: 15,
         fontWeight: FontWeight.w500,
         height: 1.6,
       );
 
   /// 13 · 500 · altura 1,5. Apoio menor.
-  static TextStyle get bodySmall => TextStyle(
-        fontFamily: fontFamily,
+  static TextStyle get bodySmall => const TextStyle(
         fontSize: 13,
         fontWeight: FontWeight.w500,
         height: 1.5,
       );
 
   /// 15 · 700. Rótulo de botão.
-  static TextStyle get button => TextStyle(
-        fontFamily: fontFamily,
+  static TextStyle get button => const TextStyle(
         fontSize: 15,
         fontWeight: FontWeight.w700,
       );
@@ -181,8 +186,7 @@ abstract final class CoreflowType {
   ///
   /// O `titleSm` do pai bate em px, altura e peso, e diverge só no tracking — 0,1 contra 1,4.
   /// Catorze com 1,4 é rótulo espaçado, não título pequeno.
-  static TextStyle get labelLg => TextStyle(
-        fontFamily: fontFamily,
+  static TextStyle get labelLg => const TextStyle(
         fontSize: 14,
         height: 20 / 14,
         fontWeight: FontWeight.w500,
@@ -190,16 +194,14 @@ abstract final class CoreflowType {
       );
 
   /// 12 · 700 · tracking 1,5. Sobrancelha em caixa alta.
-  static TextStyle get label => TextStyle(
-        fontFamily: fontFamily,
+  static TextStyle get label => const TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w700,
         letterSpacing: 1.5,
       );
 
   /// 10/12 · 500 · tracking 0,4. Rótulo de ladrilho de menu.
-  static TextStyle get tileLabel => TextStyle(
-        fontFamily: fontFamily,
+  static TextStyle get tileLabel => const TextStyle(
         fontSize: 10,
         height: 12 / 10,
         fontWeight: FontWeight.w500,

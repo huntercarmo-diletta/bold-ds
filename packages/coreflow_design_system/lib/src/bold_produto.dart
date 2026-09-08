@@ -4,6 +4,7 @@ import 'bold_gradients.dart';
 import 'bold_palette.dart';
 import 'bold_scheme.dart';
 import 'bold_tema_material.dart';
+import 'bold_type.dart' show CoreflowType;
 import 'package:coreflow/coreflow.dart';
 
 /// UM PRODUTO FEITO COM ESTE DS — paleta e marca, e tudo o mais deriva.
@@ -39,6 +40,7 @@ class CoreflowProduto {
   CoreflowProduto({
     required this.paleta,
     required this.marca,
+    this.tipografia = CoreflowTipografia.doAvo,
     CoreflowGradients? gradientes,
   }) : _gradientes = gradientes;
 
@@ -86,9 +88,9 @@ class CoreflowProduto {
   ///
   /// ## O que ele NÃO herda
   ///
-  /// A MARCA visual: logo, mapa da arte e os hexes. O default é a do Conta BOLD e ele existe pra a
-  /// primeira tela desenhar em vez de estourar — **um produto que for pra loja com o logo do Bold é
-  /// um produto que não declarou a marca dele**, e o `assets` do pacote diz de quem é o arquivo.
+  /// A MARCA visual: logo, mapa da arte e os hexes. Sem declaração, `DilettaBrand.nenhuma`: os
+  /// componentes desenham, e os que precisam de arquivo de marca somem em vez de quebrar. Até 08/09
+  /// o default era a marca do primeiro produto — filho gerado nascia com o lockup do outro.
   ///
   /// Cor semântica também não: erro, aviso, sucesso, cofre e a rampa neutra vêm da referência do
   /// pai, porque cor semântica é invariante nesta linguagem.
@@ -97,6 +99,7 @@ class CoreflowProduto {
     required String id,
     required String nome,
     DilettaBrand? marcaVisual,
+    CoreflowTipografia tipografia = CoreflowTipografia.doAvo,
     CoreflowGradients? gradientes,
   }) {
     final rampa = DilettaRampa.daMarca(marca);
@@ -125,7 +128,12 @@ class CoreflowProduto {
     );
     return CoreflowProduto(
       paleta: paleta,
-      marca: marcaVisual ?? marcaDoBold,
+      // SEM marca declarada, nenhuma — não a do primeiro produto. Era `?? marcaDoBold`, e um filho
+      // gerado nascia com o lockup do Bold. O `///` do avô diz o comportamento: um tema sem marca
+      // desenha os componentes todos, menos os que precisam de um arquivo de marca; esses somem em
+      // vez de quebrar. (Veredito de 08/09, item 1: "uma linha, hoje".)
+      marca: marcaVisual ?? DilettaBrand.nenhuma,
+      tipografia: tipografia,
       gradientes: gradientes,
     );
   }
@@ -178,6 +186,7 @@ class CoreflowProduto {
   static final CoreflowProduto bold = CoreflowProduto(
     paleta: BoldPalette.bold,
     marca: marcaDoBold,
+    tipografia: CoreflowType.tipografia,
     gradientes: CoreflowGradients.bold,
   );
 
@@ -186,6 +195,9 @@ class CoreflowProduto {
 
   /// O plugue de marca: logo, e o mapa hex→degrau das artes deste produto.
   final DilettaBrand marca;
+
+  /// A tipografia deste produto: a família (uma vez) e os degraus que o `ThemeData` recebe.
+  final CoreflowTipografia tipografia;
 
   /// ONDE OS ASSETS DO PAI MORAM — uma linha, e sem ela nenhum ícone do pai aparece.
   ///
@@ -267,10 +279,10 @@ class CoreflowProduto {
   }();
 
   /// O `ThemeData` do Material no claro.
-  late final ThemeData materialClaro = CoreflowTemaMaterial.de(esquemaClaro);
+  late final ThemeData materialClaro = CoreflowTemaMaterial.de(esquemaClaro, tipografia: tipografia);
 
   /// O `ThemeData` do Material no escuro.
-  late final ThemeData materialEscuro = CoreflowTemaMaterial.de(esquemaEscuro);
+  late final ThemeData materialEscuro = CoreflowTemaMaterial.de(esquemaEscuro, tipografia: tipografia);
 
   /// Os gradientes deste produto — a curva do símbolo e a tinta que vai por cima.
   ///

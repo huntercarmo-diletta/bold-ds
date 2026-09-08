@@ -1,9 +1,8 @@
 import 'package:diletta_design_system/diletta_design_system.dart'
-    show DilettaAbsoluteColors, DilettaDivider, DilettaListTile, DilettaSpotForma, DilettaSpotIcon, DilettaSpotState, DilettaSpotType;
+    show DilettaAbsoluteColors, DilettaDivider, DilettaListTile, DilettaSpotForma, DilettaSpotIcon, DilettaSpotState, DilettaSpotType, DilettaType;
 import 'package:flutter/material.dart';
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaSpacing;
-import 'bold_type.dart' show CoreflowType;
 import 'bold_cartao.dart' show CoreflowCartao;
 import 'bold_icone.dart' show CoreflowIcone;
 import 'bold_scheme.dart' show CoreflowScheme;
@@ -236,7 +235,7 @@ class CoreflowGrupoDeLista extends StatelessWidget {
         child: Text(title!.toUpperCase(),
             // Sobrancelha em caixa alta: o degrau é `labelSm` (11), e peso e tracking são
             // ênfase. Antes era `label` (12) empurrado pra 11.
-            style: CoreflowType.labelSm.copyWith(
+            style: DilettaType.labelSm.copyWith(
                 color: c.textMuted,
                 fontWeight: FontWeight.w700,
                 letterSpacing: 1)),
