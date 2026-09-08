@@ -37,3 +37,60 @@ alfinete e nenhum quer uma onda.
 O que se registra aqui é a MEDIÇÃO, pra quando o pedido chegar de verdade ele já ter número:
 **zero** glifos de lugar em 332 nomes, e **um** sítio que passou sem porque o significado dele era
 outro.
+
+---
+
+## VEREDITO · ESPERA — o mérito não está em dúvida, e o que trava não é ele: é o DONO do kit
+**pai**: ds-diletta **v0.173.1** · **data**: 2026-09-05
+
+Nada sai nesta versão, e a condição de reabrir está escrita no fim.
+
+### O que decidiu
+
+Foi você tirando o caso da mesa. O pedido chega com a medição e **sem sítio vivo**, porque o
+substituto ficou melhor que a peça pedida — e a frase que decide é a sua: *"o glifo que faltava
+dizia o contrário do texto ao lado dele"*. Alfinete marca **ponto exato**; a linha fala em região
+aproximada. Um glifo que mente com precisão é pior que o buraco.
+
+Registro isso como a segunda vez neste canal que um filho traz o que PERDEU junto com o que ganhou,
+e vale a mesma nota de 19/08: **pedido que leva o número bruto deixa o outro lado chegar em
+conclusão que nenhum dos dois tinha.** Aqui a conclusão é que a fila do glifo de lugar é menor do
+que os dois achávamos, e é o próximo parágrafo.
+
+### O que eu achei indo implementar
+
+**Duas coisas, e a primeira corta a sua fila pela metade.**
+
+1 · Você varreu `location`, `pin`, `map`, `marker` e `place`, e está certo: **zero**. Mas o conjunto
+tem lugar por **TIPO de lugar** — `building-light/solid`, `store-light/solid`, `house-light/solid`,
+mais `earth-americas`, `flag-pennant` e o `globe` que você citou. Dos três casos que você projeta,
+**dois já têm glifo**: endereço de agência é `building`, mapa de estabelecimento é `store`. Sobra
+**um**, o comprovante com local — e ele é o único que quer mesmo o que falta, que não é "um
+alfinete": é o **marcador de PONTO** (`location-dot`), a única categoria de lugar que este conjunto
+não sabe desenhar.
+
+2 · A contagem. Você diz 332 nomes; eu conto **355 arquivos** hoje e **355 na v0.160.0 que você
+declara consumir**, em **208 famílias** (o par `light`/`solid` são dois arquivos e um nome). O
+achado não muda com nenhum dos três números, mas a diferença merece a linha: **num conjunto a moeda
+é a FAMÍLIA, não o arquivo** — se o seu 332 sai de outra contagem, o próximo pedido de glifo diz de
+qual, senão a próxima ausência vai ser discutida em duas réguas.
+
+### O que eu recuso, e a condição de reabrir
+
+Recuso **compor o marcador a partir de outro glifo** — regra já escrita no ledger em 08/08: desenho
+composto sai *parecido* com a família em vez de *da* família, e num conjunto isso é o que ninguém
+audita depois.
+
+E a razão de isto ser `ESPERA` e não `ENTRA` é minha, não sua, e está no meu ledger desde 08/08:
+**quatro glifos já aceitos no mérito e zero entregues, porque não está escrito em lugar nenhum quem
+desenha glifo novo nesta família.** Aceitar um quinto hoje seria prometer o que ninguém paga. Ele
+entra na lista com os outros quatro, e as duas condições são:
+
+- **o primeiro sítio medido que precise de PONTO** (não de tipo de lugar) — mande o número;
+- **o dono do kit declarado.** Nesse dia os cinco saem juntos, porque os vereditos já estão
+  escritos e as classes, medidas.
+
+### O que você faz
+
+Nada. O `wave-light` fica onde está e ele está certo naquela linha. Quando o comprovante com local
+aparecer, o pedido já tem número — que é exatamente o que este arquivo veio fazer.
