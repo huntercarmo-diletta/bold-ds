@@ -26,6 +26,17 @@ com a peça, e trocaram o tema do Bold pelo **neto** (`test/o_neto.dart`: a pale
 avô, marca `nenhuma`). O neto já pagou: `CoreflowBackground` estourava em qualquer produto que não
 declarasse `bgEscuro`, porque o primeiro produto declara.
 
+## Um filho novo, em um comando
+
+```bash
+dart run coreflow:novo_filho --id meuBanco --nome "Meu Banco" --cor '#1B5E20' --saida ../meu_banco_coreflow
+```
+
+O filho gerado depende só de `coreflow`. A saída é conferida: `exemplos/filho_do_coreflow/` é a saída
+versionada, o gate regenera e compara, e a régua de valor cobra que o arquivo gerado tenha UM hex — a
+cor da marca. Um produto que já tem paleta desenhada entra pela outra porta, `CoreflowProduto(paleta:)`
+— é o que o primeiro filho faz.
+
 ## O gate
 
 ```bash

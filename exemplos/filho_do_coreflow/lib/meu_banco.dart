@@ -1,4 +1,4 @@
-import 'package:coreflow_design_system/coreflow_design_system.dart';
+import 'package:coreflow/coreflow.dart';
 import 'package:flutter/material.dart' show Color;
 
 /// Meu Banco — a identidade deste produto, e ela é UMA decisão.
@@ -14,7 +14,8 @@ final meuBanco = CoreflowProduto.daMarca(
   marca: const Color(0xFF1B5E20),
   id: 'meuBanco',
   nome: 'Meu Banco',
-  // O logo ainda é o do Conta BOLD. Declare o seu e passe aqui:
+  // Sem marca declarada, `DilettaBrand.nenhuma`: os componentes desenham, e os que precisam de um
+  // arquivo de marca somem em vez de quebrar. Declare o seu e passe aqui:
   //
   //   marcaVisual: const DilettaBrand(
   //     pacote: 'meu_banco_coreflow',
@@ -22,4 +23,8 @@ final meuBanco = CoreflowProduto.daMarca(
   //     logoFull: 'assets/logos/meu_banco.svg',
   //     logoTingePorCurrentColor: true,
   //   ),
+  //
+  // Sem tipografia declarada, a escala é a da linguagem e a família é a do app. A sua entra aqui:
+  //
+  //   tipografia: CoreflowTipografia(familia: 'packages/meu_banco_coreflow/MinhaFonte', ...),
 );

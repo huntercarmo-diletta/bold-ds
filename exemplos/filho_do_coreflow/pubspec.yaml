@@ -10,10 +10,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # O DS. Em desenvolvimento vale `path:`; pra valer, troque por `git:` numa TAG — entrega sem
-  # versão é entrega que ninguém consegue voltar atrás.
-  coreflow_design_system:
-    path: ../../packages/coreflow_design_system
+  # O PAI da linguagem — e só ele: um filho não depende de outro produto. Em desenvolvimento vale
+  # `path:`; pra valer, troque por `git:` numa TAG — entrega sem versão é entrega que ninguém consegue
+  # voltar atrás.
+  coreflow:
+    path: ../../packages/coreflow
 
 flutter:
   assets:

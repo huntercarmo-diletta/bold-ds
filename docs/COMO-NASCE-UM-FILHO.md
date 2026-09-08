@@ -10,7 +10,7 @@ o produto como um flavor de marca.
 ## 1 · Em um comando
 
 ```sh
-dart run coreflow_design_system:novo_filho \
+dart run coreflow:novo_filho \
   --id meuBanco --nome "Meu Banco" --cor '#1B5E20' --saida ../meu_banco_coreflow
 ```
 

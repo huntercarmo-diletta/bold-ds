@@ -1,8 +1,8 @@
 # Meu Banco — um produto do Coreflow
 
-Gerado por `dart run coreflow_design_system:novo_filho`. O que existe aqui é a IDENTIDADE:
-uma cor, um nome e (quando você declarar) o logo. O resto — componentes, papéis de cor, tema
-Material — vem do DS.
+Gerado por `dart run coreflow:novo_filho`. O que existe aqui é a IDENTIDADE: uma cor, um nome e
+(quando você declarar) o logo e a tipografia. O resto — componentes, papéis de cor, tema Material —
+vem do Coreflow, e nada vem de outro produto.
 
 ## Montar
 
@@ -21,6 +21,7 @@ MaterialApp(
 | decisão | onde |
 |---|---|
 | o logo e o mapa da arte | `marcaVisual:` no `meu_banco.dart` |
+| a família tipográfica e os degraus da escala | `tipografia:` no `meu_banco.dart` (`CoreflowTipografia`) |
 | discordar de um degrau derivado | `.comMaterial(...)` sobre a paleta |
 | um papel que só este produto tem | `papeisExtras` da paleta |
 | um componente que só este produto tem | nasce aqui; sobe pro DS quando um SEGUNDO produto pedir |

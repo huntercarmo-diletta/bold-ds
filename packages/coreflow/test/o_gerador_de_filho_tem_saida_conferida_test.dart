@@ -7,7 +7,7 @@ import '../bin/novo_filho.dart' as gerador;
 /// O GERADOR TEM SAÍDA CONFERIDA — gerador sem isso é template com esperança.
 ///
 /// `exemplos/filho_do_coreflow/` não é um exemplo escrito à mão: é a **saída** do
-/// `dart run coreflow_design_system:novo_filho`, versionada. Este gate regenera e compara.
+/// `dart run coreflow:novo_filho`, versionada. Este gate regenera e compara.
 ///
 /// O que isso mata é a classe: um gerador que ninguém roda envelhece calado, e o primeiro produto
 /// novo descobre que o template referencia um símbolo que mudou de nome há três versões. O exemplo
@@ -26,7 +26,7 @@ void main() {
   test('o exemplo existe, e é a saída do gerador', () {
     expect(exemplo.existsSync(), isTrue,
         reason: 'sem a saída versionada, o gerador não tem gate — rode:\n'
-            '  dart run coreflow_design_system:novo_filho --id meuBanco --nome "Meu Banco" '
+            '  dart run coreflow:novo_filho --id meuBanco --nome "Meu Banco" '
             '--cor "#1B5E20" --saida exemplos/filho_do_coreflow');
   });
 
@@ -53,6 +53,18 @@ void main() {
         reason: 'o exemplo mora DENTRO do repo, então o caminho relativo é outro. Qualquer '
             'segunda divergência é o template envelhecendo.');
     expect(difs.single, contains('path:'));
+  });
+
+  test('o produto gerado tem UM hex — a cor da marca — e nenhum outro valor de produto', () {
+    // A régua de VALOR do pai (achado 3 do veredito de 08/09) vale pro que o pai GERA: um filho
+    // nasce com uma cor, e qualquer segundo hex no arquivo dele é identidade que o gerador inventou.
+    final fonte = gerador.produtoDe(op);
+    final hexes = RegExp(r'0x[0-9A-Fa-f]{6,8}').allMatches(fonte).map((m) => m.group(0)).toList();
+    expect(hexes, [op.corDart], reason: 'o gerador escreveu valor além da cor da marca: $hexes');
+    expect(RegExp(r'TextStyle\(').hasMatch(fonte), isFalse);
+    // E o filho gerado depende SÓ do pai: nenhum produto no pubspec dele.
+    expect(gerador.pubspecDe(op), contains('\n  coreflow:\n'));
+    expect(gerador.pubspecDe(op), isNot(contains('coreflow_design_system')));
   });
 
   test('o gerador recusa o que não é identificador Dart', () {

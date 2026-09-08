@@ -201,4 +201,39 @@ void main() {
     expect(t.takeException(), isNull,
         reason: 'o .vec compilado do pai não carregou');
   });
+
+  test('o Bold é um CoreflowProduto como qualquer outro — a porta da paleta INTEIRA', () {
+    // O adendo de 08/09 do ADR mediu que o Bold NÃO renasce por `daMarca` (9 de 9 degraus da rampa,
+    // 21 de 22 campos, 13-14 de 25 papéis diferentes): ele é filho de paleta inteira, e o veredito do
+    // pai concordou — duas portas, não uma porta e um atalho. Este gate mede a porta dele: `ContaBold`
+    // é uma INSTÂNCIA de `CoreflowProduto` montada com as quatro declarações (paleta, marca,
+    // tipografia, gradientes), e o pai não tem nenhum campo, atalho ou reserva que saiba disso.
+    final refeito = CoreflowProduto(
+      paleta: BoldPalette.bold,
+      marca: ContaBold.marca,
+      tipografia: CoreflowType.tipografia,
+      gradientes: ContaBold.gradientes,
+    );
+    for (final (nome, a, b) in [
+      ('esquemaClaro', ContaBold.produto.esquemaClaro, refeito.esquemaClaro),
+      ('esquemaEscuro', ContaBold.produto.esquemaEscuro, refeito.esquemaEscuro),
+    ]) {
+      for (final par in [
+        (a.background, b.background), (a.surface, b.surface), (a.surfaceRaised, b.surfaceRaised),
+        (a.primary, b.primary), (a.primaryWash, b.primaryWash), (a.danger, b.danger),
+        (a.info, b.info), (a.vinho, b.vinho), (a.vinhoTinta, b.vinhoTinta),
+        (a.gradientes.primary.colors, b.gradientes.primary.colors),
+      ]) {
+        expect(par.$1, par.$2, reason: '$nome: a instância nomeada e a refeita divergem');
+      }
+    }
+    expect(ContaBold.produto.materialClaro.textTheme.bodyLarge?.fontFamily, BoldFonts.family);
+    expect(ContaBold.produto.marca.pacote, 'coreflow_design_system');
+    // E a outra porta continua sendo outra: o mesmo rosa por `daMarca` NÃO dá o Bold.
+    final deUmaCor = CoreflowProduto.daMarca(marca: BoldColors.primary04, id: 'x', nome: 'X');
+    expect(deUmaCor.paleta.primary04, isNot(BoldColors.primary04),
+        reason: 'daMarca põe a cor no degrau que a claridade dela pede — o 05, não o 04');
+    expect(deUmaCor.marca, DilettaBrand.nenhuma);
+  });
+
 }

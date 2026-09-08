@@ -3,14 +3,18 @@ import 'dart:io';
 /// NOVO FILHO — o produto novo em um comando.
 ///
 /// ```sh
-/// dart run coreflow_design_system:novo_filho \
+/// dart run coreflow:novo_filho \
 ///   --id meuBanco --nome "Meu Banco" --cor '#1B5E20' --saida ../meu_banco_coreflow
 /// ```
 ///
 /// O que ele escreve é o MÍNIMO que um produto precisa pra existir nesta linguagem: um pacote com a
-/// declaração do produto (uma cor) e o `pubspec` que aponta pra cá. **Não escreve tela, não escreve
-/// rota e não escreve app** — quem faz isso é o produto, e um gerador que faz vira andaime que
-/// ninguém apaga.
+/// declaração do produto (uma cor) e o `pubspec` que aponta pro PAI (`coreflow`). **Não escreve tela,
+/// não escreve rota e não escreve app** — quem faz isso é o produto, e um gerador que faz vira andaime
+/// que ninguém apaga.
+///
+/// Mora no pai desde 08/09 (fase 3 de `docs/2026-09-04-adr-o-coreflow-e-o-pai.md`): quem gera filho é
+/// quem tem filhos, e o filho gerado não depende de produto nenhum — só da linguagem. Um filho de UMA
+/// cor é uma porta; um produto que já tem paleta desenhada entra pela outra, `CoreflowProduto(paleta:)`.
 ///
 /// A prova de que ele funciona não é este arquivo: é `exemplos/filho_do_coreflow/`, que é a SAÍDA
 /// dele versionada, com um gate que regenera e compara. Gerador sem saída conferida é template com
@@ -19,7 +23,7 @@ void main(List<String> args) {
   final op = _lerArgumentos(args);
   if (op == null) {
     stderr.writeln('''
-uso: dart run coreflow_design_system:novo_filho --id <id> --nome <nome> --cor <#RRGGBB> [--saida <dir>]
+uso: dart run coreflow:novo_filho --id <id> --nome <nome> --cor <#RRGGBB> [--saida <dir>]
 
   --id     identificador Dart do produto (ex.: meuBanco)
   --nome   como a marca se escreve na tela (ex.: "Meu Banco")
@@ -51,9 +55,9 @@ escrito em ${op.saida}
   3. no app: `MaterialApp(theme: ${op.id}.materialClaro, darkTheme: ${op.id}.materialEscuro,
      builder: (_, f) => DilettaThemeScope(theme: ${op.id}.claro, child: f!))`
 
-o logo ainda é o do Conta BOLD, de propósito: ele existe pra a primeira tela desenhar. Declare o seu
-em `assets/logos/` e passe `marcaVisual:` — produto que vai pra loja com o logo do vizinho é produto
-que não declarou a marca.''');
+sem marca declarada, os componentes desenham e os que precisam de um arquivo de marca (logo) somem em
+vez de quebrar. Declare o seu em `assets/logos/` e passe `marcaVisual:`; a família tipográfica e os
+degraus da escala entram por `tipografia:` — sem eles, a escala é a da linguagem e a fonte é a do app.''');
 }
 
 /// As quatro decisões que o comando aceita. Uma delas é cor; as outras três são nome.
@@ -104,10 +108,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # O DS. Em desenvolvimento vale `path:`; pra valer, troque por `git:` numa TAG — entrega sem
-  # versão é entrega que ninguém consegue voltar atrás.
-  coreflow_design_system:
-    path: ../conta-bold-ds/packages/coreflow_design_system
+  # O PAI da linguagem — e só ele: um filho não depende de outro produto. Em desenvolvimento vale
+  # `path:`; pra valer, troque por `git:` numa TAG — entrega sem versão é entrega que ninguém consegue
+  # voltar atrás.
+  coreflow:
+    path: ../conta-bold-ds/packages/coreflow
 
 flutter:
   assets:
@@ -115,7 +120,7 @@ flutter:
 ''';
 
 String produtoDe(Opcoes op) => '''
-import 'package:coreflow_design_system/coreflow_design_system.dart';
+import 'package:coreflow/coreflow.dart';
 import 'package:flutter/material.dart' show Color;
 
 /// ${op.nome} — a identidade deste produto, e ela é UMA decisão.
@@ -131,7 +136,8 @@ final ${op.id} = CoreflowProduto.daMarca(
   marca: const Color(${op.corDart}),
   id: '${op.id}',
   nome: '${op.nome}',
-  // O logo ainda é o do Conta BOLD. Declare o seu e passe aqui:
+  // Sem marca declarada, `DilettaBrand.nenhuma`: os componentes desenham, e os que precisam de um
+  // arquivo de marca somem em vez de quebrar. Declare o seu e passe aqui:
   //
   //   marcaVisual: const DilettaBrand(
   //     pacote: '${_arquivo(op.id)}_coreflow',
@@ -139,15 +145,19 @@ final ${op.id} = CoreflowProduto.daMarca(
   //     logoFull: 'assets/logos/${_arquivo(op.id)}.svg',
   //     logoTingePorCurrentColor: true,
   //   ),
+  //
+  // Sem tipografia declarada, a escala é a da linguagem e a família é a do app. A sua entra aqui:
+  //
+  //   tipografia: CoreflowTipografia(familia: 'packages/${_arquivo(op.id)}_coreflow/MinhaFonte', ...),
 );
 ''';
 
 String leiameDe(Opcoes op) => '''
 # ${op.nome} — um produto do Coreflow
 
-Gerado por `dart run coreflow_design_system:novo_filho`. O que existe aqui é a IDENTIDADE:
-uma cor, um nome e (quando você declarar) o logo. O resto — componentes, papéis de cor, tema
-Material — vem do DS.
+Gerado por `dart run coreflow:novo_filho`. O que existe aqui é a IDENTIDADE: uma cor, um nome e
+(quando você declarar) o logo e a tipografia. O resto — componentes, papéis de cor, tema Material —
+vem do Coreflow, e nada vem de outro produto.
 
 ## Montar
 
@@ -166,6 +176,7 @@ MaterialApp(
 | decisão | onde |
 |---|---|
 | o logo e o mapa da arte | `marcaVisual:` no `${_arquivo(op.id)}.dart` |
+| a família tipográfica e os degraus da escala | `tipografia:` no `${_arquivo(op.id)}.dart` (`CoreflowTipografia`) |
 | discordar de um degrau derivado | `.comMaterial(...)` sobre a paleta |
 | um papel que só este produto tem | `papeisExtras` da paleta |
 | um componente que só este produto tem | nasce aqui; sobe pro DS quando um SEGUNDO produto pedir |
