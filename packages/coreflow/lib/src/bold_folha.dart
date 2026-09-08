@@ -1,7 +1,10 @@
+import 'bold_background.dart';
+import 'bold_espaco.dart';
+import 'bold_largura.dart';
+import 'bold_radius.dart';
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaAbsoluteColors, DilettaType;
 import 'package:flutter/material.dart';
-import 'package:coreflow/coreflow.dart' show CoreflowBackground, CoreflowEspaco, CoreflowLarguraDeConteudo, CoreflowRadius;
 // `bold_background` vem da development (o sheet com papel de parede do app). O
 // `bold_icon_button` NÃO volta: o botão de ícone é peça do pai desde a v0.13.0 do
 // pacote, e o fechar abaixo monta com `DilettaIconButton`.
@@ -12,7 +15,7 @@ import 'bold_pegador.dart' show CoreflowPegador;
 import 'bold_cabecalho_de_folha.dart' show CoreflowFecharFolha;
 
 /// BottomSheet (organismo). O CONTAINER de sheet que faltava:
-/// o [CoreflowBarraDeTopo.sheet] só dava o cabeçalho e o [BoldDialog] é modal central.
+/// o [CoreflowBarraDeTopo.sheet] só dava o cabeçalho e o `Dialog` do app é modal central.
 ///
 /// Painel ancorado no rodapé, cantos superiores arredondados, com grip iOS +
 /// título/fechar opcionais + conteúdo. Sobe do rodapé sobre um scrim escuro.

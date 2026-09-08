@@ -26,9 +26,10 @@
 /// paleta**, e o app monta os dois do mesmo brilho, então não existem dois modos ao mesmo tempo.
 library;
 
+import 'bold_radius.dart';
 import 'package:flutter/cupertino.dart' show CupertinoPageTransitionsBuilder;
 import 'package:flutter/material.dart';
-import 'package:coreflow/coreflow.dart';
+import 'package:diletta_design_system/diletta_design_system.dart';
 
 import 'bold_scheme.dart';
 

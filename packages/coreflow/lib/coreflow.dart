@@ -2,8 +2,7 @@
 ///
 /// Separação de `docs/2026-09-04-adr-o-coreflow-e-o-pai.md`, fase 2 em curso: aqui moram a
 /// linguagem do avô re-exportada e os componentes `Coreflow*` que já não dependem de produto
-/// nenhum — 36 arquivos em 08/09. Os que ainda leem o esquema ou a fonte do primeiro produto chegam
-/// com o veredito do dono do DS. O que NUNCA chega: cor, fonte, logo, arte ou nome de produto — o
+/// nenhum — 61 arquivos em 08/09, com o veredito do dono do DS (decisões 1 e 2). O que NUNCA chega: cor, fonte, logo, arte ou nome de produto — o
 /// gate `o_coreflow_nao_cita_bold` mede isso em `lib/` inteiro, comentário incluído.
 ///
 /// Os arquivos seguem chamando `bold_*.dart`: é dívida de NOME, medida e fora do escopo do ADR —
@@ -48,3 +47,28 @@ export 'src/bold_saldo.dart';
 export 'src/bold_segmentos.dart';
 export 'src/coreflow_vinho.dart';
 export 'src/coreflow_vocabulario.dart';
+export 'src/bold_amostra_de_fundo.dart';
+export 'src/bold_anel_de_escolha.dart';
+export 'src/bold_avatar.dart';
+export 'src/bold_barra_de_topo.dart';
+export 'src/bold_busca.dart';
+export 'src/bold_cabecalho_de_folha.dart';
+export 'src/bold_campo_de_texto.dart';
+export 'src/bold_cartao.dart';
+export 'src/bold_cartao_de_pedido.dart';
+export 'src/bold_contexto_de_operacao.dart';
+export 'src/bold_corpo_de_folha.dart';
+export 'src/bold_etiqueta.dart';
+export 'src/bold_folha.dart';
+export 'src/bold_gradients.dart';
+export 'src/bold_heroi.dart';
+export 'src/bold_icone.dart';
+export 'src/bold_lista.dart';
+export 'src/bold_pagina.dart';
+export 'src/bold_pagina_de_resumo.dart';
+export 'src/bold_pegador.dart';
+export 'src/bold_scheme.dart';
+export 'src/bold_tema_material.dart';
+export 'src/bold_vidro.dart';
+export 'src/bold_visor_de_codigo.dart';
+export 'src/bold_produto.dart';

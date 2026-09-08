@@ -20,10 +20,9 @@
 /// pedido pro pai. Enquanto não passarem, este arquivo é a paleta e mais nada.
 library coreflow_design_system;
 
-import 'package:diletta_design_system/diletta_design_system.dart';
+import 'package:coreflow/coreflow.dart';
 import 'package:flutter/widgets.dart';
 
-import 'src/bold_produto.dart';
 import 'src/conta_bold.dart';
 
 /// A LINGUAGEM SAI POR AQUI, e é o que faz este pacote ser "o DS do Bold" pra quem
@@ -40,34 +39,13 @@ export 'package:coreflow/coreflow.dart';
 
 /// A identidade deste filho: paleta, fonte e os dois gradientes.
 export 'src/bold_palette.dart';
-export 'src/bold_scheme.dart';
-export 'src/bold_vidro.dart';
-export 'src/bold_tema_material.dart';
-export 'src/bold_pegador.dart';
 export 'src/bold_vinho.dart';
 export 'src/bold_fonts.dart';
 export 'src/bold_type.dart';
 export 'src/bold_fundamentos.dart';
-export 'src/bold_produto.dart';
 export 'src/conta_bold.dart';
-export 'src/bold_gradients.dart';
-export 'src/bold_icone.dart';
-export 'src/bold_avatar.dart';
-export 'src/bold_barra_de_topo.dart';
-export 'src/bold_busca.dart';
-export 'src/bold_cabecalho_de_folha.dart';
-export 'src/bold_folha.dart';
-export 'src/bold_pagina.dart';
-export 'src/bold_pagina_de_resumo.dart';
-export 'src/bold_campo_de_texto.dart';
-export 'src/bold_cartao.dart';
-export 'src/bold_etiqueta.dart';
-export 'src/bold_heroi.dart';
-export 'src/bold_lista.dart';
 
 /// Componentes que só o Bold tem, nascidos aqui compondo as peças do pai.
-export 'src/bold_contexto_de_operacao.dart';
-export 'src/bold_corpo_de_folha.dart';
 export 'src/bold_specs.dart';
 
 /// AS QUATRO LACUNAS, e as duas que estavam do lado errado da fronteira.
@@ -80,11 +58,7 @@ export 'src/bold_specs.dart';
 ///
 /// São duas classes de defeito diferentes com o mesmo sintoma: **peça que não dá pra desenhar em
 /// lugar nenhum**. A régua que saiu daqui: adotada e alcançável não são a mesma coisa.
-export 'src/bold_cartao_de_pedido.dart';
-export 'src/bold_anel_de_escolha.dart';
-export 'src/bold_amostra_de_fundo.dart';
 export 'src/bold_selo_quantico.dart';
-export 'src/bold_visor_de_codigo.dart';
 
 /// Uma tela montada SÓ com componentes do pai.
 ///

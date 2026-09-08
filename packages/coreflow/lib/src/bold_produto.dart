@@ -1,9 +1,11 @@
+import 'coreflow_vinho.dart';
+import 'coreflow_vocabulario.dart';
 import 'package:flutter/material.dart' show Brightness, Color, ThemeData;
 
 import 'bold_gradients.dart';
 import 'bold_scheme.dart';
 import 'bold_tema_material.dart';
-import 'package:coreflow/coreflow.dart';
+import 'package:diletta_design_system/diletta_design_system.dart';
 
 /// UM PRODUTO FEITO COM ESTE DS — paleta e marca, e tudo o mais deriva.
 ///
@@ -130,7 +132,7 @@ class CoreflowProduto {
     );
     return CoreflowProduto(
       paleta: paleta,
-      // SEM marca declarada, nenhuma — não a do primeiro produto. Era `?? marcaDoBold`, e um filho
+      // SEM marca declarada, nenhuma — não a do primeiro produto. Era a marca dele como reserva, e um filho
       // gerado nascia com o lockup do Bold. O `///` do avô diz o comportamento: um tema sem marca
       // desenha os componentes todos, menos os que precisam de um arquivo de marca; esses somem em
       // vez de quebrar. (Veredito de 08/09, item 1: "uma linha, hoje".)
@@ -157,7 +159,7 @@ class CoreflowProduto {
   /// estoura**: desenha caixa vazia.
   ///
   /// Chegou como *"os ícones não estão aparecendo no app"*, depois de a adoção trocar
-  /// `BoldIconButton` por `DilettaIconButton`: as setas de voltar, os ícones da home e o `>` do
+  /// `IconButton` do app por `DilettaIconButton`: as setas de voltar, os ícones da home e o `>` do
   /// extrato sumiram juntos. Nada falhou — nem `analyze`, nem a suíte inteira, nem o console.
   ///
   /// **Fica AQUI e não no `main` do app**: quem liga o DS é quem sabe onde o DS guarda coisa. No

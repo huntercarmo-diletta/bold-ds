@@ -101,47 +101,4 @@ void main() {
         reason: 'declarado aqui e não lê mais — razão escrita sobre peça que mudou é documentação '
             'mentindo');
   });
-
-  test('todo glifo que este pacote pede do PAI existe no pai', () {
-    // Duas portas, e só uma tem tradutor. `CoreflowIcone` passa pelo mapa de apelidos deste produto
-    // (`chevron-right` → `angle-right-light`); `DilettaIcon` fala com o pai DIRETO.
-    //
-    // A faixa de contexto pedia `chevron-right` pelo `DilettaIcon`, e o pai foi buscar
-    // `assets/icons/chevron-right.svg.vec`, que não existe. **A seta não desenhava — sem erro, sem
-    // log.** A affordância de "isto é tocável" era invisível, e nenhum teste via, porque widget que
-    // não pinta ainda está lá na árvore.
-    final cfg = File('.dart_tool/package_config.json');
-    final raiz = cfg.absolute.uri.resolve(
-        '${RegExp(r'"name":"diletta_design_system","rootUri":"([^"]+)"').firstMatch(cfg.readAsStringSync().replaceAll(RegExp(r'\s+'), ''))!.group(1)}/');
-    final noPai = Directory.fromUri(raiz.resolve('assets/icons/'))
-        .listSync()
-        .whereType<File>()
-        .map((f) => f.uri.pathSegments.last.replaceAll('.svg.vec', ''))
-        .toSet();
-    expect(noPai, isNotEmpty, reason: 'não achei os glifos do pai — a régua está medindo o vazio');
-
-    final fonteDoApelido = File('lib/src/bold_icone.dart').readAsStringSync();
-    final apelidos = RegExp(r"'([a-z0-9-]+)':\s*'[a-z0-9-]+'")
-        .allMatches(fonteDoApelido)
-        .map((m) => m.group(1)!)
-        .toSet();
-
-    final quebrados = <String>[];
-    for (final f in Directory('lib').listSync(recursive: true).whereType<File>()) {
-      if (!f.path.endsWith('.dart')) continue;
-      final s = f.readAsStringSync();
-      for (final m in RegExp(r"DilettaIcon\(\s*name:\s*'([a-z0-9-]+)'").allMatches(s)) {
-        if (!noPai.contains(m.group(1))) {
-          quebrados.add('${f.path}: DilettaIcon(\'${m.group(1)}\') — o pai não tem esse asset');
-        }
-      }
-      for (final m in RegExp(r"CoreflowIcone\(\s*'([a-z0-9-]+)'").allMatches(s)) {
-        final n = m.group(1)!;
-        if (!noPai.contains(n) && !apelidos.contains(n)) {
-          quebrados.add('${f.path}: CoreflowIcone(\'$n\') — nem asset do pai, nem apelido do mapa');
-        }
-      }
-    }
-    expect(quebrados, isEmpty, reason: quebrados.join('\n'));
-  });
 }

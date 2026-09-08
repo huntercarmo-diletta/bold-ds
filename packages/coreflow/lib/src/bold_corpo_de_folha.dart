@@ -1,5 +1,5 @@
+import 'bold_radius.dart';
 import 'package:flutter/widgets.dart';
-import 'package:coreflow/coreflow.dart' show CoreflowRadius;
 
 import 'bold_scheme.dart' show CoreflowScheme;
 

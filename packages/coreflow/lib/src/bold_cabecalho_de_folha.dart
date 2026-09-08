@@ -7,7 +7,7 @@ import 'bold_pegador.dart' show CoreflowPegador;
 /// **O CABEÇALHO DE UMA FOLHA** — o pegador, o fechar e o título, escritos pelo time do app.
 ///
 /// Chegou por merge em 02/09, de `lib/design_system/widgets/bold_sheet_header.dart`. E ele traz uma
-/// coincidência que vale registrar: **o `BoldSheetGrip` do time e o `CoreflowPegador` desta casa são
+/// coincidência que vale registrar: **o `SheetGrip` do app do time e o `CoreflowPegador` desta casa são
 /// a mesma peça, extraída no mesmo dia, dos mesmos cinco sítios, com a mesma tinta**
 /// (`textMuted` a 50%) e o mesmo `pillR`.
 ///
@@ -20,18 +20,18 @@ import 'bold_pegador.dart' show CoreflowPegador;
 /// Regra do DS (única, sem exceção): **toda gaveta fecha pelo canto superior
 /// DIREITO, num círculo cinza com um xis no meio** (`CoreflowFecharFolha`). Antes
 /// cada gaveta resolvia isso do seu jeito — X solto à esquerda no
-/// `BoldTopBar.sheet`, X solto à direita no `BoldSheet`, e nada em quem montou
+/// `TopBar.sheet` do app, X solto à direita no `Sheet` do app, e nada em quem montou
 /// o container à mão.
 ///
-/// Quem abre pelo `BoldSheet`/`BoldTopBar.sheet` já recebe tudo isto de graça.
+/// Quem abre pelo `Sheet` do app/`TopBar.sheet` do app já recebe tudo isto de graça.
 /// Estas peças existem para as gavetas que **não** passam por eles — as que
 /// precisam de container próprio (`DraggableScrollableSheet`, altura fixa,
 /// lista com controller) — poderem ter o MESMO topo com uma linha.
 
 
 
-/// Grip iOS do topo da gaveta (40×4, cantos redondos). Fonte única: [BoldSheet],
-/// [BoldTopBar.sheet] e as gavetas de container próprio desenham este.
+/// Grip iOS do topo da gaveta (40×4, cantos redondos). Fonte única: `Sheet` do app,
+/// `TopBar` do app e as gavetas de container próprio desenham este.
 /// Fechar canônico de gaveta: círculo cinza chapado (32) + xis no meio, sempre
 /// no canto superior DIREITO.
 ///
@@ -50,7 +50,7 @@ class CoreflowFecharFolha extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // `BoldIconButton` virou `DilettaIconButton` na B2; o `neutralFill` do filho
+    // `IconButton` do app virou `DilettaIconButton` na B2; o `neutralFill` do filho
     // morreu com ele — o disco cinza do pai é o `secondary` (surfaceMuted + traço).
     // Nome do PAI (não o apelido `close`): `DilettaIconButton` não conhece o
     // mapa de apelidos do app — apelido aqui desenha NADA.
@@ -65,14 +65,14 @@ class CoreflowFecharFolha extends StatelessWidget {
 }
 
 /// Faixa superior de uma gaveta montada à mão: grip centrado + [CoreflowFecharFolha]
-/// à direita, na mesma altura que o [BoldSheet] reserva.
+/// à direita, na mesma altura que o `Sheet` do app reserva.
 ///
 /// Substitui o par "grip desenhado na mão + nenhum fechar" que cada gaveta de
 /// container próprio repetia:
 ///
 /// ```dart
 /// child: Column(children: [
-///   BoldSheetHeader(onClose: () => Navigator.of(ctx).pop()),
+///   `SheetHeader` do app(onClose: () => Navigator.of(ctx).pop()),
 ///   ... // título e conteúdo da gaveta
 /// ]),
 /// ```
@@ -94,7 +94,7 @@ class CoreflowCabecalhoDeFolha extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      // 44 = o mesmo que o [BoldSheet] gasta entre o topo do painel e o começo
+      // 44 = o mesmo que o `Sheet` do app gasta entre o topo do painel e o começo
       // do conteúdo (grip 10+4+6 + linha do título com o botão de 32).
       height: 44,
       child: Padding(

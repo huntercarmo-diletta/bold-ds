@@ -1,5 +1,5 @@
 import 'package:coreflow/coreflow.dart';
-import 'package:flutter/material.dart' show Brightness;
+import 'package:flutter/material.dart' show Brightness, ThemeData;
 
 /// O NETO — o produto-fixture dos testes do pai.
 ///
@@ -18,4 +18,12 @@ abstract final class Neto {
 
   static final DilettaTheme claro = _monta(Brightness.light);
   static final DilettaTheme escuro = _monta(Brightness.dark);
+
+  /// O neto como PRODUTO: a paleta de referência, marca nenhuma, tipografia do avô, gradiente
+  /// derivado. É o que um produto desta linguagem é quando não declara nada.
+  static final CoreflowProduto produto =
+      CoreflowProduto(paleta: DilettaPalette.referencia, marca: DilettaBrand.nenhuma);
+
+  static ThemeData get materialClaro => produto.materialClaro;
+  static ThemeData get materialEscuro => produto.materialEscuro;
 }

@@ -7,17 +7,17 @@ import 'bold_scheme.dart' show CoreflowScheme;
 
 /// top-bar building blocks.
 ///
-/// [CoreflowAvatar] é o que sobrou: o avatar do usuário dentro do [BoldTopBar],
+/// [CoreflowAvatar] é o que sobrou: o avatar do usuário dentro do `TopBar` do app,
 /// theme-aware (light/dark) via [CoreflowScheme.of].
 ///
-/// `BoldCircleButton`, `BoldAccountPill` e `BoldAccountSwitcher` saíram em 08/08 —
+/// `CircleButton` do app, `AccountPill` do app e `AccountSwitcher` do app saíram em 08/08 —
 /// as três ficaram sem consumidor quando o perfil antigo e o cabeçalho de conta
 /// morreram, e as três estavam de pé por causa de um comentário.
 
 /// Profile avatar. Shows [image] if given, otherwise gradient [initials].
 /// Set [gear] to attach a small settings badge (taps open the profile).
 /// Avatar (átomo) UNIFICADO do usuário. Superfície de **vidro**
-/// (default, o look do Redesenho: BoldGlass fill/stroke/blur + inicial em
+/// (default, o look do Redesenho: `Glass` do app fill/stroke/blur + inicial em
 /// textPrimary) OU **gradiente da marca** ([glass] = false, inicial branca);
 /// [image] cobre o disco com a foto real. Badge de canto opcional ([badge]
 /// custom — câmera/mini-avatar — ou [gear] legado).

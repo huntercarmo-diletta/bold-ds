@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 /// usuário está agindo em nome de OUTRA conta.
 ///
 /// Existe para o aviso não depender de cada tela lembrar de exibi-lo: quem
-/// monta o app publica o contexto aqui, e toda [BoldTopBar] passa a mostrar a
+/// monta o app publica o contexto aqui, e toda `TopBar` do app passa a mostrar a
 /// faixa sozinha. Sem contexto publicado, nada muda em lugar nenhum.
 class CoreflowOperatingContext extends InheritedWidget {
   const CoreflowOperatingContext({
@@ -45,7 +45,7 @@ class CoreflowOperatingContext extends InheritedWidget {
 /// top bar. Pequena de propósito — precisa estar sempre presente sem competir
 /// com o conteúdo da tela.
 ///
-/// Normalmente não se usa direto: [BoldTopBar] a insere quando existe um
+/// Normalmente não se usa direto: `TopBar` do app a insere quando existe um
 /// [CoreflowOperatingContext] acima na árvore.
 class CoreflowOperatingStrip extends StatelessWidget {
   const CoreflowOperatingStrip({
@@ -122,7 +122,7 @@ class CoreflowOperatingStrip extends StatelessWidget {
 
 
 /// Slot da faixa para telas com **cabeçalho próprio** (comprovante, sucesso,
-/// editores em tela cheia) — as que não usam [BoldTopBar] e, por isso, não
+/// editores em tela cheia) — as que não usam `TopBar` do app e, por isso, não
 /// ganhariam o contexto de graça.
 ///
 /// Renderiza a faixa quando há contexto publicado, e nada quando não há. Uma

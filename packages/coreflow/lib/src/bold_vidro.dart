@@ -12,10 +12,12 @@
 /// bater.
 library;
 
+import 'bold_radius.dart';
+import 'coreflow_vinho.dart';
 import 'dart:ui' show ImageFilter, TileMode;
 
 import 'package:flutter/material.dart';
-import 'package:coreflow/coreflow.dart';
+import 'package:diletta_design_system/diletta_design_system.dart';
 
 import 'bold_scheme.dart' show CoreflowScheme;
 

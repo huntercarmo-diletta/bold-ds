@@ -28,8 +28,9 @@
 /// tentar. A distinção é do domínio: assinatura colhida não se retira por aqui.
 library;
 
+import 'bold_autorizacao.dart';
 import 'package:flutter/widgets.dart';
-import 'package:coreflow/coreflow.dart';
+import 'package:diletta_design_system/diletta_design_system.dart';
 
 import 'bold_scheme.dart';
 import 'bold_cartao.dart';

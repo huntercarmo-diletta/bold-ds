@@ -19,16 +19,12 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   /// Onde a cor NASCE. Fora daqui, hex num widget é uma cor que ninguém encontra depois.
   const declaram = {
-    'bold_palette.dart',      // a rampa
-    'bold_gradients.dart',    // as paradas dos gradientes
-    'bold_elevacao.dart',     // as sombras
-    'bold_vidro.dart',        // o material
-    'bold_scheme.dart',       // os papéis, derivados da rampa
-    'bold_fundamentos.dart',  // a tabela de fundamentos do catálogo
-    'bold_selo_quantico.dart',// narrativa de marca (veredito do dono, 29/07)
-    'bold_produto.dart',      // as instâncias de produto
-    'bold_vinho.dart',        // o vinho da marca — três degraus, e é aqui que eles nascem
+    'bold_palette.dart',       // a rampa
+    'bold_fundamentos.dart',   // a tabela de fundamentos do catálogo
+    'bold_selo_quantico.dart', // narrativa de marca (veredito do dono, 29/07)
+    'bold_vinho.dart',         // o vinho da marca — três degraus, e é aqui que eles nascem
   };
+
 
   Iterable<File> pecas() => Directory('lib/src')
       .listSync(recursive: true)
@@ -78,7 +74,8 @@ void main() {
   test('e o gate SABE ver — a varredura enxerga peça', () {
     // Sem isto, um `listSync` que parasse de achar arquivo passaria os três testes acima medindo
     // nada. Foi assim que a fila anterior deste repo morreu.
-    expect(pecas().length, greaterThan(30),
-        reason: 'a varredura parou de achar peça — ela é que quebrou');
+    // Desde 08/09 os componentes moram no pai, e a cópia deste gate lá cobra `> 30`; aqui sobram a
+    // identidade e o selo — a varredura tem que continuar achando ALGO.
+    expect(pecas(), isNotEmpty, reason: 'a varredura parou de achar peça — ela é que quebrou');
   });
 }

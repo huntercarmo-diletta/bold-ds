@@ -138,8 +138,11 @@ class CoreflowIlustracao extends StatelessWidget {
       label: arte.base,
       image: true,
       child: SvgPicture.asset(
+        // O KIT é do produto: o caminho é a convenção da linguagem (`assets/illustrations/<base>_<modo>.svg`)
+        // e o PACOTE é o da marca em contexto (`DilettaBrand.pacote`). Era o nome do primeiro produto
+        // cravado — a arte de qualquer filho vinha do pacote dele.
         'assets/illustrations/${arte.base}_${escuro ? 'dark' : 'light'}.svg',
-        package: 'coreflow_design_system',
+        package: tema.brand.pacote,
         width: tamanho,
         height: tamanho,
         fit: BoxFit.contain,

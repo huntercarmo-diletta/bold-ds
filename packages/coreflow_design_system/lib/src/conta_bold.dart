@@ -15,10 +15,7 @@ library;
 import 'package:coreflow/coreflow.dart';
 import 'package:flutter/material.dart' show ThemeData;
 
-import 'bold_gradients.dart';
 import 'bold_palette.dart';
-import 'bold_produto.dart';
-import 'bold_scheme.dart';
 import 'bold_type.dart';
 import 'bold_vinho.dart';
 

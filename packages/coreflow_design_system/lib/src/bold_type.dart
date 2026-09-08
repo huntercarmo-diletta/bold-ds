@@ -31,11 +31,10 @@
 /// isso que faz a escada voltar a ser escada.
 library;
 
-import 'package:diletta_design_system/diletta_design_system.dart';
+import 'package:coreflow/coreflow.dart';
 import 'package:flutter/painting.dart';
 
 import 'bold_fonts.dart';
-import 'bold_tema_material.dart' show CoreflowTipografia;
 
 /// ## O PESO é o único eixo que a tela pode sobrescrever — e os outros três não são
 ///

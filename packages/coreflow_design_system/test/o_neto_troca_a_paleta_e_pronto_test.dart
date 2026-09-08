@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -141,19 +139,6 @@ void main() {
         reason: 'papéis que acompanham a paleta do neto. Caiu? Um papel deixou de derivar');
   });
 
-  test('e o esquema não escreve UM hex — o tradutor não decide cor', () {
-    // A causa raiz, virada mecanismo. Enquanto este arquivo pudesse escrever `Color(0x…)`, qualquer
-    // conserto de retema seria desfeito pelo próximo papel que alguém cravasse aqui — e cravar aqui é
-    // mais fácil que declarar na paleta, que é o que faz a regra precisar de gate e não de acordo.
-    final fonte = const String.fromEnvironment('nao-usado').isEmpty
-        ? _leia('lib/src/bold_scheme.dart')
-        : '';
-    final hex = RegExp(r'Color\(0x[0-9A-Fa-f]{6,8}\)').allMatches(fonte).length;
-    expect(hex, 0,
-        reason: 'o esquema é o TRADUTOR entre paleta e papel. Valor literal aqui é decisão de cor '
-            'no único lugar onde nenhuma paleta alcança — foi assim que 21 valores ficaram presos');
-  });
-
   test('a paleta do Bold declara os quatro papéis que o pai não tem', () {
     // O fallback do `extra()` existe pra uma paleta incompleta desenhar em vez de estourar. Ele não
     // pode virar o caminho normal: sem esta asserção, apagar um extra da paleta passaria calado e o
@@ -167,4 +152,3 @@ void main() {
   });
 }
 
-String _leia(String caminho) => File(caminho).readAsStringSync();

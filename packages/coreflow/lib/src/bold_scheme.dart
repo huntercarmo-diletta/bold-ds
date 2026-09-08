@@ -14,8 +14,10 @@
 /// mudança, e é assim que uma mudança de dono deve chegar.
 library;
 
+import 'coreflow_vinho.dart';
+import 'coreflow_vocabulario.dart';
 import 'package:flutter/material.dart';
-import 'package:coreflow/coreflow.dart';
+import 'package:diletta_design_system/diletta_design_system.dart';
 
 import 'bold_gradients.dart';
 

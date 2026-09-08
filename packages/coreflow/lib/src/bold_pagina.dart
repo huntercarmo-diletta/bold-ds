@@ -1,4 +1,9 @@
-import 'package:coreflow/coreflow.dart';
+import 'bold_background.dart';
+import 'bold_botao.dart';
+import 'bold_busy.dart';
+import 'bold_espaco.dart';
+import 'bold_largura.dart';
+import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/material.dart';
 import 'bold_barra_de_topo.dart' show CoreflowBarraDeTopo;
 import 'bold_etiqueta.dart' show CoreflowEtiqueta;
@@ -11,7 +16,7 @@ import 'bold_scheme.dart' show CoreflowScheme;
 /// entrega é o outro lado da mesma régua: **uma classe `Bold*` que estende `Widget` é vocabulário**,
 /// e vocabulário com nome de marca é o que impede um filho de existir.
 ///
-/// O par não é claro × escuro, apesar dos nomes antigos (`BoldLightScaffold`/`BoldDarkScaffold`):
+/// O par não é claro × escuro, apesar dos nomes antigos (`LightScaffold` do app/`DarkScaffold` do app):
 /// as duas usam o `CoreflowBackground`, que resolve por tema. **A diferença é o RODAPÉ.**
 ///
 /// - [CoreflowPagina] — 37 sítios. O rodapé fica ABAIXO do conteúdo, e o corpo respeita a safe area

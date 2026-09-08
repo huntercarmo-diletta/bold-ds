@@ -1,4 +1,8 @@
-import 'package:coreflow/coreflow.dart';
+import 'bold_background.dart';
+import 'bold_botoes_de_navegacao.dart';
+import 'bold_resumo_da_transacao.dart';
+import 'bold_rodape.dart';
+import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/material.dart';
 import 'bold_barra_de_topo.dart';
 
@@ -42,7 +46,7 @@ class CoreflowAcaoDeResumo {
 /// (ex.: "Comprovante") normalmente abre o documento compartilhável.
 ///
 /// **Composição** — [CoreflowBackground], [CoreflowBarraDeTopo], [CoreflowSpot],
-/// [BoldSectionHeader], [BoldAppList]/[BoldAppListGroup], [CoreflowRodape].
+/// `SectionHeader` do app, `AppList` do app/`AppListGroup` do app, [CoreflowRodape].
 class CoreflowPaginaDeResumo extends StatelessWidget {
   const CoreflowPaginaDeResumo({
     super.key,

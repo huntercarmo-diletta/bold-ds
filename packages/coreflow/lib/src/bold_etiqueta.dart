@@ -1,4 +1,5 @@
-import 'package:coreflow/coreflow.dart';
+import 'bold_radius.dart';
+import 'package:diletta_design_system/diletta_design_system.dart';
 import 'bold_icone.dart' show CoreflowIcone;
 import 'package:flutter/material.dart' show Theme;
 import 'package:flutter/widgets.dart';

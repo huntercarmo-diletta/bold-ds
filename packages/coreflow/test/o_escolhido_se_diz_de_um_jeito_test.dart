@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'dart:math' as math;
 import 'dart:ui' as ui;
 
-import 'package:coreflow_design_system/coreflow_design_system.dart';
+import 'package:coreflow/coreflow.dart';
+import 'o_neto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -99,7 +101,7 @@ void main() {
     Future<ui.Image> tira(bool escolhido) async {
       final chave = Key('$escolhido');
       await t.pumpWidget(MaterialApp(
-        theme: ContaBold.materialEscuro,
+        theme: Neto.materialEscuro,
         home: RepaintBoundary(
           key: chave,
           child: Center(
@@ -133,9 +135,17 @@ void main() {
     final escolhido = await miolo(await tira(true));
 
     expect(escolhido, isNot(normal), reason: 'o MIOLO do cartão tem que mudar, não só a moldura');
-    // E muda pra MARCA: mais vermelho que verde, que é o que o rosa deste produto é.
-    expect(escolhido[0] - escolhido[1], greaterThan(normal[0] - normal[1] + 8),
+    // E muda pra MARCA — a do PRODUTO em contexto. O tinte é a marca a 20% sobre a superfície escura,
+    // então o que sobe não é a distância à marca (o miolo continua escuro): é o CANAL dominante da
+    // marca contra o canal mais fraco dela. A versão do filho media "mais vermelho que verde", que é o
+    // que o rosa do primeiro produto é, e o próprio `///` avisava: um filho verde leria isso errado.
+    // Ele leu — aqui o neto é verde, e a régua passa a perguntar à marca qual canal é o dela.
+    final marca = Neto.produto.esquemaEscuro.primary;
+    final canais = [marca.r, marca.g, marca.b];
+    final forte = canais.indexOf(canais.reduce(math.max));
+    final fraco = canais.indexOf(canais.reduce(math.min));
+    expect(escolhido[forte] - escolhido[fraco], greaterThan(normal[forte] - normal[fraco] + 8),
         reason: 'escolhido tinge de marca; se o miolo só clareia, é degrau de superfície e não '
-            'escolha — e um filho verde leria isso errado. normal=$normal escolhido=$escolhido');
+            'escolha. marca=${marca.toARGB32().toRadixString(16)} normal=$normal escolhido=$escolhido');
   });
 }

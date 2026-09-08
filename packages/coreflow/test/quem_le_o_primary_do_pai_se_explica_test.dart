@@ -59,12 +59,27 @@ void main() {
         .toSet();
     expect(noAvo, isNotEmpty, reason: 'não achei os glifos do avô — a régua está medindo o vazio');
 
+    // Duas portas, e só uma tem tradutor: `CoreflowIcone` passa pelo mapa de apelidos desta
+    // linguagem (`chevron-right` → `angle-right-light`); `DilettaIcon` fala com o avô DIRETO.
+    final fonteDoApelido = File('lib/src/bold_icone.dart').readAsStringSync();
+    final apelidos = RegExp(r"'([a-z0-9-]+)':\s*'[a-z0-9-]+'")
+        .allMatches(fonteDoApelido)
+        .map((m) => m.group(1)!)
+        .toSet();
+
     final quebrados = <String>[];
     for (final f in Directory('lib').listSync(recursive: true).whereType<File>()) {
       if (!f.path.endsWith('.dart')) continue;
-      for (final m in RegExp(r"DilettaIcon\(\s*name:\s*'([a-z0-9-]+)'").allMatches(f.readAsStringSync())) {
+      final s = f.readAsStringSync();
+      for (final m in RegExp(r"DilettaIcon\(\s*name:\s*'([a-z0-9-]+)'").allMatches(s)) {
         if (!noAvo.contains(m.group(1))) {
           quebrados.add('${f.path}: DilettaIcon(\'${m.group(1)}\') — o avô não tem esse asset');
+        }
+      }
+      for (final m in RegExp(r"CoreflowIcone\(\s*'([a-z0-9-]+)'").allMatches(s)) {
+        final n = m.group(1)!;
+        if (!noAvo.contains(n) && !apelidos.contains(n)) {
+          quebrados.add('${f.path}: CoreflowIcone(\'$n\') — nem asset do avô, nem apelido do mapa');
         }
       }
     }

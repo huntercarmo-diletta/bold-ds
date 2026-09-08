@@ -32,7 +32,7 @@ class CoreflowIcone extends StatelessWidget {
 
   /// A ESCADA DE TAMANHO deste produto: 16 · 18 · 20.
   ///
-  /// Ela morava numa classe `BoldIconSize` do app, ao lado das sombras, e é pequena de propósito — o
+  /// Ela morava numa classe `IconSize` do app do app, ao lado das sombras, e é pequena de propósito — o
   /// chrome deste produto usa três tamanhos e nada entre eles. Fica aqui, e não numa classe própria,
   /// porque tamanho de ícone sem o ícone é um número solto: quem escreve `size:` já está escrevendo
   /// `CoreflowIcone`.
