@@ -177,3 +177,48 @@ grep -rlE 'BoldColors|BoldPalette|BoldSelo|BoldFonts|BoldVinho|marcaDoBold|Coref
 
 No app: `rg -l 'package:coreflow_design_system' lib | wc -l` (213) e
 `rg -o '\bBold(Colors|Palette|SeloQuantico|SeloEstado|Vinho)\b' lib | wc -l` (131).
+
+## Adendo de 08/09 — o que a fase 1 mediu, e uma premissa que caiu
+
+Fase 0 e fase 1 estão na branch (`45e12ff`): a régua foi de **300 para 164**, e a foto do Bold
+(`o_esquema_do_bold_nao_mudou`, 210 valores) segue verde. Duas medições novas, feitas depois dos cortes.
+
+### 1 · O grafo de imports diz onde o veredito trava
+
+Sobre os 68 arquivos de `lib/src`, com a régua do script e os imports transitivos dentro do pacote:
+
+| classe | quantos | o que são |
+|---|---|---|
+| zero na régua e só importam zero — **movíveis hoje** | 36 | `bold_background`, `bold_botao`, `bold_rodape`, `bold_saldo`, `bold_contratos`, `coreflow_vinho`, `coreflow_vocabulario`… |
+| zero na régua, **travados** por importar arquivo com Bold | 23 | 14 via `bold_scheme.dart`; 6 via `bold_scheme` + `bold_type`; 1 via `bold_gradients`; 1 via `bold_type`; 1 via `bold_selo_quantico` |
+| com Bold | 9 | `bold_palette` 103, `bold_selo_quantico` 23, `bold_produto` 12, `bold_gradients` 4, `bold_type` 3, `bold_fonts` 2, `bold_fundamentos` 2, `bold_scheme` 2, `bold_vinho` 1 |
+
+Os dois gargalos são exatamente as duas decisões do pedido: **`bold_scheme.dart`** (2 referências, os
+atalhos `dark()`/`light()` que leem `BoldPalette.bold`; **19 arquivos** o importam) e **`bold_type.dart`**
+(3 referências, `fontFamily = BoldFonts.family`; 6 o importam). Com o veredito 1 os atalhos viram sombra
+e destravam 14 + 1; com o veredito 2 a fonte muda de canal e destravam os outros 7. Não há terceiro nó.
+
+### 2 · O Bold NÃO renasce por `daMarca` — a fase 3 muda de enunciado
+
+A decisão 5 e a linha 3 da tabela de fases dizem que o Bold renasce por `daMarca(marca: BoldColors.marca,
+id: 'bold', nome: 'Conta BOLD')` mais os extras. Medido em 08/09, comparando esse produto com
+`CoreflowProduto.bold`:
+
+| o que | difere |
+|---|---|
+| a rampa de marca | **9 de 9** degraus — `daMarca` põe `#FE3976` no degrau **05** (é onde a claridade dele cai) e deriva os outros oito; a rampa do Bold é desenhada à mão, com o rosa no 04 |
+| os outros campos da paleta (22 amostrados: neutros, semânticos, superfícies, vidro, brilho) | **21 de 22** — o Bold declara neutros, vermelhos, verdes, superfícies e vidro próprios; `daMarca` traz os da referência do pai |
+| o esquema, `daMarca` só | 18 de 25 no claro, 20 de 25 no escuro |
+| o esquema, `daMarca` + os `papeisExtras` do Bold | ainda **13 de 25** no claro e **14 de 25** no escuro |
+
+A conclusão não é defeito de ninguém: **o Bold é um filho de paleta inteira, não um filho de uma cor.**
+`daMarca` é a porta de quem nasce com uma cor; o Bold nasce com `BoldPalette.bold` — 103 constantes que
+são decisão de marca — e o caminho dele é `CoreflowProduto(paleta: BoldPalette.bold, marca: marcaDoBold,
+gradientes: CoreflowGradients.bold)`, que é o que `CoreflowProduto.bold` já faz e o que a sombra da fase 2
+vai continuar fazendo. O gate `bold_e_filho_do_ds` da fase 3 passa a medir **isso**: o Bold monta o tema
+inteiro pelo construtor de paleta do pai, sem que o pai saiba que ele existe. A frase "renasce por
+`daMarca`" sai do enunciado da fase 3.
+
+Reproduzir: o grafo sai de um script de 30 linhas sobre `lib/src` (régua do script + `^import '…'`
+transitivo); a comparação, de um teste temporário que instancia os dois produtos e compara papel a
+papel — os dois estão descritos aqui e os números são de 08/09 sobre `45e12ff`.
