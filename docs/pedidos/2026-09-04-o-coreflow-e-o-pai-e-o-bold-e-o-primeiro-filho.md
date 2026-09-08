@@ -280,3 +280,87 @@ item.
 5. **`ref:`** — você consome **v0.163.0** e eu estou em **v0.175.0**: 12 tags, com a instância web
    nascida na última. **Suba antes de mover arquivo, não depois.** Mover 60 arquivos e subir 12 tags
    no mesmo intervalo faz o primeiro diff que quebrar ter duas causas, e uma delas é minha.
+
+## Resposta do filho
+
+**data**: 2026-09-08 · **branch**: `feat/coreflow-e-o-pai` · lido o veredito inteiro, os cinco itens e os
+quatro achados. Tudo que era meu está feito na branch; o que é do app e do repo dele está listado abaixo,
+com número, pra dona levar.
+
+### O que fiz, na ordem que você pediu
+
+| item | feito | commit |
+|---|---|---|
+| 5 · `ref:` do avô **antes** de mover | `v0.163.0` → `v0.175.0` nos dois pacotes. Pai e filho verdes sem mudar nada; o catálogo quebrou em UM teste, causa sua (`v0.172.0`: o acessório de voltar passou a 44 de toque com o desenho de 40 dentro), expectativa atualizada com a razão | `chore(deps)` |
+| 1 · `marcaVisual ?? DilettaBrand.nenhuma` | uma linha, mais o `///` do porquê | `feat(produto)` |
+| decisão 2 · a fonte pelo `ThemeData` | nasce `CoreflowTipografia` no pai (família, uma vez, mais os 11 degraus que o `ThemeData` recebe; `doAvo` é a escala do avô sem família). `CoreflowProduto.tipografia`; `CoreflowTemaMaterial.de(s, tipografia:)` aplica em `ThemeData(fontFamily:)`. Os 16 `copyWith(fontFamily:)` dos degraus saíram — ficaram só nos dois `mono`, que são outra família em potencial. Os 2 sítios de painter do selo ficam com a família explícita no filho; o visor de código lê a do `DefaultTextStyle` em contexto | `feat(produto)` |
+| achado 2 · `CoreflowType` não sobe | ficou INTEIRO no filho (13 degraus de marca, 644 sítios no app). Os componentes do pai leem os derivados direto do avô (`DilettaType.labelSm/titleMd/headlineSm`); a etiqueta AMPLA lê o `labelSmall` do `ThemeData` do produto quando ele registrou o esquema | `feat(produto)` |
+| decisão 1 · opção B | nasce `ContaBold` no filho (`produto`, `marca`, `gradientes`, `temaClaro/Escuro`, `materialClaro/Escuro`, `esquemaClaro/Escuro`). Saíram das classes da linguagem: `CoreflowProduto.bold/marcaDoBold`, `CoreflowScheme.dark()/light()`, `CoreflowTemaMaterial.claro/escuro`, `CoreflowGradients.bold/*DoBold` e a classe `CoreflowTheme`. `CoreflowScheme.of` sem tema registrado deriva do tema do avô em contexto, não do escuro do Bold | `feat(bold)` |
+| mover o resto | 25 arquivos a mais no pai (61 ao todo); o filho fica com 8: paleta, vinho, fonte, escala, selo, fundamentos, specs, `conta_bold`. Os gates de linguagem foram junto, com o neto (referência do avô, marca nenhuma) como fixture | `feat(coreflow)` |
+| 4 · a segunda coluna | `tool/levanta_a_separacao.sh` ganha `valor` (e `--valor`): hex 6-8 dígitos, `TextStyle(` cru, `assets/`, fora de comentário. Filho: **98**, todos onde a identidade nasce (paleta 80, escala 13, vinho 3, marca 2). Pai: **zero**, com uma exceção declarada no gate — a convenção do kit (`assets/illustrations/<base>_<modo>.svg`) | `chore(regua)` |
+
+### O que a coluna de valor achou que a de nome não via
+
+Três, além dos 13 degraus que você contou:
+
+1. **`bold_ilustracao.dart` cravava `package: 'coreflow_design_system'`** — a arte de qualquer filho vinha
+   do pacote do Bold. Passa a ler `DilettaBrand.pacote` da marca em contexto.
+2. **O avatar de convite lia `CoreflowGradients.primaryDoBold`** — leitura de produto que a régua de nome
+   não pegava porque `DoBold` não é símbolo Bold. O canal certo é o esquema em contexto: `CoreflowScheme`
+   passa a carregar `gradientes` (o produto passa os dele; quem monta de uma paleta recebe `daPaleta`).
+3. **Um gate de pixel do cartão media "mais vermelho que verde"** — e o próprio `///` dele avisava que um
+   filho verde leria errado. Ele leu, quando o gate mudou pro pai com o neto verde. Agora a régua pergunta à
+   marca qual canal é o dela.
+
+### O número que você pediu — os "30" contra os seus 14
+
+Contei de novo, no app, com a régua de nome dos sítios que perdem o atalho. Você tem razão nos 14 de
+código, e faltavam três na sua lista e todos os de teste na minha:
+
+| onde | sítios | o quê |
+|---|---|---|
+| `lib/` | **17** | os seus 14 (5 vidro, 5 `CoreflowTemaMaterial`, 2 `CoreflowScheme.dark()/light()`, 2 `primaryDoBold`) + 1 `onGradientDoBold` (`tipo_conta_screen.dart:113`) + 2 `CoreflowTheme.dark/light` (`app.dart:685-686`) |
+| `test/` | **48** | 26 `CoreflowTheme.dark/light`, 19 `CoreflowTemaMaterial.claro/escuro`, 2 `CoreflowProduto.bold`, 1 `CoreflowScheme.dark()` |
+| `show` | **2** | duas listas `show` em teste nomeiam `CoreflowTheme`/`CoreflowTemaMaterial` e precisam trocar pra `ContaBold` |
+| catálogo | **6** | 1 em código (`ds_do_bold.dart:3656`), 5 em teste — já trocados na branch |
+
+Os "cerca de 30" eram `lib` + parte de `test`, sem os `show`. A conta que a dona ouve: **17 linhas de código
+no app, 48 em teste, 2 listas `show`.** Os 5 do vidro são conserto, como você disse — o esquema já está
+no contexto em todos.
+
+**Verificado numa cópia do app** (não no repo dele): pai, filho e avô `v0.175.0` vendorizados, os 67
+renomes aplicados só na cópia. `flutter analyze`: **zero erros**, os mesmos 148 infos de antes mais 2
+`unnecessary_import` que os renomes deixam. A suíte inteira: **3.118 verdes, 9 pulados, 13 falhas em 4
+arquivos** — e as 13 têm duas causas, uma minha e uma sua:
+
+- **3 eram do pai, e já consertei**: `CoreflowVidro.traco/tinte/blur` faziam `!` em campos OPCIONAIS da
+  paleta. Enquanto o esquema caía no escuro do Bold, nunca estourava; com `CoreflowScheme.of` derivando
+  do tema em contexto, um teste da Letti sem `MaterialApp(theme:)` recebeu a paleta de referência do avô,
+  que não declara traço de vidro. Reserva agora é a receita de vidro do avô (`glassTint`/`glassBlur`/
+  `glassStroke`). Os 3 passam.
+- **10 são consequência da decisão 2, e são do app**: `a_fonte_da_marca_vem_do_pacote` (1) e
+  `o_app_deriva_a_rampa_do_pacote` (1) afirmam `CoreflowType.body.fontFamily == BoldFonts.family` — o
+  degrau não carrega mais família; a afirmação certa é sobre `ContaBold.materialClaro.textTheme`. E
+  `legenda_do_vizinho_cabe` (8) mede largura de texto pumpando fora do `ThemeData` do produto: sem a
+  família no degrau, o texto sai na fonte quadrada do `flutter_test`, 76% mais larga, e "não cabe". O
+  conserto é o teste declarar o produto (`theme: ContaBold.materialClaro`), que é exatamente o que a
+  opção B pede a todo sítio.
+
+### O que é do app e do repo dele — não toquei
+
+1. **Os 67 renomes acima**, com os 5 do vidro como `CoreflowScheme.of(context).paleta`, mais os 3
+   arquivos de teste da decisão 2 (10 testes: duas afirmações de família e um teste de largura que
+   precisa pumpar com o `ThemeData` do produto).
+2. **`tool/ds_vendor.sh`**: precisa vendorizar `packages/coreflow` também e reescrever a dependência git do
+   avô dentro dele, como já faz no filho. Sem isso o `pub get` do app morre na primeira tag desta branch.
+3. **O avô vendorizado sobe pra `v0.175.0`** junto com a tag do filho — o script já lê a tag do pai do
+   pubspec do filho.
+4. **Achado 1 · `ds_compat/src/theme/app_text_styles.dart`**: 23 estilos em Nunito prometendo espelhar
+   Inter. É do app e é o mais urgente dos quatro — quem mexer em `bold_type` vai ler "espelham" e acreditar.
+
+### O que fica pra fase 3
+
+Gerador aponta pro pai (`coreflow:` no pubspec do filho gerado), exemplo regenerado, e
+`bold_e_filho_do_ds` passa a medir o Bold pelo construtor de paleta inteira — como o adendo e o seu
+veredito concordam. E a régua de valor entra no gate do gerador: filho gerado com hex fora da paleta
+reprova.

@@ -6,22 +6,23 @@ de bloco é aqui.
 
 | pacote | o que é |
 |---|---|
-| `packages/coreflow` | **o PAI** (`feat/coreflow-e-o-pai`, fase 2 em curso): a linguagem de produto sem produto — re-exporta o `ds-diletta` e já tem os 36 componentes `Coreflow*` que não dependem de produto nenhum. Os que ainda leem o esquema ou a fonte do Bold chegam com o veredito — `docs/2026-09-04-adr-o-coreflow-e-o-pai.md` |
-| `packages/coreflow_design_system` | **o primeiro filho**: depende do pai por `path:` e o re-exporta (quem importa este recebe os três), mais os `Coreflow*` que ainda esperam veredito e o produto Bold — paleta, vinho, fonte e os dois do selo quântico, que seguem `Bold*` porque são a marca e não a linguagem |
+| `packages/coreflow` | **o PAI**: a linguagem de produto sem produto — re-exporta o `ds-diletta` e tem os 61 arquivos `Coreflow*`: componentes, `CoreflowProduto`, `CoreflowScheme`, `CoreflowTemaMaterial`, `CoreflowTipografia`, `CoreflowGradients`. Não declara valor de produto nenhum: nem cor, nem degrau, nem asset, nem família — `docs/2026-09-04-adr-o-coreflow-e-o-pai.md` |
+| `packages/coreflow_design_system` | **o primeiro filho**: depende do pai por `path:` e o re-exporta (quem importa este recebe os três), mais a identidade do Conta BOLD — `ContaBold` (o produto com o nome dele), paleta, vinho, fonte, escala e o selo quântico, que seguem `Bold*` porque são a marca e não a linguagem |
 | `packages/catalog` | **o catálogo-filho**: o plugue que declara os blocos, os grupos e o leitor de código |
 
 ## O gate
 
 ```bash
-(cd packages/coreflow && flutter analyze && flutter test)                   # 69
-(cd packages/coreflow_design_system && flutter analyze && flutter test)     # 214
+(cd packages/coreflow && flutter analyze && flutter test)                   # 77
+(cd packages/coreflow_design_system && flutter analyze && flutter test)     # 206
 (cd packages/catalog && flutter analyze && flutter test)                    # 94
 ```
 
 Dois gates medem a separação (`docs/2026-09-04-adr-o-coreflow-e-o-pai.md`), com a MESMA régua de
-`packages/coreflow_design_system/tool/levanta_a_separacao.sh`: no pai, `o_coreflow_nao_cita_bold` tem que
-dar **zero** em `lib/`, comentário incluído; no filho, `a_separacao_tem_numero` escreve o teto de
-referências ao Bold em `lib/` — o número mora no teste — e ele só desce.
+`packages/coreflow_design_system/tool/levanta_a_separacao.sh`, em DUAS colunas — nome (símbolos do Bold)
+e valor (hex cru, `TextStyle(` cru, `assets/`): no pai, `o_coreflow_nao_cita_bold` tem que dar **zero** nas
+duas, comentário incluído; no filho, `a_separacao_tem_numero` escreve o teto de nome — o número mora no
+teste — e ele só desce.
 
 A conformidade dos dois pais roda dentro desses testes (`violacoesDeConformidade` e
 `violacoesDoFilho`), e as duas baselines estão **vazias**: dívida declarada aqui é dívida que alguém

@@ -42,7 +42,15 @@ abstract final class CoreflowVidro {
   /// vidro inteiro era dele: um produto novo declarava `blurDeVidro`, `tinteDeVidro*` e
   /// `tracoDeVidro*` na paleta dele — campos que o pai criou justamente pra isso — e recebia os
   /// valores do outro assim mesmo. Os campos viajavam; o leitor não.
-  static double blur(DilettaPalette p) => p.blurDeVidro!;
+  static double blur(DilettaPalette p) => p.blurDeVidro ?? _avo(p, escuro: true).glassBlur;
+
+  /// A RECEITA DO AVÔ como reserva: os cinco campos do vidro são OPCIONAIS na paleta, e uma paleta que
+  /// não os declara (a de referência do avô, um filho de uma cor sem `comMaterial`) fazia o `!` estourar
+  /// — achado em 08/09, quando o esquema deixou de cair no primeiro produto e passou a derivar do tema
+  /// em contexto. O avô sabe COMO se constrói vidro (`glassTint`, `glassBlur`, `glassStroke`); o produto
+  /// diz de que material ele é. Sem produto, é o do avô.
+  static DilettaScheme _avo(DilettaPalette p, {required bool escuro}) =>
+      escuro ? DilettaScheme.dark(p) : DilettaScheme.light(p);
 
   static ImageFilter filtro(DilettaPalette p) =>
       ImageFilter.blur(sigmaX: blur(p), sigmaY: blur(p), tileMode: TileMode.decal);
@@ -57,14 +65,16 @@ abstract final class CoreflowVidro {
   /// Vinho e não preto: preto puro sobre a arte de fundo dá cinza morto, e o matiz é o que mantém
   /// o painel escuro dialogando com o rosa.
   static Color tinte(DilettaPalette p, {required bool escuro}) =>
-      escuro ? p.tinteDeVidroEscuro! : p.tinteDeVidroClaro!;
+      (escuro ? p.tinteDeVidroEscuro : p.tinteDeVidroClaro) ?? _avo(p, escuro: escuro).glassTint;
 
   /// O traço de 1px: escuro é o rosa claro a 30%, claro é o `primary08`.
   ///
   /// No claro a borda branca desaparecia sobre fundo claro — o traço nasceu de um defeito medido
   /// (1,06:1 é invisível), e o gate `traco-de-vidro-visivel` do pai cobra o piso.
   static Color traco(DilettaPalette p, {required bool escuro}) =>
-      escuro ? p.tracoDeVidroEscuro! : p.tracoDeVidroClaro!;
+      (escuro ? p.tracoDeVidroEscuro : p.tracoDeVidroClaro) ??
+      _avo(p, escuro: escuro).glassStroke ??
+      _avo(p, escuro: escuro).border;
 
   static const double espessuraDoTraco = 1;
 

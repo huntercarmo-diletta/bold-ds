@@ -148,12 +148,15 @@ paleta) vai pro filho. Nenhum teste é apagado.
 |---|---|---|
 | 0 | `packages/coreflow` vazio + gate `o_coreflow_nao_cita_bold` + `tool/levanta_a_separacao.sh` | gate nasce vermelho com o número; script reproduz a tabela deste ADR |
 | 1 | os 14 cortes, no pacote atual, **antes de mover** | `levanta --total` cai de 300 para 176 (só o que vai pro filho; os 15 de comentário somem junto); as duas suítes verdes; app verde por `path:` |
-| 2 | mover os componentes pro pai; filho fica com identidade + barrel `export … hide CoreflowProduto` + sombra | gate do pai em zero; suíte do filho verde; app verde por `path:` sem diff |
-| 3 | gerador aponta pro pai; exemplo regenerado; `bold` renasce por `daMarca` + extras | `o_gerador_de_filho_tem_saida_conferida`, `bold_e_filho_do_ds` |
+| 2 | mover os componentes pro pai; filho fica com identidade + `ContaBold` (opção B do veredito de 08/09: **sem sombra** — 17 linhas de código e 48 de teste no app trocam de nome) | gate do pai em zero nas DUAS colunas (nome e valor); suíte do filho verde; app verde numa cópia com os renomes |
+| 3 | gerador aponta pro pai; exemplo regenerado; o Bold monta o tema pelo construtor de paleta INTEIRA (o adendo de 08/09 derrubou o `daMarca` como caminho dele) | `o_gerador_de_filho_tem_saida_conferida`, `bold_e_filho_do_ds` |
 | 4 | tag do monorepo; CHANGELOG diz o que muda (nada) para quem consome o filho | app sobe o `ref:` num commit de uma linha |
 
 Cada fase é uma PR pequena pra `main`. O Hunter trabalha na `main` em paralelo: `git fetch` antes de todo
 commit, e commits pequenos.
+
+**Estado em 08/09:** fases 0, 1 e 2 feitas na branch (veredito ENTRA em `bd1730a` na main; resposta do
+filho no arquivo do pedido). Régua de nome em 148 e de valor em 98, todos no filho; pai em zero nas duas.
 
 ## Riscos, ditos
 
