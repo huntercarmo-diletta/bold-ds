@@ -1,13 +1,8 @@
+import 'package:coreflow/coreflow.dart';
 import 'package:flutter/material.dart';
-import 'package:diletta_design_system/diletta_design_system.dart';
-import 'bold_background.dart' show CoreflowBackground;
 import 'bold_barra_de_topo.dart' show CoreflowBarraDeTopo;
-import 'bold_botao.dart' show CoreflowBotao, CoreflowVarianteDeBotao;
 import 'bold_etiqueta.dart' show CoreflowEtiqueta;
-import 'bold_busy.dart' show CoreflowBusy;
-import 'bold_espaco.dart' show CoreflowEspaco;
 import 'bold_scheme.dart' show CoreflowScheme;
-import 'bold_largura.dart' show CoreflowLarguraDeConteudo;
 
 /// AS DUAS PÁGINAS DESTE PRODUTO, e o rodapé de ação que elas carregam.
 ///

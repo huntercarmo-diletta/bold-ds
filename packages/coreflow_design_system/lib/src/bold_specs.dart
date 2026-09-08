@@ -6,8 +6,8 @@
 /// de casa, não de contrato.
 library;
 
-import 'bold_contratos.dart';
 import 'bold_selo_quantico.dart';
+import 'package:coreflow/coreflow.dart';
 
 /// `slug → markdown`, os contratos de tudo que este pacote fornece ao catálogo.
 const Map<String, String> kBoldSpecs = {

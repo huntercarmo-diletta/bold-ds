@@ -1,8 +1,8 @@
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaSpotIcon, DilettaSpotState;
 import 'package:flutter/widgets.dart';
+import 'package:coreflow/coreflow.dart' show CoreflowElevacao;
 
-import 'bold_elevacao.dart' show CoreflowElevacao;
 import 'bold_scheme.dart' show CoreflowScheme;
 
 /// **CoreflowHeroi** — o spot grande com a AURÉOLA da marca por trás.

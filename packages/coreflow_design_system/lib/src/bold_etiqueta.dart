@@ -1,10 +1,6 @@
-import 'package:diletta_design_system/diletta_design_system.dart'
-    show DilettaAbsoluteColors, DilettaStatusTagPorte, DilettaStatusTone;
+import 'package:coreflow/coreflow.dart';
 import 'bold_icone.dart' show CoreflowIcone;
 import 'package:flutter/widgets.dart';
-import 'package:diletta_design_system/diletta_design_system.dart'
-    show DilettaSpacing;
-import 'bold_radius.dart' show CoreflowRadius;
 import 'bold_type.dart' show CoreflowType;
 import 'bold_scheme.dart' show CoreflowScheme;
 

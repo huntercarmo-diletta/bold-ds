@@ -52,7 +52,7 @@ class CoreflowAcaoDeNavegacao {
 
 /// A TRADUÇÃO de [CoreflowAcaoDeNavegacao] pro descritor do pai, com a trava do assíncrono.
 ///
-/// Ela nasceu dentro do rodapé (`BoldBottomApp`) e mora aqui desde 2026-08-08,
+/// Ela nasceu dentro do rodapé (o rodapé do app) e mora aqui desde 2026-08-08,
 /// porque passou a ter DOIS consumidores: o rodapé, que embrulha em glass, e o
 /// [CoreflowBotoesDeNavegacao] solto, que é a mesma coluna sem envelope. Duas cópias
 /// da mesma tabela de tipo é como as duas telas de "Colar" acabaram com dois
@@ -121,7 +121,7 @@ mixin CoreflowAcoesDoPai<T extends StatefulWidget> on State<T> {
 }
 
 /// NavigationButton. Coluna de 1–3 CTAs empilhados. É o CONTEÚDO
-/// do rodapé — sem glass nem home indicator (isso é papel do [BoldBottomApp]).
+/// do rodapé — sem glass nem home indicator (isso é papel do [CoreflowRodape]).
 ///
 /// **CASCA**: o desenho é do [DilettaNavigationButton]. O que fica aqui é a
 /// trava do assíncrono, que é comportamento.

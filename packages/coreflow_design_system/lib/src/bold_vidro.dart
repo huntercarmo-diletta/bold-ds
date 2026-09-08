@@ -14,11 +14,9 @@ library;
 
 import 'dart:ui' show ImageFilter, TileMode;
 
-import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:coreflow/coreflow.dart';
 
-import 'coreflow_vinho.dart';
-import 'bold_radius.dart' show CoreflowRadius;
 import 'bold_scheme.dart' show CoreflowScheme;
 
 /// O vidro do app inteiro: fill chapado, traço de 1px, blur uniforme, zero sombra.

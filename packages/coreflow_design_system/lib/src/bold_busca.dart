@@ -1,7 +1,5 @@
-import 'package:diletta_design_system/diletta_design_system.dart'
-    show DilettaSearchInput;
+import 'package:coreflow/coreflow.dart';
 import 'package:flutter/widgets.dart';
-import 'bold_radius.dart' show CoreflowRadius;
 import 'bold_scheme.dart' show CoreflowScheme;
 
 /// SearchInput (molécula). Campo de busca compacto (lupa +

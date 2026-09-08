@@ -1,9 +1,9 @@
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaInput, DilettaInputType;
-import 'bold_busy.dart' show CoreflowBusyScope;
 import 'bold_icone.dart' show CoreflowIcone;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:coreflow/coreflow.dart' show CoreflowBusyScope;
 
 /// Text field.
 ///

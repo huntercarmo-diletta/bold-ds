@@ -18,7 +18,7 @@
 /// ## O que a mudança de casa alterou
 ///
 /// **O vidro deixou de ser montado à mão.** Eram `ClipRRect` + `BackdropFilter` + `DecoratedBox` com
-/// fill, borda e blur lidos de `BoldGlass` — a mesma superfície que o `DilettaGlassSurface` do pai
+/// fill, borda e blur lidos da casca de vidro do app — a mesma superfície que o `DilettaGlassSurface` do pai
 /// monta, escrita de novo do lado de cá.
 ///
 /// **O placeholder da ilustração ficou.** Ele existe porque a arte do carrossel é do app (asset de

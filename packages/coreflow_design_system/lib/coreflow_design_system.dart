@@ -34,20 +34,16 @@ import 'src/bold_produto.dart';
 /// É também o que sustenta o `importNoCodigo` do catálogo: o código gerado diz
 /// `ds.DilettaButton(...)` com `ds` apontando pra cá. Sem este reexport, o código gerado
 /// não compilaria no app — e o catálogo não teria como saber.
-export 'package:diletta_design_system/diletta_design_system.dart';
+// O PAI, e por ele o avô: `coreflow` re-exporta `diletta_design_system`.
+export 'package:coreflow/coreflow.dart';
 
 /// A identidade deste filho: paleta, fonte e os dois gradientes.
 export 'src/bold_palette.dart';
 export 'src/bold_scheme.dart';
-export 'src/bold_radius.dart';
 export 'src/bold_vidro.dart';
 export 'src/bold_tema_material.dart';
 export 'src/bold_pegador.dart';
-export 'src/bold_ponto.dart';
-export 'src/bold_pontos_de_pagina.dart';
 export 'src/bold_vinho.dart';
-export 'src/coreflow_vinho.dart';
-export 'src/coreflow_vocabulario.dart';
 export 'src/bold_fonts.dart';
 export 'src/bold_type.dart';
 export 'src/bold_fundamentos.dart';
@@ -55,41 +51,22 @@ export 'src/bold_produto.dart';
 export 'src/bold_gradients.dart';
 export 'src/bold_icone.dart';
 export 'src/bold_avatar.dart';
-export 'src/bold_aviso.dart';
 export 'src/bold_barra_de_topo.dart';
 export 'src/bold_busca.dart';
 export 'src/bold_cabecalho_de_folha.dart';
 export 'src/bold_folha.dart';
 export 'src/bold_pagina.dart';
 export 'src/bold_pagina_de_resumo.dart';
-export 'src/bold_rodape.dart';
 export 'src/bold_campo_de_texto.dart';
 export 'src/bold_cartao.dart';
 export 'src/bold_etiqueta.dart';
 export 'src/bold_heroi.dart';
-export 'src/bold_ilustracao.dart';
 export 'src/bold_lista.dart';
 
 /// Componentes que só o Bold tem, nascidos aqui compondo as peças do pai.
-export 'src/bold_autorizacao.dart';
-export 'src/bold_busy.dart';
-export 'src/bold_comprovante.dart';
 export 'src/bold_contexto_de_operacao.dart';
 export 'src/bold_corpo_de_folha.dart';
-export 'src/bold_background.dart';
-export 'src/bold_botao.dart';
-export 'src/bold_botoes_de_navegacao.dart';
-export 'src/bold_campo_de_valor.dart';
-export 'src/bold_dinheiro.dart';
-export 'src/bold_disco.dart';
-export 'src/bold_abas.dart';
-export 'src/bold_cabecalho_da_home.dart';
-export 'src/bold_contratos.dart';
 export 'src/bold_specs.dart';
-export 'src/bold_copiar.dart';
-export 'src/bold_elevacao.dart';
-export 'src/bold_escada_de_alcadas.dart';
-export 'src/bold_espaco.dart';
 
 /// AS QUATRO LACUNAS, e as duas que estavam do lado errado da fronteira.
 ///
@@ -101,21 +78,9 @@ export 'src/bold_espaco.dart';
 ///
 /// São duas classes de defeito diferentes com o mesmo sintoma: **peça que não dá pra desenhar em
 /// lugar nenhum**. A régua que saiu daqui: adotada e alcançável não são a mesma coisa.
-export 'src/bold_cartao_da_conta.dart';
 export 'src/bold_cartao_de_pedido.dart';
 export 'src/bold_anel_de_escolha.dart';
 export 'src/bold_amostra_de_fundo.dart';
-export 'src/bold_nav_flutuante.dart';
-export 'src/bold_cartao_promocional.dart';
-export 'src/bold_chip_de_filtro.dart';
-export 'src/bold_fileira_de_avatares.dart';
-export 'src/bold_grupo_do_dia.dart';
-export 'src/bold_ladrilho_de_menu.dart';
-export 'src/bold_largura.dart';
-export 'src/bold_linha_de_aviso.dart';
-export 'src/bold_resumo_da_transacao.dart';
-export 'src/bold_saldo.dart';
-export 'src/bold_segmentos.dart';
 export 'src/bold_selo_quantico.dart';
 export 'src/bold_visor_de_codigo.dart';
 

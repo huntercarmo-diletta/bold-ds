@@ -13,6 +13,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # O PAI DA LINGUAGEM, por `path:` — mesmo monorepo, mesma tag. Ele re-exporta o `ds-diletta`, e
+  # este barrel re-exporta ele: quem importa `coreflow_design_system` recebe os três de uma vez, e o
+  # app não muda uma linha (`docs/2026-09-04-adr-o-coreflow-e-o-pai.md`).
+  coreflow:
+    path: ../coreflow
   # UM só, e por TAG. O modo mudou na v0.8.0 do pai, e a razão é a fronteira e não o
   # artefato: o sync existia porque o build do app de um CLIENTE não pode depender da infra
   # do fornecedor. O Conta BOLD é produto interno da Diletta, então essa razão não se aplica

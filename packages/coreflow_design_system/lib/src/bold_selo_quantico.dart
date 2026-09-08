@@ -33,11 +33,10 @@ library;
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
-import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
+import 'package:coreflow/coreflow.dart';
 
 import 'bold_fonts.dart';
-import 'coreflow_vinho.dart';
 
 /// Os três estados do selo. Fechado, e sem quarto caso possível.
 enum BoldSeloEstado {

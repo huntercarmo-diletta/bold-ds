@@ -1,12 +1,10 @@
-import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/material.dart' show Brightness, Color, ThemeData;
 
 import 'bold_gradients.dart';
 import 'bold_palette.dart';
 import 'bold_scheme.dart';
 import 'bold_tema_material.dart';
-import 'coreflow_vinho.dart';
-import 'coreflow_vocabulario.dart';
+import 'package:coreflow/coreflow.dart';
 
 /// UM PRODUTO FEITO COM ESTE DS — paleta e marca, e tudo o mais deriva.
 ///

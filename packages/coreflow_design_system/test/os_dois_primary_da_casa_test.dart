@@ -76,17 +76,11 @@ void main() {
   });
 
   test('quem lê o `primary` do PAI está declarado, e o quinto tem que se explicar', () {
-    // Os quatro legítimos, e o que os torna legítimos é o mesmo: nenhum deles é TINTA sobre claro.
-    const legitimos = {
-      'lib/src/bold_autorizacao.dart': 'o tom da barra de progresso — superfície CHEIA, e o que '
-          'precisa de contraste é o que vai por cima dela, não ela contra o fundo.',
-      'lib/src/bold_cabecalho_da_home.dart': 'o anel do avatar quando há foto. O contraste é contra '
-          'a FOTO, que é conteúdo arbitrário: nenhum dos dois rosas ganha essa por número.',
-      'lib/src/bold_nav_flutuante.dart': 'o preenchimento da aba ativa — pintura, e a marca é o que '
-          'ela tem que dizer.',
-      'lib/src/bold_pontos_de_pagina.dart': 'o ponto da página atual. Objeto gráfico, piso 3,0, e o '
-          'rosa da marca dá 3,46:1 sobre branco.',
-    };
+    // Os quatro legítimos (barra de progresso, anel do avatar, aba ativa, ponto de página) mudaram
+    // de casa em 08/09: moram no pai, e a lista com as razões foi junto —
+    // `packages/coreflow/test/quem_le_o_primary_do_pai_se_explica_test.dart`. Aqui a lista é
+    // vazia de propósito: peça DESTE pacote que leia o `primary` do pai tem que se explicar aqui.
+    const legitimos = <String, String>{};
     final lendo = <String>{};
     for (final f in Directory('lib').listSync(recursive: true).whereType<File>()) {
       if (!f.path.endsWith('.dart')) continue;

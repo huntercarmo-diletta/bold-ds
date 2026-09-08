@@ -39,7 +39,7 @@ class CoreflowLargura {
 /// Em tela mais estreita que o teto é **transparente**: a largura continua sendo
 /// a do pai, sem faixa lateral vazia.
 ///
-/// O ponto de aplicação principal é o `child` de [BoldBackground] — as camadas de
+/// O ponto de aplicação principal é o `child` de [CoreflowBackground] — as camadas de
 /// fundo são irmãs anteriores no mesmo `Stack` e ficam de fora, então o fundo
 /// segue em 100% da largura por trás do conteúdo limitado. As camadas que não
 /// passam pelo corpo da tela (rodapé do `Scaffold`, bandeja flutuante, gaveta,
@@ -80,11 +80,11 @@ class CoreflowLarguraDeConteudo extends StatelessWidget {
   }
 }
 
-/// [BoldContentWidth] para o slot `appBar:` do `Scaffold`, que exige um
+/// [CoreflowLarguraDeConteudo] para o slot `appBar:` do `Scaffold`, que exige um
 /// [PreferredSizeWidget].
 ///
 /// Só as telas de `Scaffold` cru que usam `AppBar` do Material precisam disto —
-/// as telas do DS desenham a `BoldTopBar` dentro do corpo, já coberto pelo teto.
+/// as telas do DS desenham a barra de topo dentro do corpo, já coberto pelo teto.
 /// O `preferredSize` é delegado ao filho: quem manda na ALTURA da barra continua
 /// sendo a própria barra.
 class CoreflowBarraComTeto extends StatelessWidget
@@ -105,7 +105,7 @@ class CoreflowBarraComTeto extends StatelessWidget
 ///
 /// É o teto expresso como MARGEM, para quem posiciona por inset em vez de por
 /// pai que centraliza: `Positioned(left:/right:)`, `insetPadding` de diálogo,
-/// `EdgeInsets` de uma faixa. Nesses lugares o [BoldContentWidth] não serve — ele
+/// `EdgeInsets` de uma faixa. Nesses lugares o [CoreflowLarguraDeConteudo] não serve — ele
 /// expande até a largura disponível para poder centralizar, o que esticaria a
 /// superfície (o painel do diálogo, a barra do toast) e encolheria só o texto
 /// dentro dela.
@@ -125,7 +125,7 @@ double coreflowSobraLateral(BuildContext context) =>
 /// precisa sangrar. Use com parcimônia: fora daqui, conteúdo nenhum ultrapassa o
 /// teto.
 ///
-/// `OverflowBox` é a mesma técnica que [BoldBackground.statusBarScrim] já usa no
+/// `OverflowBox` é a mesma técnica que o scrim da barra de status já usava no
 /// eixo vertical — não é padrão novo no repo, é o padrão existente no outro eixo.
 ///
 /// `fit: OverflowBoxFit.deferToChild` **não é opcional**: no `max` (o default) o

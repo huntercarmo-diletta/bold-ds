@@ -1,14 +1,6 @@
-import 'package:diletta_design_system/diletta_design_system.dart'
-    show DilettaAbsoluteColors, DilettaAppList, DilettaAppListRow, DilettaLeftAccessory, DilettaMiddleAccessory, DilettaSectionHeader;
+import 'package:coreflow/coreflow.dart';
 import 'package:flutter/material.dart';
-import 'bold_rodape.dart';
 import 'bold_barra_de_topo.dart';
-import 'package:diletta_design_system/diletta_design_system.dart'
-    show DilettaSpacing;
-import 'bold_botoes_de_navegacao.dart' show CoreflowAcaoDeNavegacao;
-import 'bold_background.dart' show CoreflowBackground;
-import 'bold_resumo_da_transacao.dart' show CoreflowEstadoDaTransacao;
-import 'bold_resumo_da_transacao.dart' show CoreflowResumoDaTransacao;
 
 /// Linha de detalhe (acessório à esquerda + título/subtítulo) de uma seção do
 /// [CoreflowPaginaDeResumo].

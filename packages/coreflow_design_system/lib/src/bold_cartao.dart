@@ -1,10 +1,6 @@
-import 'package:diletta_design_system/diletta_design_system.dart'
-    show DilettaAbsoluteColors, DilettaCardSurface;
+import 'package:coreflow/coreflow.dart';
 import 'package:flutter/material.dart';
 import 'bold_vidro.dart';
-import 'package:diletta_design_system/diletta_design_system.dart'
-    show DilettaSpacing;
-import 'bold_radius.dart' show CoreflowRadius;
 import 'bold_scheme.dart' show CoreflowScheme;
 
 /// Card surface.

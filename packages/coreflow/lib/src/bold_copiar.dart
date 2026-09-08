@@ -25,7 +25,7 @@ import 'package:flutter/widgets.dart';
 /// Botão de copiar com aviso flutuante.
 /// **DUAS VEZES A MESMA PEÇA, e a segunda chegou por merge em 02/09.**
 ///
-/// O time do app escreveu um `BoldCopyButton` dentro de `lib/design_system/widgets/` — campo por
+/// O time do app escreveu um botão de copiar próprio dentro de `lib/design_system/widgets/` — campo por
 /// campo esta peça, incluindo os **1800 ms** de permanência do aviso. Não é cópia por descuido: é o
 /// que acontece quando o barril do app esconde o pacote e a peça de cá fica invisível de lá.
 ///

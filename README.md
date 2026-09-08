@@ -6,14 +6,14 @@ de bloco é aqui.
 
 | pacote | o que é |
 |---|---|
-| `packages/coreflow` | **o PAI, nascendo** (`feat/coreflow-e-o-pai`): a linguagem de produto sem produto. Na fase 0 só re-exporta o `ds-diletta`; os `Coreflow*` chegam depois do veredito — `docs/2026-09-04-adr-o-coreflow-e-o-pai.md` |
-| `packages/coreflow_design_system` | **a BASE da família**: os 50 componentes (`Coreflow*`) mais o produto Bold — paleta, vinho, fonte e os dois do selo quântico, que seguem `Bold*` porque são a marca e não a linguagem |
+| `packages/coreflow` | **o PAI** (`feat/coreflow-e-o-pai`, fase 2 em curso): a linguagem de produto sem produto — re-exporta o `ds-diletta` e já tem os 36 componentes `Coreflow*` que não dependem de produto nenhum. Os que ainda leem o esquema ou a fonte do Bold chegam com o veredito — `docs/2026-09-04-adr-o-coreflow-e-o-pai.md` |
+| `packages/coreflow_design_system` | **o primeiro filho**: depende do pai por `path:` e o re-exporta (quem importa este recebe os três), mais os `Coreflow*` que ainda esperam veredito e o produto Bold — paleta, vinho, fonte e os dois do selo quântico, que seguem `Bold*` porque são a marca e não a linguagem |
 | `packages/catalog` | **o catálogo-filho**: o plugue que declara os blocos, os grupos e o leitor de código |
 
 ## O gate
 
 ```bash
-(cd packages/coreflow && flutter analyze && flutter test)                   # 3
+(cd packages/coreflow && flutter analyze && flutter test)                   # 10
 (cd packages/coreflow_design_system && flutter analyze && flutter test)     # 273
 (cd packages/catalog && flutter analyze && flutter test)                    # 94
 ```

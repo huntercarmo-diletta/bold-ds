@@ -14,12 +14,10 @@
 /// mudança, e é assim que uma mudança de dono deve chegar.
 library;
 
-import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:coreflow/coreflow.dart';
 
 import 'bold_palette.dart';
-import 'coreflow_vinho.dart';
-import 'coreflow_vocabulario.dart';
 
 class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   const CoreflowScheme({

@@ -1,18 +1,15 @@
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaAbsoluteColors;
 import 'package:flutter/material.dart';
+import 'package:coreflow/coreflow.dart' show CoreflowBackground, CoreflowEspaco, CoreflowLarguraDeConteudo, CoreflowRadius;
 // `bold_background` vem da development (o sheet com papel de parede do app). O
 // `bold_icon_button` NÃO volta: o botão de ícone é peça do pai desde a v0.13.0 do
 // pacote, e o fechar abaixo monta com `DilettaIconButton`.
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaSpacing;
-import 'bold_background.dart' show CoreflowBackground;
-import 'bold_espaco.dart' show CoreflowEspaco;
-import 'bold_radius.dart' show CoreflowRadius;
 import 'bold_scheme.dart' show CoreflowScheme;
 import 'bold_type.dart' show CoreflowType;
 import 'bold_pegador.dart' show CoreflowPegador;
-import 'bold_largura.dart' show CoreflowLarguraDeConteudo;
 import 'bold_cabecalho_de_folha.dart' show CoreflowFecharFolha;
 
 /// BottomSheet (organismo). O CONTAINER de sheet que faltava:

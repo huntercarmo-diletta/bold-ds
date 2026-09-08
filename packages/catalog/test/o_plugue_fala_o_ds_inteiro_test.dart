@@ -27,11 +27,15 @@ void main() {
   };
 
   test('todo widget do DS está no plugue, ou tem razão escrita pra não estar', () {
-    final dir = Directory('../coreflow_design_system/lib/src');
-    expect(dir.existsSync(), isTrue, reason: 'não achei o DS ao lado: ${dir.path}');
+    // Dois diretórios desde 08/09: os componentes sem produto moram no pai (`packages/coreflow`), o
+    // resto no filho — e o plugue tem que falar os dois (`docs/2026-09-04-adr-o-coreflow-e-o-pai.md`).
+    final dirs = [Directory('../coreflow/lib/src'), Directory('../coreflow_design_system/lib/src')];
+    for (final d in dirs) {
+      expect(d.existsSync(), isTrue, reason: 'não achei o DS ao lado: ${d.path}');
+    }
 
     final widgets = <String>{};
-    for (final f in dir.listSync().whereType<File>()) {
+    for (final f in dirs.expand((d) => d.listSync()).whereType<File>()) {
       if (!f.path.endsWith('.dart')) continue;
       for (final m in RegExp(
               r'^class (Coreflow[A-Za-z0-9]+)\s+extends\s+(?:StatelessWidget|StatefulWidget|InheritedWidget)',

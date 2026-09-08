@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:coreflow/coreflow.dart' show CoreflowRadius;
 
-import 'bold_radius.dart' show CoreflowRadius;
 import 'bold_scheme.dart' show CoreflowScheme;
 
 /// **CoreflowPegador** — a barrinha de arrastar no topo de uma folha, e ela tinha DUAS receitas.

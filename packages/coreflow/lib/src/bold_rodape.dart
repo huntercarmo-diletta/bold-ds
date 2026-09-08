@@ -131,8 +131,8 @@ class CoreflowRodape extends StatelessWidget {
 
   // Aqui moravam `.keyboard` e `.buttonAndKeyboard`, os dois envelopes de
   // teclado numérico. Zero consumidores em 2026-08-08 — o único numpad do app
-  // vivia num sheet de PIN que ninguém abria. Saíram junto com o `BoldKeypad` e
-  // o `BoldPinDots`. Se voltar a existir entrada por numpad, o pai tem
+  // vivia num sheet de PIN que ninguém abria. Saíram junto com o teclado numérico e
+  // os pontos de PIN do app. Se voltar a existir entrada por numpad, o pai tem
   // `DilettaBottomApp.keyboard` e `DilettaKeyboard` prontos.
 
   final Widget child;
@@ -214,7 +214,7 @@ class CoreflowRodape extends StatelessWidget {
 
 /// A PÍLULA da nav — e desde 17/08 ela é a do PACOTE, não a montada aqui.
 ///
-/// Este miolo remontava a peça inteira à mão: vidro (`BoldGlass.fill` + stroke + `BackdropFilter`),
+/// Este miolo remontava a peça inteira à mão: vidro (o fill da casca do app + stroke + `BackdropFilter`),
 /// raio 26 em `BorderRadius.circular`, rótulo com `fontSize: 10` cravado, spot do ativo e a elevação
 /// por fora do clip. O `CoreflowNavFlutuante` do pacote é essa mesma peça, e ela atravessou a fronteira
 /// em 13/08 porque um print achou o que gate nenhum media: o catálogo desenhava a barra ANCORADA do

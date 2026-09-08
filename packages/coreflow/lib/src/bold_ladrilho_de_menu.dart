@@ -1,6 +1,6 @@
 /// CONTA BOLD — o LADRILHO do menu, e ele era a maior lacuna que restava.
 ///
-/// O inventário de adoção marcava `BoldMenuTile` como **lacuna com alcance 4** — a maior das quatro
+/// O inventário de adoção marcava o ladrilho de menu do app como **lacuna com alcance 4** — a maior das quatro
 /// que sobraram depois de o legado sair. Lacuna quer dizer o que está escrito: peça que desenha
 /// sozinha, sem par na linguagem, e que por isso não existe no catálogo.
 ///
@@ -26,7 +26,7 @@
 /// na escada do pai, e ele era o único sítio do app que o usava. Um degrau com um usuário é um
 /// degrau que não é escada — e 10px de rótulo já estava no limite do que se lê num ladrilho de 85.
 ///
-/// **O vidro virou o `DilettaGlassSurface` do pai.** Era `BoldCard(glass: true)`, que é a mesma
+/// **O vidro virou o `DilettaGlassSurface` do pai.** Era o cartão do app com `glass: true`, que é a mesma
 /// superfície com outro nome deste lado da fronteira.
 library;
 

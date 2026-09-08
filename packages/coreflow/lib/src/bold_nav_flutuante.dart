@@ -3,7 +3,7 @@
 /// Ela atravessou a fronteira em 13/08, e o print que a trouxe foi direto ao ponto: *"a navbar da home tá
 /// diferente, parece que você redesenhou do zero."* Não redesenhei — o catálogo desenhava a barra do
 /// PAI, porque era a única que existia deste lado. E a diferença entre as duas está escrita, palavra por
-/// palavra, no `///` do `BoldBottomApp` dentro do app:
+/// palavra, no `///` do rodapé dentro do app:
 ///
 /// > *"A `.nav` é outra história: a do pai é barra ANCORADA full-width, itens em `Expanded`, círculo do
 /// > ativo estourando a borda de cima, traço de home por dentro. A daqui é **pílula flutuante** com hug e
@@ -23,10 +23,10 @@
 ///
 /// ## O que a mudança de casa alterou, e cada uma tem número
 ///
-/// **O vidro virou `DilettaGlassSurface`.** No app são `BoldGlass.fill` + stroke + `BackdropFilter`
+/// **O vidro virou `DilettaGlassSurface`.** No app são o fill da casca de vidro + stroke + `BackdropFilter`
 /// montados à mão, com um desvio SÓ aqui: no claro o branco sobe de 50% pra 75%, porque a nav puxava
 /// escuro pelo blur sobre a arte da home. É a mesma troca que o ladrilho de menu fez ao cruzar
-/// (`BoldCard(glass: true)` → superfície do pai), e o desvio do claro fica de fora — vidro com exceção
+/// (o cartão com `glass: true` → superfície do pai), e o desvio do claro fica de fora — vidro com exceção
 /// por componente é o começo de dois vidros.
 ///
 /// **Raio 26 → `all24`.** Vinte e seis não é degrau da escada do pai. A diferença de 2 num raio de

@@ -10,8 +10,8 @@
 /// `pix_meus_qr_flow.dart` usa **os dois, seis linhas um do outro** —
 ///
 /// ```
-/// BoldSegmentedControl(segments: ['15 dias', '30 dias', '60 dias'])   // filtro
-/// BoldTabs(tabs: ['Ativos', 'Encerrados'])                            // navegação
+/// SegmentedControl(segments: ['15 dias', '30 dias', '60 dias'])   // filtro  (peça do app)
+/// Tabs(tabs: ['Ativos', 'Encerrados'])                            // navegação (peça do app)
 /// ```
 ///
 /// — e a diferença é de JOB, não de estilo: o segmento troca um parâmetro do que está na tela; a aba

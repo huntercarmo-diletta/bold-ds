@@ -25,12 +25,11 @@
 /// `DilettaType.labelSm` (11/16), sem sobrescrita.
 library;
 
-import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
+import 'package:coreflow/coreflow.dart';
 
 import 'bold_anel_de_escolha.dart';
 import 'bold_scheme.dart';
-import 'bold_background.dart';
 
 /// O retrato de um [CoreflowBackdrop] no seletor de Aparência.
 class CoreflowAmostraDeFundo extends StatelessWidget {

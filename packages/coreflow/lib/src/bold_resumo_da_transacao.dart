@@ -1,6 +1,6 @@
 /// CONTA BOLD — o RESUMO DA TRANSAÇÃO, e por que ele é conteúdo e não tela.
 ///
-/// O app tem um organismo `BoldTransactionSummary` que é a TELA inteira do comprovante: `Scaffold` +
+/// O app tem um organismo de resumo de transação que é a TELA inteira do comprovante: `Scaffold` +
 /// fundo + barra de topo + este cabeçalho + as seções + a barra de baixo. Ele NÃO entra na linguagem
 /// nessa forma, e a razão é a dinâmica do catálogo: lá se monta tela COM blocos, então um bloco que
 /// já é a tela não compõe com nada — ele só pode ser usado sozinho.
