@@ -16,30 +16,30 @@ import 'package:flutter_test/flutter_test.dart';
 /// e o que ele ganha está medido abaixo: dois arquivos viraram um.
 void main() {
   test('a marca está declarada, e o arquivo diz o que pode ser tingido', () {
-    expect(CoreflowTheme.marca.pacote, 'coreflow_design_system');
-    expect(CoreflowTheme.marca.logoTingePorCurrentColor, isTrue,
+    expect(ContaBold.marca.pacote, 'coreflow_design_system');
+    expect(ContaBold.marca.logoTingePorCurrentColor, isTrue,
         reason: 'sem isto o `ColorFilter` volta e engole o gradiente que o arquivo protege — os '
             'dois caminhos se excluem, e é o veredito que diz');
     // Desde a 0.99.0 o tema carrega a marca declarada MAIS a cor das letras decidida por modo. Tudo o
     // mais tem que ser a marca, campo a campo — a cópia em `marcaNo` não pode perder nada no caminho.
     for (final (tema, cor, modo) in [
-      (CoreflowTheme.light, DilettaAbsoluteColors.black, 'claro'),
-      (CoreflowTheme.dark, DilettaAbsoluteColors.white, 'escuro'),
+      (ContaBold.temaClaro, DilettaAbsoluteColors.black, 'claro'),
+      (ContaBold.temaEscuro, DilettaAbsoluteColors.white, 'escuro'),
     ]) {
       final b = tema.brand;
       expect(b.corDoLogo, cor,
           reason: 'no $modo as letras do lockup seguem o tema, não o `primary` — o rosa era o default '
               'do pai preenchendo uma ausência');
-      expect(b.pacote, CoreflowTheme.marca.pacote);
-      expect(b.logo, CoreflowTheme.marca.logo);
-      expect(b.logoFull, CoreflowTheme.marca.logoFull);
-      expect(b.logoParceiro, CoreflowTheme.marca.logoParceiro);
-      expect(b.bandeiraDoCartao, CoreflowTheme.marca.bandeiraDoCartao);
-      expect(b.carteirasDeSistema, CoreflowTheme.marca.carteirasDeSistema);
-      expect(b.selosDeLoja, CoreflowTheme.marca.selosDeLoja);
-      expect(b.logoTingePorCurrentColor, CoreflowTheme.marca.logoTingePorCurrentColor);
-      expect(b.proporcaoDoLockup, CoreflowTheme.marca.proporcaoDoLockup);
-      expect(b.hexesDaArte, CoreflowTheme.marca.hexesDaArte);
+      expect(b.pacote, ContaBold.marca.pacote);
+      expect(b.logo, ContaBold.marca.logo);
+      expect(b.logoFull, ContaBold.marca.logoFull);
+      expect(b.logoParceiro, ContaBold.marca.logoParceiro);
+      expect(b.bandeiraDoCartao, ContaBold.marca.bandeiraDoCartao);
+      expect(b.carteirasDeSistema, ContaBold.marca.carteirasDeSistema);
+      expect(b.selosDeLoja, ContaBold.marca.selosDeLoja);
+      expect(b.logoTingePorCurrentColor, ContaBold.marca.logoTingePorCurrentColor);
+      expect(b.proporcaoDoLockup, ContaBold.marca.proporcaoDoLockup);
+      expect(b.hexesDaArte, ContaBold.marca.hexesDaArte);
     }
   });
 
@@ -88,7 +88,7 @@ void main() {
     // O veredito do recolor: *"nome sobrevive à troca de paleta, cor não"*. Se este mapa guardasse
     // hex→hex, ele envelheceria na primeira vez que um degrau mudasse — e ninguém saberia, porque o
     // recolor não erra alto: ele deixa passar o que não conhece.
-    final mapa = CoreflowTheme.marca.hexesDaArte;
+    final mapa = ContaBold.marca.hexesDaArte;
     expect(mapa, isNotEmpty);
     for (final e in mapa.entries) {
       expect(e.key, matches(RegExp(r'^#[0-9a-f]{6}$')),

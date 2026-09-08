@@ -33,7 +33,7 @@ void main() {
         .toFilePath();
   }
 
-  final rampa = p.DilettaIllustrationBrand.rampaDe(BoldPalette.bold, marca: CoreflowTheme.marca);
+  final rampa = p.DilettaIllustrationBrand.rampaDe(BoldPalette.bold, marca: ContaBold.marca);
   final tabelaDele = p.DilettaIllustrationBrand.rampaDe(BoldPalette.bold);
 
   test('a nossa rampa cobre TODO hex que o pai declara como marca', () {
@@ -54,7 +54,7 @@ void main() {
     for (final nome in arquivos) {
       final cru = File('${dir.path}/$nome.svg').readAsStringSync();
       final saida = p.DilettaIllustrationBrand
-          .apply(cru, BoldPalette.bold, marca: CoreflowTheme.marca)
+          .apply(cru, BoldPalette.bold, marca: ContaBold.marca)
           .toLowerCase();
 
       for (final hex in tabelaDele.keys) {
@@ -72,7 +72,7 @@ void main() {
   test('o mapa não inventa nome de degrau — todo destino existe na paleta', () {
     // `rampaDe` IGNORA em silêncio nome que a paleta não tem (a linha some do mapa em vez de pintar
     // errado). Então o tamanho do mapa é a prova: 17 declarados, 17 resolvidos.
-    expect(rampa.length, CoreflowTheme.marca.hexesDaArte.length,
+    expect(rampa.length, ContaBold.marca.hexesDaArte.length,
         reason: 'entrada que sumiu é nome de degrau que a paleta não conhece');
   });
 

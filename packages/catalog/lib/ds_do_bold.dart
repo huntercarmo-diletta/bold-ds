@@ -3653,7 +3653,7 @@ void configurarDsDoBold() {
       'Ritmo': ['ritmo', 'divisor', 'grade'],
     },
     tema: (filho, {required escuro}) => DilettaThemeScope(
-      theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+      theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
       child: filho,
     ),
     spacingTokens: const {

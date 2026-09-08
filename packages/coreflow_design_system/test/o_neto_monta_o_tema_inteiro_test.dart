@@ -17,7 +17,7 @@ void main() {
   /// que o pai mantém, então este teste acompanha o contrato dele sem eu copiar campo.
   final neto = CoreflowProduto(
     paleta: DilettaPalette.referencia,
-    marca: CoreflowProduto.marcaDoBold,
+    marca: ContaBold.marca,
   );
 
   /// Tudo que é cor de MARCA do Conta BOLD. Se um destes valores aparecer no tema do neto, é rosa
@@ -72,7 +72,7 @@ void main() {
   test('e o controle: o tema do BOLD tem esses valores, senão a varredura olha pro nada', () {
     // Asserção de ausência passa sozinha quando não há o que encontrar. Este é o par: os mesmos
     // sítios, no produto de verdade, TÊM que bater no rosa.
-    final achou = sitios(CoreflowProduto.bold.materialClaro)
+    final achou = sitios(ContaBold.produto.materialClaro)
         .values
         .where((c) => c != null && rosaDoBold.containsKey(c))
         .length;
@@ -102,14 +102,14 @@ void main() {
       'vinhoLavagem': const DilettaPapelExtra(
           claro: Color(0xFF0A2C1F), escuro: Color(0xFF0A2C1F), significado: 'a lavagem do neto'),
     });
-    final dele = CoreflowProduto(paleta: comVinhoProprio, marca: CoreflowProduto.marcaDoBold);
+    final dele = CoreflowProduto(paleta: comVinhoProprio, marca: ContaBold.marca);
 
     expect(dele.esquemaClaro.vinho, const Color(0xFF0B4F3A));
     expect(dele.esquemaClaro.vinhoTinta, const Color(0xFF04160F));
     expect(dele.esquemaEscuro.vinhoLavagem, const Color(0xFF0A2C1F));
 
     // E o Bold continua com o dele, sem declarar nada além do que já declarava.
-    expect(CoreflowProduto.bold.esquemaClaro.vinho, BoldVinho.marca);
+    expect(ContaBold.produto.esquemaClaro.vinho, BoldVinho.marca);
   });
 
   test('e quem NÃO declara o vinho recebe o DELE, derivado da rampa — nunca o do Bold', () {
@@ -134,7 +134,7 @@ void main() {
     );
     final dele = CoreflowProduto(
         paleta: DilettaPalette.referencia,
-        marca: CoreflowProduto.marcaDoBold,
+        marca: ContaBold.marca,
         gradientes: curvaDele);
 
     expect(dele.gradientes.primary.colors, curvaDele.paradasDoLockup);
@@ -147,8 +147,8 @@ void main() {
     expect(neto.gradientes.primary.colors, isNot(contains(BoldColors.lockup01)));
     expect(neto.gradientes.onGradient, DilettaPalette.referencia.onPrimary);
     // E o Bold continua com a curva DELE, porque passa: 8 paradas, a primeira é o rosa.
-    expect(CoreflowProduto.bold.gradientes.primary.colors.length, 8);
-    expect(CoreflowProduto.bold.gradientes.primary.colors.first, BoldColors.lockup01);
+    expect(ContaBold.produto.gradientes.primary.colors.length, 8);
+    expect(ContaBold.produto.gradientes.primary.colors.first, BoldColors.lockup01);
   });
 
 }

@@ -32,7 +32,7 @@ void main() {
       await t.pumpWidget(MaterialApp(
         debugShowCheckedModeBanner: false,
         home: DilettaThemeScope(
-          theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+          theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
           child: Scaffold(
             body: Builder(builder: (ctx) {
               c = CoreflowScheme.of(ctx);
@@ -67,7 +67,7 @@ void main() {
     await t.pumpWidget(MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DilettaThemeScope(
-        theme: CoreflowTheme.dark,
+        theme: ContaBold.temaEscuro,
         child: const Scaffold(
           body: CoreflowSpot('hourglass-start-light', tone: CoreflowTomDoSpot.info, size: 40),
         ),

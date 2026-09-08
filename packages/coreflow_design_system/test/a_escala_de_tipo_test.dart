@@ -24,7 +24,7 @@ void main() {
           reason: '${e.key} repete a família — a segunda fonte da mesma verdade voltou');
     }
     // E o ThemeData do Bold entrega a família em todo degrau do textTheme — é o canal.
-    final t = CoreflowProduto.bold.materialClaro;
+    final t = ContaBold.produto.materialClaro;
     for (final d in [t.textTheme.displayLarge, t.textTheme.bodyMedium, t.textTheme.labelSmall]) {
       expect(d?.fontFamily, CoreflowType.fontFamily);
     }

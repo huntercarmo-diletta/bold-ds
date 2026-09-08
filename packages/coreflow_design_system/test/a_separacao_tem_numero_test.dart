@@ -13,7 +13,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// que dar o mesmo número, e a única forma de dois medidores concordarem sempre é serem um só.
 void main() {
   /// O teto de hoje. Desce a cada corte, no mesmo commit; nunca sobe.
-  const teto = 163;
+  const teto = 149;
 
   late final RegExp regua;
 
@@ -77,7 +77,7 @@ void main() {
 
   test('e a régua SABE ver o que procura', () {
     expect(regua.hasMatch('      color: BoldPalette.bold.primary04,'), isTrue);
-    expect(regua.hasMatch('CoreflowProduto.bold.paleta'), isTrue);
+    expect(regua.hasMatch('ContaBold.produto.paleta'), isTrue);
     expect(regua.hasMatch('CoreflowProduto.boldo'), isFalse, reason: r'o \b do script vale aqui');
     expect(regua.hasMatch('FontWeight.bold'), isFalse);
   });

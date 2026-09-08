@@ -3,7 +3,6 @@ import 'package:diletta_design_system/diletta_design_system.dart'
 import 'bold_icone.dart' show CoreflowIcone;
 import 'package:flutter/material.dart';
 import 'bold_vidro.dart';
-import 'bold_gradients.dart' show CoreflowGradients;
 import 'bold_scheme.dart' show CoreflowScheme;
 
 /// top-bar building blocks.
@@ -73,7 +72,8 @@ class CoreflowAvatar extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: glass ? CoreflowVidro.tinte(c.paleta, escuro: c.isDark) : null,
-              gradient: glass ? null : CoreflowGradients.primaryDoBold,
+              // O gradiente é o DO PRODUTO, pelo esquema em contexto. Era a const do primeiro produto.
+              gradient: glass ? null : c.gradientes.primary,
               border: glass
                   ? Border.all(
                       color: CoreflowVidro.traco(c.paleta, escuro: c.isDark), width: CoreflowVidro.espessuraDoTraco)
@@ -81,7 +81,7 @@ class CoreflowAvatar extends StatelessWidget {
             ),
             child: CoreflowIcone('user-light',
                 size: size * 0.44,
-                color: glass ? c.textSecondary : CoreflowGradients.onGradientDoBold),
+                color: glass ? c.textSecondary : c.gradientes.onGradient),
           )
         : DilettaAvatar(
             initials: initials ?? '',

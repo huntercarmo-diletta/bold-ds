@@ -23,7 +23,7 @@ void main() {
     await t.pumpWidget(MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DilettaThemeScope(
-        theme: CoreflowTheme.dark,
+        theme: ContaBold.temaEscuro,
         child: const Scaffold(
           body: Center(
             // O chip de 40 com constraint TIGHT — o caso que esticava.

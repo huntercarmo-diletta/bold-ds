@@ -58,7 +58,7 @@ void main() {
     // olhando o catálogo, não em teste de unidade.
     await t.pumpWidget(MaterialApp(
       home: DilettaThemeScope(
-        theme: CoreflowTheme.dark,
+        theme: ContaBold.temaEscuro,
         child: const Scaffold(
           body: DilettaGlassSurface(child: SizedBox(width: 100, height: 100)),
         ),

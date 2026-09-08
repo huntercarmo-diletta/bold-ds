@@ -17,11 +17,13 @@ library;
 import 'package:flutter/material.dart';
 import 'package:coreflow/coreflow.dart';
 
-import 'bold_palette.dart';
+import 'bold_gradients.dart';
+
 
 class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   const CoreflowScheme({
     required this.paleta,
+    required this.gradientes,
     required this.vinho,
     required this.vinhoTinta,
     required this.vinhoLavagem,
@@ -64,6 +66,14 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   ///
   /// É o mesmo que o pai faz: `DilettaScheme` também carrega a `palette` de onde derivou.
   final DilettaPalette paleta;
+
+  /// OS GRADIENTES do produto de onde este esquema saiu — a curva do símbolo e a tinta por cima.
+  ///
+  /// Entrou em 08/09 pelo mesmo motivo da [paleta]: uma peça do pai (o avatar de convite) precisava do
+  /// gradiente DO PRODUTO e o lia de uma const do primeiro produto, porque não havia por onde chegar em
+  /// contexto. Agora chega por aqui: o `CoreflowProduto` passa os dele; quem monta o esquema direto de
+  /// uma paleta recebe [CoreflowGradients.daPaleta].
+  final CoreflowGradients gradientes;
 
   final Color background, surface, surfaceRaised, field, surfacePressed;
 
@@ -151,7 +161,8 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   ///
   /// **Agora são 44 de 44.** Os dois valores continuam sendo deste produto; o que mudou é que eles
   /// entram pela paleta, então um neto declara os dele no mesmo lugar.
-  factory CoreflowScheme.de(DilettaPalette paleta, {required Brightness brilho}) {
+  factory CoreflowScheme.de(DilettaPalette paleta,
+      {required Brightness brilho, CoreflowGradients? gradientes}) {
     final escuro = brilho == Brightness.dark;
     final d = escuro ? DilettaScheme.dark(paleta) : DilettaScheme.light(paleta);
 
@@ -176,6 +187,7 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
 
     return CoreflowScheme(
       paleta: paleta,
+      gradientes: gradientes ?? CoreflowGradients.daPaleta(paleta),
       brightness: brilho,
       // ── derivados do pai ──────────────────────────────────────────────────
       surface: d.surface,
@@ -228,7 +240,6 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
     );
   }
 
-  /// O escuro do Bold. Atalho pra [CoreflowScheme.de] com a paleta deste produto.
   /// O ESQUEMA DESTE PRODUTO, lido do tema — e ele entrou em 22/08, pra uma peça daqui.
   ///
   /// Até então só o APP tinha acessor (um alias homônimo deste `of`), e as peças deste pacote leiam
@@ -236,17 +247,17 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   /// aqui — e o cartão do pedido precisou: o tom de INFORMAÇÃO da TED é papel extra deste produto,
   /// e o pai recusou a família `info` na `v0.27.0`.
   ///
-  /// Sem a extensão registrada, cai no escuro — o mesmo default que o app usa, e pela mesma razão:
-  /// peça que estoura por falta de tema é peça que ninguém consegue pôr num teste.
-  static CoreflowScheme of(BuildContext context) =>
-      Theme.of(context).extension<CoreflowScheme>() ?? CoreflowScheme.dark();
-
-  static CoreflowScheme dark() =>
-      CoreflowScheme.de(BoldPalette.bold, brilho: Brightness.dark);
-
-  /// O claro do Bold. Atalho pra [CoreflowScheme.de] com a paleta deste produto.
-  static CoreflowScheme light() =>
-      CoreflowScheme.de(BoldPalette.bold, brilho: Brightness.light);
+  /// Sem a extensão registrada, DERIVA do tema do avô em contexto — a paleta e o modo que o
+  /// `DilettaThemeScope` deu, ou a referência do avô se nem ele existir. Era o escuro do primeiro
+  /// produto, e o pai não tem produto pra cair: peça que estoura por falta de tema é peça que ninguém
+  /// consegue pôr num teste, mas peça que pinta a marca de outro por falta de tema é pior, porque não
+  /// estoura.
+  static CoreflowScheme of(BuildContext context) {
+    final registrado = Theme.of(context).extension<CoreflowScheme>();
+    if (registrado != null) return registrado;
+    final avo = DilettaTheme.schemeOf(context);
+    return CoreflowScheme.de(avo.palette, brilho: avo.isDark ? Brightness.dark : Brightness.light);
+  }
 
 
   @override

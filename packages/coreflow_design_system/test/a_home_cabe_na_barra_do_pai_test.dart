@@ -39,7 +39,7 @@ void main() {
   testWidgets('a barra do pai aceita o cabeçalho do filho e dá a linha inteira', (t) async {
     await t.pumpWidget(MaterialApp(
       home: DilettaThemeScope(
-        theme: CoreflowTheme.light,
+        theme: ContaBold.temaClaro,
         child: Scaffold(
           body: Builder(
             builder: (ctx) => DilettaNavigationTopBar(
@@ -73,7 +73,7 @@ void main() {
     // O par do teste acima: caber não basta, tem que sair com a identidade daqui.
     await t.pumpWidget(MaterialApp(
       home: DilettaThemeScope(
-        theme: CoreflowTheme.dark,
+        theme: ContaBold.temaEscuro,
         child: Scaffold(
           body: Builder(
             builder: (ctx) => DilettaNavigationTopBar(

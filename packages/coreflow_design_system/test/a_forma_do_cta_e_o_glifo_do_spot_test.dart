@@ -14,7 +14,7 @@ void main() {
   Widget naTela(Widget filho, {bool escuro = false}) => Directionality(
         textDirection: TextDirection.ltr,
         child: DilettaThemeScope(
-          theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+          theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
           child: Align(alignment: Alignment.topLeft, child: filho),
         ),
       );
@@ -23,7 +23,7 @@ void main() {
 
   test('a declaração mora na paleta, e o scheme DERIVA os dois modos', () {
     expect(BoldPalette.bold.raioDeBotao, 16);
-    for (final tema in [CoreflowTheme.light, CoreflowTheme.dark]) {
+    for (final tema in [ContaBold.temaClaro, ContaBold.temaEscuro]) {
       expect(tema.scheme.formaDoBotao, BorderRadius.all(Radius.circular(16)));
     }
   });
@@ -70,7 +70,7 @@ void main() {
   test('o par tinta/fundo do spot alcança 3:1 nos dois estados que eu uso', () {
     // `DilettaSpotIcon` nasce `fill`, que é como o resumo o usa: fundo semântico cheio.
     for (final (nome, escuro) in [('claro', false), ('escuro', true)]) {
-      final s = (escuro ? CoreflowTheme.dark : CoreflowTheme.light).scheme;
+      final s = (escuro ? ContaBold.temaEscuro : ContaBold.temaClaro).scheme;
       for (final (estado, tinta, fundo) in [
         ('success', s.onSuccess, s.success),
         ('warning', s.onWarning, s.warning),
@@ -88,7 +88,7 @@ void main() {
   /// Sem esta linha, o gate de 3:1 acima passaria de novo se um dia a derivação voltasse a ser declaração
   /// numa paleta cujo âmbar seja escuro: a razão passaria e a CAUSA teria voltado.
   test('e no claro ela sai do branco, porque o papel deriva', () {
-    final s = CoreflowTheme.light.scheme;
+    final s = ContaBold.temaClaro.scheme;
     expect(s.onWarning, isNot(s.palette.white));
     expect(_razao(s.onWarning, s.warning), closeTo(5.48, 0.01));
   });

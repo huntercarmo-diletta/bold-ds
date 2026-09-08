@@ -53,7 +53,7 @@ void main() {
   /// O que o Bold é HOJE, medido pelo mesmo código acima.
   Map<String, String> hoje() {
     final b = <String, String>{};
-    final p = CoreflowProduto.bold;
+    final p = ContaBold.produto;
     papeis(p.esquemaClaro).forEach((k, v) => b['claro.$k'] = v);
     papeis(p.esquemaEscuro).forEach((k, v) => b['escuro.$k'] = v);
     material(p.materialClaro).forEach((k, v) => b['materialClaro.$k'] = v);
@@ -67,8 +67,8 @@ void main() {
       b['gradiente.accent.$i'] = h(g.accent.colors[i]);
     }
     b['gradiente.onGradient'] = h(g.onGradient);
-    b['atalho.primaryDoBold.0'] = h(CoreflowGradients.primaryDoBold.colors.first);
-    b['atalho.onGradientDoBold'] = h(CoreflowGradients.onGradientDoBold);
+    b['atalho.primaryDoBold.0'] = h(ContaBold.gradientes.primary.colors.first);
+    b['atalho.onGradientDoBold'] = h(ContaBold.gradientes.onGradient);
     final pal = p.paleta;
     for (final escuro in [false, true]) {
       final m = escuro ? 'escuro' : 'claro';
@@ -78,11 +78,11 @@ void main() {
       b['vidroDeEntrada.$m.base'] = h(CoreflowVidroDeEntrada.base(pal, escuro: escuro));
       b['vidroDeEntrada.$m.traco'] = h(CoreflowVidroDeEntrada.traco(pal, escuro: escuro));
     }
-    b['theme.light.bg'] = h(CoreflowTheme.light.scheme.bg);
-    b['theme.dark.bg'] = h(CoreflowTheme.dark.scheme.bg);
-    b['theme.light.primary'] = h(CoreflowTheme.light.scheme.primary);
-    b['scheme.dark().surfaceRaised'] = h(CoreflowScheme.dark().surfaceRaised);
-    b['scheme.light().surfaceRaised'] = h(CoreflowScheme.light().surfaceRaised);
+    b['theme.light.bg'] = h(ContaBold.temaClaro.scheme.bg);
+    b['theme.dark.bg'] = h(ContaBold.temaEscuro.scheme.bg);
+    b['theme.light.primary'] = h(ContaBold.temaClaro.scheme.primary);
+    b['scheme.dark().surfaceRaised'] = h(ContaBold.esquemaEscuro.surfaceRaised);
+    b['scheme.light().surfaceRaised'] = h(ContaBold.esquemaClaro.surfaceRaised);
     return b;
   }
 
@@ -105,7 +105,7 @@ void main() {
       for (final tone in DilettaStatusTone.values) {
         for (final dot in [false, true]) {
           await t.pumpWidget(MaterialApp(
-            theme: escuro ? CoreflowTemaMaterial.escuro : CoreflowTemaMaterial.claro,
+            theme: escuro ? ContaBold.materialEscuro : ContaBold.materialClaro,
             home: Center(child: CoreflowEtiqueta(label: 'x', tone: tone, dot: dot)),
           ));
           final deco =

@@ -24,6 +24,7 @@ import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
 import 'src/bold_produto.dart';
+import 'src/conta_bold.dart';
 
 /// A LINGUAGEM SAI POR AQUI, e é o que faz este pacote ser "o DS do Bold" pra quem
 /// consome: o app e o catálogo importam UM caminho
@@ -48,6 +49,7 @@ export 'src/bold_fonts.dart';
 export 'src/bold_type.dart';
 export 'src/bold_fundamentos.dart';
 export 'src/bold_produto.dart';
+export 'src/conta_bold.dart';
 export 'src/bold_gradients.dart';
 export 'src/bold_icone.dart';
 export 'src/bold_avatar.dart';
@@ -84,30 +86,6 @@ export 'src/bold_amostra_de_fundo.dart';
 export 'src/bold_selo_quantico.dart';
 export 'src/bold_visor_de_codigo.dart';
 
-/// Os temas do Bold — claro e escuro, com a paleta acima.
-///
-/// O escuro sai de graça: mesma paleta, rampa invertida pelo pai.
-class CoreflowTheme {
-  CoreflowTheme._();
-
-  /// O tema do Conta BOLD no claro. Atalho pra `CoreflowProduto.bold.claro`.
-  ///
-  /// Este par de getters era o fim da linha: os dois eram `static final` montados com
-  /// `BoldPalette.bold` cravada, e não havia forma de pedir o mesmo tema com outra paleta. Desde
-  /// 20/08 quem responde é o [CoreflowProduto], e este nome fica porque **43 cascas e o `main` do app
-  /// já o escrevem** — atalho pro produto default não é indireção, é o nome curto do caso comum.
-  static DilettaTheme get light => CoreflowProduto.bold.claro;
-
-  /// O tema do Conta BOLD no escuro. Atalho pra `CoreflowProduto.bold.escuro`.
-  static DilettaTheme get dark => CoreflowProduto.bold.escuro;
-
-  /// A MARCA deste produto, declarada no plugue do pai — arquivos e o mapa da arte.
-  ///
-  /// Mora em [CoreflowProduto.marcaDoBold] desde 20/08, porque marca é do PRODUTO e não do tema: um
-  /// filho do Bold troca as duas coisas juntas ou nenhuma.
-  static const DilettaBrand marca = CoreflowProduto.marcaDoBold;
-}
-
 /// Uma tela montada SÓ com componentes do pai.
 ///
 /// Serve de exemplo e de instrumento: é o que o teste renderiza pra medir se sobrou
@@ -124,7 +102,7 @@ class TelaDeExemploBold extends StatelessWidget {
   final CoreflowProduto? _produto;
 
   /// O produto desta tela. Sem nada declarado, é o Conta BOLD.
-  CoreflowProduto get produto => _produto ?? CoreflowProduto.bold;
+  CoreflowProduto get produto => _produto ?? ContaBold.produto;
 
   @override
   Widget build(BuildContext context) {

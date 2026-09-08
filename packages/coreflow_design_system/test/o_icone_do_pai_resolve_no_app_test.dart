@@ -20,7 +20,7 @@ void main() {
     DilettaAssets.assetPackage = null;
 
     // Nenhuma chamada de configuração: só usar o tema, que é o que qualquer consumidor faz.
-    final _ = CoreflowTheme.light;
+    final _ = ContaBold.temaClaro;
 
     expect(DilettaAssets.assetPackage, DilettaAssets.package,
         reason: 'sem isto o VectorGraphic procura na raiz do bundle e desenha caixa vazia — em silêncio');
@@ -29,7 +29,7 @@ void main() {
 
   test('e o escuro também, porque um app pode abrir direto no escuro', () {
     DilettaAssets.assetPackage = null;
-    final _ = CoreflowTheme.dark;
+    final _ = ContaBold.temaEscuro;
     expect(DilettaAssets.assetPackage, DilettaAssets.package);
   });
 
@@ -37,7 +37,7 @@ void main() {
     // Um consumidor que hospede os ícones em outro pacote (o contrato do pai prevê) declara o dele, e o
     // tema não pode pisar por cima.
     DilettaAssets.assetPackage = 'outro_pacote_de_icones';
-    final _ = CoreflowTheme.light;
+    final _ = ContaBold.temaClaro;
     expect(DilettaAssets.assetPackage, 'outro_pacote_de_icones');
     DilettaAssets.assetPackage = DilettaAssets.package;
   });

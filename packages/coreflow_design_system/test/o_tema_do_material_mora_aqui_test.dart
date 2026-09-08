@@ -13,8 +13,8 @@ import 'package:flutter_test/flutter_test.dart';
 /// no escuro em silêncio dentro de um app claro.
 void main() {
   for (final (nome, tema, esperado) in [
-    ('claro', CoreflowTemaMaterial.claro, Brightness.light),
-    ('escuro', CoreflowTemaMaterial.escuro, Brightness.dark),
+    ('claro', ContaBold.materialClaro, Brightness.light),
+    ('escuro', ContaBold.materialEscuro, Brightness.dark),
   ]) {
     group('o tema $nome', () {
       test('pede a família da marca em toda a escada', () {
@@ -56,14 +56,14 @@ void main() {
     // Onze dos catorze no escuro e nove dos catorze no claro saem do `DilettaScheme`. O gate mede
     // uma amostra dos derivados: se o pai mudar um degrau, o filho acompanha sem ninguém tocar
     // aqui — e se alguém cravar um hex por cima, o par para de bater.
-    final escuro = CoreflowScheme.dark();
+    final escuro = ContaBold.esquemaEscuro;
     final doPaiEscuro = DilettaScheme.dark(BoldPalette.bold);
     expect(escuro.background, doPaiEscuro.bg);
     expect(escuro.surface, doPaiEscuro.surface);
     expect(escuro.textPrimary, doPaiEscuro.fg);
     expect(escuro.border, doPaiEscuro.border);
 
-    final claro = CoreflowScheme.light();
+    final claro = ContaBold.esquemaClaro;
     final doPaiClaro = DilettaScheme.light(BoldPalette.bold);
     expect(claro.surface, doPaiClaro.surface);
     expect(claro.textPrimary, doPaiClaro.fg);

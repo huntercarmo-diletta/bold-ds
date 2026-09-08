@@ -30,8 +30,6 @@ import 'package:flutter/painting.dart';
 
 import 'package:diletta_design_system/diletta_design_system.dart';
 
-import 'bold_palette.dart';
-import 'bold_vinho.dart';
 
 /// Os gradientes de um produto feito com este DS, e os dois saem da paleta.
 ///
@@ -46,7 +44,8 @@ import 'bold_vinho.dart';
 ///
 /// Quem não tem símbolo próprio recebe [CoreflowGradients.daPaleta]: dois degraus da rampa DELE, com
 /// a tinta que a paleta dele declara pra cima da marca. Até 04/09 o default era a curva do primeiro
-/// produto.
+/// produto; até 08/09 a curva dele ainda era declarada AQUI, e os atalhos dela saíam desta classe —
+/// hoje moram no pacote do produto, com o nome dele.
 class CoreflowGradients {
   const CoreflowGradients({
     required this.paleta,
@@ -67,20 +66,6 @@ class CoreflowGradients {
         tintaSobreOGradiente: p.onPrimary,
       );
 
-  // ── A CURVA DO PRIMEIRO PRODUTO, e os atalhos que o app chama ─────────────────
-  //
-  // Esta é a única declaração de produto que sobra neste arquivo, e ela fica porque `primaryDoBold`
-  // e `onGradientDoBold` são chamados no app (4 sítios). Sai daqui com a sombra homônima do filho,
-  // na fase 2 do ADR — não antes.
-
-  /// A curva do símbolo do primeiro produto, parada por parada, com a tinta dele por cima.
-  static const CoreflowGradients bold = CoreflowGradients(
-    paleta: BoldPalette.bold,
-    paradasDoLockup: BoldColors.lockupParadas,
-    offsetsDoLockup: BoldColors.lockupStops,
-    tintaSobreOGradiente: BoldVinho.ink,
-  );
-
   final DilettaPalette paleta;
 
   /// A curva da marca, na ordem do símbolo. Mesmo comprimento que [offsetsDoLockup].
@@ -89,7 +74,7 @@ class CoreflowGradients {
   /// Os offsets de cada parada, de 0 a 1.
   final List<double> offsetsDoLockup;
 
-  /// A tinta que vai POR CIMA do gradiente. No Bold é o vinho-tinta, com pior parada 5,69:1.
+  /// A tinta que vai POR CIMA do gradiente. No primeiro produto é o vinho-tinta, com pior parada 5,69:1.
   final Color tintaSobreOGradiente;
 
   DilettaPalette get _p => paleta;
@@ -154,15 +139,4 @@ class CoreflowGradients {
   /// os 3,37 do gradiente anterior. O `accent` continua com pior caso 3,37 e continua com a regra
   /// antiga: lá vale glifo e texto grande.
   Color get onGradient => tintaSobreOGradiente;
-
-  // Os três atalhos leem `bold`, que é a única declaração — não são uma segunda fonte.
-
-  /// Atalho pra `CoreflowGradients.bold.primary`.
-  static LinearGradient get primaryDoBold => bold.primary;
-
-  /// Atalho pra `CoreflowGradients.bold.accent`.
-  static LinearGradient get accentDoBold => bold.accent;
-
-  /// Atalho pra `CoreflowGradients.bold.onGradient`.
-  static Color get onGradientDoBold => bold.onGradient;
 }

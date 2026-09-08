@@ -22,11 +22,11 @@ void main() {
   Future<void> montar(WidgetTester tester,
       {required double escala, required bool oculto}) async {
     await tester.pumpWidget(MaterialApp(
-      theme: CoreflowTemaMaterial.claro,
+      theme: ContaBold.materialClaro,
       home: MediaQuery(
         data: MediaQueryData(textScaler: TextScaler.linear(escala)),
         child: DilettaThemeScope(
-          theme: CoreflowTheme.light,
+          theme: ContaBold.temaClaro,
           child: Scaffold(
             body: Center(
               child: CoreflowSaldo(valor: r'R$ 0,14', oculto: oculto),

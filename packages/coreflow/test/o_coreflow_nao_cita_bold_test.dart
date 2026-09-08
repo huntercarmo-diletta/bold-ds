@@ -15,13 +15,13 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   // A mesma `P=` do script. Se o script mudar, este literal muda no mesmo commit.
   final regua = RegExp(
-    r'BoldColors|BoldPalette|BoldSeloQuantico|BoldSeloEstado|BoldFonts|BoldVinho|marcaDoBold|'
+    r'BoldColors|BoldPalette|BoldSeloQuantico|BoldSeloEstado|BoldFonts|BoldVinho|ContaBold|marcaDoBold|'
     r'CoreflowProduto\.bold\b|Conta BOLD|hexesDaArte|assets/logos',
   );
 
   // Mais larga que a régua: QUALQUER símbolo `Bold` com inicial maiúscula. Fecha a classe "a regex
   // deixou passar um nome novo" — `FontWeight.bold` é minúsculo e não casa.
-  final qualquerBold = RegExp(r'\bBold[A-Z]\w*');
+  final qualquerBold = RegExp(r'\bBold[A-Z]\w*|\bContaBold\b');
 
   List<String> varre(RegExp r) {
     final achados = <String>[];

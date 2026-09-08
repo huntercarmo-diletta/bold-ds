@@ -17,7 +17,7 @@ cd "$(dirname "$0")/.."
 # são CAMPOS do `CoreflowScheme` que o app lê (6 sítios de `.vinhoTinta`), e o esquema é forma que vai
 # pro pai. Contar o nome do campo como referência ao Bold faria o gate do pai reprovar a API que o app
 # consome. O que a régua ainda pega do vinho é `BoldVinho` — a casa dos três valores do Bold.
-P='BoldColors|BoldPalette|BoldSeloQuantico|BoldSeloEstado|BoldFonts|BoldVinho|marcaDoBold|CoreflowProduto\.bold\b|Conta BOLD|hexesDaArte|assets/logos'
+P='BoldColors|BoldPalette|BoldSeloQuantico|BoldSeloEstado|BoldFonts|BoldVinho|ContaBold|marcaDoBold|CoreflowProduto\.bold\b|Conta BOLD|hexesDaArte|assets/logos'
 
 if [[ "${1:-}" == "--total" ]]; then
   (grep -rhoE "$P" lib || true) | wc -l | tr -d ' '

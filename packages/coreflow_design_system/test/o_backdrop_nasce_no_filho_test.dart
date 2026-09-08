@@ -17,7 +17,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   Widget montar(Widget filho, {bool escuro = false}) => MaterialApp(
         home: DilettaThemeScope(
-          theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+          theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
           child: Scaffold(body: filho),
         ),
       );
@@ -60,7 +60,7 @@ void main() {
   testWidgets('com arte no scope, ela É pintada, e o scope manda no estilo', (t) async {
     await t.pumpWidget(MaterialApp(
       home: DilettaThemeScope(
-        theme: CoreflowTheme.light,
+        theme: ContaBold.temaClaro,
         child: CoreflowBackdropScope(
           estilo: CoreflowBackdrop.imagem,
           arteClara: const AssetImage('assets/fonts/OFL.txt'), // qualquer provider serve

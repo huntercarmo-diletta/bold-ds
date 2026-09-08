@@ -153,7 +153,7 @@ void main() {
               body: FormatoDoAparelho(
                 tamanho: const Size(_largura * 1.0, _altura * 1.0),
                 child: DilettaThemeScope(
-              theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+              theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
               child: Builder(builder: (ctx) {
                 final s = DilettaTheme.schemeOf(ctx);
                 return ColoredBox(

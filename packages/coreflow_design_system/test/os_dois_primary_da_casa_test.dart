@@ -40,7 +40,7 @@ void main() {
       late Color tinta, lavagem, fundo;
       await t.pumpWidget(MaterialApp(
         key: ValueKey(escuro),
-        theme: escuro ? CoreflowTemaMaterial.escuro : CoreflowTemaMaterial.claro,
+        theme: escuro ? ContaBold.materialEscuro : ContaBold.materialClaro,
         home: Builder(builder: (ctx) {
           final c = CoreflowScheme.of(ctx);
           tinta = c.primary;
@@ -62,7 +62,7 @@ void main() {
     // ESCOLHA. Ele existe pra provar que o piso é apertado o bastante pra pegar o defeito real.
     late Color marca, lavagem, fundo;
     await t.pumpWidget(MaterialApp(
-      theme: CoreflowTemaMaterial.claro,
+      theme: ContaBold.materialClaro,
       home: Builder(builder: (ctx) {
         final c = CoreflowScheme.of(ctx);
         marca = c.paleta.primary04;

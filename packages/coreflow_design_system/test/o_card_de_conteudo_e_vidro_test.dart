@@ -21,7 +21,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   Widget montar(Widget filho, {bool escuro = false}) => MaterialApp(
         home: DilettaThemeScope(
-          theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+          theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
           child: Scaffold(body: filho),
         ),
       );
@@ -87,7 +87,7 @@ void main() {
 
     await t.pumpWidget(MaterialApp(
       home: DilettaThemeScope(
-        theme: CoreflowTheme.light,
+        theme: ContaBold.temaClaro,
         child: RepaintBoundary(
           key: chave,
           child: Stack(children: [

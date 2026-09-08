@@ -8,7 +8,7 @@ void main() {
   Widget naTela(Widget filho, {bool escuro = false}) => Directionality(
         textDirection: TextDirection.ltr,
         child: DilettaThemeScope(
-          theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+          theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
           child: Align(alignment: Alignment.topLeft, child: filho),
         ),
       );
@@ -181,7 +181,7 @@ void eixosDoCartao() {
   Widget naTela(Widget filho, {bool escuro = false}) => Directionality(
         textDirection: TextDirection.ltr,
         child: DilettaThemeScope(
-          theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+          theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
           child: Align(alignment: Alignment.topLeft, child: filho),
         ),
       );

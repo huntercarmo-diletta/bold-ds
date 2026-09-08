@@ -18,7 +18,7 @@ void main() {
           brightness: escuro ? Brightness.dark : Brightness.light,
         ),
         home: DilettaThemeScope(
-          theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+          theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
           // `Scaffold` porque a família da fonte chega no texto pelo `DefaultTextStyle`, e quem o
           // fornece é o Material.
           child: Scaffold(backgroundColor: const Color(0x00000000), body: filho),

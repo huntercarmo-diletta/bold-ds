@@ -29,7 +29,7 @@ void main() {
     late CoreflowBackdropScope? scope;
     await t.pumpWidget(MaterialApp(
       home: DilettaThemeScope(
-        theme: CoreflowTheme.light,
+        theme: ContaBold.temaClaro,
         child: Builder(
           builder: (ctx) => Builder(
             builder: (dentro) {
@@ -64,7 +64,7 @@ void main() {
     // "pintou qualquer coisa" — um ícone na árvore satisfaria a versão frouxa.
     await t.pumpWidget(MaterialApp(
       home: DilettaThemeScope(
-        theme: CoreflowTheme.light,
+        theme: ContaBold.temaClaro,
         child: Builder(
             builder: (ctx) =>
                 Ds.atual.fundoDoFrame!(ctx) ?? const SizedBox.shrink()),

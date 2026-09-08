@@ -19,7 +19,7 @@ void main() {
 
   test('o Bold não muda um pixel — ele DECLARA os três', () {
     // A derivação só alcança quem não declarou. O Bold declara, e o declarado ganha.
-    final s = CoreflowProduto.bold.esquemaEscuro;
+    final s = ContaBold.produto.esquemaEscuro;
     expect(s.vinho, BoldVinho.marca);
     expect(s.vinhoTinta, BoldVinho.ink);
     expect(s.vinhoLavagem, BoldVinho.lavagem);
@@ -43,7 +43,7 @@ void main() {
     // A regra não é "escureça um pouco": são três pontos medidos na rampa do Bold, que reproduzem
     // os hexes dele com erro zero. É isso que faz a derivação descrever em vez de aproximar.
     double luz(Color c) => 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b;
-    final bold = CoreflowProduto.bold.esquemaEscuro;
+    final bold = ContaBold.produto.esquemaEscuro;
     final filho = verde.esquemaEscuro;
     // O verde é MAIS CLARO que o rosa na mesma posição de rampa — o matiz muda a luminância —, mas
     // a ORDEM dos três tem que ser a mesma nos dois: marca > lavagem > tinta.

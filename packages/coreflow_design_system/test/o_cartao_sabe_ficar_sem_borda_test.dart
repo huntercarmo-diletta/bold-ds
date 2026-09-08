@@ -14,7 +14,7 @@ import 'package:flutter_test/flutter_test.dart';
 Widget _naTela(Widget filho) => MaterialApp(
       debugShowCheckedModeBanner: false,
       home: DilettaThemeScope(
-        theme: CoreflowTheme.dark,
+        theme: ContaBold.temaEscuro,
         child: Scaffold(body: Center(child: filho)),
       ),
     );

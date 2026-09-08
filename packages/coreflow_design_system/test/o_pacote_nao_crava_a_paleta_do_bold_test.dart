@@ -21,10 +21,9 @@ void main() {
     'bold_palette.dart',
     // O produto default. Ele existe pra dizer "o Bold é esta paleta com esta marca".
     'bold_produto.dart',
-    // As duas fábricas `light()`/`dark()` e a declaração `CoreflowGradients.bold` — atalhos nomeados do
-    // produto, não leitores anônimos.
-    'bold_scheme.dart',
-    'bold_gradients.dart',
+    // O produto com o nome dele: a instância, os gradientes e a marca. Até 08/09 os atalhos moravam
+    // em `bold_scheme.dart` e `bold_gradients.dart` com nome de linguagem — o veredito os tirou de lá.
+    'conta_bold.dart',
     // Não é código: é a DOCUMENTAÇÃO dos fundamentos, escrita em `r'''…'''` e servida ao catálogo.
     // A varredura é por linha e não distingue string de expressão; distinguir custaria um parser
     // pra ganhar um arquivo. Fica declarado, que é a forma barata de não mentir.

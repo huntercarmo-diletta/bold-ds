@@ -15,7 +15,7 @@ void main() {
   Widget naTela(Widget filho) => MaterialApp(
         debugShowCheckedModeBanner: false,
         home: DilettaThemeScope(
-          theme: CoreflowTheme.dark,
+          theme: ContaBold.temaEscuro,
           child: Scaffold(body: Center(child: filho)),
         ),
       );

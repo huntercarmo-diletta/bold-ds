@@ -31,17 +31,16 @@ import 'package:flutter/material.dart';
 import 'package:coreflow/coreflow.dart';
 
 import 'bold_scheme.dart';
-import 'bold_type.dart' show CoreflowType;
 
-/// O `ThemeData` do produto, nos dois modos — os dois atalhos são do primeiro produto.
+/// O `ThemeData` de um produto deste DS, montado do esquema e da tipografia dele.
 ///
 /// ```dart
-/// MaterialApp(
-///   theme: CoreflowTemaMaterial.claro,
-///   darkTheme: CoreflowTemaMaterial.escuro,
-///   themeMode: seuModo,
-/// )
+/// final meu = CoreflowProduto(paleta: minhaPaleta, marca: minhaMarca, tipografia: minhaTipografia);
+/// MaterialApp(theme: meu.materialClaro, darkTheme: meu.materialEscuro, themeMode: seuModo)
 /// ```
+///
+/// Até 08/09 esta classe tinha `claro`/`escuro` que montavam o tema do primeiro produto — atalho de
+/// marca com nome de linguagem, e o veredito do pai os tirou daqui (decisão 1, opção B).
 /// A TIPOGRAFIA de um produto — os degraus que o `ThemeData` recebe, e a família, uma vez.
 ///
 /// Veredito de 08/09 (`docs/pedidos/2026-09-04-…`): *família é do app, uma vez* — a `DilettaBrand`
@@ -101,8 +100,6 @@ class CoreflowTipografia {
 abstract final class CoreflowTemaMaterial {
   const CoreflowTemaMaterial._();
 
-  static ThemeData get claro => de(CoreflowScheme.light(), tipografia: CoreflowType.tipografia);
-  static ThemeData get escuro => de(CoreflowScheme.dark(), tipografia: CoreflowType.tipografia);
 
   /// O `ThemeData` de QUALQUER esquema deste DS — a porta pra um produto que não é o primeiro.
   ///

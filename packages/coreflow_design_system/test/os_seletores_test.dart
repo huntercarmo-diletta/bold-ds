@@ -13,7 +13,7 @@ void main() {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: BoldFonts.familyRaw),
         home: DilettaThemeScope(
-          theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+          theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
           // `Scaffold` não é enfeite: a família da fonte chega no texto pelo `DefaultTextStyle`, e quem o
           // fornece é o Material. Sem ele o `ThemeData(fontFamily:)` não alcança nada, e o teste mede na
           // fonte quadrada com o tema declarado do lado — verde, e medindo outra coisa.

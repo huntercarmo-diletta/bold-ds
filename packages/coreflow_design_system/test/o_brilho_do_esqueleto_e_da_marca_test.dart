@@ -31,7 +31,7 @@ void main() {
   test('o FEIXE tem pontas transparentes e centro na cor — a forma, medida onde ela é declarada', () {
     // A forma virou peça pública (`feixeDoEsqueleto`) exatamente pra poder ser medida: `shaderCallback`
     // devolve `Shader`, e `Shader` não conta quantos stops tem.
-    final feixe = feixeDoEsqueleto(CoreflowTheme.light.scheme, 0.5);
+    final feixe = feixeDoEsqueleto(ContaBold.temaClaro.scheme, 0.5);
     expect(feixe.colors, hasLength(3), reason: 'dois stops é banho que escorre, não luz que passa');
     expect(feixe.colors.first.a, 0, reason: 'a ponta de entrada tem que ser transparente');
     expect(feixe.colors.last.a, 0, reason: 'a ponta de saída tem que ser transparente');
@@ -39,7 +39,7 @@ void main() {
     expect(feixe.colors[1].r, BoldColors.primary07.r, reason: 'e a luz é da marca');
 
     // E ela ENTRA e SAI: no começo do ciclo os stops se achatam no 0, então não há luz sobre a peça.
-    final inicio = feixeDoEsqueleto(CoreflowTheme.light.scheme, 0);
+    final inicio = feixeDoEsqueleto(ContaBold.temaClaro.scheme, 0);
     expect(inicio.stops!.first, 0);
     expect(inicio.stops!.last, lessThan(0.4),
         reason: 'no instante 0 o feixe ainda está entrando pela borda esquerda');
@@ -72,7 +72,7 @@ void main() {
 
     await t.pumpWidget(MaterialApp(
       home: DilettaThemeScope(
-        theme: CoreflowTheme.light,
+        theme: ContaBold.temaClaro,
         child: RepaintBoundary(
           key: chave,
           child: ColoredBox(
@@ -119,7 +119,7 @@ void main() {
     // eu concluiria que o brilho pinta quando ele não pinta nada.
     await t.pumpWidget(MaterialApp(
       home: DilettaThemeScope(
-        theme: CoreflowTheme.light,
+        theme: ContaBold.temaClaro,
         child: RepaintBoundary(
           key: const Key('semBrilho'),
           child: ColoredBox(

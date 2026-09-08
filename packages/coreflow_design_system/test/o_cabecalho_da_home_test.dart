@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   Widget naBarra(CoreflowCabecalhoDaHome cabecalho, {bool escuro = true}) => MaterialApp(
         home: DilettaThemeScope(
-          theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+          theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
           child: Scaffold(
             body: Column(children: [cabecalho]),
           ),

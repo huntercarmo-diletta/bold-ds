@@ -17,9 +17,9 @@ final _foto = MemoryImage(Uint8List.fromList(base64Decode(
 /// identidade — não animar nada.
 void main() {
   Widget montar({Object? tag, ImageProvider? foto}) => MaterialApp(
-        theme: CoreflowTemaMaterial.claro,
+        theme: ContaBold.materialClaro,
         home: DilettaThemeScope(
-          theme: CoreflowTheme.light,
+          theme: ContaBold.temaClaro,
           child: Scaffold(
             body: CoreflowCabecalhoDaHome(nome: 'Ranter', conta: 'Minha conta', foto: foto, heroTag: tag),
           ),

@@ -24,7 +24,7 @@ void main() {
       home: DilettaThemeScope(
         theme: DilettaTheme.resolve(
           palette: paleta,
-          brand: CoreflowTheme.marca,
+          brand: ContaBold.marca,
           brightness: escuro ? Brightness.dark : Brightness.light,
         ),
         child: Center(
@@ -94,7 +94,7 @@ void main() {
       for (final escuro in [false, true]) {
         await t.pumpWidget(MaterialApp(
           home: DilettaThemeScope(
-            theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+            theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
             child: Center(child: CoreflowIlustracao(arte, tamanho: 100)),
           ),
         ));

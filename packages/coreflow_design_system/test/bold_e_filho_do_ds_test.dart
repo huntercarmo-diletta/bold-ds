@@ -163,7 +163,7 @@ void main() {
     expect(DilettaAssets.package, 'diletta_design_system');
     await t.pumpWidget(MaterialApp(
       home: DilettaThemeScope(
-        theme: CoreflowTheme.light,
+        theme: ContaBold.temaClaro,
         child: const Scaffold(body: DilettaIcon(name: 'bell-light', size: 24)),
       ),
     ));
@@ -185,7 +185,7 @@ void main() {
 
     await t.pumpWidget(MaterialApp(
       home: DilettaThemeScope(
-        theme: CoreflowTheme.light,
+        theme: ContaBold.temaClaro,
         child: Scaffold(
           body: DilettaFrame.row(
             gap: DilettaSpacing.s2,

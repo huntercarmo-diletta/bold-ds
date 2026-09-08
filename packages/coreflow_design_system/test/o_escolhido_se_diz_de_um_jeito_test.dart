@@ -99,7 +99,7 @@ void main() {
     Future<ui.Image> tira(bool escolhido) async {
       final chave = Key('$escolhido');
       await t.pumpWidget(MaterialApp(
-        theme: CoreflowTemaMaterial.escuro,
+        theme: ContaBold.materialEscuro,
         home: RepaintBoundary(
           key: chave,
           child: Center(

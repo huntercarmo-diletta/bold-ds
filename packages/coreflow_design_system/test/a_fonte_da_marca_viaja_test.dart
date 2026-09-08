@@ -71,7 +71,7 @@ void main() {
     await t.pumpWidget(MaterialApp(
       theme: ThemeData(fontFamily: BoldFonts.familyRaw),
       home: DilettaThemeScope(
-        theme: CoreflowTheme.light,
+        theme: ContaBold.temaClaro,
         child: const Scaffold(
           body: DilettaText('Conta BOLD', style: DilettaType.headlineMd),
         ),

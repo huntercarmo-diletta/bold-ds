@@ -10,7 +10,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   Widget montar(Widget filho, {bool escuro = true}) => MaterialApp(
         home: DilettaThemeScope(
-          theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+          theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
           child: Scaffold(body: SizedBox(width: 300, height: 500, child: filho)),
         ),
       );
