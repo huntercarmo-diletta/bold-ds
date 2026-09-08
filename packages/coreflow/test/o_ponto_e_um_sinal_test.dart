@@ -1,4 +1,4 @@
-import 'package:coreflow_design_system/coreflow_design_system.dart';
+import 'package:coreflow/coreflow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

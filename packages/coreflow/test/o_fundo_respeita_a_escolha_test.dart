@@ -1,4 +1,5 @@
-import 'package:coreflow_design_system/coreflow_design_system.dart';
+import 'package:coreflow/coreflow.dart';
+import 'o_neto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -19,7 +20,7 @@ void main() {
   }) async {
     await tester.pumpWidget(
       DilettaThemeScope(
-        theme: CoreflowTheme.dark,
+        theme: Neto.escuro,
         child: Directionality(
           textDirection: TextDirection.ltr,
           child: CoreflowBackdropScope(
@@ -64,7 +65,7 @@ void main() {
     // retrato de um mood. Nenhum teste falhava: cinco amostras concordando é estado consistente.
     await t.pumpWidget(
       DilettaThemeScope(
-        theme: CoreflowTheme.dark,
+        theme: Neto.escuro,
         child: const Directionality(
           textDirection: TextDirection.ltr,
           child: CoreflowBackdropScope(

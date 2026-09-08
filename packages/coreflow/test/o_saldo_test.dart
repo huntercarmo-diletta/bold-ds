@@ -1,4 +1,5 @@
-import 'package:coreflow_design_system/coreflow_design_system.dart';
+import 'package:coreflow/coreflow.dart';
+import 'o_neto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -7,7 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   Widget montar(Widget filho, {bool escuro = false}) => MaterialApp(
         home: DilettaThemeScope(
-          theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+          theme: escuro ? Neto.escuro : Neto.claro,
           child: Scaffold(body: filho),
         ),
       );

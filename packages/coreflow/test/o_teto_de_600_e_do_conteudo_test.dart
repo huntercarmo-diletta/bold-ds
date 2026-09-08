@@ -1,4 +1,5 @@
-import 'package:coreflow_design_system/coreflow_design_system.dart';
+import 'package:coreflow/coreflow.dart';
+import 'o_neto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -25,7 +26,7 @@ void main() {
 
   Widget naTela(Widget filho) => MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: DilettaThemeScope(theme: CoreflowTheme.dark, child: filho),
+        home: DilettaThemeScope(theme: Neto.escuro, child: filho),
       );
 
   testWidgets('numa tela larga o conteúdo para em 600', (t) async {

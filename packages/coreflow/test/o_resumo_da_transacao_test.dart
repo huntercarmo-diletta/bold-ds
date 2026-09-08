@@ -1,4 +1,5 @@
-import 'package:coreflow_design_system/coreflow_design_system.dart';
+import 'package:coreflow/coreflow.dart';
+import 'o_neto.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -8,7 +9,7 @@ void main() {
   Widget naTela(Widget filho, {bool escuro = false, double largura = 360}) => Directionality(
         textDirection: TextDirection.ltr,
         child: DilettaThemeScope(
-          theme: escuro ? CoreflowTheme.dark : CoreflowTheme.light,
+          theme: escuro ? Neto.escuro : Neto.claro,
           child: Align(
             alignment: Alignment.topLeft,
             child: SizedBox(width: largura, child: filho),

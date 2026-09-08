@@ -13,8 +13,8 @@ de bloco é aqui.
 ## O gate
 
 ```bash
-(cd packages/coreflow && flutter analyze && flutter test)                   # 10
-(cd packages/coreflow_design_system && flutter analyze && flutter test)     # 273
+(cd packages/coreflow && flutter analyze && flutter test)                   # 69
+(cd packages/coreflow_design_system && flutter analyze && flutter test)     # 214
 (cd packages/catalog && flutter analyze && flutter test)                    # 94
 ```
 

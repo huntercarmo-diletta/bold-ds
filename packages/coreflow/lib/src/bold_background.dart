@@ -197,7 +197,10 @@ class CoreflowBackground extends StatelessWidget {
     // seis vezes, e aí o risco passa a ser esquecer de mudar uma delas.
     final base = switch (fundo) {
       CoreflowBackdrop.solido =>
-        s.isDark ? s.palette.bgEscuro! : s.palette.primary08,
+        // `bgEscuro` é campo OPCIONAL da paleta — o primeiro produto declara, a paleta de referência
+        // do avô não. Sem o `??` a peça estourava em qualquer produto que não declarasse (achado em
+        // 08/09 pelo neto nos testes do pai); o `bg` do esquema é a mesma conta com a reserva certa.
+        s.isDark ? (s.palette.bgEscuro ?? s.bg) : s.palette.primary08,
       _ => !s.isDark && ehMood ? s.palette.primary08 : s.bg,
     };
 

@@ -17,6 +17,13 @@ chamando `bold_*.dart`: dívida de NOME, medida e fora do escopo do ADR.
 
 O filho (`packages/coreflow_design_system`) depende daqui por `path:` e re-exporta este barrel.
 
+## Os testes
+
+Teste de componente mora com o componente: os 12 arquivos que exercitam peças daqui vieram do filho
+com a peça, e trocaram o tema do Bold pelo **neto** (`test/o_neto.dart`: a paleta de referência do
+avô, marca `nenhuma`). O neto já pagou: `CoreflowBackground` estourava em qualquer produto que não
+declarasse `bgEscuro`, porque o primeiro produto declara.
+
 ## O gate
 
 ```bash
