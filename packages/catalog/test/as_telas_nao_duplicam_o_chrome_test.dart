@@ -211,7 +211,10 @@ void main() {
     final volta = t.getRect(find.bySemanticsLabel('Voltar'));
     expect(volta.center.dx - barra.left, 44,
         reason: 'com flush o glifo ia pra 24 e o alvo saía da margem — o alvo encosta, o glifo centra');
-    expect(volta.width, 40, reason: 'a caixa de toque do acessório é 40, e o desenho declara 40');
+    // 44 desde a `v0.172.0` do avô: o acessório de navegação passou a ancorar o GLIFO na margem do
+    // conteúdo (`glifoNoInicio`) e o alvo de toque ficou no piso, 44, crescendo pra dentro da tela —
+    // a caixa de 40 do desenho mora dentro dos 44. Era 40 até a v0.163.0, e o centro continua em 44.
+    expect(volta.width, 44, reason: 'o alvo de toque do acessório é o piso do avô (44), com o desenho de 40 dentro');
   });
 
   testWidgets('o bloco do esqueleto desenha o PAR — forma e brilho', (t) async {
