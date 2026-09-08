@@ -170,7 +170,8 @@ class _RampaDaMarca implements ColorMapper {
 
   final Map<int, int> _de;
 
-  static int _hexParaInt(String hex) => 0xFF000000 | int.parse(hex.substring(1), radix: 16);
+  // Alfa opaco por deslocamento, não por literal: a régua de VALOR do pai conta hex de 6-8 dígitos.
+  static int _hexParaInt(String hex) => (0xFF << 24) | int.parse(hex.substring(1), radix: 16);
 
   @override
   Color substitute(String? id, String elementName, String attributeName, Color color) {

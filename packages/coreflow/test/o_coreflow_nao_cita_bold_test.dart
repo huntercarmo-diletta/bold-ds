@@ -47,6 +47,32 @@ void main() {
     expect(achados, isEmpty, reason: 'símbolo Bold* em lib/ do pai:\n${achados.join("\n")}');
   });
 
+  test('e nenhum VALOR de produto subiu — hex cru, TextStyle cru, caminho de asset', () {
+    // Achado 3 do veredito de 08/09: a régua de NOME fecha em zero com identidade que subiu como
+    // VALOR. Segunda coluna (`--valor` no script): fora de comentário, hex de 6-8 dígitos, `TextStyle(`
+    // cru e `assets/`. Uma exceção, declarada: a CONVENÇÃO do kit de arte
+    // (`assets/illustrations/<base>_<modo>.svg`) — o caminho é da linguagem, o PACOTE é da marca em
+    // contexto. O que faria dela um valor de produto é o pacote cravado, e esse saiu.
+    final valor = RegExp(r'0x[0-9A-Fa-f]{6,8}|TextStyle\(|assets/');
+    const convencao = "'assets/illustrations/\${arte.base}_\${escuro ? 'dark' : 'light'}.svg',";
+    final achados = <String>[];
+    for (final f in Directory('lib').listSync(recursive: true).whereType<File>()) {
+      final linhas = f.readAsLinesSync();
+      for (var i = 0; i < linhas.length; i++) {
+        final l = linhas[i];
+        if (l.trimLeft().startsWith('//')) continue;
+        if (l.trim() == convencao) continue;
+        for (final m in valor.allMatches(l)) {
+          achados.add('${f.path}:${i + 1}  ${m.group(0)}  ${l.trim()}');
+        }
+      }
+    }
+    expect(achados, isEmpty, reason: 'valor de produto em lib/ do pai:\n${achados.join("\n")}');
+    // Controle da convenção: ela existe onde diz que existe.
+    expect(File('lib/src/bold_ilustracao.dart').readAsLinesSync().map((l) => l.trim()),
+        contains(convencao));
+  });
+
   test('e a régua SABE ver o que procura', () {
     // Controle: asserção de ausência passa sozinha quando a busca está errada.
     for (final l in const [
