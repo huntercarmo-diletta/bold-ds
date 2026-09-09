@@ -20,6 +20,93 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.100.0] — 2026-09-XX
+
+### O Coreflow é o pai, e o Bold é o primeiro filho — a tag em que `packages/coreflow` nasce
+
+**Major pela régua deste arquivo** — símbolo removido — ainda que o número seja 0.99.0: em SemVer 0.x a
+quebra sobe o minor, e é a convenção que o avô usa (v0.180.0 com vinte quebras declaradas). Leia a nota de
+migração antes de subir; são **17 linhas de código, 48 de teste e 2 listas `show`**, e um patch pronto as
+aplica. Decisão: `docs/2026-09-04-adr-o-coreflow-e-o-pai.md`. Veredito do pai (ENTRA, 08/09) e resposta:
+`docs/pedidos/2026-09-04-o-coreflow-e-o-pai-e-o-bold-e-o-primeiro-filho.md`.
+
+O pacote que o app importa **continua o mesmo**: `coreflow_design_system`, mesmo `path:`, mesmo barrel.
+O que mudou é o que está atrás dele. Nasce `packages/coreflow`, a base da linguagem: os 61 arquivos
+`Coreflow*`, `CoreflowProduto`, `CoreflowScheme`, `CoreflowTemaMaterial`, `CoreflowGradients`, o gerador de
+filho — e **nenhum valor de produto**: nem cor, nem degrau de escala, nem asset, nem família tipográfica.
+`coreflow_design_system` depende dele por `path:` e o re-exporta; fica com a identidade do Conta BOLD.
+
+### Removido — os quatro atalhos do Bold com nome de linguagem, e a classe `CoreflowTheme`
+
+*"Valor de marca com nome de linguagem"* é a forma que o pai não aceita, e a sombra homônima que o ADR
+oferecia era essa forma um degrau abaixo. Saíram: `CoreflowProduto.bold` e `.marcaDoBold`,
+`CoreflowTemaMaterial.claro`/`.escuro`, `CoreflowScheme.dark()`/`.light()`, `CoreflowGradients.bold`,
+`.primaryDoBold`, `.accentDoBold`, `.onGradientDoBold`, e a classe `CoreflowTheme` inteira.
+
+**Migração** — o produto ganhou o nome dele, `ContaBold`, e tudo nele é atalho da mesma instância:
+
+| era | vira |
+|---|---|
+| `CoreflowProduto.bold` | `ContaBold.produto` |
+| `CoreflowProduto.marcaDoBold` · `CoreflowTheme.marca` | `ContaBold.marca` |
+| `CoreflowTheme.light` / `.dark` | `ContaBold.temaClaro` / `.temaEscuro` |
+| `CoreflowTemaMaterial.claro` / `.escuro` | `ContaBold.materialClaro` / `.materialEscuro` |
+| `CoreflowScheme.light()` / `.dark()` | `ContaBold.esquemaClaro` / `.esquemaEscuro` |
+| `CoreflowGradients.primaryDoBold` · `.accentDoBold` · `.onGradientDoBold` | `ContaBold.gradientes.primary` · `.accent` · `.onGradient` |
+
+E **cinco sítios não são renome, são conserto**: `CoreflowVidro.filtro(CoreflowProduto.bold.paleta)` dentro
+de um `build` lê a paleta do produto onde o esquema já está no contexto — `CoreflowScheme.of(context).paleta`.
+
+### Alterado — a família tipográfica viaja uma vez, no `ThemeData`
+
+Os degraus de `CoreflowType` **não carregam mais `fontFamily`** (só os dois `mono`, que são outra família em
+potencial). Ela entra em `CoreflowType.tipografia.familia`, o `CoreflowProduto` a carrega, e
+`ThemeData(fontFamily:)` a aplica ao `textTheme` inteiro. Dentro da árvore do `MaterialApp` nada muda de
+pixel. Fora dela muda: teste que pumpa sem `theme:` passa a medir na fonte quadrada do `flutter_test`, e
+teste que afirma `CoreflowType.body.fontFamily` passa a ver `null` — a afirmação certa é sobre
+`ContaBold.materialClaro.textTheme`. Painter que desenha texto declara a família na mão, como já fazia.
+
+### Alterado — quem não declara recebe a REGRA, não o valor do Bold
+
+Um produto que não declara `papeisExtras`, vinho, gradiente ou marca recebia os do Bold: navy na superfície
+elevada, vinho no vidro escuro, rosa→amarelo no card de destaque, lockup do Bold no logo. Agora recebe uma
+regra sobre a paleta dele (`CoreflowVocabulario`, `CoreflowVinho.derivadosDe`, `CoreflowGradients.daPaleta`)
+e `DilettaBrand.nenhuma`. **O Bold não muda um pixel**: declara os sete e o declarado ganha — o gate
+`o_esquema_do_bold_nao_mudou` fotografou 210 valores antes do primeiro corte e segue verde. E
+`CoreflowScheme.of` sem tema registrado deriva do tema do avô em contexto, não do escuro do Bold.
+
+### Adicionado
+
+- `ContaBold` — o produto, a marca, os gradientes e os seis atalhos de tema.
+- `CoreflowTipografia` — a família e os onze degraus que o `ThemeData` recebe; `doAvo` para quem não declara.
+- `CoreflowScheme.gradientes` — o gradiente do produto chega em contexto; era const do Bold no avatar.
+- `CoreflowVinho`, `CoreflowVocabulario`, `CoreflowGramatica` — as regras do que antes era reserva do Bold.
+- `dart run coreflow:novo_filho` — o gerador mora no pai; o filho gerado depende só de `coreflow`.
+- A régua da separação em duas colunas (`tool/levanta_a_separacao.sh --total` / `--valor`), e o gate do pai
+  cobrando zero nas duas, comentário incluído.
+
+### Corrigido
+
+- `CoreflowVidro.blur/tinte/traco` faziam `!` em campos opcionais da paleta; a reserva é a receita de vidro do avô.
+- `CoreflowIlustracao` cravava `package: 'coreflow_design_system'`; lê `DilettaBrand.pacote` da marca em contexto.
+- O avatar de convite lia o gradiente do Bold por const; lê `CoreflowScheme.of(context).gradientes`.
+
+### Dependências
+
+`ds-diletta` **v0.163.0 → v0.180.0** nos dois pacotes (itens 5 do veredito e o aviso de 08/09). Nada removido
+lá; a v0.172.0 pôs o alvo de toque do acessório de voltar em 44, e a v0.179.0 passou a resolver `primary`
+pela régua `marcaHonrada` — só paleta derivada de uma cor se move.
+
+### O que o app faz pra subir
+
+1. aplica o patch da opção B (39 arquivos: 8 de lib, 30 de teste, `tool/ds_vendor.sh`);
+2. `tool/ds_vendor.sh v0.99.0` — o script passa a vendorizar `packages/coreflow` como terceira irmã e a
+   reescrever a dependência do avô nos dois pubspecs;
+3. `flutter pub get && flutter test`. Medido numa cópia: analyze zero erros, **3.131 verdes, 0 falhas**.
+
+Fora do escopo desta tag, e escrito no ADR: renomear os `bold_*.dart` (dívida de nome), a marca Diletta
+(`diletta_coreflow`, quando houver cor e SVGs), e o `ds_compat` do app em Nunito.
+
 ## [0.99.0] — 2026-09-09
 
 ### Alterado — as letras do lockup seguem o tema: preto no claro, branco no escuro
