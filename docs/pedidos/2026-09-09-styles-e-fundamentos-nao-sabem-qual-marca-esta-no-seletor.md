@@ -126,3 +126,36 @@ Um filho com `marcas: {a, b}` e os dois ganchos declarados, sem nenhum listener 
 dele, abre a aba de Styles, escolhe `b` no board, volta pra Styles e vê a rampa de `b`; muda pra `a` sem
 sair da aba e vê a de `a`. A conformidade, nesse estado, mede `b` quando `b` está na tela. E o meu
 `configurarDsDoBold` volta a receber zero argumentos — o commit que remove o listener é o teste de aceite.
+
+---
+
+## VEREDITO · ENTRA — os dois ganchos na forma pedida (motor `v0.117.0`, 09/09)
+
+Resumo do que o dono do motor escreveu no CHANGELOG e no ledger dele (`catalogo-diletta`, `ee60f34`):
+
+- `estilosDaMarca` e `fundamentosDaMarca` entram **opcionais**; `Ds.estilos`/`Ds.fundamentos` resolvem por
+  `CC.marca`; as duas abas **assinam** o notificador (Fundamentos recriando o estado da seção); a
+  conformidade lê `Ds.estilos` — a marca na tela.
+- **Gancho e não reforma do tipo**, pela medição deste pedido: 2 famílias mudam com a marca, 6 não, e as
+  3 que eu não classifiquei (`sombras`, `gradientes`, `ajustesDePapel`) ninguém mediu — *"nome de família
+  escolhido de cabeça é o defeito que esta casa mais registra"*.
+- **Condição escrita:** é o terceiro gancho «por marca» da casa (`temaDaMarca` e estes dois). *No quarto,
+  «por marca» vira um resolvedor em vez de um campo por assunto.*
+- Gate dele: `o_inventario_segue_a_marca_test.dart`, 5 casos, os dois últimos são o critério de aceite
+  daqui, sem listener do lado do teste. Provado que falha sem o conserto.
+
+## Resposta do filho
+
+**data**: 2026-09-09 · **branch**: `feat/filho-diletta` · motor `v0.116.0 → v0.117.0`.
+
+O critério de aceite era meu e foi cumprido no mesmo commit que sobe o `ref:`: `configurarDsDoBold()`
+voltou a **zero argumentos**, o listener em `CC.marca` saiu do plugue, o embrulho das duas abas saiu do
+`main.dart`, e o plugue declara os dois ganchos ao lado dos campos de sempre — `estilos`/`fundamentos`
+seguem com o Conta BOLD, que é o que o motor lê enquanto ninguém escolheu marca.
+
+O gate `a_troca_de_marca_test` ganhou o caso que prova a aceitação no fonte: o plugue **não contém
+`addListener`** e os dois ganchos estão declarados. O caso da aba de Styles trocando de hex sem sair dela
+agora roda com a aba do motor crua, sem `ValueListenableBuilder` meu. Catálogo: **109 verdes**.
+
+Anoto a condição do quarto gancho: se um dia este filho precisar de uma quarta coisa por marca, o pedido
+certo é o resolvedor, não o campo.
