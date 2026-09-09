@@ -155,9 +155,9 @@ paleta) vai pro filho. Nenhum teste é apagado.
 Cada fase é uma PR pequena pra `main`. O Hunter trabalha na `main` em paralelo: `git fetch` antes de todo
 commit, e commits pequenos.
 
-**Estado em 08/09:** fases 0, 1, 2 e 3 feitas na branch (veredito ENTRA em `bd1730a` na main; resposta do
+**Estado em 09/09:** fases 0 a 4 feitas — na `main` por fast-forward em 09/09 (a dona do produto tem escrita direta no repo; PR só pro ds-diletta), tag `v0.100.0`. O segundo filho (`packages/diletta_coreflow`) e o seletor de marca do catálogo entraram no mesmo dia. Estado anterior, em 08/09: fases 0, 1, 2 e 3 feitas na branch (veredito ENTRA em `bd1730a` na main; resposta do
 filho no arquivo do pedido). Régua de nome em 147 (era 148: `hexesDaArte` saiu da régua em 09/09 — é campo do avô que o `marcaNo` do pai copia) e de valor em 98, todos no filho; pai em zero nas duas.
-Falta a fase 4 (tag, do dono do DS) e, do lado do app, os renomes da opção B e o `ds_vendor.sh`.
+Falta, do lado do app, os renomes da opção B, o `ds_vendor.sh` vendorizando `packages/coreflow` e o `ref:` em `v0.100.0`.
 
 ## Riscos, ditos
 
