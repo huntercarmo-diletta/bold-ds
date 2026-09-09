@@ -93,6 +93,23 @@ class CoreflowTipografia {
   /// Os três estilos fora do `textTheme`: o rótulo do `TextButton`, a dica e o rótulo do campo.
   final TextStyle botaoDeTexto, dica, rotuloDeCampo;
 
+  /// A mesma escala com outra família — o caso do filho que herda os degraus do avô e declara só a
+  /// fonte: `CoreflowTipografia.doAvo.copyWith(familia: 'packages/meu_produto/MinhaFonte')`.
+  CoreflowTipografia copyWith({String? familia}) => CoreflowTipografia(
+        familia: familia ?? this.familia,
+        displayLarge: displayLarge,
+        headlineLarge: headlineLarge,
+        headlineMedium: headlineMedium,
+        titleLarge: titleLarge,
+        bodyLarge: bodyLarge,
+        bodyMedium: bodyMedium,
+        labelLarge: labelLarge,
+        labelSmall: labelSmall,
+        botaoDeTexto: botaoDeTexto,
+        dica: dica,
+        rotuloDeCampo: rotuloDeCampo,
+      );
+
   /// Um estilo com a família do produto aplicada — pros três sítios que o `ThemeData` não alcança
   /// sozinho (o `apply(fontFamily:)` do Material só cobre o `textTheme`).
   TextStyle comFamilia(TextStyle s) => familia == null ? s : s.copyWith(fontFamily: familia);
