@@ -39,7 +39,17 @@ void main() {
 
   test('a marca está declarada, e os dois arquivos existem e viram com o tema', () {
     expect(Diletta.marca.pacote, 'diletta_coreflow');
-    expect(Diletta.temaClaro.brand, Diletta.marca);
+    // Desde a 0.99.0 do repo o tema carrega a marca declarada MAIS a cor das letras decidida por modo
+    // (`CoreflowProduto.marcaNo`): esta marca não declara `corDoLogo`, então recebe preto no claro e
+    // branco no escuro — é exatamente o "as letras seguem o tema" que o lockup pede.
+    for (final (tema, cor) in [
+      (Diletta.temaClaro, DilettaAbsoluteColors.black),
+      (Diletta.temaEscuro, DilettaAbsoluteColors.white),
+    ]) {
+      expect(tema.brand.logoFull, Diletta.marca.logoFull);
+      expect(tema.brand.pacote, Diletta.marca.pacote);
+      expect(tema.brand.corDoLogo, cor, reason: 'as letras do lockup seguem o tema, não o vermelho');
+    }
     expect(Diletta.marca.logoTingePorCurrentColor, isTrue);
     for (final caminho in [Diletta.marca.logo, Diletta.marca.logoFull]) {
       expect(File(caminho).existsSync(), isTrue, reason: '$caminho não está no pacote');

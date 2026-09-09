@@ -33,7 +33,11 @@ void main() {
           escuro: escuro,
           marca: id,
         ));
-        expect(tema.brand, marca);
+        // A marca chega com as letras do lockup decididas por modo (`marcaNo`, 0.99.0): compara o que
+        // identifica a marca, e cobra a tinta certa em vez da identidade do objeto.
+        expect(tema.brand.logoFull, marca.logoFull);
+        expect(tema.brand.pacote, marca.pacote);
+        expect(tema.brand.corDoLogo, escuro ? DilettaAbsoluteColors.white : DilettaAbsoluteColors.black);
         expect(tema.scheme.palette.primary04, primario);
         expect(tema.scheme.isDark, escuro);
       });
@@ -127,7 +131,7 @@ void main() {
         ),
       ))));
       await t.pumpAndSettle();
-      final hexDaDiletta = '#E60000';
+      const hexDaDiletta = '#E60000';
       final hexDoBold = '#${(BoldPalette.bold.primary04.toARGB32() & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}';
       expect(find.textContaining(hexDoBold, findRichText: true), findsWidgets);
       expect(find.textContaining(hexDaDiletta, findRichText: true), findsNothing);
@@ -145,7 +149,8 @@ void main() {
       tema = DilettaTheme.of(ctx);
       return const SizedBox();
     })));
-    expect(tema.brand, ContaBold.marca);
+    expect(tema.brand.logoFull, ContaBold.marca.logoFull);
+    expect(tema.brand.pacote, ContaBold.marca.pacote);
   });
 }
 

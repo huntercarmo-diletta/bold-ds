@@ -33,7 +33,8 @@ class TelaDeExemploDiletta extends StatelessWidget {
                 gap: DilettaSpacing.s4,
                 padding: EdgeInsets.all(DilettaSpacing.s5),
                 children: [
-                  DilettaLogo(variant: DilettaLogoVariant.full, size: 56, color: s.fg),
+                  // Sem `color:` — a tinta das letras vem do tema (`marcaNo`): preto no claro, branco no escuro.
+                  const DilettaLogo(variant: DilettaLogoVariant.full, size: 56),
                   DilettaText(produto.paleta.nome, style: DilettaType.displaySm),
                   DilettaText(
                     'Nenhuma linha desta tela é da marca: os componentes são do pai, e a cor '
