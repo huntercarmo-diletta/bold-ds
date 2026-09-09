@@ -34,7 +34,7 @@ void main() {
             'um lado só');
   });
 
-  test('a proporção é 10 alias para 11 derivados, e o número é a informação', () {
+  test('a proporção é 9 alias para 12 derivados, e o número é a informação', () {
     // A lista não é a informação — a PROPORÇÃO é. Um vocabulário em que quase tudo é derivado é um
     // que eu não consigo mover; um em que quase nada é derivado é um em que o pai não está
     // garantindo contraste nenhum.
@@ -66,8 +66,14 @@ void main() {
     // Ou seja: eu movo MENOS papel trocando a paleta, e é isso que eu queria — o que saiu do alias
     // não foi pra rampa, foi pra uma porta que eu declaro. **O número que encolhe aqui é o número de
     // coisas que dependiam de qual degrau eu apontava**, e ele encolheu até o fim.
-    expect(alias, 10, reason: 'quantos papéis eu posso mover trocando a paleta');
-    expect(derivado, 11, reason: 'quantos são conta do pai — os que eu NÃO movo');
+    //
+    // **09/09: 10/11 → 9/12.** `primary` do claro deixou de ser alias do `primary04`: a `ds v0.179.0`
+    // passa a resolvê-lo pela régua pública `marcaHonrada` (a marca DECLARADA, quando ela cabe nos
+    // dois pisos). Pra paleta escrita à mão, como a do Bold, o VALOR é o mesmo — a foto do esquema
+    // (`o_esquema_do_bold_nao_mudou`, no DS) segue verde —, mas a ORIGEM virou conta do pai. É o
+    // mesmo movimento das duas vezes anteriores: menos um papel que dependia de qual degrau eu apontava.
+    expect(alias, 9, reason: 'quantos papéis eu posso mover trocando a paleta');
+    expect(derivado, 12, reason: 'quantos são conta do pai — os que eu NÃO movo');
     expect(alias + derivado, papeisDoBoldParaMedir().length);
   });
 }
