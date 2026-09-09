@@ -14,7 +14,7 @@ de bloco é aqui.
 
 ```bash
 (cd packages/coreflow && flutter analyze && flutter test)                   # 86
-(cd packages/coreflow_design_system && flutter analyze && flutter test)     # 201
+(cd packages/coreflow_design_system && flutter analyze && flutter test)     # 202
 (cd packages/catalog && flutter analyze && flutter test)                    # 94
 ```
 

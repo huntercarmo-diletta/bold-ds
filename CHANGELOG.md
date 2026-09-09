@@ -24,7 +24,7 @@ O que cada degrau significa **pro app que adota**:
 
 ### O Coreflow é o pai, e o Bold é o primeiro filho — a tag em que `packages/coreflow` nasce
 
-**Major pela régua deste arquivo** — símbolo removido — ainda que o número seja 0.99.0: em SemVer 0.x a
+**Major pela régua deste arquivo** — símbolo removido — ainda que o número seja 0.100.0: em SemVer 0.x a
 quebra sobe o minor, e é a convenção que o avô usa (v0.180.0 com vinte quebras declaradas). Leia a nota de
 migração antes de subir; são **17 linhas de código, 48 de teste e 2 listas `show`**, e um patch pronto as
 aplica. Decisão: `docs/2026-09-04-adr-o-coreflow-e-o-pai.md`. Veredito do pai (ENTRA, 08/09) e resposta:
@@ -100,7 +100,7 @@ pela régua `marcaHonrada` — só paleta derivada de uma cor se move.
 ### O que o app faz pra subir
 
 1. aplica o patch da opção B (39 arquivos: 8 de lib, 30 de teste, `tool/ds_vendor.sh`);
-2. `tool/ds_vendor.sh v0.99.0` — o script passa a vendorizar `packages/coreflow` como terceira irmã e a
+2. `tool/ds_vendor.sh v0.100.0` — o script passa a vendorizar `packages/coreflow` como terceira irmã e a
    reescrever a dependência do avô nos dois pubspecs;
 3. `flutter pub get && flutter test`. Medido numa cópia: analyze zero erros, **3.131 verdes, 0 falhas**.
 
