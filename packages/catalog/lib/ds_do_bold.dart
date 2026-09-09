@@ -19,6 +19,7 @@
 library;
 
 import 'package:coreflow_design_system/coreflow_design_system.dart';
+import 'package:diletta_coreflow/diletta_coreflow.dart' show Diletta;
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/widgets.dart';
 
@@ -3656,6 +3657,14 @@ void configurarDsDoBold() {
       theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
       child: filho,
     ),
+    // AS DUAS MARCAS da casa, e o seletor do motor as troca na mesma peça. É o white label provado onde
+    // ele é visto: o componente que o Bold usa, na marca da Diletta, sem uma linha de código a mais no
+    // componente. O `tema` acima continua sendo o default (Conta BOLD) pra quem não escolhe.
+    marcas: const {'bold': 'Conta BOLD', 'diletta': 'Diletta'},
+    temaDaMarca: (filho, {required escuro, required marca}) {
+      final produto = marca == 'diletta' ? Diletta.produto : ContaBold.produto;
+      return DilettaThemeScope(theme: escuro ? produto.escuro : produto.claro, child: filho);
+    },
     spacingTokens: const {
       's1': DilettaSpacing.s1,
       's2': DilettaSpacing.s2,

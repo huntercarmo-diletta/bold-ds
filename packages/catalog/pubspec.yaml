@@ -17,6 +17,10 @@ dependencies:
   # deste repo — a entrega pro app do cliente é outra coisa (ver tool/sincroniza_pai_ds.py).
   coreflow_design_system:
     path: ../coreflow_design_system
+  # O SEGUNDO filho, pra o seletor de marca do motor: o catálogo mostra o mesmo componente na marca do
+  # Conta BOLD e na da Diletta — é o white label provado na ferramenta, e não só na tela de exemplo.
+  diletta_coreflow:
+    path: ../diletta_coreflow
 
   # O pai FERRAMENTA, por TAG. Subir de versão é trocar o `ref` aqui, de propósito:
   # upgrade é escolha do filho.
