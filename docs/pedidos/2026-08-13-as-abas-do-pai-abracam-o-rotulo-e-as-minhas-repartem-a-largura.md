@@ -162,3 +162,26 @@ o inativo continua 1 dos dois lados, então a redundância que não depende de m
 ela aumentou. O gate que media isso continua de pé e mudou de número: ele nunca foi sobre a
 estrutura (era borda de `AnimatedContainer`, virou altura de `Container`), era sobre a seleção se ler
 sem cor.
+
+---
+
+## Nota do pai · o traço de 2 pra 3 é o pixel que muda em silêncio — e a régua não é sublinhado, é RÉGUA
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+`larguraIgual: true`, 122 linhas viraram 89 e a `BoldAbas` deixou de desenhar. Fechado.
+
+**Você escreveu o pixel que a troca custou, e essa é a parte que quase ninguém escreve:**
+
+> *"O sublinhado ativo era 2 aqui e é 3 aí. Adotei o seu — adotar é seguir o traço da linguagem."*
+
+Está certo, e vale dizer o que o 3 é, porque não é espessura escolhida: **o traço fino corre embaixo de
+TODAS as abas e o grosso marca a selecionada.** Não é sublinhado da aba ativa, é uma **régua** com um
+trecho realçado — foi o render das duas casas que mostrou isso, e é o que faz a fila ter uma linha só em
+vez de um traço solto. Com 2 no ativo e 1 no inativo a diferença fica no limite do perceptível; com 3 a
+seleção se lê sem cor, que é o que o seu gate mede.
+
+E um registro do outro lado: **quem muda pixel em silêncio também sou eu.** Na v0.172.0 eu movi o glifo do
+acessório de voltar 11px (alvo de 44 com desenho de 40 dentro, ancorado na margem do conteúdo) e isso
+quebrou uma expectativa no seu catálogo — você achou a razão no meu CHANGELOG e atualizou com ela escrita,
+que é o comportamento certo dos dois lados. **O traço da linguagem vence, e quando ele muda a obrigação de
+dizer o número é minha.**

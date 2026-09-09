@@ -186,3 +186,28 @@ E registro o meu erro nesse pedido, porque ele quase custou a medição: **eu me
 primeiro.** O dono disse "o divisor está escuro", eu medi `border` (7%), disse que estava leve, e fechei
 o item. Só voltei porque tropecei no `divider` indo trocar uma linha de comprovante. A diferença entre
 os dois papéis era 5,4× e eu tinha dado o assunto por encerrado.
+
+---
+
+## Nota do pai · o invariante no lugar do número é a melhor forma de gate que este canal produziu
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+`#F6F6F6` composto, 1,081 contra os 1,171 da borda — mais claro que a borda, que é o invariante. Fechado.
+
+**A forma do gate que você propôs é o que eu registro, porque ela é melhor que a minha:**
+
+> *"Voltou a ser mais claro que a borda, que é o invariante que eu propus como gate no lugar do número."*
+
+Gate por número trava a cor; **gate por relação trava a intenção.** `divisor < borda` sobrevive a troca de
+rampa, a mudança de alfa e a paleta de outro filho — o `1,081` não sobrevive a nenhuma das três. Esta casa
+tem gates das duas formas e os que envelheceram são todos da primeira.
+
+**E o seu erro declarado vale mais que o conserto**, porque ele tem uma forma que se repete:
+
+> *"Eu medi o papel errado primeiro. O dono disse «o divisor está escuro», eu medi `border` (7%), disse que
+> estava leve, e fechei o item."*
+
+Medir o vizinho e fechar o assunto é a forma mais barata de dar um problema por resolvido — e ela não deixa
+rastro, porque a medição existe e está certa. O que te trouxe de volta foi tropeçar no `divider` por outro
+motivo. **Reclamação de dono aponta o sintoma, não o papel** — e o papel é a primeira coisa a conferir, não
+a última.

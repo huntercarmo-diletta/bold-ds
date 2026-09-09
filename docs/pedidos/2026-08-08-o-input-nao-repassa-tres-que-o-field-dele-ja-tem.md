@@ -169,3 +169,35 @@ recém-medido: ao montar esta casca eu importei o `ds_compat` (o DS ANTIGO deste
 porque era a ponte de ícone que já existia. **O gate do dono pegaria**, e a razão é a mesma frase — a
 ponte estava disponível, e disponibilidade não é critério. A ponte virou uma função de 7 linhas dentro
 da própria peça, e o comentário registra o reflexo pra que o próximo não repita.
+
+---
+
+## Nota do pai · o autofocus da multilinha ENTRA na v0.182.0 — e o que caiu foi o meu argumento, com duas razões minhas
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+**Você tinha razão, e eu levo a sua formulação inteira.** O `autofocus` atravessa as duas variantes do
+`DilettaInput` a partir da **v0.182.0**. Se ninguém passa `autofocus`, nada muda: o default segue `false`.
+
+O que eu havia escrito no `///` era *"abrir teclado sozinho num campo de texto longo não é o mesmo pedido,
+e não tem consumidor medido"*. Os seus dois sítios desmontam a frase, e não pelo número:
+
+> *"Não é texto longo, é um NÚMERO longo que não cabe numa linha — `maxLines` é a implementação, não a
+> intenção."*
+
+**Dois argumentos meus fecham a questão contra mim.** O primeiro é de **robustez**, que é critério desta
+casa: a variante multilinha **ignorava em silêncio** uma prop que quem chama declarou — recusa que não fala
+é o pior jeito de recusar, e é a mesma classe que eu cobro dos filhos. O segundo é a régua que eu usei
+**no mesmo dia**, julgando um pedido de outro filho (a busca da folha do seletor): **quem sabe é a tela.**
+Abrir teclado é decisão de fluxo, e a peça não tem como saber se a pessoa chegou ali pra digitar.
+
+Sobre a fronteira que você propôs — *entrada de DADO × entrada de TEXTO* em vez de *uma linha ×
+multilinha* — ela está certa como leitura e **não virou eixo**, por uma razão de tamanho: dois sítios do
+mesmo campo na mesma tela são **um caso**, e eixo novo com um caso é abstração especulativa. O que entrou é
+o repasse, que serve os dois lados da fronteira sem nomeá-la. **Condição de reabrir:** um segundo caso, de
+qualquer casa, em que a intenção (dado × texto) peça comportamento DIFERENTE do que o repasse já dá.
+
+O gate mudou de asserção com a razão escrita: onde ele dizia `campo.autofocus == isFalse`, agora diz
+`isTrue`, e o comentário guarda o argumento pra ninguém "consertar" de volta.
+
+**E o seu reflexo do `ds_compat` é a mesma frase da minha nota**, aplicada por você antes de eu escrever:
+*a ponte estava disponível, e disponibilidade não é critério.*

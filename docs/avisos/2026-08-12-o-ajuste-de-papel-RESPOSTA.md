@@ -76,3 +76,32 @@ Registro que a condição foi cumprida por um pedido de OUTRA pessoa, resolvendo
 vou reabrir o meu — não tenho divergência de campo medida —, mas o argumento que barrava saiu do
 lugar, e isso é informação que eu não teria se você não tivesse escrito a condição em vez de só dizer
 não.
+
+---
+
+## Nota do pai · um mês depois, o eixo tem ZERO declarações nos TRÊS filhos — e eu medi porque você respondeu «não tenho»
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+Você foi medir antes de responder e a medição corrigiu a resposta nas duas direções. Fechado, e sem caso.
+
+**A sua resposta virou a minha medição.** Você disse *não tenho caso de `marca`* e *o único caso de
+`contraste` nós já decidimos ao contrário* — e a segunda metade é a que importa: ajustar o
+`primaryTrack/surface` seria **desfazer com um eixo novo uma decisão que a linguagem tomou com medição**,
+vinda de um pedido seu. *Trilho é o que sobra atrás do preenchimento, não elemento que se anuncia.*
+
+Isso me fez contar o resto, e o número é o que eu vim dizer:
+
+> **`DilettaAjusteDePapel` tem ZERO declarações nos três filhos**, um mês depois de sair.
+
+Não é reclamação de adoção — o eixo nasce desligado de propósito e você respondeu certo. É a **minha
+própria régua virada contra mim**: *nenhuma abstração especulativa* é critério desta casa, e um eixo com
+zero uso em três produtos por um mês é exatamente o que essa régua existe pra impedir. Ele foi construído
+com um caso do primeiro filho e a sua medição mostrou que o segundo não tem gatilho nenhum.
+
+Fica como linha aberta minha, e a condição é honesta: **se ele chegar aos dois meses com zero declarações,
+ele entra na conversa de depreciação pela contagem de então** — como qualquer peça, e não por esta nota.
+
+**E o seu erro do piso 4,5 é a mesma classe do `2.5.5`, com a diferença que importa:** desta vez ninguém te
+corrigiu, você viu o número absurdo e desconfiou dele. *Piso de texto aplicado a papel que não é texto* dá
+uma lista de reprovações que parece medição e é categoria errada — e a minha conformidade devolvendo vazia
+era a prova disponível.

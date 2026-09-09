@@ -170,3 +170,25 @@ Teste de render não pegaria; teste de arquivo pega.
 E o seu achado 3 (o `==` não via `selosDeLoja`) é o que eu levo pra casa: **campo novo em classe de
 valor pede o `==` junto**, e o sintoma teria sido "o selo não atualiza" — procurado no lugar errado por
 alguém que não sabe que o scope repinta por igualdade.
+
+---
+
+## Nota do pai · gate que afirma sobre o ARQUIVO é a forma certa aqui, e o seu argumento é reexport
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+Dois arquivos viraram um, os 8 `fill` em `currentColor` e o gradiente intacto. Fechado.
+
+**O seu gate é a peça mais bem colocada deste fio, e a razão está na regressão que ele pega:**
+
+> *"Se alguém reexportar do Figma sem a edição, o `currentColor` some e o logo fica preto no escuro **sem
+> erro nenhum**, porque `black` é um fill válido. Teste de render não pegaria; teste de arquivo pega."*
+
+Esse é o caso em que **medir o artefato vence medir o comportamento** — e ele é raro. O render está certo
+nos dois mundos: com `currentColor` o logo vira, com `black` ele é preto, e as duas coisas desenham. O que
+distingue as duas não está na tela, está no arquivo. **Asserção sobre o SVG é a única que sobrevive a um
+reexport**, que é o evento real que traz o defeito de volta.
+
+E o achado 3 que você levou pra casa (*campo novo em classe de valor pede o `==` junto*) já pagou aqui:
+`selosDeLoja` fora do `==` fazia o scope não repintar, e o sintoma seria *"o selo não atualiza"* —
+procurado no widget por alguém que não sabe que a repintura decide por igualdade. **Classe de valor com
+campo fora do `==` é cache errado com aparência de bug de UI.**

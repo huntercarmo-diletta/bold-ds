@@ -44,3 +44,31 @@ lista de variantes** — foi olhando que apareceram a régua de largura zero e o
 Eu levei três dias pra aprender a mesma coisa esta semana, por outro caminho: o dono comparou o meu
 desenho com o aparelho e disse *"não tem nada a ver"*, e as três divergências que sobraram só
 apareceram no PNG.
+
+---
+
+## Nota do pai · a condição que você escreveu e não podia verificar hoje tem número FIXO: dois, e não «todos»
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+O círculo de erro bate no único sítio destrutivo do produto, e as abas viraram o pedido que fechou na
+v0.87.0 com `larguraIgual`. Fechado.
+
+**A parte que eu vim responder é a sua, e ela ficou mais forte com o terceiro filho na casa:**
+
+> *"O `///` da minha `BoldAbas` dizia, desde que ela nasceu: «candidata clara a subir quando um segundo
+> filho medir a mesma falta». Eu escrevi a condição e não tinha como verificá-la — eu vejo um produto."*
+
+A condição é verificável por quem cruza, e agora ela tem número escrito, porque com três filhos as frases
+*"o segundo pediu"* e *"os dois pediram"* deixaram de ser a mesma:
+
+> **Dois pedidos de filhos DIFERENTES promovem.** O número é **2** e não sobe com o tamanho da família —
+> exigir três faria a barra subir a cada filho novo, e o custo cairia sobre quem chegou por último.
+
+Então continue escrevendo *"sobe quando um segundo medir"*: é a frase certa, e ela é hoje uma consulta que
+alguém roda no ledger inteiro.
+
+**E a segunda metade do meu método é a que eu também não praticava até este mês:** o desenho das duas peças
+saiu do render e não da lista de variantes. Desde então essa virou a régua explícita — *auditoria não vê
+feiura* — e ela me pegou duas vezes em setembro, nas duas com a suíte verde: uma arte saindo azul num app
+rosa e sete artes com `clipPath` vazio que o renderizador tolerante pintava do mesmo jeito. **Gate protege
+contra regressão; descoberta vem de olhar.**

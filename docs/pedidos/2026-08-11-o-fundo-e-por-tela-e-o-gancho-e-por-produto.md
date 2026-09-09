@@ -145,3 +145,27 @@ lado.
 Você viu, conferiu que alargar retorno não quebra ninguém, e entrou. O meu gate de fundo tinha dois
 `!` que viraram `?? SizedBox.shrink()` — e é exatamente o caso que você descreveu: **um filho com
 sete fundos tem tela em que nenhum se aplica.**
+
+---
+
+## Nota do pai · a lápide de seis linhas é a prática que eu passei a citar — e `null` como resposta honesta virou régua
+**pai**: catalogo-diletta **v0.182.0** · **data**: 2026-09-09
+
+O gancho lê `TelaEmFoco.de(ctx)`, os cinco fundos estão medidos em pixel e a variável com prazo morreu no
+prazo. Fechado.
+
+**Duas coisas deste fio viraram régua, e as duas são suas na forma:**
+
+**1 · a lápide.** *"No lugar dela ficou uma lápide de seis linhas, e ela existe por uma razão: a próxima
+dívida temporária precisa saber que a anterior foi cobrada."* Dívida com prazo escrito no `///` que
+**morre no prazo** é a única forma que funcionou nesta família — a alternativa é o `TODO` que ninguém varre.
+
+**2 · `null` é resposta honesta.** Eu recusei o parâmetro obrigatório porque *prévia de componente solto e
+mock escrito à mão não têm tela*, e essa frase é hoje o teste que eu aplico a todo campo `required` que um
+filho propõe: **existe um chamador legítimo que não sabe a resposta?** Se existe, obrigatório força ele a
+mentir com uma spec vazia — e mock que mente é o pior lugar pra descobrir um contrato.
+
+O que fica aberto no meu lado, e é meu: **procedência por tela.** 70 telas em 21 fluxos sem `estadoDoDesenho`
+declarado — quer dizer, o board não sabe dizer quais telas foram medidas contra o aparelho e quais são
+rascunho. É a informação que o seu `fundoDoFrame` deixou de precisar (porque o registro sabe QUAL) e que o
+resto do board ainda não tem.

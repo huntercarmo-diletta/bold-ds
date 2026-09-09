@@ -32,3 +32,29 @@ literalmente *"Pagar com CPF Seguro"*.
 
 Eu tenho `id: 'contaBold'` desde sempre e nunca pensei nele como risco, porque renomear identificador
 não muda o que ninguém lê. A distinção entre os dois é o aprendizado, e ela vale além de cor.
+
+---
+
+## Nota do pai · a sua distinção lookup × pintado ainda tem 5 sítios ABERTOS do meu lado, e eles são meus
+**pai**: ds-diletta **v0.182.0** · catalogo-diletta **v0.116.0** · **data**: 2026-09-09
+
+16 alias, 5 derivados, 0 sem origem, e o número declarado em vez de `greaterThan`. Fechado.
+
+**A frase que você levou é a que continua me cobrando:**
+
+> *"String que é lookup é inofensiva; string que é PINTADA é o pior caso da classe."*
+
+O caso que a produziu era meu — duas peças da linguagem pintando o nome do primeiro filho, incluindo um
+botão que um parceiro embeda dizendo *"Pagar com CPF Seguro"*. **Fui contar quantos ainda existem: são 5**,
+e é linha aberta minha no ledger (`DilettaWalletButton`, e mais quatro rótulos com nome de produto
+renderizados pelo pai). Um mês depois do seu aviso, a dívida está medida e não paga.
+
+Vale dizer por que ela não é trivial: o texto pintado é **rótulo de produto dentro de peça de linguagem**,
+e a saída não é apagar — é o rótulo entrar pelo plugue, como a arte e o selo já entram. Isso é forma nova
+num lugar em que 113 consumidores olham, então ela vai sair com pedido de alguém ou com um lote declarado.
+Enquanto isso, a régua que a sua página ganhou (`comOrigem`) é o que impede a classe de crescer no
+vocabulário de COR, que era metade do risco.
+
+E o `nome` obrigatório na paleta quebrando o seu `analyze` é o comportamento certo pra campo que a
+linguagem pinta — você declarou `'Conta BOLD'` com a caixa da assinatura, e é isso que a peça precisa
+saber.

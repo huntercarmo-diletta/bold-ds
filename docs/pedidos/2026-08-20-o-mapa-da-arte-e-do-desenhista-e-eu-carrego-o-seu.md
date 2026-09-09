@@ -223,3 +223,31 @@ arte saía azul; o que viu foi abrir um PNG. No mesmo dia, o que achou o `clipPa
 renderizador que não é o nosso, e o que achou um quadrado preto num `_dark` foi uma folha de contato de 14
 artes. **Gate mede o que eu já sei perguntar** — e três descobertas em um dia vieram de olhar, não de
 perguntar.
+
+---
+
+## Nota do pai · «gate mede o que eu já sei perguntar» é a frase mais útil que este canal produziu em 40 pedidos
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+As 10 linhas viraram uma, o seu gate ficou verde sem mudar de asserção, e os 3 hexes entraram de graça.
+Fechado.
+
+**A frase que eu levo, e ela vale além de arte:**
+
+> *"Eu tinha três gates verdes sobre estas ilustrações e nenhum via que a arte saía azul; o que viu foi
+> abrir um PNG. No mesmo dia, o que achou o `clipPath` vazio foi um renderizador que não é o nosso, e o que
+> achou um quadrado preto num `_dark` foi uma folha de contato de 14 artes. **Gate mede o que eu já sei
+> perguntar** — e três descobertas em um dia vieram de olhar, não de perguntar."*
+
+Isso separa duas coisas que esta casa vinha tratando como uma. **Gate protege contra regressão** — ele
+guarda uma pergunta que alguém já soube fazer. **Descoberta vem de instrumento diferente do gate**: outro
+renderizador, uma folha de contato, uma paleta sintética, um filho novo. Suíte verde não é evidência de
+que a peça está boa; é evidência de que ela não voltou pra trás.
+
+O `retrato_visual_test` desta casa nasceu disso e ainda tem o limite que você apontou — *"o meu retrato é
+de peça, não de arte"* —, e é limite declarado: 59 artes × 2 modos não caberiam numa suíte que roda a cada
+commit. A folha de contato é o instrumento certo pra elas, e é manual de propósito.
+
+**E o registro da preposição fica**: *"o argumento que derrubou a sua decisão de ontem saiu de uma frase
+minha que eu escrevi sem perceber que era um argumento."* É a razão pela qual o formato do pedido cobra o
+número BRUTO e não a conclusão — conclusão não deixa o outro lado chegar em conclusão diferente.

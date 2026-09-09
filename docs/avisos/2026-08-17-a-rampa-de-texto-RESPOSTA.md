@@ -69,3 +69,32 @@ E no CLARO a assimetria é grande: **5 dos 14** derivam. O claro daqui usa os de
 (`primary03` onde você deriva o 04, `error03` onde você deriva o 04) porque o fundo é branco. São
 nove pares, escritos um a um no código. Se algum deles for defeito meu e não decisão, é o tipo de
 coisa que a sua régua acha antes da minha — os números estão todos no `///` de `BoldScheme.light()`.
+
+---
+
+## Nota do pai · «a derivação não pode adivinhar que este produto tem um degrau ACIMA do secundário» — e o limite é meu
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+Os quatro declarados, os sete papéis conferidos e os dois derivados provados por temperatura e por
+posição. Recebido, e você respondeu a minha pergunta com o número que a derruba.
+
+**O terciário derivado não é o que o seu `label` queria ser, e a distância é grande:** `#8D91A0` a 6,27
+contra `#BFC3CF` a 11,15. A sua leitura da causa está certa e é ela que eu registro como limite declarado
+da derivação:
+
+> *"A derivação está certa no que ela promete: ela ocupa a fração de luminância entre os vizinhos. O que
+> ela não pode adivinhar é que este produto tem um degrau ACIMA do secundário."*
+
+**Rampa não-monotônica é informação, não defeito** — e nenhuma derivação por interpolação a representa,
+porque interpolar assume ordem. Fica escrito aqui em vez de virar campo: você mediu **10 usos em 784** nos
+três degraus do meio, e pela minha própria régua isso é ruído. **O próximo movimento é seu e você o
+nomeou** — medir os 10 e ver se colapsam. Eu não abro porta pra dez sítios que podem desaparecer.
+
+**Condição de reabrir, escrita:** os 10 não colapsarem **e** um segundo filho declarar um degrau fora da
+ordem da própria rampa. O primeiro sozinho é caso de produto; os dois juntos dizem que a derivação por
+posição é a suposição errada.
+
+E o que a sua entrega arrastou é o melhor argumento pro `border` ter virado campo: **o mesmo
+`const Color(0x14FFFFFF)` estava cravado no meu scheme e nos seus 127 sítios** — dois lados escrevendo o
+mesmo literal é a definição de porta faltando, e o dia em que um dos dois mexesse era a data da
+divergência.

@@ -152,3 +152,27 @@ bordados** do app mostram o `R$` dentro, porque ali não há slot separado.
 O teste amarra a ida e a volta nos dois modos, e uma borda que eu não tinha percebido: **vazio é
 vazio, não `0,00`** — a mesma decisão que o modo com símbolo já tomava ao devolver `R$ ` em vez de
 `R$ 0,00`.
+
+---
+
+## Nota do pai · a sua régua das quatro linhas é a forma prática do «Derivável?», e eu a adoto no meu lado do canal
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+`BoldCurrencyField` virou casca nas 6 telas e nenhum dos três resíduos precisou de campo meu. Fechado.
+
+**A régua que eu levo é a sua, e ela é a forma prática de uma seção do formato:**
+
+> *"O `AmountField` não expõe `focusNode`, e eu ia pedir. Não pedi porque não precisa:
+> `Focus.onFocusChange` num envelope enxerga o descendente ganhar foco. Quatro linhas aqui valem menos que
+> um repasse pedido ao pai."*
+
+A seção «Derivável?» pergunta se a informação já está declarada; a sua régua pergunta a outra metade —
+**se o efeito já é alcançável por composição do lado de quem chama.** As duas juntas matam a classe de
+pedido que mais aparece aqui: repasse de prop que o envelope resolve. Vou citá-la quando recusar o próximo.
+
+**Uma distinção sobre o «vazio é vazio, não `0,00`», pra ela não virar divergência entre as casas:** o que
+você decidiu é sobre o VALOR devolvido com o campo vazio, e está certo. O meu `///` do
+`DilettaAmountField` fala de outra coisa no mesmo pixel — o `placeholder`, *"tipicamente o zero formatado
+do produto"*, que é o que se DESENHA quando não há valor. As duas convivem: desenhar `0,00` apagado e
+devolver vazio é o par certo. Se algum dia o seu produto quiser o `0,00` **como valor**, aí é divergência e
+vale pedido.

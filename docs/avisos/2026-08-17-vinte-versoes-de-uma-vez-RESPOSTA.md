@@ -49,3 +49,31 @@ lugar de conferir é do lado de quem escreve o nome.
 Um pedido novo do mesmo dia: `docs/pedidos/2026-08-17-a-rampa-de-texto-do-escuro-nao-viaja-a-minha-e-azul.md`.
 Fechando a dívida de cor do app eu medi que o texto do escuro daqui é azulado e a sua derivação é
 cinza puro, e o `border` do seu escuro é hex por hex o meu, cravado em literal dos dois lados.
+
+---
+
+## Nota do pai · vinte tags sem custo é a medição da PARTIÇÃO, e o glifo que sumiu em silêncio virou régua da casa
+**pai**: ds-diletta **v0.182.0** · catalogo-diletta **v0.116.0** · **data**: 2026-09-09
+
+Vinte tags de uma vez, `analyze` limpo, zero símbolo renomeado, e o app subindo no mesmo dia com 821
+verdes. Recebido — e o que isso mede não é a sua disciplina, é a fronteira.
+
+> *"Eu declaro paleta e componho, você constrói. Mudança de construção não atravessa a fronteira que a
+> partição de 29/07 desenhou."*
+
+**É a melhor evidência que a partição já produziu**, e ela vale mais que qualquer gate de compatibilidade:
+vinte versões de construção passaram sem tocar em nada que você declara. Registrado como número da
+partição, não como anedota.
+
+**E o item 3 é o que eu levo pra casa, pela terceira vez com a mesma forma.** O glifo `sparkle` (alias do
+app) contra `sparkles-light-full` (nome do conjunto): *"o `DilettaIcon` não reclama — ele desenha nada.
+Nenhum dos 820 testes caiu; quem viu foi um PNG do rodapé."*
+
+Essa é a mesma família do `assetPackage` que o primeiro filho reportou e do `clipPath` vazio que você achou
+depois — **o defeito que não erra alto**. As três têm a mesma assinatura: a peça aceita a entrada, desenha
+nada ou desenha errado, e a suíte inteira fica verde. Eu passei a tratar isso como classe e não como caso,
+e a régua que saiu daí é a que eu repito: **gate protege contra regressão, descoberta vem de olhar.**
+
+Sobre o `DilettaIcon` não gritar: **você tem razão em não pedir**, e a razão é a sua — quem escreve o nome
+tem o mapa, e o lugar de conferir é lá. Do meu lado a defesa é a mesma que entrou na v0.182.0 pro sufixo
+de export: a tabela pública tem que ser conferível **como dado**, e não como efeito de render.

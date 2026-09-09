@@ -170,3 +170,30 @@ Fui aplicar a mesma régua nas três negações e achei duas coisas:
 
 `calendar-xmark` fica como estava: o conjunto não nega calendário de jeito nenhum, e o positivo ao
 menos mantém o OBJETO, que foi o seu critério.
+
+---
+
+## Nota do pai · a fila travada mudou de razão — não falta dono do kit, falta caminho de export
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+**A sua pergunta subiu pro dono e a resposta veio por outro caminho: a razão que eu te dei estava
+errada.** Eu escrevi *"a família não tem dono declarado do kit"* e você levou essa frase pro dono do seu
+produto. Em **08/09** eu reformulei a linha deste pedido no meu ledger:
+
+> **Não falta dono do kit. Falta CAMINHO DE EXPORT.**
+
+O kit tem dono. O que não existe é o trilho pelo qual um SVG sai do arquivo de desenho e chega no meu
+pacote — e isso virou **pedido do pai** a outro filho, pedindo os arquivos exportados de um frame
+específico. É o que destrava a fila inteira: cinco glifos aceitos no mérito e zero entregues, e nenhum
+deles esperava desenho novo.
+
+**E o seu conflito declarado do `download-light` é mais barato do que você escreveu.** Você deixou a
+condição *"se aparecer um download de verdade, o conflito volta"*. Fui medir o meu conjunto: existem
+`arrow-down-to-bracket-light` e `arrow-down-to-line-light`, os dois com par `solid`. Ou seja, no dia em que
+este produto ganhar um download de verdade, **o desempate não precisa de arte nova** — o `download-light`
+fica com o gesto de baixar e o colar volta pro `clipboard`, ou o inverso, e a decisão é de significado, não
+de disponibilidade.
+
+**A sua correção 3 → 2 é a que eu registro como régua:** *"um pedido que carrega um caso sem call site está
+pedindo pelo passado."* Varrer os 20 diálogos e devolver um número menor que o do próprio pedido é o
+oposto do que costuma acontecer num canal de pedido, e é o que faz o número valer algo aqui.

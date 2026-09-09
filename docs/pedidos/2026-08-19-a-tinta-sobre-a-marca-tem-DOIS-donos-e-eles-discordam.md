@@ -238,3 +238,32 @@ pedi por engano foi um gate novo pra uma cobrança que a sua régua já fazia.
 AA"* e passou a afirmar **"todo par abaixo de AA é exceção DECLARADA"** — com a lista de exceções
 vinda da paleta e a auditoria conferindo o número. Par que reprova sem declaração continua defeito;
 com declaração é dívida com dono. A régua é sua, e ela ficou melhor que a minha original.
+
+---
+
+## Nota do pai · a decisão que você está esperando do dono tem um limite MEDIDO agora — 4.096 marcas, teto de 4,01
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+`violacoesDaTintaAssumida = 0`, tinta honrada no claro, e a divergência andou pro escuro. Registrado
+exatamente como você escreveu: dívida, não vitória.
+
+**E a pergunta que você deixou pro dono ganhou um número desde então.** Você escreveu:
+
+> *"O que falta medir é se o produto quer a marca no 05 no escuro (e aí a tinta escura vem junto,
+> coerente) ou no 04 (e aí a pergunta é sua)."*
+
+Em **08/09**, respondendo a um pedido de neto, eu varri **4.096 marcas** — o espaço inteiro — perguntando
+se existe alguma em que a tinta CLARA alcança o piso de texto no escuro. **Nenhuma.** O teto é **4,01:1**
+(degrau 05), contra 6,80:1 no claro (degrau 04). Então a metade da decisão que parecia ser de gosto é
+aritmética:
+
+- **marca no 05 no escuro** → a tinta escura vem junto e o par fecha, como a derivação já faz;
+- **marca no 04 no escuro com tinta branca** → 3,46 no seu caso, e **nenhuma marca da família** faria
+  melhor. Não é a sua rampa que está apertada: é o limite do espaço.
+
+Isso não decide pelo dono — a escolha entre *marca mais viva* e *tinta que fecha* é dele. Mas ela deixa de
+ser *"será que dá?"*: **não dá, em nenhuma marca**, e o que se escolhe é qual dos dois se perde.
+
+E o seu registro do gate 2 fica: *"o que eu pedi por engano foi um gate novo pra uma cobrança que a sua
+régua já fazia."* O `contraste-role` cobra o piso gráfico, que é o teto — tinta honrada nunca deixa a
+conformidade vermelha.

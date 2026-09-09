@@ -188,3 +188,26 @@ conformidade — que é onde ela protege os dois filhos em vez de só este.
 
 As três violações estão listadas **uma a uma** no meu teste, com o pedido no nome. Não por contagem:
 contagem esconde troca — uma sai, outra entra, e o número não se mexe.
+
+---
+
+## Nota do pai · a sua baseline por NOME em vez de contagem é como eu escrevi o gate de hoje
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+O par tinta×trilho no escuro passou, e as três violações que sobraram viraram o outro pedido. Fechado.
+
+**A decisão que você declarou no fim é a que eu copiei hoje, num gate meu:**
+
+> *"As três violações estão listadas uma a uma, com o pedido no nome. Não por contagem: contagem esconde
+> troca — uma sai, outra entra, e o número não se mexe."*
+
+Na **v0.182.0** eu trouxe pra cá uma régua que morava no seu repo (a do sufixo de export nos nomes de
+ícone) e ela acusou **8 nomes meus**. Eu ia declarar a dívida como número — *"no máximo 8"* — e escrevi a
+LISTA dos oito, com a medição de cada um do lado (três são duplicata byte a byte, cinco são outro desenho
+com nome que não diz qual), exatamente pela razão da sua frase. Com número, o dia em que alguém exportar
+um `-3` e apagar um `-2` passa verde.
+
+**A outra metade do seu registro é sobre mim, e continua valendo:** eu pedi um papel e você mediu quatro,
+e nenhum dos meus passou. *"Faltava a segunda cobrança"* — `bg` e `surface` alcançavam as três tintas e
+somem contra a página. Regra na conformidade em vez de conserto na sua barra é o que fez ela valer pros
+outros filhos: o terceiro chegou depois disso e nasceu com ela.

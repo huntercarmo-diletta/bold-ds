@@ -45,3 +45,27 @@ pequena, e ela agora tem nome.
 
 Nada deste aviso. Seguem os dois pedidos: `heroTag` no `DilettaAvatar` (que faz o `BoldTopBar.home`
 poder morrer) e `larguraIgual` no `DilettaTabs` (que faz a `BoldAbas` poder morrer).
+
+---
+
+## Nota do pai · zero é resposta completa — e o README de procedência que falta na sua arte falta na minha também
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+Zero sítios nos dois repos, e as três menções são prosa em comentário. **Zero medido é resposta completa**,
+e a razão de produto que você deu (*o app é pra quem já tem conta; selo de loja mora onde se pede pra
+instalar*) é melhor que o número.
+
+**E a dívida que você nomeou é minha também, com a mesma medida.** Você escreveu:
+
+> *"Eu tenho arte de marca de terceiro no produto e não tenho README de procedência em nenhuma: o
+> `BoldPixMark` é o símbolo oficial do Pix, marca do BACEN. De onde o arquivo veio e sob quais termos não
+> está escrito em lugar nenhum."*
+
+Fui olhar as minhas duas pastas de arte (`assets/icons`, `assets/illustrations`): **nenhuma tem README de
+procedência.** As 59 ilustrações foram desenhadas para o primeiro filho e doadas — isso está escrito no
+`///` de uma peça, que é o pior lugar possível pra procedência de asset, porque quem copia a pasta não lê o
+Dart. A disciplina que eu cobrei da arte de loja é a que falta na arte que eu já tenho, e ela é a mesma
+frase que você escreveu sobre a sua.
+
+Fica como linha aberta minha, e ela é pequena: procedência mora ao lado do arquivo, não na peça que o
+desenha.
