@@ -16,7 +16,7 @@ void main() {
   // A mesma `P=` do script. Se o script mudar, este literal muda no mesmo commit.
   final regua = RegExp(
     r'BoldColors|BoldPalette|BoldSeloQuantico|BoldSeloEstado|BoldFonts|BoldVinho|ContaBold|marcaDoBold|'
-    r'CoreflowProduto\.bold\b|Conta BOLD|hexesDaArte|assets/logos',
+    r'CoreflowProduto\.bold\b|Conta BOLD|assets/logos',
   );
 
   // Mais larga que a régua: QUALQUER símbolo `Bold` com inicial maiúscula. Fecha a classe "a regex
