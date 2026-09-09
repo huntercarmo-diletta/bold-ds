@@ -511,7 +511,7 @@ class BoldPalette {
     // **E ela vale só no CLARO, por aritmética e não por escolha.** No escuro o pai clareia a marca
     // pro degrau 05 (`#F66FA0`), e ali o branco cai pra **2,73** — abaixo do teto de 3:1, então a
     // derivação segue mandando. O `3,46` declarado é o pior modo em que eu de fato assumo.
-    tintasAssumidas: const [
+    tintasAssumidas: [
       DilettaTintaAssumida(
         papel: 'onPrimary',
         razao: 'o rótulo branco sobre o rosa da marca é o CTA deste produto desde antes da adoção; '

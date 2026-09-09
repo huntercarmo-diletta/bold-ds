@@ -125,7 +125,7 @@ abstract final class CoreflowType {
         fontWeight: FontWeight.w800,
         letterSpacing: -1,
         height: 1.0,
-        fontFeatures: const [FontFeature.tabularFigures()],
+        fontFeatures: [FontFeature.tabularFigures()],
       );
 
   /// 32 · 800 · tracking -1. **O valor de transação** — revisar, comprovante, resultado.
@@ -137,7 +137,7 @@ abstract final class CoreflowType {
         fontWeight: FontWeight.w800,
         letterSpacing: -1,
         height: 1.0,
-        fontFeatures: const [FontFeature.tabularFigures()],
+        fontFeatures: [FontFeature.tabularFigures()],
       );
 
   /// 30 · 800 · tracking -0,5. Título de tela.
