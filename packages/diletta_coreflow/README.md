@@ -15,7 +15,8 @@ MaterialApp(
 ```
 
 `TelaDeExemploDiletta` é a prova em uma tela: nenhuma linha dela é da marca além do tema que a
-envolve. A cor foi medida antes de escolhida — o `///` de `lib/src/diletta.dart` tem os números,
+envolve. `kDilettaFundamentos` é a prosa das decisões (paleta, semáforo, vinho e vidro, Inter, logo) no
+formato que o catálogo plunga — a aba de Fundamentos mostra a dela quando a Diletta está escolhida. A cor foi medida antes de escolhida — o `///` de `lib/src/diletta.dart` tem os números,
 inclusive a distância do vermelho ao semáforo da linguagem e por que a resposta é forma, não matiz.
 
 ## O gate

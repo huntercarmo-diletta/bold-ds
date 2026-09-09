@@ -19,7 +19,7 @@
 library;
 
 import 'package:coreflow_design_system/coreflow_design_system.dart';
-import 'package:diletta_coreflow/diletta_coreflow.dart' show Diletta;
+import 'package:diletta_coreflow/diletta_coreflow.dart' show Diletta, kDilettaFundamentos;
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart' show Theme;
 import 'package:flutter/widgets.dart';
@@ -2567,13 +2567,16 @@ BlockDef _cartaoDeDestaque() => BlockDef(
         'descricao': 'Alçadas, operadores e aprovação em duas mãos.',
         'acao': 'Conhecer',
       },
-      build: (p) => DilettaFeatureCard(
-        icon: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
-        title: '${p['titulo']}',
-        description: '${p['descricao']}',
-        brandColor: BoldPalette.bold.primary04,
-        actionLabel: _vazio(p['acao']) ? null : '${p['acao']}',
-        onTap: () {},
+      // `brandColor` da paleta do TEMA em volta, e não do Bold: é o que faz a peça seguir o seletor.
+      build: (p) => Builder(
+        builder: (ctx) => DilettaFeatureCard(
+          icon: DilettaIcons.all['${p['icone']}'] ?? '${p['icone']}',
+          title: '${p['titulo']}',
+          description: '${p['descricao']}',
+          brandColor: DilettaTheme.schemeOf(ctx).palette.primary04,
+          actionLabel: _vazio(p['acao']) ? null : '${p['acao']}',
+          onTap: () {},
+        ),
       ),
       codegen: (p) => 'ds.DilettaFeatureCard(icon: ds.DilettaIcons.${p['icone']}'
           ', title: ${_str(p['titulo'])}, description: ${_str(p['descricao'])}'
@@ -3497,7 +3500,20 @@ BlockDef _cartaoDePedido() => BlockDef(
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /// O segundo dos quatro plugues.
-void configurarDsDoBold() {
+/// O PLUGUE SEGUE A MARCA — e é por isso que ele é uma função, e não uma constante.
+///
+/// O motor guarda a marca escolhida em `CC.marca` (o seletor do board escreve ali) e lê `Ds.estilos` e
+/// `Ds.fundamentos` do plugue ATUAL a cada build das abas. Os campos do `PlugueDoDs` são finais, então o
+/// único jeito de Styles e Fundamentos mostrarem a paleta da Diletta quando a Diletta está escolhida é
+/// **plugar de novo** com o inventário e a prosa dela. Blocos, grupos, contratos e leitor não mudam
+/// entre marcas — só o que é IDENTIDADE muda: cores, papéis, fundo da tela e a prosa das decisões.
+///
+/// Sem `marca`, lê a do motor; sem marca no motor, o default é o Conta BOLD — o mesmo default do
+/// gancho `tema`. Chamar com uma marca desconhecida cai no default em vez de estourar: o motor só
+/// escreve ids que o plugue declarou em `marcas`.
+void configurarDsDoBold({String? marca}) {
+  final produto = _produtoDaMarca(marca ?? CC.marca.value);
+  _assinaAMarcaDoMotor();
   // O mapa de blocos sai pra uma variável porque os CONTRATOS derivam dele. Ler `Ds.blocos` aqui seria
   // o ovo antes da galinha — e o motor falha alto nisso, com a mensagem certa: "nenhum design system
   // plugado". Melhor assim que um mapa vazio em silêncio.
@@ -3782,8 +3798,9 @@ void configurarDsDoBold() {
     // Fica declarado também: o motor usa o `Color?` quando o widget está ausente, e é o que
     // pinta a cor por trás do próprio backdrop.
     fundoDaTela: (ctx) {
+      // Da PALETA DO TEMA, e não do Bold: com a Diletta escolhida, o fundo é o degrau 08 dela.
       final s = DilettaTheme.schemeOf(ctx);
-      return s.isDark ? BoldPalette.bold.bgEscuro : BoldPalette.bold.primary08;
+      return s.isDark ? (s.palette.bgEscuro ?? s.bg) : s.palette.primary08;
     },
     superficieDaTela: (ctx) => DilettaTheme.schemeOf(ctx).surface,
     // `margensDoConteudo` (motor v0.83.0) fica NULO de propósito, e o número está medido.
@@ -3804,116 +3821,10 @@ void configurarDsDoBold() {
       return s.isDark ? s.bg : null;
     },
     // OS FUNDAMENTOS (v0.43.0 do motor) — a prosa que ENSINA, e a segunda página minha que ele apaga.
-    //
-    // A do pai viaja no pacote dele (`kDilettaLinguagem`), então o catálogo plunga a linguagem inteira
-    // sem copiar uma linha — e copiar era o que faria a prosa envelhecer em dois lugares. As quatro
-    // seções deste produto (paleta, gradientes, vidro, tipografia) são as decisões que eu tomei medindo,
-    // com os números que as sustentam.
-    fundamentos: const {
-      'A linguagem (do pai)': kDilettaLinguagem,
-      ...kBoldFundamentos,
-    },
-    // O INVENTÁRIO DE ESTILO (v0.39.0 do motor) — e a aba de Styles deixa de ser escrita à mão.
-    //
-    // Eu tinha escrito a minha, com tipografia, gradiente e vidro. O motor passou a entregar a página
-    // derivada deste inventário, então a minha saiu: **peça que o pai entrega, o filho não reescreve** —
-    // é a regra que este repo cobra dos outros e que valia pra mim.
-    //
-    // O que ficou em Fundamentos é o que o próprio pai diz que é de lá: a DECISÃO (rampa com razão,
-    // papéis nos dois modos, os dois gradientes modulados, a receita do vidro, o relatório de adoção).
-    // Styles é o inventário que se CONSULTA; Fundamentos é o que se lê uma vez.
-    //
-    // O movimento entra porque a página TOCA: tabela de duração não é motion — 300ms com `easeOut` e
-    // 300ms com `elasticOut` têm a mesma linha na tabela e são coisas diferentes na tela.
-    estilos: InventarioDeEstilo(
-      cores: _coresDaMarca(),
-      // PAPEL SEMÂNTICO (v0.53.0) — e esta seção era MINHA até agora.
-      //
-      // Eu escrevia as faixas claro/escuro à mão em `styles_do_bold.dart`, e o pai mediu que cada filho
-      // tinha metade da página: eu tinha faixa + hex e não tinha significado nem a amostra. As quatro
-      // andam juntas agora, então a minha seção saiu — quinta página deste catálogo que um release apaga.
-      //
-      // Os 21 papéis são os que aparecem em componente deste produto, e não os 53 de cor do esquema
-      // (contados por CAMPO em 2026-08-06; eu já disse 17, ~51 e 39 aqui — o 39 saiu de um regex que
-      // contava LINHA de declaração): lista longa em catálogo é lista que ninguém lê. Cada um lê `DilettaScheme.light/dark(BoldPalette.bold)`, então
-      // valor errado aqui é impossível — não há número digitado.
-      papeis: _papeisDoBold(),
-      amostraDePapeis: const AmostraDePapeis(
-        fundo: 'bg',
-        superficie: 'surface',
-        texto: 'fg',
-        textoSecundario: 'textSecondary',
-        primaria: 'primary',
-        sobrePrimaria: 'onPrimary',
-      ),
-      // O USO DE CADA TOKEN (v0.54.0). Sai da prosa que já existia em `kBoldFundamentos` — não é texto
-      // novo, é texto que estava numa página e não chegava no degrau que ele descreve.
-      descricoesDeToken: const {
-        'espaco.s2': 'Respiro mínimo — entre rótulo e campo, entre ícone e texto.',
-        'espaco.s3': 'Entre itens de uma mesma lista.',
-        'espaco.s4': 'O gap de trabalho: entre campos, padding interno de card.',
-        'espaco.s6': 'Entre blocos de uma tela.',
-        'espaco.s8': 'Entre seções — o maior respiro que uma tela de telefone aguenta.',
-        'tipografia.displaySm': 'O saldo. É o único lugar deste produto com voz de display.',
-        'tipografia.headlineLg': 'Título de tela cheia — comprovante, autorização.',
-        'tipografia.headlineSm': 'Título de folha e de diálogo.',
-        'tipografia.titleMd': 'Título de card e de seção dentro do conteúdo.',
-        'tipografia.subheading': 'Rótulo de controle: aba, segmento, botão.',
-        'tipografia.bodyMd': 'O corpo. Tudo que se lê em parágrafo.',
-        'tipografia.bodySm': 'Apoio: subtítulo de linha, ajuda de campo.',
-        'tipografia.label': 'Rótulo de campo e chave de linha de valor.',
-        'tipografia.labelSm': 'Sobrescrito de seção e legenda.',
-        'tipografia.numeric': 'Dígito que ALINHA em coluna — valor de extrato, código, relógio. '
-            'Não é um título pequeno: é outra categoria de voz.',
-        'forma.all8': 'Controle pequeno: chip, selo, campo.',
-        'forma.all16': 'Card e folha.',
-        'forma.all24': 'Superfície grande — o topo de uma folha de tela cheia.',
-        'forma.pillAll': 'Pílula: botão, segmento, avatar.',
-      },
-      // O GRUPO (v0.54.0) — 51 valores em fileira contínua é parede, e a frase é do pai.
-      gruposDeToken: const {
-        'tipografia': [
-          GrupoDeToken('TÍTULOS', ['displaySm', 'headlineLg', 'headlineSm', 'titleMd'],
-              descricao: 'Hierarquia de tela. Uma por nível, e nenhuma repete o nível de cima.'),
-          GrupoDeToken('CORPO', ['bodyMd', 'bodySm'],
-              descricao: 'O que se lê em parágrafo.'),
-          GrupoDeToken('UTILITÁRIAS', ['subheading', 'label', 'labelSm', 'numeric'],
-              descricao: 'Rótulo, controle e dígito. `numeric` é voz própria, não título pequeno.'),
-        ],
-      },
-      tipos: const {
-        'displaySm': DilettaType.displaySm,
-        'headlineLg': DilettaType.headlineLg,
-        'headlineSm': DilettaType.headlineSm,
-        'titleMd': DilettaType.titleMd,
-        'subheading': DilettaType.subheading,
-        'bodyMd': DilettaType.bodyMd,
-        'bodySm': DilettaType.bodySm,
-        'label': DilettaType.label,
-        'labelSm': DilettaType.labelSm,
-        'numeric': DilettaType.numeric,
-      },
-      raios: {
-        'all8': DilettaRadius.all8.topLeft.x,
-        'all16': DilettaRadius.all16.topLeft.x,
-        'all24': DilettaRadius.all24.topLeft.x,
-        'pillAll': DilettaRadius.pillAll.topLeft.x,
-      },
-      movimentos: const {
-        'micro (120ms)': MotionDaTransicao(
-            duracao: DilettaMotion.micro, curva: DilettaMotion.enter, token: 'DilettaMotion.micro',
-            descricao: 'hover e troca de cor'),
-        'short (150ms)': MotionDaTransicao(
-            duracao: DilettaMotion.short, curva: DilettaMotion.enter, token: 'DilettaMotion.short',
-            descricao: 'pastilha do segmento, thumb do interruptor'),
-        'medium (250ms)': MotionDaTransicao(
-            duracao: DilettaMotion.medium, curva: DilettaMotion.enter, token: 'DilettaMotion.medium',
-            descricao: 'folha, toast, ponto de página'),
-        'slow (400ms)': MotionDaTransicao(
-            duracao: DilettaMotion.slow, curva: DilettaMotion.standard, token: 'DilettaMotion.slow',
-            descricao: 'transição de página'),
-      },
-    ),
+    // A do pai viaja no pacote dele (`kDilettaLinguagem`); as seções do produto vêm do pacote do produto.
+    fundamentos: _fundamentosDe(produto),
+    // O INVENTÁRIO DE ESTILO e a prosa: os dois seguem a marca. Ver `_estilosDe` e `_fundamentosDe`.
+    estilos: _estilosDe(produto),
     // COMO ESTE DS MOVE CADA TRANSIÇÃO (gancho `motionDaTransicao`).
     //
     // A vista de Gramática (v0.64.0 do motor) mede isto contra as setas dos fluxos, e ela me mostrou o
@@ -3981,6 +3892,146 @@ void configurarDsDoBold() {
 ///
 /// Fica esta lápide no lugar dela, porque a próxima dívida temporária precisa saber que a anterior
 /// foi cobrada.
+
+// ═══════════════════════════════════════════════════════════════════════════════
+// 2b · O QUE MUDA COM A MARCA
+// ═══════════════════════════════════════════════════════════════════════════════
+
+/// O produto que a marca do motor pede. `null` e id desconhecido caem no Conta BOLD.
+CoreflowProduto _produtoDaMarca(String? marca) =>
+    marca == 'diletta' ? Diletta.produto : ContaBold.produto;
+
+bool _assinado = false;
+
+/// Assina `CC.marca` UMA vez: toda troca no seletor do board replugue o DS com a identidade escolhida.
+///
+/// É o desenho do motor — *"quem assina o notificador reconstrói sozinho"* — aplicado ao plugue. As
+/// abas de Styles e Fundamentos leem `Ds.estilos`/`Ds.fundamentos` no build, e o `main.dart` as
+/// reconstrói na troca (ver o `ValueListenableBuilder` de lá), então quem está com a aba aberta vê a
+/// paleta mudar sem sair dela.
+void _assinaAMarcaDoMotor() {
+  if (_assinado) return;
+  _assinado = true;
+  CC.marca.addListener(() => configurarDsDoBold(marca: CC.marca.value));
+}
+
+/// A PROSA das decisões de cada produto, atrás da linguagem do pai.
+///
+/// A do pai é a string do pacote dele, byte a byte, e as seções do produto vêm do pacote DO PRODUTO:
+/// as do Conta BOLD moram no primeiro filho, as da Diletta no segundo. O catálogo não escreve prosa de
+/// decisão — plunga a de quem decidiu.
+Map<String, String> _fundamentosDe(CoreflowProduto produto) => {
+      'A linguagem (do pai)': kDilettaLinguagem,
+      ...(produto.paleta.id == Diletta.produto.paleta.id ? kDilettaFundamentos : kBoldFundamentos),
+    };
+
+/// O INVENTÁRIO DE ESTILO (v0.39.0 do motor) de UM produto — e a aba de Styles deixa de ser escrita à mão.
+///
+/// Eu tinha escrito a minha, com tipografia, gradiente e vidro. O motor passou a entregar a página
+/// derivada deste inventário, então a minha saiu: **peça que o pai entrega, o filho não reescreve** —
+/// é a regra que este repo cobra dos outros e que valia pra mim.
+///
+/// O que ficou em Fundamentos é o que o próprio pai diz que é de lá: a DECISÃO (rampa com razão,
+/// papéis nos dois modos, os dois gradientes modulados, a receita do vidro, o relatório de adoção).
+/// Styles é o inventário que se CONSULTA; Fundamentos é o que se lê uma vez.
+///
+/// O movimento entra porque a página TOCA: tabela de duração não é motion — 300ms com `easeOut` e
+/// 300ms com `elasticOut` têm a mesma linha na tabela e são coisas diferentes na tela.
+///
+/// Só `cores` e `papeis` dependem da paleta. Tipografia, forma, movimento, grupos e descrições são a
+/// LINGUAGEM, iguais nas duas marcas — é o que o white label promete: mesmo inventário, outra cor.
+InventarioDeEstilo _estilosDe(CoreflowProduto produto) {
+  final p = produto.paleta;
+  return InventarioDeEstilo(
+    cores: _coresDaMarca(p),
+    // PAPEL SEMÂNTICO (v0.53.0) — e esta seção era MINHA até agora.
+    //
+    // Eu escrevia as faixas claro/escuro à mão em `styles_do_bold.dart`, e o pai mediu que cada filho
+    // tinha metade da página: eu tinha faixa + hex e não tinha significado nem a amostra. As quatro
+    // andam juntas agora, então a minha seção saiu — quinta página deste catálogo que um release apaga.
+    //
+    // Os 21 papéis são os que aparecem em componente deste produto, e não os 53 de cor do esquema
+    // (contados por CAMPO em 2026-08-06; eu já disse 17, ~51 e 39 aqui — o 39 saiu de um regex que
+    // contava LINHA de declaração): lista longa em catálogo é lista que ninguém lê. Cada um lê `DilettaScheme.light/dark(BoldPalette.bold)`, então
+    // valor errado aqui é impossível — não há número digitado.
+    papeis: _papeisDe(p),
+    amostraDePapeis: const AmostraDePapeis(
+      fundo: 'bg',
+      superficie: 'surface',
+      texto: 'fg',
+      textoSecundario: 'textSecondary',
+      primaria: 'primary',
+      sobrePrimaria: 'onPrimary',
+    ),
+    // O USO DE CADA TOKEN (v0.54.0). Sai da prosa que já existia em `kBoldFundamentos` — não é texto
+    // novo, é texto que estava numa página e não chegava no degrau que ele descreve.
+    descricoesDeToken: const {
+      'espaco.s2': 'Respiro mínimo — entre rótulo e campo, entre ícone e texto.',
+      'espaco.s3': 'Entre itens de uma mesma lista.',
+      'espaco.s4': 'O gap de trabalho: entre campos, padding interno de card.',
+      'espaco.s6': 'Entre blocos de uma tela.',
+      'espaco.s8': 'Entre seções — o maior respiro que uma tela de telefone aguenta.',
+      'tipografia.displaySm': 'O saldo. É o único lugar deste produto com voz de display.',
+      'tipografia.headlineLg': 'Título de tela cheia — comprovante, autorização.',
+      'tipografia.headlineSm': 'Título de folha e de diálogo.',
+      'tipografia.titleMd': 'Título de card e de seção dentro do conteúdo.',
+      'tipografia.subheading': 'Rótulo de controle: aba, segmento, botão.',
+      'tipografia.bodyMd': 'O corpo. Tudo que se lê em parágrafo.',
+      'tipografia.bodySm': 'Apoio: subtítulo de linha, ajuda de campo.',
+      'tipografia.label': 'Rótulo de campo e chave de linha de valor.',
+      'tipografia.labelSm': 'Sobrescrito de seção e legenda.',
+      'tipografia.numeric': 'Dígito que ALINHA em coluna — valor de extrato, código, relógio. '
+          'Não é um título pequeno: é outra categoria de voz.',
+      'forma.all8': 'Controle pequeno: chip, selo, campo.',
+      'forma.all16': 'Card e folha.',
+      'forma.all24': 'Superfície grande — o topo de uma folha de tela cheia.',
+      'forma.pillAll': 'Pílula: botão, segmento, avatar.',
+    },
+    // O GRUPO (v0.54.0) — 51 valores em fileira contínua é parede, e a frase é do pai.
+    gruposDeToken: const {
+      'tipografia': [
+        GrupoDeToken('TÍTULOS', ['displaySm', 'headlineLg', 'headlineSm', 'titleMd'],
+            descricao: 'Hierarquia de tela. Uma por nível, e nenhuma repete o nível de cima.'),
+        GrupoDeToken('CORPO', ['bodyMd', 'bodySm'],
+            descricao: 'O que se lê em parágrafo.'),
+        GrupoDeToken('UTILITÁRIAS', ['subheading', 'label', 'labelSm', 'numeric'],
+            descricao: 'Rótulo, controle e dígito. `numeric` é voz própria, não título pequeno.'),
+      ],
+    },
+    tipos: const {
+      'displaySm': DilettaType.displaySm,
+      'headlineLg': DilettaType.headlineLg,
+      'headlineSm': DilettaType.headlineSm,
+      'titleMd': DilettaType.titleMd,
+      'subheading': DilettaType.subheading,
+      'bodyMd': DilettaType.bodyMd,
+      'bodySm': DilettaType.bodySm,
+      'label': DilettaType.label,
+      'labelSm': DilettaType.labelSm,
+      'numeric': DilettaType.numeric,
+    },
+    raios: {
+      'all8': DilettaRadius.all8.topLeft.x,
+      'all16': DilettaRadius.all16.topLeft.x,
+      'all24': DilettaRadius.all24.topLeft.x,
+      'pillAll': DilettaRadius.pillAll.topLeft.x,
+    },
+    movimentos: const {
+      'micro (120ms)': MotionDaTransicao(
+          duracao: DilettaMotion.micro, curva: DilettaMotion.enter, token: 'DilettaMotion.micro',
+          descricao: 'hover e troca de cor'),
+      'short (150ms)': MotionDaTransicao(
+          duracao: DilettaMotion.short, curva: DilettaMotion.enter, token: 'DilettaMotion.short',
+          descricao: 'pastilha do segmento, thumb do interruptor'),
+      'medium (250ms)': MotionDaTransicao(
+          duracao: DilettaMotion.medium, curva: DilettaMotion.enter, token: 'DilettaMotion.medium',
+          descricao: 'folha, toast, ponto de página'),
+      'slow (400ms)': MotionDaTransicao(
+          duracao: DilettaMotion.slow, curva: DilettaMotion.standard, token: 'DilettaMotion.slow',
+          descricao: 'transição de página'),
+    },
+  );
+}
 
 // ═══════════════════════════════════════════════════════════════════════════════
 // 3 · OS AUXILIARES
@@ -4167,8 +4218,7 @@ Map<String, String> _contratosDosBlocos(Map<String, BlockDef> blocos) {
 ///
 /// Só as RAMPAS, e não os 53 papéis de cor do esquema: papel é derivado e muda com o modo, então mostrá-lo numa lista sem
 /// dizer o modo é meia informação. Papel nos dois modos é Fundamentos, que é a página da decisão.
-Map<String, Color> _coresDaMarca() {
-  const p = BoldPalette.bold;
+Map<String, Color> _coresDaMarca(DilettaPalette p) {
   return {
     'primary01': p.primary01, 'primary02': p.primary02, 'primary03': p.primary03,
     'primary04': p.primary04, 'primary05': p.primary05, 'primary06': p.primary06,
@@ -4176,7 +4226,9 @@ Map<String, Color> _coresDaMarca() {
     'success03': p.success03, 'success04': p.success04,
     'warning03': p.warning03, 'warning04': p.warning04,
     'error03': p.error03, 'error04': p.error04,
-    'vinho.marca': BoldVinho.marca, 'vinho.ink': BoldVinho.ink,
+    // O vinho pela API do pai: quem declara (o Conta BOLD) recebe o que declarou; quem não declara (a
+    // Diletta) recebe o derivado da rampa dela. É a regra de reserva do veredito, e não um valor do Bold.
+    'vinho.marca': CoreflowVinho.marcaDe(p), 'vinho.ink': CoreflowVinho.tintaDe(p),
     'neutral01': p.neutral01, 'neutral05': p.neutral05, 'neutral10': p.neutral10,
     // OS ONZE QUE FALTAVAM, e eles não são gosto: são as entradas pra onde a ORIGEM dos papéis
     // aponta. A checagem `alias-fantasma` do motor (v0.104.0) achou na primeira execução — a página
@@ -4235,11 +4287,12 @@ bool _vazio(Object? v) => v == null || '$v'.isEmpty;
 ///
 /// Quem recebe texto em cima é o `subtle` de cada estado, e esses três passam (5,19 · 6,09 · 6,05).
 /// Atalho pro gate medir a proporção alias/derivado sem passar pelo plugue.
-Map<String, PapelNosDoisModos> papeisDoBoldParaMedir() => _papeisDoBold();
+Map<String, PapelNosDoisModos> papeisDoBoldParaMedir() => _papeisDe(BoldPalette.bold);
 
-Map<String, PapelNosDoisModos> _papeisDoBold() {
-  final c = DilettaScheme.light(BoldPalette.bold);
-  final e = DilettaScheme.dark(BoldPalette.bold);
+/// Os mesmos 21 papéis lidos de OUTRA paleta — o que o seletor de marca pede.
+Map<String, PapelNosDoisModos> _papeisDe(DilettaPalette paleta) {
+  final c = DilettaScheme.light(paleta);
+  final e = DilettaScheme.dark(paleta);
   PapelNosDoisModos p(
     Color Function(DilettaScheme) ler, {
     String? significado,
@@ -4270,7 +4323,7 @@ Map<String, PapelNosDoisModos> _papeisDoBold() {
     'border': p((s) => s.border, significado: 'Traço de card e de campo.'),
     'divider': p((s) => s.divider, significado: 'Separador dentro de uma coleção.'),
     'primary': p((s) => s.primary,
-        significado: 'Ação primária, link, foco. É o rosa da marca.', tinta: 'onPrimary'),
+        significado: 'Ação primária, link, foco. É a cor da marca.', tinta: 'onPrimary'),
     'onPrimary': p((s) => s.onPrimary, significado: 'Tinta sobre a ação primária.'),
     'primarySubtle': p((s) => s.primarySubtle,
         significado: 'Fundo de destaque da marca — pastilha, degrau de alçada.',

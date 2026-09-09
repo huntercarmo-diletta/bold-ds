@@ -1,7 +1,7 @@
 import 'package:conta_bold_catalog/ds_do_bold.dart';
 import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
-import 'package:diletta_coreflow/diletta_coreflow.dart' show Diletta;
+import 'package:diletta_coreflow/diletta_coreflow.dart' show Diletta, kDilettaFundamentos;
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -67,6 +67,78 @@ void main() {
     }
   }
 
+  // STYLES E FUNDAMENTOS SEGUEM A MARCA. O motor lê `Ds.estilos`/`Ds.fundamentos` do plugue atual, e o
+  // plugue assina `CC.marca`: trocar a marca no seletor replugue com a paleta e a prosa daquela marca.
+  // Mede as três coisas que mudam (cores, papéis, prosa) e a que NÃO muda (a linguagem), e volta.
+  group('Styles e Fundamentos seguem a marca escolhida', () {
+    tearDown(() {
+      CC.marca.value = null;
+      configurarDsDoBold();
+    });
+
+    test('com a Diletta escolhida, o inventário e a prosa são dela', () {
+      CC.marca.value = 'diletta';
+      final inv = Ds.estilos;
+      expect(inv.cores['primary04'], Diletta.vermelho);
+      expect(inv.cores['vinho.marca'], CoreflowVinho.marcaDe(Diletta.produto.paleta),
+          reason: 'vinho da Diletta é o derivado da rampa dela, não o declarado do Bold');
+      expect(inv.papeis['primary']?.claro, Diletta.produto.claro.scheme.primary);
+      expect(inv.papeis['bg']?.escuro, Diletta.produto.escuro.scheme.bg);
+      expect(Ds.fundamentos.keys.toSet(), {'A linguagem (do pai)', ...kDilettaFundamentos.keys});
+      expect(Ds.fundamentos['A linguagem (do pai)'], same(kDilettaLinguagem),
+          reason: 'a linguagem é a mesma nas duas marcas — é o que o white label promete');
+      // O que é linguagem não muda com a marca.
+      final doBold = _comMarca('bold', () => Ds.estilos);
+      expect(inv.tipos.keys, doBold.tipos.keys);
+      expect(inv.raios, doBold.raios);
+      expect(inv.descricoesDeToken, doBold.descricoesDeToken);
+    });
+
+    test('voltando pro Conta BOLD, a página é a de antes — byte a byte nas cores', () {
+      CC.marca.value = 'diletta';
+      CC.marca.value = 'bold';
+      final inv = Ds.estilos;
+      expect(inv.cores['primary04'], BoldPalette.bold.primary04);
+      expect(inv.cores['vinho.marca'], BoldVinho.marca);
+      expect(inv.cores['vinho.ink'], BoldVinho.ink);
+      expect(Ds.fundamentos.keys, contains('A paleta do Bold'));
+      expect(Ds.fundamentos.keys, isNot(contains('A paleta da Diletta')));
+    });
+
+    test('a conformidade do motor não ganha violação nova com a Diletta plugada', () {
+      final doBold = violacoesDoFilho().map(chaveDaViolacao).toSet();
+      CC.marca.value = 'diletta';
+      final daDiletta = violacoesDoFilho().map(chaveDaViolacao).toSet();
+      expect(daDiletta.difference(doBold), isEmpty,
+          reason: 'alias do papel apontando pra entrada que a paleta da Diletta não publica, ou par sem contraste');
+    });
+
+    testWidgets('a aba de Styles desenha a paleta da Diletta, e troca sem sair dela', (t) async {
+      t.view.physicalSize = const Size(1400, 6000);
+      t.view.devicePixelRatio = 1.0;
+      addTearDown(t.view.reset);
+      await t.pumpWidget(MaterialApp(home: Scaffold(body: SingleChildScrollView(
+        child: Ds.tema(
+          ValueListenableBuilder<String?>(
+            valueListenable: CC.marca,
+            builder: (_, m, __) => KeyedSubtree(key: ValueKey(m ?? 'bold'), child: const AbaDeStyles()),
+          ),
+          escuro: false,
+        ),
+      ))));
+      await t.pumpAndSettle();
+      final hexDaDiletta = '#E60000';
+      final hexDoBold = '#${(BoldPalette.bold.primary04.toARGB32() & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}';
+      expect(find.textContaining(hexDoBold, findRichText: true), findsWidgets);
+      expect(find.textContaining(hexDaDiletta, findRichText: true), findsNothing);
+
+      CC.marca.value = 'diletta';
+      await t.pumpAndSettle();
+      expect(find.textContaining(hexDaDiletta, findRichText: true), findsWidgets);
+      expect(find.textContaining(hexDoBold, findRichText: true), findsNothing);
+    });
+  });
+
   testWidgets('sem marca pedida, o default continua sendo o Conta BOLD', (t) async {
     late DilettaTheme tema;
     await t.pumpWidget(Ds.tema(Builder(builder: (ctx) {
@@ -75,4 +147,15 @@ void main() {
     })));
     expect(tema.brand, ContaBold.marca);
   });
+}
+
+/// Roda [le] com a marca [m] plugada e devolve ao estado anterior.
+T _comMarca<T>(String m, T Function() le) {
+  final antes = CC.marca.value;
+  CC.marca.value = m;
+  try {
+    return le();
+  } finally {
+    CC.marca.value = antes;
+  }
 }

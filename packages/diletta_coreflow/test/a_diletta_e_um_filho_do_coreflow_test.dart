@@ -106,4 +106,21 @@ void main() {
       expect(find.text('Diletta'), findsOneWidget);
     });
   }
+
+  test('os fundamentos são prosa de decisão: cinco seções, markdown, e a régua do pai vale nelas', () {
+    expect(kDilettaFundamentos.keys.toList(), [
+      'A paleta da Diletta',
+      'O vermelho e o semáforo',
+      'O vinho e o vidro, derivados',
+      'A tipografia: Inter',
+      'O logo',
+    ], reason: 'seção entrou ou saiu — se foi de propósito, o nome vem no diff');
+    for (final e in kDilettaFundamentos.entries) {
+      expect(e.value.trimLeft(), startsWith('## '), reason: '"${e.key}" não abre com um título');
+      expect(e.value.trim().length, greaterThan(300), reason: '"${e.key}" é curta demais pra ser decisão');
+    }
+    // A prosa cita a cor da marca e o vermelho de erro do avô por número, e são citações: o gate do hex
+    // único continua valendo pro código deste pacote, e é ele quem prova que nada aqui virou token.
+    expect(kDilettaFundamentos['A paleta da Diletta'], contains('#E60000'));
+  });
 }

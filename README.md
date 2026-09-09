@@ -9,15 +9,15 @@ de bloco é aqui.
 | `packages/coreflow` | **o PAI**: a linguagem de produto sem produto — re-exporta o `ds-diletta` e tem os 61 arquivos `Coreflow*`: componentes, `CoreflowProduto`, `CoreflowScheme`, `CoreflowTemaMaterial`, `CoreflowTipografia`, `CoreflowGradients`. Não declara valor de produto nenhum: nem cor, nem degrau, nem asset, nem família — `docs/2026-09-04-adr-o-coreflow-e-o-pai.md` |
 | `packages/coreflow_design_system` | **o primeiro filho**: depende do pai por `path:` e o re-exporta (quem importa este recebe os três), mais a identidade do Conta BOLD — `ContaBold` (o produto com o nome dele), paleta, vinho, fonte, escala e o selo quântico, que seguem `Bold*` porque são a marca e não a linguagem |
 | `packages/diletta_coreflow` | **o segundo filho, a Diletta**: a porta de UMA cor — `#E60000`, o logo e a Inter; tudo o mais deriva do pai. É o white label com a marca da casa |
-| `packages/catalog` | **o catálogo-filho**: o plugue que declara os blocos, os grupos e o leitor de código — com o seletor de marca do motor mostrando cada peça no Conta BOLD e na Diletta |
+| `packages/catalog` | **o catálogo-filho**: o plugue que declara os blocos, os grupos e o leitor de código — com o seletor de marca do motor mostrando cada peça, a aba de Styles e a de Fundamentos no Conta BOLD e na Diletta |
 
 ## O gate
 
 ```bash
 (cd packages/coreflow && flutter analyze && flutter test)                   # 86
 (cd packages/coreflow_design_system && flutter analyze && flutter test)     # 202
-(cd packages/diletta_coreflow && flutter analyze && flutter test)           # 8
-(cd packages/catalog && flutter analyze && flutter test)                    # 94
+(cd packages/diletta_coreflow && flutter analyze && flutter test)           # 9
+(cd packages/catalog && flutter analyze && flutter test)                    # 108
 ```
 
 Dois gates medem a separação (`docs/2026-09-04-adr-o-coreflow-e-o-pai.md`), com a MESMA régua de

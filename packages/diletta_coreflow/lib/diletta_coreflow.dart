@@ -9,4 +9,5 @@ library diletta_coreflow;
 
 export 'package:coreflow/coreflow.dart';
 export 'src/diletta.dart';
+export 'src/diletta_fundamentos.dart';
 export 'src/tela_de_exemplo_diletta.dart';
