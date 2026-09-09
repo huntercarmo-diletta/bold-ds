@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:conta_bold_catalog/ds_do_bold.dart';
 import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
@@ -117,18 +119,22 @@ void main() {
           reason: 'alias do papel apontando pra entrada que a paleta da Diletta não publica, ou par sem contraste');
     });
 
+    // O critério de aceite que eu escrevi no pedido, verificável no fonte: o filho não assina `CC.marca`
+    // e não replugue o DS — quem faz isso é o motor, pelos dois ganchos.
+    test('o plugue declara os dois ganchos por marca e não assina o notificador do motor', () {
+      final fonte = File('lib/ds_do_bold.dart').readAsStringSync();
+      expect(fonte, isNot(contains('addListener')), reason: 'o listener era o truque; o motor v0.117.0 o dispensou');
+      expect(Ds.atual.estilosDaMarca, isNotNull);
+      expect(Ds.atual.fundamentosDaMarca, isNotNull);
+    });
+
     testWidgets('a aba de Styles desenha a paleta da Diletta, e troca sem sair dela', (t) async {
       t.view.physicalSize = const Size(1400, 6000);
       t.view.devicePixelRatio = 1.0;
       addTearDown(t.view.reset);
       await t.pumpWidget(MaterialApp(home: Scaffold(body: SingleChildScrollView(
-        child: Ds.tema(
-          ValueListenableBuilder<String?>(
-            valueListenable: CC.marca,
-            builder: (_, m, __) => KeyedSubtree(key: ValueKey(m ?? 'bold'), child: const AbaDeStyles()),
-          ),
-          escuro: false,
-        ),
+        // A aba do motor, crua: desde a v0.117.0 é ela quem assina `CC.marca` — nenhum embrulho meu.
+        child: Ds.tema(const AbaDeStyles(), escuro: false),
       ))));
       await t.pumpAndSettle();
       const hexDaDiletta = '#E60000';

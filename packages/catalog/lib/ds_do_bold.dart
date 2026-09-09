@@ -3500,20 +3500,15 @@ BlockDef _cartaoDePedido() => BlockDef(
 // ═══════════════════════════════════════════════════════════════════════════════
 
 /// O segundo dos quatro plugues.
-/// O PLUGUE SEGUE A MARCA — e é por isso que ele é uma função, e não uma constante.
+/// O PLUGUE É UM SÓ, E A MARCA CHEGA PELOS GANCHOS DO MOTOR.
 ///
-/// O motor guarda a marca escolhida em `CC.marca` (o seletor do board escreve ali) e lê `Ds.estilos` e
-/// `Ds.fundamentos` do plugue ATUAL a cada build das abas. Os campos do `PlugueDoDs` são finais, então o
-/// único jeito de Styles e Fundamentos mostrarem a paleta da Diletta quando a Diletta está escolhida é
-/// **plugar de novo** com o inventário e a prosa dela. Blocos, grupos, contratos e leitor não mudam
-/// entre marcas — só o que é IDENTIDADE muda: cores, papéis, fundo da tela e a prosa das decisões.
-///
-/// Sem `marca`, lê a do motor; sem marca no motor, o default é o Conta BOLD — o mesmo default do
-/// gancho `tema`. Chamar com uma marca desconhecida cai no default em vez de estourar: o motor só
-/// escreve ids que o plugue declarou em `marcas`.
-void configurarDsDoBold({String? marca}) {
-  final produto = _produtoDaMarca(marca ?? CC.marca.value);
-  _assinaAMarcaDoMotor();
+/// Blocos, grupos, contratos e leitor não mudam entre marcas. O que é IDENTIDADE — cores, papéis, a prosa
+/// das decisões — o motor pede por marca, em `estilosDaMarca` e `fundamentosDaMarca` (v0.117.0, pedido de
+/// 09/09), e resolve por `CC.marca` sozinho: as abas assinam o notificador, a conformidade mede a marca na
+/// tela. Este arquivo não assina nada e não replugue nada — a versão de 09/09 (manhã) fazia as duas
+/// coisas, e o pedido ao motor nasceu daí. O campo `estilos`/`fundamentos` sem gancho continua declarado
+/// com o Conta BOLD: é o que o motor lê enquanto ninguém escolheu marca.
+void configurarDsDoBold() {
   // O mapa de blocos sai pra uma variável porque os CONTRATOS derivam dele. Ler `Ds.blocos` aqui seria
   // o ovo antes da galinha — e o motor falha alto nisso, com a mensagem certa: "nenhum design system
   // plugado". Melhor assim que um mapa vazio em silêncio.
@@ -3822,9 +3817,11 @@ void configurarDsDoBold({String? marca}) {
     },
     // OS FUNDAMENTOS (v0.43.0 do motor) — a prosa que ENSINA, e a segunda página minha que ele apaga.
     // A do pai viaja no pacote dele (`kDilettaLinguagem`); as seções do produto vêm do pacote do produto.
-    fundamentos: _fundamentosDe(produto),
-    // O INVENTÁRIO DE ESTILO e a prosa: os dois seguem a marca. Ver `_estilosDe` e `_fundamentosDe`.
-    estilos: _estilosDe(produto),
+    fundamentos: _fundamentosDe(ContaBold.produto),
+    fundamentosDaMarca: (marca) => _fundamentosDe(_produtoDaMarca(marca)),
+    // O INVENTÁRIO DE ESTILO e a prosa seguem a marca pelos ganchos do motor. Ver `_estilosDe` e `_fundamentosDe`.
+    estilos: _estilosDe(ContaBold.produto),
+    estilosDaMarca: (marca) => _estilosDe(_produtoDaMarca(marca)),
     // COMO ESTE DS MOVE CADA TRANSIÇÃO (gancho `motionDaTransicao`).
     //
     // A vista de Gramática (v0.64.0 do motor) mede isto contra as setas dos fluxos, e ela me mostrou o
@@ -3900,20 +3897,6 @@ void configurarDsDoBold({String? marca}) {
 /// O produto que a marca do motor pede. `null` e id desconhecido caem no Conta BOLD.
 CoreflowProduto _produtoDaMarca(String? marca) =>
     marca == 'diletta' ? Diletta.produto : ContaBold.produto;
-
-bool _assinado = false;
-
-/// Assina `CC.marca` UMA vez: toda troca no seletor do board replugue o DS com a identidade escolhida.
-///
-/// É o desenho do motor — *"quem assina o notificador reconstrói sozinho"* — aplicado ao plugue. As
-/// abas de Styles e Fundamentos leem `Ds.estilos`/`Ds.fundamentos` no build, e o `main.dart` as
-/// reconstrói na troca (ver o `ValueListenableBuilder` de lá), então quem está com a aba aberta vê a
-/// paleta mudar sem sair dela.
-void _assinaAMarcaDoMotor() {
-  if (_assinado) return;
-  _assinado = true;
-  CC.marca.addListener(() => configurarDsDoBold(marca: CC.marca.value));
-}
 
 /// A PROSA das decisões de cada produto, atrás da linguagem do pai.
 ///

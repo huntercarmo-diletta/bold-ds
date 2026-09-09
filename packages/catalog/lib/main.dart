@@ -91,14 +91,12 @@ CatalogoConfig configDoCatalogoDoBold() {
         // markdown de bloco (tabela inclusive). A minha página visual saiu, e o que era medição dela —
         // o relatório de adoção — foi pra aba de conformidade, e o papel semântico nos dois modos foi
         // pra Styles quando a v0.48.0 deixou compor a página.
-        // NA MARCA ESCOLHIDA: o plugue replugue Styles e Fundamentos quando `CC.marca` muda (ver
-        // `configurarDsDoBold`), e estas duas abas leem `Ds.fundamentos`/`Ds.estilos` no build. Assinar
-        // o notificador aqui é o que faz quem está com a aba ABERTA ver a paleta trocar; a chave por
-        // marca recria a aba de Fundamentos, que guarda a seção selecionada e ela muda de nome.
+        // NA MARCA ESCOLHIDA desde o motor v0.117.0: a aba assina `CC.marca` sozinha e lê a prosa pelo
+        // gancho `fundamentosDaMarca` do plugue. O embrulho que eu tinha aqui (09/09, manhã) saiu.
         AbaDoCatalogo(
           id: 'fundamentos',
           label: 'Fundamentos',
-          constroi: (_) => _naMarca((m) => const AbaDeFundamentos()),
+          constroi: (_) => const AbaDeFundamentos(),
         ),
         // STYLES voltou a ser do MOTOR INTEIRA, e o caminho até aqui tem três degraus:
         //
@@ -113,7 +111,7 @@ CatalogoConfig configDoCatalogoDoBold() {
         AbaDoCatalogo(
           id: 'styles',
           label: 'Styles',
-          constroi: (_) => _naMarca((m) => const AbaDeStyles()),
+          constroi: (_) => const AbaDeStyles(),
         ),
         // COMPONENTES é do MOTOR desde a v0.44.0, quando o `previaDeComponente` passou a envolver no
         // gancho `tema` e a dar `Stack` pro bloco de tela cheia — os dois defeitos que me faziam ficar
@@ -280,12 +278,3 @@ class _CardDeViolacao extends StatelessWidget {
     );
   }
 }
-
-/// Reconstrói [filho] a cada troca de marca no motor, com uma chave por marca.
-///
-/// O plugue já foi replugado pelo listener de `configurarDsDoBold` quando este builder roda — o
-/// `ValueNotifier` avisa os ouvintes na ordem de assinatura, e o plugue assina antes de a casca subir.
-Widget _naMarca(Widget Function(String? marca) filho) => ValueListenableBuilder<String?>(
-      valueListenable: CC.marca,
-      builder: (_, marca, __) => KeyedSubtree(key: ValueKey(marca ?? 'bold'), child: filho(marca)),
-    );
