@@ -20,6 +20,43 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.99.0] — 2026-09-09
+
+### Alterado — as letras do lockup seguem o tema: preto no claro, branco no escuro
+
+O `DilettaLogo` do pai pinta o `currentColor` do arquivo com `color ?? brand.corDoLogo ??
+scheme.primary`. A marca do Bold não declarava `corDoLogo`, e as cinco telas do app que mostram o lockup
+(`DilettaLogo.comLargura`) não passam `color` — então as 8 letras saíam no `primary`: rosa, nos dois
+modos, sobre qualquer fundo. Pedido da dona do produto em 09/09: *"que as letras do logo sigam
+branco/preto dependendo do tema e da necessidade da tela, não rosa"*.
+
+`CoreflowProduto` ganha `marcaNo(Brightness)`: `claro` e `escuro` montam o tema do pai com a marca
+declarada mais `corDoLogo` decidida por modo — `DilettaAbsoluteColors.black` no claro, `.white` no
+escuro. A regra só preenche ausência: produto que declara `corDoLogo` na marca é respeitado, nos dois
+modos. Vale pra todo filho do Coreflow, não só pro Bold — logo em tinta de texto é o caso comum do
+white-label.
+
+O que NÃO muda: o gradiente do "O" (é do arquivo; `currentColor` não o alcança), e a tela que precisa de
+outra tinta — fundo fixo escuro, hero de marca — segue passando `color:` ao `DilettaLogo`, que vence
+tudo. No app, o splash é esse caso — fundo fixo `#0A0B12` nos dois modos, casado com o splash nativo —,
+e o lockup ali pede `color: DilettaAbsoluteColors.white`. É decisão de tela, do lado do app. As outras
+quatro telas (boas-vindas, login, login recorrente, ativar acesso rápido) desenham sobre
+`CoreflowBackground`, que segue o tema, e ficam com a regra nova.
+
+Efeito colateral, medido no pai: o `DilettaAvatar` desenha o logo com `color: null` quando não é sólido,
+então ele também deixa de sair rosa e passa a seguir o tema. É o comportamento pedido. `DilettaWalletButton`
+e `DilettaCobrandMark` passam cor explícita e não mudam.
+
+Cópia campo a campo em `marcaNo` porque `DilettaBrand` não tem `copyWith`: um campo novo do pai que não
+estiver na lista chega no default no tema. Está escrito no código, e um `copyWith` no pai é o jeito de
+tirar isso daqui.
+
+### Gate — `o_logo_e_do_arquivo_e_a_tinta_e_do_tema`
+
+Deixa de comparar `light.brand` e `dark.brand` com a marca por identidade e passa a conferir os onze
+campos mais a `corDoLogo` de cada modo. Caso novo: um filho por `daMarca` recebe preto/branco, e um
+produto com `corDoLogo` própria mantém a dele nos dois modos, sem cópia.
+
 ## [0.98.1] — 2026-09-04
 
 ### Corrigido — dois textos do produto saíam na fonte do SISTEMA, e não na da marca

@@ -1,3 +1,5 @@
+import 'dart:ui' show Color;
+
 import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:diletta_design_system/diletta_design_system.dart' as p;
 import 'package:flutter/services.dart' show rootBundle;
@@ -18,8 +20,50 @@ void main() {
     expect(CoreflowTheme.marca.logoTingePorCurrentColor, isTrue,
         reason: 'sem isto o `ColorFilter` volta e engole o gradiente que o arquivo protege — os '
             'dois caminhos se excluem, e é o veredito que diz');
-    expect(CoreflowTheme.light.brand, CoreflowTheme.marca);
-    expect(CoreflowTheme.dark.brand, CoreflowTheme.marca);
+    // Desde a 0.99.0 o tema carrega a marca declarada MAIS a cor das letras decidida por modo. Tudo o
+    // mais tem que ser a marca, campo a campo — a cópia em `marcaNo` não pode perder nada no caminho.
+    for (final (tema, cor, modo) in [
+      (CoreflowTheme.light, DilettaAbsoluteColors.black, 'claro'),
+      (CoreflowTheme.dark, DilettaAbsoluteColors.white, 'escuro'),
+    ]) {
+      final b = tema.brand;
+      expect(b.corDoLogo, cor,
+          reason: 'no $modo as letras do lockup seguem o tema, não o `primary` — o rosa era o default '
+              'do pai preenchendo uma ausência');
+      expect(b.pacote, CoreflowTheme.marca.pacote);
+      expect(b.logo, CoreflowTheme.marca.logo);
+      expect(b.logoFull, CoreflowTheme.marca.logoFull);
+      expect(b.logoParceiro, CoreflowTheme.marca.logoParceiro);
+      expect(b.bandeiraDoCartao, CoreflowTheme.marca.bandeiraDoCartao);
+      expect(b.carteirasDeSistema, CoreflowTheme.marca.carteirasDeSistema);
+      expect(b.selosDeLoja, CoreflowTheme.marca.selosDeLoja);
+      expect(b.logoTingePorCurrentColor, CoreflowTheme.marca.logoTingePorCurrentColor);
+      expect(b.proporcaoDoLockup, CoreflowTheme.marca.proporcaoDoLockup);
+      expect(b.hexesDaArte, CoreflowTheme.marca.hexesDaArte);
+    }
+  });
+
+  test('as letras seguem o tema em qualquer filho, e quem declara cor própria é respeitado', () {
+    // Um filho nascido por `daMarca` não declara `corDoLogo`: recebe preto/branco por modo.
+    final filho = CoreflowProduto.daMarca(
+        marca: const Color(0xFF1B5E20), id: 'meuBanco', nome: 'Meu Banco');
+    expect(filho.claro.brand.corDoLogo, DilettaAbsoluteColors.black);
+    expect(filho.escuro.brand.corDoLogo, DilettaAbsoluteColors.white);
+
+    // Um produto que ESCREVEU a cor do logo na marca fica com ela nos dois modos — a regra preenche
+    // ausência, não sobrescreve decisão.
+    const propria = Color(0xFF123456);
+    final decidido = CoreflowProduto(
+      paleta: BoldPalette.bold,
+      marca: const DilettaBrand(
+          pacote: 'coreflow_design_system',
+          corDoLogo: propria,
+          logoTingePorCurrentColor: true),
+    );
+    expect(decidido.claro.brand.corDoLogo, propria);
+    expect(decidido.escuro.brand.corDoLogo, propria);
+    expect(identical(decidido.claro.brand, decidido.marca), isTrue,
+        reason: 'com cor declarada não há cópia: a marca vai como está');
   });
 
   test('o arquivo tem as letras em currentColor e o gradiente intacto', () async {

@@ -207,17 +207,59 @@ class CoreflowProduto {
   /// O esquema de cor deste produto no escuro.
   late final CoreflowScheme esquemaEscuro = CoreflowScheme.de(paleta, brilho: Brightness.dark);
 
+  /// A MARCA que vai no tema de cada modo — e é aqui que as letras do lockup param de ser rosa.
+  ///
+  /// O `DilettaLogo` do pai pinta o `currentColor` do arquivo com `color ?? brand.corDoLogo ??
+  /// scheme.primary`. A marca do Bold não declarava `corDoLogo`, nenhuma das cinco telas do app que
+  /// mostram o lockup passa `color`, e as 8 letras saíam no `primary`: rosa, nos dois modos, sobre
+  /// qualquer fundo. Pedido da dona do produto (09/09): *"que as letras do logo sigam branco/preto
+  /// dependendo do tema e da necessidade da tela, não rosa"*.
+  ///
+  /// A cor é decidida POR MODO porque `DilettaBrand.corDoLogo` é uma cor só, e quem sabe o brilho é o
+  /// tema: preto absoluto no claro, branco absoluto no escuro. O que NÃO muda: o gradiente do "O" (é do
+  /// arquivo, e `currentColor` não o alcança) e a tela que precisa de outra tinta — fundo fixo escuro,
+  /// hero de marca —, que segue passando `color:` ao `DilettaLogo`, e `color` vence tudo.
+  ///
+  /// A regra só preenche AUSÊNCIA: produto que declara `corDoLogo` na marca é respeitado. Vale pra todo
+  /// filho do Coreflow, não só pro Bold — logo em tinta de texto é o caso comum do white-label, e quem
+  /// quiser o logo em cor de marca escreve isso na marca dele.
+  ///
+  /// Cópia campo a campo porque `DilettaBrand` não tem `copyWith`. O preço está escrito: um campo novo
+  /// do pai que não estiver nesta lista chega no default no tema. Um `copyWith` no pai é o jeito de
+  /// tirar isto daqui.
+  DilettaBrand marcaNo(Brightness brilho) {
+    if (marca.corDoLogo != null) return marca;
+    return DilettaBrand(
+      pacote: marca.pacote,
+      logo: marca.logo,
+      logoFull: marca.logoFull,
+      logoParceiro: marca.logoParceiro,
+      bandeiraDoCartao: marca.bandeiraDoCartao,
+      carteirasDeSistema: marca.carteirasDeSistema,
+      selosDeLoja: marca.selosDeLoja,
+      corDoLogo: brilho == Brightness.dark
+          ? DilettaAbsoluteColors.white
+          : DilettaAbsoluteColors.black,
+      logoTingePorCurrentColor: marca.logoTingePorCurrentColor,
+      proporcaoDoLockup: marca.proporcaoDoLockup,
+      hexesDaArte: marca.hexesDaArte,
+    );
+  }
+
   /// O tema do PAI no claro — o que as peças dele leem pelo `DilettaThemeScope`.
   late final DilettaTheme claro = () {
     _garanteOsAssetsDoPai();
-    return DilettaTheme.resolve(palette: paleta, brand: marca);
+    return DilettaTheme.resolve(
+        palette: paleta, brand: marcaNo(Brightness.light));
   }();
 
   /// O tema do PAI no escuro.
   late final DilettaTheme escuro = () {
     _garanteOsAssetsDoPai();
     return DilettaTheme.resolve(
-        palette: paleta, brand: marca, brightness: Brightness.dark);
+        palette: paleta,
+        brand: marcaNo(Brightness.dark),
+        brightness: Brightness.dark);
   }();
 
   /// O `ThemeData` do Material no claro.
