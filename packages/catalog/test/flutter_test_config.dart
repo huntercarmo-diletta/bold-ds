@@ -25,6 +25,7 @@ import 'package:conta_bold_catalog/chrome_do_bold.dart';
 import 'package:conta_bold_catalog/conteudo_do_bold.dart';
 import 'package:conta_bold_catalog/ds_do_bold.dart';
 import 'package:coreflow_design_system/coreflow_design_system.dart';
+import 'package:diletta_coreflow/diletta_coreflow.dart' show Diletta;
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -45,8 +46,17 @@ Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   // Registro os DOIS nomes: quem aplica a família é o `ThemeData` do app hospedeiro (`familyRaw`), e o
   // caminho com prefixo é o que um `TextStyle` com `package:` pediria. Um só dos dois deixa metade do
   // texto na fonte quadrada, dependendo de quem escreveu o estilo.
+  //
+  // E o TERCEIRO nome é o da Diletta: desde que o seletor de marca põe o `ThemeData` do produto acima da
+  // peça, texto na marca da Diletta pede `packages/diletta_coreflow/Inter`. Sem este registro, a prévia da
+  // segunda marca sai em blocos e um gate de layout dela mediria com a fonte quadrada. É a mesma Inter —
+  // os arquivos são iguais — mudam só os nomes pelos quais cada filho a pede.
   var carregadas = 0;
-  final loaders = [FontLoader(BoldFonts.familyRaw), FontLoader(BoldFonts.family)];
+  final loaders = [
+    FontLoader(BoldFonts.familyRaw),
+    FontLoader(BoldFonts.family),
+    FontLoader(Diletta.tipografia.familia!),
+  ];
   for (final arquivo in const [
     'Inter-Regular.ttf',
     'Inter-Medium.ttf',

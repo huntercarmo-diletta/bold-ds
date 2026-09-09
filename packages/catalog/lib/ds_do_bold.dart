@@ -21,6 +21,7 @@ library;
 import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:diletta_coreflow/diletta_coreflow.dart' show Diletta;
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
+import 'package:flutter/material.dart' show Theme;
 import 'package:flutter/widgets.dart';
 
 import 'leitor_do_bold.dart';
@@ -239,6 +240,19 @@ BlockDef _campo() => BlockDef(
           '${_vazio(p['erro']) ? '' : ', errorText: ${_str(p['erro'])}'}'
           '${p['mono'] == true ? ', mono: true' : ''}'
           '${p['somenteLeitura'] == true ? ', readOnly: true' : ''})',
+    );
+
+/// O tema de UM produto, nas duas camadas que a decisão 2 do veredito separou: o `ThemeData` do
+/// Material por cima (é ele quem carrega a família tipográfica e a escada de texto já pintada com os
+/// tokens do esquema) e o `DilettaThemeScope` por baixo (o que os componentes do DS leem).
+///
+/// Antes o plugue punha só o escopo, e a prévia de 09/09 mostrou o preço: texto solto sem cor caía no
+/// `DefaultTextStyle` do Material claro, cinza sobre fundo escuro, e a Inter da Diletta não viajava pelo
+/// seletor de marca. É a mesma montagem da `TelaDeExemploDiletta`, e por isso a tela e o catálogo passam
+/// a mostrar o mesmo produto.
+Widget _temaDoProduto(CoreflowProduto produto, Widget filho, {required bool escuro}) => Theme(
+      data: escuro ? produto.materialEscuro : produto.materialClaro,
+      child: DilettaThemeScope(theme: escuro ? produto.escuro : produto.claro, child: filho),
     );
 
 BlockDef _valor() => BlockDef(
@@ -3653,18 +3667,13 @@ void configurarDsDoBold() {
         'botoesDeNavegacao'],
       'Ritmo': ['ritmo', 'divisor', 'grade'],
     },
-    tema: (filho, {required escuro}) => DilettaThemeScope(
-      theme: escuro ? ContaBold.temaEscuro : ContaBold.temaClaro,
-      child: filho,
-    ),
+    tema: (filho, {required escuro}) => _temaDoProduto(ContaBold.produto, filho, escuro: escuro),
     // AS DUAS MARCAS da casa, e o seletor do motor as troca na mesma peça. É o white label provado onde
     // ele é visto: o componente que o Bold usa, na marca da Diletta, sem uma linha de código a mais no
     // componente. O `tema` acima continua sendo o default (Conta BOLD) pra quem não escolhe.
     marcas: const {'bold': 'Conta BOLD', 'diletta': 'Diletta'},
-    temaDaMarca: (filho, {required escuro, required marca}) {
-      final produto = marca == 'diletta' ? Diletta.produto : ContaBold.produto;
-      return DilettaThemeScope(theme: escuro ? produto.escuro : produto.claro, child: filho);
-    },
+    temaDaMarca: (filho, {required escuro, required marca}) =>
+        _temaDoProduto(marca == 'diletta' ? Diletta.produto : ContaBold.produto, filho, escuro: escuro),
     spacingTokens: const {
       's1': DilettaSpacing.s1,
       's2': DilettaSpacing.s2,

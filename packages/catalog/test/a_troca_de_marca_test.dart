@@ -37,6 +37,33 @@ void main() {
         expect(tema.scheme.palette.primary04, primario);
         expect(tema.scheme.isDark, escuro);
       });
+
+      // Decisão 2 do veredito: a fonte viaja pelo `ThemeData`. Se o seletor só puser o escopo do DS, a
+      // Inter da Diletta não chega e texto sem cor cai no `DefaultTextStyle` do Material claro — foi o
+      // cinza sobre fundo escuro da prévia de 09/09. Mede as duas coisas: família e cor do corpo.
+      testWidgets('a marca `$id` traz o `ThemeData` do produto — ${escuro ? 'escuro' : 'claro'}',
+          (t) async {
+        late ThemeData material;
+        late DilettaScheme s;
+        await t.pumpWidget(Ds.tema(
+          Builder(builder: (ctx) {
+            material = Theme.of(ctx);
+            s = DilettaTheme.schemeOf(ctx);
+            return const SizedBox();
+          }),
+          escuro: escuro,
+          marca: id,
+        ));
+        final produto = id == 'diletta' ? Diletta.produto : ContaBold.produto;
+        final familia = produto.tipografia.familia;
+        if (familia != null) {
+          expect(material.textTheme.bodyMedium?.fontFamily, familia,
+              reason: 'a família tipográfica do produto viaja pelo ThemeData');
+        }
+        expect(material.textTheme.bodyMedium?.color, s.fg,
+            reason: 'texto sem cor herda o `fg` do esquema, e não o preto do Material claro');
+        expect(material.textTheme.labelSmall?.color, s.textSecondary);
+      });
     }
   }
 
