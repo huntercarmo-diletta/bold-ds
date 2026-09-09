@@ -44,11 +44,11 @@ packages:
     dependency: transitive
     description:
       path: "packages/diletta_design_system"
-      ref: "v0.175.0"
-      resolved-ref: e6fd69505103bfb0ba4bc477566abb49854fb8b5
+      ref: "v0.180.0"
+      resolved-ref: "4384a5b6574b3270933531d4dde3505d79a29779"
       url: "git@bitbucket.org:diletta/ds-diletta.git"
     source: git
-    version: "0.175.0"
+    version: "0.180.0"
   flutter:
     dependency: "direct main"
     description: flutter
