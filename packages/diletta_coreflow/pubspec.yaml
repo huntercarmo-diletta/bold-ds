@@ -1,0 +1,46 @@
+name: diletta_coreflow
+description: >-
+  A Diletta como produto do Coreflow — o filho que mostra o white label com a marca da casa.
+  Uma cor declarada (#E60000), o logo, a Inter empacotada; tudo o mais deriva do pai.
+version: 0.1.0
+publish_to: none
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # O PAI da linguagem — e só ele. Um filho não depende de outro produto; o avô chega por ele.
+  coreflow:
+    path: ../coreflow
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  # O gate da fonte lê o próprio pubspec pra conferir que todo peso declarado tem arquivo.
+  yaml: ^3.1.2
+
+flutter:
+  uses-material-design: true
+  # A MARCA: o símbolo e o lockup horizontal, recortados do arquivo oficial em 09/09/2026. O símbolo
+  # fica em #E60000 fixo; as 16 letras do lockup dizem `currentColor` e viram com o tema.
+  assets:
+    - assets/logos/
+  # A FONTE: Inter v4.0, SIL Open Font License 1.1 (`OFL.txt` viaja junto). Empacotada, e não resolvida
+  # por download, pelo mesmo motivo do primeiro filho: fonte de marca que depende de rede às vezes não
+  # é a da marca.
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter-ExtraBold.ttf
+          weight: 800
