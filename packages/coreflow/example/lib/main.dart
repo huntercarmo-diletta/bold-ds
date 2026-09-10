@@ -1,6 +1,6 @@
 /// O WHITE LABEL RODANDO — um app inteiro vestido com a marca da Diletta, e nenhuma linha dele é da marca.
 ///
-/// É a receita do `///` de `CoreflowProduto`, aplicada ao segundo filho: o `ThemeData` claro e escuro
+/// É a receita do `///` de `CoreflowProduto`, aplicada à marca da casa: o `ThemeData` claro e escuro
 /// saem do MESMO produto (`Diletta.materialClaro/Escuro`), e o `DilettaThemeScope` — o que os
 /// componentes do DS leem — segue o brilho que o `MaterialApp` resolveu. A fonte (Inter) chega pelo
 /// `ThemeData`, a cor pelo esquema, o logo pela marca declarada; o app só escolhe o modo.
