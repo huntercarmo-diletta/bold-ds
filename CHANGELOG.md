@@ -20,6 +20,15 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.102.1] — 2026-09-10
+
+### Corrigido — a prosa do `example/` citava o primeiro cliente pelo nome, e o gate do pacote acusou
+
+A régua da Diletta cobra que ela não cite outro produto — nem em comentário. O `///` do barrel dizia
+"Conta BOLD" ao explicar quem é o primeiro cliente; passa a dizer só isso: o primeiro cliente. A tag
+`v0.102.0` ficou com esse gate vermelho no `example/`; esta o fecha. Example 12 · pai 86 · filho 202 ·
+catálogo 109.
+
 ## [0.102.0] — 2026-09-10
 
 ### Alterado — a Diletta é a CARA do Coreflow, e mora no `example/` do pai

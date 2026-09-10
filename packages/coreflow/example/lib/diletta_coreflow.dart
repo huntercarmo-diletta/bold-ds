@@ -6,8 +6,8 @@
 /// símbolo, e a rampa, os papéis, o vidro e o vocabulário derivam pela régua do avô. O que este pacote
 /// declara cabe numa tela: a cor, a marca (dois SVGs) e a fonte. Roda: `flutter run` aqui dentro.
 ///
-/// O Conta BOLD é o primeiro CLIENTE do Coreflow — um filho de paleta inteira, em pacote próprio. Este
-/// pacote não o cita, e o gate cobra: é assim que se prova que o pai não sabe que o Bold existe.
+/// O primeiro CLIENTE do Coreflow é um filho de paleta inteira, em pacote próprio. Este pacote não o
+/// cita nem pelo nome, e o gate cobra: é assim que se prova que a cara da casa não sabe que ele existe.
 library;
 
 export 'package:coreflow/coreflow.dart';
