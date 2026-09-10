@@ -135,6 +135,7 @@ paleta) vai pro filho. Nenhum teste é apagado.
 ## O que NÃO se faz aqui
 
 - **Renomear os 65 `bold_*.dart`.** É mecânico e ruidoso; outro dia, outra PR, sem lógica junto.
+  *(Feito em 10/09, `v0.100.1`: 59 arquivos do pai viraram `coreflow_*.dart`, sem lógica junto. Os do filho ficam `bold_*` — são do Bold.)*
 - **Criar a marca Diletta.** Insumo de marca (cor oficial, SVGs de logo) que não existe em código nenhum.
 - **Tocar `app-newbold`** além do critério de pronto (pub get + suíte por `path:` local, sem diff).
 - **Tocar `feat/adota-conta-bold-ds`** nem a PR #708. Esta branch sai da `main` e volta pra `main`.

@@ -17,7 +17,7 @@ de bloco é aqui.
 (cd packages/coreflow && flutter analyze && flutter test)                   # 86
 (cd packages/coreflow_design_system && flutter analyze && flutter test)     # 202
 (cd packages/diletta_coreflow && flutter analyze && flutter test)           # 9
-(cd packages/catalog && flutter analyze && flutter test)                    # 108
+(cd packages/catalog && flutter analyze && flutter test)                    # 109
 ```
 
 Dois gates medem a separação (`docs/2026-09-04-adr-o-coreflow-e-o-pai.md`), com a MESMA régua de

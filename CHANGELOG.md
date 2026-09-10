@@ -20,6 +20,30 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.100.1] — 2026-09-10
+
+### Alterado — os 59 arquivos do pai deixam de se chamar `bold_*.dart`
+
+O ADR de 04/09 adiou de propósito (*"é mecânico e ruidoso; outro dia, outra PR, sem lógica junto"*). O dia
+chegou sem lógica junto: `git mv` de `lib/src/bold_X.dart` para `lib/src/coreflow_X.dart` nos 59 arquivos de
+`packages/coreflow`, o barrel e os 71 imports internos acompanham, e os seis gates do pai que leem arquivo
+por nome apontam pros nomes novos. Os dois que já se chamavam `coreflow_*` (vinho e vocabulário) ficam.
+
+**Quem consome não muda uma linha**: filho, Diletta e catálogo importam o barrel `package:coreflow/coreflow.dart`,
+e nenhum pacote fora do pai citava um caminho `src/bold_*` (medido por `grep` antes de mover). Os arquivos do
+FILHO continuam `bold_*.dart` — esses são do Bold de verdade.
+
+Um gate do pai isentava `bold_selo_quantico.dart` e `bold_type.dart` do degrau tipográfico; os dois são do
+filho desde 08/09 e o gate varre só o pai, então a isenção era letra morta e saiu.
+
+### Alterado — três `const` desnecessários saem do filho
+
+O lint do app acusa a cópia vendorizada (`unnecessary_const`) e o do DS não os via. Nada muda em valor.
+
+### Gates
+
+Pai 86 · filho 202 · Diletta 9 · catálogo 109. Régua nome 147 / valor 98, todos no filho; pai em zero.
+
 ## [0.100.0] — 2026-09-09
 
 ### O Coreflow é o pai, e o Bold é o primeiro filho — a tag em que `packages/coreflow` nasce
