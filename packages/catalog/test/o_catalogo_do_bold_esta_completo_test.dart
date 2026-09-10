@@ -188,6 +188,9 @@ void main() {
   });
 
   testWidgets('o preview sai com a cor do BOLD, e nenhuma do CPF SEGURO', (t) async {
+    // O catálogo abre na Diletta desde 10/09; este teste é sobre o BOLD, então o escolhe no seletor.
+    CC.marca.value = 'bold';
+    addTearDown(() => CC.marca.value = null);
     // O mesmo critério do DS-filho, aplicado à ferramenta: os componentes aqui passam
     // pelo gancho `tema` do plugue, e é ele que faz a identidade chegar no preview.
     const marcaDoPrimeiroFilho = {
@@ -210,6 +213,7 @@ void main() {
             ),
           ),
         ),
+        marca: 'bold', // o teste é sobre o Bold, e é assim que a prévia do motor passa a marca do seletor
       ),
     ));
     await t.pump(const Duration(milliseconds: 100));

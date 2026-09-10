@@ -2,6 +2,7 @@ import 'package:conta_bold_catalog/chrome_do_bold.dart';
 import 'package:conta_bold_catalog/conteudo_do_bold.dart';
 import 'package:conta_bold_catalog/ds_do_bold.dart';
 import 'package:coreflow_design_system/coreflow_design_system.dart';
+import 'package:diletta_coreflow/diletta_coreflow.dart' show Diletta;
 import 'package:diletta_catalog_core/diletta_catalog_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -159,8 +160,9 @@ void main() {
         }
       }
     }
-    expect(cores, contains(BoldPalette.bold.primary04.toARGB32()),
-        reason: 'o preview do pai não está desenhando com a paleta do Bold');
+    // A marca da casa: o catálogo abre na Diletta desde 10/09, e é a cor dela que o preview pinta.
+    expect(cores, contains(Diletta.vermelho.toARGB32()),
+        reason: 'o preview do pai não está desenhando com a paleta da marca em foco (a Diletta)');
     expect(cores, isNot(contains(0xFF0E7C5F)),
         reason: 'voltou a paleta de REFERÊNCIA — o preview saiu do gancho `tema`');
   });

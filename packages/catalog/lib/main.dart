@@ -66,7 +66,7 @@ CatalogoConfig configDoCatalogoDoBold() {
       titulo: _versaoDaBuild.isEmpty
           ? 'Conta BOLD · DS Catalog'
           : 'Conta BOLD · DS Catalog $_versaoDaBuild',
-      marca: 'BOLD · Design System',
+      marca: 'Coreflow · Design System',
       abaInicial: 'fundamentos',
       navegacao: nav,
       // A FONTE DO PRODUTO no chrome, e ela faltava desde o primeiro dia.

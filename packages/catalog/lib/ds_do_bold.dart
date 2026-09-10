@@ -3507,7 +3507,7 @@ BlockDef _cartaoDePedido() => BlockDef(
 /// 09/09), e resolve por `CC.marca` sozinho: as abas assinam o notificador, a conformidade mede a marca na
 /// tela. Este arquivo não assina nada e não replugue nada — a versão de 09/09 (manhã) fazia as duas
 /// coisas, e o pedido ao motor nasceu daí. O campo `estilos`/`fundamentos` sem gancho continua declarado
-/// com o Conta BOLD: é o que o motor lê enquanto ninguém escolheu marca.
+/// com a Diletta: é o que o motor lê enquanto ninguém escolheu marca.
 void configurarDsDoBold() {
   // O mapa de blocos sai pra uma variável porque os CONTRATOS derivam dele. Ler `Ds.blocos` aqui seria
   // o ovo antes da galinha — e o motor falha alto nisso, com a mensagem certa: "nenhum design system
@@ -3678,13 +3678,13 @@ void configurarDsDoBold() {
         'botoesDeNavegacao'],
       'Ritmo': ['ritmo', 'divisor', 'grade'],
     },
-    tema: (filho, {required escuro}) => _temaDoProduto(ContaBold.produto, filho, escuro: escuro),
+    tema: (filho, {required escuro}) => _temaDoProduto(Diletta.produto, filho, escuro: escuro),
     // AS DUAS MARCAS da casa, e o seletor do motor as troca na mesma peça. É o white label provado onde
     // ele é visto: o componente que o Bold usa, na marca da Diletta, sem uma linha de código a mais no
-    // componente. O `tema` acima continua sendo o default (Conta BOLD) pra quem não escolhe.
-    marcas: const {'bold': 'Conta BOLD', 'diletta': 'Diletta'},
+    // componente. O `tema` acima é o default pra quem não escolhe — a Diletta, desde 10/09.
+    marcas: const {'diletta': 'Diletta', 'bold': 'Conta BOLD'},
     temaDaMarca: (filho, {required escuro, required marca}) =>
-        _temaDoProduto(marca == 'diletta' ? Diletta.produto : ContaBold.produto, filho, escuro: escuro),
+        _temaDoProduto(_produtoDaMarca(marca), filho, escuro: escuro),
     spacingTokens: const {
       's1': DilettaSpacing.s1,
       's2': DilettaSpacing.s2,
@@ -3817,10 +3817,10 @@ void configurarDsDoBold() {
     },
     // OS FUNDAMENTOS (v0.43.0 do motor) — a prosa que ENSINA, e a segunda página minha que ele apaga.
     // A do pai viaja no pacote dele (`kDilettaLinguagem`); as seções do produto vêm do pacote do produto.
-    fundamentos: _fundamentosDe(ContaBold.produto),
+    fundamentos: _fundamentosDe(Diletta.produto),
     fundamentosDaMarca: (marca) => _fundamentosDe(_produtoDaMarca(marca)),
     // O INVENTÁRIO DE ESTILO e a prosa seguem a marca pelos ganchos do motor. Ver `_estilosDe` e `_fundamentosDe`.
-    estilos: _estilosDe(ContaBold.produto),
+    estilos: _estilosDe(Diletta.produto),
     estilosDaMarca: (marca) => _estilosDe(_produtoDaMarca(marca)),
     // COMO ESTE DS MOVE CADA TRANSIÇÃO (gancho `motionDaTransicao`).
     //
@@ -3894,9 +3894,13 @@ void configurarDsDoBold() {
 // 2b · O QUE MUDA COM A MARCA
 // ═══════════════════════════════════════════════════════════════════════════════
 
-/// O produto que a marca do motor pede. `null` e id desconhecido caem no Conta BOLD.
+/// O produto que a marca do motor pede. `null` e id desconhecido caem na DILETTA — a cara do Coreflow.
+///
+/// Era o Conta BOLD até 10/09. A dona do produto decidiu: o Coreflow se apresenta vestido de Diletta,
+/// e o Bold é o primeiro CLIENTE, selecionável. O catálogo continua documentando as telas do Bold — é
+/// justamente isso que mostra o white label: o conteúdo de um produto na marca da casa.
 CoreflowProduto _produtoDaMarca(String? marca) =>
-    marca == 'diletta' ? Diletta.produto : ContaBold.produto;
+    marca == 'bold' ? ContaBold.produto : Diletta.produto;
 
 /// A PROSA das decisões de cada produto, atrás da linguagem do pai.
 ///

@@ -137,26 +137,29 @@ void main() {
         child: Ds.tema(const AbaDeStyles(), escuro: false),
       ))));
       await t.pumpAndSettle();
+      // Abre na marca da casa (a Diletta é o padrão desde 10/09) e troca pro Bold sem sair da aba.
       const hexDaDiletta = '#E60000';
       final hexDoBold = '#${(BoldPalette.bold.primary04.toARGB32() & 0xFFFFFF).toRadixString(16).padLeft(6, '0').toUpperCase()}';
-      expect(find.textContaining(hexDoBold, findRichText: true), findsWidgets);
-      expect(find.textContaining(hexDaDiletta, findRichText: true), findsNothing);
-
-      CC.marca.value = 'diletta';
-      await t.pumpAndSettle();
       expect(find.textContaining(hexDaDiletta, findRichText: true), findsWidgets);
       expect(find.textContaining(hexDoBold, findRichText: true), findsNothing);
+
+      CC.marca.value = 'bold';
+      await t.pumpAndSettle();
+      expect(find.textContaining(hexDoBold, findRichText: true), findsWidgets);
+      expect(find.textContaining(hexDaDiletta, findRichText: true), findsNothing);
     });
   });
 
-  testWidgets('sem marca pedida, o default continua sendo o Conta BOLD', (t) async {
+  testWidgets('sem marca pedida, o default é a DILETTA — a cara do Coreflow', (t) async {
+    // Decisão da dona do produto em 10/09: o Coreflow se apresenta vestido de Diletta; o Conta BOLD é o
+    // primeiro cliente, selecionável. Era o Bold até então.
     late DilettaTheme tema;
     await t.pumpWidget(Ds.tema(Builder(builder: (ctx) {
       tema = DilettaTheme.of(ctx);
       return const SizedBox();
     })));
-    expect(tema.brand.logoFull, ContaBold.marca.logoFull);
-    expect(tema.brand.pacote, ContaBold.marca.pacote);
+    expect(tema.brand.logoFull, Diletta.marca.logoFull);
+    expect(tema.brand.pacote, Diletta.marca.pacote);
   });
 }
 

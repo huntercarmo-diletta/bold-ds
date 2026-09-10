@@ -21,7 +21,11 @@ void main() {
     configurarChromeDoBold();
     configurarDsDoBold();
     configurarConteudoDoBold();
+    // Este arquivo mede as DECLARAÇÕES DO BOLD (seções, papéis, tinta assumida). Desde 10/09 o catálogo
+    // abre na Diletta, então o Bold é escolhido aqui como o seletor escolheria — e devolvido no fim.
+    CC.marca.value = 'bold';
   });
+  tearDownAll(() => CC.marca.value = null);
 
   testWidgets('as SEÇÕES declaradas chegam na aba do pai, e são exatamente estas cinco', (t) async {
     // Terceiro achado da varredura do pai, e este é meu. A asserção iterava `kBoldFundamentos.keys` e cobrava
