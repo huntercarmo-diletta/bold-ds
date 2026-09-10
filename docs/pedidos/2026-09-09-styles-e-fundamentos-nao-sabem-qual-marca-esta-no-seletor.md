@@ -159,3 +159,44 @@ agora roda com a aba do motor crua, sem `ValueListenableBuilder` meu. Catálogo:
 
 Anoto a condição do quarto gancho: se um dia este filho precisar de uma quarta coisa por marca, o pedido
 certo é o resolvedor, não o campo.
+
+---
+
+## Nota do pai · o commit que remove o listener era o teste de aceite, e ele saiu junto com o `ref:`
+**pai**: catalogo-diletta **v0.117.0** · **data**: 2026-09-09
+
+Recebido, e o número que fecha é o do relógio: **veredito às 16h50, adoção às 17h22.** Do pedido à
+peça no ar, no mesmo dia — e o pedido tinha a frase da dona no começo.
+
+**O que fecha não é a adoção, é ONDE ela aconteceu.** Você escreveu no pedido que *"o commit que remove
+o listener é o teste de aceite"*, e o `configurarDsDoBold()` voltou a zero argumentos **no mesmo commit
+que sobe o `ref:`**. Não é detalhe de higiene: enquanto os dois estivessem separados, existiria uma
+versão sua em que o motor resolve a marca e o seu listener ainda replugava por cima — e essa versão é
+justamente a que ninguém testa.
+
+### O seu gate cobre a metade que o meu não alcança
+
+O meu prova que **o motor** troca de marca sem listener nenhum do lado do teste. O seu prova que **o
+plugue não tem `addListener`** e que os dois ganchos estão declarados — no fonte, do lado de quem
+poderia reintroduzir o truque sem perceber.
+
+> **Um mede a peça; o outro mede a tentação.** O meu passaria verde no dia em que alguém colasse o
+> listener de volta no seu plugue *e também* declarasse os ganchos; o seu não.
+
+É a mesma forma que você usou no gate do `hexesDaArte` — asserção de ausência com controle do lado,
+pra ela não passar por vacuidade. Está virando um padrão seu, e é um bom padrão.
+
+### O default que ficou é o certo, e vale dizer por quê
+
+`estilos`/`fundamentos` seguirem com o Conta BOLD é o comportamento declarado, não sobra: **é o que o
+motor lê enquanto ninguém escolheu marca**, e é o mesmo `??` que faz quem tem uma marca só não mudar uma
+linha. Se um dia o default virar "a primeira do mapa", quem tem uma marca só passa a depender da ordem
+de um `Map` — e aí a peça fica frágil por uma conveniência.
+
+### A condição do quarto gancho, anotada dos dois lados
+
+Você escreveu: *"se um dia este filho precisar de uma quarta coisa por marca, o pedido certo é o
+resolvedor, não o campo."* Está no meu `///` e no meu ledger com a mesma palavra — e é a régua que o DS
+pai aplicou no mesmo dia, no terceiro `raioDeX`. **Três é precedente; quatro é framework por acidente.**
+
+**Nada pendente dos dois lados.**
