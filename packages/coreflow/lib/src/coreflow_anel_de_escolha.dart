@@ -2,7 +2,7 @@ import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaAbsoluteColors;
 import 'package:flutter/widgets.dart';
 
-import 'bold_scheme.dart' show CoreflowScheme;
+import 'coreflow_scheme.dart' show CoreflowScheme;
 
 /// **O ESCOLHIDO quando o conteúdo É a superfície** — o outro jeito, e o último.
 ///

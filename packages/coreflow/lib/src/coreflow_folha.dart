@@ -1,7 +1,7 @@
-import 'bold_background.dart';
-import 'bold_espaco.dart';
-import 'bold_largura.dart';
-import 'bold_radius.dart';
+import 'coreflow_background.dart';
+import 'coreflow_espaco.dart';
+import 'coreflow_largura.dart';
+import 'coreflow_radius.dart';
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaAbsoluteColors, DilettaType;
 import 'package:flutter/material.dart';
@@ -10,9 +10,9 @@ import 'package:flutter/material.dart';
 // pacote, e o fechar abaixo monta com `DilettaIconButton`.
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaSpacing;
-import 'bold_scheme.dart' show CoreflowScheme;
-import 'bold_pegador.dart' show CoreflowPegador;
-import 'bold_cabecalho_de_folha.dart' show CoreflowFecharFolha;
+import 'coreflow_scheme.dart' show CoreflowScheme;
+import 'coreflow_pegador.dart' show CoreflowPegador;
+import 'coreflow_cabecalho_de_folha.dart' show CoreflowFecharFolha;
 
 /// BottomSheet (organismo). O CONTAINER de sheet que faltava:
 /// o [CoreflowBarraDeTopo.sheet] só dava o cabeçalho e o `Dialog` do app é modal central.

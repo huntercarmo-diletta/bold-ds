@@ -28,12 +28,12 @@
 /// tentar. A distinção é do domínio: assinatura colhida não se retira por aqui.
 library;
 
-import 'bold_autorizacao.dart';
+import 'coreflow_autorizacao.dart';
 import 'package:flutter/widgets.dart';
 import 'package:diletta_design_system/diletta_design_system.dart';
 
-import 'bold_scheme.dart';
-import 'bold_cartao.dart';
+import 'coreflow_scheme.dart';
+import 'coreflow_cartao.dart';
 
 /// O cartão de um pedido esperando assinatura.
 /// O TOM do ladrilho do tipo, e ele é o que diz "Pix" ou "boleto" antes de o texto ser lido.

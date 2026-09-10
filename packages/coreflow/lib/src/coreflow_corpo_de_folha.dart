@@ -1,7 +1,7 @@
-import 'bold_radius.dart';
+import 'coreflow_radius.dart';
 import 'package:flutter/widgets.dart';
 
-import 'bold_scheme.dart' show CoreflowScheme;
+import 'coreflow_scheme.dart' show CoreflowScheme;
 
 /// **CoreflowCorpoDeFolha** — o painel de uma folha que a TELA monta, e ele tinha 13 cópias.
 ///

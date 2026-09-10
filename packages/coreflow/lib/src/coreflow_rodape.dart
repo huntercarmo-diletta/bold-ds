@@ -3,10 +3,10 @@ import 'package:diletta_design_system/diletta_design_system.dart'
 import 'package:flutter/material.dart';
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaSpacing;
-import 'bold_botoes_de_navegacao.dart' show CoreflowAcaoDeNavegacao, CoreflowAcoesDoPai;
-import 'bold_espaco.dart' show CoreflowEspaco;
-import 'bold_nav_flutuante.dart' show CoreflowItemDeNav;
-import 'bold_nav_flutuante.dart' show CoreflowNavFlutuante;
+import 'coreflow_botoes_de_navegacao.dart' show CoreflowAcaoDeNavegacao, CoreflowAcoesDoPai;
+import 'coreflow_espaco.dart' show CoreflowEspaco;
+import 'coreflow_nav_flutuante.dart' show CoreflowItemDeNav;
+import 'coreflow_nav_flutuante.dart' show CoreflowNavFlutuante;
 
 
 /// Um item da nav ([CoreflowRodape.nav]): o valor que ele seleciona, o rótulo e o [glifo].

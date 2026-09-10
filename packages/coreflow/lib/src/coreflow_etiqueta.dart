@@ -1,9 +1,9 @@
-import 'bold_radius.dart';
+import 'coreflow_radius.dart';
 import 'package:diletta_design_system/diletta_design_system.dart';
-import 'bold_icone.dart' show CoreflowIcone;
+import 'coreflow_icone.dart' show CoreflowIcone;
 import 'package:flutter/material.dart' show Theme;
 import 'package:flutter/widgets.dart';
-import 'bold_scheme.dart' show CoreflowScheme;
+import 'coreflow_scheme.dart' show CoreflowScheme;
 
 // O TOM é o do pai. Ele tinha 5 valores aqui e 7 lá, e os 5 eram os mesmos
 // nomes — vocabulário duplicado, não vocabulário próprio. Os dois que faltavam

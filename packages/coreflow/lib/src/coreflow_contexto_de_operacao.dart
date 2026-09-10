@@ -5,7 +5,7 @@
 /// **regra deste produto é vocabulário DESTE produto, e o pacote é o DS dele.** Terceira peça a
 /// mudar de casa pela mesma frase relida, depois do logo e das 16 ilustrações.
 import 'package:diletta_design_system/diletta_design_system.dart';
-import 'bold_scheme.dart' show CoreflowScheme;
+import 'coreflow_scheme.dart' show CoreflowScheme;
 import 'package:flutter/material.dart';
 
 

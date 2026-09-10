@@ -1,9 +1,9 @@
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaAvatar, DilettaAvatarVariant;
-import 'bold_icone.dart' show CoreflowIcone;
+import 'coreflow_icone.dart' show CoreflowIcone;
 import 'package:flutter/material.dart';
-import 'bold_vidro.dart';
-import 'bold_scheme.dart' show CoreflowScheme;
+import 'coreflow_vidro.dart';
+import 'coreflow_scheme.dart' show CoreflowScheme;
 
 /// top-bar building blocks.
 ///

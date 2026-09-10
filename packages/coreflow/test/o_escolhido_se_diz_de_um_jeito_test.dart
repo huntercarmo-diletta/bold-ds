@@ -27,13 +27,13 @@ void main() {
   // Os DOIS fios deste pacote que não são de cartão, cada um com a razão escrita. A lista é curta
   // de propósito: entrada nova aqui é decisão, não conserto.
   const fiosComRazao = {
-    'lib/src/bold_avatar.dart':
+    'lib/src/coreflow_avatar.dart':
         'o anel do selo de 16px — fio de 1 num círculo desse tamanho é 12% do raio, e ele lê como '
             'disco cheio. A espessura acompanha a peça, não o estado dela.',
-    'lib/src/bold_tema_material.dart':
+    'lib/src/coreflow_tema_material.dart':
         'o anel de FOCO do campo de texto, que é do tema Material e não de superfície. Foco é a '
             'única coisa neste produto que engrossa borda, e ela engrossa em UM valor.',
-    'lib/src/bold_etiqueta.dart':
+    'lib/src/coreflow_etiqueta.dart':
         'meio fio na pílula. A etiqueta é pequena e vive em fileira; fio inteiro em seis delas '
             'lado a lado vira grade, e a fileira lê como tabela em vez de conjunto.',
   };
@@ -43,7 +43,7 @@ void main() {
     for (final f in Directory('lib').listSync(recursive: true).whereType<File>()) {
       if (!f.path.endsWith('.dart')) continue;
       // O cartão é o dono das duas espessuras de SUPERFÍCIE: é lá que elas moram, por contrato.
-      if (f.path.endsWith('bold_cartao.dart')) continue;
+      if (f.path.endsWith('coreflow_cartao.dart')) continue;
       final fonte = f.readAsStringSync();
       for (final m in RegExp(r'(Border\.all|BorderSide)\([^)]*width:\s*([0-9.]+)')
           .allMatches(fonte)) {
@@ -60,7 +60,7 @@ void main() {
   });
 
   test('o cartão só conhece DUAS espessuras, e a segunda é 1,5', () {
-    final fonte = File('lib/src/bold_cartao.dart').readAsStringSync();
+    final fonte = File('lib/src/coreflow_cartao.dart').readAsStringSync();
     expect(fonte, contains('bordaReforcada ? 1.5 : 1.0'));
     // O CONTROLE: se o eixo livre voltar, este teste é o que avisa.
     expect(fonte, isNot(contains('final double? larguraDaBorda')),
@@ -74,10 +74,10 @@ void main() {
     // Até 02/09 essa forma estava escrita DUAS vezes — dentro do `CoreflowAmostraDeFundo` e na tela
     // de preferências do Letti, uma com o token de transparente e a outra com `Colors.transparent`.
     // A varredura dos jeitos de dizer escolhido achou as duas cópias no mesmo dia.
-    final anel = File('lib/src/bold_anel_de_escolha.dart').readAsStringSync();
+    final anel = File('lib/src/coreflow_anel_de_escolha.dart').readAsStringSync();
     expect(anel, contains('static const double espessura = 2.5'),
         reason: 'o número mora numa constante nomeada, e não solto na decoração');
-    final amostra = File('lib/src/bold_amostra_de_fundo.dart').readAsStringSync();
+    final amostra = File('lib/src/coreflow_amostra_de_fundo.dart').readAsStringSync();
     expect(amostra, contains('CoreflowAnelDeEscolha'));
     expect(amostra, isNot(contains('width: 2.5')), reason: 'a cópia voltou');
     // E ele lê o esquema DESTE pacote. A peça que o hospeda lia o do pai, e no CLARO os dois
@@ -87,7 +87,7 @@ void main() {
   });
 
   test('o cartão de pedido não tem mais resposta PRÓPRIA pra escolhido', () {
-    final fonte = File('lib/src/bold_cartao_de_pedido.dart').readAsStringSync();
+    final fonte = File('lib/src/coreflow_cartao_de_pedido.dart').readAsStringSync();
     expect(fonte, contains('selecionado: selecionada'));
     expect(fonte, isNot(contains('selecionada ? s.primary : s.border')),
         reason: 'era a resposta certa escrita no lugar errado — duas peças respondendo a mesma '

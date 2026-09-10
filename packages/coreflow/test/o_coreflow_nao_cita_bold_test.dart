@@ -69,7 +69,7 @@ void main() {
     }
     expect(achados, isEmpty, reason: 'valor de produto em lib/ do pai:\n${achados.join("\n")}');
     // Controle da convenção: ela existe onde diz que existe.
-    expect(File('lib/src/bold_ilustracao.dart').readAsLinesSync().map((l) => l.trim()),
+    expect(File('lib/src/coreflow_ilustracao.dart').readAsLinesSync().map((l) => l.trim()),
         contains(convencao));
   });
 

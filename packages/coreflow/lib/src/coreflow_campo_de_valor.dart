@@ -2,7 +2,7 @@ import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaAmountField, DilettaAmountFieldSize;
 import 'package:flutter/material.dart';
 
-import 'bold_dinheiro.dart';
+import 'coreflow_dinheiro.dart';
 
 /// CurrencyField. Campo de valor: `R$` à esquerda, número grande e
 /// centralizado, sem moldura.

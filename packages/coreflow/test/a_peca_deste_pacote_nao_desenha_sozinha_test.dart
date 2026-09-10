@@ -19,7 +19,7 @@ import 'package:flutter_test/flutter_test.dart';
 void main() {
   /// Onde a cor NASCE. Fora daqui, hex num widget é uma cor que ninguém encontra depois.
   const declaram = {
-    'bold_elevacao.dart',        // as sombras
+    'coreflow_elevacao.dart',        // as sombras
   };
 
 
@@ -64,8 +64,9 @@ void main() {
     // Cobra-se o DEGRAU (`fontSize:`), não todo `TextStyle`: peso num `TextSpan` filho é ÊNFASE, e
     // ele herda tamanho e família de cima.
     cobraZero('degrau tipográfico inventado', RegExp(r'fontSize:\s*[\d.]+'),
-        'A escala é `CoreflowType` / `DilettaType`.',
-        isentos: {'bold_selo_quantico.dart', 'bold_type.dart'});
+        // Sem isentos: os dois que havia (`bold_selo_quantico.dart`, `bold_type.dart`) são do FILHO
+        // desde 08/09 e este gate varre só o pai — isenção de arquivo que não está aqui é letra morta.
+        'A escala é `CoreflowType` / `DilettaType`.');
   });
 
   test('e o gate SABE ver — a varredura enxerga peça', () {

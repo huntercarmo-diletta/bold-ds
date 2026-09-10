@@ -5,7 +5,7 @@ import 'package:diletta_design_system/diletta_design_system.dart'
         DilettaNavigationAction,
         DilettaNavigationButton;
 import 'package:flutter/material.dart';
-import 'bold_botao.dart';
+import 'coreflow_botao.dart';
 
 /// Descriptor de um CTA no [CoreflowBotoesDeNavegacao].
 ///

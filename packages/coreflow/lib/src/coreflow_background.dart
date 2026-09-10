@@ -35,7 +35,7 @@ import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
 import 'coreflow_vinho.dart';
-import 'bold_largura.dart' show CoreflowLarguraDeConteudo;
+import 'coreflow_largura.dart' show CoreflowLarguraDeConteudo;
 
 /// Os sete fundos que o produto oferece.
 ///

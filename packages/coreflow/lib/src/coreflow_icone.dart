@@ -2,7 +2,7 @@ import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaIcon;
 import 'package:flutter/widgets.dart';
 
-import 'bold_scheme.dart';
+import 'coreflow_scheme.dart';
 
 /// **CoreflowIcone** — o glifo do produto, com o nome que o produto usa e a caixa que ele pede.
 ///

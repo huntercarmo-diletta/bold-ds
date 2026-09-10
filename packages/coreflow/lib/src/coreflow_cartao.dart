@@ -1,8 +1,8 @@
-import 'bold_radius.dart';
+import 'coreflow_radius.dart';
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/material.dart';
-import 'bold_vidro.dart';
-import 'bold_scheme.dart' show CoreflowScheme;
+import 'coreflow_vidro.dart';
+import 'coreflow_scheme.dart' show CoreflowScheme;
 
 /// Card surface.
 ///

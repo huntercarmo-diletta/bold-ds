@@ -1,7 +1,7 @@
-import 'bold_busy.dart';
+import 'coreflow_busy.dart';
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaInput, DilettaInputType;
-import 'bold_icone.dart' show CoreflowIcone;
+import 'coreflow_icone.dart' show CoreflowIcone;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 

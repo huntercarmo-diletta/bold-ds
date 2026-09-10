@@ -2,7 +2,7 @@ import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaReceipt, DilettaReceiptRow, DilettaReceiptSection, DilettaSpotState;
 import 'package:flutter/widgets.dart';
 
-import 'bold_copiar.dart' show CoreflowCopiar;
+import 'coreflow_copiar.dart' show CoreflowCopiar;
 
 /// **CoreflowComprovante** — o comprovante do pai com o ID pronto pra ser levado dali.
 ///

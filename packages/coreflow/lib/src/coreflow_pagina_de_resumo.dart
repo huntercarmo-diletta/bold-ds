@@ -1,10 +1,10 @@
-import 'bold_background.dart';
-import 'bold_botoes_de_navegacao.dart';
-import 'bold_resumo_da_transacao.dart';
-import 'bold_rodape.dart';
+import 'coreflow_background.dart';
+import 'coreflow_botoes_de_navegacao.dart';
+import 'coreflow_resumo_da_transacao.dart';
+import 'coreflow_rodape.dart';
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/material.dart';
-import 'bold_barra_de_topo.dart';
+import 'coreflow_barra_de_topo.dart';
 
 /// Linha de detalhe (acessório à esquerda + título/subtítulo) de uma seção do
 /// [CoreflowPaginaDeResumo].

@@ -18,7 +18,7 @@ void main() {
     // o resto da camada de DS do app. O gate segue lendo fonte — a ausência de construtor não se
     // mede em árvore —, e o caminho é o do pacote resolvido, não um caminho relativo que só existe
     // na máquina de quem tem os dois repos lado a lado.
-    final fonte = File('lib/src/bold_barra_de_topo.dart').readAsStringSync();
+    final fonte = File('lib/src/coreflow_barra_de_topo.dart').readAsStringSync();
     expect(fonte.contains('_rawBar'), isFalse,
         reason: 'a barra copiada voltou — os acessórios do pai cobrem leading/trailing');
     expect(fonte.contains('this.leading'), isFalse,

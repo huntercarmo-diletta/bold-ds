@@ -16,13 +16,13 @@ void main() {
   test('quem lê o `primary` do avô está declarado, e o quinto tem que se explicar', () {
     // O que os torna legítimos é o mesmo: nenhum deles é TINTA sobre claro.
     const legitimos = {
-      'lib/src/bold_autorizacao.dart': 'o tom da barra de progresso — superfície CHEIA, e o que '
+      'lib/src/coreflow_autorizacao.dart': 'o tom da barra de progresso — superfície CHEIA, e o que '
           'precisa de contraste é o que vai por cima dela, não ela contra o fundo.',
-      'lib/src/bold_cabecalho_da_home.dart': 'o anel do avatar quando há foto. O contraste é contra '
+      'lib/src/coreflow_cabecalho_da_home.dart': 'o anel do avatar quando há foto. O contraste é contra '
           'a FOTO, que é conteúdo arbitrário: nenhum dos dois degraus ganha essa por número.',
-      'lib/src/bold_nav_flutuante.dart': 'o preenchimento da aba ativa — pintura, e a marca é o que '
+      'lib/src/coreflow_nav_flutuante.dart': 'o preenchimento da aba ativa — pintura, e a marca é o que '
           'ela tem que dizer.',
-      'lib/src/bold_pontos_de_pagina.dart': 'o ponto da página atual. Objeto gráfico, piso 3,0, e a '
+      'lib/src/coreflow_pontos_de_pagina.dart': 'o ponto da página atual. Objeto gráfico, piso 3,0, e a '
           'marca do primeiro produto dá 3,46:1 sobre branco.',
     };
     final lendo = <String>{};
@@ -61,7 +61,7 @@ void main() {
 
     // Duas portas, e só uma tem tradutor: `CoreflowIcone` passa pelo mapa de apelidos desta
     // linguagem (`chevron-right` → `angle-right-light`); `DilettaIcon` fala com o avô DIRETO.
-    final fonteDoApelido = File('lib/src/bold_icone.dart').readAsStringSync();
+    final fonteDoApelido = File('lib/src/coreflow_icone.dart').readAsStringSync();
     final apelidos = RegExp(r"'([a-z0-9-]+)':\s*'[a-z0-9-]+'")
         .allMatches(fonteDoApelido)
         .map((m) => m.group(1)!)

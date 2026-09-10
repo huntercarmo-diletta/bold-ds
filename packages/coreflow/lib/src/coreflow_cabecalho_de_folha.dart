@@ -3,7 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaIconButton, DilettaIconButtonSize, DilettaIconButtonType, DilettaSpacing;
 
-import 'bold_pegador.dart' show CoreflowPegador;
+import 'coreflow_pegador.dart' show CoreflowPegador;
 /// **O CABEÇALHO DE UMA FOLHA** — o pegador, o fechar e o título, escritos pelo time do app.
 ///
 /// Chegou por merge em 02/09, de `lib/design_system/widgets/bold_sheet_header.dart`. E ele traz uma

@@ -1,13 +1,13 @@
-import 'bold_background.dart';
-import 'bold_botao.dart';
-import 'bold_busy.dart';
-import 'bold_espaco.dart';
-import 'bold_largura.dart';
+import 'coreflow_background.dart';
+import 'coreflow_botao.dart';
+import 'coreflow_busy.dart';
+import 'coreflow_espaco.dart';
+import 'coreflow_largura.dart';
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/material.dart';
-import 'bold_barra_de_topo.dart' show CoreflowBarraDeTopo;
-import 'bold_etiqueta.dart' show CoreflowEtiqueta;
-import 'bold_scheme.dart' show CoreflowScheme;
+import 'coreflow_barra_de_topo.dart' show CoreflowBarraDeTopo;
+import 'coreflow_etiqueta.dart' show CoreflowEtiqueta;
+import 'coreflow_scheme.dart' show CoreflowScheme;
 
 /// AS DUAS PÁGINAS DESTE PRODUTO, e o rodapé de ação que elas carregam.
 ///

@@ -3,9 +3,9 @@ import 'package:diletta_design_system/diletta_design_system.dart'
 import 'package:flutter/material.dart';
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaSpacing;
-import 'bold_cartao.dart' show CoreflowCartao;
-import 'bold_icone.dart' show CoreflowIcone;
-import 'bold_scheme.dart' show CoreflowScheme;
+import 'coreflow_cartao.dart' show CoreflowCartao;
+import 'coreflow_icone.dart' show CoreflowIcone;
+import 'coreflow_scheme.dart' show CoreflowScheme;
 
 
 /// List primitives (portados do "App list" do cpf-seguro).

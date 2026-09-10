@@ -19,7 +19,7 @@ import 'coreflow_vocabulario.dart';
 import 'package:flutter/material.dart';
 import 'package:diletta_design_system/diletta_design_system.dart';
 
-import 'bold_gradients.dart';
+import 'coreflow_gradients.dart';
 
 
 class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
