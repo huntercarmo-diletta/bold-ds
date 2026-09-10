@@ -20,6 +20,35 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.102.0] — 2026-09-10
+
+### Alterado — a Diletta é a CARA do Coreflow, e mora no `example/` do pai
+
+A frase do pedido original era *"o Coreflow terá o visual da marca da Diletta para mostrar o white label"*. A
+Diletta tinha nascido como um pacote irmão do Bold — estruturalmente um segundo filho — porque a regra de
+08/09 proíbe valor de produto no pai. A dona do produto corrigiu a leitura em 10/09: **a identidade da casa
+não é um cliente.** O que não pode morar no `lib/` do pai mora no `example/` dele, que é o lugar que o pub
+reserva pra "como este pacote se veste quando usado".
+
+- `packages/diletta_coreflow` → `packages/coreflow/example` (`git mv`, histórico preservado). O nome do
+  pacote segue `diletta_coreflow`, então quem importa não muda uma linha.
+- `exemplos/diletta_app` entrou no mesmo pacote: o `example/` é executável (`flutter run`), com a tela de
+  exemplo e os três botões de modo. Um lugar em vez de dois.
+- O gate do pai continua em zero: ele mede `lib/`, e o `example/` fica fora. A régua da Diletta continua
+  cobrando que ela não cite o primeiro cliente.
+
+### Alterado — o catálogo abre na Diletta; o Conta BOLD é o primeiro cliente, selecionável
+
+`marcas` passa a `{diletta, bold}`, o `tema` default e o inventário de Styles/Fundamentos sem marca
+escolhida são os da Diletta, e a casca diz `Coreflow · Design System`. O conteúdo documentado continua
+sendo o do Bold (telas, adoção, contratos) — é isso que mostra o white label: o conteúdo de um produto na
+marca da casa. Sete gates que afirmavam o Bold como padrão passaram a escolhê-lo no seletor quando o teste é
+sobre ele, e a cobrar a Diletta quando o teste é sobre o padrão.
+
+### Gates
+
+Pai 86 · filho Bold 202 · example (Diletta) 12 · catálogo 109.
+
 ## [0.101.0] — 2026-09-10
 
 ### Adicionado — `exemplos/diletta_app`: o white label rodando
