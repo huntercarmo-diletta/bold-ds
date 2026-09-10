@@ -10,6 +10,7 @@ de bloco é aqui.
 | `packages/coreflow_design_system` | **o primeiro filho**: depende do pai por `path:` e o re-exporta (quem importa este recebe os três), mais a identidade do Conta BOLD — `ContaBold` (o produto com o nome dele), paleta, vinho, fonte, escala e o selo quântico, que seguem `Bold*` porque são a marca e não a linguagem |
 | `packages/diletta_coreflow` | **o segundo filho, a Diletta**: a porta de UMA cor — `#E60000`, o logo e a Inter; tudo o mais deriva do pai. É o white label com a marca da casa |
 | `packages/catalog` | **o catálogo-filho**: o plugue que declara os blocos, os grupos e o leitor de código — com o seletor de marca do motor mostrando cada peça, a aba de Styles e a de Fundamentos no Conta BOLD e na Diletta |
+| `exemplos/diletta_app` | **o white label rodando**: um app mínimo, inteiro na marca da Diletta, que depende só de `diletta_coreflow` — `theme`/`darkTheme` do produto, o escopo do DS seguindo o brilho, e a tela de exemplo do pacote com três botões de modo. `flutter run -d chrome` |
 
 ## O gate
 
@@ -18,6 +19,7 @@ de bloco é aqui.
 (cd packages/coreflow_design_system && flutter analyze && flutter test)     # 202
 (cd packages/diletta_coreflow && flutter analyze && flutter test)           # 9
 (cd packages/catalog && flutter analyze && flutter test)                    # 109
+(cd exemplos/diletta_app && flutter analyze && flutter test)                # 3
 ```
 
 Dois gates medem a separação (`docs/2026-09-04-adr-o-coreflow-e-o-pai.md`), com a MESMA régua de

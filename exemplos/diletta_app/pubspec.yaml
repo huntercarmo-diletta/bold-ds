@@ -1,0 +1,25 @@
+name: diletta_app
+description: O white label rodando — um app mínimo vestido com a marca da Diletta, montado só com o pai e o segundo filho.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # O SEGUNDO FILHO, e só ele: quem importa `diletta_coreflow` recebe o pai (`coreflow`) e o avô
+  # (`ds-diletta`) por re-export. Um app de produto não depende de outro produto — este arquivo não
+  # cita o Bold, e o gate do pacote cobra que o pacote também não cite.
+  diletta_coreflow:
+    path: ../../packages/diletta_coreflow
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

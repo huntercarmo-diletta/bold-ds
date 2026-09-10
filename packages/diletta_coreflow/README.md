@@ -14,6 +14,9 @@ MaterialApp(
 );
 ```
 
+Pra VER rodando: `exemplos/diletta_app` na raiz do repo é um app mínimo com esta receita e três botões
+de modo (`flutter run -d chrome`, macOS ou um simulador).
+
 `TelaDeExemploDiletta` é a prova em uma tela: nenhuma linha dela é da marca além do tema que a
 envolve. `kDilettaFundamentos` é a prosa das decisões (paleta, semáforo, vinho e vidro, Inter, logo) no
 formato que o catálogo plunga — a aba de Fundamentos mostra a dela quando a Diletta está escolhida. A cor foi medida antes de escolhida — o `///` de `lib/src/diletta.dart` tem os números,

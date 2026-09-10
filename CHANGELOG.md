@@ -20,6 +20,21 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.101.0] — 2026-09-XX
+
+### Adicionado — `exemplos/diletta_app`: o white label rodando
+
+Um app Flutter mínimo (web, macOS, iOS, Android) inteiro na marca da Diletta, e nenhuma linha dele é da
+marca: `theme`/`darkTheme` saem de `Diletta.materialClaro/Escuro`, o `DilettaThemeScope` segue o brilho que
+o `MaterialApp` resolveu (inclusive em `ThemeMode.system`), e a `TelaDeExemploDiletta` do pacote ganha três
+botões de modo na base. O `pubspec.yaml` depende só de `diletta_coreflow` — pai e avô chegam por re-export.
+
+É a receita do `///` de `CoreflowProduto` aplicada ao segundo filho, e o que o catálogo prova em prévia
+agora se vê num aparelho. Compilado pra web e aberto no navegador em 10/09.
+
+Gate próprio, 3 casos: sobe no claro com a Inter no `ThemeData` e o vermelho no esquema; os três botões
+trocam Material e DS juntos (as letras do lockup viram junto); em `Sistema` quem decide é o aparelho.
+
 ## [0.100.1] — 2026-09-10
 
 ### Alterado — os 59 arquivos do pai deixam de se chamar `bold_*.dart`
