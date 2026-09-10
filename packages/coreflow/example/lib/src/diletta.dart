@@ -11,7 +11,7 @@
 /// **O semáforo foi medido e a resposta é forma, não matiz.** O erro da linguagem (`#B3251D` no
 /// claro, `#D8483F` no escuro) está no mesmo matiz. Escurecer o vermelho pra alcançar AAA o aproxima
 /// do erro (ΔE 10,0 → 2,6 em `#B30000`); deslocar o matiz ao laranja ou ao carmim compra 1 a 3 de
-/// distância e paga em fidelidade ao logo ou em proximidade com o rosa do primeiro filho. Ficou o
+/// distância e paga em fidelidade ao logo ou em proximidade com o rosa do primeiro cliente. Ficou o
 /// `#E60000`, e perigo continua se dizendo por ponto, contorno, ícone e botão sólido — regra do avô.
 library;
 

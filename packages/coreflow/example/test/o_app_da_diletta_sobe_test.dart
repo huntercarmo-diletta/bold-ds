@@ -1,4 +1,4 @@
-import 'package:diletta_app/main.dart';
+import 'package:diletta_coreflow/main.dart';
 import 'package:diletta_coreflow/diletta_coreflow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';

@@ -1,4 +1,4 @@
-/// OS FUNDAMENTOS DA DILETTA — a prosa que ensina, e não o inventário.
+/// OS FUNDAMENTOS DA DILETTA — a cara do Coreflow: a prosa que ensina, e não o inventário.
 ///
 /// A fronteira é do avô: **Foundations são as DECISÕES, que se leem uma vez; Styles é o INVENTÁRIO,
 /// que se consulta.** A aba de Styles do catálogo se deriva sozinha da paleta deste produto; esta não
@@ -53,7 +53,7 @@ marca reprova com a tinta, e esta não reprova. É a mesma razão pela qual o ro
 igual nos dois modos.
 
 **Rampa não é gosto: é a estrutura que faz o papel derivado ter contraste.** Aqui ela é inteira do
-avô — este filho não tem um hex de rampa pra defender.
+avô — a Diletta não tem um hex de rampa pra defender.
 ''';
 
 const _semaforo = r'''
@@ -79,7 +79,7 @@ Três caminhos pra afastar a marca do semáforo, e nenhum comprou o bastante:
 |---|---|---|
 | escurecer até `#B30000` | branco a **7,20** (AAA) | cai no degrau 03; o 04 recalculado vira `#EB0000`, e o produto passa a ter DOIS vermelhos de marca |
 | puxar pro laranja (`#EA4000`) | mais longe do erro | branco a 4,01 — perde AA de texto; e deixa de ser a cor do símbolo |
-| puxar pro carmim (`#DB005C`) | branco a 5,04 | se aproxima do rosa do primeiro filho — troca um vizinho por outro |
+| puxar pro carmim (`#DB005C`) | branco a 5,04 | se aproxima do rosa do primeiro cliente — troca um vizinho por outro |
 
 A decisão da dona do produto (09/09): **manter o `#E60000`** e resolver o semáforo por forma. A cor
 que está no símbolo é a cor que está no botão — e um white label que muda a cor da marca pra caber na
@@ -87,9 +87,9 @@ ferramenta inverteu quem serve a quem.
 ''';
 
 const _vinhoEVidro = r'''
-## Este filho não declara vinho nem vidro — e recebe os dois
+## A Diletta não declara vinho nem vidro — e recebe os dois
 
-O primeiro filho declarou os três degraus do vinho e os quatro valores do vidro na paleta dele. Este
+O primeiro cliente do Coreflow (o filho de paleta inteira) declarou os três degraus do vinho e os quatro valores do vidro na paleta dele. Este
 não declara nenhum, e o pai não empresta o valor de ninguém: quem não declara recebe **a regra sobre a
 própria rampa**.
 
@@ -101,9 +101,9 @@ própria rampa**.
 | tinte do vidro escuro | `primary01` a 50% |
 | traço do vidro (claro / escuro) | `primary08` / `primary06` a 30% |
 
-As posições foram medidas na rampa do primeiro filho, onde reproduzem os hexes dele com erro zero na
+As posições foram medidas na rampa do primeiro cliente, onde reproduzem os hexes dele com erro zero na
 terceira casa — e aplicadas a esta rampa dão o vinho DESTA marca. O blur (15), o card de vidro e os
-raios são a gramática do Coreflow, iguais em qualquer filho.
+raios são a gramática do Coreflow, iguais em qualquer produto.
 
 A Styles ao lado mostra os valores que saíram dessa conta. Nenhum deles está escrito neste pacote.
 ''';
@@ -112,7 +112,7 @@ const _tipografia = r'''
 ## Inter, e ela viaja pelo tema
 
 A Inter é fonte do Google, licença OFL (o arquivo `OFL.txt` acompanha os cinco pesos, 400 a 800, em
-`assets/fonts/`). É a mesma família do primeiro filho — a diferença não é a fonte, é **por onde ela
+`assets/fonts/`). É a mesma família do primeiro cliente — a diferença não é a fonte, é **por onde ela
 chega**.
 
 Pelo veredito do pai (08/09, decisão 2), a família tipográfica é do produto e viaja pelo `ThemeData`:
@@ -121,7 +121,7 @@ escala continuam sendo os do avô, sem `fontFamily` em nenhum — quem pinta a f
 e todo texto do produto a herda. O catálogo prova isso no seletor de marca: a peça é a mesma, a fonte
 chega com a marca.
 
-O que este filho NÃO tem é uma escala própria. O primeiro filho carrega treze degraus de marca porque
+O que a Diletta NÃO tem é uma escala própria. O primeiro cliente carrega treze degraus de marca porque
 o app dele os pedia; este nasceu depois da decisão e usa a escala da linguagem como ela é.
 ''';
 
@@ -133,7 +133,7 @@ const _logo = r'''
 | `diletta-mark.svg` | o símbolo | vermelho fixo — é a única cor do produto, gravada no arquivo |
 | `diletta-lockup.svg` | símbolo + DILETTA SOLUTIONS | as dezesseis letras em `currentColor` |
 
-É a convenção dos outros filhos: o símbolo é a marca e não muda; as letras são TEXTO e seguem o `fg` do
+É a convenção dos produtos desta casa: o símbolo é a marca e não muda; as letras são TEXTO e seguem o `fg` do
 esquema — pretas no claro, brancas no escuro. Recortado do arquivo oficial da marca, com a proporção do
 lockup declarada em `DilettaBrand.proporcaoDoLockup` pra o componente do avô reservar o espaço certo
 antes de o SVG carregar.

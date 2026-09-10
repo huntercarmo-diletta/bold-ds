@@ -1,7 +1,7 @@
 name: diletta_coreflow
 description: >-
-  A Diletta como produto do Coreflow — o filho que mostra o white label com a marca da casa.
-  Uma cor declarada (#E60000), o logo, a Inter empacotada; tudo o mais deriva do pai.
+  A Diletta — o Coreflow vestido com a marca da casa. Mora no example/ do pai porque o pai não
+  declara valor de produto; é também um app (flutter run) e a marca padrão do catálogo.
 version: 0.1.0
 publish_to: none
 
@@ -14,9 +14,10 @@ dependencies:
     sdk: flutter
   # O PAI da linguagem — e só ele. Um filho não depende de outro produto; o avô chega por ele.
   coreflow:
-    path: ../coreflow
+    path: ..
 
 dev_dependencies:
+  flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
   # O gate da fonte lê o próprio pubspec pra conferir que todo peso declarado tem arquivo.
