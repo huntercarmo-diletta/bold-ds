@@ -20,7 +20,7 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
-## [0.101.0] — 2026-09-XX
+## [0.101.0] — 2026-09-10
 
 ### Adicionado — `exemplos/diletta_app`: o white label rodando
 
