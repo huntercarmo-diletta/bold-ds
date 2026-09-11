@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Catálogo web · Conta BOLD</title>
+
+<!-- AS TRÊS FOLHAS, e a ordem é a peça inteira.
+     As duas do avô trazem primitivas e papéis na tinta de REFERÊNCIA; a nossa declara os mesmos
+     nomes com os valores do Bold. O seletor de marca abaixo só liga e desliga a terceira — é
+     literalmente o white label acontecendo, sem trocar um componente. -->
+<link rel="stylesheet" href="../node_modules/diletta-design-system-web/tokens/cps-tokens.css">
+<link rel="stylesheet" href="../node_modules/diletta-design-system-web/tokens/cps-papeis.css">
+<link rel="stylesheet" href="../tokens/bold-papeis.css" id="marca">
+
+<style>
+  body { background: var(--cps-bg); color: var(--cps-fg);
+         font: 14px/1.5 system-ui, sans-serif; margin: 0; padding: 32px 40px 80px; }
+  header { display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap; margin-bottom: 8px; }
+  h1 { font-size: 20px; margin: 0; }
+  .intro { max-width: 62ch; color: var(--cps-fg); opacity: .75; margin: 0 0 28px; }
+  .controles { margin-left: auto; display: flex; gap: 8px; }
+  button { font: inherit; padding: 6px 14px; border-radius: 999px; cursor: pointer;
+           background: var(--cps-surface); color: var(--cps-fg);
+           border: 1px solid var(--cps-border); }
+  button[aria-pressed="true"] { background: var(--cps-primary); color: var(--cps-onPrimary);
+                                border-color: transparent; }
+  section { border-top: 1px solid var(--cps-divider); padding: 24px 0 8px; }
+  h2 { font-size: 15px; margin: 0; font-family: ui-monospace, Menlo, monospace; }
+  .slug { font-size: 12px; opacity: .6; margin-bottom: 16px; }
+  .grade { display: flex; flex-wrap: wrap; gap: 20px 28px; }
+  .caso { display: flex; flex-direction: column; gap: 6px; align-items: flex-start; }
+  .rotulo { font-size: 11px; opacity: .55; font-family: ui-monospace, Menlo, monospace; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Catálogo web · <span id="quem">Conta BOLD</span></h1>
+    <div class="controles">
+      <button id="marcaBtn" aria-pressed="true">Conta BOLD</button>
+      <button id="modoBtn" aria-pressed="false">Modo escuro</button>
+    </div>
+  </header>
+  <p class="intro">
+    As <strong>mesmas</strong> peças do avô, com a tinta deste produto. Nenhum componente é
+    reimplementado aqui: o seletor de marca liga e desliga uma folha de CSS, e é só isso que separa
+    um produto do outro. Os blocos e os eixos são declarados pelo avô — este catálogo os lê, não os
+    copia.
+  </p>
+  <main id="raiz"></main>
+
+<!-- O IMPORT MAP, e ele existe por uma razão que vale saber antes de adotar.
+     `import 'coreflow-design-system-web'` é um especificador NU: bundler resolve (o IB usa Vite e
+     resolveria), navegador cru não — ele exige caminho começando com `/`, `./` ou `../`. Sem este
+     bloco a página morre com `Failed to resolve module specifier`, medido aqui em 11/09. -->
+<script type="importmap">
+{
+  "imports": {
+    "diletta-design-system-web": "../node_modules/diletta-design-system-web/index.js",
+    "coreflow-design-system-web": "../index.js"
+  }
+}
+</script>
+
+<script type="module">
+  // Os blocos são DELE. Importamos a declaração em vez de manter uma lista nossa: bloco novo no avô
+  // aparece aqui na próxima tag, e eixo que ele acrescentar não fica escondido no nosso catálogo.
+  import { blocos } from '../node_modules/diletta-design-system-web/catalogo/blocos.js';
+  import 'coreflow-design-system-web';
+
+  const combinacoes = (eixos) => Object.keys(eixos).reduce(
+    (acc, n) => acc.flatMap((c) => eixos[n].map((v) => ({ ...c, [n]: v }))), [{}]);
+
+  const raiz = document.getElementById('raiz');
+  for (const b of blocos) {
+    const sec = document.createElement('section');
+    sec.innerHTML = `<h2>${b.tag}</h2><div class="slug">${b.slug}</div>`;
+    const grade = document.createElement('div');
+    grade.className = 'grade';
+    for (const c of combinacoes(b.eixos)) {
+      const caso = document.createElement('div');
+      caso.className = 'caso';
+      const el = document.createElement(b.tag);
+      for (const [k, v] of Object.entries({ ...b.fixos, ...c })) {
+        if (k === 'texto' && b.tag === 'diletta-text-link') el.textContent = v;
+        else if (v !== '') el.setAttribute(k, v);
+      }
+      const rot = document.createElement('div');
+      rot.className = 'rotulo';
+      rot.textContent = Object.entries(c).map(([k, v]) => `${k}=${v || '—'}`).join(' · ');
+      caso.append(el, rot);
+      grade.append(caso);
+    }
+    sec.append(grade);
+    raiz.append(sec);
+  }
+
+  const modoBtn = document.getElementById('modoBtn');
+  modoBtn.addEventListener('click', () => {
+    const escuro = document.documentElement.dataset.theme === 'dark';
+    document.documentElement.dataset.theme = escuro ? 'light' : 'dark';
+    modoBtn.textContent = escuro ? 'Modo escuro' : 'Modo claro';
+    modoBtn.setAttribute('aria-pressed', String(!escuro));
+  });
+
+  // O SELETOR DE MARCA, e ele é uma linha: desligar a nossa folha devolve a tinta de referência do
+  // avô. É a prova visual de que a instância web é white label de verdade — a mesma peça, na marca
+  // que a folha declarar.
+  const marca = document.getElementById('marca');
+  const marcaBtn = document.getElementById('marcaBtn');
+  const quem = document.getElementById('quem');
+  marcaBtn.addEventListener('click', () => {
+    marca.disabled = !marca.disabled;
+    const bold = !marca.disabled;
+    marcaBtn.textContent = bold ? 'Conta BOLD' : 'Referência';
+    marcaBtn.setAttribute('aria-pressed', String(bold));
+    quem.textContent = bold ? 'Conta BOLD' : 'a tinta de referência do avô';
+  });
+</script>
+</body>
+</html>

@@ -36,6 +36,35 @@ import 'coreflow-design-system-web';
 
 Rótulo é **atributo**, não conteúdo. `exemplo/index.html` mostra as peças nos dois modos.
 
+**4 · Se a página não tiver bundler, precisa de import map.** `import 'coreflow-design-system-web'`
+é um especificador NU: o Vite do IB resolve, o navegador cru não — ele exige caminho começando com
+`/`, `./` ou `../`, e sem isso a página morre com `Failed to resolve module specifier` (medido em
+11/09). A saída é declarar o mapa:
+
+```html
+<script type="importmap">
+{ "imports": {
+    "diletta-design-system-web": "/node_modules/diletta-design-system-web/index.js",
+    "coreflow-design-system-web": "/node_modules/coreflow-design-system-web/index.js" } }
+</script>
+```
+
+`catalogo/index.html` faz exatamente isso, e é o exemplo vivo.
+
+## O catálogo
+
+```
+catalogo/index.html
+```
+
+As 25 peças, no produto cartesiano dos eixos que **o avô declara** (`blocos.js` dele, importado e não
+copiado — bloco novo na tag dele aparece aqui sozinho). Dois botões:
+
+- **modo** claro/escuro, pelo `data-theme`;
+- **marca**, e ele é uma linha de código: liga e desliga a nossa folha. Desligada, a peça volta pra
+  tinta de referência do avô. É o white label visível, sem trocar um componente — o gêmeo do seletor
+  de marca do catálogo Flutter.
+
 ## De onde vem a nossa folha
 
 De `BoldPalette.bold`, pela derivação **do avô** (`dilettaCorDoPapelGen`), emitida por
