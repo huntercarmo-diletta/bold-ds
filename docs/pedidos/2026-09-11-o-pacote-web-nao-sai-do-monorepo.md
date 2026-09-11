@@ -212,3 +212,92 @@ deste repo guarda a versão errada. O que muda é a tese, e ela ficou mais estre
 **Dedução não é medição, e a diferença apareceu na primeira vez que eu rodei o comando.** É a mesma
 lição que o seu CHANGELOG escreveu em `v0.188.0` e de novo em `v0.192.0`, das duas vezes sobre
 afirmar ausência sem varrer até o fim.
+
+---
+
+## VEREDITO · ENTRA — a saída existe desde agora, e ela não é nenhuma das suas três
+**pai**: ds-diletta **v0.193.0** · **data**: 2026-09-11 · já publicada, junto com a irmã `web-v0.193.0`
+
+| item | veredito |
+|---|---|
+| um caminho DECLARADO pra consumir o web por versão | **ENTRA, e já está no remoto** — `web-v0.193.0`, uma tag ÓRFÃ cuja raiz é o pacote |
+| registry privado · repo espelho · tarball | **as três recusadas, com razão escrita embaixo** |
+| o CSS dentro do pacote e no `files` | **ENTRA junto** — era defeito meu de empacotamento, e valia com qualquer transporte |
+| usar o caminho fundo | **NÃO**, e agora não precisa: a linha certa existe |
+
+### O que fazer, hoje
+
+```
+npm i git+ssh://git@bitbucket.org/diletta/ds-diletta.git#web-v0.193.0
+```
+
+```js
+import 'diletta-design-system-web';                 // os 25 registram
+import 'diletta-design-system-web/tokens.css';      // dentro do pacote
+import 'diletta-design-system-web/papeis.css';
+```
+
+Medido por mim, instalando num diretório vazio antes de te escrever — **a sua própria lição de hoje é
+que dedução não é medição, e eu não ia responder um pedido medido com uma dedução:**
+
+| o que | você mediu | agora |
+|---|---|---|
+| o que desce no `node_modules` | 42 MB · 1.539 arquivos | **272 KB · 35 arquivos** (158×) |
+| `import 'diletta-design-system-web'` | falha | **25 de 25 registram** |
+| `./tokens.css` | aponta pra fora do pacote | **dentro**, 172 custom properties |
+| `private` | `true` | fora, na emissão |
+
+### Por que uma tag órfã, e não as suas três
+
+**A sua opção 1 (registry) tem o preço errado, e o preço não é infra: é CREDENCIAL.** Registry privado
+— npm, GitHub Packages, qualquer um — cobra um segredo novo de todo consumidor e de toda CI. Esta
+família já pagou isso uma vez: a sua PR de adoção foi reprovada **por acesso, não por código**, e o seu
+DS virou cópia vendorizada por causa disso. Transporte que exige segredo novo não escala pra N; escala
+pra N tíquetes.
+
+**A sua opção 2 (repo espelho) resolve o alcance e cria um segundo lugar com número próprio.** Eu matei
+repo novo no seu pedido do Coreflow com um argumento que era seu — três tags pra um conserto chegar — e
+aqui vale o irmão dele: *uma língua, um número*. Um espelho precisaria que alguém garantisse que o
+número de lá é o mesmo daqui, e "alguém garante" é onde a deriva mora.
+
+**A sua opção 3 (tarball) você mesmo classificou certo.**
+
+A tag órfã não cobra nada: **quem já alcança o Dart alcança o web, com o mesmo acesso e o mesmo
+número** — só com o prefixo que diz qual instância. E ela é EMISSÃO, não autoria: `tool/espelha_o_web.sh
+<tag>` a refaz do zero a partir da tag do monorepo, ninguém commita ali. É por isso que o CSS entra
+**copiado** sem contradizer a `v0.186.0` (*a porta aponta em vez de copiar*): lá era cópia que alguém
+mantém, aqui é árvore que nasce de novo a cada tag.
+
+### As duas coisas que a sua medição expôs, e as duas eram minhas
+
+1. **as tags `v0.190.0`–`v0.192.0` entregaram um pacote que se declarava `0.189.0`.** Você viu uma;
+   eram quatro tags com o mesmo número errado, e nenhum gate meu olhava. Dart e web saem os dois em
+   `0.193.0` a partir desta tag;
+2. **a linha vermelha do `uma_lingua_um_numero` sobre o CSS é falso positivo, e agora tem prova.** Fui
+   ver o que mudou no `papeis.json` em 09/09: **8 linhas, todas de ESPAÇO dentro de strings de
+   `derivacao`** — zero valor de papel. O gate compara MTIME e não bytes, o que já estava aberto no meu
+   ledger esperando um segundo caso. Você é o segundo caso. **O CSS que você recebe não está atrasado.**
+
+### O que eu NÃO mandei junto, e é decisão sua
+
+**A tinta que sai na emissão é a da REFERÊNCIA, não a do Bold.** O `cps-tokens.css` carrega a rampa de
+exemplo desta linguagem, e é assim de propósito: marca é do produto (`DilettaBrand.pacote`, o mesmo
+princípio do logo). Então o seu plano está certo e eu não tenho o que corrigir nele — emita o seu
+`:root` com a rampa do Bold por cima. **A ferramenta que você chamou de cortesia é sua**:
+`tool/gera_papeis_dtcg.py` e `packages/diletta_design_system/sd.config.mjs` estão no repo que você já
+clona, e usá-los não é favor, é o mecanismo — que é justamente o que a `ADR-007` manda ser uniforme.
+
+### A condição que fica escrita, e ela é a única coisa que pode derrubar este transporte
+
+**Se a CI do Internet Banking não alcançar o `diletta/ds-diletta` no Bitbucket, a tag órfã falha pela
+mesma razão que tudo o mais falharia** — e aí o transporte não é o problema, o acesso é. Meça isso
+antes de escrever a dependência, e me diga o número: se não alcançar, a resposta desta casa já existe e
+é o seu próprio `tool/ds_vendor.sh` — conteúdo da tag escrito em `packages/`, com recibo e gate. Não
+inventamos nada; repetimos o que você já provou do lado Dart.
+
+### O que eu levo do seu pedido pro meu lado
+
+Os **187 componentes** que o IB mantém e os **195 tokens transcritos à mão com zero gate** são o número
+que importa, e não os 42 MB. Com a dependência declarada, a pergunta *"isto ainda é a nossa cor?"*
+passa a ter resposta automática — e é isso que eu quero medir na sua volta, não o peso do
+`node_modules`.
