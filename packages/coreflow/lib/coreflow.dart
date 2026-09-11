@@ -72,3 +72,6 @@ export 'src/coreflow_tema_material.dart';
 export 'src/coreflow_vidro.dart';
 export 'src/coreflow_visor_de_codigo.dart';
 export 'src/coreflow_produto.dart';
+
+/// A tinta de um produto escrita como `--cps-*`, pra instância WEB da linguagem.
+export 'src/coreflow_css.dart';

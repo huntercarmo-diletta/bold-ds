@@ -1,0 +1,42 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Conta BOLD · instância web</title>
+<!-- A ORDEM: as duas do avô (primitivas + papéis de referência), e a nossa por último. -->
+<link rel="stylesheet" href="../node_modules/diletta-design-system-web/tokens/cps-tokens.css">
+<link rel="stylesheet" href="../node_modules/diletta-design-system-web/tokens/cps-papeis.css">
+<link rel="stylesheet" href="../tokens/bold-papeis.css">
+<style>
+  body { background: var(--cps-bg); color: var(--cps-fg); font: 14px system-ui, sans-serif;
+         margin: 0; padding: 32px; }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  p  { color: var(--cps-fgMuted, var(--cps-fg)); margin: 0 0 28px; }
+  section { background: var(--cps-surface); border: 1px solid var(--cps-border);
+            border-radius: 12px; padding: 24px; display: flex; flex-wrap: wrap;
+            gap: 16px; align-items: center; margin-bottom: 16px; }
+  .amostras { display: flex; gap: 8px; }
+  .chip { width: 56px; height: 56px; border-radius: 8px; border: 1px solid var(--cps-border); }
+</style>
+<h1>Conta BOLD · a linguagem do avô, com a nossa tinta</h1>
+<p>Mesmos custom elements. Só as variáveis mudam.</p>
+
+<section>
+  <diletta-button type="primary" size="md" rotulo="Pagar"></diletta-button>
+  <diletta-button type="secondary" size="md" rotulo="Cancelar"></diletta-button>
+  <diletta-button type="tertiaryPrimary" size="md" rotulo="Depois"></diletta-button>
+  <diletta-status-tag tone="success" label="Aprovado"></diletta-status-tag>
+  <diletta-status-tag tone="pending" label="Em análise"></diletta-status-tag>
+  <diletta-avatar nome="Tatiana Hasimoto"></diletta-avatar>
+  <diletta-text-link href="#">ver extrato</diletta-text-link>
+</section>
+
+<section>
+  <div class="amostras">
+    <div class="chip" style="background: var(--cps-primary)"    title="--cps-primary"></div>
+    <div class="chip" style="background: var(--cps-primarySubtle)" title="--cps-primarySubtle"></div>
+    <div class="chip" style="background: var(--cps-error)"      title="--cps-error"></div>
+    <div class="chip" style="background: var(--cps-secure)"     title="--cps-secure"></div>
+    <div class="chip" style="background: var(--cps-surface)"    title="--cps-surface"></div>
+  </div>
+</section>
+
+<script type="module" src="../node_modules/diletta-design-system-web/index.js"></script>

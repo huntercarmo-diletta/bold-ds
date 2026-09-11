@@ -55,3 +55,7 @@ packages/*/pubspec.lock
 # token PESSOAL no global dá `Authentication error [code: 10000]`, que não diz nada sobre conta trocada.
 .wrangler/
 pubspec_overrides.yaml
+
+# O `node_modules` da instância web. O `package-lock.json` FICA versionado: é ele que
+# prega a tag órfã do avô num commit resolvido.
+packages/*/node_modules/
