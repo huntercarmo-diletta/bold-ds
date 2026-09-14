@@ -168,6 +168,24 @@ void main() {
   });
 
   group('os AJUSTES de papel por componente', () {
+    // AS TAGS VÊM DO `node_modules` do pacote web, e uma suíte Dart não pode EXIGIR `npm install`:
+    // quem clonar o repo e rodar `flutter test` pegaria vermelho por um passo de outra linguagem,
+    // que não tem a ver com o que veio fazer.
+    //
+    // Então a régua é a estreita: **sem as tags, pula — a não ser que haja ajuste declarado.** Com
+    // ajuste declarado e sem tags, a emissão sairia vazia e o gate aprovaria em silêncio, que é
+    // exatamente a falha que ele existe pra impedir. Aí reprova, e reprova alto.
+    final tags = tagsDaWeb();
+    final semTags = tags.isEmpty;
+    const semTagsPorque = 'sem `npm install` em coreflow_design_system_web não há lista de tags. '
+        'Este produto não declara ajuste, então não há o que medir — rode o install para cobrir.';
+
+    setUp(() {
+      if (semTags && ContaBold.produto.ajustesDePapel.isNotEmpty) {
+        fail('há ajuste declarado e a lista de tags veio vazia: a folha sairia SEM ele e nada '
+            'acusaria. Rode `npm install` em coreflow_design_system_web.');
+      }
+    });
     // O eixo que deixa um produto dizer "neste componente, o papel X passa a ler o Y", com `de` e
     // `para` da mesma família e um motivo declarado. No Flutter é `scheme.comAjustes(...)`; na web é
     // cascata dentro do elemento. Os dois têm que remapear a MESMA coisa.
@@ -177,7 +195,7 @@ void main() {
     // e o único caso de `contraste` a casa já decidiu ao contrário). Um gate que só rodasse contra a
     // lista real passaria sem medir nada — por isso o primeiro teste usa uma lista SINTÉTICA.
 
-    test('o remapeamento da web é o mesmo que o do app', () {
+    test('o remapeamento da web é o mesmo que o do app', skip: semTags ? semTagsPorque : null, () {
       const ajustes = [
         DilettaAjusteDePapel(
             componente: 'DilettaButton',
@@ -197,12 +215,13 @@ void main() {
 
       // WEB: a mesma troca, como alias dentro da tag. Alias e não cor: a folha tem que seguir
       // `primaryPressed` quando ele mudar, e cor copiada aqui divergiria na próxima paleta.
-      final css = coreflowAjustesCss(ajustes, tagsWeb: tagsDaWeb());
+      final css = coreflowAjustesCss(ajustes, tagsWeb: tags);
       expect(css, contains('diletta-button { --cps-primary: var(--cps-primaryPressed); }'),
           reason: 'a web não aplicou o ajuste que o app aplica');
     });
 
-    test('ajuste em peça sem instância web não some calado — some por não existir lá', () {
+    test('ajuste em peça sem instância web não some calado — some por não existir lá',
+        skip: semTags ? semTagsPorque : null, () {
       // `CoreflowSaldo` é do pai e só tem lado Flutter. Ajustar nela não tem o que emitir, e isso
       // não é divergência: é peça que não existe na web. O que seria divergência é uma peça QUE
       // EXISTE ficar de fora — e é isso que a conta abaixo separa.
@@ -214,10 +233,6 @@ void main() {
             motivo: MotivoDoAjuste.marca,
             nota: 'sintético'),
       ];
-      final tags = tagsDaWeb();
-      expect(tags, isNotEmpty,
-          reason: 'a lista de tags veio vazia — rode `npm install` em coreflow_design_system_web. '
-              'Sem ela, TODO ajuste sairia de fora e o gate aprovaria em silêncio.');
       expect(tags.contains(tagDaPeca('CoreflowSaldo')), isFalse);
       expect(coreflowAjustesCss(ajustes, tagsWeb: tags), isEmpty);
     });
@@ -226,7 +241,6 @@ void main() {
       // A catraca de verdade: roda contra a lista real. Hoje ela é vazia e isto passa de graça — e
       // no dia em que alguém declarar um ajuste numa peça que EXISTE na web, este teste é o que
       // cobra a folha acompanhar.
-      final tags = tagsDaWeb();
       final declarados = ContaBold.produto.ajustesDePapel;
       final deveriamSair =
           declarados.where((a) => tags.contains(tagDaPeca(a.componente))).toList();
