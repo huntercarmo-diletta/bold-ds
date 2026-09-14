@@ -20,6 +20,64 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.103.0] — 2026-09-14
+
+### Nasce a instância WEB deste DS — os 25 elementos da linguagem, com a nossa tinta
+
+Nada muda pra quem consome Flutter. Esta tag acrescenta um LADO, e ele sai por uma tag irmã.
+
+**O pedido de 11/09 foi aceito no mesmo dia.** Medimos que o pacote web do avô instalava — e que
+instalava errado: `npm i git+ssh://…#tag` punha **42 MB e 1.539 arquivos** no `node_modules` de quem
+queria 320 KB, o `import` do README dele falhava, e o único caminho que funcionava atravessava duas
+pastas que não são a do pacote, sobrevivendo só porque a raiz do monorepo não declara `exports`. O
+veredito dele foi tag órfã (`web-v0.193.0`), e **`tool/espelha_o_web.sh` aqui é o mesmo mecanismo um
+andar abaixo** — o muro se repete de nós pra quem nos consumir.
+
+**`packages/coreflow_design_system_web`** não reimplementa componente nenhum: declara o pacote do avô
+por versão e acrescenta a TINTA deste produto. `--cps-*` é variável CSS, e variável se sobrescreve —
+é o mesmo white label do lado Flutter, com o mesmo mecanismo, do outro lado.
+
+A folha sai do Dart, não de tabela digitada. **282 declarações, nenhum hex escrito à mão:**
+
+| família | quantas | fonte |
+|---|---|---|
+| papéis de cor | 57 | `DilettaScheme` do avô, com a rampa do Bold |
+| papéis do esquema do produto | 9 | `CoreflowScheme` |
+| raio por nome | 4 | `CoreflowRadius` |
+| escala de tipo | 20 degraus | `CoreflowType` |
+
+**O emissor mora no PAI, e quem mandou foi um gate meu.** Eu tinha escrito `boldPapeisCss()` no
+filho cravando `BoldPalette.bold`, e o `o_pacote_nao_crava_a_paleta_do_bold` reprovou com a razão
+certa — *"um produto novo declara a paleta dele e recebe estes valores assim mesmo"*. Virou
+`coreflowPapeisCss(paleta, produto:)` em `packages/coreflow`, que é onde a `GOVERNANCA` manda: outro
+filho ia querer isso, então é linguagem. Um banco novo emite a folha dele com a cor dele, de graça.
+
+**DUAS COLISÕES declaradas**, e elas são o mecanismo e não o defeito: `primary` e `border` saem nos
+papéis do avô e de novo no esquema do produto, e o do produto ganha na cascata — o IB usa
+`primary-03` no claro e `primary-04` no escuro, que é exatamente o que o `CoreflowScheme.primary`
+faz. Um gate reprova a TERCEIRA que aparecer sem decisão.
+
+### O catálogo ganhou o lado web, e o seletor de marca dele é uma linha
+
+`packages/coreflow_design_system_web/catalogo/` monta as 25 peças no produto cartesiano dos eixos —
+importando o `blocos.js` do avô, não copiando. O botão de marca liga e desliga a nossa folha:
+desligada, as mesmas peças voltam pra tinta de referência. É o gêmeo do seletor do catálogo Flutter,
+com um décimo do maquinário, porque do lado web o plugue de marca É a cascata.
+
+Achado medido montando: **especificador nu não resolve em página crua** — `import
+'coreflow-design-system-web'` morre com `Failed to resolve module specifier` sem bundler. A saída é
+`<script type="importmap">`, e está no README, porque quem adotar sem bundler precisa saber antes.
+
+### O avô sobe de v0.180.0 pra v0.193.0
+
+Treze tags, nenhuma major. A `ADR-007` chama isso de fase 0 — *"a única que já devia ter sido feita
+sem web nenhuma"* — e a deriva estava em doze quando começamos. Movem pixel: o auxiliar do campo
+(4px), a faixa do calendário e a busca na folha do seletor, conferidos em tela.
+
+### Gates
+
+Pai 86 · filho 206 · example 12 · catálogo 109. `flutter analyze` limpo nos quatro.
+
 ## [0.102.1] — 2026-09-10
 
 ### Corrigido — a prosa do `example/` citava o primeiro cliente pelo nome, e o gate do pacote acusou

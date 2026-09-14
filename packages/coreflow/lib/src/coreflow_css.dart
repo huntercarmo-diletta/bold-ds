@@ -96,14 +96,28 @@ String coreflowEsquemaCss(DilettaPalette p) {
       bloco(Brightness.dark, ''));
 }
 
-/// As MEDIDAS que o produto declara por nome — hoje o raio. Vão como `--cps-radius-*`, e não como
-/// `--cps-r<N>`: o avô emite a escada de primitivas, isto é o papel que a peça pede.
+/// As MEDIDAS por nome, com o que ESTE produto declarou — `--cps-radius-*`, e não a escada de
+/// primitivas do avô: peça pede papel, não degrau.
+///
+/// **Recebe a paleta porque raio é declarável.** A primeira versão desta função, de 14/09, emitia a
+/// const: um filho com `raioDeFolha: 8` recebia `--cps-radius-sheet: 22px` e via o Flutter desenhar
+/// 8 enquanto a web desenhava 22. O defeito foi registrado no mesmo dia, na lista de exceções do
+/// `a_folha_segue_o_raio_declarado_test`, com a frase que o fecha: *"fica de fora do gate porque a
+/// régua é sobre pintura, e não porque está certo"*. Isto é o conserto.
+///
+/// A folha vem de `CoreflowScheme.formaDaFolha`, que é o caminho sancionado — a const só pode ser
+/// lida lá, como default. **Campo, cartão e pílula ainda são gramática**, cravados nos dois lados:
+/// é exatamente o que o pedido de 14/09 (`a-forma-do-filho-para-em-dois-raios`) cobra do avô, e
+/// quando ele entrar estes três entram junto, por aqui.
 ///
 /// Não é mode-aware, então sai num `:root` só.
-String coreflowMedidasCss() {
+String coreflowMedidasCss(DilettaPalette p) {
+  final folha = CoreflowScheme.de(p, brilho: Brightness.light).formaDaFolha.topLeft.x;
   final raios = <String, double>{
-    'field': CoreflowRadius.field, 'card': CoreflowRadius.card,
-    'sheet': CoreflowRadius.sheet, 'pill': CoreflowRadius.pill,
+    'field': CoreflowRadius.field,
+    'card': CoreflowRadius.card,
+    'sheet': folha,
+    'pill': CoreflowRadius.pill,
   };
   final linhas = raios.entries
       .map((e) => '  --cps-radius-${e.key}: ${_px(e.value)};')

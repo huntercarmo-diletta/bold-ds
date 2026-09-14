@@ -17,7 +17,7 @@ String cssDoBold() => [
       '\n/* O ESQUEMA DESTE PRODUTO — os papéis que o avô não tem. */\n',
       coreflowEsquemaCss(BoldPalette.bold),
       '\n/* MEDIDA por nome. */\n',
-      coreflowMedidasCss(),
+      coreflowMedidasCss(BoldPalette.bold),
       '\n/* A ESCALA DE TIPO DESTE PRODUTO. Seis degraus têm px que o avô não tem — decisão escrita\n'
           '   no `///` do `CoreflowType`, não deriva. Os homônimos SOBRESCREVEM os dele. */\n',
       coreflowTipoCss(_degrausDoBold, familia: "'${BoldFonts.familyRaw}', system-ui, sans-serif"),
@@ -45,7 +45,6 @@ void main() {
     final f = File('../coreflow_design_system_web/tokens/bold-tokens.css');
     f.parent.createSync(recursive: true);
     f.writeAsStringSync(css);
-    File('../coreflow_design_system_web/tokens/bold-papeis.css').deleteSync();
 
     final vars = RegExp(r'--cps-[A-Za-z0-9-]+\s*:').allMatches(css).length;
     // Controle negativo: folha curta demais não é erro no navegador, é silêncio.

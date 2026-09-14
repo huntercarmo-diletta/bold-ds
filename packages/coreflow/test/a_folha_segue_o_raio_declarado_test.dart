@@ -85,13 +85,6 @@ void main() {
     final permitido = {
       'lib/src/coreflow_radius.dart': 'declara a const',
       'lib/src/coreflow_scheme.dart': 'é o default de formaDaFolha, num lugar só',
-      // Este não DESENHA, emite: `coreflowMedidasCss()` exporta a escada de raios do DS como
-      // `--cps-radius-*`. Fica de fora do gate porque a régua é sobre pintura, e não porque está
-      // certo — ele emite a GRAMÁTICA e não o que o produto declarou, então um filho com
-      // `raioDeFolha: 8` recebe `--cps-radius-sheet: 22px`. É o mesmo defeito das cinco, uma camada
-      // pra fora, e a função nem recebe paleta pra fazer diferente. Registrado em 14/09, no dia em
-      // que a folha web nasceu.
-      'lib/src/coreflow_css.dart': 'emite token, não pinta — e emite a gramática, não o produto',
     }.keys.toSet();
     final achados = <String>[];
     for (final f in Directory('lib').listSync(recursive: true).whereType<File>()) {

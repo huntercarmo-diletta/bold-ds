@@ -6,6 +6,7 @@
 import 'dart:io';
 
 import 'package:coreflow_design_system/coreflow_design_system.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'emite_o_css_do_bold.dart' show cssDoBold;
@@ -54,6 +55,19 @@ void main() {
         reason: 'o esquema deste produto sobrescreve papel do avô fora da lista declarada — '
             'ou o avô ganhou um papel com nome que já era nosso. Os dois casos pedem decisão, '
             'não uma linha a mais na constante.');
+  });
+
+  test('a folha emitida segue o raio que o PRODUTO declarou, não a gramática', () {
+    // O conserto de 14/09: `coreflowMedidasCss` emitia a const, então um filho com `raioDeFolha: 8`
+    // recebia 22px no CSS e via o Flutter desenhar 8. Este gate é o que impede a volta — e ele mede
+    // com uma paleta DIFERENTE da nossa, porque a do Bold declara justamente 22 e esconderia o
+    // defeito por coincidência.
+    // `DilettaPalette` é imutável e não tem `copyWith` — um produto declara a forma dele no
+    // `comMaterial`, que é por onde um filho nasce. Montar assim é usar o caminho de verdade.
+    final outra = DilettaPalette.daMarca(marca: const Color(0xFF2F6FC4), id: 'x', nome: 'X')
+        .comMaterial(raioDeFolha: 8);
+    expect(coreflowMedidasCss(outra), contains('--cps-radius-sheet: 8px;'));
+    expect(coreflowMedidasCss(BoldPalette.bold), contains('--cps-radius-sheet: 22px;'));
   });
 
   test('a escala de tipo emitida tem os 20 degraus do CoreflowType', () {
