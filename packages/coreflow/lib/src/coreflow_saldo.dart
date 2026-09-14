@@ -25,6 +25,8 @@ import 'dart:math' as math;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'coreflow_scheme.dart' show CoreflowScheme;
+
 /// O card de saldo.
 class CoreflowSaldo extends StatelessWidget {
   const CoreflowSaldo({
@@ -72,9 +74,9 @@ class CoreflowSaldo extends StatelessWidget {
         'entradas': entradas == null ? 'ausente' : 'presente',
         'saidas': saidas == null ? 'ausente' : 'presente',
       },
-      tokens: const ['type.headlineMd', 'scheme.fg', 'radius.all16'],
+      tokens: const ['type.headlineMd', 'scheme.fg', 'scheme.formaDoVidro'],
       child: DilettaGlassSurface(
-        borderRadius: DilettaRadius.all16,
+        borderRadius: CoreflowScheme.of(context).formaDoVidro,
         child: Padding(
           // 16 nos lados e 8 à direita: o botão de extrato carrega o próprio respiro.
           padding: EdgeInsets.fromLTRB(

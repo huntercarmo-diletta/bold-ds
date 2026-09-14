@@ -547,6 +547,23 @@ class BoldPalette {
     // e o `formaDaFolha` do esquema leva ele pra nove sítios da linguagem de uma vez.
     raioDeFolha: 22,
 
+    // E AS TRÊS QUE FALTAVAM — cartão, vidro e nav —, declaradas na tabela que o veredito de 14/09
+    // abriu (`ds v0.194.0`). O pedido pedia campo na paleta; o pai recusou o campo e deu a tabela,
+    // pela conta do auditor dele: 41 opcionais no plugue com a condição de conserto escrita em 45.
+    //
+    // **Os três valores são o desenho de hoje**, não uma mudança: 24 no cartão, 16 no vidro e 24 na
+    // nav é o que este produto já pintava em 19 sítios, e o `flutter test` mede que nenhum pixel se
+    // moveu. O que muda é o DONO: o número saiu de dentro das peças e passou a estar declarado num
+    // lugar só, que é o que faz o cartão do avô e o daqui desenharem o mesmo canto.
+    //
+    // A pílula (999) e o miúdo de 8 ficaram FORA por veredito, e as razões são deste lado: 999 ×
+    // qualquer fator continua pílula, e três sítios num pacote só é um caso, não uma família.
+    medidas: const {
+      DilettaMedida.formaDeCartao: 24,
+      DilettaMedida.formaDeVidro: 16,
+      DilettaMedida.formaDeNav: 24,
+    },
+
     // E O CARD DE CONTEÚDO É VIDRO, que é a quinta linha da mesma receita (`ds v0.32.0`).
     //
     // Ela existe porque o dono do produto olhou o board e disse *"o fundo nos cards (lista) também é

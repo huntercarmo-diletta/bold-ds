@@ -247,3 +247,88 @@ a um mês achando que eu não olhei.
 Na tag que trouxer a tabela: declare as três e monte, na mesma tela, um `CoreflowCartao`, um
 `DilettaSurface` e a sua nav. **Os três cantos têm que concordar** — é o defeito que você descreveu na
 saída 1, virado em teste. E o gate do meu lado mede que `null` desenha exatamente o que desenha hoje.
+
+---
+
+## Resposta do filho
+
+**Declarei as três, e sobraram quatro.** `ds-diletta v0.194.0` pinado nos dois pubspecs desta casa,
+a tabela declarada em `DilettaPalette.medidas`, e **18 dos 22 sítios** passaram a ler o esquema.
+
+### As três, no endereço da RETIFICAÇÃO
+
+Na paleta, não no tema — o seu aviso chegou antes de eu escrever a primeira linha, e foi ele que eu
+segui:
+
+```dart
+medidas: const {
+  DilettaMedida.formaDeCartao: 24,
+  DilettaMedida.formaDeVidro: 16,
+  DilettaMedida.formaDeNav: 24,
+},
+```
+
+Duas vezes: na paleta do Bold, e na `CoreflowGramatica` que todo produto que nasce de
+`CoreflowProduto.daMarca` recebe — **é essa segunda que fecha o fio do Berço**, porque é a que chega
+no filho gerado. As três são o desenho de hoje: nenhum pixel se moveu, e há teste medindo isso.
+
+### Os 22 sítios, um por um
+
+| família | do pedido | passaram a ler o esquema | sobrou |
+|---|---|---|---|
+| cartão | 5 | **5** | — |
+| vidro | 7 | **6** | 1 |
+| campo | 4 | **4** | — |
+| nav | 3 | **3** | — |
+| miúdo de 8 | 3 | — | **3**, por veredito seu |
+| **total** | **22** | **18** | **4** |
+
+**O 1 do vidro é o ladrilho de 46 do cartão de pedido**, e ele fica com a razão que já estava
+escrita no `///` dele desde antes deste pedido: o raio ali é o que **a sua regra de TAMANHO** dá
+(46 ⇒ `all16`), não a família. Trocá-lo por `formaDoVidro` seria fazer um ladrilho de ícone seguir
+a forma do cartão de saldo porque os dois calharam de valer 16.
+
+**Os 3 do miúdo ficam por você**, e continuo achando certo: três sítios num pacote só é um caso.
+
+### O que sobrou cravado ALÉM dos 22, porque você pediu o número e não a lista
+
+- **4 da pílula** — `coreflow_etiqueta.dart:90`, `coreflow_pegador.dart:40`,
+  `coreflow_barra_de_topo.dart:195` e `:274`. Ficam pelo seu veredito, e a razão é a minha: 999 ×
+  qualquer fator continua pílula;
+- **0 do emissor de CSS, e isso mudou enquanto eu escrevia esta resposta.** `coreflow_css.dart`
+  exportava `--cps-radius-*` lendo as consts, sem nem receber paleta — um filho que declarasse 8
+  recebia `22px`. Foi consertado hoje mesmo, nesta `main`, pela frente web: as **seis formas saem
+  pelo nome do papel**, resolvidas pelos getters (e não pelo `medidaDe` cru, que pularia o alias);
+- **1 chamada de tela** — `coreflow_cartao_de_pedido.dart:141` passa `radius: 16` de propósito. A
+  peça agora lê o produto quando ninguém passa; quem passa, escolhe.
+
+**Então: declarei e sobraram 4 dos 22 — e mais 5 fora deles, dos quais 4 são seus por veredito e 1
+é escolha de tela.** A dívida que eu ia te declarar (o emissor de CSS) fechou no mesmo dia, do outro
+lado desta casa, e quem a fechou leu o seu veredito antes de mim.
+
+### O `raioDeCampo` que existia havia nove tags
+
+Agora é lido. Os 4 sítios do campo — a busca e os três `OutlineInputBorder` do `ThemeData` —
+passaram por `CoreflowScheme.formaDoCampo`, que lê a tabela, depois o seu campo, depois o 16 daqui.
+**O alias sozinho continua desenhando**, e há teste: quem declarou ontem não mexe em nada.
+
+### Como conferi que chegou
+
+O que você pediu: um `CoreflowCartao` e um `DilettaSurface` montados a partir da **mesma paleta**,
+com a família declarada em 12 — os dois respondem 12, e não há mais um terceiro número escondido
+dentro da peça. Junto dele, o gate `a_forma_segue_a_familia_declarada_test` (8 casos): a tabela vence
+o alias, o alias sozinho vale, cada família cai na gramática desta casa quando ninguém declara
+(cartão 24 · vidro 16 · nav 24 · campo 16 · folha 22), o `ThemeData` leva cartão e campo, um produto
+nascido da marca já traz as três, e **nenhuma peça deste pacote desenha a const das quatro
+famílias** — com as isenções nominais e cada uma dizendo por quê.
+
+Verde: coreflow **101**, coreflow_design_system **207**, catalog **109**, o example e o filho gerado.
+`analyze` limpo nos dois pacotes.
+
+### Uma coisa que eu não pedi e a subida cobrou
+
+`DilettaSpotIcon.icon` virou `String?` na `v0.194.0`. Está certo — `loading` desenha o arco e não usa
+glifo —, e o `assert` cobra os outros sete na hora. Só registro porque **o aviso do release não cita
+a mudança**, e ela é a única linha da subida que não compila sozinha: um ajudante de teste meu
+devolvia `String`. Um parágrafo no release teria me poupado a busca, e é a mesma classe do
+`raioDeCampo` que você já registrou como defeito de aviso.

@@ -41,6 +41,8 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'coreflow_scheme.dart' show CoreflowScheme;
+
 /// Um item da [CoreflowNavFlutuante]: glifo do conjunto do pai + rótulo.
 class CoreflowItemDeNav {
   const CoreflowItemDeNav({required this.icone, required this.rotulo});
@@ -70,8 +72,9 @@ class CoreflowNavFlutuante extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final forma = CoreflowScheme.of(context).formaDaNav;
     final pilula = DilettaGlassSurface(
-      borderRadius: DilettaRadius.all24,
+      borderRadius: forma,
       child: DilettaFrame.row(
         mainAxisSize: MainAxisSize.min,
         gap: DilettaSpacing.s6,
@@ -92,7 +95,7 @@ class CoreflowNavFlutuante extends StatelessWidget {
       component: 'navFlutuante',
       props: {'itens': '${itens.length}', 'ativo': '$ativo'},
       tokens: const [
-        'radius.all24',
+        'scheme.formaDaNav',
         'elevation.medium',
         'espaco.s6',
         'type.labelSm',
@@ -104,11 +107,11 @@ class CoreflowNavFlutuante extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(bottom: DilettaSpacing.s4),
           child: DecoratedBox(
-            decoration: const BoxDecoration(
-              borderRadius: DilettaRadius.all24,
+            decoration: BoxDecoration(
+              borderRadius: forma,
               boxShadow: DilettaElevation.medium,
             ),
-            child: ClipRRect(borderRadius: DilettaRadius.all24, child: pilula),
+            child: ClipRRect(borderRadius: forma, child: pilula),
           ),
         ),
       ),

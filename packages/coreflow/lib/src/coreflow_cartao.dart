@@ -1,4 +1,3 @@
-import 'coreflow_radius.dart';
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/material.dart';
 import 'coreflow_vidro.dart';
@@ -30,7 +29,7 @@ class CoreflowCartao extends StatelessWidget {
     this.gradiente,
     this.forma,
     this.fio,
-    this.radius = CoreflowRadius.card,
+    this.radius,
     this.glass = false,
     this.highlight = false,
   });
@@ -154,7 +153,11 @@ class CoreflowCartao extends StatelessWidget {
   /// razão fica escrita porque o erro foi de método e não de gosto: **eu agrupei por FORMA
   /// (`pillR`) e concluí sobre CONTEÚDO.** Treze coisas com o mesmo raio não são treze da mesma
   /// coisa.
-  final double radius;
+  ///
+  /// **Nulo — o default desde 14/09 — quer dizer *o raio de cartão que o PRODUTO declarou*,** que é
+  /// o que `CoreflowScheme.raioDoCartao` responde. Antes era a const 24 aqui no parâmetro: um
+  /// produto que declarasse outro canto via os cartões do avô obedecerem e os daqui não.
+  final double? radius;
 
   /// Card surface treatment from [_CardSurface] (the "no-fundo" look, no
   /// solid fill). Frosted glass is now reserved for the nav bar only — kept
@@ -169,7 +172,7 @@ class CoreflowCartao extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final c = CoreflowScheme.of(context);
-    final br = BorderRadius.circular(radius);
+    final br = BorderRadius.circular(radius ?? c.raioDoCartao);
 
     final inner = onTap == null
         ? Padding(padding: padding, child: child)
@@ -226,7 +229,7 @@ class CoreflowCartao extends StatelessWidget {
               borderRadius: br,
             ),
             child: CustomPaint(
-              foregroundPainter: _CardSurface.strokePainter(radius, c.isDark),
+              foregroundPainter: _CardSurface.strokePainter(br.topLeft.x, c.isDark),
               child: inner,
             ),
           ),

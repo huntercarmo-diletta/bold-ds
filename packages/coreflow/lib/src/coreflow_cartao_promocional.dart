@@ -28,6 +28,8 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'coreflow_scheme.dart' show CoreflowScheme;
+
 /// O cartão de sugestão do carrossel.
 class CoreflowCartaoPromocional extends StatelessWidget {
   const CoreflowCartaoPromocional({
@@ -55,9 +57,9 @@ class CoreflowCartaoPromocional extends StatelessWidget {
     Widget cartao = DilettaDevInfo(
       component: 'cartaoPromocional',
       props: {'fecha': '${aoFechar != null}'},
-      tokens: const ['radius.all16', 'type.headlineSm', 'type.bodySm'],
+      tokens: const ['scheme.formaDoVidro', 'type.headlineSm', 'type.bodySm'],
       child: DilettaGlassSurface(
-        borderRadius: DilettaRadius.all16,
+        borderRadius: CoreflowScheme.of(context).formaDoVidro,
         child: Stack(children: [
           Padding(
             padding: EdgeInsets.all(DilettaSpacing.s4),
@@ -129,7 +131,9 @@ class _MolduraSemArte extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: s.surfaceLoading,
-        borderRadius: DilettaRadius.all16,
+        // O ESQUELETO TEM O CANTO DA PEÇA que ele substitui: se o produto declarar outro vidro, o
+        // vazio e o cheio têm que ser a mesma silhueta.
+        borderRadius: CoreflowScheme.of(context).formaDoVidro,
         border: Border.all(color: s.border),
       ),
       child: Center(

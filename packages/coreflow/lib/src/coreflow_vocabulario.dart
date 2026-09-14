@@ -20,6 +20,7 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/painting.dart' show Color;
 
+import 'coreflow_radius.dart';
 import 'coreflow_vinho.dart';
 
 abstract final class CoreflowVocabulario {
@@ -75,6 +76,15 @@ abstract final class CoreflowGramatica {
   static const bool cardDeVidro = true;
   static const double raioDeBotao = 16;
   static const double raioDeFolha = 22;
+
+  /// As TRÊS que o veredito de 14/09 abriu — cartão, vidro e nav.
+  ///
+  /// São alias das consts de [CoreflowRadius] de propósito: o número tem um lugar só, e aqui ele
+  /// ganha o nome que o produto declara. A gramática não inventa valor novo; ela diz quais famílias
+  /// um produto que nasce desta casa já declara sem precisar pensar.
+  static const double raioDeCartao = CoreflowRadius.card;
+  static const double raioDeVidro = CoreflowRadius.vidro;
+  static const double raioDaNav = CoreflowRadius.nav;
   static const double blurDeVidro = 15;
 
   /// O tinte do vidro CLARO: branco a 50%. O escuro é da marca (o degrau 01 dela a 50%) e sai da

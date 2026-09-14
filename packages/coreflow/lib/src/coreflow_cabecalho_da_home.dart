@@ -55,6 +55,8 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'coreflow_scheme.dart' show CoreflowScheme;
+
 
 /// Um ícone da direita do cabeçalho, com marcador opcional.
 ///
@@ -225,7 +227,7 @@ class _BotaoDeConta extends StatelessWidget {
       onTap: aoTocar,
       child: DilettaBox(
         height: 28,
-        radius: DilettaRadius.all16,
+        radius: CoreflowScheme.of(context).formaDoVidro,
         borderColor: tinta,
         padding: EdgeInsets.symmetric(horizontal: DilettaSpacing.s3),
         child: Row(mainAxisSize: MainAxisSize.min, children: [

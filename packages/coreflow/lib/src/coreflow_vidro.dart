@@ -12,7 +12,6 @@
 /// bater.
 library;
 
-import 'coreflow_radius.dart';
 import 'coreflow_vinho.dart';
 import 'dart:ui' show ImageFilter, TileMode;
 
@@ -185,24 +184,27 @@ class CoreflowPainelDeEntrada extends StatelessWidget {
   const CoreflowPainelDeEntrada({
     super.key,
     required this.child,
-    this.raio = CoreflowRadius.cardR,
+    this.raio,
     this.padding = const EdgeInsets.all(DilettaSpacing.s4),
   });
 
   final Widget child;
-  final BorderRadius raio;
+  /// Nulo lê `CoreflowScheme.formaDoCartao`: este painel é um cartão de vidro, e o canto dele é o
+  /// da família CARTÃO, não o da superfície de vidro.
+  final BorderRadius? raio;
   final EdgeInsetsGeometry padding;
 
   @override
   Widget build(BuildContext context) {
     final c = CoreflowScheme.of(context);
+    final forma = raio ?? c.formaDoCartao;
     return ClipRRect(
-      borderRadius: raio,
+      borderRadius: forma,
       child: BackdropFilter(
         filter: CoreflowVidroDeEntrada.filtro,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            borderRadius: raio,
+            borderRadius: forma,
             border: Border.all(
                 color: CoreflowVidroDeEntrada.traco(c.paleta, escuro: c.isDark),
                 width: CoreflowVidroDeEntrada.espessuraDoTraco),

@@ -19,6 +19,8 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'coreflow_scheme.dart' show CoreflowScheme;
+
 /// O cabeçalho da tela de conta.
 class CoreflowCartaoDaConta extends StatelessWidget {
   const CoreflowCartaoDaConta({
@@ -49,9 +51,9 @@ class CoreflowCartaoDaConta extends StatelessWidget {
     return DilettaDevInfo(
       component: 'cartaoDaConta',
       props: {'tipo': tipo},
-      tokens: const ['radius.all24', 'type.headlineLg', 'type.labelMd'],
+      tokens: const ['scheme.formaDoCartao', 'type.headlineLg', 'type.labelMd'],
       child: DilettaGlassSurface(
-        borderRadius: DilettaRadius.all24,
+        borderRadius: CoreflowScheme.of(context).formaDoCartao,
         child: Padding(
           padding: EdgeInsets.all(DilettaSpacing.s5),
           child: Column(

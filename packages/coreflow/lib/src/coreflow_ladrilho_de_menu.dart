@@ -33,6 +33,8 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'coreflow_scheme.dart' show CoreflowScheme;
+
 /// Porte do [CoreflowLadrilhoDeMenu] — os três são medidos no produto, não inventados.
 enum CoreflowPorteDoLadrilho {
   /// Altura 80, largura de quem posiciona. A grade de três colunas do menu da Área Pix.
@@ -88,9 +90,9 @@ class CoreflowLadrilhoDeMenu extends StatelessWidget {
     Widget ladrilho = DilettaDevInfo(
       component: 'ladrilhoDeMenu',
       props: {'icone': icone, 'porte': porte.name},
-      tokens: const ['radius.all16', 'type.labelMd', 'scheme.fg'],
+      tokens: const ['scheme.formaDoVidro', 'type.labelMd', 'scheme.fg'],
       child: DilettaGlassSurface(
-        borderRadius: DilettaRadius.all16,
+        borderRadius: CoreflowScheme.of(context).formaDoVidro,
         child: Padding(
           padding: respiro,
           child: Column(

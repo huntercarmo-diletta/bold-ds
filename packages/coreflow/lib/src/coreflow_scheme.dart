@@ -153,8 +153,49 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   /// *casar por VALOR e nunca por nome*. A divergência só aparece numa paleta que não declara o
   /// raio, e a única deste repo é a de referência do avô, usada como fixture de teste: com 22 ela
   /// desenha o que desenhava antes desta linha existir.
+  /// **Desde a v0.194.0 do avô a TABELA vem primeiro.** O veredito de 14/09 recusou campo por
+  /// família e abriu `DilettaPalette.medidas` — `raioDeFolha` continua valendo como alias, e a
+  /// ordem é a dele: tabela, campo, default. Alias que vence a forma nova faz a migração andar
+  /// pra trás.
   BorderRadius get formaDaFolha => BorderRadius.vertical(
-      top: Radius.circular(paleta.raioDeFolha ?? CoreflowRadius.sheet));
+      top: Radius.circular(medidaDe(DilettaMedida.formaDeFolha) ??
+          paleta.raioDeFolha ??
+          CoreflowRadius.sheet));
+
+  /// O DEGRAU QUE O PRODUTO DECLAROU pra [papel], ou `null` — a gêmea do `DilettaScheme.medidaDe`.
+  ///
+  /// Repetida aqui e não importada pela mesma razão das outras gêmeas: as peças deste pacote leem
+  /// este esquema e não o do avô. **O que não se repete é a conta** — os dois leem o mesmo
+  /// `paleta.medidas`, então um produto declara uma vez e as duas famílias de peça obedecem.
+  double? medidaDe(String papel) => paleta.medidas[papel];
+
+  /// O RAIO DO CARTÃO, em número — 24 quando o produto não declara.
+  ///
+  /// É o único da família exposto como `double`, porque `CoreflowCartao.radius` é um `double` que a
+  /// tela pode sobrescrever (a pílula é este cartão com `CoreflowRadius.pill`). O resto da casa lê
+  /// [formaDoCartao] e nunca refaz a conta.
+  double get raioDoCartao => medidaDe(DilettaMedida.formaDeCartao) ?? CoreflowRadius.card;
+
+  /// A FORMA DO CARTÃO — a quarta gêmea, e a que o veredito do avô chamou de decisiva: *"é o cartão
+  /// que muda a leitura da tela"*. A Home deste produto é feita de cartão, vidro e nav, e nenhuma
+  /// das três era declarável até 14/09.
+  BorderRadius get formaDoCartao => BorderRadius.all(Radius.circular(raioDoCartao));
+
+  /// A FORMA DA SUPERFÍCIE DE VIDRO — 16 por default, o valor que os seis sítios cravavam.
+  BorderRadius get formaDoVidro => BorderRadius.all(
+      Radius.circular(medidaDe(DilettaMedida.formaDeVidro) ?? CoreflowRadius.vidro));
+
+  /// A FORMA DA NAV FLUTUANTE — 24 por default. Um sítio só, e ele está em todas as telas.
+  BorderRadius get formaDaNav =>
+      BorderRadius.all(Radius.circular(medidaDe(DilettaMedida.formaDeNav) ?? CoreflowRadius.nav));
+
+  /// A FORMA DO CAMPO — e esta chega com um campo de alias que **já existia havia nove tags**.
+  ///
+  /// `raioDeCampo` entrou na `v0.184.0` do avô, pedido de outro filho, e ninguém aqui soube: o
+  /// próprio pai registrou o defeito de aviso como dele. A ordem é a mesma das irmãs — tabela,
+  /// campo, default 16.
+  BorderRadius get formaDoCampo => BorderRadius.all(Radius.circular(
+      medidaDe(DilettaMedida.formaDeCampo) ?? paleta.raioDeCampo ?? CoreflowRadius.field));
 
   /// O ESQUEMA A PARTIR DE UMA PALETA — e é esta assinatura que faz o DS ser retematizável.
   ///

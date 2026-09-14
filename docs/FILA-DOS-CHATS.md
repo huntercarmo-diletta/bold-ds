@@ -75,9 +75,17 @@ máquina** pra re-resolver — subir só o `package.json` deixaria o lock discor
 **o filho gerado hoje nasce um número à frente da nossa própria instância web**, e isso é uma linha
 pra próxima rodada.
 
-## 3 · Declarar as três formas, e dizer ao pai o que sobrou
+## 3 · Declarar as três formas, e dizer ao pai o que sobrou — FEITO
 
-**Depende do 2.** Fecha o **item 1 da fila do Berço** — o pedido `2026-09-14-a-forma-do-filho-para-em-dois-raios.md`.
+Fecha o **item 1 da fila do Berço** — o pedido `2026-09-14-a-forma-do-filho-para-em-dois-raios.md`,
+que agora tem a `## Resposta do filho` escrita no próprio arquivo. **18 dos 22 sítios** passaram a
+ler o esquema; sobraram 4, cada um com a razão (o ladrilho de 46, que segue a regra de TAMANHO do
+avô, e os 3 do miúdo de 8, que ficaram fora por veredito).
+
+Nasceram quatro gêmeas no `CoreflowScheme` — `formaDoCartao`, `formaDoVidro`, `formaDaNav`,
+`formaDoCampo` —, e a `formaDaFolha` passou a ler a tabela antes do campo. **A declaração é dupla de
+propósito**: na paleta do Bold e na `CoreflowGramatica`, que é a que chega no filho gerado pelo
+Berço — sem ela, o tom de voz continuaria parando no botão.
 
 ```dart
 BoldColors.paleta.comMaterial(medidas: const {
@@ -87,24 +95,30 @@ BoldColors.paleta.comMaterial(medidas: const {
 })
 ```
 
-**Medido por esta rotina** em `packages/`, fora de teste e fora de comentário: **16 usos de
-`CoreflowRadius` + o construtor privado**, e eles não são todos a mesma coisa —
+**E a medição desta rotina estava CURTA.** Eu tinha contado 16 usos de `CoreflowRadius` e concluído
+"7 viram declaração"; o pedido tinha contado **22 sítios**, e a diferença é que metade deles não usa
+a const deste pacote — desenha `DilettaRadius.all16`/`all24` direto, que o meu grep não via.
+**Contar pelo nome da const mede quem escreveu o grep, não o que a tela desenha.**
 
-| grupo | quantos | sítios | o que acontece com eles |
+A conta que valeu, sítio por sítio:
+
+| família | do pedido | passaram a ler o esquema | sobrou |
 |---|---|---|---|
-| campo | 4 | `coreflow_busca.dart:66`, `coreflow_tema_material.dart:217·219·222` | **passam a ler `formaDoCampo`** — a família existe desde a `v0.184.0` |
-| cartão | 2 | `coreflow_cartao.dart:33`, `coreflow_tema_material.dart:185` | passam a ler `formaDoCartao` |
-| vidro | 1 | `coreflow_vidro.dart:188` | passa a ler `formaDoVidro` |
-| pílula | 4 | `coreflow_etiqueta.dart:90`, `coreflow_pegador.dart:40`, `coreflow_barra_de_topo.dart:195·274` | **ficam**, e o pai concordou: 999 × qualquer fator continua pílula |
-| emissor de CSS | 4 | `coreflow_css.dart:105·106` | é o **item 5** desta fila, não este |
-| fallback do esquema | 1 | `coreflow_scheme.dart:157` | **é o certo**: é o `null` que desenha o de hoje |
+| cartão | 5 | **5** | — |
+| vidro | 7 | **6** | 1 — o ladrilho de 46, que segue a regra de TAMANHO do avô (46 ⇒ `all16`) |
+| campo | 4 | **4** | — |
+| nav | 3 | **3** | — |
+| miúdo de 8 | 3 | — | **3**, por veredito dele |
+| **total** | **22** | **18** | **4** |
 
-Quer dizer: **7 sítios viram declaração, 4 ficam por veredito, 4 são outro item e 1 já está certo.**
-O pai pediu exatamente este número — *"declare as três e me diga o que sobrou cravado"* —, e a
-resposta vai como `## Resposta do filho` no mesmo arquivo do pedido.
+Fora dos 22 seguem cravados **4 da pílula** (veredito dele, razão nossa) e **1 chamada de tela** que
+escolhe 16 de propósito. O emissor de CSS — que era o item 5 desta fila — **fechou no mesmo dia, do
+outro lado da casa** (`ca33d6c`).
 
-**Teste que ele pede**: `CoreflowCartao`, `DilettaSurface` e a nav na mesma tela — os três cantos têm
-que concordar.
+**A conferência que ele pediu** virou teste: um `CoreflowCartao` e um `DilettaSurface` montados da
+mesma paleta, com a família declarada em 12 — os dois respondem 12, e não há mais um terceiro número
+escondido dentro da peça. Junto dele, o gate `a_forma_segue_a_familia_declarada_test`, 8 casos,
+incluindo *nenhuma peça deste pacote desenha a const das quatro famílias*.
 
 ## 4 · O pedido do logo — ESCRITO, e esta rotina deu o push
 
@@ -138,15 +152,19 @@ arquivo viaja como `assets/logos/{arquivo}_negativo.svg`, sai no manifesto, e o 
 comentário dizendo **por que** o campo não está declarado e **onde** está o pedido. No dia do
 veredito, esse comentário é o que tem que sumir — é o rastro que fecha o fio.
 
-## 5 · `coreflow_css.dart` emite a gramática, não o produto
+## 5 · `coreflow_css.dart` emite a gramática, não o produto — FEITO por outra mão (`ca33d6c`)
 
-**Nosso, não é pedido.** `coreflowMedidasCss()` exporta `--cps-radius-*` lendo as consts de
-`CoreflowRadius` e **a função nem recebe paleta**: um filho com `raioDeFolha: 8` recebe
-`--cps-radius-sheet: 22px`. É o mesmo defeito das cinco peças da folha, uma camada pra fora — e
-aquelas cinco já foram consertadas (`171748e`, com o gate `a_folha_segue_o_raio_declarado_test`).
+**Não fui eu, e é o melhor jeito de este item fechar.** A frente web leu o veredito e emitiu as
+**seis formas pelo nome do papel** (`--cps-formaDeCartao`…), resolvidas pelos GETTERS e não pelo
+`medidaDe` cru — que leria só a tabela e devolveria pílula pra quem declarou o alias. Junto veio o
+pino do `package.json` web, que esta rotina tinha deixado em `web-v0.193.0` por falta de npm.
 
-Hoje está **isento no gate com a razão escrita**, não porque esteja certo. Vem depois do item 3
-porque é a mesma tabela: consertar antes é escrever duas vezes.
+**Uma nota que fica pra próxima rodada, e não é defeito hoje**: o emissor lê cinco das seis formas
+do esquema do AVÔ (`DilettaScheme.light(p)`) e só a folha do nosso. Hoje os números coincidem
+(cartão 24 · vidro 16 · nav 24 nos dois), então o CSS e o Flutter concordam. **No dia em que a
+gramática desta casa divergir do default do avô em alguma dessas cinco**, a web emitirá o número
+dele e as peças desenharão o nosso — a mesma classe do `CoreflowRadius.card` valer 24 contra o
+`DilettaRadius.card` de 16, que já está escrita como *casar por VALOR e nunca por nome*.
 
 ## 6 · Os moods decoram com a cor de ALERTA
 

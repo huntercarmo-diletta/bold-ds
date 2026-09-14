@@ -40,6 +40,8 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'coreflow_scheme.dart' show CoreflowScheme;
+
 /// Um degrau: até [ate] reais, a saída exige [aprovacoes] assinaturas.
 class CoreflowDegrauDeAlcada {
   const CoreflowDegrauDeAlcada({
@@ -143,7 +145,7 @@ class _Degrau extends StatelessWidget {
     return DilettaBox(
       color: fundo,
       borderColor: traco,
-      radius: DilettaRadius.all24,
+      radius: CoreflowScheme.of(context).formaDoCartao,
       padding: EdgeInsets.symmetric(
         horizontal: DilettaSpacing.s4,
         vertical: densa ? DilettaSpacing.s2 : DilettaSpacing.s3,

@@ -36,6 +36,19 @@ abstract final class CoreflowRadius {
   /// produto; o gate `a_folha_segue_o_raio_declarado_test` não deixa voltar.
   static const double sheet = 22;
 
+  /// 16 — a superfície de VIDRO (saldo, ladrilho, promocional, aviso, cabeçalho da Home).
+  ///
+  /// Estava escrita como `DilettaRadius.all16` em seis sítios e não tinha nome aqui: o número
+  /// existia, a FAMÍLIA não. Desde 14/09 é o default de `CoreflowScheme.formaDoVidro`, e o valor é
+  /// o mesmo do avô — aqui a coincidência é real, e é por isso que ela pode ser lida por nome.
+  static const double vidro = 16;
+
+  /// 24 — a pílula flutuante de navegação, o único elemento persistente da tela.
+  ///
+  /// O `///` da peça já registrava que o desenho pedia 26 e que 26 não é degrau da escada do avô.
+  /// Continua sendo 24 por default; o que muda é que agora o produto pode declarar o dele.
+  static const double nav = 24;
+
   /// Pílula inteira — botões, segmented, switches, nav.
   /// O pai usa 200; 999 e 200 desenham o mesmo em qualquer altura de controle.
   static const double pill = 999;

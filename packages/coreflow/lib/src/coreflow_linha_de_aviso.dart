@@ -26,6 +26,8 @@ library;
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'coreflow_scheme.dart' show CoreflowScheme;
+
 import 'coreflow_vinho.dart';
 
 /// A linha-aviso da home.
@@ -62,9 +64,9 @@ class CoreflowLinhaDeAviso extends StatelessWidget {
     Widget linha = DilettaDevInfo(
       component: 'linhaDeAviso',
       props: {'icone': icone, 'contagem': '${contagem ?? 0}'},
-      tokens: const ['radius.all16', 'type.labelMd', 'type.bodySm'],
+      tokens: const ['scheme.formaDoVidro', 'type.labelMd', 'type.bodySm'],
       child: DilettaGlassSurface(
-        borderRadius: DilettaRadius.all16,
+        borderRadius: CoreflowScheme.of(context).formaDoVidro,
         child: Padding(
           padding: EdgeInsets.all(DilettaSpacing.s3),
           child: Row(children: [

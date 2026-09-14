@@ -26,7 +26,6 @@
 /// paleta**, e o app monta os dois do mesmo brilho, então não existem dois modos ao mesmo tempo.
 library;
 
-import 'coreflow_radius.dart';
 import 'package:flutter/cupertino.dart' show CupertinoPageTransitionsBuilder;
 import 'package:flutter/material.dart';
 import 'package:diletta_design_system/diletta_design_system.dart';
@@ -182,7 +181,7 @@ abstract final class CoreflowTemaMaterial {
       cardTheme: CardThemeData(
         color: s.surface,
         elevation: 0,
-        shape: const RoundedRectangleBorder(borderRadius: CoreflowRadius.cardR),
+        shape: RoundedRectangleBorder(borderRadius: s.formaDoCartao),
       ),
       iconTheme: IconThemeData(color: s.textSecondary, size: 22),
       textButtonTheme: TextButtonThemeData(
@@ -213,13 +212,13 @@ abstract final class CoreflowTemaMaterial {
         contentPadding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         hintStyle: t.comFamilia(t.dica).copyWith(color: s.textMuted),
         labelStyle: t.comFamilia(t.rotuloDeCampo).copyWith(color: s.textSecondary),
-        border: const OutlineInputBorder(
-            borderRadius: CoreflowRadius.fieldR, borderSide: BorderSide.none),
-        enabledBorder: const OutlineInputBorder(
-            borderRadius: CoreflowRadius.fieldR, borderSide: BorderSide.none),
+        border: OutlineInputBorder(
+            borderRadius: s.formaDoCampo, borderSide: BorderSide.none),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: s.formaDoCampo, borderSide: BorderSide.none),
         // Deixou de ser `const` porque a cor deixou de ser congelada. É a única diferença.
         focusedBorder: OutlineInputBorder(
-          borderRadius: CoreflowRadius.fieldR,
+          borderRadius: s.formaDoCampo,
           borderSide: BorderSide(color: s.paleta.primary04, width: 1.5),
         ),
       ),

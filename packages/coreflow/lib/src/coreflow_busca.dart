@@ -1,4 +1,3 @@
-import 'coreflow_radius.dart';
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 import 'coreflow_scheme.dart' show CoreflowScheme;
@@ -63,7 +62,7 @@ class _CoreflowBuscaState extends State<CoreflowBusca> {
     return DecoratedBox(
       decoration: BoxDecoration(
         border: Border.all(color: CoreflowScheme.of(context).danger, width: 1),
-        borderRadius: BorderRadius.circular(CoreflowRadius.field),
+        borderRadius: CoreflowScheme.of(context).formaDoCampo,
       ),
       child: DilettaSearchInput(
         controller: widget.controller,

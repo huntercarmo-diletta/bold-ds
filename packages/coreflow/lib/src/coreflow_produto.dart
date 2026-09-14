@@ -113,6 +113,15 @@ class CoreflowProduto {
       cardDeVidro: CoreflowGramatica.cardDeVidro,
       raioDeBotao: CoreflowGramatica.raioDeBotao,
       raioDeFolha: CoreflowGramatica.raioDeFolha,
+      // A FORMA POR FAMÍLIA, na tabela que o veredito de 14/09 abriu (`ds v0.194.0`). Os dois de
+      // cima continuam campo porque são a grafia antiga da mesma decisão e o avô os mantém como
+      // alias; as três de baixo só existem aqui. **Um filho gerado passa a poder declarar a forma
+      // da Home inteira** — que é cartão, vidro e nav, e não o botão, que a Home não tem.
+      medidas: const {
+        DilettaMedida.formaDeCartao: CoreflowGramatica.raioDeCartao,
+        DilettaMedida.formaDeVidro: CoreflowGramatica.raioDeVidro,
+        DilettaMedida.formaDeNav: CoreflowGramatica.raioDaNav,
+      },
       blurDeVidro: CoreflowGramatica.blurDeVidro,
       // O vocabulário extra, DECLARADO pela regra da linguagem sobre a rampa dele: superfície
       // elevada, pressionada, fluxo secundário, informação — e o vinho, refeito nos mesmos pontos da
