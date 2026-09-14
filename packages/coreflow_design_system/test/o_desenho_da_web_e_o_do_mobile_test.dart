@@ -19,7 +19,7 @@ import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'emite_o_css_do_bold.dart' show cssDoBold;
+import 'emite_o_css_do_bold.dart' show cssDoBold, tagsDaWeb;
 
 /// As variáveis da folha, por MODO.
 ///
@@ -165,5 +165,76 @@ void main() {
       });
     });
     expect(divergem, isEmpty, reason: 'a web escreve diferente do app:\n${divergem.join('\n')}');
+  });
+
+  group('os AJUSTES de papel por componente', () {
+    // O eixo que deixa um produto dizer "neste componente, o papel X passa a ler o Y", com `de` e
+    // `para` da mesma família e um motivo declarado. No Flutter é `scheme.comAjustes(...)`; na web é
+    // cascata dentro do elemento. Os dois têm que remapear a MESMA coisa.
+    //
+    // Este produto declara ZERO ajustes hoje, por decisão medida e escrita
+    // (`docs/avisos/2026-08-12-o-ajuste-de-papel-RESPOSTA.md`: sem parceiro, não há caso de `marca`;
+    // e o único caso de `contraste` a casa já decidiu ao contrário). Um gate que só rodasse contra a
+    // lista real passaria sem medir nada — por isso o primeiro teste usa uma lista SINTÉTICA.
+
+    test('o remapeamento da web é o mesmo que o do app', () {
+      const ajustes = [
+        DilettaAjusteDePapel(
+            componente: 'DilettaButton',
+            de: 'primary',
+            para: 'primaryPressed',
+            motivo: MotivoDoAjuste.marca,
+            nota: 'sintético, só para o gate medir'),
+      ];
+      final base = DilettaScheme.light(p);
+      final comAjuste = base.comAjustes(ajustes, 'DilettaButton');
+
+      // MOBILE: no componente ajustado, `primary` passa a valer o que `primaryPressed` vale.
+      expect(_hex(comAjuste.primary), _hex(base.primaryPressed),
+          reason: 'o app não aplicou o ajuste — o eixo do Flutter parou de funcionar');
+      // E fora dele, nada muda. Ajuste é por componente, não global.
+      expect(_hex(base.primary), isNot(_hex(base.primaryPressed)));
+
+      // WEB: a mesma troca, como alias dentro da tag. Alias e não cor: a folha tem que seguir
+      // `primaryPressed` quando ele mudar, e cor copiada aqui divergiria na próxima paleta.
+      final css = coreflowAjustesCss(ajustes, tagsWeb: tagsDaWeb());
+      expect(css, contains('diletta-button { --cps-primary: var(--cps-primaryPressed); }'),
+          reason: 'a web não aplicou o ajuste que o app aplica');
+    });
+
+    test('ajuste em peça sem instância web não some calado — some por não existir lá', () {
+      // `CoreflowSaldo` é do pai e só tem lado Flutter. Ajustar nela não tem o que emitir, e isso
+      // não é divergência: é peça que não existe na web. O que seria divergência é uma peça QUE
+      // EXISTE ficar de fora — e é isso que a conta abaixo separa.
+      const ajustes = [
+        DilettaAjusteDePapel(
+            componente: 'CoreflowSaldo',
+            de: 'surface',
+            para: 'surfaceMuted',
+            motivo: MotivoDoAjuste.marca,
+            nota: 'sintético'),
+      ];
+      final tags = tagsDaWeb();
+      expect(tags, isNotEmpty,
+          reason: 'a lista de tags veio vazia — rode `npm install` em coreflow_design_system_web. '
+              'Sem ela, TODO ajuste sairia de fora e o gate aprovaria em silêncio.');
+      expect(tags.contains(tagDaPeca('CoreflowSaldo')), isFalse);
+      expect(coreflowAjustesCss(ajustes, tagsWeb: tags), isEmpty);
+    });
+
+    test('nenhum ajuste DESTE produto fica de fora da folha', () {
+      // A catraca de verdade: roda contra a lista real. Hoje ela é vazia e isto passa de graça — e
+      // no dia em que alguém declarar um ajuste numa peça que EXISTE na web, este teste é o que
+      // cobra a folha acompanhar.
+      final tags = tagsDaWeb();
+      final declarados = ContaBold.produto.ajustesDePapel;
+      final deveriamSair =
+          declarados.where((a) => tags.contains(tagDaPeca(a.componente))).toList();
+      final css = coreflowAjustesCss(declarados, tagsWeb: tags);
+      for (final a in deveriamSair) {
+        expect(css, contains('${tagDaPeca(a.componente)} { --cps-${a.de}: var(--cps-${a.para}); }'),
+            reason: '${a.componente} tem instância web e o ajuste dele não saiu na folha');
+      }
+    });
   });
 }

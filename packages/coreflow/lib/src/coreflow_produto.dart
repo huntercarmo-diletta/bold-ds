@@ -41,6 +41,7 @@ class CoreflowProduto {
     required this.paleta,
     required this.marca,
     this.tipografia = CoreflowTipografia.doAvo,
+    this.ajustesDePapel = const [],
     CoreflowGradients? gradientes,
   }) : _gradientes = gradientes;
 
@@ -105,6 +106,7 @@ class CoreflowProduto {
     DilettaBrand? marcaVisual,
     CoreflowTipografia tipografia = CoreflowTipografia.doAvo,
     CoreflowGradients? gradientes,
+    List<DilettaAjusteDePapel> ajustesDePapel = const [],
   }) {
     final rampa = DilettaRampa.daMarca(marca);
     final so = DilettaPalette.daMarca(marca: marca, id: id, nome: nome);
@@ -148,6 +150,7 @@ class CoreflowProduto {
       marca: marcaVisual ?? DilettaBrand.nenhuma,
       tipografia: tipografia,
       gradientes: gradientes,
+      ajustesDePapel: ajustesDePapel,
     );
   }
 
@@ -156,6 +159,21 @@ class CoreflowProduto {
 
   /// O plugue de marca: logo, e o mapa hex→degrau das artes deste produto.
   final DilettaBrand marca;
+
+  /// Os AJUSTES DE PAPEL POR COMPONENTE deste produto — adaptação limitada, não slot livre.
+  ///
+  /// A linguagem permite um produto dizer *"neste componente, o papel X passa a ler o Y"*, com `de` e
+  /// `para` da mesma família e um motivo declarado. Serve pra marca e pra contraste, e o avô fecha o
+  /// escopo no `///` dele: *"nunca uma coisa muito fora disso"*.
+  ///
+  /// **Estava chegando em lugar nenhum até 14/09.** O `DilettaTheme.resolve` aceita a lista desde
+  /// sempre, e este produto montava o tema sem passá-la — então um filho do Coreflow podia declarar
+  /// ajuste e nada acontecia, nem no Flutter. Achado indo construir o lado WEB do mecanismo: não dá
+  /// pra emitir CSS de um eixo que o Dart não liga.
+  ///
+  /// Do lado web o ajuste vira cascata — `coreflowAjustesCss` emite `<tag> { --cps-de: var(--cps-para) }`
+  /// —, e o gate de paridade cobra que os dois lados apliquem o mesmo.
+  final List<DilettaAjusteDePapel> ajustesDePapel;
 
   /// A tipografia deste produto: a família (uma vez) e os degraus que o `ThemeData` recebe.
   final CoreflowTipografia tipografia;
@@ -229,7 +247,9 @@ class CoreflowProduto {
   late final DilettaTheme claro = () {
     _garanteOsAssetsDoPai();
     return DilettaTheme.resolve(
-        palette: paleta, brand: marcaNo(Brightness.light));
+        palette: paleta,
+        brand: marcaNo(Brightness.light),
+        ajustesDePapel: ajustesDePapel);
   }();
 
   /// O tema do PAI no escuro.
@@ -238,7 +258,8 @@ class CoreflowProduto {
     return DilettaTheme.resolve(
         palette: paleta,
         brand: marcaNo(Brightness.dark),
-        brightness: Brightness.dark);
+        brightness: Brightness.dark,
+        ajustesDePapel: ajustesDePapel);
   }();
 
   /// O `ThemeData` do Material no claro.

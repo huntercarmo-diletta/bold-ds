@@ -166,3 +166,42 @@ String coreflowTipoCss(Map<String, TextStyle> degraus, {required String familia}
 /// `16px`, e `22px` — sem `.0` pendurado, que é o que o CSS do avô escreve.
 String _px(double v) => v == v.roundToDouble() ? '${v.round()}px' : '${v}px';
 
+/// Os AJUSTES DE PAPEL POR COMPONENTE, como cascata.
+///
+/// A linguagem deixa um produto dizer *"neste componente, o papel X passa a ler o Y"*, e do lado
+/// Flutter isso é `scheme.comAjustes(...)`. Na web é mais direto do que parece: a peça pinta com
+/// `var(--cps-X)`, então redeclarar `--cps-X` DENTRO do elemento muda o que ela lê — e propriedade
+/// customizada atravessa shadow DOM, que é onde os custom elements desenham.
+///
+/// ```css
+/// diletta-button { --cps-primary: var(--cps-secure); }
+/// ```
+///
+/// Sai mode-aware de graça: `--cps-secure` já muda por modo, e o alias segue.
+///
+/// **Ajuste em peça que não tem instância web não sai**, e isso não é perda: peça que não existe na
+/// web não desenha nada pra ajustar. O que seria perda é sair calado — por isso o gate de paridade
+/// separa os dois casos e só aceita a ausência quando a peça não existe mesmo lá.
+///
+/// [tagsWeb] é o conjunto de tags que a instância web registra, e ele entra por parâmetro porque
+/// quem sabe disso é o pacote web, não o pai.
+String coreflowAjustesCss(
+  List<DilettaAjusteDePapel> ajustes, {
+  required Set<String> tagsWeb,
+}) {
+  if (ajustes.isEmpty) return '';
+  final linhas = <String>[];
+  for (final a in ajustes) {
+    final tag = tagDaPeca(a.componente);
+    if (!tagsWeb.contains(tag)) continue;
+    linhas.add('/* ${a.componente}: ${a.de} → ${a.para} — ${a.motivo.name}. ${a.nota} */');
+    linhas.add('$tag { --cps-${a.de}: var(--cps-${a.para}); }');
+  }
+  return linhas.isEmpty ? '' : '${linhas.join('\n')}\n';
+}
+
+/// `DilettaButton` → `diletta-button`. A mesma conta que o pacote web usa pra registrar, e por isso
+/// ela é pública: o gate de paridade precisa fazer a volta pra saber qual peça tem instância web.
+String tagDaPeca(String componente) => componente
+    .replaceAllMapped(RegExp('(?<=.)[A-Z]'), (m) => '-${m[0]}')
+    .toLowerCase();
