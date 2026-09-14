@@ -33,7 +33,8 @@ da fila porque mudam o desenho do que vem depois.
 
 ## 1 · A resposta do pai chegou e está em branch, não na `main`
 
-**Estado**: entregue pelo pai, não aplicada aqui. **Origem**: canal do pai, achado por esta rotina.
+**Estado**: **FEITO em 14/09** — as duas branches foram mescladas na `main` (`a3c37eb` e `7846705`).
+**Origem**: canal do pai, achado por esta rotina.
 
 | o que | onde |
 |---|---|
@@ -51,15 +52,28 @@ tags — sem que este filho soubesse; o pai registrou o defeito como dele.
 tema. Quem for aplicar o veredito **sem ler o aviso escreve no endereço errado**, e é por isso que
 este item é o primeiro.
 
-> Fazer: trazer os dois pra `main` (a resposta mora junto da pergunta), e só então tocar em código.
-> Três respostas anteriores do pai também estão paradas em branch — `veredito/o-web-sai-por-tag`,
-> `nota/fila-de-31`, `nota/coreflow-v0186`. Esta rotina não mescla nada sozinha.
+> Feito com `--no-ff`, pra branch continuar sendo o nome da resposta. **Três respostas anteriores
+> dele seguem paradas em branch** — `veredito/o-web-sai-por-tag` (11/09), `nota/fila-de-31` e
+> `nota/coreflow-v0186` (10/09) —, e nenhuma delas foi tocada nesta rodada.
 
-## 2 · Subir o `ref:` pra `v0.194.0`
+## 2 · Subir o `ref:` pra `v0.194.0` — FEITO (`bfb6aeb`)
 
-**Depende do 1.** Dois pubspecs pinam `v0.193.0`: `packages/coreflow/pubspec.yaml:23` e
-`packages/coreflow_design_system/pubspec.yaml:34` — a mesma tag na família, ou dois `DilettaTheme`
-no mesmo build. Entre as duas há a `v0.193.1`, que não cobra nada daqui.
+Os dois pubspecs subiram, e a suíte cobrou **três coisas que o `ref:` não mostra**:
+
+| o que mordeu | por quê |
+|---|---|
+| o gate `o filho gerado recebe o MESMO avô que o pai pina` | o gerador pinava `web-v0.193.0`; um filho novo nasceria com duas versões da língua. `tagWebDoAvo` → `web-v0.194.0` |
+| o gate byte a byte do exemplo versionado | o `web/package.json` do filho de exemplo carrega a mesma tag |
+| `o_resumo_da_transacao_test.dart` não compilava | **`DilettaSpotIcon.icon` virou `String?`** na `v0.194.0` — `loading` desenha o arco e não usa glifo. Os outros sete seguem obrigatórios pelo `assert` do avô |
+
+Verde nos cinco pacotes: coreflow 93 · coreflow_design_system 207 · catalog 109 · o example e o
+filho gerado.
+
+**Um pino ficou atrás, e é de propósito**: `packages/coreflow_design_system_web` segue em
+`web-v0.193.0`. O `package-lock.json` dele resolve por commit e **não há node nem npm nesta
+máquina** pra re-resolver — subir só o `package.json` deixaria o lock discordando. Quer dizer que
+**o filho gerado hoje nasce um número à frente da nossa própria instância web**, e isso é uma linha
+pra próxima rodada.
 
 ## 3 · Declarar as três formas, e dizer ao pai o que sobrou
 
