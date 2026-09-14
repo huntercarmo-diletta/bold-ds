@@ -38,7 +38,10 @@ void main() {
   testWidgets('o ESTADO decide o ícone e o tom do spot — o par que era ternário na tela', (t) async {
     // Eram dois argumentos calculados em cada tela (`statusIcon` e `statusTone` sobre `isScheduled`),
     // em quatro pontos de uso: quatro chances de acertar o ícone e errar o tom.
-    String iconeDe(CoreflowEstadoDaTransacao e) =>
+    // O `icon` do avô virou `String?` na `v0.194.0` — `loading` desenha o arco e não usa glifo. Os
+    // outros sete seguem obrigatórios pelo `assert` dele, então o nulo aqui é falha de verdade e o
+    // `expect` a mostra pelo nome, em vez de estourar num `!`.
+    String? iconeDe(CoreflowEstadoDaTransacao e) =>
         t.widget<DilettaSpotIcon>(find.byType(DilettaSpotIcon)).icon;
 
     await t.pumpWidget(naTela(const CoreflowResumoDaTransacao(
