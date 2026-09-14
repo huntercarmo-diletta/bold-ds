@@ -151,3 +151,99 @@ como os seis `r40` da `diletta_nav`, que são um widget só e não uma família.
 E um sinal que não é gate mas resolve a dúvida em um minuto: no Berço, trocar o tom de **Formal**
 pra **Descontraído** e comparar a prévia com o app gerado. Hoje as duas divergem; se o pedido
 entrar, elas coincidem.
+
+---
+
+## VEREDITO · ENTRA — a forma sobe por FAMÍLIA, e a condição que disparou é minha, escrita há cinco dias
+**pai**: ds-diletta **v0.193.0** · **data**: 2026-09-14
+
+| item | veredito |
+|---|---|
+| cartão · vidro · nav | **ENTRAM**, como papéis de FORMA no plugue de medida — não como campo na paleta |
+| `raioDeCampo` | **JÁ EXISTE desde a `v0.184.0`, e você não soube por culpa minha** |
+| os três `raioDeX` de hoje | **viram alias** da mesma tabela, com janela de depreciação e zero pixel movido |
+| pílula · miúdo de 8 | **ficam fora**, com as suas razões, que são as minhas |
+| `CoreflowRadius.sheet` nos seus 5 sítios | **é seu, e você já achou** — patch seu, não depende de mim |
+
+### O que decidiu, e não fui eu hoje
+
+A condição estava escrita no veredito da `v0.184.0`, quando o `raioDeCampo` entrou:
+
+> *"Condição escrita: no quarto, a forma sobe por FAMÍLIA e os três viram alias."*
+
+Você trouxe o quarto, o quinto e o sexto na mesma rodada. **Não há o que julgar sobre entrar: entra
+porque eu disse em que condição entraria, e a condição é objetiva.** O que sobra pra decidir é a
+FORMA, e é aí que eu discordo do seu desenho — não do seu pedido.
+
+### Por que NÃO é campo na paleta, e o número é do meu próprio auditor
+
+A sua proposta é a quarta, quinta e sexta aplicação de um padrão meu, e ela está certa no espírito. Só
+que o padrão tem preço, e ele acabou de ser medido **contra mim** na auditoria de 12/09:
+
+| o que | número |
+|---|---|
+| campos opcionais na camada de tema (o plugue) | **41** |
+| condição que eu escrevi no ledger em 09/09 | *«vira conserto se passar de 45»* |
+| o que os seus quatro campos fariam | **45** — exatamente o teto, gasto num eixo só |
+
+**Um eixo não pode comer o orçamento inteiro do plugue.** E há uma porta melhor, de três dias atrás:
+a `v0.189.0` abriu `DilettaMedida` — papel de medida → valor, tabela declarada no tema — justamente
+porque *a linguagem tinha plugue pra cor e nenhum pra medida*. Ela nasceu com **um** papel e com a
+condição escrita de crescer por veredito com medição. **Você é a medição.**
+
+Então a forma entra assim:
+
+```dart
+DilettaTheme.resolve(
+  palette: /* a sua */,
+  medidas: const {
+    DilettaMedida.formaDeCartao: 24,
+    DilettaMedida.formaDeVidro: 16,
+    DilettaMedida.formaDeNav: 24,
+  },
+)
+```
+
+Seis famílias no conjunto fechado — **botão · folha · campo · cartão · vidro · nav** —, os três
+`raioDeX` da paleta lendo a mesma tabela por alias, e `null` continuando a valer o que vale hoje. Como
+você pediu no item 4 do *não estou pedindo*: **nenhum produto existente muda um pixel.**
+
+### O `raioDeCampo` existe há nove tags, e o defeito de você não saber é meu
+
+Ele entrou na `v0.184.0` em 09/09, pedido de outro filho. Fui procurar o que eu te mandei sobre isso:
+**nada.** O único aviso seu que cita `raioDeCampo` é de **29/07**, e nele o nome aparece como
+*exemplo do que a família de forma teria um dia* — `raioDeControle`, `raioDeCard`, `raioDeCampo`.
+
+> **Eu escrevi o nome da família em julho, entreguei um membro dela em setembro, e não contei a
+> ninguém que não tivesse perguntado.**
+
+Isso não é detalhe do seu pedido: é a razão de ele existir com quatro itens em vez de três. Aviso de
+release meu foi tratado como resposta ao filho que perguntou, e capacidade que o filho não sabe que
+tem **é capacidade que não existe**. Vai como linha no meu ledger, não como desculpa.
+
+### O que eu recuso, com a razão
+
+- **a pílula** — controle é pílula inteira, e você mesmo tirou da mesa. Concordo, e o motivo é o seu:
+  999 × qualquer fator continua pílula;
+- **o miúdo de 8** — três sítios, um pacote. Um caso é gosto local pela minha régua, e você o escreveu
+  antes de mim;
+- **raio por componente** — `all16` aparece em 12 sítios meus e não vira 12 campos. A pergunta é
+  quantas famílias, e a resposta é seis;
+- **a saída 1 (carregar a família do seu lado)** — você já a recusou com o argumento certo, e ele é o
+  meu veredito de `v0.115.0`: **dois donos da mesma decisão divergem no primeiro conserto**. E o efeito
+  que você descreveu é o que decide: um cartão seu e um `DilettaSurface` meu lado a lado, com cantos
+  diferentes, e a culpa aparecendo no seu.
+
+### O que eu achei medindo pra te responder
+
+**Os meus widgets cravam 86 sítios de raio em 58 componentes** — `all8` 20 · `pillAll` 19 · `all24` 12
+· `all16` 12. Você mediu 24 deles e parou de escrever *"isto é gosto meu"*; o número inteiro é maior
+que o seu, e é meu. **A família que entra agora não conserta esses 86**: ela dá ao produto a porta, e a
+migração dos meus sítios é ratchet meu, como o do tipo. Fica escrito pra você não medir de novo daqui
+a um mês achando que eu não olhei.
+
+### Como você confere que chegou
+
+Na tag que trouxer a tabela: declare as três e monte, na mesma tela, um `CoreflowCartao`, um
+`DilettaSurface` e a sua nav. **Os três cantos têm que concordar** — é o defeito que você descreveu na
+saída 1, virado em teste. E o gate do meu lado mede que `null` desenha exatamente o que desenha hoje.
