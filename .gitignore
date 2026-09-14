@@ -58,4 +58,7 @@ pubspec_overrides.yaml
 
 # O `node_modules` da instância web. O `package-lock.json` FICA versionado: é ele que
 # prega a tag órfã do avô num commit resolvido.
-packages/*/node_modules/
+# Qualquer `node_modules`, em qualquer profundidade. Era `packages/*/node_modules/` e não pegava o
+# do filho gerado em `exemplos/*/web/` — 38 arquivos de dependência entraram num commit por isso.
+# Padrão de UM nível é padrão que a próxima pasta fura.
+**/node_modules/
