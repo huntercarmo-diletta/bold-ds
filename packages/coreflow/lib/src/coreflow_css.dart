@@ -1,7 +1,6 @@
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
-import 'coreflow_radius.dart';
 import 'coreflow_scheme.dart';
 
 /// A INSTÂNCIA WEB da tinta: os papéis da linguagem, resolvidos com [p], escritos como `--cps-*`.
@@ -96,33 +95,47 @@ String coreflowEsquemaCss(DilettaPalette p) {
       bloco(Brightness.dark, ''));
 }
 
-/// As MEDIDAS por nome, com o que ESTE produto declarou — `--cps-radius-*`, e não a escada de
-/// primitivas do avô: peça pede papel, não degrau.
+/// As MEDIDAS por nome, com o que ESTE produto declarou — `--cps-*`, com o nome do papel, igual à
+/// cor. Peça pede papel, não degrau: a escada de primitivas do avô (`--cps-r8`, `--cps-r16`…) já vem
+/// na folha dele e não é isto.
 ///
-/// **Recebe a paleta porque raio é declarável.** A primeira versão desta função, de 14/09, emitia a
-/// const: um filho com `raioDeFolha: 8` recebia `--cps-radius-sheet: 22px` e via o Flutter desenhar
-/// 8 enquanto a web desenhava 22. O defeito foi registrado no mesmo dia, na lista de exceções do
-/// `a_folha_segue_o_raio_declarado_test`, com a frase que o fecha: *"fica de fora do gate porque a
-/// régua é sobre pintura, e não porque está certo"*. Isto é o conserto.
+/// **As seis FORMAS saem do plugue de medida do avô**, que ganhou as três últimas no veredito de
+/// 14/09 (*"a forma sobe por FAMÍLIA e os três viram alias"*). A primeira versão desta função emitia
+/// a const de cada uma, e o `///` dizia que quando o pedido entrasse elas viriam por aqui. Entrou;
+/// vieram.
 ///
-/// A folha vem de `CoreflowScheme.formaDaFolha`, que é o caminho sancionado — a const só pode ser
-/// lida lá, como default. **Campo, cartão e pílula ainda são gramática**, cravados nos dois lados:
-/// é exatamente o que o pedido de 14/09 (`a-forma-do-filho-para-em-dois-raios`) cobra do avô, e
-/// quando ele entrar estes três entram junto, por aqui.
+/// Papel não declarado devolve `null`, e aí vale o que a linguagem desenha — a gramática deste DS.
+/// **Nenhum produto move um pixel** por esta tabela existir: quem não declarou recebe o que recebia.
+///
+/// A PÍLULA não sai como token seu: o veredito a deixou fora das seis de propósito (*999 × qualquer
+/// fator continua pílula, e controle é pílula inteira*), e emitir um `--cps-pilula: 999px` ao lado de
+/// um `--cps-formaDeBotao: 200px` poria dois números pra mesma forma na mesma folha. Quem quer pílula
+/// lê `formaDeBotao` ou `formaDeNav`, que é onde a linguagem a desenha.
 ///
 /// Não é mode-aware, então sai num `:root` só.
 String coreflowMedidasCss(DilettaPalette p) {
-  final folha = CoreflowScheme.de(p, brilho: Brightness.light).formaDaFolha.topLeft.x;
-  final raios = <String, double>{
-    'field': CoreflowRadius.field,
-    'card': CoreflowRadius.card,
-    'sheet': folha,
-    'pill': CoreflowRadius.pill,
+  // Os GETTERS do avô, não o `medidaDe` cru. Cada um resolve a cadeia inteira — tabela de medidas,
+  // depois o campo `raioDeX` que virou alias, depois o desenho da linguagem —, e ler a tabela direto
+  // pula o meio: um produto que declare só o alias receberia a pílula em vez do que declarou.
+  // Medido num produto desta casa em 14/09, no mesmo dia em que as seis formas entraram.
+  final a = DilettaScheme.light(p);
+  // A FOLHA é a exceção e é nossa: o esquema deste DS cai em 22 onde o avô cai em 24, pela régua do
+  // `CoreflowRadius` — casar por VALOR e nunca por nome.
+  final nossa = CoreflowScheme.de(p, brilho: Brightness.light);
+
+  final formas = <String, BorderRadius>{
+    DilettaMedida.formaDeBotao: a.formaDoBotao,
+    DilettaMedida.formaDeFolha: nossa.formaDaFolha,
+    DilettaMedida.formaDeCampo: a.formaDoCampo,
+    DilettaMedida.formaDeCartao: a.formaDoCartao,
+    DilettaMedida.formaDeVidro: a.formaDoVidro,
+    DilettaMedida.formaDeNav: a.formaDaNav,
   };
-  final linhas = raios.entries
-      .map((e) => '  --cps-radius-${e.key}: ${_px(e.value)};')
-      .join('\n');
-  return ':root {\n$linhas\n}\n';
+
+  final linhas = [
+    for (final e in formas.entries) '  --cps-${e.key}: ${_px(e.value.topLeft.x)};',
+  ];
+  return ':root {\n${linhas.join('\n')}\n}\n';
 }
 
 /// A ESCALA DE TIPO do produto, na MESMA forma que o avô emite (`-size`, `-weight`, `-line-height`,

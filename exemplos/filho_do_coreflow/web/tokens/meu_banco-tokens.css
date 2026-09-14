@@ -229,8 +229,10 @@
 
 /* MEDIDA por nome. */
 :root {
-  --cps-radius-field: 16px;
-  --cps-radius-card: 24px;
-  --cps-radius-sheet: 22px;
-  --cps-radius-pill: 999px;
+  --cps-formaDeBotao: 16px;
+  --cps-formaDeFolha: 22px;
+  --cps-formaDeCampo: 16px;
+  --cps-formaDeCartao: 24px;
+  --cps-formaDeVidro: 16px;
+  --cps-formaDeNav: 24px;
 }

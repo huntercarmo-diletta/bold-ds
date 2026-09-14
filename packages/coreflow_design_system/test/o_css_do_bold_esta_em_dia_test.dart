@@ -66,8 +66,43 @@ void main() {
     // `comMaterial`, que é por onde um filho nasce. Montar assim é usar o caminho de verdade.
     final outra = DilettaPalette.daMarca(marca: const Color(0xFF2F6FC4), id: 'x', nome: 'X')
         .comMaterial(raioDeFolha: 8);
-    expect(coreflowMedidasCss(outra), contains('--cps-radius-sheet: 8px;'));
-    expect(coreflowMedidasCss(BoldPalette.bold), contains('--cps-radius-sheet: 22px;'));
+    expect(coreflowMedidasCss(outra), contains('--cps-formaDeFolha: 8px;'));
+    expect(coreflowMedidasCss(BoldPalette.bold), contains('--cps-formaDeFolha: 22px;'));
+  });
+
+  test('o pacote WEB recebe o mesmo avô que este pacote Dart', () {
+    // O GATE QUE FALTAVA, e a falta foi medida: em 14/09 o `ref:` do Dart subiu pra v0.194.0 e o
+    // `package.json` do web ficou na v0.193.0, porque quem subiu não tinha npm pra re-resolver o
+    // lock. Eu tinha escrito a guarda equivalente no GERADOR — ela pegou, e o filho hipotético
+    // recebeu v0.194.0 enquanto o produto de verdade ficou atrás.
+    //
+    // **Guardar o futuro e deixar o presente aberto é a forma de gate que não serve.**
+    final dart = RegExp(r'ref:\s*(v[\d.]+)')
+        .firstMatch(File('pubspec.yaml').readAsStringSync())
+        ?.group(1);
+    expect(dart, isNotNull, reason: 'este pacote deixou de pinar o avô por tag');
+    final web = File('../coreflow_design_system_web/package.json').readAsStringSync();
+    expect(web, contains('#web-$dart'),
+        reason: 'o Dart recebe o avô em $dart e o pacote web recebe outra tag — uma língua, um '
+            'número. Suba o `package.json` e rode `npm install` pra re-resolver o lock.');
+  });
+
+  test('a forma emitida segue o ALIAS do produto, não a gramática', () {
+    // Segunda vez que a mesma classe de defeito aparece nesta função, e as duas vezes por pular um
+    // degrau da cadeia. As formas resolvem em três: tabela de medidas → campo `raioDeX` (o alias) →
+    // desenho da linguagem. Ler a tabela direto devolve nulo pro Conta BOLD, que declara
+    // `raioDeBotao: 16` e receberia 999 — a pílula, num produto cujo botão não é pílula.
+    expect(coreflowMedidasCss(BoldPalette.bold), contains('--cps-formaDeBotao: 16px;'),
+        reason: 'o alias `raioDeBotao` do produto parou de ser lido');
+
+    // E o controle: uma paleta que não declara NADA recebe o desenho da LINGUAGEM, sem herdar o 16
+    // deste produto. Filho de outro banco não nasce com o botão do Bold.
+    //
+    // O número é 200 e não 999 porque o default é do avô, e o `///` do `CoreflowRadius` já diz por
+    // que os dois convivem: *"o pai usa 200; 999 e 200 desenham o mesmo em qualquer altura de
+    // controle"*. Quem cai no default cai no dele — é a linguagem ganhando, que é a regra.
+    final outra = DilettaPalette.daMarca(marca: const Color(0xFF2F6FC4), id: 'x', nome: 'X');
+    expect(coreflowMedidasCss(outra), contains('--cps-formaDeBotao: 200px;'));
   });
 
   test('a escala de tipo emitida tem os 20 degraus do CoreflowType', () {
