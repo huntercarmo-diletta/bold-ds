@@ -193,7 +193,9 @@ abstract final class CoreflowTemaMaterial {
       ),
       bottomSheetTheme: BottomSheetThemeData(
         backgroundColor: s.surface,
-        shape: const RoundedRectangleBorder(borderRadius: CoreflowRadius.sheetR),
+        // Os quatro cantos, como sempre foram: numa folha ancorada embaixo os de baixo não
+        // aparecem, e mudar a geometria junto com o valor esconderia qual dos dois mexeu na tela.
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(s.formaDaFolha.topLeft)),
         // Desligado de propósito: cada folha deste produto desenha o próprio grip. Com o handle do
         // tema ligado apareciam DUAS barrinhas.
         showDragHandle: false,

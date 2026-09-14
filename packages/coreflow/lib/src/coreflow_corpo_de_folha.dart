@@ -1,4 +1,3 @@
-import 'coreflow_radius.dart';
 import 'package:flutter/widgets.dart';
 
 import 'coreflow_scheme.dart' show CoreflowScheme;
@@ -17,11 +16,14 @@ import 'coreflow_scheme.dart' show CoreflowScheme;
 /// ))
 /// ```
 ///
-/// **E o 24 estava errado nas treze.** O raio de folha deste produto é `CoreflowRadius.sheet`, que
-/// vale **22** — o número está declarado desde a `v0.44.0` e o pedido de 22/08 ao pai é justamente
-/// sobre o `r24` cravado na variante `.bottomsheet` dele. As folhas montadas à mão copiaram o
-/// número do pai em vez de ler o do produto, e ninguém tinha como ver os dois pixels de diferença
-/// numa folha por vez.
+/// **E o 24 estava errado nas treze.** O raio de folha deste produto vale **22** — declarado desde a
+/// `v0.44.0`, e o pedido de 22/08 ao pai é justamente sobre o `r24` cravado na variante
+/// `.bottomsheet` dele. As folhas montadas à mão copiaram o número do pai em vez de ler o do
+/// produto, e ninguém tinha como ver os dois pixels de diferença numa folha por vez.
+///
+/// **Em 14/09 o mesmo defeito apareceu um degrau acima, e era meu**: esta peça lia a const em vez
+/// do que o produto declarou em `raioDeFolha`, então ela consertava a cópia do número do pai e
+/// mantinha a cópia do número deste pacote. Hoje lê `CoreflowScheme.formaDaFolha`.
 ///
 /// A superfície também variava: `surface`, `background` e uma que declarava `surface` com um
 /// comentário explicando que branco fixo apagava o título. Aqui é `surface`, e quem precisa de
@@ -35,12 +37,11 @@ class CoreflowCorpoDeFolha extends StatelessWidget {
   final Color? cor;
 
   @override
-  Widget build(BuildContext context) => DecoratedBox(
-        decoration: BoxDecoration(
-          color: cor ?? CoreflowScheme.of(context).surface,
-          borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(CoreflowRadius.sheet)),
-        ),
-        child: child,
-      );
+  Widget build(BuildContext context) {
+    final c = CoreflowScheme.of(context);
+    return DecoratedBox(
+      decoration: BoxDecoration(color: cor ?? c.surface, borderRadius: c.formaDaFolha),
+      child: child,
+    );
+  }
 }

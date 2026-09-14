@@ -29,6 +29,11 @@ abstract final class CoreflowRadius {
   /// ABERTO no ledger do pai, levantado pelo primeiro filho, e este produto é o segundo número da
   /// mesma pergunta — dois filhos com folha de 22 contra a folha de 24 da linguagem. Nota enviada
   /// em 18/08.
+  ///
+  /// **Desde 14/09 ela é DEFAULT, não desenho.** Quem precisa do raio da folha lê
+  /// `CoreflowScheme.formaDaFolha`, que devolve o que o produto declarou em `raioDeFolha` e cai
+  /// aqui quando não declara. Cinco peças deste pacote desenhavam este número direto e ignoravam o
+  /// produto; o gate `a_folha_segue_o_raio_declarado_test` não deixa voltar.
   static const double sheet = 22;
 
   /// Pílula inteira — botões, segmented, switches, nav.
@@ -37,6 +42,9 @@ abstract final class CoreflowRadius {
 
   static const BorderRadius fieldR = DilettaRadius.all16;
   static const BorderRadius cardR = DilettaRadius.all24;
+  /// Os quatro cantos no raio de folha. **Nada deste pacote desenha com ela** desde 14/09 — ficou
+  /// porque três folhas montadas à mão no app a leem (`raffle_dialogs.dart`), e elas têm o mesmo
+  /// defeito que as cinco daqui tinham: só mudam de raio quando este número muda.
   static const BorderRadius sheetR = BorderRadius.all(Radius.circular(sheet));
   static const BorderRadius pillR = DilettaRadius.pillAll;
 }

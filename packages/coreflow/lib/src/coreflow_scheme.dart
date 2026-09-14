@@ -14,6 +14,7 @@
 /// mudança, e é assim que uma mudança de dono deve chegar.
 library;
 
+import 'coreflow_radius.dart';
 import 'coreflow_vinho.dart';
 import 'coreflow_vocabulario.dart';
 import 'package:flutter/material.dart';
@@ -133,6 +134,28 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
   final Color vinho, vinhoTinta, vinhoLavagem;
 
   bool get isDark => brightness == Brightness.dark;
+
+  /// A FORMA DO CANTO DA FOLHA, lida da paleta — a gêmea do `DilettaScheme.formaDaFolha`.
+  ///
+  /// **Ela existe porque cinco peças deste pacote ignoravam o que o produto declarou.** O avô já
+  /// resolveu isto em 22/08: o filho declara `raioDeFolha` na paleta, o componente lê
+  /// `formaDaFolha` do esquema, e nove sítios da linguagem passaram por lá de uma vez. As folhas
+  /// DESTE pacote ficaram de fora e continuaram desenhando a const [CoreflowRadius.sheet] — então
+  /// um produto que declarasse 8 via as nove folhas do avô obedecerem e a folha principal daqui
+  /// não. Achado medindo o que o Berço Coreflow consegue entregar ao filho gerado.
+  ///
+  /// As peças daqui leem o `CoreflowScheme` e não o do avô, e por isso o getter é repetido em vez
+  /// de importado. **O que não se repete é a conta**: os dois leem o mesmo `paleta.raioDeFolha`.
+  ///
+  /// O default diverge de propósito. O avô cai em 24, que é a folha da linguagem; aqui cai em
+  /// [CoreflowRadius.sheet] (22), que é a gramática deste DS — mesma razão que faz
+  /// `CoreflowRadius.card` valer 24 contra o `DilettaRadius.card` de 16, e que está escrita lá como
+  /// *casar por VALOR e nunca por nome*. A divergência só aparece numa paleta que não declara o
+  /// raio, e a única deste repo é a de referência do avô, usada como fixture de teste: com 22 ela
+  /// desenha o que desenhava antes desta linha existir.
+  BorderRadius get formaDaFolha => BorderRadius.vertical(
+      top: Radius.circular(paleta.raioDeFolha ?? CoreflowRadius.sheet));
+
   /// O ESQUEMA A PARTIR DE UMA PALETA — e é esta assinatura que faz o DS ser retematizável.
   ///
   /// **Até 19/08 as duas fábricas cravavam a paleta do primeiro produto por dentro.** Isso quer dizer que um

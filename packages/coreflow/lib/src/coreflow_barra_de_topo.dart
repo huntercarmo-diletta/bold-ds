@@ -257,9 +257,7 @@ class CoreflowBarraDeTopo extends StatelessWidget {
         // Superfície do tema (dark no dark) — branco fixo criava faixa branca
         // no topo do sheet com o título (texto branco) invisível.
         color: c.surface,
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(CoreflowRadius.sheet),
-            topRight: Radius.circular(CoreflowRadius.sheet)),
+        borderRadius: c.formaDaFolha,
       ),
       child: Column(mainAxisSize: MainAxisSize.min, children: [
         // Grip iOS. **É CÓPIA do [CoreflowFolha], e a nota anterior dizia "fonte única do handle" —

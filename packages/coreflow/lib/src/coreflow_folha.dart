@@ -1,7 +1,6 @@
 import 'coreflow_background.dart';
 import 'coreflow_espaco.dart';
 import 'coreflow_largura.dart';
-import 'coreflow_radius.dart';
 import 'package:diletta_design_system/diletta_design_system.dart'
     show DilettaAbsoluteColors, DilettaType;
 import 'package:flutter/material.dart';
@@ -264,8 +263,7 @@ class CoreflowFolha extends StatelessWidget {
             // de outro produto tinge com o rosa dele, não com o nosso. O gate deste pacote pegou
             // a const aqui na mudança de casa, pela mesma razão que pegou a etiqueta.
             : (c.isDark ? c.surface : c.paleta.primary08),
-        borderRadius: const BorderRadius.vertical(
-            top: Radius.circular(CoreflowRadius.sheet)),
+        borderRadius: c.formaDaFolha,
         border: Border.all(color: c.border, width: 1),
       ),
       // O papel de parede tem que respeitar os cantos arredondados do painel.
