@@ -49,7 +49,9 @@ p = raiz / "package.json"
 d = json.loads(p.read_text())
 d["version"] = versao
 d.pop("private", None)
-d["files"] = ["index.js", "tokens/"]
+# A lista de arquivos é a QUE O PACOTE DECLARA, não uma cravada aqui: cravar é como o `fontes/`
+# ficou de fora da v0.104.0 — o pacote ganhou uma pasta e a emissão não soube.
+assert d.get("files"), "o pacote não declara `files` — a emissão não sabe o que levar"
 d["exports"] = {k: v for k, v in d["exports"].items() if not k.startswith("./catalogo")}
 p.write_text(json.dumps(d, ensure_ascii=False, indent=2) + "\n")
 
@@ -59,6 +61,8 @@ assert d.get("dependencies", {}).get("diletta-design-system-web"), \
     "o pacote saiu sem a dependência do avô — sairia sem os 25 elementos"
 for f in ("index.js", "tokens/bold-tokens.css"):
     assert (raiz / f).exists(), f"faltou {f} na emissão"
+for f in d["files"]:
+    assert (raiz / f.rstrip("/")).exists(), f"`files` promete {f} e a emissão não tem"
 for proibido in ("catalogo", "exemplo", "node_modules"):
     assert not (raiz / proibido).exists(), f"{proibido}/ vazou pra emissão"
 print(f"  pacote emitido: {d['name']}@{versao}")
