@@ -20,6 +20,42 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.104.0] — 2026-09-14
+
+### A fonte viaja no pacote — e o pronto ganhou da conversão pelo `tnum`
+
+A `v0.103.0` emitia `--cps-font-family: Inter` e não entregava o arquivo. Os custom elements do avô
+não declaram fonte — herdam de quem hospeda —, então o nome sem o arquivo é a mesma falha silenciosa
+das variáveis sem valor: a folha pede Inter e o navegador cai no fallback.
+
+`coreflow-design-system-web/fontes.css` fecha isso, reexportando o **`@fontsource/inter`** nos cinco
+pesos do `CoreflowType`.
+
+**A primeira versão disto era uma conversão nossa** dos `.ttf` do pacote Flutter — subconjunto
+latino, sem hinting, 14 KB por peso contra 23 KB do pronto. A dona perguntou se não havia nada
+pronto, e a medição respondeu por ela: **o meu subconjunto jogava o `tnum` fora**. Sem algarismo
+tabular, valor não alinha em coluna no extrato. Trinta e cinco quilobytes mais leve, e errado pro
+produto que vai usar.
+
+| | conversão nossa | `@fontsource` |
+|---|---|---|
+| `tnum`, `pnum`, `frac`, `numr`, `dnom` | **não** | sim |
+| por peso | 14 KB | 23 KB |
+| divisão por subconjunto | não | **sim** — o navegador baixa só o latino |
+
+**É a mesma Inter do app, e isso foi medido antes de trocar.** O pacote Flutter empacota a `4.000`,
+o fontsource serve a `4.001`: `unitsPerEm`, ascent, descent, capHeight e xHeight **idênticos**, e 80
+das 81 letras testadas com a mesma largura de avanço. A única diferença é o dígito `5` — 30 de 2048
+unidades, **0,23px em texto de 16px**. App e web desenham a mesma palavra no mesmo lugar.
+
+`fontes.css` **precisa de bundler** (`@import '@fontsource/inter/400.css'` é especificador nu, e o
+Vite resolve). Numa página sem build, aponte para os arquivos direto — é o que o `catalogo/` faz, e
+está no README.
+
+### Gates
+
+Pai 91 · filho 207 · example 12 · catálogo 109.
+
 ## [0.103.0] — 2026-09-14
 
 ### Nasce a instância WEB deste DS — os 25 elementos da linguagem, com a nossa tinta

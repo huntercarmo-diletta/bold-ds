@@ -28,9 +28,24 @@ verde** — sem um erro no console.
 body { font-family: var(--cps-font-family); }
 ```
 
-⚠️ **O pacote emite o NOME, não o arquivo.** O DS empacota a Inter em `.ttf` para o Flutter; um
-produto web precisa hospedar os `.woff2` e declarar os `@font-face`. Sem isso a folha pede Inter e o
-navegador cai no fallback — que é o mesmo defeito silencioso das variáveis sem valor.
+A fonte **viaja no pacote** — o nome sem o arquivo seria a mesma falha silenciosa das variáveis sem
+valor. Uma linha, com bundler:
+
+```js
+import 'coreflow-design-system-web/fontes.css';
+```
+
+Ela reexporta o `@fontsource/inter` nos cinco pesos que o `CoreflowType` usa. **Precisa de bundler**
+(o Vite resolve; página crua não) — numa página sem build, aponte para
+`node_modules/@fontsource/inter/{400..800}.css` direto, como o `catalogo/` faz.
+
+Por que o pronto e não uma conversão nossa: o fontsource mantém as **features numéricas** —
+`tnum`, `pnum`, `frac`. Uma conversão nossa dos `.ttf` do pacote Flutter saía 35 KB mais leve
+jogando o `tnum` fora, e sem ele valor não alinha em coluna no extrato.
+
+É a mesma Inter do app, medido: o Flutter empacota a 4.000 e o fontsource serve a 4.001, com
+`unitsPerEm`, ascent, descent, capHeight e xHeight idênticos e 80 das 81 letras testadas com a mesma
+largura. A única diferença é o dígito `5`, 0,23px em texto de 16px.
 
 **2 · As peças.** Um import registra as 25:
 

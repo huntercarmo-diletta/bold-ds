@@ -2,6 +2,13 @@
 <meta charset="utf-8">
 <title>Conta BOLD · instância web</title>
 <!-- A ORDEM: as duas do avô (primitivas + papéis de referência), e a nossa por último. -->
+<!-- A INTER. Aqui por caminho relativo porque esta é uma página CRUA: o `fontes.css` do pacote
+     usa `@import '@fontsource/inter/400.css'`, que é especificador nu e só um bundler resolve. -->
+<link rel="stylesheet" href="../node_modules/@fontsource/inter/400.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/inter/500.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/inter/600.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/inter/700.css">
+<link rel="stylesheet" href="../node_modules/@fontsource/inter/800.css">
 <link rel="stylesheet" href="../node_modules/diletta-design-system-web/tokens/cps-tokens.css">
 <link rel="stylesheet" href="../node_modules/diletta-design-system-web/tokens/cps-papeis.css">
 <link rel="stylesheet" href="../tokens/bold-tokens.css">
