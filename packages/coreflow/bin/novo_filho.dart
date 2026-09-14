@@ -56,6 +56,8 @@ uso: dart run coreflow:novo_filho --id <id> --nome <nome> --cor <#RRGGBB> [--sai
   File('${op.saida}/web/package.json').writeAsStringSync(packageJsonDe(op));
   File('${op.saida}/web/index.js').writeAsStringSync(indexJsDe(op));
   File('${op.saida}/web/README.md').writeAsStringSync(leiameWebDe(op));
+  File('${op.saida}/test/o_desenho_da_web_e_o_do_mobile_test.dart')
+      .writeAsStringSync(gateDeParidadeDe(op));
   File('${op.saida}/web/tokens/.gitkeep').writeAsStringSync('');
 
   stdout.writeln('''
@@ -174,6 +176,18 @@ final ${op.id} = CoreflowProduto.daMarca(
   // Sem tipografia declarada, a escala é a da linguagem e a família é a do app. A sua entra aqui:
   //
   //   tipografia: CoreflowTipografia(familia: 'packages/${_arquivo(op.id)}_coreflow/MinhaFonte', ...),
+  //
+  // AJUSTE DE PAPEL POR COMPONENTE — adaptação limitada, não slot livre. Serve pra dizer "neste
+  // componente, o papel X passa a ler o Y", com `de` e `para` da MESMA família e um motivo fechado
+  // (`marca` ou `contraste`). Existe porque mexer no papel muda 36 peças de uma vez; isto muda uma.
+  // O que você declarar aqui chega no Flutter E na folha da web, e um gate cobra que os dois
+  // apliquem o mesmo:
+  //
+  //   ajustesDePapel: const [
+  //     DilettaAjusteDePapel(
+  //       componente: 'DilettaProgressBar', de: 'primaryTrack', para: 'primarySubtle',
+  //       motivo: MotivoDoAjuste.marca, nota: 'o trilho some sobre a superfície do parceiro'),
+  //   ],
 );
 ''';
 
@@ -234,6 +248,17 @@ import 'package:coreflow/coreflow.dart';
 import 'package:${_arquivo(op.id)}_coreflow/${_arquivo(op.id)}.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/// As TAGS que a instância web registra, lidas do `index.js` do pacote do avô — a fonte é o pacote e
+/// não uma lista nossa, porque peça nova na tag dele tem que entrar sozinha.
+Set<String> tagsDaWeb() {
+  final f = File('web/node_modules/diletta-design-system-web/index.js');
+  if (!f.existsSync()) return const {};
+  return RegExp(r"^\\s*'(diletta-[a-z-]+)',", multiLine: true)
+      .allMatches(f.readAsStringSync())
+      .map((m) => m.group(1)!)
+      .toSet();
+}
+
 /// As famílias que este produto declara, na ordem em que a cascata precisa delas. Nenhum hex é
 /// escrito aqui: tudo sai da paleta, pela derivação da linguagem.
 String cssDoProduto() => [
@@ -247,7 +272,15 @@ String cssDoProduto() => [
       // nosso. Quando declarar, acrescente aqui:
       //
       //   coreflowTipoCss(meusDegraus, familia: "'MinhaFonte', system-ui, sans-serif"),
+      // OS AJUSTES por componente, por último: eles redeclaram papel DENTRO de um elemento, então
+      // vêm depois das declarações de raiz que sobrescrevem. Sem ajuste declarado sai vazio.
+      _ajustes(),
     ].join();
+
+String _ajustes() {
+  final css = coreflowAjustesCss(${op.id}.ajustesDePapel, tagsWeb: tagsDaWeb());
+  return css.isEmpty ? '' : '\\n/* AJUSTES DE PAPEL POR COMPONENTE. */\\n\$css';
+}
 
 void main() {
   test('emite o CSS dos tokens do ${op.nome}', () {
@@ -378,4 +411,173 @@ O nome sem o arquivo é falha silenciosa: a folha pede a fonte e o navegador cai
 O `npm` não tem o `path:` do `pub` — subpasta de repo não se instala. Quem consumir precisa de uma
 **tag órfã** cuja raiz seja este diretório. O padrão está no `conta-bold-ds`
 (`tool/espelha_o_web.sh`), e o avô fez igual.
+''';
+
+/// O GATE DE PARIDADE do filho: o que a web desenha é o que o mobile desenha.
+///
+/// Nasce junto porque a alternativa é o produto descobrir sozinho — e a casa já pagou por isso. O
+/// irmão mais velho levou dois defeitos da mesma classe em um dia, os dois passando por um gate que
+/// só comparava o arquivo com o gerador: o gerador é que mentia. Por isso este lê pelas MESMAS portas
+/// que os widgets leem, e nunca pelo caminho que o emissor usou.
+String gateDeParidadeDe(Opcoes op) => '''
+// O QUE A WEB DESENHA É O QUE O MOBILE DESENHA.
+//
+// Já existe um gate provando que o `.css` no disco é o que o emissor produz. Ele só pega quem edita
+// o arquivo à mão. O que ele NÃO pega é o emissor produzir uma coisa e o componente desenhar outra —
+// e é essa a classe de defeito que custou caro no primeiro produto desta casa.
+//
+// Por isso aqui a leitura é pelas MESMAS portas que os widgets usam: `formaDoCartao`,
+// `dilettaCorDoPapelGen`. Comparar a saída com a fonte não é o mesmo que comparar a saída com o
+// DESENHO.
+import 'package:coreflow/coreflow.dart';
+import 'package:${_arquivo(op.id)}_coreflow/${_arquivo(op.id)}.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+import 'emite_o_css.dart' show cssDoProduto, tagsDaWeb;
+
+/// As variáveis da folha, por modo. A folha tem vários blocos `:root` — um por família — e varrer
+/// por posição pegaria só o primeiro.
+Map<String, String> _vars(String css, {required bool escuro}) {
+  final fora = <String, String>{};
+  var dentro = false;
+  var profundidade = 0;
+  for (final linha in css.split('\\n')) {
+    final l = linha.trim();
+    if (l.endsWith('{')) {
+      profundidade++;
+      final sel = l.substring(0, l.length - 1).trim();
+      if (sel.isNotEmpty && !sel.startsWith('@')) {
+        dentro = escuro ? sel == ':root[data-theme="dark"]' : sel == ':root';
+      }
+      continue;
+    }
+    if (l == '}') {
+      profundidade--;
+      if (profundidade <= 0) dentro = false;
+      continue;
+    }
+    if (!dentro) continue;
+    final m = RegExp(r'--cps-([A-Za-z0-9-]+):\\s*([^;]+);').firstMatch(l);
+    if (m != null) fora[m.group(1)!] = m.group(2)!.trim();
+  }
+  return fora;
+}
+
+String _hex(Color c) {
+  final argb = c.toARGB32();
+  final rgb = argb.toRadixString(16).padLeft(8, '0').substring(2);
+  final a = (argb >> 24) & 0xFF;
+  return a == 0xFF ? '#\$rgb' : '#\$rgb\${a.toRadixString(16).padLeft(2, '0')}';
+}
+
+String _px(double v) => v == v.roundToDouble() ? '\${v.round()}px' : '\${v}px';
+
+void main() {
+  final css = cssDoProduto();
+  final claro = _vars(css, escuro: false);
+  final escuro = _vars(css, escuro: true);
+  final p = ${op.id}.paleta;
+
+  test('a COR de cada papel é a que o componente pinta, nos dois modos', () {
+    final divergem = <String>[];
+    for (final modo in [
+      (nome: 'claro', s: DilettaScheme.light(p), css: claro),
+      (nome: 'escuro', s: DilettaScheme.dark(p), css: escuro),
+    ]) {
+      for (final papel in dilettaNomesDePapelGen) {
+        final cor = dilettaCorDoPapelGen(modo.s, papel);
+        if (cor == null) continue;
+        // Os dois que o esquema do produto sobrescreve de propósito saem com o valor DELE — é assim
+        // que o white label acontece na cascata, e a conferência deles é o teste abaixo.
+        if (papel == 'primary' || papel == 'border') continue;
+        if (modo.css[papel] != _hex(cor)) {
+          divergem.add('\${modo.nome}/\$papel: mobile \${_hex(cor)} × web \${modo.css[papel] ?? "ausente"}');
+        }
+      }
+    }
+    expect(divergem, isEmpty, reason: 'a web pinta diferente do app:\\n\${divergem.join('\\n')}');
+  });
+
+  test('os papéis do ESQUEMA do produto também, e são eles que ganham na cascata', () {
+    for (final modo in [
+      (nome: 'claro', b: Brightness.light, css: claro),
+      (nome: 'escuro', b: Brightness.dark, css: escuro),
+    ]) {
+      final s = CoreflowScheme.de(p, brilho: modo.b);
+      // Variável e não literal solto: `{` no início de statement o Dart lê como BLOCO, não mapa.
+      final esperado = {
+        'background': s.background, 'secondaryFlow': s.secondaryFlow,
+        'textPrimary': s.textPrimary, 'border': s.border, 'overlay': s.overlay,
+        'primary': s.primary, 'danger': s.danger, 'infoSubtle': s.infoSubtle, 'vinho': s.vinho,
+      };
+      esperado.forEach((papel, cor) {
+        expect(modo.css[papel], _hex(cor),
+            reason: '\${modo.nome}/\$papel: a web não pinta o que o esquema do produto diz');
+      });
+    }
+  });
+
+  test('a FORMA de cada família é a que o componente arredonda', () {
+    final a = DilettaScheme.light(p);
+    final nosso = CoreflowScheme.de(p, brilho: Brightness.light);
+    final desenho = {
+      DilettaMedida.formaDeBotao: a.formaDoBotao,
+      DilettaMedida.formaDeFolha: nosso.formaDaFolha,
+      DilettaMedida.formaDeCampo: a.formaDoCampo,
+      DilettaMedida.formaDeCartao: a.formaDoCartao,
+      DilettaMedida.formaDeVidro: a.formaDoVidro,
+      DilettaMedida.formaDeNav: a.formaDaNav,
+    };
+    desenho.forEach((papel, raio) {
+      expect(claro[papel], _px(raio.topLeft.x),
+          reason: '\$papel: o app arredonda \${_px(raio.topLeft.x)} e a web diz \${claro[papel]}');
+    });
+    // Forma nova no avô sem entrar na folha é peça web arredondando por conta própria.
+    expect(desenho.keys.toSet(), DilettaMedida.formas);
+  });
+
+  group('os AJUSTES de papel por componente', () {
+    // As tags saem do `node_modules` do pacote web, e uma suíte Dart não pode EXIGIR `npm install`:
+    // quem clonar e rodar `flutter test` pegaria vermelho por um passo de outra linguagem. Então:
+    // sem tags e sem ajuste declarado, PULA com o motivo escrito; com ajuste declarado, reprova —
+    // aí a ausência esconderia a folha saindo sem ele.
+    final tags = tagsDaWeb();
+    final semTags = tags.isEmpty;
+    const porque = 'sem `npm install` em web/ não há lista de tags, e este produto não declara '
+        'ajuste — não há o que medir. Rode o install para cobrir.';
+
+    setUp(() {
+      if (semTags && ${op.id}.ajustesDePapel.isNotEmpty) {
+        fail('há ajuste declarado e a lista de tags veio vazia: a folha sairia SEM ele e nada '
+            'acusaria. Rode `npm install` em web/.');
+      }
+    });
+
+    test('o remapeamento da web é o mesmo que o do app', skip: semTags ? porque : null, () {
+      // Lista SINTÉTICA de propósito: um gate que só rodasse contra a lista real passaria sem medir
+      // nada enquanto este produto não declarar nenhum ajuste.
+      const ajustes = [
+        DilettaAjusteDePapel(
+            componente: 'DilettaButton', de: 'primary', para: 'primaryPressed',
+            motivo: MotivoDoAjuste.marca, nota: 'sintético, só para o gate medir'),
+      ];
+      final base = DilettaScheme.light(p);
+      expect(_hex(base.comAjustes(ajustes, 'DilettaButton').primary), _hex(base.primaryPressed),
+          reason: 'o app não aplicou o ajuste');
+      expect(coreflowAjustesCss(ajustes, tagsWeb: tags),
+          contains('diletta-button { --cps-primary: var(--cps-primaryPressed); }'),
+          reason: 'a web não aplicou o ajuste que o app aplica');
+    });
+
+    test('nenhum ajuste DESTE produto fica de fora da folha', () {
+      final declarados = ${op.id}.ajustesDePapel;
+      final css = coreflowAjustesCss(declarados, tagsWeb: tags);
+      for (final a in declarados.where((a) => tags.contains(tagDaPeca(a.componente)))) {
+        expect(css, contains('\${tagDaPeca(a.componente)} { --cps-\${a.de}: var(--cps-\${a.para}); }'),
+            reason: '\${a.componente} tem instância web e o ajuste dele não saiu na folha');
+      }
+    });
+  });
+}
 ''';

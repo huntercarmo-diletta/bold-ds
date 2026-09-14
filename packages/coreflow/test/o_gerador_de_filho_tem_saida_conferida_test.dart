@@ -62,6 +62,7 @@ void main() {
     final arquivos = {
       'test/emite_o_css.dart': gerador.emissorDe(op),
       'test/o_css_esta_em_dia_test.dart': gerador.gateDoCssDe(op),
+      'test/o_desenho_da_web_e_o_do_mobile_test.dart': gerador.gateDeParidadeDe(op),
       'web/package.json': gerador.packageJsonDe(op),
       'web/index.js': gerador.indexJsDe(op),
       'web/README.md': gerador.leiameWebDe(op),

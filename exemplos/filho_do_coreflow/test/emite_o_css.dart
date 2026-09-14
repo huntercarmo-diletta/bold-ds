@@ -11,6 +11,17 @@ import 'package:coreflow/coreflow.dart';
 import 'package:meu_banco_coreflow/meu_banco.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+/// As TAGS que a instância web registra, lidas do `index.js` do pacote do avô — a fonte é o pacote e
+/// não uma lista nossa, porque peça nova na tag dele tem que entrar sozinha.
+Set<String> tagsDaWeb() {
+  final f = File('web/node_modules/diletta-design-system-web/index.js');
+  if (!f.existsSync()) return const {};
+  return RegExp(r"^\s*'(diletta-[a-z-]+)',", multiLine: true)
+      .allMatches(f.readAsStringSync())
+      .map((m) => m.group(1)!)
+      .toSet();
+}
+
 /// As famílias que este produto declara, na ordem em que a cascata precisa delas. Nenhum hex é
 /// escrito aqui: tudo sai da paleta, pela derivação da linguagem.
 String cssDoProduto() => [
@@ -24,7 +35,15 @@ String cssDoProduto() => [
       // nosso. Quando declarar, acrescente aqui:
       //
       //   coreflowTipoCss(meusDegraus, familia: "'MinhaFonte', system-ui, sans-serif"),
+      // OS AJUSTES por componente, por último: eles redeclaram papel DENTRO de um elemento, então
+      // vêm depois das declarações de raiz que sobrescrevem. Sem ajuste declarado sai vazio.
+      _ajustes(),
     ].join();
+
+String _ajustes() {
+  final css = coreflowAjustesCss(meuBanco.ajustesDePapel, tagsWeb: tagsDaWeb());
+  return css.isEmpty ? '' : '\n/* AJUSTES DE PAPEL POR COMPONENTE. */\n$css';
+}
 
 void main() {
   test('emite o CSS dos tokens do Meu Banco', () {

@@ -27,4 +27,16 @@ final meuBanco = CoreflowProduto.daMarca(
   // Sem tipografia declarada, a escala é a da linguagem e a família é a do app. A sua entra aqui:
   //
   //   tipografia: CoreflowTipografia(familia: 'packages/meu_banco_coreflow/MinhaFonte', ...),
+  //
+  // AJUSTE DE PAPEL POR COMPONENTE — adaptação limitada, não slot livre. Serve pra dizer "neste
+  // componente, o papel X passa a ler o Y", com `de` e `para` da MESMA família e um motivo fechado
+  // (`marca` ou `contraste`). Existe porque mexer no papel muda 36 peças de uma vez; isto muda uma.
+  // O que você declarar aqui chega no Flutter E na folha da web, e um gate cobra que os dois
+  // apliquem o mesmo:
+  //
+  //   ajustesDePapel: const [
+  //     DilettaAjusteDePapel(
+  //       componente: 'DilettaProgressBar', de: 'primaryTrack', para: 'primarySubtle',
+  //       motivo: MotivoDoAjuste.marca, nota: 'o trilho some sobre a superfície do parceiro'),
+  //   ],
 );
