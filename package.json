@@ -1,0 +1,18 @@
+{
+  "name": "coreflow-design-system-web",
+  "version": "0.103.0",
+  "type": "module",
+  "description": "A INSTÂNCIA WEB do DS do Conta BOLD: os custom elements da linguagem, do avô, com a tinta deste produto. Não redefine componente — troca a cor por variável CSS.",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./tokens.css": "./tokens/bold-tokens.css"
+  },
+  "files": [
+    "index.js",
+    "tokens/"
+  ],
+  "dependencies": {
+    "diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-v0.193.0"
+  }
+}
