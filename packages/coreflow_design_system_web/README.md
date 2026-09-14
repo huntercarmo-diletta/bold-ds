@@ -14,12 +14,23 @@ pede fork, pede uma folha depois.
 ```html
 <link rel="stylesheet" href=".../diletta-design-system-web/tokens/cps-tokens.css">
 <link rel="stylesheet" href=".../diletta-design-system-web/tokens/cps-papeis.css">
-<link rel="stylesheet" href=".../coreflow-design-system-web/tokens/bold-papeis.css">
+<link rel="stylesheet" href=".../coreflow-design-system-web/tokens/bold-tokens.css">
 ```
 
 As duas primeiras são do avô: primitivas e papéis na tinta de REFERÊNCIA. A terceira é a nossa, e
 declara os mesmos nomes com os valores do Bold. **Fora de ordem, a referência ganha e a tela sai
 verde** — sem um erro no console.
+
+**1b · A fonte.** O pacote emite `--cps-font-family` (hoje **Inter**), e os custom elements do avô
+**não declaram fonte nenhuma** — herdam de quem hospeda. Então quem adota aplica no `body`:
+
+```css
+body { font-family: var(--cps-font-family); }
+```
+
+⚠️ **O pacote emite o NOME, não o arquivo.** O DS empacota a Inter em `.ttf` para o Flutter; um
+produto web precisa hospedar os `.woff2` e declarar os `@font-face`. Sem isso a folha pede Inter e o
+navegador cai no fallback — que é o mesmo defeito silencioso das variáveis sem valor.
 
 **2 · As peças.** Um import registra as 25:
 
@@ -64,6 +75,22 @@ copiado — bloco novo na tag dele aparece aqui sozinho). Dois botões:
 - **marca**, e ele é uma linha de código: liga e desliga a nossa folha. Desligada, a peça volta pra
   tinta de referência do avô. É o white label visível, sem trocar um componente — o gêmeo do seletor
   de marca do catálogo Flutter.
+
+## O que a folha declara
+
+| família | quantas | de onde |
+|---|---|---|
+| papéis de cor da linguagem | 57 | `DilettaScheme` do avô, com a rampa do Bold |
+| papéis do esquema do produto | 9 | `CoreflowScheme` — o que o avô não tem |
+| raio por nome | 4 | `CoreflowRadius` |
+| escala de tipo | 20 degraus | `CoreflowType` — seis têm px que o avô não tem |
+| espaço, elevação, duração, breakpoint | — | já vêm nas folhas do avô |
+
+**282 declarações**, nenhuma digitada.
+
+Dois nomes aparecem duas vezes de propósito — `primary` e `border`: o esquema do produto ganha do
+papel genérico da linguagem, e é isso que faz o white label acontecer na cascata. Um gate reprova a
+terceira colisão que aparecer sem ser declarada.
 
 ## De onde vem a nossa folha
 

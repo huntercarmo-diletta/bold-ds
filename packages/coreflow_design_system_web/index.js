@@ -11,7 +11,7 @@
 //
 //     <link rel="stylesheet" href=".../diletta-design-system-web/tokens/cps-tokens.css">
 //     <link rel="stylesheet" href=".../diletta-design-system-web/tokens/cps-papeis.css">
-//     <link rel="stylesheet" href=".../coreflow-design-system-web/tokens/bold-papeis.css">
+//     <link rel="stylesheet" href=".../coreflow-design-system-web/tokens/bold-tokens.css">
 //
 // As duas primeiras são do avô e trazem primitivas e papéis na tinta de REFERÊNCIA. A terceira é a
 // nossa, e declara os mesmos nomes com os valores do Bold. Fora de ordem, a referência ganha e a tela

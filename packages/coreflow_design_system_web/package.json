@@ -7,7 +7,7 @@
   "main": "./index.js",
   "exports": {
     ".": "./index.js",
-    "./tokens.css": "./tokens/bold-papeis.css"
+    "./tokens.css": "./tokens/bold-tokens.css"
   },
   "files": [
     "index.js",
