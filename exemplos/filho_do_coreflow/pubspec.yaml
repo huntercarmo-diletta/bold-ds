@@ -16,6 +16,12 @@ dependencies:
   coreflow:
     path: ../../packages/coreflow
 
+dev_dependencies:
+  # O emissor do CSS e o gate dele rodam como teste de widget — é assim que a linguagem resolve a
+  # paleta sem subir um app.
+  flutter_test:
+    sdk: flutter
+
 flutter:
   assets:
     - assets/logos/

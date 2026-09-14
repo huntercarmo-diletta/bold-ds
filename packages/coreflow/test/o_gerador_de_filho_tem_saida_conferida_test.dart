@@ -55,6 +55,37 @@ void main() {
     expect(difs.single, contains('path:'));
   });
 
+  test('o LADO WEB do filho gerado é byte a byte o que está versionado', () {
+    // Desde 14/09 um filho nasce mobile E web. Antes disso o gerador entregava só o Flutter, e o
+    // segundo produto teria que montar a instância web olhando a do primeiro — copiando, que é o
+    // que esta casa passou o mês combatendo.
+    final arquivos = {
+      'test/emite_o_css.dart': gerador.emissorDe(op),
+      'test/o_css_esta_em_dia_test.dart': gerador.gateDoCssDe(op),
+      'web/package.json': gerador.packageJsonDe(op),
+      'web/index.js': gerador.indexJsDe(op),
+      'web/README.md': gerador.leiameWebDe(op),
+    };
+    for (final e in arquivos.entries) {
+      final f = File('${exemplo.path}/${e.key}');
+      expect(f.existsSync(), isTrue, reason: 'o gerador promete ${e.key} e o exemplo não tem');
+      expect(f.readAsStringSync(), e.value,
+          reason: '${e.key}: o gerador mudou e o exemplo não — ou o contrário. Regenere.');
+    }
+  });
+
+  test('o filho gerado recebe o MESMO avô que o pai pina', () {
+    // Duas tags diferentes seriam duas versões da linguagem no mesmo produto: o Flutter desenhando
+    // uma coisa e a web outra, sem nada acusando. O pai pina `vX` em Dart; o pacote web do filho
+    // pina `web-vX`, e o número tem que ser o mesmo.
+    final pubspec = File('pubspec.yaml').readAsStringSync();
+    final tagDart = RegExp(r'ref:\s*(v[\d.]+)').firstMatch(pubspec)?.group(1);
+    expect(tagDart, isNotNull, reason: 'o pai deixou de pinar o avô por tag');
+    expect(gerador.tagWebDoAvo, 'web-$tagDart',
+        reason: 'o pai recebe o avô em $tagDart e o filho gerado receberia '
+            '${gerador.tagWebDoAvo} — uma língua, um número.');
+  });
+
   test('o produto gerado tem UM hex — a cor da marca — e nenhum outro valor de produto', () {
     // A régua de VALOR do pai (achado 3 do veredito de 08/09) vale pro que o pai GERA: um filho
     // nasce com uma cor, e qualquer segundo hex no arquivo dele é identidade que o gerador inventou.
