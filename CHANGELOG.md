@@ -20,6 +20,82 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.105.0] — 2026-09-15
+
+### A entrelinha que a fonte manda, a forma por família, e o avô dois degraus à frente
+
+**Quebra declarada, no degrau minor** — a régua deste arquivo chama símbolo removido de major, e em
+SemVer 0.x a quebra sobe o minor com nota de migração, como a `v0.100.0` fez. Quatro nomes de token
+saem e seis entram. **Nenhum consumidor existe ainda** (o pacote web não é dependência de ninguém
+hoje), então o preço real é zero; a nota existe porque o primeiro consumidor está chegando.
+
+#### Nota de migração — a forma sobe por FAMÍLIA
+
+| sai | entra |
+|---|---|
+| `--cps-radius-field` | `--cps-formaDeCampo` |
+| `--cps-radius-card` | `--cps-formaDeCartao` |
+| `--cps-radius-sheet` | `--cps-formaDeFolha` |
+| `--cps-radius-pill` | — (some: a pílula ficou fora das seis por veredito do avô; quem a quer lê `--cps-formaDeBotao` ou `--cps-formaDeNav`, que é onde a linguagem a desenha) |
+| — | `--cps-formaDeBotao`, `--cps-formaDeVidro`, `--cps-formaDeNav` (novos) |
+
+Os nomes deixam de ser inventados aqui: são os seis papéis de forma do `DilettaMedida` do avô,
+entregues no veredito de 14/09 (*"a forma sobe por família e os três viram alias"*). O valor de cada
+um passa a sair dos getters do esquema, então um produto que declare `raioDeBotao: 16` vê o 16 — a
+emissão anterior lia a tabela crua e teria devolvido a pílula.
+
+#### O conserto que motivou a versão: `line-height`
+
+Cinco degraus saíam com a entrelinha errada na web. `height` nulo no Flutter quer dizer *use a caixa
+natural da fonte* — a Inter entrega ~1,2 —, e o emissor traduzia por `1 ×`.
+
+| degrau | app | web antes | web agora |
+|---|---|---|---|
+| `title` | 21px | 17px | `normal` |
+| `button` | 18px | 15px | `normal` |
+| `label` | 15px | 12px | `normal` |
+| `mono` | 16px | 13px | `normal` |
+| `monoCaption` | 13px | 11px | `normal` |
+
+Medido com a Inter carregada nos dois lados — `FontLoader` no Dart, a mesma Inter servida num
+navegador. A primeira medição, num `flutter test` cru, deu **zero nos vinte degraus**: o ambiente de
+teste troca a fonte por uma de métricas 1,0 e embutia a mesma suposição do emissor. Depois do
+conserto a maior diferença é **0,5px**, e é o Flutter arredondando a caixa da linha pra pixel
+inteiro onde o navegador guarda a fração.
+
+Quem declara altura continua saindo em px: declarado é declarado.
+
+#### O avô sobe de `v0.194.0` para `v0.194.3`
+
+E o pacote web publicado estava ainda mais atrás — a `web-v0.104.0` carregava o avô em
+**`web-v0.193.0`**. O que chega:
+
+- **as peças web ganham degrau de tipo.** Seis das 25 saíam com `font: inherit`, ou seja com o
+  tamanho **e o peso** da página hospedeira: o `sm` do botão declara `labelMd` (12/500) e num
+  hospedeiro no padrão do navegador saía 16/400. `pagination` fica de fora por decisão do avô — o
+  degrau dela (12/700) não existe na escada;
+- **o contrato viaja com o código**: `spec-publicada.json` com as 98 peças — propósito, destino,
+  eixos, tipos, uniões, papéis, slots e geometria — em `./spec` do pacote dele.
+
+#### Gates
+
+Três novos, e os três nasceram de buraco medido, não de ideia:
+
+- **a versão INSTALADA do avô é a que o pino diz.** O `npm install` responde «up to date» depois de
+  trocar a tag e deixa a versão velha no disco — o lock guarda o commit resolvido, não a tag;
+- **todo degrau que as peças PEDEM resolve nas quatro faces.** O nome do degrau quem escolhe é a
+  peça do avô: pedir um que ninguém declara mata a declaração no navegador sem erro;
+- **a folha escreve exatamente as faces que o Dart declara**, nem a mais nem a menos. Face a mais
+  silencia o degrau do avô na cascata; face a menos é a peça caindo na folha dele sem ninguém saber.
+
+O terceiro tem autoteste sintético porque metade da régua nunca foi exercida por produto nenhum
+desta casa: os 20 degraus do Bold declaram peso, todos.
+
+#### O gerador
+
+Um filho novo nasce com os três, e com a régua já provada — o autoteste roda mesmo num produto que
+ainda não declarou escala de tipo. De 6 para 15 verificações no filho gerado.
+
 ## [0.104.0] — 2026-09-14
 
 ### A fonte viaja no pacote — e o pronto ganhou da conversão pelo `tnum`
