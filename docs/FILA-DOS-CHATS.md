@@ -141,10 +141,10 @@ foi a nota de que positivo/negativo e claro/escuro nomeiam a mesma coisa, e a tr
 > (`ds-diletta/docs/PEDIDO-DO-FILHO.md`, passo 2). O pedido está no `origin/main` desde 14/09; a
 > retificação está commitada e esperando o envio.
 
-## 4 · A arte Font Awesome Pro viaja no repo do app, e o pai abriu a pergunta hoje
+## 4 · A arte Font Awesome Pro viaja no repo do app — RESPONDIDO por ela: temos a licença
 
-**Estado**: **ABERTO no ledger do pai, e a resposta não é de código.** Depende do 2, porque a saída
-técnica já existe e chega pinando: é a `v0.195.0`.
+**Estado**: **mérito FECHADO em 15/09 pela dona do produto**; segue **ABERTO no ledger do pai**, que
+não foi avisado. Já não depende do 2: a saída técnica da `v0.195.0` deixou de ser obrigatória.
 
 O pai registrou hoje, em `docs/PEDIDOS.md` (seção Abertos), levantado pela própria resposta de
 procedência:
@@ -172,7 +172,32 @@ devolve vazio —, e a cópia vendorizada do app tampouco o carrega.
 **O que esta rotina NÃO fez, por regra**: não tocou em `packages/` do `app-newbold` (é cópia
 vendorizada; conserto vai no repo do DS) e não escreveu nota de licença, porque *se a licença Pro
 desta empresa cobre os produtos que consomem o pacote* é pergunta para uma pessoa, não para uma
-medição. **É a linha desta fila que pede resposta humana.**
+medição.
+
+### RESPONDIDO por ela em 15/09, ao ler esta rodada: **«temos a licença»**
+
+Isso fecha o mérito, e fecha pelo caminho que o próprio pai deixou escrito no ledger:
+
+> *se a licença Pro desta empresa cobre os produtos que consomem o pacote, **isto está dentro e a
+> linha existe só pra ninguém poder dizer que não sabia**; se não cobre, a saída é a mesma que a
+> Font Awesome recomenda e que o lado web já usa.*
+
+Está dentro. **A saída do lado web — `<diletta-icon>` da `v0.195.0`, o nome viaja e a arte não — deixa
+de ser conserto obrigatório do lado Dart** e volta a ser o que era antes da pergunta: desenho do
+pacote web, pelas razões dele.
+
+**Registrado como o que é: declaração da dona do produto, datada — não medição.** Esta linha não
+afirma cobertura jurídica, afirma que quem responde por ela respondeu. O que sobra é só o rastro, e
+são duas coisas pequenas:
+
+1. **O pai não sabe.** O item está **ABERTO no ledger dele** (`ds-diletta/docs/PEDIDOS.md`, seção
+   Abertos, 15/09) e ele declarou que *não é decisão minha*. A resposta precisa chegar junto com o
+   próximo sinal — **é a mesma viagem do sinal do logo**, e não custa veredito a ninguém.
+2. **Falta o «ninguém pode dizer que não sabia» deste lado.** O pai criou
+   `packages/diletta_design_system/PROCEDENCIA.md` em 15/09; aqui não existe equivalente, e a cópia
+   que de fato redistribui — os 355 arquivos no repo do app — também não carrega nenhum. **Esta
+   rotina não escreveu o arquivo**: onde ele mora (aqui, no app, ou nos dois) e com que palavras é
+   decisão dela, e texto de licença não se redige por inferência.
 
 ## 5 · `CoreflowBotao` é a única peça do pacote que não repassa `disabled` — e são cinco telas
 
