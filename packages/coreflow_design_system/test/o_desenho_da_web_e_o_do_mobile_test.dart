@@ -68,6 +68,42 @@ String _hex(Color c) {
 
 String _px(double v) => v == v.roundToDouble() ? '${v.round()}px' : '${v}px';
 
+/// QUAIS faces a folha escreve, contra quais o Dart declara — a régua, fora do `test`.
+///
+/// Fora porque o autoteste precisa alimentá-la com uma tabela SINTÉTICA: régua que só sabe rodar
+/// contra o produto real só prova os casos que o produto real tem.
+///
+/// [folha] é o mapa de variáveis do CSS, com as chaves como saem do seletor (`type-<degrau>-<face>`).
+List<String> _facesErradas(Map<String, TextStyle> degraus, Map<String, String> folha) {
+  const faces = ['size', 'weight', 'line-height', 'spacing'];
+  final erradas = <String>[];
+  for (final e in degraus.entries) {
+    // `size` e `line-height` saem SEMPRE — tamanho é obrigatório e altura nula vira `normal`, que é
+    // instrução e não invenção (veja o `///` do `coreflowTipoCss`). As outras duas saem se, e
+    // somente se, o Dart as declarar.
+    final esperadas = {
+      '${e.key}-size',
+      '${e.key}-line-height',
+      if (e.value.fontWeight != null) '${e.key}-weight',
+      if (e.value.letterSpacing != null) '${e.key}-spacing',
+    };
+    // Nome de degrau é prefixo de nome de degrau (`body` está em `bodyLg`), então casar por começo
+    // traria a face do vizinho. As faces são quatro e fechadas: casar o nome INTEIRO separa
+    // `body-size` de `bodyLg-size` sem depender da ordem em que a folha foi escrita.
+    final naFolha = {
+      for (final f in faces)
+        if (folha.containsKey('type-${e.key}-$f')) '${e.key}-$f',
+    };
+    for (final a in naFolha.difference(esperadas)) {
+      erradas.add('$a: a folha escreve e o app NÃO declara');
+    }
+    for (final f in esperadas.difference(naFolha)) {
+      erradas.add('$f: o app declara e a folha NÃO escreve');
+    }
+  }
+  return erradas;
+}
+
 /// Os 20 degraus do produto, por nome — a MESMA tabela para os dois testes de tipo.
 ///
 /// Fora do `test` porque dois testes a leem: o que confere VALOR e o que confere QUAIS FACES saem.
@@ -196,35 +232,73 @@ void main() {
     // `size` e `line-height` saem SEMPRE — tamanho é obrigatório e altura nula vira `normal`, que é
     // instrução e não invenção (veja o `///` do `coreflowTipoCss`). `weight` e `spacing` saem se, e
     // somente se, o Dart os declarar.
-    final erradas = <String>[];
-    for (final e in _degraus.entries) {
-      final esperadas = {
-        '${e.key}-size',
-        '${e.key}-line-height',
-        if (e.value.fontWeight != null) '${e.key}-weight',
-        if (e.value.letterSpacing != null) '${e.key}-spacing',
-      };
-      final naFolha = claro.keys
-          .where((k) => k.startsWith('type-${e.key}-'))
-          .map((k) => k.substring('type-'.length))
-          .toSet();
-      // Nome de degrau é prefixo de nome de degrau (`body` está em `bodyLg`), então casar por
-      // `startsWith` sozinho traria o do vizinho. As faces são quatro e fechadas: filtrar por elas
-      // separa `body-size` de `bodyLg-size` sem depender da ordem em que a folha foi escrita.
-      naFolha.removeWhere((k) => !const ['size', 'weight', 'line-height', 'spacing']
-          .any((f) => k == '${e.key}-$f'));
-
-      for (final a in naFolha.difference(esperadas)) {
-        erradas.add('$a: a folha escreve e o app NÃO declara');
-      }
-      for (final f in esperadas.difference(naFolha)) {
-        erradas.add('$f: o app declara e a folha NÃO escreve');
-      }
-    }
+    final erradas = _facesErradas(_degraus, claro);
     expect(erradas, isEmpty,
         reason: 'a folha e o Dart discordam sobre QUAIS faces existem:\n${erradas.join('\n')}\n'
             'Face a mais é opinião que o produto não declarou, e ela silencia o degrau do avô na '
             'cascata. Face a menos é a peça caindo na folha dele sem ninguém saber.');
+  });
+
+  group('e a régua acima sabe morder — nas DUAS metades', () {
+    // A REGRA TEM DUAS METADES, e o PESO exercita só uma. Medido em 15/09: os 20 degraus do Bold
+    // declaram peso, todos. O `spacing` tem os dois casos (13 declaram, 7 não) e por isso a régua
+    // rodando contra o produto já o cobre — provado por mutação, 7 acusações. O `weight` não tem o
+    // segundo caso neste produto.
+    //
+    // **E isso não é ponto cego: é ausência de caso.** Conferi antes de afirmar. Mandei o emissor
+    // escrever peso sempre (`fontWeight ?? w400`) e a folha saiu **byte a byte idêntica**, 284
+    // declarações — com os vinte declarando peso, o `??` nunca dispara. Não havia o que acusar, e o
+    // verde estava certo. A primeira leitura que eu fiz disso foi "o gate tem uma porta aberta", e
+    // ela estava errada: o que a mutação provou é que ela era inerte, não que o gate era cego.
+    //
+    // O que ESTE grupo protege não é o Bold — é o PRÓXIMO produto. Um filho com um degrau sem peso
+    // declarado cai numa metade da régua que nenhum produto desta casa jamais exerceu, e régua nunca
+    // exercida é régua que ninguém sabe se funciona. Aqui ela roda contra uma tabela sintética com
+    // os dois casos: afrouxar `_facesErradas` reprova mesmo que o Bold siga declarando peso nos 20.
+    const semPeso = TextStyle(fontSize: 12);
+    const comPeso = TextStyle(fontSize: 12, fontWeight: FontWeight.w700);
+
+    test('face a MAIS: o app não declara peso e a folha escreve um', () {
+      expect(
+        _facesErradas({'sintetico': semPeso}, {
+          'type-sintetico-size': '12px',
+          'type-sintetico-line-height': 'normal',
+          'type-sintetico-weight': '400',
+        }),
+        ['sintetico-weight: a folha escreve e o app NÃO declara'],
+      );
+    });
+
+    test('face a MENOS: o app declara peso e a folha não escreve', () {
+      expect(
+        _facesErradas({'sintetico': comPeso},
+            {'type-sintetico-size': '12px', 'type-sintetico-line-height': 'normal'}),
+        ['sintetico-weight: o app declara e a folha NÃO escreve'],
+      );
+    });
+
+    test('e o caso limpo não acusa nada — senão a régua gritaria sempre', () {
+      expect(
+        _facesErradas({'sintetico': semPeso},
+            {'type-sintetico-size': '12px', 'type-sintetico-line-height': 'normal'}),
+        isEmpty,
+      );
+    });
+
+    test('o vizinho de nome mais longo não conta como face deste', () {
+      // `body` é prefixo de `bodyLg`. Sem casar o nome inteiro, o `bodyLg-size` da folha entraria na
+      // conta do `body` e a régua acusaria uma face inventada que não existe.
+      expect(
+        _facesErradas({'body': semPeso}, {
+          'type-body-size': '15px',
+          'type-body-line-height': 'normal',
+          'type-bodyLg-size': '16px',
+          'type-bodyLg-line-height': '24px',
+          'type-bodyLg-weight': '500',
+        }),
+        isEmpty,
+      );
+    });
   });
 
   group('os AJUSTES de papel por componente', () {
