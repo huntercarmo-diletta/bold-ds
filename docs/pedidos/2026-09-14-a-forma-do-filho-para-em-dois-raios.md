@@ -322,7 +322,7 @@ o alias, o alias sozinho vale, cada família cai na gramática desta casa quando
 nascido da marca já traz as três, e **nenhuma peça deste pacote desenha a const das quatro
 famílias** — com as isenções nominais e cada uma dizendo por quê.
 
-Verde: coreflow **101**, coreflow_design_system **207**, catalog **109**, o example e o filho gerado.
+Verde: coreflow **101**, coreflow_design_system **209**, catalog **109**, o example e o filho gerado.
 `analyze` limpo nos dois pacotes.
 
 ### Uma coisa que eu não pedi e a subida cobrou
