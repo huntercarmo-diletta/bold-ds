@@ -35,6 +35,16 @@ String cssDoProduto() => [
       // nosso. Quando declarar, acrescente aqui:
       //
       //   coreflowTipoCss(meusDegraus, familia: "'MinhaFonte', system-ui, sans-serif"),
+      //
+      // ...e junto com ele DUAS coisas, senão a primeira tentativa não compila e a segunda passa
+      // verde sem medir:
+      //
+      //   1. `import 'package:flutter/widgets.dart';` lá em cima — é de onde vêm `TextStyle` e
+      //      `FontWeight`. Ele não está lá hoje de propósito: import sem uso o `analyze` acusa, e
+      //      um filho recém-nascido não declara escala nenhuma;
+      //   2. a tabela `_degraus` do `o_desenho_da_web_e_o_do_mobile_test.dart`, com os mesmos
+      //      degraus. O gate de lá reprova se a folha ganhar degrau e a tabela dele não — ele diz
+      //      sobre quantas declarações está dormindo.
       // OS AJUSTES por componente, por último: eles redeclaram papel DENTRO de um elemento, então
       // vêm depois das declarações de raiz que sobrescrevem. Sem ajuste declarado sai vazio.
       _ajustes(),

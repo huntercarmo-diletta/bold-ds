@@ -51,6 +51,48 @@ String _hex(Color c) {
 
 String _px(double v) => v == v.roundToDouble() ? '${v.round()}px' : '${v}px';
 
+/// QUAIS faces a folha escreve, contra quais o Dart declara.
+///
+/// Fora do `test` porque o autoteste a alimenta com tabela SINTÉTICA: régua que só sabe rodar contra
+/// o produto real só prova os casos que o produto real tem — e um produto recém-nascido não tem
+/// nenhum. **A régua chega provada mesmo num produto que ainda não declarou escala.**
+List<String> _facesErradas(Map<String, TextStyle> degraus, Map<String, String> folha) {
+  const faces = ['size', 'weight', 'line-height', 'spacing'];
+  final erradas = <String>[];
+  for (final e in degraus.entries) {
+    // `size` e `line-height` saem SEMPRE — tamanho é obrigatório e altura nula vira `normal`, que é
+    // instrução e não invenção (veja o `///` do `coreflowTipoCss`). As outras duas saem se, e
+    // somente se, o Dart as declarar.
+    final esperadas = {
+      '${e.key}-size',
+      '${e.key}-line-height',
+      if (e.value.fontWeight != null) '${e.key}-weight',
+      if (e.value.letterSpacing != null) '${e.key}-spacing',
+    };
+    // Nome de degrau é prefixo de nome de degrau (`body` está em `bodyLg`), então casar por começo
+    // traria a face do vizinho. As faces são quatro e fechadas: casar o nome INTEIRO separa os dois.
+    final naFolha = {
+      for (final f in faces)
+        if (folha.containsKey('type-${e.key}-$f')) '${e.key}-$f',
+    };
+    for (final a in naFolha.difference(esperadas)) {
+      erradas.add('$a: a folha escreve e o app NÃO declara');
+    }
+    for (final f in esperadas.difference(naFolha)) {
+      erradas.add('$f: o app declara e a folha NÃO escreve');
+    }
+  }
+  return erradas;
+}
+
+/// Os degraus que ESTE produto declara, por nome.
+///
+/// **Nasce vazia de propósito**: um filho recém-nascido não declara escala de tipo — a do avô já vem
+/// na folha dele, e emitir de novo seria repetir o que não é nosso. Quando este produto declarar a
+/// dele em `tipografia:` e acrescentar o `coreflowTipoCss(...)` em `emite_o_css.dart`, **preencha
+/// esta tabela junto**: o gate abaixo reprova se a folha ganhar degrau e esta tabela não.
+final _degraus = <String, TextStyle>{};
+
 void main() {
   final css = cssDoProduto();
   final claro = _vars(css, escuro: false);
@@ -155,6 +197,80 @@ void main() {
         expect(css, contains('${tagDaPeca(a.componente)} { --cps-${a.de}: var(--cps-${a.para}); }'),
             reason: '${a.componente} tem instância web e o ajuste dele não saiu na folha');
       }
+    });
+  });
+  test('a folha não escreve face que o app não declara — nem deixa de escrever a que ele declara',
+      () {
+    // A GUARDA, e ela é o motivo de este teste existir num produto que ainda não declara escala:
+    // com `_degraus` vazia a régua percorreria o nada e aprovaria para sempre — gate que passa sem
+    // medir é pior que gate nenhum, porque PARECE proteção. Então, se a folha tem degrau e a tabela
+    // não, reprova alto.
+    final naFolha = claro.keys.where((k) => k.startsWith('type-')).toSet();
+    if (_degraus.isEmpty) {
+      expect(naFolha, isEmpty,
+          reason: 'a folha emite escala de tipo e a `_degraus` deste gate está vazia — ele está '
+              'dormindo sobre ${naFolha.length} declarações. Preencha a tabela com os degraus '
+              'que este produto declara.');
+      return;
+    }
+    final erradas = _facesErradas(_degraus, claro);
+    expect(erradas, isEmpty,
+        reason: 'a folha e o Dart discordam sobre QUAIS faces existem:\n${erradas.join('\n')}\n'
+            'Face a mais é opinião que o produto não declarou, e ela silencia o degrau do avô na '
+            'cascata. Face a menos é a peça caindo na folha dele sem ninguém saber.');
+  });
+
+  group('e a régua acima sabe morder — nas DUAS metades', () {
+    // RODAM SEMPRE, inclusive num produto sem escala nenhuma. É exatamente o ponto: a régua chega
+    // provada no dia em que o filho nasce, e não no dia em que ele declara a escala dele.
+    //
+    // Medido no primeiro produto desta casa em 15/09: os 20 degraus dele declaram peso, TODOS. A
+    // metade *"não declarou, logo a folha não pode escrever"* nunca foi exercida por produto
+    // nenhum — e régua nunca exercida é régua que ninguém sabe se funciona. Aqui ela roda contra
+    // tabela sintética com os dois casos, então afrouxá-la reprova mesmo num filho vazio.
+    const semPeso = TextStyle(fontSize: 12);
+    const comPeso = TextStyle(fontSize: 12, fontWeight: FontWeight.w700);
+
+    test('face a MAIS: o app não declara peso e a folha escreve um', () {
+      expect(
+        _facesErradas({'sintetico': semPeso}, {
+          'type-sintetico-size': '12px',
+          'type-sintetico-line-height': 'normal',
+          'type-sintetico-weight': '400',
+        }),
+        ['sintetico-weight: a folha escreve e o app NÃO declara'],
+      );
+    });
+
+    test('face a MENOS: o app declara peso e a folha não escreve', () {
+      expect(
+        _facesErradas({'sintetico': comPeso},
+            {'type-sintetico-size': '12px', 'type-sintetico-line-height': 'normal'}),
+        ['sintetico-weight: o app declara e a folha NÃO escreve'],
+      );
+    });
+
+    test('e o caso limpo não acusa nada — senão a régua gritaria sempre', () {
+      expect(
+        _facesErradas({'sintetico': semPeso},
+            {'type-sintetico-size': '12px', 'type-sintetico-line-height': 'normal'}),
+        isEmpty,
+      );
+    });
+
+    test('o vizinho de nome mais longo não conta como face deste', () {
+      // `body` é prefixo de `bodyLg`. Sem casar o nome inteiro, o `bodyLg-size` entraria na conta
+      // do `body` e a régua acusaria uma face inventada que não existe.
+      expect(
+        _facesErradas({'body': semPeso}, {
+          'type-body-size': '15px',
+          'type-body-line-height': 'normal',
+          'type-bodyLg-size': '16px',
+          'type-bodyLg-line-height': '24px',
+          'type-bodyLg-weight': '500',
+        }),
+        isEmpty,
+      );
     });
   });
 }
