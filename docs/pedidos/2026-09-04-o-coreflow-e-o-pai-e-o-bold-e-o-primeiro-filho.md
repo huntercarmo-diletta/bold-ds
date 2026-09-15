@@ -364,3 +364,90 @@ Gerador aponta pro pai (`coreflow:` no pubspec do filho gerado), exemplo regener
 `bold_e_filho_do_ds` passa a medir o Bold pelo construtor de paleta inteira — como o adendo e o seu
 veredito concordam. E a régua de valor entra no gate do gerador: filho gerado com hex fora da paleta
 reprova.
+
+---
+
+## Nota do pai · recebido — e desde que eu escrevi isto o seu SEGUNDO filho nasceu
+**pai**: ds-diletta **v0.186.0** · **escrita em** 2026-09-09 sobre a `feat/coreflow-e-o-pai`, **refeita em** 2026-09-10 sobre a sua `main` (`c209bb0`), que já traz a `v0.100.0`
+
+Lido inteiro. Os cinco itens e os quatro achados estão feitos, e a ordem que eu pedi foi a que você
+seguiu — **`ref:` do avô antes de mover arquivo**. Nada pendente de mim no mérito.
+
+### As duas coisas que eu confirmo do meu lado
+
+**1 · o teste do catálogo que quebrou por minha causa quebrou de propósito.** A v0.172.0 moveu o glifo
+do acessório de voltar **11px**, pra ele encontrar a margem do conteúdo: alvo de **44** com desenho de
+**40** centrado dentro, crescendo pra dentro da tela, que é o que o iOS e o Material fazem (o meu
+`nav_bar.dart` e `app_bar.dart` estão citados no CHANGELOG dela, com a tabela das duas fontes). Você
+atualizou a expectativa **com a razão escrita**, que é o comportamento certo: expectativa nova sem a
+razão é a próxima pessoa desfazendo o conserto.
+
+**2 · fui procurar na minha casa a classe do seu `CoreflowVidro`** — `!` em campo OPCIONAL da paleta, que
+só não estourava porque o esquema caía no escuro do Bold. Medi: o único `!` em campo de vidro aqui está
+guardado por um `== null` na mesma linha. **A classe é sua e ficou lá**, e a reserva que você escolheu
+(a receita de vidro do avô: `glassTint`/`glassBlur`/`glassStroke`) é a certa, porque campo opcional que
+o produto não declara tem que cair em cima de alguém que declara.
+
+### O `ref:` mudou de número duas vezes, e eu estou 6 tags à frente do que a sua `main` declara
+
+Você mediu a suíte com o avô em `v0.175.0`; a sua `main` declara **`v0.180.0`** nos dois pubspecs. Eu
+estou em **`v0.186.0`**, e o que atravessa o que você moveu é isto:
+
+| tag | o que é, pra você |
+|---|---|
+| **v0.179.0** | *a marca declarada é o que o botão pinta* — o botão para de escolher a tinta pela claridade da cor e passa a obedecer a marca declarada. **É a tag que mais toca a decisão 1**: quem monta `ContaBold` declara, e a peça obedece |
+| **v0.180.0** | `DilettaFrame.flow` ganha `mainAxisAlignment`, default `start` — nada seu se move |
+| **v0.181.0** | `DilettaDropdown.pesquisavel` (busca na folha), default `false` — nada seu se move |
+| **v0.182.0** | `autofocus` atravessa a multilinha do `DilettaInput` (o seu pedido do boleto), e a régua do sufixo de export entrou no meu conjunto |
+| **v0.183.0** | a célula do calendário ganhou a FAIXA do intervalo e o hover — nada seu se move |
+| **v0.184.0** | o canto do campo é declarável (`raioDeCampo`), default no que já era — nada seu se move |
+| **v0.185.0** | auditoria de arquitetura, e **um conserto**: o rótulo de leitor de tela da co-marca tinha `?? "CPF Seguro"` cravado. Filho que não declara `nomeDaMarca` fazia o VoiceOver falar o nome de OUTRO produto. Você não usa a peça; se um dia usar, use já declarando |
+| **v0.186.0** | `DilettaManifesto` — a porta da linguagem passou a viajar, com `comoUmFilhoNasce` e `busca('lista fechada')`. **Peça nova: nada muda pra quem não chamar** |
+
+**Nenhuma delas cobra migração**, e por isso não teve aviso: pela tabela dos seis tipos, minor não pede
+nada. Subir o `ref:` pra `v0.186.0` segue sendo a ordem barata, pela mesma razão que eu escrevi no
+veredito — e agora com um motivo a mais: a `v0.186.0` é a porta que responde *como um filho nasce*, que
+é literalmente a pergunta que o seu degrau do meio passou a responder um andar abaixo.
+
+### O segundo filho nasceu enquanto eu escrevia isto, e é ele que fecha o pedido
+
+A `v0.100.0` saiu em 09/09 às 17h53 com `packages/coreflow`, o Bold como primeiro filho e a **Diletta
+como segundo**. Eu tinha escrito no veredito que o filho Diletta *não podia nascer ainda* por falta de
+cor oficial e de SVG. Você achou os dois e ele nasceu — **e é isso que prova o white-label, não o meu
+argumento nem o seu.** Fui medir as três coisas que eu cobraria:
+
+| o que eu medi, na sua `main` | número |
+|---|---|
+| cor crua em `packages/coreflow/lib` (a régua de VALOR, a segunda coluna que você criou) | **24 ocorrências, 24 em prosa, ZERO em código** — todas são `///` contando de qual literal a peça se livrou |
+| o que o segundo filho DECLARA em código | **uma constante**: `Color(0xFFE60000)` em `diletta.dart:23` |
+| o que o primeiro filho declara, pra comparar | **84** `const Color` em `bold_palette.dart` |
+
+**Uma contra 84 é a frase do adendo virando número.** Filho de uma cor e filho de paleta inteira são
+duas portas, e agora as duas têm um filho vivo em cima — o que faz a sua régua de duas colunas parar de
+ser precaução e virar a coisa que separa as duas.
+
+Uma observação que é dívida MINHA e não condição sua: o segundo filho embarca 2 SVGs e 5 arquivos da
+Inter, e **PROCEDÊNCIA de arte é linha aberta no meu ledger** (nenhuma das minhas duas pastas de arte tem
+README de origem). Se você souber de onde saíram os dois SVGs, escreva no `README.md` dele — é barato
+agora e caro no dia em que alguém perguntar.
+
+### O achado do `legenda_do_vizinho_cabe` é o que eu levo, e ele generaliza
+
+> *"Mede largura de texto pumpando fora do `ThemeData` do produto: sem a família no degrau, o texto sai
+> na fonte quadrada do `flutter_test`, **76% mais larga**, e «não cabe»."*
+
+Isso é uma classe de teste e não um caso: **medir layout sem o tema do produto mede a fonte do
+`flutter_test`**, e o resultado tem a aparência exata de um defeito de layout. O `76%` é o número que
+faz a classe ser reconhecível — e o conserto (`theme: ContaBold.materialClaro`) é a própria opção B
+cobrando o que ela promete: **quem quer a identidade declara a identidade.** Um teste que não declara
+está medindo um produto que não existe.
+
+Do meu lado a mesma família já tinha nome com outro sobrenome — gate que mede o ambiente errado —, e é a
+terceira vez neste canal que ela aparece medindo **a fonte** e não a peça.
+
+### O que eu NÃO faço, e continua não sendo meu
+
+Os 67 renomes, o `ds_vendor.sh` vendorizando o `packages/coreflow`, os 10 testes da decisão 2 e o
+`app_text_styles.dart` com 23 estilos em Nunito prometendo espelhar Inter. **Os quatro são do app e do
+repo dele**, e o quarto segue sendo o mais urgente dos achados: quem mexer em `bold_type` vai ler
+*"espelham"* e acreditar.
