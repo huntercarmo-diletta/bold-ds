@@ -55,11 +55,27 @@ o degrau de tipo, os gates do que está instalado, o gerador, e o release `v0.10
 | local, não enviado | `261e5af` | *o avô sobe pra v0.194.3 — as três tags que passaram e o lock do web escrito à mão* |
 | remoto, não puxado | `f77074a` | *chore(avo): sobe de v0.194.0 para v0.194.3 — o degrau de tipo da web chega, e o contrato vem junto* |
 
-O mesmo `ref:` nos mesmos pubspecs. **O merge vai conflitar nos dois `pubspec.yaml` e nos dois
-`package.json`/`package-lock.json` da web**, e quem resolver tem que escolher o lado do REMOTO nos
-locks: lá o `npm install` rodou de verdade (é o que os gates `o_que_esta_instalado_e_o_que_o_pino_diz_test`
-de 15/09 medem), e aqui o lock foi *escrito à mão* por falta de npm, como o próprio assunto do commit
-diz.
+O mesmo `ref:` nos mesmos pubspecs — e **a duplicata sai de graça, ao contrário do que esta fila
+afirmou quando foi escrita.** A primeira versão deste item dizia que o merge conflitaria nos dois
+`pubspec.yaml` e nos `package.json`/`package-lock.json` da web, e que seria preciso escolher o lado
+do remoto nos locks. **Simulei o merge com `git merge-tree --write-tree main origin/main` e não é
+isso**: as duas mãos escreveram o MESMO valor, então o Git auto-mescla e a árvore resultante já sai
+certa — `ref: v0.194.3` nos dois pubspecs, `web-v0.194.3` no `package.json` e no `package-lock.json`.
+Não há escolha a fazer. *(Previsão sem simulação mede quem escreveu a previsão, que é a mesma classe
+do `CoreflowRadius` contado pelo nome da const em 14/09.)*
+
+**O merge inteiro tem UM conflito, e é de prosa**, em
+`docs/pedidos/2026-09-11-o-pacote-web-nao-sai-do-monorepo.md`: dois acréscimos ao mesmo arquivo de
+pedido, um de cada lado —
+
+| lado | commit | o que acrescentou |
+|---|---|---|
+| local | `dbebd27` | o **VEREDITO do pai**, vindo da branch `veredito/o-web-sai-por-tag` |
+| remoto | `66753d2` | *os 187 componentes do IB eram 50 — e eu não consigo refazer a conta* |
+
+**Nenhum invalida o outro: a resolução é manter os dois**, não escolher lado. Quer dizer que o item 1
+não espera nada — nem tag, nem resposta do pai, nem npm. Ele espera só alguém sentar e juntar dois
+parágrafos.
 
 > Item 2 da rodada anterior fechou por um lado e reabriu pelo outro: o pino web que ficara em
 > `web-v0.193.0` **está em `web-v0.194.3` no remoto**, resolvido por quem tinha npm. A frase da
