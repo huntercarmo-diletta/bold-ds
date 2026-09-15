@@ -144,15 +144,26 @@ String coreflowMedidasCss(DilettaPalette p) {
 /// [degraus] é `papel -> estilo`, e quem monta é o produto: a escala é dele (seis px que o avô não
 /// tem, por decisão escrita no `///` da classe). O `height` do Flutter é multiplicador; aqui vira px,
 /// que é o que o CSS do avô já usa — comparar as duas folhas tem que ser `diff`, não conversão.
+///
+/// **`height` nulo vira `normal`, e NÃO `1 ×` o tamanho.** Nulo no Flutter quer dizer *use a caixa
+/// natural da fonte* — a Inter entrega ~1,2 —, e a primeira versão desta função traduzia isso por
+/// `1 ×`, que é uma opinião que ninguém declarou. Medido em 15/09 com a Inter carregada: **7 dos 20
+/// degraus divergiam**, cinco deles por 2 a 4px POR LINHA (`title` 21×17, `button` 18×15, `label`
+/// 15×12, `mono` 16×13, `monoCaption` 13×11) e os dois restantes por fração, que é o Flutter
+/// arredondando a caixa pra pixel inteiro. `normal` é a palavra do CSS pra mesma instrução, e faz os
+/// dois lados lerem a mesma métrica em vez de dois números escritos por casas diferentes.
+///
+/// Quem declara altura continua saindo em px: declarado é declarado, e o gate de paridade compara os
+/// dois casos separados.
 String coreflowTipoCss(Map<String, TextStyle> degraus, {required String familia}) {
   final linhas = <String>["  --cps-font-family: $familia;"];
   for (final e in degraus.entries) {
     final s = e.value;
     final tamanho = s.fontSize;
     if (tamanho == null) continue;
-    final altura = (s.height ?? 1) * tamanho;
+    final altura = s.height == null ? 'normal' : _px(s.height! * tamanho);
     linhas.add('  --cps-type-${e.key}-size: ${_px(tamanho)};');
-    linhas.add('  --cps-type-${e.key}-line-height: ${_px(altura)};');
+    linhas.add('  --cps-type-${e.key}-line-height: $altura;');
     if (s.fontWeight != null) {
       linhas.add('  --cps-type-${e.key}-weight: ${s.fontWeight!.value};');
     }

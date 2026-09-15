@@ -265,7 +265,7 @@
   --cps-type-headlineSm-weight: 600;
   --cps-type-headlineSm-spacing: 0px;
   --cps-type-title-size: 17px;
-  --cps-type-title-line-height: 17px;
+  --cps-type-title-line-height: normal;
   --cps-type-title-weight: 700;
   --cps-type-titleMd-size: 16px;
   --cps-type-titleMd-line-height: 24px;
@@ -286,10 +286,10 @@
   --cps-type-bodySmall-line-height: 19.5px;
   --cps-type-bodySmall-weight: 500;
   --cps-type-button-size: 15px;
-  --cps-type-button-line-height: 15px;
+  --cps-type-button-line-height: normal;
   --cps-type-button-weight: 700;
   --cps-type-label-size: 12px;
-  --cps-type-label-line-height: 12px;
+  --cps-type-label-line-height: normal;
   --cps-type-label-weight: 700;
   --cps-type-label-spacing: 1.5px;
   --cps-type-labelLg-size: 14px;
@@ -309,9 +309,9 @@
   --cps-type-tileLabel-weight: 500;
   --cps-type-tileLabel-spacing: 0.4px;
   --cps-type-mono-size: 13px;
-  --cps-type-mono-line-height: 13px;
+  --cps-type-mono-line-height: normal;
   --cps-type-mono-weight: 400;
   --cps-type-monoCaption-size: 11px;
-  --cps-type-monoCaption-line-height: 11px;
+  --cps-type-monoCaption-line-height: normal;
   --cps-type-monoCaption-weight: 400;
 }

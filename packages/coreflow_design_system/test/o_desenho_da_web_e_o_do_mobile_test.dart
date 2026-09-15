@@ -154,7 +154,13 @@ void main() {
       final tamanho = e.fontSize!;
       final conferir = {
         '$nome-size': _px(tamanho),
-        '$nome-line-height': _px((e.height ?? 1) * tamanho),
+        // ALTURA NULA É `normal`, NÃO `1 ×`. Nulo no Flutter quer dizer *a caixa natural da fonte*,
+        // e a primeira versão daqui — e do emissor — traduzia por `1 ×`. Medido em 15/09 com a Inter
+        // carregada dos dois lados: cinco degraus saíam 2 a 4px mais apertados na web POR LINHA
+        // (`title` 21×17, `button` 18×15, `label` 15×12, `mono` 16×13, `monoCaption` 13×11). Com
+        // `normal` a maior diferença que sobra é 0,5px, e ela é o Flutter arredondando a caixa pra
+        // pixel inteiro onde o navegador guarda a fração — conferido no navegador, degrau a degrau.
+        '$nome-line-height': e.height == null ? 'normal' : _px(e.height! * tamanho),
         if (e.fontWeight != null) '$nome-weight': '${e.fontWeight!.value}',
         if (e.letterSpacing != null) '$nome-spacing': _px(e.letterSpacing!),
       };
