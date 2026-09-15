@@ -68,6 +68,24 @@ String _hex(Color c) {
 
 String _px(double v) => v == v.roundToDouble() ? '${v.round()}px' : '${v}px';
 
+/// Os 20 degraus do produto, por nome — a MESMA tabela para os dois testes de tipo.
+///
+/// Fora do `test` porque dois testes a leem: o que confere VALOR e o que confere QUAIS FACES saem.
+/// Duas cópias divergiriam no primeiro degrau novo, e a divergência entre gate e gate é a que
+/// ninguém percebe.
+final _degraus = <String, TextStyle>{
+  'display': CoreflowType.display, 'valorHeroi': CoreflowType.valorHeroi,
+  'h1': CoreflowType.h1, 'h2': CoreflowType.h2,
+  'headlineMd': CoreflowType.headlineMd, 'headlineSm': CoreflowType.headlineSm,
+  'title': CoreflowType.title, 'titleMd': CoreflowType.titleMd,
+  'body': CoreflowType.body, 'bodyLg': CoreflowType.bodyLg,
+  'bodySm': CoreflowType.bodySm, 'bodySmall': CoreflowType.bodySmall,
+  'button': CoreflowType.button, 'label': CoreflowType.label,
+  'labelLg': CoreflowType.labelLg, 'labelMd': CoreflowType.labelMd,
+  'labelSm': CoreflowType.labelSm, 'tileLabel': CoreflowType.tileLabel,
+  'mono': CoreflowType.mono, 'monoCaption': CoreflowType.monoCaption,
+};
+
 void main() {
   final css = cssDoBold();
   final claro = _vars(css, escuro: false);
@@ -138,19 +156,7 @@ void main() {
 
   test('o TIPO de cada degrau é o que o componente escreve', () {
     final divergem = <String>[];
-    final degraus = <String, TextStyle>{
-      'display': CoreflowType.display, 'valorHeroi': CoreflowType.valorHeroi,
-      'h1': CoreflowType.h1, 'h2': CoreflowType.h2,
-      'headlineMd': CoreflowType.headlineMd, 'headlineSm': CoreflowType.headlineSm,
-      'title': CoreflowType.title, 'titleMd': CoreflowType.titleMd,
-      'body': CoreflowType.body, 'bodyLg': CoreflowType.bodyLg,
-      'bodySm': CoreflowType.bodySm, 'bodySmall': CoreflowType.bodySmall,
-      'button': CoreflowType.button, 'label': CoreflowType.label,
-      'labelLg': CoreflowType.labelLg, 'labelMd': CoreflowType.labelMd,
-      'labelSm': CoreflowType.labelSm, 'tileLabel': CoreflowType.tileLabel,
-      'mono': CoreflowType.mono, 'monoCaption': CoreflowType.monoCaption,
-    };
-    degraus.forEach((nome, e) {
+    _degraus.forEach((nome, e) {
       final tamanho = e.fontSize!;
       final conferir = {
         '$nome-size': _px(tamanho),
@@ -171,6 +177,54 @@ void main() {
       });
     });
     expect(divergem, isEmpty, reason: 'a web escreve diferente do app:\n${divergem.join('\n')}');
+  });
+
+  test('a folha não escreve face que o app não declara — nem deixa de escrever a que ele declara', () {
+    // O IRMÃO do teste acima, e a falta dele foi medida em 15/09. Aquele anda as faces que o Dart
+    // DECLARA e confere o valor de cada uma; o que ele não faz é olhar o caminho de volta — **o que
+    // a folha escreveu e o Dart não pediu**.
+    //
+    // Provado na travessura: fiz o emissor escrever `spacing` para todo degrau (`letterSpacing ?? 0`),
+    // reemiti a folha como faria quem fez a mudança de boa-fé, e **7 trackings inventados entraram
+    // com as 220 verificações verdes**. Um `0px` inventado não é inofensivo: onde o app não declara
+    // tracking, quem manda é o degrau homônimo do avô por cascata, e um `0` nosso o silencia.
+    //
+    // É a mesma classe do defeito do dia — ali o emissor inventou `1 ×` onde o Dart não declarava
+    // altura. A diferença é a face: aquele inventava valor ERRADO numa face declarada, este inventa
+    // uma face INTEIRA. Um gate que só confere o declarado nunca vê o segundo.
+    //
+    // `size` e `line-height` saem SEMPRE — tamanho é obrigatório e altura nula vira `normal`, que é
+    // instrução e não invenção (veja o `///` do `coreflowTipoCss`). `weight` e `spacing` saem se, e
+    // somente se, o Dart os declarar.
+    final erradas = <String>[];
+    for (final e in _degraus.entries) {
+      final esperadas = {
+        '${e.key}-size',
+        '${e.key}-line-height',
+        if (e.value.fontWeight != null) '${e.key}-weight',
+        if (e.value.letterSpacing != null) '${e.key}-spacing',
+      };
+      final naFolha = claro.keys
+          .where((k) => k.startsWith('type-${e.key}-'))
+          .map((k) => k.substring('type-'.length))
+          .toSet();
+      // Nome de degrau é prefixo de nome de degrau (`body` está em `bodyLg`), então casar por
+      // `startsWith` sozinho traria o do vizinho. As faces são quatro e fechadas: filtrar por elas
+      // separa `body-size` de `bodyLg-size` sem depender da ordem em que a folha foi escrita.
+      naFolha.removeWhere((k) => !const ['size', 'weight', 'line-height', 'spacing']
+          .any((f) => k == '${e.key}-$f'));
+
+      for (final a in naFolha.difference(esperadas)) {
+        erradas.add('$a: a folha escreve e o app NÃO declara');
+      }
+      for (final f in esperadas.difference(naFolha)) {
+        erradas.add('$f: o app declara e a folha NÃO escreve');
+      }
+    }
+    expect(erradas, isEmpty,
+        reason: 'a folha e o Dart discordam sobre QUAIS faces existem:\n${erradas.join('\n')}\n'
+            'Face a mais é opinião que o produto não declarou, e ela silencia o degrau do avô na '
+            'cascata. Face a menos é a peça caindo na folha dele sem ninguém saber.');
   });
 
   group('os AJUSTES de papel por componente', () {
