@@ -155,6 +155,17 @@ String coreflowMedidasCss(DilettaPalette p) {
 ///
 /// Quem declara altura continua saindo em px: declarado é declarado, e o gate de paridade compara os
 /// dois casos separados.
+///
+/// **NÃO existe gate medindo o PIXEL das duas plataformas, e é decisão.** O que achou isto foi
+/// medir a Inter num navegador de verdade contra a Inter num `flutter test` com a fonte carregada
+/// — e um gate assim pediria navegador em toda rodada, sobre duas plataformas que não podem
+/// empatar (sobra 0,5px de arredondamento, e gate com tolerância é gate que se afrouxa). Varri as
+/// outras famílias antes de decidir: cor, medida, tamanho, peso e tracking são CÓPIA de valor; a
+/// altura era a única TRADUÇÃO, e é esta linha. Classe de um caso, fechado.
+///
+/// Condição de reabrir: **a segunda tradução** — outro ponto em que o Flutter diz *natural* e o
+/// CSS precise escolher a palavra —, ou uma divergência de desenho medida à mão que o gate de
+/// paridade tenha deixado passar.
 String coreflowTipoCss(Map<String, TextStyle> degraus, {required String familia}) {
   final linhas = <String>["  --cps-font-family: $familia;"];
   for (final e in degraus.entries) {
