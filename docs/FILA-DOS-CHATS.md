@@ -75,7 +75,7 @@ máquina** pra re-resolver — subir só o `package.json` deixaria o lock discor
 **o filho gerado hoje nasce um número à frente da nossa própria instância web**, e isso é uma linha
 pra próxima rodada.
 
-## 3 · Declarar as três formas, e dizer ao pai o que sobrou — FEITO
+## 3 · Declarar as três formas, e dizer ao pai o que sobrou — FECHADO (o pai aprovou em 15/09)
 
 Fecha o **item 1 da fila do Berço** — o pedido `2026-09-14-a-forma-do-filho-para-em-dois-raios.md`,
 que agora tem a `## Resposta do filho` escrita no próprio arquivo. **18 dos 22 sítios** passaram a
