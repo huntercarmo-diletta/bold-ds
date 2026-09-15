@@ -8,9 +8,268 @@ sessão, arquivo de scratchpad, ledger de divergência do Figma — e **ninguém
 **Como ler**: a ordem é de DEPENDÊNCIA, não de importância. O item 2 não se faz antes do 1 porque a
 porta que ele usa chega na tag do 1.
 
-**O que é «nosso» e o que é «pedido»**: `CoreflowBackdrop`, os moods, o emissor de CSS e a tela de
-Aparência moram em `packages/coreflow` — **são nossos, não se pede**. Ao avô (`ds-diletta`) só vai o
-que é vocabulário dele: a forma por família (respondida hoje) e a arte do logo (aberta).
+**O que é «nosso» e o que é «pedido»**: `CoreflowBackdrop`, os moods, a tela de Aparência e o repasse
+de `disabled` no botão moram em `packages/coreflow` — **são nossos, não se pede**. Ao avô
+(`ds-diletta`) só vai o que é vocabulário dele: a forma por família (respondida, e adotada), e o EIXO
+do logo (aberto, retificado em 15/09). A licença da arte não é nenhum dos dois: é pergunta para uma
+pessoa.
+
+---
+
+## Rodada de 2026-09-15
+
+**Chats lidos** (transcrição, não resumo de terceiro):
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| Biblioteca Figma da Diletta | `claude_newbold` | 15/09 17h44 | ondas 8–10, o protótipo do onboarding, e **D80 · D81–D85 · D86–D89 · D92–D94** |
+| Berço Coreflow (white label) | `claude_newbold` | 15/09 17h31 | o rename do «Tom de voz», e **a decisão dela sobre o logo** |
+| Coreflow é o pai (este repo) | `bold-ds-pacote` | 15/09 11h23 | os quatro merges de resposta do pai, e o `ref:` em v0.194.3 |
+| `aprendizado-do-dia` (rotina) | `claude_newbold` | 15/09 10h44 | nada pra esta fila — reescreveu o prompt DESTA rotina |
+
+**E o canal do pai andou muito.** `git fetch` nos dois repos: o `ds-diletta` recebeu **18 commits e
+três tags** hoje (`v0.194.4`, `v0.195.0`, `v0.195.1`), e o `bold-ds` remoto recebeu **9 commits e a
+tag `v0.105.0`**, de outra mão. Nada disso está na árvore local.
+
+**A regra desta rodada mudou, e é dela** (15/09, 10h40): *«escreve tudo e deixa o envio comigo»*.
+Esta rodada **não deu push, não abriu PR, não mesclou nada e não criou tag** — ao contrário da
+anterior, que pushou o pedido do logo. O que ficou pronto está no fim deste arquivo, com o comando.
+
+---
+
+## 1 · A `main` local tem 10 commits presos, o remoto andou 9 — e os dois subiram o avô
+
+**Estado**: **ABERTO, e é o primeiro porque tudo o que se escrever aqui nasce em cima de uma árvore
+que o remoto não conhece.** Medido com `git rev-list`: `main...origin/main` = **ahead 10, behind 9**.
+
+Os 10 daqui são os quatro merges de resposta do pai de hoje (`516180d`, `c98915c`, `5233636`,
+`b60948c`), o `546a0e1` do fio da forma, e o `261e5af` que subiu o avô. Os 9 de lá são a frente web:
+o degrau de tipo, os gates do que está instalado, o gerador, e o release `v0.105.0` (`8f4a60d`,
+15/09 16h41).
+
+**E o pior não é a divergência, é a duplicata.** As duas pontas subiram o avô de v0.194.0 para
+**v0.194.3**, cada uma por sua mão e no mesmo dia:
+
+| onde | commit | assunto |
+|---|---|---|
+| local, não enviado | `261e5af` | *o avô sobe pra v0.194.3 — as três tags que passaram e o lock do web escrito à mão* |
+| remoto, não puxado | `f77074a` | *chore(avo): sobe de v0.194.0 para v0.194.3 — o degrau de tipo da web chega, e o contrato vem junto* |
+
+O mesmo `ref:` nos mesmos pubspecs. **O merge vai conflitar nos dois `pubspec.yaml` e nos dois
+`package.json`/`package-lock.json` da web**, e quem resolver tem que escolher o lado do REMOTO nos
+locks: lá o `npm install` rodou de verdade (é o que os gates `o_que_esta_instalado_e_o_que_o_pino_diz_test`
+de 15/09 medem), e aqui o lock foi *escrito à mão* por falta de npm, como o próprio assunto do commit
+diz.
+
+> Item 2 da rodada anterior fechou por um lado e reabriu pelo outro: o pino web que ficara em
+> `web-v0.193.0` **está em `web-v0.194.3` no remoto**, resolvido por quem tinha npm. A frase da
+> rodada passada — *«o filho gerado hoje nasce um número à frente da nossa própria instância web»* —
+> deixou de valer lá, e continua valendo na árvore local.
+
+**Esta rotina não mescla.** Merge de branch de veredito do pai e reconciliação de main divergente são
+as duas coisas que o prompt dela proíbe, e as duas exigem escolher lado num conflito.
+
+## 2 · O avô está TRÊS tags à frente do pino, e uma delas muda o desenho do que vem depois
+
+**Estado**: **ABERTO.** Depende do 1 — subir o pino numa árvore que já tem duas subidas do avô em
+conflito é fabricar a terceira.
+
+Medido em `git show origin/main:packages/coreflow_design_system/pubspec.yaml` (linha 34) e nas tags
+do `ds-diletta`:
+
+| | versão | o que é |
+|---|---|---|
+| pino do `bold-ds` (ponta remota) | **v0.194.3** | `ref:` nos dois pubspecs, e `web-v0.194.3` nos dois `package.json` |
+| ponta do `ds-diletta` | **v0.195.1** | 15/09 17h31 |
+
+As três que passaram, e por que importam aqui:
+
+- **`v0.194.4`** (11h38) — *o catálogo viajava quebrado, e com tinta apareceram outros dois*. É o
+  **veredito do nosso pedido de 14/09** (`2026-09-14-o-seu-catalogo-web-publicado-renderiza-sem-tinta.md`),
+  que estava escrito como *nota, não pede nada*. Ele consertou pela **segunda das três saídas que nós
+  oferecemos** e **recusou a terceira por escrito** — e a terceira é justamente a que esta casa tomou
+  um andar abaixo (não emitir o catálogo). A razão dele é quem instala, e está no ledger. **A nossa
+  decisão não muda**; o que muda é que agora existe um não registrado contra ela, e reabrir sem caso
+  novo volta reprovado.
+- **`v0.195.0`** (13h11) — *`<diletta-icon>`: o nome viaja, a arte não, e a razão é licença*. É a
+  forma do conserto do item 4 desta fila.
+- **`v0.195.1`** (17h31) — *a biblioteca `sistema`: as 20 formas cravadas viraram 12 nomes*. Chegou
+  50 minutos depois do nosso release `v0.105.0`, que se anuncia com *«o avô vem dois degraus à
+  frente»*. **São três, não dois** — a conta do release envelheceu no mesmo dia.
+
+**E a deriva do app é muito maior do que a do pacote.** O `app-newbold` consome `bold-ds v0.102.1`
+(`packages/coreflow_design_system/pubspec.yaml:6`, vendorizado), e essa tag pina o avô em
+**`v0.180.0`**. Da tag do app até a ponta do avô são **15 degraus** (v0.180.0 → v0.195.1); do pacote
+até a ponta, **3**. É essa distância que o **D80** do chat do Figma converteu em conta pronta: no dia
+em que o app subir, *o botão destrutivo primário troca glifo e rótulo de branco para preto, nos dois
+modos, porque o branco reprova o mínimo de contraste de texto* — cinco amarrações e uma constante.
+
+## 3 · O logo: ela cravou o eixo hoje, e o precedente já existe na casa do pai — RETIFICADO
+
+**Estado**: **o pedido segue sem veredito e sem SINAL**, e esta rodada **escreveu a retificação
+dentro do próprio arquivo**, que é a última janela barata.
+
+Os dois fios que a rodada anterior deixou em aberto fecharam, e no mesmo lugar.
+
+**Ela decidiu, às 17h30, com um manual de marca de cliente na mão**: *«quero que você mude o "logo
+para fundo escuro" para o logo positivo/negativo, se é que essa versão existe no design system»*.
+
+**E a resposta medida é a munição que faltava.** Em
+`packages/diletta_design_system/lib/src/theme/diletta_brand_assets.dart` da ponta do pai, no MESMO
+plugue de marca:
+
+```dart
+typedef DilettaSeloDeLoja = ({String? escuro, String? claro});
+typedef DilettaCarteiraDeSistema = ({String? marcaClara, String? marcaEscura,
+                                     String? botaoClaro, String? botaoEscuro});
+```
+
+contra `final String logo;` e `final String logoFull;` (linhas 116–117), que são caminho único. **O
+selo de loja e a carteira já viajam em par por brilho; o logo do filho, não** — e o `///` dele
+explica o par com a nossa frase: *«marca preta some no tema escuro, sem erro e sem golden
+quebrando»*, registrado como defeito dele na `v0.28.0`.
+
+Isso baixa o pedido de *capacidade nova* para *assimetria de uma classe que esta casa já resolveu
+duas vezes* — que é a categoria mais barata de aprovar.
+
+**A D75 foi fundida no pedido de 14/09**, mantendo a numeração mais antiga, pela régua de promoção:
+dois pedidos sobre o mesmo eixo contam como dois, e brilho é um caso de aplicação. O item 5 de «Não
+estou pedindo» **não se retirou** — o eixo continua sendo BRILHO, que é a moeda do pai; o que entrou
+foi a nota de que positivo/negativo e claro/escuro nomeiam a mesma coisa, e a tradução fica no Berço.
+
+> **O que continua sendo dela, e só dela: o SINAL.** Push não é entrega
+> (`ds-diletta/docs/PEDIDO-DO-FILHO.md`, passo 2). O pedido está no `origin/main` desde 14/09; a
+> retificação está commitada e esperando o envio.
+
+## 4 · A arte Font Awesome Pro viaja no repo do app, e o pai abriu a pergunta hoje
+
+**Estado**: **ABERTO no ledger do pai, e a resposta não é de código.** Depende do 2, porque a saída
+técnica já existe e chega pinando: é a `v0.195.0`.
+
+O pai registrou hoje, em `docs/PEDIDOS.md` (seção Abertos), levantado pela própria resposta de
+procedência:
+
+> **os `.svg.vec` de arte Font Awesome Pro VIAJAM no pacote Dart que os três filhos consomem** — e um
+> deles, **o B, consome vendorizado, com a arte escrita dentro do repo dele**. […] ABERTO, **e não é
+> decisão minha** — é pergunta de licença, não de arquitetura.
+
+**O filho B é esta casa, e a medição confirma o dedo apontado:**
+
+| onde | `.svg.vec` rastreados no git | tamanho |
+|---|---|---|
+| `bold-ds` (este repo) | **0** | — |
+| `app-newbold`, `packages/diletta_design_system/assets/icons/` | **355** | **1,4 MB** |
+
+No `bold-ds` a arte não é versionada: os 2.130 arquivos que o disco mostra estão todos em `build/` e
+em cópias geradas, e o pacote chega por `git:`. **Quem redistribui é o app**, pela vendorização de
+10/09 — e os 355 estão declarados em `pubspec.yaml:30-31` (`assets: - assets/icons/`).
+
+**E não há PROCEDENCIA.** O pai criou `packages/diletta_design_system/PROCEDENCIA.md` em 15/09,
+dizendo que os 355 são Font Awesome Pro e que *a licença Pro proíbe redistribuir o asset a quem não
+tem licença*. Nesta casa não existe arquivo equivalente — `find` por `PROCEDENCIA*` e `*LICENS*`
+devolve vazio —, e a cópia vendorizada do app tampouco o carrega.
+
+**O que esta rotina NÃO fez, por regra**: não tocou em `packages/` do `app-newbold` (é cópia
+vendorizada; conserto vai no repo do DS) e não escreveu nota de licença, porque *se a licença Pro
+desta empresa cobre os produtos que consomem o pacote* é pergunta para uma pessoa, não para uma
+medição. **É a linha desta fila que pede resposta humana.**
+
+## 5 · `CoreflowBotao` é a única peça do pacote que não repassa `disabled` — e são cinco telas
+
+**Nosso.** Mora em `packages/coreflow`, não se pede a ninguém.
+
+O chat do Figma mediu no app rodando: *«o botão principal desabilitado pinta exatamente a mesma cor
+do habilitado […] em cinco das doze telas o botão convida ao toque e não responde»*. **Fui conferir o
+mecanismo no código, e ele está certo:**
+
+`packages/coreflow/lib/src/coreflow_botao.dart:148-157` monta o `DilettaButton` com nove argumentos —
+`label · onPressed · type · size · state · leadIcon · trailIcon · isLoading · fullWidth` — e
+**`disabled` não é um deles**. O `CoreflowBotao` também não expõe o campo: são 11 props
+(linhas 58–70) e nenhuma é `disabled`.
+
+**Do lado do pai, o comentário diz por que isso não se resolve sozinho** — `diletta_button.dart:150-152`:
+
+```dart
+// Disabled é ESTADO EXPLÍCITO — onPressed null é só não-interativo
+bool get _disabled => widget.disabled;
+```
+
+Passar `onPressed: null` deixa a peça inerte e **não muda um pixel**: a pintura, o cursor
+(`SystemMouseCursors.forbidden`, linha 336) e o `enabled:` da semântica (linhas 280 e 333) todos
+penduram em `widget.disabled`.
+
+**E o botão é a exceção dentro do próprio pacote**, o que é o argumento que fecha:
+
+| peça do `coreflow` | repassa? | onde |
+|---|---|---|
+| `CoreflowBotoesDeNavegacao` | **sim** — `disabled: travado` | `coreflow_botoes_de_navegacao.dart:78` |
+| `CoreflowCampoDeTexto` | **sim** — `disabled: !habilitado` | `coreflow_campo_de_texto.dart:187` |
+| `CoreflowLista` | **não, e com a razão escrita** | `coreflow_lista.dart:60` |
+| `CoreflowBotao` | **não, e sem razão escrita** | — |
+
+A `CoreflowLista` é o precedente que diz o que fazer: *«três props saíram por não ter chamador —
+`badge`, `disabled` e `loading` […] voltam por repasse no dia em que uma tela pedir»*. **O chamador
+agora existe e está medido**: cinco telas do onboarding.
+
+## 6 · Os moods decoram com a cor de ALERTA
+
+**Nosso.** Sem mudança desde a rodada anterior — reconferido na ponta remota:
+`coreflow_background.dart:265` (`p.warning03` a 0,30), `:270` (`p.warning04` a 0,22) e `:272`
+(`p.warning03` a 0,26). `aurora` e `porDoSol` seguem montados sobre a rampa semântica de aviso, que é
+`#876307`/`#B0810A` **em toda marca**, e no claro ainda multiplica por k=1,3.
+
+A receita do Berço (`harmoniaAnaloga`/`harmoniaComplementar` em OKLCH, com a regra da faixa amarela)
+continua pronta do lado de lá e não veio pra cá.
+
+## 7 · `CoreflowBackdrop.solido` não serve de fundo de Home, faltam dois fundos — e o Figma achou o mesmo buraco
+
+**Nosso.** Segue aberto, e ganhou uma segunda testemunha: **a D88**.
+
+Reconferido: o enum `CoreflowBackdrop` (`coreflow_background.dart:45-65`) tem os mesmos sete valores,
+`degradeSimples` e `liso` não existem em lugar nenhum de `packages/coreflow/lib/`, e a base
+`primary08` no claro continua em `:203-204`.
+
+**O que a D88 acrescenta** é a mesma falta vista pela outra ponta: o chat do Figma achou *«um
+comentário órfão no tema do app descrevendo o fundo de fluxo secundário que nunca foi
+implementado»* — e a consequência medida é que **o app mostra a arte da cidade no onboarding inteiro
+porque nenhuma tela passa estilo**, ou seja, por acidente de default e não por decisão. É a mesma
+lacuna que o item 7 descreve desde a rodada passada, agora com o custo visível numa jornada de 12
+telas.
+
+## 8 · A tela de Aparência não conhece a curadoria do produto
+
+**Nosso.** Sem mudança, e depende do 7. Reconferido: `packages/catalog/lib/ds_do_bold.dart:3049` e
+`:3055` seguem lendo `CoreflowBackdrop.values`, e `fundosOferecidos` **não existe** em
+`coreflow_produto.dart` — `grep` devolve zero.
+
+## 9 · Levantado hoje, e que esta rodada NÃO mediu
+
+Entra na fila como levantamento, não como afirmação — item de fila afirma o que foi verificado, e
+estes não foram:
+
+- **D81–D85**, as duas de código: *um papel de cor que as telas leem e não aparece na lista
+  publicada*, e *o cartão de tipo de conta que redesenha à mão um componente que o pai já tem*. O
+  chat não nomeou o papel nem o componente, e sem o nome o `grep` mede a minha escrita e não a tela —
+  que é o erro que esta rotina já cometeu com o `CoreflowRadius` em 14/09.
+- **D92–D94**: o acessório esquerdo da linha de lista trava em 34 e o app usa 40 e 48 (override não
+  pega por ser instância dentro de instância), e a peça de rodapé é cravada numa altura que não cresce
+  para dois botões. **São da biblioteca no Figma**, e o que houver de código atrás mora no pai.
+- **Os dois defeitos de navegação do onboarding** — pessoa física nunca define senha (a tela de criar
+  senha só é alcançada pelo ramo PJ, e duas telas se declaram *5 de 6*), e a tela de conta aprovada é
+  órfã. **São de produto, não de DS**: o próprio chat disse que pedem um change do OpenSpec.
+
+---
+
+## O que mudou de dono desde a rodada anterior
+
+- **Itens 1, 2, 3, 4 e 5 da rodada de 14/09 fecharam** — as duas branches mescladas, o `ref:` em
+  v0.194.0 e depois v0.194.3, as três formas declaradas com o pai aprovando em 15/09, o pedido do logo
+  pushado, e o emissor de CSS fechado por outra mão (`ca33d6c`).
+- **O «Tom de voz» do Berço virou «Forma do app»** e **não toca este repo**: `grep -i` por
+  `tom de voz`/`tomDeVoz`/`formaDoApp` em `packages/coreflow/lib/` e `packages/coreflow_design_system/lib/`
+  devolve zero. O nome só viajava até o `manifesto.json` do Berço. Fica registrado porque o manifesto é
+  a porta do filho gerado, e renomear porta é a classe de mudança que chega calada.
+- **D76 e D77 continuam esperando decisão dela** e não mudaram de estado hoje.
 
 ---
 
@@ -215,9 +474,15 @@ dá `git fetch` no `bold-ds` pra ver se o pai respondeu, mede no código o que d
 **recompara com a rodada anterior**. Item que sumiu da fila sem commit correspondente vira pergunta,
 não desaparece.
 
-**O que ela faz sozinha**: escreve este arquivo, e dá push em pedido que já estava ESCRITO e
-commitado por ela (o do logo, nesta rodada) — porque push é o passo 1 do contrato e não custa
-veredito a ninguém.
+**O que ela faz sozinha**: escreve este arquivo, o `PEDIDOS.md` e os arquivos de pedido, e **commita
+local**.
 
-**O que ela não faz**: escrever pedido novo (pedido sem medição é pedido adulterado), mesclar branch
-de veredito do pai, tocar em `ds-diletta`, ou dar o SINAL — o sinal é dela.
+**O que ela NÃO faz, desde 15/09** — a regra é dela, e a frase é dela: *«escreve tudo e deixa o envio
+comigo»*. **Nunca push, nunca PR, nunca merge, nunca tag.** No contrato do pai o push é o que ENTREGA
+o pedido, e entrega é decisão da Agatha. Some daqui o que a rodada de 14/09 dizia: aquela rodada
+pushou o pedido do logo, e essa permissão acabou.
+
+Também não se toca: `packages/` do `app-newbold` (é cópia vendorizada — o conserto vai no repo do
+DS), `~/.claude/agents/`, e nenhuma correção de código que ela não tenha pedido. **Achado de código
+vira linha nesta fila, não commit.** E segue de pé: não escrever pedido sem medição, não mesclar
+branch de veredito do pai, não tocar em `ds-diletta`, e não dar o SINAL — o sinal é dela.

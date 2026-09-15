@@ -134,3 +134,71 @@ oferecer o segundo envio na etapa 1, ao lado do primeiro. Hoje ele só sabe avis
 
 E o sinal de um minuto: um logo `#0B1020` na etapa 1 do Berço. Hoje ele mede 1,06:1 contra a página
 escura e aparece na prévia como uma mancha que some. Com o par, ele aparece.
+
+---
+
+## Retificação de 2026-09-15 — o precedente que faltava, e o nome que ela usa
+
+**Escrita pela rotina `atualizacoes-ds`, ANTES do sinal.** O pedido está pushado desde 14/09 e o
+sinal ainda não foi dado, então isto não reabre nada: corrige o pedido enquanto ele ainda é o
+primeiro. Depois do sinal, o mesmo conteúdo custaria um SEGUNDO pedido sobre o mesmo eixo, e a régua
+de promoção do pai conta dois.
+
+### 1 · O argumento mais forte não estava no pedido, e ele é do próprio pai
+
+O pedido acima argumenta por CONTRASTE MEDIDO. Existe um argumento mais barato, e é um precedente já
+escrito na casa do pai — medido nesta rodada em `packages/diletta_design_system/lib/src/theme/diletta_brand_assets.dart`
+da ponta dele (`origin/main`, `v0.195.1`):
+
+```dart
+typedef DilettaSeloDeLoja = ({String? escuro, String? claro});
+
+typedef DilettaCarteiraDeSistema = ({
+  String? marcaClara, String? marcaEscura, String? botaoClaro, String? botaoEscuro,
+});
+```
+
+E a razão que ele escreveu para isso, no `///` da mesma classe, é literalmente a nossa:
+
+> **Sempre em PAR, e nunca um só:** as três guidelines proíbem a mesma coisa — claro sobre claro e
+> escuro sobre escuro […] A marca nasceu com UM caminho na v0.28.0, e **era defeito meu: marca preta
+> some no tema escuro, sem erro e sem golden quebrando.**
+
+Quer dizer: **no mesmo plugue de marca, o selo de loja e a carteira de sistema já viajam em par por
+brilho — e o logo do filho, não.** O `DilettaBrand` tem `logo` e `logoFull` como `String` única
+(linhas 116–117), ao lado de `selosDeLoja` e `carteirasDeSistema` que são pares. A assimetria é
+dentro da mesma classe, e a frase dele sobre a `v0.28.0` descreve exatamente o defeito que este
+pedido mede em 95 passos de claridade.
+
+Isto não muda o que se pede. Muda a razão: **não é capacidade nova, é a assimetria de uma classe que
+esta casa já resolveu duas vezes.**
+
+### 2 · O nome que a dona do produto usa é «positivo / negativo»
+
+Em 15/09, às 17h30, decidindo a etapa de logo do Berço com um manual de marca de cliente na mão, ela
+escreveu: *«quero que você mude o "logo para fundo escuro" para o logo positivo/negativo, se é que
+essa versão existe no design system»*.
+
+**A resposta medida é: não existe para o logo, e existe para o selo e a carteira** — é o parágrafo
+acima.
+
+O item 5 de «Não estou pedindo» segue valendo e não se retira: **o eixo é BRILHO**, que é a moeda
+desta casa, e não cabe ao pai aprender vocabulário de manual de marca. O que esta retificação
+registra é que **as duas palavras nomeiam a mesma coisa** — positivo é a arte para página clara,
+negativo a arte para página escura —, e que o nome que chega do cliente é o dela. Se o par nascer com
+os nomes `claro`/`escuro` do `DilettaSeloDeLoja`, o Berço traduz na etapa 1 e ninguém paga nada.
+
+### 3 · A D75 é este pedido com um tamanho maior, e ela não vira pedido separado
+
+O chat da biblioteca no Figma registrou, às cegas deste pedido, a **D75**: enum de APLICAÇÃO no
+`DilettaBrand` (Positivo · Negativo · Marca · Monocromático), com a frase dela — *«a simples pintura
+pode não solucionar muitos casos de uso do logo»*.
+
+**Fundida aqui, mantendo a numeração deste pedido**, pela régua de promoção: dois pedidos sobre o
+mesmo eixo contam como dois, e o eixo é um só. O par por brilho é o caso com bloqueio medido (4 de 6
+cores de banco reprovam); `marca` e `monocromático` são o resto da classe, e entram como a frase
+final de «Não estou pedindo» já diz: **a forma é sua** — se o pai preferir nascer com quatro
+aplicações em vez de duas, este pedido não se opõe, porque brilho é um caso de aplicação.
+
+**Nada aqui pede arte nova ao pai.** O arquivo do logo é do filho, por contrato (`/// logo e fonte
+viajam no FILHO`). O que falta é o EIXO.
