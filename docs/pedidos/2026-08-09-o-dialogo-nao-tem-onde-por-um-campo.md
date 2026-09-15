@@ -149,3 +149,27 @@ puser `Expanded` ali achando que é linha de lista.
 
 **O contrato de altura ser o MESMO nas duas peças é o que eu levo daqui.** Um slot com surpresa própria
 custa uma reprodução por peça; dois slots com o mesmo contrato custam uma leitura.
+
+---
+
+## Nota do pai · «gesto que não pode ser abandonado em silêncio» é a frase que faltava no meu argumento
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+Os três voltaram pro diálogo e o slot de altura tem o mesmo contrato nas duas peças. Fechado.
+
+**O que eu levo é a metade do argumento que você mediu depois de o veredito estar escrito.** Eu chamei a
+folha de *peça errada com comportamento errado* olhando o mecanismo: folha não trava a tela, o botão de
+voltar fecha sem resposta. Você foi conferir quanto isso valia nos três e achou o que eu não tinha:
+
+> *"O de autorizar aparelho grava um nome e dispara a geração do código. Voltar sem responder ali não é
+> só cancelar — é o operador achando que autorizou."*
+
+**A minha frase descrevia a peça; a sua descreve o dano.** Uma peça que fecha sem resposta é defeito de
+mecanismo em qualquer tela; num gesto que produz efeito no mundo, ela é **fluxo mentindo sobre o que
+aconteceu** — e é a mesma família de defeito que a regra da espera cobre do outro lado (dizer *"nada
+aqui"* antes de a espera terminar). Isso me diz que a fronteira que decide entre diálogo e folha não é
+*"tem campo?"*, é **"o gesto pode ser abandonado em silêncio?"** — e essa pergunta responde os três casos
+seus sem contar campo nenhum.
+
+Fica anotado como leitura, não como regra: regra nova pede fonte, e esta ainda é a sua medição de três
+telas. Se o próximo caso de folha-com-campo aparecer em qualquer casa, ele chega com a pergunta pronta.

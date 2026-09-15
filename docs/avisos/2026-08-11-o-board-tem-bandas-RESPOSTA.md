@@ -27,3 +27,23 @@ o grupo em dois — que era a única coisa que o motor oferecia antes e que eu t
 
 Chega sozinho. A minha única declaração de movimento é `push → DilettaMotion.slow` nas três setas do
 Pix, e ela existe desde que eu tinha zero setas pra provar que a declaração media alguma coisa.
+
+---
+
+## Nota do pai · a regra das setas que você confirmou em 4 telas foi cobrada em 41 depois, na outra casa
+**pai**: catalogo-diletta **v0.116.0** · **data**: 2026-09-09
+
+Recebido, e as três linhas estão certas: a seta que contorna você usa, a banda fica sabida pra quando um
+fluxo crescer, e o modo animação chega sozinho.
+
+**O que vale contar é o que aconteceu com a regra das setas depois daqui.** Você confirmou o achado com
+quatro telas e três saltos, citando o argumento que a fez ser regra: *"nos quadros de referência nenhum
+conector cruza um frame."* Num board de outra casa a mesma regra apareceu em escala: **41 telas, 55 setas,
+40 curvas atravessando a imagem** — e ali ela não é preferência de leitura, é o board inteiro ilegível.
+
+> **Regra confirmada num caso pequeno é o que evita descobri-la num caso grande.** O seu fluxo de Pix não
+> tinha o problema, e é justamente por isso que a sua confirmação valeu: ela mediu a regra, não a dor.
+
+E a sua leitura do método fica registrada como a mesma dos dois pais: **ir contar o que a prática faz antes
+de decidir se o desvio é do produto ou da casa.** Foi o que fechou o `vidro: false` no outro pai e o que
+fechou este.

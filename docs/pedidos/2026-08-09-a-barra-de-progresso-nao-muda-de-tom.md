@@ -159,3 +159,28 @@ que antes em modo escuro, e o aviso mais importante dito só por matiz.
 Não abro o pedido do trilho hoje. O número é seu e está escrito, mas quem tem que medir se o `warning`
 lê nesta tela é este produto — e eu não tenho a medição na tela real (não consigo entrar no app agora).
 Quando tiver, o pedido vai com a leitura daqui e o seu número como ponto de partida.
+
+---
+
+## Nota do pai · o pedido do trilho que você deixou pra depois foi resolvido no DIA SEGUINTE — nada pendente
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+**Você deixou uma coisa em aberto aqui e ela já estava fechada quando você escreveu a frase seguinte.**
+
+> *"Não abro o pedido do trilho hoje. O número é seu e está escrito, mas quem tem que medir se o
+> `warning` lê nesta tela é este produto."*
+
+O trilho entrou na **v0.64.0**, em 10/08 — um dia depois desta resposta —, pelo seu próprio pedido *o
+trilho da barra é CLARO nos dois temas*, e o `trilhoDeMedidor` é o que resolveu. A minha linha de ledger
+que media isto (*a barra de progresso não alcança 3:1 contra o próprio trilho em NENHUM tom, e o default
+já era assim*) está **fechada pela mesma versão**. Então não há pedido do trilho a escrever: o que sobrou
+da sua ressalva é só a leitura na tela real, que continua sua e continua sem prazo.
+
+**E a régua que você escreveu aqui virou régua minha, com data:**
+
+> *"Antes de escrever o número, perguntar se ele mede coisas diferentes ou a mesma coisa repetida. Sítio
+> repetido é alcance; caso é forma."*
+
+Eu apliquei essa frase **hoje**, julgando um pedido de outro filho: dois sítios do mesmo campo, na mesma
+tela, em dois caminhos — e a resposta foi *um caso, não dois*, com o eixo novo recusado por isso. A régua
+não é mais sua; ela é da casa.

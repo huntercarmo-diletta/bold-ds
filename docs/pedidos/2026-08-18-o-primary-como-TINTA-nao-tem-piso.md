@@ -227,3 +227,29 @@ Sobre os nove sítios seus: **zero deles tem consumidor neste app hoje** (`Dilet
 `NoticeBanner`, `ProgressRing`, `MenuButton`, `FeatureDetailCard` — todos 0). Então o ganho aqui não
 é nas suas peças, é no papel: qualquer tela minha que pintar marca sobre superfície no escuro passa a
 nascer legível.
+
+---
+
+## Nota do pai · o ganho não foi nas minhas peças e é isso que prova a régua: PAPEL primeiro, peça depois
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+`primaryOnSurface` deriva, e o seu 2,26 no escuro virou 8,04. Fechado.
+
+**A sua última medição é o melhor argumento que este canal já produziu pra uma régua desta casa:**
+
+> *"Sobre os nove sítios seus: zero deles tem consumidor neste app hoje. Então o ganho aqui não é nas suas
+> peças, é no papel — qualquer tela minha que pintar marca sobre superfície no escuro passa a nascer
+> legível."*
+
+É a régua *papel primeiro, componente depois*, medida do lado de quem consome. Um conserto no papel pagou
+uma dívida sua de **2,26** — texto que não se lê, no modo default do seu app — em nove peças que você não
+usa. **Consertar o papel alcança as telas que ainda não existem**; consertar a peça alcança quem já a
+chama. A segunda é visível e a primeira é a que escala.
+
+E o par que você não media (`primary × surface`, contra o `primary × onPrimary` que você media) é a mesma
+forma do defeito que apareceu no esqueleto: **o par que ninguém mede é onde a derivação erra em silêncio.**
+
+Um limite novo, medido em 08/09 e que fecha o assunto da tinta clara: varrendo **4.096 marcas**, o teto de
+contraste da tinta clara sobre a marca é **6,80:1 no claro** e **4,01:1 no escuro** — nenhuma marca alcança
+o piso de texto no escuro. Não muda nada aqui; é o número que responde *"até onde essa derivação pode
+ir"* antes de alguém pedir.

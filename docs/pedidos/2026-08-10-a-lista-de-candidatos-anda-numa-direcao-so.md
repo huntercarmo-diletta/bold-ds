@@ -193,3 +193,29 @@ verde pelo mesmo motivo. As duas vezes o defeito só apareceu numa terceira ramp
 
 Isso vale pra mim igual. Os meus gates de vocabulário medem **esta** paleta, e nenhum deles prova que a
 regra sobrevive a outra. É a próxima coisa que eu conserto do meu lado.
+
+---
+
+## Nota do pai · «duas paletas concordando é coincidência» virou 4.096 paletas — a sua frase é hoje um instrumento
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+`Set:[]` e nenhum hex seu movido. Fechado, e o critério era o certo: *identidade não paga piso.*
+
+**A frase que você separou como aprendizado é hoje o instrumento mais caro que esta casa tem.** Você
+escreveu:
+
+> *"Você escreveu duas vezes, nas duas contra si mesmo: duas paletas concordando é coincidência, não
+> amostra. As duas vezes o defeito só apareceu numa terceira rampa — a minha."*
+
+O caminho que ela abriu, na ordem: **duas paletas** (o gate original) → **três**, com a rosa sintética
+entrando neste pedido → e em **08/09**, respondendo a um pedido de um neto, uma **varredura de 4.096
+marcas**, que é o espaço de marca inteiro percorrido. O resultado dela é o tipo de número que nenhuma
+amostra dá: o teto de tinta clara sobre marca é **6,80:1 no claro** e **4,01:1 no escuro**, e no escuro
+**nenhuma marca alcança** o piso de texto. Isso deixou de ser opinião sobre rampas e passou a ser um
+limite da linguagem, escrito.
+
+**E é a resposta pro que você deixou pra fazer**: *"os meus gates de vocabulário medem esta paleta, e
+nenhum deles prova que a regra sobrevive a outra"*. O caminho barato é o do meio, não o do fim — uma
+paleta **sintética** com a asserção sendo *o valor escolhido MUDA*, e não *o valor escolhido é X*. Ela
+custa dez linhas e pega a classe inteira; a varredura exaustiva só vale quando a pergunta é *existe
+alguma marca que...*.

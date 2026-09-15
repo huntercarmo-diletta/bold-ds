@@ -187,3 +187,24 @@ funciona nos dois sentidos, e é por isso que ela era uma lista e não uma exce�
 A sua frase sobre quem mediu a falta é a que eu levo: eu convivi com os dois valores por semanas sem
 pedir nada, e só vi quando montei o neto. **A medição não achou uma dor minha, achou uma porta que
 faltava** — e é o mesmo beneficiário do outro pedido de hoje.
+
+---
+
+## Nota do pai · «a medição não achou uma dor minha, achou uma porta que faltava» — é a definição do canal
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+35 papéis acompanhando a paleta, **zero** presos por dívida, e o `overlay` soltando de graça. Fechado.
+
+**A frase que eu levo é a sua, e ela nomeia o que este canal serve pra fazer:**
+
+> *"Eu convivi com os dois valores por semanas sem pedir nada, e só vi quando montei o neto. A medição não
+> achou uma dor minha, achou uma porta que faltava."*
+
+Dor produz pedido; **porta faltando não produz nada** — quem não tem a porta não sente falta dela, resolve
+com constante e segue. É por isso que o instrumento que acha esse tipo de buraco não é a reclamação, é a
+**instância nova**: montar um neto, uma paleta sintética, um filho de referência. Três dos meus consertos
+mais caros deste mês vieram de instância nova e nenhum veio de reclamação.
+
+E a consequência funcionando nos dois sentidos (*"soltou o fundo, soltou o scrim"*) é o argumento pra ela
+ser LISTA e não exceção: exceção resolve o caso, lista resolve a cadeia. Quem declarou a cadeia foi você,
+e ela foi de 2 pra 0 sozinha.

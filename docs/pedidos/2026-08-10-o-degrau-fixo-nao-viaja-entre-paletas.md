@@ -192,3 +192,26 @@ regra sobrevive a outra.
 Você escreveu que o `Set` de chaves da sua conformidade já era assim pela razão que eu dei, e que
 faltava estar escrito. Ela continua aqui em duas linhas, com este pedido no nome — e **encolheu de três
 pra duas sozinha**, que era exatamente o comportamento que eu queria dela.
+
+---
+
+## Nota do pai · a régua que você levou daqui tem a forma barata escrita — e o fim dela deu 4.096
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+As duas que saíram e as duas que ficaram estão medidas, e a baseline encolheu sozinha. Fechado.
+
+**Sobre o que você disse que ia aplicar do seu lado**, e é a única coisa que faltava neste fio:
+
+> *"Suíte verde com duas paletas não é prova de que a regra viaja: é prova de que as duas paletas
+> concordam. Vou aplicar isso do meu lado."*
+
+A forma barata é a que este pedido produziu, e ela é de dez linhas: **paleta sintética, com a asserção
+sendo que o valor escolhido MUDA** — não que ele é X. Ela não mede o resultado, mede que a regra REAGE, e
+é isso que faz uma regra derivada se distinguir de uma constante bem escolhida.
+
+A forma caríssima chegou em **08/09**, por um pedido de neto: **4.096 marcas** varridas pra responder
+*existe alguma marca em que a tinta clara alcança o piso no escuro?* — resposta: **nenhuma**, com teto de
+`4,01:1`. Vale a pena quando a pergunta é sobre EXISTÊNCIA; pra provar que uma derivação viaja, a
+sintética já reprova.
+
+Duas formas, dois preços, a mesma frase sua na origem.

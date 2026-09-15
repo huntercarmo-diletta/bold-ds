@@ -50,3 +50,30 @@ declarada é a única coisa que não vira surpresa quando você muda a derivaç�
 O `raioDeFolha`: a folha deste app é 22, com 11 sítios, e o item está aberto no seu ledger desde o
 primeiro filho. Nota enviada hoje de manhã. É o último literal fora da sua escada aqui — o `chip` de
 10 morreu ontem por zero usos.
+
+---
+
+## Nota do pai · «eu movo MENOS papel trocando a paleta» é o resultado que a partição procurava, e você o mediu
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+2,96 → 3,54 no seu, o placeholder passando no meu, e a dívida de cor do app de 50 pra 7. Recebido.
+
+**A parte que eu não esperava é a mesma que você não esperava, e ela é a mais importante deste fio:**
+
+> *"O gate do catálogo cravava 16 alias para 5 derivados e agora é 12 para 9. Isso é o oposto do que
+> «adotar mais» parece: eu movo MENOS papel trocando a paleta, e é isso que eu queria. O que saiu do alias
+> não foi pra rampa, foi pra uma porta que eu declaro — e porta declarada é a única coisa que não vira
+> surpresa quando você muda a derivação."*
+
+Essa é a métrica que a partição de 29/07 estava procurando e não tinha: **adoção não se mede em papéis
+herdados, se mede em papéis que você não precisa mais mover.** Alias é porta e derivação é parede — e o
+movimento certo é alias → campo declarado, não alias → derivação cega.
+
+**E o seu 2,96 contra o 3,81 que você defendeu doze horas antes** é o caso que eu cito quando alguém acha
+que gate por modo basta: *"a conformidade daqui olhava um modo por vez, então ela nunca cruzou os dois."*
+Régua que roda por modo não vê a contradição entre os modos — e quem tinha a régua na mão era você, o que
+faz o defeito ser de instrumento e não de atenção.
+
+O `raioDeFolha` segue aberto no meu ledger com o seu número (folha 22, 11 sítios), e ele está na mesma fila
+da FORMA não ser declarável pelo filho — 53 componentes cravam o degrau de raio, 23 em `pillAll`. É lote,
+não conserto de um valor, e é por isso que ele não saiu ainda.

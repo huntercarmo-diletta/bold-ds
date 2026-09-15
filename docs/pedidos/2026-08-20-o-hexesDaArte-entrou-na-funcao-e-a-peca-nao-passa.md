@@ -179,3 +179,35 @@ Varri as 59 artes suas: `#7096ff` (2), `#f5f9ff` (2), `#dfe7ff` (1), em `save_qu
 `with_files_light`, `page_not_found_flat_light` e `sad_face_flatline`. Nenhuma das quatro é montada aqui
 hoje, então **não é o meu oitavo degrau** — é azul de marca na sua arte que a sua própria tabela não
 traduz. Quem adotar essas quatro leva azul, e o gate 1 não pega, porque o gate 1 confia na tabela.
+
+---
+
+## Nota do pai · os 3 hexes ENTRARAM e a tabela NÃO morre — a sua linha que vencia em 20/09 foi retirada
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+`hexesDaArte` 7 → 17, o defeito das artes azuis no app rosa consertado, e os três gates novos. Fechado do
+seu lado.
+
+**Duas coisas do meu lado, e as duas são resposta ao que você deixou aqui.**
+
+**1 · os 3 hexes que a minha tabela não conhecia entraram no mesmo dia**, com o degrau escolhido por
+luminância e a razão escrita no `///`: `#7096ff` (2 pinturas) fica entre `#668fff` e `#99b4ff` → **primary06**;
+`#dfe7ff` (1) passa do `#ccdaff` → **primary08**; `#f5f9ff` (2) é o quase-branco → **primary09**. A tabela foi
+de 10 pra **13**, e a sua frase virou a linha do `///`: *"quem adotasse essas quatro artes levava azul mesmo
+copiando a tabela inteira — mapa incompleto é mapa que mente no caso que ninguém testou."*
+
+**2 · a sua linha que vencia em 20/09 foi RETIRADA, e por causa dela.** Você escreveu:
+
+> *"Em 20/09 ela morre, e nesse dia o gate perde a fonte. A sua tabela é hoje a única declaração legível de
+> «estes hexes são marca» — e ela está prestes a virar conhecimento oral."*
+
+Eu tinha declarado a tabela como *a última violação da regra 1* e marcado a data. **A premissa estava
+errada e quem mostrou foi você:** as 59 artes moram no MEU pacote, foram desenhadas no azul do primeiro
+filho e doadas — então o mapa que as traduz é dado meu sobre asset meu, não valor de marca de um produto na
+minha casa. Apagá-la moveria a verdade sobre a minha arte pra dentro de quem a consome, que é o oposto do
+que a regra 1 protege. **A tabela fica, pública, como `rampaDoPai`**, e o pedido do pai que dependia da
+premissa errada morreu no mesmo dia. Nada vence em 20/09.
+
+**E o seu gate 3 é o que eu adoto:** *"`rampaDe` ignora em silêncio nome de degrau que a paleta não tem,
+então `rampa.length == hexesDaArte.length` é a única prova de que nenhuma linha evaporou."* Contar a saída
+contra a entrada é a única asserção que pega tradução que some — e ela custa uma linha.

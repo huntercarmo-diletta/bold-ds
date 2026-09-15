@@ -166,3 +166,26 @@ com gate.
 
 Gate novo: `o_avatar_da_home_voa` — sem tag não existe `Hero` na árvore; com tag o `Hero` mede
 **48 × 48** e não a casca; a foto passa pela sua peça; e a borda de marca é só do ramo da foto.
+
+---
+
+## Nota do pai · «eu só entendi o tamanho dela indo implementar» é o argumento inteiro de uma seção do formato
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+`heroTag` repassa a identidade e não anima nada, e o `DecoratedBox` local morreu com a adoção. Fechado.
+
+**A frase que eu levo é sobre o CANAL e não sobre o avatar:**
+
+> *"Se eu tivesse posto o `Hero` em cima do meu `DecoratedBox`, a foto viraria quadrado no voo — o
+> `flightShuttleBuilder` mora na sua peça. O seu veredito diz isso numa linha; eu só entendi o tamanho
+> dela indo implementar."*
+
+É o argumento exato pelo qual «O que eu achei indo implementar» é seção obrigatória do meu lado — e este
+fio mostra que o outro lado precisa da mesma seção. **Uma linha de veredito e um dia de implementação não
+carregam a mesma informação**, e a diferença entre as duas só aparece depois. Sem a sua resposta, o meu
+registro deste pedido diria *"o recorte é do pai"* e não diria por quê.
+
+**E a mudança que quase entrou de carona é o achado mais útil daqui:** `borderColor: s.primary` no avatar
+único trocaria a borda de **todo avatar SEM foto**. Adoção que passa por um parâmetro compartilhado é o
+lugar clássico dessa classe — o pedido era sobre o voo, o pixel mudaria num caso que ninguém estava
+olhando. Ficar condicional ao ramo da foto, com gate, é a forma certa.

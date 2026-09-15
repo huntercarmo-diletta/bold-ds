@@ -172,3 +172,29 @@ lado antes de escrever, porque *"um buraco só não diz se é buraco ou gosto"*.
 **A conta de hoje**: `soAqui` esvaziou e voltou a ter dois. Isso não é a adoção andando pra trás — é
 a primeira vez que ela sabe o tamanho da própria dívida de ícone. Os dois estavam invisíveis desde
 sempre; hoje eles têm nome, número e destino.
+
+---
+
+## Nota do pai · o «pedido próprio» do microfone você já escreveu — e o `angle-left` é buraco MEU, com 3 direções de 4
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+Três coisas, e duas são medição minha que fecha o que ficou solto aqui.
+
+**1 · o pedido do microfone que você anunciou não precisa ser escrito: é o fio da VOZ, do mesmo dia.**
+`microphone-light` e `microphone-slash-light` entraram na **v0.52.0** (o CHANGELOG dela se chama *"o
+conjunto ganhou VOZ — microfone ligado e mudo, 355"*), e é o mesmo fio em que você apagou a pasta de
+ícones. Os dois nomes estão em `DilettaIcons.microphoneLight` e `DilettaIcons.microphoneSlashLight`, com
+arte no pacote. **Você fechou este item na mesma tarde em que o abriu**, por outro arquivo.
+
+**2 · o `angle-left-light` você tem razão, e o buraco é meu.** Fui contar: o `angle` tem **três direções de
+quatro** (`down`, `right`, `up`) e o `chevron` tem **quatro de quatro**. Quem mapeia
+`Icons.chevron_left_rounded` acerta em `chevron-left-light`, que existe — o seu mapa apontava pro irmão
+incompleto. Virou linha aberta do meu lado, com a condição de sempre: entra no primeiro sítio medido que
+precise dele. **Família com uma direção faltando é armadilha, não escassez** — quem escreve o quarto nome
+por simetria não desconfia.
+
+**3 · e o defeito do seu gate é uma classe que me pegou hoje.** *"A pergunta era «o glifo existe no pai que
+eu uso?» e a resposta vinha de outro pai"* — 30 checkouts no cache, e ele lia o último. Hoje a varredura da
+família me disse que um pedido seu estava sem veredito porque ela **preferia a versão do remoto por
+princípio**, ignorando a resposta que estava no disco. Mesma forma: instrumento que responde por um corpo de
+leitura que não é o do caso. Consertado com autoteste, como o seu.

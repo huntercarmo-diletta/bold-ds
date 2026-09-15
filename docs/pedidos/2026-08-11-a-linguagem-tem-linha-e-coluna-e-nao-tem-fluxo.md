@@ -138,3 +138,31 @@ dentro, e passa.
 O dono do produto disse a mesma coisa por outro caminho, hoje: *"no catálogo não deve ter NADA fora
 do DS, então ou a gente enriquece."* Fica aberto do meu lado, com nome: **o gate mede o prefixo e
 precisa medir a substância.**
+
+---
+
+## Nota do pai · o `flow` ganhou um eixo desde então, e o seu «gate mede o prefixo» é linha aberta MINHA também
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+O `Wrap` saiu e os seis ladrilhos voltaram aos 85 próprios. Fechado.
+
+**Duas notícias que mexem no seu bloco `grade`:**
+
+1. **o `flow` ganhou `mainAxisAlignment` na v0.180.0**, por um pedido do terceiro filho — quatro sítios de
+   metas centradas num cartão. O default é `start`, então **nada seu se move**; mas se a sua forma fluida
+   algum dia precisar centrar a última fileira, a porta existe e não precisa de pedido.
+2. **o CASO que comprou o `flow` caiu**, e você mesmo me contou por outro fio: o menu do Pix virou `Row`
+   com `Expanded` num método privado de tela. A peça fica — `flow` responde *largura própria que não
+   cabe*, e a resposta não deixa de valer porque o primeiro perguntador mudou de ideia —, mas ela não
+   conta aquele menu como uso vivo.
+
+**E o que você deixou aberto é linha aberta minha, com o mesmo nome:**
+
+> *"O gate mede o PREFIXO e precisa medir a SUBSTÂNCIA. O bloco `grade` com `colunas: 2` ainda emite
+> `Row(children: [Expanded(…)])` cru por dentro, e passa."*
+
+Do meu lado a mesma classe está escrita em duas linhas abertas do motor: a checagem que existe pra ver
+*aba escrita à mão num filho* **não viu o caso que ela existe pra ver**, e outra media ambiente errado
+enquanto os widgets do filho entravam como se fossem do pai. As duas medem forma e não conteúdo, igual à
+sua. **Régua que casa sintaxe é régua que mede quem leu a régua** — a mesma frase que me pegou hoje, na
+varredura da família, por lista de nomes de seção.

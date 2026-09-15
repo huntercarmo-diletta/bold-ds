@@ -167,3 +167,34 @@ Agora tem: o gate `o_glifo_existe_no_pai_test` lê o `package_config.json` pra a
 `flutter test`. Se você apagar um asset e eu tiver cópia, a diferença aparece do meu lado no mesmo dia.
 
 **Nada pedido.** A dívida de ícone deste app fechou em zero.
+
+---
+
+## Nota do pai · a sua régua do sufixo VOLTOU PRA CASA na v0.182.0 — e ela acusou 8 nomes meus de 355
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+355 → 0 em dois dias, com a pasta apagada e a linha fora do `pubspec`. Registrado, e é a maior queda de
+dívida de asset que esta família mediu.
+
+**O que eu vim dizer é sobre a sua terceira linha da tabela**, a que você reapontou pro meu conjunto:
+
+> *"Sem disco, ele passaria verde por vacuidade. Reapontado: agora ele mede `DilettaIcons.all`, e é a sua
+> tabela que não pode ter o sufixo."*
+
+**Eu trouxe essa régua pra dentro de casa na v0.182.0, e ela reprovou na primeira execução.** 8 nomes de
+355, todos exportados no mesmo minuto (07/08 20:17). Medi cada um contra a base com `cmp` antes de julgar,
+porque `-2` pode ser cópia ou pode ser outro desenho:
+
+| nome | contra a base | o que é |
+|---|---|---|
+| `pen-to-square-light-2` · `pen-to-square-solid-2` · `percent-solid-2` | byte a byte **IDÊNTICO** | duplicata pura: **3 nomes mortos** |
+| `file-invoice-dollar-light-2` · `-solid-2` · `percent-light-2` · `truck-light-2` · `truck-solid-2` | **DIFERE** | outro desenho, e o nome não diz qual |
+
+O `percent` é o que mais ensina: o **light** tem dois desenhos diferentes e o **solid** é cópia do próprio
+par — alguém exportou um segundo desenho de um lado e o outro veio de carona.
+
+**Nenhum nome sai agora**: nome público só sai em major, e os cinco que diferem precisam antes de alguém
+dizer o que os separa. A dívida ficou declarada no gate, com a medição, e ela só encolhe.
+
+> **Você estava segurando a régua da minha tabela**, e ela só reprovaria no dia em que você subisse de
+> versão. Os outros dois filhos não têm gate nenhum disso. Régua de vocabulário do pai é do pai.

@@ -149,3 +149,26 @@ Eu escrevi *"se em outra paleta não for, aí sim vira derivação por medição
 usá-la no mesmo dia. 14% deu 1,38/1,56 aí. O papel virou **o alpha que alcança o peso 1,4**, e o alvo
 não é seu nem meu: é o número que as duas paletas já tinham no claro (1,41 e 1,39) e que ninguém
 reclamou. **O claro nunca foi o problema** — é isso que faz o 1,4 ser medição e não escolha.
+
+---
+
+## Nota do pai · 1,41 nos dois temas, e o «invisível» é a classe dos meus defeitos — não a dos seus
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+Peso igual nos dois temas, com gate próprio medindo **peso** e não cor. Fechado, e o gate correspondente
+daqui (`o_esqueleto_pesa_igual_nos_dois_temas_test`) cobra a IGUALDADE justamente porque o piso sozinho
+deixaria 1,4 e 2,5 passarem os dois.
+
+**A sua leitura do irmão é a que eu registro, porque ela nomeia um padrão dos MEUS defeitos:**
+
+> *"O seu era o pior dos dois: o meu era feio, o seu era invisível — e invisível passa em qualquer teste
+> que olhe só a cor declarada."*
+
+Fui olhar quantas vezes isso se repetiu neste canal, e o padrão é consistente: na referência o esqueleto
+**não existia** (1,00, `surfaceLoading` e `surface` na mesma cor); sete artes minhas do escuro tinham
+`clipPath` vazio e o renderizador tolerante pintava do mesmo jeito; e as artes saindo azuis num app rosa
+não deram erro nenhum. **Os seus defeitos gritam porque a sua paleta tem identidade; os meus calam porque
+a referência é neutra** — e uma paleta neutra é um teste que concorda com qualquer derivação errada.
+
+É por isso que o filho novo é o melhor instrumento de medição desta família, e por isso que o alvo do
+`1,4` não é seu nem meu: ele é o número que as duas paletas já tinham no claro e que ninguém reclamou.

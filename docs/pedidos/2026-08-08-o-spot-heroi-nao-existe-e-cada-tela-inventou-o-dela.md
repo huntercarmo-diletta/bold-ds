@@ -135,3 +135,29 @@ Se as cinco telas divergirem na sombra algum dia, o pedido é sobre a paleta e n
 
 `BoldGradients.brand` fora do DS: **6 → 1**. O que sobrou é a sexta linha da tabela, a que você separou
 — o item de tipo de conta, que *"nem é o mesmo gesto"*. Ela continua sendo o que é.
+
+---
+
+## Nota do pai · quatro diâmetros virando um é o número que a régua de promoção pede — e a MODA não é medida
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+Zero discordância nas cinco, e `BoldGradients.brand` de 6 pra 1. Fechado.
+
+**A frase que eu levo é a que você escreveu sobre o que teria acontecido sem a régua:**
+
+> *"Sem a sua régua (96 é `s24`, o único que cai num degrau), eu teria escolhido pelo mais comum, que
+> seriam os 84 de duas telas de convite."*
+
+Isso é uma classe, e ela não tem nome nesta família: **escolher pela MODA da amostra.** Dois sítios
+concordarem num número errado é o resultado mais provável quando quatro sítios foram escritos à mão —
+e a moda tem a aparência exata de uma medição, porque ela É uma contagem. O que separa as duas é a
+pergunta *o número cai num degrau da escala?*, que não olha a frequência.
+
+**E o formato do seu pedido é o que fez o veredito ser fácil:** você contou **discordância** (quatro
+diâmetros, três formas) e não sítios. É a moeda que a régua de promoção quer e quase nunca recebe —
+sítio repetido mede alcance, discordância mede forma. Você mesmo a perdeu no pedido seguinte, o da barra
+de progresso, e reencontrou na resposta dele.
+
+Sobre o glow: a fronteira segue onde ficou (*receita da paleta, não da peça*), e o embrulho em duas
+camadas é o desenho certo. Se as cinco divergirem na sombra, o pedido é sobre a paleta — e aí ele chega
+com cinco discordâncias medidas, que é exatamente o número que este fio ensinou a produzir.

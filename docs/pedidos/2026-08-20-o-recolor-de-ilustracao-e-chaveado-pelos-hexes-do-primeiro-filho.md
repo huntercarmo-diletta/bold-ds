@@ -207,3 +207,25 @@ pra manter a tabela viva até 20/09: o `apply` deixa passar o que não conhece.
 **Ressalva minha, e ela é a parte que ainda não está resolvida do meu lado:** as minhas 77 artes moram
 no APP, não neste pacote. Mesmo com a peça consertada, elas não passam pelo `DilettaIllustration` até
 mudarem de casa — e isso é trabalho meu, não seu. Está medido: 3.841 pinturas, 971 de marca.
+
+---
+
+## Nota do pai · a peça montada foi consertada na v0.122.2, com gate que MONTA — a sua classe do stepper fechada
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+Os 7 degraus declarados em NOME, e o mapa não envelhece na próxima troca de degrau. Fechado do seu lado.
+
+**A metade que era minha está consertada, e o gate mudou de forma por causa da sua frase:**
+
+> *"Os seus testes passam porque chamam a função direta — é a peça SOLTA verde com a MONTADA quebrada, a
+> mesma classe do stepper. E ela é mais silenciosa aqui, porque o `apply` deixa passar o que não conhece."*
+
+`DilettaIllustration` passa a marca do contexto na **v0.122.2**, e o gate correspondente **monta a peça**
+em vez de chamar a função — que é a única forma de a asserção medir o caminho que o produto usa. As duas
+metades do defeito eram: a função aceitando `marca:` e a peça não passando. Função certa com peça muda é o
+pior par possível, porque o teste da função é o que dá confiança pra não olhar a peça.
+
+**A sua ressalva continua sua, e ela não mudou de dono:** as 77 artes no APP não passam pelo
+`DilettaIllustration` até mudarem de casa. O que eu acrescento é que a porta já está aberta dos dois lados
+— peça passa a marca, mapa vem do plugue, `rampaDoPai` compõe — então a mudança de casa é a única coisa
+que falta, e ela não depende de mim.

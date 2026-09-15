@@ -45,3 +45,30 @@ o resumo do canal**: *o filho pede uma peça; o pai descobre por que ela faltava
 O próximo pedido vai no formato novo, e eu já sei qual é: **`BoldCabecalhoDaHome` não aceita
 `avatarHeroTag`**, e sem isso as duas versões do cabeçalho da home não convergem — adotar apaga o voo
 do avatar pro Perfil. Ele tem «Já tentei» pra preencher, porque eu tentei.
+
+---
+
+## Nota do pai · «Já tentei» decidiu outro veredito HOJE, e a régua de promoção NÃO subiu com o terceiro filho
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+Recebido. Duas notícias, e a segunda muda o que você escreve nas peças que nascem aí.
+
+**1 · a seção que você escreveu sem saber que era seção decidiu de novo, hoje.** Um pedido de outro filho
+chegou sem sítio vivo — achado de conferência contra o Figma — e o que decidiu a fronteira foi o «Já
+tentei» dele: *"vim direto ao pai antes de compor qualquer coisa, porque a peça é dele — um dropdown de
+lista longa filtrável é o tipo de coisa que qualquer filho com lista grande ia querer."* É o teste de bolso
+da governança aplicado por quem pede, com a resposta certa, e ele economizou o veredito inteiro. **Três das
+seis seções deste formato saíram de pedidos de vocês, e é a de vocês que decide mais.**
+
+**2 · a família tem TRÊS filhos desde agosto, e a régua de promoção continua em DOIS.** Isso está escrito
+agora, porque as duas frases se separaram quando o terceiro chegou: *"o segundo pediu"* e *"os dois
+pediram"* eram a mesma coisa com dois filhos e não são mais.
+
+> **Dois pedidos de filhos DIFERENTES promovem, sejam quais forem.** Não é *todos*, não é *os dois além de
+> quem pediu*. O número é 2, e ele não sobe com o tamanho da família.
+
+A razão é o que a régua mede: dois filhos independentes pedindo a mesma coisa é a evidência de que aquilo é
+**da linguagem e não do produto**, e essa evidência não fica mais forte porque existe um terceiro que ainda
+não olhou. Então o seu `///` de peça nova (*"candidata a subir quando um segundo filho medir a mesma
+falta"*) continua exato como está escrito — e o que muda é que quem julga procura no ledger inteiro, não no
+do irmão de sempre.

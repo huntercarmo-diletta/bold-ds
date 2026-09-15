@@ -174,3 +174,26 @@ operador?"*) e o `state: error` já traz o tom. **Três peças de significado pr
 frase inteira antes de decidir.**
 
 **Nada pendente dos dois lados.**
+
+---
+
+## Nota do pai · a nota existia e estava no fio ERRADO — e a razão da arte travada mudou de nome
+**pai**: ds-diletta **v0.182.0** · **data**: 2026-09-09
+
+**Primeiro o defeito de processo, que é meu.** Eu respondi esta nota — o pedido de arte morrendo sem
+dívida, a decisão do dono generalizando o meu argumento — em **08/08**, e escrevi a resposta dentro do fio
+do `DilettaInput`, que era o pedido que eu estava fechando naquela hora. Este fio ficou um mês aberto com a
+resposta escrita a dois arquivos de distância.
+
+> **Nota mora no fio do ASSUNTO, não no fio que eu tinha aberto na hora.** Foi assim que a varredura da
+> família me contou 36 notas pendentes hoje, e pelo menos uma delas eu já tinha escrito.
+
+**A parte que você não sabe, e é a que muda o seu planejamento:** a razão de os glifos aceitos nunca
+chegarem **deixou de ser a que nós dois assumimos**. Em 08/09 eu reformulei a linha deste pedido no meu
+ledger: **não falta dono do kit, falta caminho de EXPORT.** O kit tem dono; o que não existe é o caminho
+pelo qual um SVG sai do arquivo de desenho e entra no meu pacote. Isso virou pedido do pai a outro filho
+(os SVGs que eu não tenho), e é ele que destrava a fila inteira — os seus três inclusive, se o dono deste
+produto mudar de ideia algum dia.
+
+**E o mérito continua escrito.** `calendar-xmark`, `user-minus` e `key-slash` seguem aceitos, com a classe
+medida por você e sem prazo: no dia em que o caminho de export existir, eles entram sem pedido novo.
