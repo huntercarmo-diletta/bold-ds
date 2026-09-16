@@ -1,6 +1,9 @@
+import 'dart:math' as math;
+
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'coreflow_gradients.dart';
 import 'coreflow_scheme.dart';
 
 /// A INSTÂNCIA WEB da tinta: os papéis da linguagem, resolvidos com [p], escritos como `--cps-*`.
@@ -227,3 +230,51 @@ String coreflowAjustesCss(
 String tagDaPeca(String componente) => componente
     .replaceAllMapped(RegExp('(?<=.)[A-Z]'), (m) => '-${m[0]}')
     .toLowerCase();
+
+/// Os GRADIENTES do produto, como `linear-gradient` — e eles são do FILHO, não da linguagem.
+///
+/// O `///` do `CoreflowGradients` conta por quê: as paradas saem do arquivo do símbolo, e curva de
+/// logo não é rampa — *«forçá-la em `papeisExtras` seria oito entradas fingindo ser papel»*. Os
+/// atalhos moravam no pai e mudaram para o pacote do produto: **nome do pai, valor de filho**.
+///
+/// A falta disto foi medida do lado de fora: o Internet Banking pinta sete peças com o degradê da
+/// marca — avatar, botão flutuante, variante de destaque —, e não havia de onde tirá-lo. A saída
+/// que sobrava era declarar tinta de marca no repo do consumidor, que é o que a `ADR-007` proíbe.
+///
+/// O ÂNGULO vira `deg`: o Flutter fala em `Alignment` de canto a canto, o CSS em graus. `(-0.8,-1)`
+/// a `(0.8,1)` é o eixo diagonal, e `135deg` é o mesmo traço no sistema do navegador — medido, não
+/// convertido de cabeça: `atan2` do vetor entre os dois pontos, com o zero do CSS apontando pra cima.
+///
+/// A TINTA SOBRE O GRADIENTE sai junto, e não é detalhe: no primeiro produto ela é o vinho-tinta, e
+/// a troca dela é o que destravou o lockup — com branco, o amarelo dava **1,21:1**, que é conteúdo
+/// que não existe na tela.
+String coreflowGradientesCss(CoreflowGradients g) {
+  String css(LinearGradient lg) {
+    final graus = _grausDe(lg.begin, lg.end);
+    final paradas = <String>[
+      for (var i = 0; i < lg.colors.length; i++)
+        lg.stops == null
+            ? _hex(lg.colors[i])
+            : '${_hex(lg.colors[i])} ${(lg.stops![i] * 100).toStringAsFixed(0)}%',
+    ];
+    return 'linear-gradient(${graus}deg, ${paradas.join(', ')})';
+  }
+
+  final linhas = [
+    for (final e in g.todos.entries) '  --cps-gradiente-${e.key}: ${css(e.value)};',
+    '  --cps-onGradiente: ${_hex(g.tintaSobreOGradiente)};',
+  ];
+  return ':root {\n${linhas.join('\n')}\n}\n';
+}
+
+/// O ângulo do CSS a partir dos dois cantos do Flutter.
+///
+/// `Alignment` vai de -1 a 1 com o Y crescendo pra BAIXO; o `deg` do CSS mede a partir do topo, no
+/// sentido horário. Converter de cabeça erra o sinal do Y — este é o mesmo cálculo que o
+/// `linear-gradient` faz, escrito uma vez.
+int _grausDe(AlignmentGeometry begin, AlignmentGeometry end) {
+  final a = begin.resolve(TextDirection.ltr), b = end.resolve(TextDirection.ltr);
+  final dx = b.x - a.x, dy = b.y - a.y;
+  final graus = (math.atan2(dx, -dy) * 180 / math.pi).round();
+  return (graus + 360) % 360;
+}

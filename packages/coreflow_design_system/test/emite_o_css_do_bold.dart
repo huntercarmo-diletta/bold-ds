@@ -34,6 +34,9 @@ String cssDoBold() => [
       '\n/* A ESCALA DE TIPO DESTE PRODUTO. Seis degraus têm px que o avô não tem — decisão escrita\n'
           '   no `///` do `CoreflowType`, não deriva. Os homônimos SOBRESCREVEM os dele. */\n',
       coreflowTipoCss(_degrausDoBold, familia: "'${BoldFonts.familyRaw}', system-ui, sans-serif"),
+      '\n/* OS GRADIENTES DESTE PRODUTO. A curva sai do símbolo e a tinta que vai por cima é o\n'
+          '   vinho-tinta — com branco, o amarelo daria 1,21:1. */\n',
+      coreflowGradientesCss(ContaBold.gradientes),
       // OS AJUSTES POR COMPONENTE, por último: eles redeclaram papel DENTRO de um elemento, então
       // precisam vir depois das declarações de raiz que sobrescrevem. Hoje este produto não declara
       // nenhum e isto sai vazio — o encanamento existe pra que declarar um não peça mais nada.

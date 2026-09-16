@@ -315,3 +315,11 @@
   --cps-type-monoCaption-line-height: normal;
   --cps-type-monoCaption-weight: 400;
 }
+
+/* OS GRADIENTES DESTE PRODUTO. A curva sai do símbolo e a tinta que vai por cima é o
+   vinho-tinta — com branco, o amarelo daria 1,21:1. */
+:root {
+  --cps-gradiente-primary: linear-gradient(141deg, #fe3976 0%, #fe3d74 14%, #fe4a70 29%, #fe5e69 45%, #fe7b5e 60%, #fea150 75%, #fece40 91%, #feed35 100%);
+  --cps-gradiente-accent: linear-gradient(145deg, #c47c0a, #85520a);
+  --cps-onGradiente: #16060a;
+}

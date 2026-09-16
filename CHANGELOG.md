@@ -20,6 +20,47 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.106.0] — 2026-09-16
+
+### O gradiente da marca atravessa para a web
+
+**Só acrescenta.** Três tokens novos, nada muda de valor, e nada sai.
+
+| token | o que é |
+|---|---|
+| `--cps-gradiente-primary` | a curva do lockup, **oito paradas** com os offsets do símbolo |
+| `--cps-gradiente-accent` | o âmbar descendo pro tostado, para controle pequeno |
+| `--cps-onGradiente` | a tinta que vai POR CIMA — o vinho-tinta |
+
+**A falta foi medida do lado de fora**, e é o melhor tipo de achado. O Internet Banking pinta **sete
+peças** com o degradê da marca — avatar, botão flutuante, variante de destaque, barra de topo — e não
+havia de onde tirá-lo: a linguagem não publica gradiente para a web, e no Dart os atalhos saíram do
+pai para o pacote do produto (*«nome do pai, valor de filho»*). A saída que sobrava ao consumidor era
+declarar tinta de marca no repo dele, que é o que a `ADR-007` proíbe.
+
+**A curva é a do símbolo, parada por parada** — não uma amostra. O `///` do `CoreflowGradients` conta
+o preço de errar isso: as paradas já foram declaradas SEM offset um dia, o Flutter as distribuiu
+igualmente, e o coral foi parar em 0,5 quando no símbolo ele está em 0,60. *«A curva da UI e a do
+logo eram diferentes no mesmo dia em que eu disse que tinham voltado a ser a mesma.»*
+
+**O ângulo é medido, não convertido de cabeça.** `Alignment` vai de -1 a 1 com o Y crescendo pra
+BAIXO; o `deg` do CSS mede do topo, no sentido horário. Erro de sinal num gradiente diagonal é a
+curva espelhada, que ninguém percebe olhando um quadrado pequeno.
+
+### Gates
+
+Dois, e o segundo teve o controle refeito. O primeiro anda as paradas do app e exige cada uma na
+folha, com o offset. O segundo mede o ângulo — e a primeira versão dele tentava montar um gradiente
+VERTICAL de controle, o que não é possível: a classe crava o eixo e o construtor só recebe as
+paradas. O controle que ficou é melhor: **os dois gradientes têm eixos diferentes** (±0,8 e ±0,7), e
+um conversor quebrado que devolvesse constante daria o mesmo número para os dois — passando por
+qualquer teste que olhasse um só.
+
+Provado por mutação: ângulo constante reprova com *«o conversor virou constante»*; sinal do Y
+invertido reprova com *«primary aponta para cima»*.
+
+227 testes no filho, 101 no pai, 109 no catálogo, 15 no filho gerado.
+
 ## [0.105.0] — 2026-09-15
 
 ### A entrelinha que a fonte manda, a forma por família, e o avô dois degraus à frente

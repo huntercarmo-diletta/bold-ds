@@ -239,6 +239,57 @@ void main() {
             'cascata. Face a menos é a peça caindo na folha dele sem ninguém saber.');
   });
 
+  test('o GRADIENTE da web é a mesma curva que o app desenha', () {
+    // A curva sai do ARQUIVO DO SÍMBOLO, parada por parada, e o `///` do `CoreflowGradients` conta o
+    // preço de errá-la: as paradas foram declaradas sem offset um dia, o Flutter as distribuiu
+    // igualmente, e o coral foi parar em 0,5 quando no símbolo ele está em 0,60 — a curva da UI e a
+    // do logo ficaram diferentes no mesmo dia em que alguém disse que tinham voltado a ser a mesma.
+    //
+    // A falta da emissão foi medida no consumidor: o IB pinta SETE peças com o degradê da marca, e
+    // não havia de onde tirá-lo. A saída que sobrava era declarar tinta de marca no repo de quem
+    // consome, que é o que a ADR-007 proíbe.
+    final css = coreflowGradientesCss(ContaBold.gradientes);
+    final g = ContaBold.gradientes;
+
+    // TODA parada do app aparece na folha, na ordem e com o offset dela.
+    for (var i = 0; i < g.primary.colors.length; i++) {
+      final cor = _hex(g.primary.colors[i]);
+      final pct = (g.primary.stops![i] * 100).round();
+      expect(css, contains('$cor $pct%'),
+          reason: 'a parada $i da curva do símbolo não saiu na folha');
+    }
+    expect(g.primary.colors, hasLength(g.primary.stops!.length),
+        reason: 'parada sem offset é o defeito de 20/08 voltando: o navegador distribui igual');
+
+    // E a TINTA que vai por cima, que é o que destravou o lockup.
+    expect(css, contains('--cps-onGradiente: ${_hex(g.tintaSobreOGradiente)}'));
+  });
+
+  test('o ÂNGULO do CSS é o mesmo traço do Flutter, e os dois eixos continuam DIFERENTES', () {
+    // `Alignment` vai de -1 a 1 com o Y crescendo pra BAIXO; o `deg` do CSS mede do topo, no sentido
+    // horário. Converter de cabeça erra o sinal do Y — e erro de sinal num gradiente diagonal é a
+    // curva espelhada, que ninguém percebe olhando um quadrado pequeno.
+    //
+    // O eixo é CRAVADO na classe (o construtor recebe só as paradas), então não dá para montar um
+    // gradiente vertical de controle. O controle que serve é outro, e é melhor: **os dois
+    // gradientes têm eixos diferentes no Dart** — `primary` vai de (-0,8,-1) a (0,8,1) e `accent` de
+    // (-0,7,-1) a (0,7,1). Um conversor quebrado que devolvesse constante daria o MESMO número para
+    // os dois, e passaria por qualquer teste que olhasse um só.
+    final css = coreflowGradientesCss(ContaBold.gradientes);
+    final graus = RegExp(r'gradiente-(\w+): linear-gradient\((\d+)deg')
+        .allMatches(css)
+        .map((m) => (nome: m.group(1)!, g: int.parse(m.group(2)!)))
+        .toList();
+    expect(graus, hasLength(2));
+    for (final x in graus) {
+      // Descendo da esquerda-alta para a direita-baixa: mais de 90° e menos de 180° no CSS.
+      expect(x.g, greaterThan(90), reason: '${x.nome} aponta para cima — o sinal do Y inverteu');
+      expect(x.g, lessThan(180), reason: '${x.nome} passou da vertical');
+    }
+    expect(graus[0].g, isNot(graus[1].g),
+        reason: 'os dois eixos são diferentes no Dart e saíram iguais: o conversor virou constante');
+  });
+
   group('e a régua acima sabe morder — nas DUAS metades', () {
     // A REGRA TEM DUAS METADES, e o PESO exercita só uma. Medido em 15/09: os 20 degraus do Bold
     // declaram peso, todos. O `spacing` tem os dois casos (13 declaram, 7 não) e por isso a régua
