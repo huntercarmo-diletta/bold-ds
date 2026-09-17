@@ -301,7 +301,7 @@ void main() {
     f.parent.createSync(recursive: true);
     f.writeAsStringSync(css);
 
-    final vars = RegExp(r'--cps-[A-Za-z0-9-]+\\s*:').allMatches(css).length;
+    final vars = RegExp(r'--diletta-[A-Za-z0-9_-]+\\s*:').allMatches(css).length;
     // Controle negativo: folha curta demais não é erro no navegador, é silêncio.
     expect(vars, greaterThan(100), reason: 'a folha saiu curta demais pra ser os papéis');
     stdout.writeln('escrito: \${f.path} — \$vars declarações');
@@ -365,7 +365,7 @@ String indexJsDe(Opcoes op) => '''
 //     import '${_arquivo(op.id).replaceAll('_', '-')}-web/tokens.css';  // e pinta com a nossa cor
 //
 // Este pacote NÃO reimplementa componente. Ele reexporta os custom elements da linguagem e
-// acrescenta a TINTA deste produto — `--cps-*` é variável CSS, e variável se sobrescreve. A mesma
+// acrescenta a TINTA deste produto — `--diletta-*` é variável CSS, e variável se sobrescreve. A mesma
 // peça, a nossa cor: é o white label do lado web, com o mesmo mecanismo que o Flutter usa com paleta.
 //
 // A ORDEM das folhas importa e é a única pegadinha: as duas do avô primeiro, a nossa por último.
@@ -446,7 +446,7 @@ String gateDoInstaladoDe(Opcoes op) => '''
 //      nome da tag não o invalida. Quem sobe o pino, confia na resposta e publica, publica a versão
 //      velha achando que subiu;
 //
-//   2. as peças web do avô leem `--cps-type-<degrau>-*`, e **o nome do degrau quem escolhe é a peça
+//   2. as peças web do avô leem `--diletta-type-<degrau>-*`, e **o nome do degrau quem escolhe é a peça
 //      DELE**. Se ela pedir um que ninguém declara, a variável não resolve, a declaração morre no
 //      navegador sem erro, e a peça desenha com a letra da PÁGINA hospedeira.
 //
@@ -455,6 +455,9 @@ String gateDoInstaladoDe(Opcoes op) => '''
 import 'dart:convert';
 import 'dart:io';
 
+// `prefixoDaLinguagem` mora aqui: o nome das variáveis é da LINGUAGEM, e um filho que o escrevesse
+// à mão repetiria o erro que a troca de prefixo da v0.107.0 veio desfazer.
+import 'package:coreflow/coreflow.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// A raiz do pacote do avô dentro da pasta de dependências do lado web deste produto.
@@ -490,7 +493,7 @@ Set<String> _degrausPedidos() => Directory('\${_instalado.path}/src')
 const _faces = ['size', 'weight', 'line-height', 'spacing'];
 
 bool _declara(String folha, String degrau, String face) =>
-    folha.contains('--cps-type-\$degrau-\$face:');
+    folha.contains('\${prefixoDaLinguagem}type-\$degrau-\$face:');
 
 /// Os degraus que resolvem MISTURADO — parte na nossa folha, parte na do avô.
 ///
@@ -625,7 +628,7 @@ Map<String, String> _vars(String css, {required bool escuro}) {
       continue;
     }
     if (!dentro) continue;
-    final m = RegExp(r'--cps-([A-Za-z0-9-]+):\\s*([^;]+);').firstMatch(l);
+    final m = RegExp('\${RegExp.escape(prefixoDaLinguagem)}([A-Za-z0-9-]+):\\\\s*([^;]+);').firstMatch(l);
     if (m != null) fora[m.group(1)!] = m.group(2)!.trim();
   }
   return fora;
@@ -775,7 +778,7 @@ void main() {
       expect(_hex(base.comAjustes(ajustes, 'DilettaButton').primary), _hex(base.primaryPressed),
           reason: 'o app não aplicou o ajuste');
       expect(coreflowAjustesCss(ajustes, tagsWeb: tags),
-          contains('diletta-button { --cps-primary: var(--cps-primaryPressed); }'),
+          contains('diletta-button { \${prefixoDaLinguagem}primary: var(\${prefixoDaLinguagem}primaryPressed); }'),
           reason: 'a web não aplicou o ajuste que o app aplica');
     });
 
@@ -783,7 +786,7 @@ void main() {
       final declarados = ${op.id}.ajustesDePapel;
       final css = coreflowAjustesCss(declarados, tagsWeb: tags);
       for (final a in declarados.where((a) => tags.contains(tagDaPeca(a.componente)))) {
-        expect(css, contains('\${tagDaPeca(a.componente)} { --cps-\${a.de}: var(--cps-\${a.para}); }'),
+        expect(css, contains('\${tagDaPeca(a.componente)} { \${prefixoDaLinguagem}\${a.de}: var(\${prefixoDaLinguagem}\${a.para}); }'),
             reason: '\${a.componente} tem instância web e o ajuste dele não saiu na folha');
       }
     });

@@ -9,7 +9,7 @@
 //      nome da tag não o invalida. Quem sobe o pino, confia na resposta e publica, publica a versão
 //      velha achando que subiu;
 //
-//   2. as peças web do avô leem `--cps-type-<degrau>-*`, e **o nome do degrau quem escolhe é a peça
+//   2. as peças web do avô leem `--diletta-type-<degrau>-*`, e **o nome do degrau quem escolhe é a peça
 //      DELE**. Se ela pedir um que ninguém declara, a variável não resolve, a declaração morre no
 //      navegador sem erro, e a peça desenha com a letra da PÁGINA hospedeira.
 //
@@ -18,6 +18,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+// `prefixoDaLinguagem` mora aqui: o nome das variáveis é da LINGUAGEM, e um filho que o escrevesse
+// à mão repetiria o erro que a troca de prefixo da v0.107.0 veio desfazer.
+import 'package:coreflow/coreflow.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// A raiz do pacote do avô dentro da pasta de dependências do lado web deste produto.
@@ -53,7 +56,7 @@ Set<String> _degrausPedidos() => Directory('${_instalado.path}/src')
 const _faces = ['size', 'weight', 'line-height', 'spacing'];
 
 bool _declara(String folha, String degrau, String face) =>
-    folha.contains('--cps-type-$degrau-$face:');
+    folha.contains('${prefixoDaLinguagem}type-$degrau-$face:');
 
 /// Os degraus que resolvem MISTURADO — parte na nossa folha, parte na do avô.
 ///

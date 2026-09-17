@@ -62,7 +62,7 @@ void main() {
     f.parent.createSync(recursive: true);
     f.writeAsStringSync(css);
 
-    final vars = RegExp(r'--cps-[A-Za-z0-9-]+\s*:').allMatches(css).length;
+    final vars = RegExp(r'--diletta-[A-Za-z0-9_-]+\s*:').allMatches(css).length;
     // Controle negativo: folha curta demais não é erro no navegador, é silêncio.
     expect(vars, greaterThan(100), reason: 'a folha saiu curta demais pra ser os papéis');
     stdout.writeln('escrito: ${f.path} — $vars declarações');
