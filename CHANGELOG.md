@@ -20,6 +20,77 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.108.0] — 2026-09-17
+
+### Nasce o segundo filho — o Norte Benk, do Berço ao pacote em um comando
+
+**Só acrescenta.** Nada do Conta BOLD muda: nenhum token, nenhum papel, nenhuma peça — o diff do pai, do filho e da instância web contra a `v0.107.0` está vazio.
+O que entra é um pacote novo em `packages/`, ao lado dos outros, e a versão sobe no filho Bold e na
+instância web por convenção — *«uma língua, um número»* — sem que nenhum dos dois tenha mudado.
+
+| | antes | agora |
+|---|---|---|
+| filhos do Coreflow neste repo | 1 — o Conta BOLD | **2**: `coreflow_design_system` e `norte_benk_coreflow` |
+| pacotes em `packages/` | 4 | **5** |
+| de quem o filho depende | só do pai | **igual** — `norte_benk_coreflow` depende de `coreflow` por `path:`, e de mais nada |
+
+#### De onde ele veio
+
+Do **Berço Coreflow**, o site em que o cliente preenche a marca e sai com a ficha conferida. O primeiro
+envio (17/09, `norteBenk`) trouxe uma cor puxada do próprio logo, `#2A57A5`, três artes em SVG
+(colorido, positivo/negativo e símbolo), a forma "descontraído" e uma fonte pedida. A conferência do
+site fechou em **7 ok, 3 atenção, 0 falha** — texto sobre a marca a 6,99:1 no claro e 6,12:1 no
+escuro, contra o piso de 4,5:1.
+
+O pacote nasceu pelo comando do pai — `dart run coreflow:novo_filho --id norteBenk --nome "Norte Benk"
+--cor '#2A57A5'` — e três coisas entraram depois, na ordem que a ficha pede: a declaração do produto
+com a marca visual (`DilettaBrand` em três artes, `nomeDaMarca`, a proporção do lockup e
+`raioDeBotao: 26` / `raioDeFolha: 32` por `.comMaterial` sobre a paleta do `daMarca`), os três SVG em
+`assets/logos/`, e o `path:` do pai. Sem `tipografia:` de propósito: a Gotham é licenciada e não está
+no catálogo do Google Fonts — fica a escala do Coreflow e a família do sistema, e o time embala a
+fonte na implantação.
+
+#### O gerador ficou para trás do prefixo, e o filho novo descobriu
+
+A `v0.107.0` trocou o prefixo emitido para `--diletta-*`, com a ponte `--cps-x: var(--diletta-x)`, e
+atualizou os testes do Bold e a folha dele. **Não atualizou o molde em `novo_filho.dart` nem o
+exemplo `filho_do_coreflow`**: os quatro testes de um filho novo ainda nascem contando `--cps-`, e a
+suíte do exemplo está vermelha nesta `main` — 4 falhas, medidas antes deste release. É o modo de
+envelhecer que o gate do gerador existe para pegar, e ele não pegou porque compara o exemplo com o
+molde, e os dois envelheceram juntos.
+
+Os testes do Norte Benk receberam o mesmo ajuste que os do Bold receberam em `3629a23`: o emissor
+escreve a folha com `coreflowPonteDoNomeAntigo`, os contadores e o parser leem `prefixoDaLinguagem`,
+o portão do instalado lê `tokens/diletta-tokens.css`. A folha dele sai com **72 nomes, 210 declarações
+e 72 apelidos de ponte**. O molde do gerador fica como pendência do pai, com o nome escrito aqui.
+
+#### O que NÃO vem nesta versão, e por quê
+
+- **A fonte.** Pedida, não declarada — licenciada. Entra por `tipografia:` quando o time a embalar.
+- **A arte negativa no lugar certo.** O logo colorido separa só 13% do fundo escuro; a versão branca
+  mede 17,9:1. `DilettaBrand` tem UM `logo`, e as duas artes ao mesmo tempo estão pedidas em
+  `docs/pedidos/2026-09-14-o-logo-tem-uma-arte-e-a-pagina-tem-duas.md`, sem veredito. Até lá, quem
+  monta o app aplica a branca à mão onde a colorida não separa.
+- **As outras seis formas.** O "descontraído" declara cartão 32, vidro 24, nav 28, campo 24, pílula 14
+  e miúdo 12; o produto declara só botão e folha. O caminho é `comMaterial(medidas:)`, que existe
+  desde o avô v0.194.0 — a ficha do Berço foi gerada contra o v0.180.0 e ainda não o emite.
+- **Nove campos em branco** — razão social, ISPB, telefone, e-mail, termos… — que o cliente não
+  preencheu e o time completa na implantação. Não são do pacote: são do app.
+
+#### Como o app recebe
+
+Ainda não recebe. O `tool/ds_vendor.sh` do app conhece avô, base e `coreflow_design_system`; a quarta
+irmã precisa entrar no script, e o app precisa de um `bootstrap(produto:)` que hoje não existe —
+treze sítios leem `ContaBold` direto. O `path:` do pubspec é o de dentro do monorepo; na entrega por
+tag, o próprio pubspec pede `git:` + `ref:`.
+
+### Gates
+
+15 no Norte Benk, sem pulo, com o pacote web do avô instalado para os gates que olham o que está
+INSTALADO. Este Mac não tem Node: o `npm install` foi reproduzido com `git archive` da tag
+`web-v0.198.0` (commit `e7460ff`), e o `web/package-lock.json` foi escrito à mão nesse mesmo commit,
+como o do exemplo. 230 passam no filho Bold, sem mudança nele.
+
 ## [0.107.0] — 2026-09-17
 
 ### O avô vem quatro degraus à frente, e traz o movimento que o filho cravava à mão
