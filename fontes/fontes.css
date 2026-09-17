@@ -1,0 +1,29 @@
+/* A INTER deste DS, pelos cinco pesos que o `CoreflowType` usa.
+ *
+ * Não convertemos fonte à mão: isto reexporta o `@fontsource/inter`, que é mantido e vem com as
+ * FEATURES NUMÉRICAS ligadas — `tnum`, `pnum`, `frac`, `numr`, `dnom`. A primeira versão disto era
+ * uma conversão nossa dos `.ttf` do pacote Flutter, e ela saía 35 KB mais leve **jogando o `tnum`
+ * fora**: num extrato, valor deixa de alinhar em coluna. Leveza que custa algarismo tabular não é
+ * leveza num banco.
+ *
+ * ## É a mesma Inter do app?
+ *
+ * O pacote Flutter empacota a **4.000**; o fontsource serve a **4.001**. Medido antes de trocar:
+ * `unitsPerEm`, ascent, descent, capHeight e xHeight IDÊNTICOS, e 80 das 81 letras testadas com a
+ * mesma largura de avanço. A única diferença é o dígito `5`, com 30 de 2048 unidades — **0,23px em
+ * texto de 16px**. App e web desenham a mesma palavra no mesmo lugar.
+ *
+ * ## Por que a fonte viaja no PACOTE
+ *
+ * O pacote emite `--cps-font-family: Inter`, e os custom elements não declaram fonte — herdam de
+ * quem hospeda. Se o NOME viajasse sem o ARQUIVO, a folha pediria Inter e o navegador cairia no
+ * fallback: o mesmo defeito silencioso das variáveis sem valor. O `.ttf` viaja no pacote Flutter;
+ * o `.woff2` viaja neste.
+ *
+ * Licença: SIL Open Font License 1.1, a mesma dos `.ttf`.
+ */
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/inter/800.css';
