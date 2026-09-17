@@ -224,6 +224,17 @@ class CoreflowProduto {
   /// Cópia campo a campo porque `DilettaBrand` não tem `copyWith`. O preço está escrito: um campo novo
   /// do pai que não estiver nesta lista chega no default no tema. Um `copyWith` no pai é o jeito de
   /// tirar isto daqui.
+  ///
+  /// **E o preço foi cobrado, em 17/09.** `nomeDaMarca` entrou no plugue depois desta lista e ninguém
+  /// o acrescentou aqui: todo produto que não declara `corDoLogo` — o Bold inclusive — perdia o nome
+  /// da marca ao montar o tema. O campo é o rótulo de leitor de tela da co-marca, e a peça do avô
+  /// resolvia a ausência com o nome de OUTRO produto cravado (`?? "CPF Seguro"`, consertado por ele na
+  /// `v0.185.0`) — então a perda daqui virava, na tela, o nome de outro cliente.
+  ///
+  /// O gate `a_marca_do_modo_nao_perde_campo_test` fecha a CLASSE, e não só este caso: ele conta os
+  /// campos do plugue lendo o arquivo do avô e falha quando aparece um que esta lista não copia. Um
+  /// `copyWith` no avô continua sendo o jeito de tirar isto daqui — está PEDIDO em
+  /// `docs/pedidos/2026-09-17-a-copia-campo-a-campo-perde-campo-e-perdeu.md`.
   DilettaBrand marcaNo(Brightness brilho) {
     if (marca.corDoLogo != null) return marca;
     return DilettaBrand(
@@ -234,6 +245,7 @@ class CoreflowProduto {
       bandeiraDoCartao: marca.bandeiraDoCartao,
       carteirasDeSistema: marca.carteirasDeSistema,
       selosDeLoja: marca.selosDeLoja,
+      nomeDaMarca: marca.nomeDaMarca,
       corDoLogo: brilho == Brightness.dark
           ? DilettaAbsoluteColors.white
           : DilettaAbsoluteColors.black,
