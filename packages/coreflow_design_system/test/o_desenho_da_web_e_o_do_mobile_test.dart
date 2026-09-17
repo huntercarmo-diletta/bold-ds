@@ -53,7 +53,7 @@ Map<String, String> _vars(String css, {required bool escuro}) {
       continue;
     }
     if (!dentro) continue;
-    final m = RegExp(r'--cps-([A-Za-z0-9-]+):\s*([^;]+);').firstMatch(l);
+    final m = RegExp('${RegExp.escape(prefixoDaLinguagem)}([A-Za-z0-9-]+):\\s*([^;]+);').firstMatch(l);
     if (m != null) fora[m.group(1)!] = m.group(2)!.trim();
   }
   return fora;
@@ -262,7 +262,7 @@ void main() {
         reason: 'parada sem offset é o defeito de 20/08 voltando: o navegador distribui igual');
 
     // E a TINTA que vai por cima, que é o que destravou o lockup.
-    expect(css, contains('--cps-onGradiente: ${_hex(g.tintaSobreOGradiente)}'));
+    expect(css, contains('${prefixoDaLinguagem}onGradiente: ${_hex(g.tintaSobreOGradiente)}'));
   });
 
   test('o ÂNGULO do CSS é o mesmo traço do Flutter, e os dois eixos continuam DIFERENTES', () {
@@ -401,7 +401,7 @@ void main() {
       // WEB: a mesma troca, como alias dentro da tag. Alias e não cor: a folha tem que seguir
       // `primaryPressed` quando ele mudar, e cor copiada aqui divergiria na próxima paleta.
       final css = coreflowAjustesCss(ajustes, tagsWeb: tags);
-      expect(css, contains('diletta-button { --cps-primary: var(--cps-primaryPressed); }'),
+      expect(css, contains('diletta-button { ${prefixoDaLinguagem}primary: var(${prefixoDaLinguagem}primaryPressed); }'),
           reason: 'a web não aplicou o ajuste que o app aplica');
     });
 
@@ -431,7 +431,7 @@ void main() {
           declarados.where((a) => tags.contains(tagDaPeca(a.componente))).toList();
       final css = coreflowAjustesCss(declarados, tagsWeb: tags);
       for (final a in deveriamSair) {
-        expect(css, contains('${tagDaPeca(a.componente)} { --cps-${a.de}: var(--cps-${a.para}); }'),
+        expect(css, contains('${tagDaPeca(a.componente)} { ${prefixoDaLinguagem}${a.de}: var(${prefixoDaLinguagem}${a.para}); }'),
             reason: '${a.componente} tem instância web e o ajuste dele não saiu na folha');
       }
     });

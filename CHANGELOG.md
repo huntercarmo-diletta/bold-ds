@@ -53,17 +53,49 @@ números. A frase dele fecha o caso: ***«transcrição à mão não erra só o 
 a fonte não está emitida»***. O movimento do IB hoje não é o movimento do app, e ninguém veria isso
 sem a emissão.
 
-#### O prefixo do CSS muda, e há ponte
+#### Esta folha passa a emitir `--diletta-*`, e quase saiu quebrada
 
 A `v0.198.0` do avô renomeia toda variável de `--cps-*` para `--diletta-*` — a pedido do filho A,
 cujo argumento é que `cps` é a sigla do PRIMEIRO consumidor carimbada na saída de quem é consumido
-por três.
+por três. Ele emitiu uma ponte: `cps-tokens.css` importa `diletta-tokens.css` e aponta cada nome por
+`var()`, 245 apelidos.
 
-**Nenhum consumidor precisa mexer em nada nesta versão.** As folhas com o nome velho continuam
-emitidas: `cps-tokens.css` importa `diletta-tokens.css` e aponta cada nome por `var()`, **245
-apelidos** (188 + 57). Alias não copia valor, então o modo escuro continua seguindo o seletor.
+**A ponte dele não nos cobre, e descobrir isso custou uma release.** Ela serve a quem ESCREVE
+`--cps-*` na própria folha — um consumidor. Nós não escrevemos: nós **sobrescrevemos**. E
+sobrescrever o nome velho não alcança quem lê o novo, porque as peças dele passaram a ler
+`--diletta-*`.
 
-A ponte sai na **v0.210.0** do avô, e a migração vira tarefa própria de cada consumidor.
+Medido num diretório vazio, com o pacote instalado pela tag, antes de publicar:
+
+    <diletta-button>  desenhou em  #17a37d   ← o verde de REFERÊNCIA
+    a nossa folha declarava        #f66fa0   ← o rosa do Bold, que ninguém lia
+
+**Sem um erro no console.** É o modo de falhar que o README deste pacote já descrevia — *«fora de
+ordem, a referência ganha e a tela sai verde»* — chegando por outra porta: não pela ordem, pelo NOME.
+
+O conserto: o prefixo virou **uma constante** no emissor (estava cravado em 22 literais), a folha
+passa a declarar `--diletta-*`, e **nós emitimos a nossa própria ponte** — 149 apelidos `--cps-*`
+apontando para ela, pelo mesmo mecanismo que o avô nos deu. O Internet Banking tem 2.315 ocorrências
+do nome velho e não precisa mexer em nada.
+
+A ponte é derivada da FOLHA, não de uma segunda lista, e isso tem nome: a ponte do avô foi feita por
+expressão regular que não lia o `_`, e `--diletta-s0_5` e `--diletta-s1_5` ficaram sem alias — dois
+degraus mudos, achados pelo gate dele e não por olho.
+
+#### O gate que faltava, e por que 440 testes passaram
+
+Todos os gates conferiam a folha contra a FONTE dela: que a emissão corresponde ao Dart, que a versão
+instalada casa com o pino, que os degraus resolvem. **Todos certos, e nenhum perguntava a única coisa
+que este pacote existe para garantir: a peça do avô, desenhada, sai na cor deste produto?**
+
+Nasce `a_peca_do_avo_le_o_que_esta_folha_declara_test.dart`: lê os `var(--x)` dos fontes das peças do
+avô, lê o que esta folha declara, e reprova quando declaramos um papel com nome diferente do que a
+peça lê. Provado por mutação — devolver o prefixo antigo reprova.
+
+Dois gates vizinhos também estavam olhando o lugar errado e foram corrigidos junto: o que mede os
+degraus de tipo lia a folha de PONTE do avô, que só tem apelidos e nenhum valor.
+
+A ponte dele sai na **v0.210.0**; a nossa sai quando o consumidor migrar.
 
 #### A escada de espaço aparece inteira no catálogo
 
@@ -86,7 +118,7 @@ o terceiro, que explica o próprio defeito na mensagem de erro: *«a versão INS
 pino diz»* — o `npm install` responde «up to date» porque o lock guarda o COMMIT já resolvido, e
 trocar o nome da tag não o invalida. O erro traz o comando que força a re-resolução.
 
-440 testes verdes: 101 no pai, 227 no filho, 112 no catálogo. `flutter analyze` limpo.
+443 testes verdes: 101 no pai, 230 no filho, 112 no catálogo. `flutter analyze` limpo.
 
 ## [0.106.0] — 2026-09-16
 

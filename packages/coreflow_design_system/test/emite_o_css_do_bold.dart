@@ -43,6 +43,15 @@ String cssDoBold() => [
       _ajustes(),
     ].join();
 
+/// A folha inteira: as famílias, e a PONTE do nome antigo derivada delas.
+///
+/// A ponte vem por último e é calculada a partir do que saiu acima — token novo em qualquer família
+/// ganha alias sozinho, e família que sair leva o alias junto.
+String cssDoBoldComPonte() {
+  final css = cssDoBold();
+  return css + coreflowPonteDoNomeAntigo(css);
+}
+
 String _ajustes() {
   final css = coreflowAjustesCss(ContaBold.produto.ajustesDePapel, tagsWeb: tagsDaWeb());
   return css.isEmpty ? '' : '\n/* AJUSTES DE PAPEL POR COMPONENTE. */\n$css';
@@ -66,14 +75,25 @@ final Map<String, TextStyle> _degrausDoBold = {
 
 void main() {
   test('emite o CSS dos tokens do Bold', () {
-    final css = cssDoBold();
+    final css = cssDoBoldComPonte();
     final f = File('../coreflow_design_system_web/tokens/bold-tokens.css');
     f.parent.createSync(recursive: true);
     f.writeAsStringSync(css);
 
-    final vars = RegExp(r'--cps-[A-Za-z0-9-]+\s*:').allMatches(css).length;
+    final daLinguagem = RegExp(r'--diletta-([A-Za-z0-9_-]+)\s*:').allMatches(css).length;
+    // NOME ÚNICO, e não declaração: a folha declara o mesmo papel três vezes (claro, escuro por
+    // mídia, escuro por atributo) e a ponte precisa de um alias só para os três — alias segue o
+    // seletor. Comparar declaração com apelido foi o primeiro jeito que escrevi, e ele dava 287
+    // contra 149 sem que nada estivesse errado.
+    Set<String> nomesUnicos(String prefixo) =>
+        RegExp('$prefixo([A-Za-z0-9_-]+)\\s*:').allMatches(css).map((m) => m.group(1)!).toSet();
+    final nomes = nomesUnicos('--diletta-');
+    final apelidos = nomesUnicos('--cps-');
     // Controle negativo: folha curta demais não é erro no navegador, é silêncio.
-    expect(vars, greaterThan(250), reason: 'a folha saiu curta demais pra ser as quatro famílias');
-    stdout.writeln('escrito: ${f.path} — $vars declarações');
+    expect(daLinguagem, greaterThan(250), reason: 'a folha saiu curta demais pra ser as quatro famílias');
+    // A ponte cobre TODO nome: um sem alias é um consumidor lendo vazio, calado — foi assim que os
+    // dois meio-passos ficaram mudos na ponte do avô.
+    expect(apelidos, nomes, reason: 'a ponte não cobriu todos os nomes emitidos');
+    stdout.writeln('escrito: ${f.path} — ${nomes.length} nomes, $daLinguagem declarações, ${apelidos.length} apelidos');
   });
 }

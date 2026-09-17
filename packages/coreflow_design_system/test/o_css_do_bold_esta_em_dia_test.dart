@@ -9,7 +9,7 @@ import 'package:coreflow_design_system/coreflow_design_system.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'emite_o_css_do_bold.dart' show cssDoBold;
+import 'emite_o_css_do_bold.dart' show cssDoBold, cssDoBoldComPonte;
 
 /// As colisões DECLARADAS entre o esquema deste produto e os papéis do avô.
 ///
@@ -28,14 +28,14 @@ void main() {
         reason: 'bold-tokens.css não existe — rode `flutter test test/emite_o_css_do_bold.dart`');
     expect(
       f.readAsStringSync(),
-      cssDoBold(),
+      cssDoBoldComPonte(),
       reason: 'o CSS do disco divergiu da fonte. Alguém editou à mão, ou a tinta mudou e ninguém '
           'reemitiu: `flutter test test/emite_o_css_do_bold.dart`',
     );
   });
 
   test('a folha cobre os mesmos papéis de cor que o avô', () {
-    final nossos = RegExp(r'--cps-([A-Za-z]+):')
+    final nossos = RegExp('${RegExp.escape(prefixoDaLinguagem)}([A-Za-z]+):')
         .allMatches(coreflowPapeisCss(BoldPalette.bold, produto: 'x'))
         .map((m) => m.group(1)!)
         .toSet();
@@ -48,7 +48,7 @@ void main() {
 
   test('o esquema do produto só sobrescreve o que está declarado', () {
     Set<String> nomes(String css) =>
-        RegExp(r'--cps-([A-Za-z]+):').allMatches(css).map((m) => m.group(1)!).toSet();
+        RegExp('${RegExp.escape(prefixoDaLinguagem)}([A-Za-z]+):').allMatches(css).map((m) => m.group(1)!).toSet();
     final doAvo = nomes(coreflowPapeisCss(BoldPalette.bold, produto: 'x'));
     final doProduto = nomes(coreflowEsquemaCss(BoldPalette.bold));
     expect(doProduto.intersection(doAvo), _colisoesDeclaradas,
@@ -66,8 +66,8 @@ void main() {
     // `comMaterial`, que é por onde um filho nasce. Montar assim é usar o caminho de verdade.
     final outra = DilettaPalette.daMarca(marca: const Color(0xFF2F6FC4), id: 'x', nome: 'X')
         .comMaterial(raioDeFolha: 8);
-    expect(coreflowMedidasCss(outra), contains('--cps-formaDeFolha: 8px;'));
-    expect(coreflowMedidasCss(BoldPalette.bold), contains('--cps-formaDeFolha: 22px;'));
+    expect(coreflowMedidasCss(outra), contains('${prefixoDaLinguagem}formaDeFolha: 8px;'));
+    expect(coreflowMedidasCss(BoldPalette.bold), contains('${prefixoDaLinguagem}formaDeFolha: 22px;'));
   });
 
   test('o pacote WEB recebe o mesmo avô que este pacote Dart', () {
@@ -92,7 +92,7 @@ void main() {
     // degrau da cadeia. As formas resolvem em três: tabela de medidas → campo `raioDeX` (o alias) →
     // desenho da linguagem. Ler a tabela direto devolve nulo pro Conta BOLD, que declara
     // `raioDeBotao: 16` e receberia 999 — a pílula, num produto cujo botão não é pílula.
-    expect(coreflowMedidasCss(BoldPalette.bold), contains('--cps-formaDeBotao: 16px;'),
+    expect(coreflowMedidasCss(BoldPalette.bold), contains('${prefixoDaLinguagem}formaDeBotao: 16px;'),
         reason: 'o alias `raioDeBotao` do produto parou de ser lido');
 
     // E o controle: uma paleta que não declara NADA recebe o desenho da LINGUAGEM, sem herdar o 16
@@ -102,11 +102,11 @@ void main() {
     // que os dois convivem: *"o pai usa 200; 999 e 200 desenham o mesmo em qualquer altura de
     // controle"*. Quem cai no default cai no dele — é a linguagem ganhando, que é a regra.
     final outra = DilettaPalette.daMarca(marca: const Color(0xFF2F6FC4), id: 'x', nome: 'X');
-    expect(coreflowMedidasCss(outra), contains('--cps-formaDeBotao: 200px;'));
+    expect(coreflowMedidasCss(outra), contains('${prefixoDaLinguagem}formaDeBotao: 200px;'));
   });
 
   test('a escala de tipo emitida tem os 20 degraus do CoreflowType', () {
-    final degraus = RegExp(r'--cps-type-([A-Za-z0-9]+)-size:')
+    final degraus = RegExp('${RegExp.escape(prefixoDaLinguagem)}type-([A-Za-z0-9]+)-size:')
         .allMatches(cssDoBold())
         .map((m) => m.group(1)!)
         .toSet();

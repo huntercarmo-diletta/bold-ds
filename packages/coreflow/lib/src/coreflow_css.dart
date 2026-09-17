@@ -1,10 +1,36 @@
 import 'dart:math' as math;
 
+
+
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
 import 'coreflow_gradients.dart';
 import 'coreflow_scheme.dart';
+
+/// O PREFIXO DAS VARIÁVEIS, e ele é **da linguagem** — não deste filho.
+///
+/// Era `--cps-` cravado em 22 literais aqui, e isso ficou errado na v0.198.0 do avô, que renomeou
+/// tudo para `--diletta-*` **e passou a ler os nomes novos dentro das peças**. A ponte dele aponta
+/// `--cps-x → var(--diletta-x)`, o que serve para quem ESCREVE o nome velho na própria folha — um
+/// consumidor. Nós não escrevemos: nós SOBRESCREVEMOS, e sobrescrever o nome velho não alcança quem
+/// lê o novo.
+///
+/// Medido num diretório vazio em 17/09, antes de publicar: o `<diletta-button>` desenhou em
+/// **#17a37d**, o verde de referência, com a nossa folha declarando `--cps-primary: #f66fa0` ao
+/// lado, sem erro nenhum no console. É o modo de falhar que o README deste pacote já descrevia —
+/// *«fora de ordem, a referência ganha e a tela sai verde»* — chegando por outra porta.
+///
+/// Uma constante, e não 22 literais, pela mesma razão que levou o avô a fazer o mesmo: prefixo
+/// espalhado é prefixo que se troca pela metade.
+const prefixoDaLinguagem = '--diletta-';
+
+/// O prefixo ANTIGO, que este pacote continua emitindo como PONTE para quem já escreveu com ele.
+///
+/// O Internet Banking tem 2.315 ocorrências de `--cps-*` nas folhas dele. A ponte é o mesmo
+/// mecanismo que o avô nos deu, um andar abaixo: alias por `var()`, que não copia valor — então o
+/// modo escuro segue o seletor sozinho.
+const prefixoDaPonte = '--cps-';
 
 /// A INSTÂNCIA WEB da tinta: os papéis da linguagem, resolvidos com [p], escritos como `--cps-*`.
 ///
@@ -33,7 +59,7 @@ String coreflowPapeisCss(DilettaPalette p, {required String produto}) {
       // ausência não vira `--cps-x: ;` — declaração inválida some no navegador sem erro, que é a
       // classe de defeito que o README do pacote web do avô conta ter custado semanas.
       if (cor == null) continue;
-      linhas.add('$indent  --cps-$papel: ${_hex(cor)};');
+      linhas.add('$indent  $prefixoDaLinguagem$papel: ${_hex(cor)};');
     }
     return linhas.join('\n');
   }
@@ -91,7 +117,7 @@ String coreflowEsquemaCss(DilettaPalette p) {
 
   String bloco(Brightness b, String i) => papeis(b)
       .entries
-      .map((e) => '$i  --cps-${e.key}: ${_hex(e.value)};')
+      .map((e) => '$i  $prefixoDaLinguagem${e.key}: ${_hex(e.value)};')
       .join('\n');
 
   return _tresBlocos(bloco(Brightness.light, ''), bloco(Brightness.dark, '  '),
@@ -136,7 +162,7 @@ String coreflowMedidasCss(DilettaPalette p) {
   };
 
   final linhas = [
-    for (final e in formas.entries) '  --cps-${e.key}: ${_px(e.value.topLeft.x)};',
+    for (final e in formas.entries) '  $prefixoDaLinguagem${e.key}: ${_px(e.value.topLeft.x)};',
   ];
   return ':root {\n${linhas.join('\n')}\n}\n';
 }
@@ -170,19 +196,19 @@ String coreflowMedidasCss(DilettaPalette p) {
 /// CSS precise escolher a palavra —, ou uma divergência de desenho medida à mão que o gate de
 /// paridade tenha deixado passar.
 String coreflowTipoCss(Map<String, TextStyle> degraus, {required String familia}) {
-  final linhas = <String>["  --cps-font-family: $familia;"];
+  final linhas = <String>["  ${prefixoDaLinguagem}font-family: $familia;"];
   for (final e in degraus.entries) {
     final s = e.value;
     final tamanho = s.fontSize;
     if (tamanho == null) continue;
     final altura = s.height == null ? 'normal' : _px(s.height! * tamanho);
-    linhas.add('  --cps-type-${e.key}-size: ${_px(tamanho)};');
-    linhas.add('  --cps-type-${e.key}-line-height: $altura;');
+    linhas.add('  ${prefixoDaLinguagem}type-${e.key}-size: ${_px(tamanho)};');
+    linhas.add('  ${prefixoDaLinguagem}type-${e.key}-line-height: $altura;');
     if (s.fontWeight != null) {
-      linhas.add('  --cps-type-${e.key}-weight: ${s.fontWeight!.value};');
+      linhas.add('  ${prefixoDaLinguagem}type-${e.key}-weight: ${s.fontWeight!.value};');
     }
     if (s.letterSpacing != null) {
-      linhas.add('  --cps-type-${e.key}-spacing: ${_px(s.letterSpacing!)};');
+      linhas.add('  ${prefixoDaLinguagem}type-${e.key}-spacing: ${_px(s.letterSpacing!)};');
     }
   }
   return ':root {\n${linhas.join('\n')}\n}\n';
@@ -220,7 +246,7 @@ String coreflowAjustesCss(
     final tag = tagDaPeca(a.componente);
     if (!tagsWeb.contains(tag)) continue;
     linhas.add('/* ${a.componente}: ${a.de} → ${a.para} — ${a.motivo.name}. ${a.nota} */');
-    linhas.add('$tag { --cps-${a.de}: var(--cps-${a.para}); }');
+    linhas.add('$tag { $prefixoDaLinguagem${a.de}: var($prefixoDaLinguagem${a.para}); }');
   }
   return linhas.isEmpty ? '' : '${linhas.join('\n')}\n';
 }
@@ -261,8 +287,8 @@ String coreflowGradientesCss(CoreflowGradients g) {
   }
 
   final linhas = [
-    for (final e in g.todos.entries) '  --cps-gradiente-${e.key}: ${css(e.value)};',
-    '  --cps-onGradiente: ${_hex(g.tintaSobreOGradiente)};',
+    for (final e in g.todos.entries) '  ${prefixoDaLinguagem}gradiente-${e.key}: ${css(e.value)};',
+    '  ${prefixoDaLinguagem}onGradiente: ${_hex(g.tintaSobreOGradiente)};',
   ];
   return ':root {\n${linhas.join('\n')}\n}\n';
 }
@@ -277,4 +303,35 @@ int _grausDe(AlignmentGeometry begin, AlignmentGeometry end) {
   final dx = b.x - a.x, dy = b.y - a.y;
   final graus = (math.atan2(dx, -dy) * 180 / math.pi).round();
   return (graus + 360) % 360;
+}
+
+/// A PONTE DO NOME ANTIGO — todo `--diletta-x` que esta folha declara ganha um `--cps-x` apontando
+/// para ele.
+///
+/// Derivada da FOLHA, não de uma segunda lista, e a razão tem nome: o avô fez a ponte dele por
+/// expressão regular e ela não lia o `_`, então `--diletta-s0_5` e `--diletta-s1_5` ficaram sem
+/// alias — dois degraus mudos, achados pelo gate dele e não por olho. Lista paralela e regex estreita
+/// são a mesma dívida com roupas diferentes: quem lê a saída não erra o que a saída tem.
+///
+/// Alias não copia VALOR. `--cps-primary: var(--diletta-primary)` num `:root` único segue o seletor
+/// que estiver valendo, então um bloco só cobre claro e escuro — não há par de blocos para
+/// dessincronizar.
+///
+/// Sai quando o consumidor migrar. Enquanto existir, ela é o que deixa 2.315 ocorrências de
+/// `--cps-*` no Internet Banking continuarem lendo a tinta deste produto.
+String coreflowPonteDoNomeAntigo(String folha) {
+  // `[A-Za-z0-9_-]` inclui o `_` DE PROPÓSITO — ver o `///` acima.
+  final nomes = RegExp('${RegExp.escape(prefixoDaLinguagem)}([A-Za-z0-9_-]+)\\s*:')
+      .allMatches(folha)
+      .map((m) => m.group(1)!)
+      .toSet()
+      .toList()
+    ..sort();
+  if (nomes.isEmpty) return '';
+  final linhas = nomes
+      .map((n) => '  $prefixoDaPonte$n: var($prefixoDaLinguagem$n);')
+      .join('\n');
+  return '\n/* PONTE: os nomes com o prefixo antigo, apontando para os da linguagem.\n'
+      '   ${nomes.length} apelidos. Alias não copia valor, então o escuro segue o seletor. */\n'
+      ':root {\n$linhas\n}\n';
 }

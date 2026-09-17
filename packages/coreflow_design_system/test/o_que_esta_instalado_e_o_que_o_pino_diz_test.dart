@@ -22,6 +22,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:coreflow/coreflow.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// A raiz do pacote do avô DENTRO da pasta de dependências do nosso pacote web.
@@ -32,7 +33,14 @@ final _instalado = Directory('../coreflow_design_system_web/node_modules/diletta
 /// A ordem importa pro navegador e NÃO importa aqui: o gate pergunta se o nome existe em ALGUMA das
 /// duas, que é o que decide se a variável resolve. Qual das duas ganha é assunto do gate de
 /// paridade, que compara valor a valor.
-String _folhaDoAvo() => File('${_instalado.path}/tokens/cps-tokens.css').readAsStringSync();
+/// A folha do avô é a que TEM OS VALORES — `diletta-tokens.css`.
+///
+/// Era `cps-tokens.css`, e a partir da v0.198.0 dele esse arquivo virou PONTE: ele só declara
+/// `--cps-x: var(--diletta-x)`, sem um valor dentro. Um gate que procura valor numa folha de
+/// apelidos não acha nada e reprova por motivo errado — ou, pior, encontra o apelido e aprova
+/// achando que mediu o valor.
+String _folhaDoAvo() =>
+    File('${_instalado.path}/tokens/diletta-tokens.css').readAsStringSync();
 String _folhaDoBold() =>
     File('../coreflow_design_system_web/tokens/bold-tokens.css').readAsStringSync();
 
@@ -53,7 +61,7 @@ Set<String> _degrausPedidos() => Directory('${_instalado.path}/src')
 const _faces = ['size', 'weight', 'line-height', 'spacing'];
 
 bool _declara(String folha, String degrau, String face) =>
-    folha.contains('--cps-type-$degrau-$face:');
+    folha.contains('${prefixoDaLinguagem}type-$degrau-$face:');
 
 /// Os degraus que resolvem MISTURADO — parte na nossa folha, parte na do avô.
 ///
