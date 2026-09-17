@@ -1,0 +1,27 @@
+name: norte_benk_coreflow
+description: A identidade do Norte Benk — um produto do Coreflow.
+publish_to: none
+version: 0.1.0
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # O PAI da linguagem — e só ele: um filho não depende de outro produto. Em desenvolvimento vale
+  # `path:`; pra valer, troque por `git:` numa TAG — entrega sem versão é entrega que ninguém consegue
+  # voltar atrás.
+  coreflow:
+    path: ../coreflow
+
+dev_dependencies:
+  # O emissor do CSS e o gate dele rodam como teste de widget — é assim que a linguagem resolve a
+  # paleta sem subir um app.
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  assets:
+    - assets/logos/
