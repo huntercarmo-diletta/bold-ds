@@ -1,78 +1,81 @@
-# PEDIDO · Não existe tinta de estado sobre a superfície — e é a terceira vez que a sua lição se aplica
+# PEDIDO · Três dos quatro pares declarados de estado não passam — e o enquadramento anterior deste pedido estava errado
 
 - **de**: conta-bold-ds (filho B) · **para**: ds-diletta (o pai)
 - **consome**: ds-diletta `v0.194.3` · `web-v0.194.3`
-- **bloqueante?**: **não** — está declarado como dívida no consumidor, com as 25 regras listadas,
-  travadas por catraca nos dois sentidos. Não conserta nada; impede de piorar.
+- **bloqueante?**: **não** — declarado como dívida no consumidor, 28 regras, catraca nos dois
+  sentidos e nos dois modos.
 
-## O caso, achado medindo o modo claro
+> **CORREÇÃO, escrita no mesmo dia.** A primeira versão deste pedido dizia que *quinze sítios põem
+> `warning` ou `success` **direto sobre a página***. O número e o enquadramento estavam errados, e o
+> erro era da nossa régua: ela media toda tinta contra `--cps-surface`, inclusive a que vive dentro
+> de uma peça que pinta o próprio fundo. Consertamos a régua e remedimos. **O achado ficou mais
+> forte, não mais fraco** — e mudou de assunto: não é papel faltando para um caso nosso, é par
+> declarado que não passa.
 
-Quinze lugares do Internet Banking põem `warning` ou `success` **direto sobre a página** — texto e
-glifo, sem pastilha atrás. Medido contra `--cps-surface`:
+## O achado, agora medido contra o fundo que está mesmo atrás
 
-| papel | claro | escuro | onde |
-|---|---|---|---|
-| `warning` | **2,08:1** | 10,18 ✓ | 9 regras — 5 ícones, 4 textos |
-| `success` | **4,04:1** | 9,18 ✓ | 6 regras — 1 ícone, 5 textos |
+O `///` do `warning` diz que ele é *«calibrado pra ser FUNDO de tag e tinta de glifo»*. Fomos medir o
+glifo sobre a tag — o par que você declara — e estendemos aos quatro:
 
-O piso é 4,5:1 para texto e 3:1 para gráfico. **O âmbar não alcança nem o de gráfico.**
-
-E só falha no claro, nos dois casos. É o mesmo padrão que este consumidor vem encontrando a semana
-inteira: o escuro foi desenhado e revisado, o claro não.
-
-## Fomos procurar o papel certo e descobrimos que ele não existe
-
-A primeira proposta interna foi trocar por `onWarningSubtle` e `onSuccessSubtle`, que passam
-(**6,54** e **5,38** no claro). **A designer recusou, e ela estava certa** — o seu `///` diz por quê:
-
-> *Conteúdo sobre o preenchimento SUTIL de cada role. (…) o TEXTO sobre o tinte sutil precisa de
-> 4.5:1 **contra o tinte**.*
-
-A tinta foi medida **contra a pastilha**. Usá-la sobre a página é tirar o papel do par para o qual
-ele foi construído — exatamente o erro que os seus `onSubtle` existem para acabar.
-
-Fomos então olhar a família inteira do âmbar, e **cada papel foi medido contra um fundo diferente**:
-
-| papel | medido contra | para quê |
+| tinta sobre a SUA pastilha | claro | escuro |
 |---|---|---|
-| `warning` | a tinta que vai sobre ele | **fundo** de tag |
-| `warningSubtle` | — | a pastilha |
-| `onWarningSubtle` | **a pastilha** | texto dentro da tag |
-| `warningGrafico` | **o trilho do medidor** | a barra |
+| `warning` sobre `warningSubtle` | **1,94** ✗ | 3,67 ✓ |
+| `danger` sobre `errorSubtle` | 6,05 ✓ | **2,77** ✗ |
+| `primary` sobre `primarySubtle` | 7,13 ✓ | **2,94** ✗ |
+| `success` sobre `successSubtle` | 3,90 ✓ | 3,42 ✓ |
 
-`warningGrafico` dá o mesmo valor que `warning` no nosso esquema porque ele é
-`_primeiroQueAlcanca(3.0, trilho, [...])` — contra o trilho o âmbar base já alcança. Contra a página,
-não.
+Piso de glifo é 3:1. **Três dos quatro reprovam**, cada um num modo diferente — e nenhum dos três
+reprova no modo em que alguém iria procurar.
 
-**Nenhum dos quatro foi medido contra `surface`.** Não é falta de sorte na escolha: é a lacuna.
+Medido no navegador, no alerta e no banner do consumidor, contra o `backgroundColor` computado do
+ancestral que pinta — não contra token lido de folha.
 
-## O pedido
+## O que o seu próprio app faz, e que nós não fizemos
 
-Um par novo: **tinta de estado sobre a superfície**, para `warning` e `success` — e para `error` se a
-sua medição disser que ele precisa.
+O `bold_alert` do app do Conta BOLD não põe o tom base como glifo solto. Ele carrega **cinco** papéis
+por intenção:
 
-O precedente são os seus dois, e o argumento é a sua frase, escrita duas vezes:
+```dart
+BoldIntent.warning => (warning04, warning07, warning05, warning02, warning05)
+//                     spot        wash      borda     título-claro  título-escuro
+```
+
+O tom base vai no `BoldSpotIcon` — que tem **fundo próprio**, então o glifo não está sobre a wash — e
+o texto no claro usa `warning02`, um degrau escuro. **Glifo do tom base sobre a wash não existe lá.**
+Nós fizemos isso, e foi o nosso erro. Mas a medição mostra que o par, se alguém o usar como o `///`
+descreve, não fecha.
+
+## Os nove que estão mesmo sobre a página
+
+Corrigindo o número da primeira versão: sobre `--cps-surface` são **nove**, não quinze — cinco de
+`warning` (2,08) e quatro de `success` (4,04), no claro. Os outros vivem sobre pastilha ou vidro da
+própria peça, e são os da tabela acima.
+
+Para esses nove o pedido original continua de pé, e o argumento é o seu, escrito duas vezes:
 
 > *«um token não serve duas exigências de contraste ao mesmo tempo»*
 > *«não é igual a nenhum papel existente em AMBOS os modos, e é por isso que ele precisa de nome
 > próprio em vez de reaproveitar um»*
 
-Foi assim que nasceram o `onSubtle` (porque tag de `warning` dava 2,16:1) e o `Grafico` (porque a
-barra dava 2,55 na Aurora). O nosso caso é o terceiro da mesma família, e chega com o mesmo tipo de
-número.
+Foi assim que nasceram o `onSubtle` e o `Grafico`. Mas depois da correção achamos que **o primeiro
+pedido é o outro**: não adianta um quinto papel se três dos quatro pares já declarados não fecham.
 
-E a sua régua de fechamento se aplica inteira: *«papel especulativo é o que este repo recusa»*. Este
-não é — são 15 sítios medidos, num produto em produção, num modo que já mandamos para revisão.
+## O pedido, em duas partes e nesta ordem
 
-Como nos dois anteriores, **papel novo não cobra filho nenhum**: ele deriva da paleta que já existe.
-No claro o degrau provável é o mesmo que o `onWarningSubtle` já usa (`warning02`, 6,54 contra a
-página); no escuro o `warning` de tela já dá 10,18.
+**1. Medir os quatro pares declarados nos dois modos.** `xSubtle` × tom base, que é o par que o `///`
+do `warning` descreve e que as tags e os alertas usam. Se a sua medição confirmar os nossos números,
+os degraus precisam se mover — como o `warningGrafico` moveu quando a Aurora reprovou.
+
+**2. Depois disso, a tinta de estado sobre a superfície**, para os nove que sobram.
 
 ## O que fizemos enquanto isso
 
-Nada — de propósito. A dívida está declarada no gate do consumidor, com as 25 regras nomeadas, o
-número de cada uma e o modo em que falha. A catraca fecha nos dois sentidos: uso novo de qualquer um
-dos três papéis reprova, e **consertar** uma das 25 também reprova, obrigando a podar a lista.
+Nada na tinta, de propósito. Consertamos a **régua**: ela agora sobe pelo seletor procurando quem
+pinta, e quando não sabe, diz que não sabe em vez de presumir a página. A dívida foi refeita a partir
+da medição — 28 regras, com o fundo escrito em cada linha, porque *«reprova»* sem dizer contra o quê
+foi exatamente o que produziu o erro desta primeira versão.
 
-Escolher um papel errado para tapar o número seria pior que a dívida: trocaria um problema visível
-por um invisível, que é o que o `onSubtle` ensinou a não fazer.
+E ficou uma lição que talvez sirva do seu lado, porque ela não é sobre cor: **uma régua que presume o
+fundo produz uma crença.** A nossa dizia «o escuro foi revisado, o claro não» — e essa frase entrou
+em commit, em pedido e no nome de uma constante, antes de alguém perceber que era artefato da
+medição, não do produto.
