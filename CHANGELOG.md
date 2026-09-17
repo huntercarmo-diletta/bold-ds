@@ -20,6 +20,74 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.107.0] — 2026-09-17
+
+### O avô vem quatro degraus à frente, e traz o movimento que o filho cravava à mão
+
+Nada de desenho muda nesta versão — **a tinta emitida é byte a byte a mesma**, conferido no diff.
+O que muda é o que passa a estar DISPONÍVEL, porque o avô respondeu cinco pedidos abertos e o do
+banner, e entregou em três tags.
+
+#### O que o consumidor ganha
+
+| | antes | agora |
+|---|---|---|
+| curvas de movimento | nenhuma — duração atravessava, curva não | **4**: `--cps-ease-standard`, `-emphasized`, `-enter`, `-exit` |
+| contextos de movimento | nenhum | **6** pares duração+curva: control, emphasis, fade, page, sheet, toast |
+| elementos registrados | 25 | **28**, com `<diletta-status-banner-button>` |
+
+**As curvas são o item que mais importa, e o motivo é um defeito nosso.** O Internet Banking cravou
+dois `cubic-bezier` literais porque a curva não atravessava, com um comentário prometendo trocar
+quando ela viesse. Ela veio — e o avô, indo responder o pedido, foi conferir os nossos números
+contra o SDK do Flutter:
+
+    o nosso `ease-standard`     cubic-bezier(0.33, 1, 0.68, 1)
+    o `ease-enter` da linguagem cubic-bezier(0, 0, 0.58, 1)      ← é este que ele queria ser
+
+    o nosso `ease-emphasized`      cubic-bezier(0.65, 0, 0.35, 1)
+    o `ease-standard` da linguagem cubic-bezier(0.42, 0, 0.58, 1) ← e este
+
+Erramos o nome **e** o valor: os nossos dois não são nenhuma das quatro curvas do Flutter — são o
+`easeOutCubic` e o `easeInOutCubic` de uma tabela pública de easings, com os mesmos rótulos e outros
+números. A frase dele fecha o caso: ***«transcrição à mão não erra só o rótulo: troca a fonte quando
+a fonte não está emitida»***. O movimento do IB hoje não é o movimento do app, e ninguém veria isso
+sem a emissão.
+
+#### O prefixo do CSS muda, e há ponte
+
+A `v0.198.0` do avô renomeia toda variável de `--cps-*` para `--diletta-*` — a pedido do filho A,
+cujo argumento é que `cps` é a sigla do PRIMEIRO consumidor carimbada na saída de quem é consumido
+por três.
+
+**Nenhum consumidor precisa mexer em nada nesta versão.** As folhas com o nome velho continuam
+emitidas: `cps-tokens.css` importa `diletta-tokens.css` e aponta cada nome por `var()`, **245
+apelidos** (188 + 57). Alias não copia valor, então o modo escuro continua seguindo o seletor.
+
+A ponte sai na **v0.210.0** do avô, e a migração vira tarefa própria de cada consumidor.
+
+#### A escada de espaço aparece inteira no catálogo
+
+A aba *Styles → espaço* mostrava nove degraus enquanto a linguagem publica onze: `s0_5` e `s1_5`,
+os dois meio-passos, ficavam de fora da `spacingTokens` declarada aqui. Eles saíam no CSS o tempo
+todo — só não saíam no catálogo.
+
+Esconder degrau não é neutro. A designer foi ao catálogo conferir se `2px` tinha token, não achou, e
+a conclusão correta a partir do que estava na tela era que não existia — e o caminho natural a partir
+daí é escrever o número à mão, que é o oposto do que o catálogo existe para fazer.
+
+Gate novo cobra que a lista não deixe NENHUM degrau de fora, provando o valor de cada um contra
+`DilettaSpacing` em vez de números digitados no teste — segunda fonte para o mesmo número é o defeito
+que o `///` do motor diz que esta família já registrou três vezes.
+
+#### Os pinos que faltavam
+
+Cinco lugares pinavam o avô e três gates DELE acharam os dois que eu esqueci. O que vale registrar é
+o terceiro, que explica o próprio defeito na mensagem de erro: *«a versão INSTALADA do avô é a que o
+pino diz»* — o `npm install` responde «up to date» porque o lock guarda o COMMIT já resolvido, e
+trocar o nome da tag não o invalida. O erro traz o comando que força a re-resolução.
+
+440 testes verdes: 101 no pai, 227 no filho, 112 no catálogo. `flutter analyze` limpo.
+
 ## [0.106.0] — 2026-09-16
 
 ### O gradiente da marca atravessa para a web
