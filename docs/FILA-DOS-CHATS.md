@@ -178,10 +178,39 @@ E a frase dela de 17/09 10h38 — *"o logo positivo/negativo pode ter um contorn
 padrão"* — e a do pai — *"desenho não se deriva"* — são a mesma frase, ditas no mesmo dia, em casas
 diferentes, sem uma ter lido a outra.
 
-> **A porta abriu em 18/09 (`99a5303`), e este item não fechou com ela.** O `marcaNo` já atravessa o
-> par; falta a linha no arquivo do produto — `logoEscuro:` apontando pro mono que já está versionado —
-> e o `///` que hoje diz *"até o pedido entrar"* passa a estar errado. **É mudança de produto, não de
-> porta**: muda o que o cliente vê no escuro, e a decisão é dela. Suíte do pacote: 10 verdes.
+### FECHADO em 18/09, a pedido dela — `1fe7d93`
+
+A porta abriu no `99a5303` e a declaração entrou logo depois. **E a medição mudou o campo que recebe
+o arquivo**: não é `logoEscuro`, é **`logoFullEscuro`**.
+
+O mono é o **LOCKUP**, medido nos arquivos e não deduzido do nome — `viewBox 0 0 380 166` e 7 paths,
+os mesmos do lockup colorido, contra `0 0 197 84` e 2 paths do símbolo. Declará-lo no slot do símbolo
+poria a palavra de volta nas seis peças do avô que desenham só a marca, no escuro e só no escuro.
+
+**Os números, medidos contra as páginas DESTE produto** (clara `#FFFFFF`, escura `#14181A`), e não
+contra as da referência:
+
+| | página clara | página escura |
+|---|---|---|
+| branco — o mono | 1,00:1 | **17,87:1** |
+| azul `#2A57A5` — a marca | 6,99:1 | **2,56:1**, abaixo do piso gráfico de 3:1 |
+| ouro `#E8B236` | 1,94:1 | 9,23:1 |
+
+O mono só pode ser a arte do escuro, e é o slot em que entrou. O que ele conserta é o azul a 2,56.
+
+**E o símbolo fica SEM PAR, com a ausência escrita em vez de improvisada.** O cliente não mandou
+negativa da marca, e o avô não deriva desenho (*«tinta se deriva, desenho não se deriva»*). `logoEscuro`
+fica nulo, o símbolo colorido vale nos dois brilhos como antes, e as seis peças seguem com o azul a
+2,56 no escuro. **É pedido ao dono da marca, e o lugar de pedir é o Berço** — na etapa do logo, ao lado
+do lockup negativo. Até lá, quem precisar passa `color:` no sítio.
+
+Gate novo `a_negativa_e_do_lockup_e_chega_no_tema_test`, cinco provas, mutação feita: movendo o
+arquivo pro slot errado os cinco reprovam, e os que dependem do caminho reprovam DIZENDO o motivo em
+vez de estourar num nulo. **Pacote: 15 verdes (eram 10), `analyze` limpo.**
+
+> **E o `logoTingePorCurrentColor: true` fica.** Os três SVG deste produto não têm um `currentColor`
+> sequer, então ele não tinge nada — **ele impede**: sem ele, o `srcIn` com a `corDoLogo` que o
+> `marcaNo` preenche pintaria o lockup colorido de uma cor só. Estava sem razão escrita e agora tem.
 
 ---
 
@@ -409,6 +438,12 @@ Medidos hoje em `origin/main`, todos iguais à rodada passada:
 
 - **D81–D85** e **D92–D94**: sem nome novo nos chats desta janela, e sem o nome o `grep` mede a minha
   escrita. Inalterados desde 15/09;
+- **o cabeçalho do filho gerado traz a versão do APP, não a do repo.** O `///` de
+  `packages/norte_benk_coreflow/lib/norte_benk.dart:11` diz *«Gerado pelo Berço Coreflow em 2026-09-17
+  (pai coreflow · bold-ds v0.102.1 · avô v0.180.0)»* — e `v0.102.1`/`v0.180.0` são os pinos da cópia
+  VENDORIZADA do `app-newbold`, não os do repo, que naquele dia estava em `v0.107.0` com o avô em
+  `v0.198.0`. **Não mexi**: é linha de procedência, registra o que o Berço acreditava no nascimento, e
+  o conserto é no Berço (ele lê a versão do lugar errado), não aqui;
 - **o gate mais novo do remoto não roda nesta máquina.**
   `packages/coreflow_design_system/test/a_peca_do_avo_le_o_que_esta_folha_declara_test.dart` (de
   `3629a23`, 17/09) lê os fontes das peças web do avô em `node_modules` para perguntar *"a peça do avô
