@@ -8,7 +8,7 @@
 // `dilettaCorDoPapelGen`. Comparar a saída com a fonte não é o mesmo que comparar a saída com o
 // DESENHO.
 import 'package:coreflow/coreflow.dart';
-import 'package:meu_banco_coreflow/meu_banco.dart';
+import 'package:norte_benk_coreflow/norte_benk.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -97,7 +97,7 @@ void main() {
   final css = cssDoProduto();
   final claro = _vars(css, escuro: false);
   final escuro = _vars(css, escuro: true);
-  final p = meuBanco.paleta;
+  final p = norteBenk.paleta;
 
   test('a COR de cada papel é a que o componente pinta, nos dois modos', () {
     final divergem = <String>[];
@@ -168,7 +168,7 @@ void main() {
         'ajuste — não há o que medir. Rode o install para cobrir.';
 
     setUp(() {
-      if (semTags && meuBanco.ajustesDePapel.isNotEmpty) {
+      if (semTags && norteBenk.ajustesDePapel.isNotEmpty) {
         fail('há ajuste declarado e a lista de tags veio vazia: a folha sairia SEM ele e nada '
             'acusaria. Rode `npm install` em web/.');
       }
@@ -191,7 +191,7 @@ void main() {
     });
 
     test('nenhum ajuste DESTE produto fica de fora da folha', () {
-      final declarados = meuBanco.ajustesDePapel;
+      final declarados = norteBenk.ajustesDePapel;
       final css = coreflowAjustesCss(declarados, tagsWeb: tags);
       for (final a in declarados.where((a) => tags.contains(tagDaPeca(a.componente)))) {
         expect(css, contains('${tagDaPeca(a.componente)} { ${prefixoDaLinguagem}${a.de}: var(${prefixoDaLinguagem}${a.para}); }'),

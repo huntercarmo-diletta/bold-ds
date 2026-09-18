@@ -1,4 +1,4 @@
-/* GERADO — NÃO editar à mão. Os 59 papéis da linguagem, com a tinta de Meu Banco.
+/* GERADO — NÃO editar à mão. Os 59 papéis da linguagem, com a tinta de Norte Benk.
    Carregue DEPOIS das folhas do avô: estas mesmas variáveis, com os valores deste produto. */
 :root {
   --diletta-bg: #ffffff;
@@ -13,14 +13,14 @@
   --diletta-errorSolidPressed: #3d0a08;
   --diletta-errorSubtle: #fbe4e2;
   --diletta-fg: #14181a;
-  --diletta-glassStroke: #e6f8e5;
+  --diletta-glassStroke: #eff2f7;
   --diletta-glassTint: #ffffff80;
   --diletta-onError: #ffffff;
   --diletta-onErrorSolid: #e8837c;
   --diletta-onErrorSubtle: #8a1a14;
   --diletta-onPartner: #ffffff;
   --diletta-onPrimary: #ffffff;
-  --diletta-onPrimarySubtle: #1b5e20;
+  --diletta-onPrimarySubtle: #2a57a5;
   --diletta-onSecure: #14181a;
   --diletta-onSecureSubtle: #4a3a05;
   --diletta-onSuccess: #ffffff;
@@ -30,17 +30,17 @@
   --diletta-onWarningSubtle: #5c4304;
   --diletta-partner: #6b3fa0;
   --diletta-partnerSurface: #1c2124;
-  --diletta-primary: #1b5e20;
-  --diletta-primaryHover: #a2e5a2;
-  --diletta-primaryOnSurface: #1b5e20;
-  --diletta-primaryPressed: #e6f8e5;
-  --diletta-primarySolidHover: #1b5e20;
-  --diletta-primarySolidPressed: #04390a;
-  --diletta-primarySubtle: #e6f8e5;
-  --diletta-primaryTrack: #a2e5a2;
+  --diletta-primary: #2a57a5;
+  --diletta-primaryHover: #c7d2e4;
+  --diletta-primaryOnSurface: #2a57a5;
+  --diletta-primaryPressed: #eff2f7;
+  --diletta-primarySolidHover: #2a57a5;
+  --diletta-primarySolidPressed: #02286a;
+  --diletta-primarySubtle: #eff2f7;
+  --diletta-primaryTrack: #c7d2e4;
   --diletta-secure: #9c7b0c;
   --diletta-secureSubtle: #fbf6e4;
-  --diletta-skeletonShimmer: #1fb734;
+  --diletta-skeletonShimmer: #5c96fa;
   --diletta-success: #12905c;
   --diletta-successBorder: #6acca2;
   --diletta-successSubtle: #e0f5eb;
@@ -76,14 +76,14 @@
     --diletta-errorSolidPressed: #8a1a14;
     --diletta-errorSubtle: #5e110d;
     --diletta-fg: #f5f8f9;
-    --diletta-glassStroke: #40ce4c4d;
-    --diletta-glassTint: #031c0480;
+    --diletta-glassStroke: #85aef54d;
+    --diletta-glassTint: #00123a80;
     --diletta-onError: #3d0a08;
     --diletta-onErrorSolid: #e8837c;
     --diletta-onErrorSubtle: #e8837c;
     --diletta-onPartner: #ffffff;
     --diletta-onPrimary: #14181a;
-    --diletta-onPrimarySubtle: #a2e5a2;
+    --diletta-onPrimarySubtle: #c7d2e4;
     --diletta-onSecure: #14181a;
     --diletta-onSecureSubtle: #f6ecc8;
     --diletta-onSuccess: #06301f;
@@ -93,17 +93,17 @@
     --diletta-onWarningSubtle: #e6c86b;
     --diletta-partner: #6b3fa0;
     --diletta-partnerSurface: #1c2124;
-    --diletta-primary: #1fb734;
-    --diletta-primaryHover: #009820;
-    --diletta-primaryOnSurface: #40ce4c;
-    --diletta-primaryPressed: #1b5e20;
-    --diletta-primarySolidHover: #009820;
-    --diletta-primarySolidPressed: #1b5e20;
-    --diletta-primarySubtle: #1b5e20;
-    --diletta-primaryTrack: #04390a;
+    --diletta-primary: #5c96fa;
+    --diletta-primaryHover: #1d72ff;
+    --diletta-primaryOnSurface: #85aef5;
+    --diletta-primaryPressed: #2a57a5;
+    --diletta-primarySolidHover: #1d72ff;
+    --diletta-primarySolidPressed: #2a57a5;
+    --diletta-primarySubtle: #2a57a5;
+    --diletta-primaryTrack: #02286a;
     --diletta-secure: #c49e1e;
     --diletta-secureSubtle: #4a3a05;
-    --diletta-skeletonShimmer: #04390a;
+    --diletta-skeletonShimmer: #02286a;
     --diletta-success: #2fb37b;
     --diletta-successBorder: #12905c;
     --diletta-successSubtle: #0a4b31;
@@ -139,14 +139,14 @@
   --diletta-errorSolidPressed: #8a1a14;
   --diletta-errorSubtle: #5e110d;
   --diletta-fg: #f5f8f9;
-  --diletta-glassStroke: #40ce4c4d;
-  --diletta-glassTint: #031c0480;
+  --diletta-glassStroke: #85aef54d;
+  --diletta-glassTint: #00123a80;
   --diletta-onError: #3d0a08;
   --diletta-onErrorSolid: #e8837c;
   --diletta-onErrorSubtle: #e8837c;
   --diletta-onPartner: #ffffff;
   --diletta-onPrimary: #14181a;
-  --diletta-onPrimarySubtle: #a2e5a2;
+  --diletta-onPrimarySubtle: #c7d2e4;
   --diletta-onSecure: #14181a;
   --diletta-onSecureSubtle: #f6ecc8;
   --diletta-onSuccess: #06301f;
@@ -156,17 +156,17 @@
   --diletta-onWarningSubtle: #e6c86b;
   --diletta-partner: #6b3fa0;
   --diletta-partnerSurface: #1c2124;
-  --diletta-primary: #1fb734;
-  --diletta-primaryHover: #009820;
-  --diletta-primaryOnSurface: #40ce4c;
-  --diletta-primaryPressed: #1b5e20;
-  --diletta-primarySolidHover: #009820;
-  --diletta-primarySolidPressed: #1b5e20;
-  --diletta-primarySubtle: #1b5e20;
-  --diletta-primaryTrack: #04390a;
+  --diletta-primary: #5c96fa;
+  --diletta-primaryHover: #1d72ff;
+  --diletta-primaryOnSurface: #85aef5;
+  --diletta-primaryPressed: #2a57a5;
+  --diletta-primarySolidHover: #1d72ff;
+  --diletta-primarySolidPressed: #2a57a5;
+  --diletta-primarySubtle: #2a57a5;
+  --diletta-primaryTrack: #02286a;
   --diletta-secure: #c49e1e;
   --diletta-secureSubtle: #4a3a05;
-  --diletta-skeletonShimmer: #04390a;
+  --diletta-skeletonShimmer: #02286a;
   --diletta-success: #2fb37b;
   --diletta-successBorder: #12905c;
   --diletta-successSubtle: #0a4b31;
@@ -195,44 +195,121 @@
   --diletta-textPrimary: #14181a;
   --diletta-border: #d5dce1;
   --diletta-overlay: #ffffffd9;
-  --diletta-primary: #1b5e20;
+  --diletta-primary: #2a57a5;
   --diletta-danger: #8a1a14;
   --diletta-infoSubtle: #20262a1c;
-  --diletta-vinho: #145319;
+  --diletta-vinho: #1e4893;
 }
 
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --diletta-background: #14181a;
-    --diletta-secondaryFlow: #020f02;
+    --diletta-secondaryFlow: #000a1f;
     --diletta-textPrimary: #f5f8f9;
     --diletta-border: #ffffff14;
     --diletta-overlay: #14181ab3;
-    --diletta-primary: #1fb734;
+    --diletta-primary: #5c96fa;
     --diletta-danger: #d8483f;
     --diletta-infoSubtle: #b2bcc41c;
-    --diletta-vinho: #145319;
+    --diletta-vinho: #1e4893;
   }
 }
 
 :root[data-theme="dark"] {
   --diletta-background: #14181a;
-  --diletta-secondaryFlow: #020f02;
+  --diletta-secondaryFlow: #000a1f;
   --diletta-textPrimary: #f5f8f9;
   --diletta-border: #ffffff14;
   --diletta-overlay: #14181ab3;
-  --diletta-primary: #1fb734;
+  --diletta-primary: #5c96fa;
   --diletta-danger: #d8483f;
   --diletta-infoSubtle: #b2bcc41c;
-  --diletta-vinho: #145319;
+  --diletta-vinho: #1e4893;
 }
 
 /* MEDIDA por nome. */
 :root {
-  --diletta-formaDeBotao: 16px;
-  --diletta-formaDeFolha: 22px;
+  --diletta-formaDeBotao: 26px;
+  --diletta-formaDeFolha: 32px;
   --diletta-formaDeCampo: 16px;
   --diletta-formaDeCartao: 24px;
   --diletta-formaDeVidro: 16px;
   --diletta-formaDeNav: 24px;
+}
+
+/* PONTE: os nomes com o prefixo antigo, apontando para os da linguagem.
+   72 apelidos. Alias não copia valor, então o escuro segue o seletor. */
+:root {
+  --cps-background: var(--diletta-background);
+  --cps-bg: var(--diletta-bg);
+  --cps-bgMenu: var(--diletta-bgMenu);
+  --cps-border: var(--diletta-border);
+  --cps-borderSubtle: var(--diletta-borderSubtle);
+  --cps-danger: var(--diletta-danger);
+  --cps-divider: var(--diletta-divider);
+  --cps-error: var(--diletta-error);
+  --cps-errorBorder: var(--diletta-errorBorder);
+  --cps-errorSolid: var(--diletta-errorSolid);
+  --cps-errorSolidHover: var(--diletta-errorSolidHover);
+  --cps-errorSolidPressed: var(--diletta-errorSolidPressed);
+  --cps-errorSubtle: var(--diletta-errorSubtle);
+  --cps-fg: var(--diletta-fg);
+  --cps-formaDeBotao: var(--diletta-formaDeBotao);
+  --cps-formaDeCampo: var(--diletta-formaDeCampo);
+  --cps-formaDeCartao: var(--diletta-formaDeCartao);
+  --cps-formaDeFolha: var(--diletta-formaDeFolha);
+  --cps-formaDeNav: var(--diletta-formaDeNav);
+  --cps-formaDeVidro: var(--diletta-formaDeVidro);
+  --cps-glassStroke: var(--diletta-glassStroke);
+  --cps-glassTint: var(--diletta-glassTint);
+  --cps-infoSubtle: var(--diletta-infoSubtle);
+  --cps-onError: var(--diletta-onError);
+  --cps-onErrorSolid: var(--diletta-onErrorSolid);
+  --cps-onErrorSubtle: var(--diletta-onErrorSubtle);
+  --cps-onPartner: var(--diletta-onPartner);
+  --cps-onPrimary: var(--diletta-onPrimary);
+  --cps-onPrimarySubtle: var(--diletta-onPrimarySubtle);
+  --cps-onSecure: var(--diletta-onSecure);
+  --cps-onSecureSubtle: var(--diletta-onSecureSubtle);
+  --cps-onSuccess: var(--diletta-onSuccess);
+  --cps-onSuccessSubtle: var(--diletta-onSuccessSubtle);
+  --cps-onSurface: var(--diletta-onSurface);
+  --cps-onWarning: var(--diletta-onWarning);
+  --cps-onWarningSubtle: var(--diletta-onWarningSubtle);
+  --cps-overlay: var(--diletta-overlay);
+  --cps-partner: var(--diletta-partner);
+  --cps-partnerSurface: var(--diletta-partnerSurface);
+  --cps-primary: var(--diletta-primary);
+  --cps-primaryHover: var(--diletta-primaryHover);
+  --cps-primaryOnSurface: var(--diletta-primaryOnSurface);
+  --cps-primaryPressed: var(--diletta-primaryPressed);
+  --cps-primarySolidHover: var(--diletta-primarySolidHover);
+  --cps-primarySolidPressed: var(--diletta-primarySolidPressed);
+  --cps-primarySubtle: var(--diletta-primarySubtle);
+  --cps-primaryTrack: var(--diletta-primaryTrack);
+  --cps-secondaryFlow: var(--diletta-secondaryFlow);
+  --cps-secure: var(--diletta-secure);
+  --cps-secureSubtle: var(--diletta-secureSubtle);
+  --cps-skeletonShimmer: var(--diletta-skeletonShimmer);
+  --cps-success: var(--diletta-success);
+  --cps-successBorder: var(--diletta-successBorder);
+  --cps-successSubtle: var(--diletta-successSubtle);
+  --cps-surface: var(--diletta-surface);
+  --cps-surfaceInverse: var(--diletta-surfaceInverse);
+  --cps-surfaceLoading: var(--diletta-surfaceLoading);
+  --cps-surfaceLoadingStrong: var(--diletta-surfaceLoadingStrong);
+  --cps-surfaceMuted: var(--diletta-surfaceMuted);
+  --cps-surfaceSubtle: var(--diletta-surfaceSubtle);
+  --cps-textDisabled: var(--diletta-textDisabled);
+  --cps-textMuted: var(--diletta-textMuted);
+  --cps-textPlaceholder: var(--diletta-textPlaceholder);
+  --cps-textPrimary: var(--diletta-textPrimary);
+  --cps-textSecondary: var(--diletta-textSecondary);
+  --cps-textTertiary: var(--diletta-textTertiary);
+  --cps-trilhoDeMedidor: var(--diletta-trilhoDeMedidor);
+  --cps-vinho: var(--diletta-vinho);
+  --cps-warning: var(--diletta-warning);
+  --cps-warningBorder: var(--diletta-warningBorder);
+  --cps-warningGrafico: var(--diletta-warningGrafico);
+  --cps-warningSubtle: var(--diletta-warningSubtle);
 }

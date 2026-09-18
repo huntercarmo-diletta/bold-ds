@@ -35,6 +35,16 @@ dependencies:
       path: packages/diletta_catalog_core
 
 dev_dependencies:
+  # Só o TESTE usa, e usa de propósito: `a_escada_de_espaco_aparece_inteira_test.dart` compara a
+  # lista que o catálogo mostra contra `DilettaSpacing`, que é a escada da linguagem. Comparar contra
+  # números digitados aqui seria a segunda fonte do mesmo valor — o defeito que o `///` de
+  # `spacingTokens` no motor diz que esta família já registrou três vezes.
+  # Vinha de carona pelo pai, e carona some sem aviso na versão em que o pai parar de usá-la.
+  diletta_design_system:
+    git:
+      url: git@bitbucket.org:diletta/ds-diletta.git
+      ref: v0.198.0
+      path: packages/diletta_design_system
   flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter

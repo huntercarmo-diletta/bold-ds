@@ -1,7 +1,36 @@
+import 'dart:math' as math;
+
+
+
 import 'package:diletta_design_system/diletta_design_system.dart';
 import 'package:flutter/widgets.dart';
 
+import 'coreflow_gradients.dart';
 import 'coreflow_scheme.dart';
+
+/// O PREFIXO DAS VARIÁVEIS, e ele é **da linguagem** — não deste filho.
+///
+/// Era `--cps-` cravado em 22 literais aqui, e isso ficou errado na v0.198.0 do avô, que renomeou
+/// tudo para `--diletta-*` **e passou a ler os nomes novos dentro das peças**. A ponte dele aponta
+/// `--cps-x → var(--diletta-x)`, o que serve para quem ESCREVE o nome velho na própria folha — um
+/// consumidor. Nós não escrevemos: nós SOBRESCREVEMOS, e sobrescrever o nome velho não alcança quem
+/// lê o novo.
+///
+/// Medido num diretório vazio em 17/09, antes de publicar: o `<diletta-button>` desenhou em
+/// **#17a37d**, o verde de referência, com a nossa folha declarando `--cps-primary: #f66fa0` ao
+/// lado, sem erro nenhum no console. É o modo de falhar que o README deste pacote já descrevia —
+/// *«fora de ordem, a referência ganha e a tela sai verde»* — chegando por outra porta.
+///
+/// Uma constante, e não 22 literais, pela mesma razão que levou o avô a fazer o mesmo: prefixo
+/// espalhado é prefixo que se troca pela metade.
+const prefixoDaLinguagem = '--diletta-';
+
+/// O prefixo ANTIGO, que este pacote continua emitindo como PONTE para quem já escreveu com ele.
+///
+/// O Internet Banking tem 2.315 ocorrências de `--cps-*` nas folhas dele. A ponte é o mesmo
+/// mecanismo que o avô nos deu, um andar abaixo: alias por `var()`, que não copia valor — então o
+/// modo escuro segue o seletor sozinho.
+const prefixoDaPonte = '--cps-';
 
 /// A INSTÂNCIA WEB da tinta: os papéis da linguagem, resolvidos com [p], escritos como `--cps-*`.
 ///
@@ -30,7 +59,7 @@ String coreflowPapeisCss(DilettaPalette p, {required String produto}) {
       // ausência não vira `--cps-x: ;` — declaração inválida some no navegador sem erro, que é a
       // classe de defeito que o README do pacote web do avô conta ter custado semanas.
       if (cor == null) continue;
-      linhas.add('$indent  --cps-$papel: ${_hex(cor)};');
+      linhas.add('$indent  $prefixoDaLinguagem$papel: ${_hex(cor)};');
     }
     return linhas.join('\n');
   }
@@ -88,7 +117,7 @@ String coreflowEsquemaCss(DilettaPalette p) {
 
   String bloco(Brightness b, String i) => papeis(b)
       .entries
-      .map((e) => '$i  --cps-${e.key}: ${_hex(e.value)};')
+      .map((e) => '$i  $prefixoDaLinguagem${e.key}: ${_hex(e.value)};')
       .join('\n');
 
   return _tresBlocos(bloco(Brightness.light, ''), bloco(Brightness.dark, '  '),
@@ -133,7 +162,7 @@ String coreflowMedidasCss(DilettaPalette p) {
   };
 
   final linhas = [
-    for (final e in formas.entries) '  --cps-${e.key}: ${_px(e.value.topLeft.x)};',
+    for (final e in formas.entries) '  $prefixoDaLinguagem${e.key}: ${_px(e.value.topLeft.x)};',
   ];
   return ':root {\n${linhas.join('\n')}\n}\n';
 }
@@ -144,20 +173,42 @@ String coreflowMedidasCss(DilettaPalette p) {
 /// [degraus] é `papel -> estilo`, e quem monta é o produto: a escala é dele (seis px que o avô não
 /// tem, por decisão escrita no `///` da classe). O `height` do Flutter é multiplicador; aqui vira px,
 /// que é o que o CSS do avô já usa — comparar as duas folhas tem que ser `diff`, não conversão.
+///
+/// **`height` nulo vira `normal`, e NÃO `1 ×` o tamanho.** Nulo no Flutter quer dizer *use a caixa
+/// natural da fonte* — a Inter entrega ~1,2 —, e a primeira versão desta função traduzia isso por
+/// `1 ×`, que é uma opinião que ninguém declarou. Medido em 15/09 com a Inter carregada: **7 dos 20
+/// degraus divergiam**, cinco deles por 2 a 4px POR LINHA (`title` 21×17, `button` 18×15, `label`
+/// 15×12, `mono` 16×13, `monoCaption` 13×11) e os dois restantes por fração, que é o Flutter
+/// arredondando a caixa pra pixel inteiro. `normal` é a palavra do CSS pra mesma instrução, e faz os
+/// dois lados lerem a mesma métrica em vez de dois números escritos por casas diferentes.
+///
+/// Quem declara altura continua saindo em px: declarado é declarado, e o gate de paridade compara os
+/// dois casos separados.
+///
+/// **NÃO existe gate medindo o PIXEL das duas plataformas, e é decisão.** O que achou isto foi
+/// medir a Inter num navegador de verdade contra a Inter num `flutter test` com a fonte carregada
+/// — e um gate assim pediria navegador em toda rodada, sobre duas plataformas que não podem
+/// empatar (sobra 0,5px de arredondamento, e gate com tolerância é gate que se afrouxa). Varri as
+/// outras famílias antes de decidir: cor, medida, tamanho, peso e tracking são CÓPIA de valor; a
+/// altura era a única TRADUÇÃO, e é esta linha. Classe de um caso, fechado.
+///
+/// Condição de reabrir: **a segunda tradução** — outro ponto em que o Flutter diz *natural* e o
+/// CSS precise escolher a palavra —, ou uma divergência de desenho medida à mão que o gate de
+/// paridade tenha deixado passar.
 String coreflowTipoCss(Map<String, TextStyle> degraus, {required String familia}) {
-  final linhas = <String>["  --cps-font-family: $familia;"];
+  final linhas = <String>["  ${prefixoDaLinguagem}font-family: $familia;"];
   for (final e in degraus.entries) {
     final s = e.value;
     final tamanho = s.fontSize;
     if (tamanho == null) continue;
-    final altura = (s.height ?? 1) * tamanho;
-    linhas.add('  --cps-type-${e.key}-size: ${_px(tamanho)};');
-    linhas.add('  --cps-type-${e.key}-line-height: ${_px(altura)};');
+    final altura = s.height == null ? 'normal' : _px(s.height! * tamanho);
+    linhas.add('  ${prefixoDaLinguagem}type-${e.key}-size: ${_px(tamanho)};');
+    linhas.add('  ${prefixoDaLinguagem}type-${e.key}-line-height: $altura;');
     if (s.fontWeight != null) {
-      linhas.add('  --cps-type-${e.key}-weight: ${s.fontWeight!.value};');
+      linhas.add('  ${prefixoDaLinguagem}type-${e.key}-weight: ${s.fontWeight!.value};');
     }
     if (s.letterSpacing != null) {
-      linhas.add('  --cps-type-${e.key}-spacing: ${_px(s.letterSpacing!)};');
+      linhas.add('  ${prefixoDaLinguagem}type-${e.key}-spacing: ${_px(s.letterSpacing!)};');
     }
   }
   return ':root {\n${linhas.join('\n')}\n}\n';
@@ -195,7 +246,7 @@ String coreflowAjustesCss(
     final tag = tagDaPeca(a.componente);
     if (!tagsWeb.contains(tag)) continue;
     linhas.add('/* ${a.componente}: ${a.de} → ${a.para} — ${a.motivo.name}. ${a.nota} */');
-    linhas.add('$tag { --cps-${a.de}: var(--cps-${a.para}); }');
+    linhas.add('$tag { $prefixoDaLinguagem${a.de}: var($prefixoDaLinguagem${a.para}); }');
   }
   return linhas.isEmpty ? '' : '${linhas.join('\n')}\n';
 }
@@ -205,3 +256,82 @@ String coreflowAjustesCss(
 String tagDaPeca(String componente) => componente
     .replaceAllMapped(RegExp('(?<=.)[A-Z]'), (m) => '-${m[0]}')
     .toLowerCase();
+
+/// Os GRADIENTES do produto, como `linear-gradient` — e eles são do FILHO, não da linguagem.
+///
+/// O `///` do `CoreflowGradients` conta por quê: as paradas saem do arquivo do símbolo, e curva de
+/// logo não é rampa — *«forçá-la em `papeisExtras` seria oito entradas fingindo ser papel»*. Os
+/// atalhos moravam no pai e mudaram para o pacote do produto: **nome do pai, valor de filho**.
+///
+/// A falta disto foi medida do lado de fora: o Internet Banking pinta sete peças com o degradê da
+/// marca — avatar, botão flutuante, variante de destaque —, e não havia de onde tirá-lo. A saída
+/// que sobrava era declarar tinta de marca no repo do consumidor, que é o que a `ADR-007` proíbe.
+///
+/// O ÂNGULO vira `deg`: o Flutter fala em `Alignment` de canto a canto, o CSS em graus. `(-0.8,-1)`
+/// a `(0.8,1)` é o eixo diagonal, e `135deg` é o mesmo traço no sistema do navegador — medido, não
+/// convertido de cabeça: `atan2` do vetor entre os dois pontos, com o zero do CSS apontando pra cima.
+///
+/// A TINTA SOBRE O GRADIENTE sai junto, e não é detalhe: no primeiro produto ela é o vinho-tinta, e
+/// a troca dela é o que destravou o lockup — com branco, o amarelo dava **1,21:1**, que é conteúdo
+/// que não existe na tela.
+String coreflowGradientesCss(CoreflowGradients g) {
+  String css(LinearGradient lg) {
+    final graus = _grausDe(lg.begin, lg.end);
+    final paradas = <String>[
+      for (var i = 0; i < lg.colors.length; i++)
+        lg.stops == null
+            ? _hex(lg.colors[i])
+            : '${_hex(lg.colors[i])} ${(lg.stops![i] * 100).toStringAsFixed(0)}%',
+    ];
+    return 'linear-gradient(${graus}deg, ${paradas.join(', ')})';
+  }
+
+  final linhas = [
+    for (final e in g.todos.entries) '  ${prefixoDaLinguagem}gradiente-${e.key}: ${css(e.value)};',
+    '  ${prefixoDaLinguagem}onGradiente: ${_hex(g.tintaSobreOGradiente)};',
+  ];
+  return ':root {\n${linhas.join('\n')}\n}\n';
+}
+
+/// O ângulo do CSS a partir dos dois cantos do Flutter.
+///
+/// `Alignment` vai de -1 a 1 com o Y crescendo pra BAIXO; o `deg` do CSS mede a partir do topo, no
+/// sentido horário. Converter de cabeça erra o sinal do Y — este é o mesmo cálculo que o
+/// `linear-gradient` faz, escrito uma vez.
+int _grausDe(AlignmentGeometry begin, AlignmentGeometry end) {
+  final a = begin.resolve(TextDirection.ltr), b = end.resolve(TextDirection.ltr);
+  final dx = b.x - a.x, dy = b.y - a.y;
+  final graus = (math.atan2(dx, -dy) * 180 / math.pi).round();
+  return (graus + 360) % 360;
+}
+
+/// A PONTE DO NOME ANTIGO — todo `--diletta-x` que esta folha declara ganha um `--cps-x` apontando
+/// para ele.
+///
+/// Derivada da FOLHA, não de uma segunda lista, e a razão tem nome: o avô fez a ponte dele por
+/// expressão regular e ela não lia o `_`, então `--diletta-s0_5` e `--diletta-s1_5` ficaram sem
+/// alias — dois degraus mudos, achados pelo gate dele e não por olho. Lista paralela e regex estreita
+/// são a mesma dívida com roupas diferentes: quem lê a saída não erra o que a saída tem.
+///
+/// Alias não copia VALOR. `--cps-primary: var(--diletta-primary)` num `:root` único segue o seletor
+/// que estiver valendo, então um bloco só cobre claro e escuro — não há par de blocos para
+/// dessincronizar.
+///
+/// Sai quando o consumidor migrar. Enquanto existir, ela é o que deixa 2.315 ocorrências de
+/// `--cps-*` no Internet Banking continuarem lendo a tinta deste produto.
+String coreflowPonteDoNomeAntigo(String folha) {
+  // `[A-Za-z0-9_-]` inclui o `_` DE PROPÓSITO — ver o `///` acima.
+  final nomes = RegExp('${RegExp.escape(prefixoDaLinguagem)}([A-Za-z0-9_-]+)\\s*:')
+      .allMatches(folha)
+      .map((m) => m.group(1)!)
+      .toSet()
+      .toList()
+    ..sort();
+  if (nomes.isEmpty) return '';
+  final linhas = nomes
+      .map((n) => '  $prefixoDaPonte$n: var($prefixoDaLinguagem$n);')
+      .join('\n');
+  return '\n/* PONTE: os nomes com o prefixo antigo, apontando para os da linguagem.\n'
+      '   ${nomes.length} apelidos. Alias não copia valor, então o escuro segue o seletor. */\n'
+      ':root {\n$linhas\n}\n';
+}

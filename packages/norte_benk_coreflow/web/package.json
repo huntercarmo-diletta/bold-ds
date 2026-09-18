@@ -1,13 +1,13 @@
 {
-  "name": "meu-banco-web",
+  "name": "norte-benk-web",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "A INSTÂNCIA WEB do Meu Banco: os custom elements da linguagem, com a tinta deste produto.",
+  "description": "A INSTÂNCIA WEB do Norte Benk: os custom elements da linguagem, com a tinta deste produto.",
   "main": "./index.js",
   "exports": {
     ".": "./index.js",
-    "./tokens.css": "./tokens/meu_banco-tokens.css"
+    "./tokens.css": "./tokens/norte_benk-tokens.css"
   },
   "files": [
     "index.js",

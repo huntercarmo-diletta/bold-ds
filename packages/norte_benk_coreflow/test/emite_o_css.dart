@@ -1,4 +1,4 @@
-// ESCREVE `web/tokens/meu_banco-tokens.css`. **Não é gate** — gate é o vizinho
+// ESCREVE `web/tokens/norte_benk-tokens.css`. **Não é gate** — gate é o vizinho
 // `o_css_esta_em_dia_test.dart`, que roda na suíte e compara o disco com a fonte.
 //
 //     flutter test test/emite_o_css.dart
@@ -8,7 +8,7 @@
 import 'dart:io';
 
 import 'package:coreflow/coreflow.dart';
-import 'package:meu_banco_coreflow/meu_banco.dart';
+import 'package:norte_benk_coreflow/norte_benk.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// As TAGS que a instância web registra, lidas do `index.js` do pacote do avô — a fonte é o pacote e
@@ -25,11 +25,11 @@ Set<String> tagsDaWeb() {
 /// As famílias que este produto declara, na ordem em que a cascata precisa delas. Nenhum hex é
 /// escrito aqui: tudo sai da paleta, pela derivação da linguagem.
 String cssDoProduto() => [
-      coreflowPapeisCss(meuBanco.paleta, produto: 'Meu Banco'),
+      coreflowPapeisCss(norteBenk.paleta, produto: 'Norte Benk'),
       '\n/* O ESQUEMA DESTE PRODUTO — os papéis que o avô não tem. */\n',
-      coreflowEsquemaCss(meuBanco.paleta),
+      coreflowEsquemaCss(norteBenk.paleta),
       '\n/* MEDIDA por nome. */\n',
-      coreflowMedidasCss(meuBanco.paleta),
+      coreflowMedidasCss(norteBenk.paleta),
       // A ESCALA DE TIPO entra quando este produto declarar a dele em `tipografia:`. Sem declaração,
       // a escala é a do avô e ela já vem na folha dele — emitir de novo seria repetir o que não é
       // nosso. Quando declarar, acrescente aqui:
@@ -50,21 +50,33 @@ String cssDoProduto() => [
       _ajustes(),
     ].join();
 
+/// A folha COM a ponte `--cps-x: var(--diletta-x)` — o que vai para o disco, como no Bold
+/// (`3629a23`): quem já escreveu com o nome antigo continua resolvendo.
+String cssDoProdutoComPonte() {
+  final css = cssDoProduto();
+  return css + coreflowPonteDoNomeAntigo(css);
+}
+
 String _ajustes() {
-  final css = coreflowAjustesCss(meuBanco.ajustesDePapel, tagsWeb: tagsDaWeb());
+  final css = coreflowAjustesCss(norteBenk.ajustesDePapel, tagsWeb: tagsDaWeb());
   return css.isEmpty ? '' : '\n/* AJUSTES DE PAPEL POR COMPONENTE. */\n$css';
 }
 
 void main() {
-  test('emite o CSS dos tokens do Meu Banco', () {
-    final css = cssDoProduto();
-    final f = File('web/tokens/meu_banco-tokens.css');
+  test('emite o CSS dos tokens do Norte Benk', () {
+    final css = cssDoProdutoComPonte();
+    final f = File('web/tokens/norte_benk-tokens.css');
     f.parent.createSync(recursive: true);
     f.writeAsStringSync(css);
 
-    final vars = RegExp(r'--diletta-[A-Za-z0-9_-]+\s*:').allMatches(css).length;
+    final daLinguagem = RegExp(r'--diletta-([A-Za-z0-9_-]+)\s*:').allMatches(css).length;
+    Set<String> nomesUnicos(String prefixo) =>
+        RegExp('$prefixo([A-Za-z0-9_-]+)\\s*:').allMatches(css).map((m) => m.group(1)!).toSet();
+    final nomes = nomesUnicos('--diletta-');
+    final apelidos = nomesUnicos('--cps-');
     // Controle negativo: folha curta demais não é erro no navegador, é silêncio.
-    expect(vars, greaterThan(100), reason: 'a folha saiu curta demais pra ser os papéis');
-    stdout.writeln('escrito: ${f.path} — $vars declarações');
+    expect(daLinguagem, greaterThan(100), reason: 'a folha saiu curta demais pra ser os papéis');
+    expect(apelidos, nomes, reason: 'a ponte não cobriu todos os nomes emitidos');
+    stdout.writeln('escrito: ${f.path} — ${nomes.length} nomes, $daLinguagem declarações, ${apelidos.length} apelidos');
   });
 }

@@ -3685,8 +3685,18 @@ void configurarDsDoBold() {
     marcas: const {'diletta': 'Diletta', 'bold': 'Conta BOLD'},
     temaDaMarca: (filho, {required escuro, required marca}) =>
         _temaDoProduto(_produtoDaMarca(marca), filho, escuro: escuro),
+    // A ESCADA INTEIRA, meio-passo incluído. Os dois meios (`s0_5` e `s1_5`) estavam de fora, e a
+    // consequência é que a aba Styles → espaço mostrava nove degraus enquanto a linguagem publica
+    // onze — a designer foi ao catálogo conferir um `2px` e concluiu, com razão, que não havia token.
+    // Havia: `DilettaSpacing` declara os dois e escreve para que servem («micro: offset de badge,
+    // ajuste fino» e «gap apertado, entre 4 e 8»), o `DilettaInlineAlert` usa um, e o
+    // `diletta-segmented-control` desenha o trilho com `gap: 2px; padding: 2px`.
+    // Catálogo que esconde degrau ensina a escrever o número à mão, que é o oposto do que ele existe
+    // para fazer. Mesmo padrão do lote 3 do IB: o token chega e ninguém volta para ver quem o lê.
     spacingTokens: const {
+      's0_5': DilettaSpacing.s0_5,
       's1': DilettaSpacing.s1,
+      's1_5': DilettaSpacing.s1_5,
       's2': DilettaSpacing.s2,
       's3': DilettaSpacing.s3,
       's4': DilettaSpacing.s4,

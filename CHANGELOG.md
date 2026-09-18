@@ -20,6 +20,294 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.108.0] — 2026-09-17
+
+### Nasce o segundo filho — o Norte Benk, do Berço ao pacote em um comando
+
+**Só acrescenta.** Nada do Conta BOLD muda: nenhum token, nenhum papel, nenhuma peça — o diff do pai, do filho e da instância web contra a `v0.107.0` está vazio.
+O que entra é um pacote novo em `packages/`, ao lado dos outros, e a versão sobe no filho Bold e na
+instância web por convenção — *«uma língua, um número»* — sem que nenhum dos dois tenha mudado.
+
+| | antes | agora |
+|---|---|---|
+| filhos do Coreflow neste repo | 1 — o Conta BOLD | **2**: `coreflow_design_system` e `norte_benk_coreflow` |
+| pacotes em `packages/` | 4 | **5** |
+| de quem o filho depende | só do pai | **igual** — `norte_benk_coreflow` depende de `coreflow` por `path:`, e de mais nada |
+
+#### De onde ele veio
+
+Do **Berço Coreflow**, o site em que o cliente preenche a marca e sai com a ficha conferida. O primeiro
+envio (17/09, `norteBenk`) trouxe uma cor puxada do próprio logo, `#2A57A5`, três artes em SVG
+(colorido, positivo/negativo e símbolo), a forma "descontraído" e uma fonte pedida. A conferência do
+site fechou em **7 ok, 3 atenção, 0 falha** — texto sobre a marca a 6,99:1 no claro e 6,12:1 no
+escuro, contra o piso de 4,5:1.
+
+O pacote nasceu pelo comando do pai — `dart run coreflow:novo_filho --id norteBenk --nome "Norte Benk"
+--cor '#2A57A5'` — e três coisas entraram depois, na ordem que a ficha pede: a declaração do produto
+com a marca visual (`DilettaBrand` em três artes, `nomeDaMarca`, a proporção do lockup e
+`raioDeBotao: 26` / `raioDeFolha: 32` por `.comMaterial` sobre a paleta do `daMarca`), os três SVG em
+`assets/logos/`, e o `path:` do pai. Sem `tipografia:` de propósito: a Gotham é licenciada e não está
+no catálogo do Google Fonts — fica a escala do Coreflow e a família do sistema, e o time embala a
+fonte na implantação.
+
+#### O gerador ficou para trás do prefixo, e o filho novo descobriu
+
+A `v0.107.0` trocou o prefixo emitido para `--diletta-*`, com a ponte `--cps-x: var(--diletta-x)`, e
+atualizou os testes do Bold e a folha dele. **Não atualizou o molde em `novo_filho.dart` nem o
+exemplo `filho_do_coreflow`**: os quatro testes de um filho novo ainda nascem contando `--cps-`, e a
+suíte do exemplo está vermelha nesta `main` — 4 falhas, medidas antes deste release. É o modo de
+envelhecer que o gate do gerador existe para pegar, e ele não pegou porque compara o exemplo com o
+molde, e os dois envelheceram juntos.
+
+Os testes do Norte Benk receberam o mesmo ajuste que os do Bold receberam em `3629a23`: o emissor
+escreve a folha com `coreflowPonteDoNomeAntigo`, os contadores e o parser leem `prefixoDaLinguagem`,
+o portão do instalado lê `tokens/diletta-tokens.css`. A folha dele sai com **72 nomes, 210 declarações
+e 72 apelidos de ponte**. O molde do gerador fica como pendência do pai, com o nome escrito aqui.
+
+#### O que NÃO vem nesta versão, e por quê
+
+- **A fonte.** Pedida, não declarada — licenciada. Entra por `tipografia:` quando o time a embalar.
+- **A arte negativa no lugar certo.** O logo colorido separa só 13% do fundo escuro; a versão branca
+  mede 17,9:1. `DilettaBrand` tem UM `logo`, e as duas artes ao mesmo tempo estão pedidas em
+  `docs/pedidos/2026-09-14-o-logo-tem-uma-arte-e-a-pagina-tem-duas.md`, sem veredito. Até lá, quem
+  monta o app aplica a branca à mão onde a colorida não separa.
+- **As outras seis formas.** O "descontraído" declara cartão 32, vidro 24, nav 28, campo 24, pílula 14
+  e miúdo 12; o produto declara só botão e folha. O caminho é `comMaterial(medidas:)`, que existe
+  desde o avô v0.194.0 — a ficha do Berço foi gerada contra o v0.180.0 e ainda não o emite.
+- **Nove campos em branco** — razão social, ISPB, telefone, e-mail, termos… — que o cliente não
+  preencheu e o time completa na implantação. Não são do pacote: são do app.
+
+#### Como o app recebe
+
+Ainda não recebe. O `tool/ds_vendor.sh` do app conhece avô, base e `coreflow_design_system`; a quarta
+irmã precisa entrar no script, e o app precisa de um `bootstrap(produto:)` que hoje não existe —
+treze sítios leem `ContaBold` direto. O `path:` do pubspec é o de dentro do monorepo; na entrega por
+tag, o próprio pubspec pede `git:` + `ref:`.
+
+### Gates
+
+15 no Norte Benk, sem pulo, com o pacote web do avô instalado para os gates que olham o que está
+INSTALADO. Este Mac não tem Node: o `npm install` foi reproduzido com `git archive` da tag
+`web-v0.198.0` (commit `e7460ff`), e o `web/package-lock.json` foi escrito à mão nesse mesmo commit,
+como o do exemplo. 230 passam no filho Bold, sem mudança nele.
+
+## [0.107.0] — 2026-09-17
+
+### O avô vem quatro degraus à frente, e traz o movimento que o filho cravava à mão
+
+Nada de desenho muda nesta versão — **a tinta emitida é byte a byte a mesma**, conferido no diff.
+O que muda é o que passa a estar DISPONÍVEL, porque o avô respondeu cinco pedidos abertos e o do
+banner, e entregou em três tags.
+
+#### O que o consumidor ganha
+
+| | antes | agora |
+|---|---|---|
+| curvas de movimento | nenhuma — duração atravessava, curva não | **4**: `--cps-ease-standard`, `-emphasized`, `-enter`, `-exit` |
+| contextos de movimento | nenhum | **6** pares duração+curva: control, emphasis, fade, page, sheet, toast |
+| elementos registrados | 25 | **28**, com `<diletta-status-banner-button>` |
+
+**As curvas são o item que mais importa, e o motivo é um defeito nosso.** O Internet Banking cravou
+dois `cubic-bezier` literais porque a curva não atravessava, com um comentário prometendo trocar
+quando ela viesse. Ela veio — e o avô, indo responder o pedido, foi conferir os nossos números
+contra o SDK do Flutter:
+
+    o nosso `ease-standard`     cubic-bezier(0.33, 1, 0.68, 1)
+    o `ease-enter` da linguagem cubic-bezier(0, 0, 0.58, 1)      ← é este que ele queria ser
+
+    o nosso `ease-emphasized`      cubic-bezier(0.65, 0, 0.35, 1)
+    o `ease-standard` da linguagem cubic-bezier(0.42, 0, 0.58, 1) ← e este
+
+Erramos o nome **e** o valor: os nossos dois não são nenhuma das quatro curvas do Flutter — são o
+`easeOutCubic` e o `easeInOutCubic` de uma tabela pública de easings, com os mesmos rótulos e outros
+números. A frase dele fecha o caso: ***«transcrição à mão não erra só o rótulo: troca a fonte quando
+a fonte não está emitida»***. O movimento do IB hoje não é o movimento do app, e ninguém veria isso
+sem a emissão.
+
+#### Esta folha passa a emitir `--diletta-*`, e quase saiu quebrada
+
+A `v0.198.0` do avô renomeia toda variável de `--cps-*` para `--diletta-*` — a pedido do filho A,
+cujo argumento é que `cps` é a sigla do PRIMEIRO consumidor carimbada na saída de quem é consumido
+por três. Ele emitiu uma ponte: `cps-tokens.css` importa `diletta-tokens.css` e aponta cada nome por
+`var()`, 245 apelidos.
+
+**A ponte dele não nos cobre, e descobrir isso custou uma release.** Ela serve a quem ESCREVE
+`--cps-*` na própria folha — um consumidor. Nós não escrevemos: nós **sobrescrevemos**. E
+sobrescrever o nome velho não alcança quem lê o novo, porque as peças dele passaram a ler
+`--diletta-*`.
+
+Medido num diretório vazio, com o pacote instalado pela tag, antes de publicar:
+
+    <diletta-button>  desenhou em  #17a37d   ← o verde de REFERÊNCIA
+    a nossa folha declarava        #f66fa0   ← o rosa do Bold, que ninguém lia
+
+**Sem um erro no console.** É o modo de falhar que o README deste pacote já descrevia — *«fora de
+ordem, a referência ganha e a tela sai verde»* — chegando por outra porta: não pela ordem, pelo NOME.
+
+O conserto: o prefixo virou **uma constante** no emissor (estava cravado em 22 literais), a folha
+passa a declarar `--diletta-*`, e **nós emitimos a nossa própria ponte** — 149 apelidos `--cps-*`
+apontando para ela, pelo mesmo mecanismo que o avô nos deu. O Internet Banking tem 2.315 ocorrências
+do nome velho e não precisa mexer em nada.
+
+A ponte é derivada da FOLHA, não de uma segunda lista, e isso tem nome: a ponte do avô foi feita por
+expressão regular que não lia o `_`, e `--diletta-s0_5` e `--diletta-s1_5` ficaram sem alias — dois
+degraus mudos, achados pelo gate dele e não por olho.
+
+#### O gate que faltava, e por que 440 testes passaram
+
+Todos os gates conferiam a folha contra a FONTE dela: que a emissão corresponde ao Dart, que a versão
+instalada casa com o pino, que os degraus resolvem. **Todos certos, e nenhum perguntava a única coisa
+que este pacote existe para garantir: a peça do avô, desenhada, sai na cor deste produto?**
+
+Nasce `a_peca_do_avo_le_o_que_esta_folha_declara_test.dart`: lê os `var(--x)` dos fontes das peças do
+avô, lê o que esta folha declara, e reprova quando declaramos um papel com nome diferente do que a
+peça lê. Provado por mutação — devolver o prefixo antigo reprova.
+
+Dois gates vizinhos também estavam olhando o lugar errado e foram corrigidos junto: o que mede os
+degraus de tipo lia a folha de PONTE do avô, que só tem apelidos e nenhum valor.
+
+A ponte dele sai na **v0.210.0**; a nossa sai quando o consumidor migrar.
+
+#### A escada de espaço aparece inteira no catálogo
+
+A aba *Styles → espaço* mostrava nove degraus enquanto a linguagem publica onze: `s0_5` e `s1_5`,
+os dois meio-passos, ficavam de fora da `spacingTokens` declarada aqui. Eles saíam no CSS o tempo
+todo — só não saíam no catálogo.
+
+Esconder degrau não é neutro. A designer foi ao catálogo conferir se `2px` tinha token, não achou, e
+a conclusão correta a partir do que estava na tela era que não existia — e o caminho natural a partir
+daí é escrever o número à mão, que é o oposto do que o catálogo existe para fazer.
+
+Gate novo cobra que a lista não deixe NENHUM degrau de fora, provando o valor de cada um contra
+`DilettaSpacing` em vez de números digitados no teste — segunda fonte para o mesmo número é o defeito
+que o `///` do motor diz que esta família já registrou três vezes.
+
+#### Os pinos que faltavam
+
+Cinco lugares pinavam o avô e três gates DELE acharam os dois que eu esqueci. O que vale registrar é
+o terceiro, que explica o próprio defeito na mensagem de erro: *«a versão INSTALADA do avô é a que o
+pino diz»* — o `npm install` responde «up to date» porque o lock guarda o COMMIT já resolvido, e
+trocar o nome da tag não o invalida. O erro traz o comando que força a re-resolução.
+
+443 testes verdes: 101 no pai, 230 no filho, 112 no catálogo. `flutter analyze` limpo.
+
+## [0.106.0] — 2026-09-16
+
+### O gradiente da marca atravessa para a web
+
+**Só acrescenta.** Três tokens novos, nada muda de valor, e nada sai.
+
+| token | o que é |
+|---|---|
+| `--cps-gradiente-primary` | a curva do lockup, **oito paradas** com os offsets do símbolo |
+| `--cps-gradiente-accent` | o âmbar descendo pro tostado, para controle pequeno |
+| `--cps-onGradiente` | a tinta que vai POR CIMA — o vinho-tinta |
+
+**A falta foi medida do lado de fora**, e é o melhor tipo de achado. O Internet Banking pinta **sete
+peças** com o degradê da marca — avatar, botão flutuante, variante de destaque, barra de topo — e não
+havia de onde tirá-lo: a linguagem não publica gradiente para a web, e no Dart os atalhos saíram do
+pai para o pacote do produto (*«nome do pai, valor de filho»*). A saída que sobrava ao consumidor era
+declarar tinta de marca no repo dele, que é o que a `ADR-007` proíbe.
+
+**A curva é a do símbolo, parada por parada** — não uma amostra. O `///` do `CoreflowGradients` conta
+o preço de errar isso: as paradas já foram declaradas SEM offset um dia, o Flutter as distribuiu
+igualmente, e o coral foi parar em 0,5 quando no símbolo ele está em 0,60. *«A curva da UI e a do
+logo eram diferentes no mesmo dia em que eu disse que tinham voltado a ser a mesma.»*
+
+**O ângulo é medido, não convertido de cabeça.** `Alignment` vai de -1 a 1 com o Y crescendo pra
+BAIXO; o `deg` do CSS mede do topo, no sentido horário. Erro de sinal num gradiente diagonal é a
+curva espelhada, que ninguém percebe olhando um quadrado pequeno.
+
+### Gates
+
+Dois, e o segundo teve o controle refeito. O primeiro anda as paradas do app e exige cada uma na
+folha, com o offset. O segundo mede o ângulo — e a primeira versão dele tentava montar um gradiente
+VERTICAL de controle, o que não é possível: a classe crava o eixo e o construtor só recebe as
+paradas. O controle que ficou é melhor: **os dois gradientes têm eixos diferentes** (±0,8 e ±0,7), e
+um conversor quebrado que devolvesse constante daria o mesmo número para os dois — passando por
+qualquer teste que olhasse um só.
+
+Provado por mutação: ângulo constante reprova com *«o conversor virou constante»*; sinal do Y
+invertido reprova com *«primary aponta para cima»*.
+
+227 testes no filho, 101 no pai, 109 no catálogo, 15 no filho gerado.
+
+## [0.105.0] — 2026-09-15
+
+### A entrelinha que a fonte manda, a forma por família, e o avô dois degraus à frente
+
+**Quebra declarada, no degrau minor** — a régua deste arquivo chama símbolo removido de major, e em
+SemVer 0.x a quebra sobe o minor com nota de migração, como a `v0.100.0` fez. Quatro nomes de token
+saem e seis entram. **Nenhum consumidor existe ainda** (o pacote web não é dependência de ninguém
+hoje), então o preço real é zero; a nota existe porque o primeiro consumidor está chegando.
+
+#### Nota de migração — a forma sobe por FAMÍLIA
+
+| sai | entra |
+|---|---|
+| `--cps-radius-field` | `--cps-formaDeCampo` |
+| `--cps-radius-card` | `--cps-formaDeCartao` |
+| `--cps-radius-sheet` | `--cps-formaDeFolha` |
+| `--cps-radius-pill` | — (some: a pílula ficou fora das seis por veredito do avô; quem a quer lê `--cps-formaDeBotao` ou `--cps-formaDeNav`, que é onde a linguagem a desenha) |
+| — | `--cps-formaDeBotao`, `--cps-formaDeVidro`, `--cps-formaDeNav` (novos) |
+
+Os nomes deixam de ser inventados aqui: são os seis papéis de forma do `DilettaMedida` do avô,
+entregues no veredito de 14/09 (*"a forma sobe por família e os três viram alias"*). O valor de cada
+um passa a sair dos getters do esquema, então um produto que declare `raioDeBotao: 16` vê o 16 — a
+emissão anterior lia a tabela crua e teria devolvido a pílula.
+
+#### O conserto que motivou a versão: `line-height`
+
+Cinco degraus saíam com a entrelinha errada na web. `height` nulo no Flutter quer dizer *use a caixa
+natural da fonte* — a Inter entrega ~1,2 —, e o emissor traduzia por `1 ×`.
+
+| degrau | app | web antes | web agora |
+|---|---|---|---|
+| `title` | 21px | 17px | `normal` |
+| `button` | 18px | 15px | `normal` |
+| `label` | 15px | 12px | `normal` |
+| `mono` | 16px | 13px | `normal` |
+| `monoCaption` | 13px | 11px | `normal` |
+
+Medido com a Inter carregada nos dois lados — `FontLoader` no Dart, a mesma Inter servida num
+navegador. A primeira medição, num `flutter test` cru, deu **zero nos vinte degraus**: o ambiente de
+teste troca a fonte por uma de métricas 1,0 e embutia a mesma suposição do emissor. Depois do
+conserto a maior diferença é **0,5px**, e é o Flutter arredondando a caixa da linha pra pixel
+inteiro onde o navegador guarda a fração.
+
+Quem declara altura continua saindo em px: declarado é declarado.
+
+#### O avô sobe de `v0.194.0` para `v0.194.3`
+
+E o pacote web publicado estava ainda mais atrás — a `web-v0.104.0` carregava o avô em
+**`web-v0.193.0`**. O que chega:
+
+- **as peças web ganham degrau de tipo.** Seis das 25 saíam com `font: inherit`, ou seja com o
+  tamanho **e o peso** da página hospedeira: o `sm` do botão declara `labelMd` (12/500) e num
+  hospedeiro no padrão do navegador saía 16/400. `pagination` fica de fora por decisão do avô — o
+  degrau dela (12/700) não existe na escada;
+- **o contrato viaja com o código**: `spec-publicada.json` com as 98 peças — propósito, destino,
+  eixos, tipos, uniões, papéis, slots e geometria — em `./spec` do pacote dele.
+
+#### Gates
+
+Três novos, e os três nasceram de buraco medido, não de ideia:
+
+- **a versão INSTALADA do avô é a que o pino diz.** O `npm install` responde «up to date» depois de
+  trocar a tag e deixa a versão velha no disco — o lock guarda o commit resolvido, não a tag;
+- **todo degrau que as peças PEDEM resolve nas quatro faces.** O nome do degrau quem escolhe é a
+  peça do avô: pedir um que ninguém declara mata a declaração no navegador sem erro;
+- **a folha escreve exatamente as faces que o Dart declara**, nem a mais nem a menos. Face a mais
+  silencia o degrau do avô na cascata; face a menos é a peça caindo na folha dele sem ninguém saber.
+
+O terceiro tem autoteste sintético porque metade da régua nunca foi exercida por produto nenhum
+desta casa: os 20 degraus do Bold declaram peso, todos.
+
+#### O gerador
+
+Um filho novo nasce com os três, e com a régua já provada — o autoteste roda mesmo num produto que
+ainda não declarou escala de tipo. De 6 para 15 verificações no filho gerado.
+
 ## [0.104.0] — 2026-09-14
 
 ### A fonte viaja no pacote — e o pronto ganhou da conversão pelo `tnum`

@@ -3,9 +3,10 @@
 - **de**: conta-bold-ds (filho B) · **para**: ds-diletta (o pai)
 - **consome**: ds-diletta `v0.192.0` (subimos hoje, de `v0.180.0` — 12 tags, gates verdes)
 - **bloqueante?**: **não** — e a primeira versão deste arquivo dizia que sim. Eu instalei antes de
-  você ler (veja a «Retificação» no fim) e ele **funciona**, por um caminho que você não documentou e
-  não prometeu. O pedido continua de pé com outra tese: *o que funciona por acidente quebra sem
-  aviso*, e aqui o aviso chegaria como o IB em produção sem tinta.
+  você ler (veja a «Retificação» no fim — e a «Retificação 2», dos números) e ele **funciona**, por
+  um caminho que você não documentou e não prometeu. O pedido continua de pé com outra tese: *o
+  que funciona por acidente quebra sem aviso*, e aqui o aviso chegaria como o IB em produção sem
+  tinta.
 
 ## De onde vem o pedido
 
@@ -82,6 +83,9 @@ E o custo que já está pago, do outro lado:
 | componentes que o IB mantém por conta própria, em React | **187** |
 | tokens de cor do IB transcritos à mão a partir do Dart | **195** |
 | gates ligando essa transcrição à fonte | **0** |
+
+> **Os dois primeiros números desta tabela estão errados — veja a «Retificação 2» no fim.** O
+> terceiro, que é o do pedido, continua **0**.
 
 O cabeçalho do arquivo de tokens do IB declara a transcrição em voz alta — *portados de
 `…/bold_colors.dart`*. É cópia honesta e assumida. O que não existe é como saber se ela continua
@@ -301,3 +305,65 @@ Os **187 componentes** que o IB mantém e os **195 tokens transcritos à mão co
 que importa, e não os 42 MB. Com a dependência declarada, a pergunta *"isto ainda é a nossa cor?"*
 passa a ter resposta automática — e é isso que eu quero medir na sua volta, não o peso do
 `node_modules`.
+
+---
+
+## Retificação 2 — 15/09, DEPOIS de o sinal ser dado e de o pai ter decidido
+
+**Os `187` componentes e os `195` tokens da seção «Número» não foram medidos. O primeiro está
+errado por 137.** Esta retificação é mais cara que a primeira: aquela corrigiu o arquivo antes de
+alguém lê-lo; esta corrige um número que **já viajou, já foi citado e já sustentou uma decisão**.
+
+### O que eu medi agora
+
+| o que | escrito aqui | medido em 15/09 |
+|---|---|---|
+| componentes do DS local do IB, em React | 187 | **50** — 4 átomos, 35 moléculas, 11 organismos |
+| telas e componentes de aplicação (fora do DS) | — | **45** |
+| **arquivos de componente no repo inteiro** | — | **95** |
+| declarações de cor `--bold-*` transcritas do Dart | 195 | **191** — e são **115** nomes distintos |
+| gates ligando a transcrição à fonte | 0 | **0** |
+
+O método, pra que o próximo número seja conferível sem me perguntar:
+
+```bash
+# as peças do DS local: .tsx sob src/design-system, fora story e teste
+find src/design-system -name '*.tsx' ! -name '*.stories.tsx' ! -name '*.test.tsx' | wc -l
+
+# as declarações de cor, nos quatro arquivos que as declaram
+cat src/design-system/tokens/colors.css src/design-system/themes/{light,dark,marca-matera}.css \
+  | grep -cE '^\s*--bold-'
+```
+
+### De onde saíram os 187
+
+Da mesma pasta, contando **os arquivos de apoio de cada peça como se fossem peças**: cada uma das 50
+tem uma vitrine (`.stories.tsx`), quase todas têm um teste (`.test.tsx`) e uma folha de estilo
+(`.module.css`). Somados dão 183.
+
+**E é aqui que está o pior:** 183 não é 187. **Eu não consigo reproduzir o número que escrevi** — o
+que significa que ele não saiu de contagem nenhuma que eu saiba refazer. Número que o próprio autor
+não consegue medir de novo não é número: é impressão com formatação de dado.
+
+### O que muda na tese, e o que não muda
+
+**Não muda:** a transcrição existe, ela é manual, o cabeçalho do arquivo de tokens do IB a declara
+em voz alta (*portados de `…/bold_colors.dart`*), e **nada liga uma ponta à outra**. O pedido era
+esse, e 115 nomes copiados sem gate são tão indefensáveis quanto 195.
+
+**Muda:** o TAMANHO do lado de cá. O `CHANGELOG` da `v0.194.1` abre com *«o número que trouxe isto é
+de fora»* e cita os 187 como o peso que justificou publicar a spec como dado. Com 50, o peso é um
+terço. A estrutura do argumento sobrevive — quatro implementações, três escritas por outras pessoas,
+todas transcrevendo à mão —, mas **quem decide se um terço do peso ainda decide é você, e por isso
+isto não fica só corrigido aqui: vai no sinal.**
+
+### A lição, e ela não é nova
+
+A primeira retificação deste mesmo arquivo terminou em *«dedução não é medição»*. Esta termina uma
+casa adiante: **medição que não sobrevive a ser refeita é dedução com número.** O erro não foi
+contar errado — foi contar uma vez, não escrever o método, e deixar o número viajar sozinho.
+
+O contraste está no mesmo repo, do mesmo dia: a resposta ao pedido dos raios saiu com **207** onde a
+suíte dava **209**, dois de diferença, sem efeito em conclusão nenhuma — e foi corrigida em menos de
+um dia, com a razão escrita: *«número em pedido é a única coisa que o pai não consegue conferir
+sozinho»*. Este aqui errava por 137 e ficou quatro dias de pé.
