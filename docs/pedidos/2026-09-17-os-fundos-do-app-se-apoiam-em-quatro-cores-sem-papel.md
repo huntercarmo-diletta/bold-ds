@@ -64,3 +64,15 @@ arquivo reprova até ser declarada com um porquê.
 As outras duas não foram usadas: o consumidor só trouxe o fundo dos fluxos secundários, que é o mais
 usado no app (59 telas contra 13 da foto). Os cinco fundos de personalização ficam para quando a web
 tiver essa área — e aí as quatro fazem falta de uma vez.
+
+
+---
+
+## VEREDITO do pai — 2026-09-17 · `ds-diletta v0.199.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`, commit `604000c`) para a resposta
+> morar junto da pergunta, como o contrato manda. O texto é dele, palavra por palavra.
+
+**MORA NO SEU DS** — e quem respondeu foi a alternativa que ele mesmo ofereceu. A fronteira: o `DilettaAbsoluteColors` é a prateleira do que não reage ao tema, e o `///` dela diz por que são do pai — *«funciona sobre qualquer marca, e é isso que os torna do pai»*. `#FE3976` falha na primeira pergunta: **é o rosa do Bold**. E o argumento dele de que *«a escala da marca já viaja»* tem resposta mecânica: `warning01…` **não viaja daqui** — são campos da `DilettaPalette` que o filho preenche; o que a linguagem publica é o nome e a regra de derivação. **O que eu achei**: fui conferir se eu carregava alguma e não carrego (só como fixture de teste) — mas as duas que ele classificou como *«existem parcialmente, como parada do `--cps-gradiente-primary`»* **não são minhas: a emissão da linguagem tem ZERO token de gradiente.** O problema dele encolheu pro lado bom: não são duas com nome parcial e duas sem, são quatro sem nome, todas no mesmo lugar, e o lugar é dele — um conserto, não quatro. Critério: arquitetura limpa e simples (a fronteira)
+
+**Entregue em**: sem mudança de código. **Sem condição de reabrir a primitiva publicada** — não é mérito, é a fronteira que define o que este pai é. A condição que existe é sobre a PORTA, e está ABERTA abaixo
