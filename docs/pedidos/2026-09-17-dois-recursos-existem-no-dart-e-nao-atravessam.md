@@ -1,13 +1,15 @@
-# PEDIDO · Três recursos existem no Dart e não atravessam — e os três travam a adoção das peças
+# PEDIDO · Quatro recursos existem no Dart e não atravessam — e os quatro travam a adoção das peças
 
 - **de**: conta-bold-ds (filho B) · **para**: ds-diletta (o pai)
 - **consome**: ds-diletta `v0.194.3` · `web-v0.194.3`
 - **bloqueante?**: **sim, para a adoção**. O consumidor está trocando as 14 peças locais pelos seus
-  elementos, e estes três param a fila: `BoldButton` (140 usos), `BoldChip` (12) e `BoldSteps` (5).
-- **adendo de 17/09**: o CASO 3 entrou **depois** que os dois primeiros já tinham saído daqui. O
-  nome do arquivo ficou com *dois* de propósito, para não quebrar o link que você já recebeu.
+  elementos, e estes quatro param a fila: `BoldButton` (140 usos), `BoldChip` (12), `BoldSteps` (5)
+  e o sino da barra de topo (1, e é a casca de toda tela autenticada).
+- **adendos**: o CASO 3 entrou em **17/09** e o CASO 4 em **18/09**, os dois depois que o arquivo já
+  tinha saído daqui. O nome do arquivo ficou com *dois* de propósito, para não quebrar o link que
+  você já recebeu.
 
-Três casos, um pedido, porque são a mesma classe — a que você já respondeu duas vezes: o recurso
+Quatro casos, um pedido, porque são a mesma classe — a que você já respondeu duas vezes: o recurso
 existe do lado Dart e o lado web não o carrega.
 
 ---
@@ -128,17 +130,71 @@ a mesma escolha do CASO 2: usar errado ou não usar. Preferimos dizer isso agora
 
 ---
 
-## Por que os três juntos
+## CASO 4 · `<diletta-icon-button>` não tem o BADGE que o Dart tem
+
+O menor dos quatro, e o que eu quase não escrevi — cheguei nele por outro caminho, investigando por
+que o meu ícone estava 4px menor do que o token prometia.
+
+O Dart tem:
+
+```dart
+// DilettaIconButton
+this.badge = false,
+...
+if (widget.badge) const PositionedDirectional(top: 6, end: 6, child: _BadgeDot()),
+
+class _BadgeDot extends StatelessWidget {
+  // 11px, s.error, círculo, com anel branco de 1.5
+}
+```
+
+O elemento web observa sete atributos e nenhum é badge:
+
+```js
+static observedAttributes = ['type', 'size', 'state', 'flush', 'rotulo', 'disabled', 'href'];
+```
+
+`grep -c badge` no arquivo devolve **zero**.
+
+**O que isso custa aqui**: um uso, e ele é o sino de notificações na barra de topo — ou seja, a
+casca de **toda tela autenticada** do produto. Hoje eu desenho o ponto à mão:
+
+```css
+.ponto { position: absolute; top: 6px; right: 6px; width: 9px; height: 9px;
+         border-radius: var(--cps-r200); background: var(--cps-primary);
+         box-shadow: 0 0 0 1.5px var(--cps-bg); }
+```
+
+São 9px onde o seu são 11, e `primary` onde o seu é `error` — **duas divergências que eu só descobri
+ao ler o seu código para escrever isto.** Não vou "consertar" as duas na minha folha: enquanto o
+badge não atravessar, mexer nelas é escolher entre duas cópias, e cópia que persegue original é
+exatamente o que a adoção veio acabar.
+
+**O pedido**: o atributo de badge no elemento, com o ponto de 11 e o papel que o Dart usa.
+
+**Uma observação que talvez seja mais útil que o pedido.** Fui procurar o `DilettaIconAccessory` na
+web e ele não existe — e descobri que ele **não faz falta**, porque quem carrega o badge é o botão,
+e o medalhão já atravessou como `<diletta-spot-icon>`. Mas isso deixou o `padding: 2` do accessory
+sem instância web nenhuma, e eu tinha copiado essa regra para o meu átomo de ícone achando que ela
+era a régua geral. Não é: o `///` do próprio accessory diz *«slot standalone com badge usa 2; glyph
+inline dentro de outro componente usa 0»*, e 51 dos meus 52 usos são o segundo caso. **A regra
+estava escrita e eu li pela metade** — registro aqui porque, se outro filho fizer a mesma leitura, o
+custo é todo glifo do produto desenhando 4px menor sem ninguém ver.
+
+---
+
+## Por que os quatro juntos
 
 Porque a resposta de um não serve aos outros, mas a **causa** é a mesma, e ela já tem nome nesta
 família: derivação que não carrega. As curvas de movimento foram isso em 16/09 — e o seu veredito
 lá foi o que mostrou que a nossa transcrição à mão tinha trocado a fonte, não só o rótulo.
 
-Aqui não há transcrição possível: `formAssociated`, o modo de seleção e uma peça inteira não são
-valores que alguém copia errado. Ou o lado web os tem, ou o consumidor reimplementa a peça — que é
+Aqui não há transcrição possível: `formAssociated`, o modo de seleção, um badge e uma peça inteira
+não são valores que alguém copia errado. Ou o lado web os tem, ou o consumidor reimplementa a peça — que é
 exatamente o que a adoção veio desfazer.
 
-E o CASO 3 mostra a borda de fora dessa classe: os dois primeiros são recurso que ficou para trás
-DENTRO de um elemento; o terceiro é um elemento que nunca saiu. O jeito de achar os próximos é o
+E os casos mostram a classe inteira, das duas bordas: o 1, o 2 e o 4 são recurso que ficou para trás
+DENTRO de um elemento — um deles (o badge) tão pequeno que eu só achei por acidente; o 3 é um
+elemento que nunca saiu. O jeito de achar os próximos é o
 mesmo dos gates desta casa — um inventário que compare os widgets do Dart com os elementos do
 pacote web e reprove quando a lista divergir sem motivo escrito. Se for útil, escrevemos e mandamos.
