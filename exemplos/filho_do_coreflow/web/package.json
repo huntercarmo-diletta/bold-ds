@@ -14,6 +14,6 @@
     "tokens/"
   ],
   "dependencies": {
-    "diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-v0.198.0"
+    "diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-v0.199.0"
   }
 }

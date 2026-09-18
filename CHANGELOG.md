@@ -20,6 +20,42 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.109.0] — 2026-09-18
+
+### O avô sobe para a `v0.199.0` — a ponte ganhou porta, e dois recursos atravessaram
+
+**Só acrescenta.** Nenhum token deste produto muda de valor, nenhum papel muda de nome, nenhuma peça
+daqui muda de desenho. O que muda é o que o avô entrega por baixo, e são três coisas que os produtos
+esperavam:
+
+- **a ponte do prefixo ganhou porta.** A `v0.198.0` do avô renomeou as variáveis para `--diletta-*` e
+  emitiu a ponte do nome velho — mas as duas folhas entravam no pacote sem entrar no mapa de
+  `exports`, e **ponte emitida e não exportada é ponte que não existe**. Medido pelo consumidor web:
+  de 107 nomes `--cps-*` lidos, 84 resolviam e **23 ficavam sem valor, sem um erro no console**. Agora
+  há `./ponte/tokens.css` e `./ponte/papeis.css`, conferidos aqui num diretório vazio;
+- **`<diletta-button>` participa de formulário**: `formAssociated` mais o eixo `acao`
+  (`button` | `submit` | `reset`). O nome é dele e não o que pedimos — `type` já era o eixo de
+  aparência, e *«quando o nome pedido já é de outra coisa, o empate não se resolve no uso, se resolve
+  no nome»*;
+- **`<diletta-input-chip>` tem o modo escolhível**: `selecionavel` e `selecionado`, com
+  `aria-pressed`. É o chip de FILTRO que o produto usa e que até agora não tinha para onde ir.
+
+Vai junto o badge do `<diletta-spot-icon>`, que também atravessou.
+
+### O que os gates pegaram na subida
+
+Dois lugares ficaram para trás do número, e são a mesma classe da troca de prefixo — quando quem
+achou foi o segundo filho, depois de publicado:
+
+    o gerador de filho recebe o MESMO avô que o pai pina  →  `novo_filho.dart` pinava web-v0.198.0
+    o LADO WEB do filho gerado é byte a byte              →  `exemplos/filho_do_coreflow` também
+
+**Desta vez achou o gate, antes de publicar.** É para isto que ele existe.
+
+E um terceiro ensinou o modo de falhar do `npm`: trocar o nome da tag no `package.json` **não
+invalida o lock** — ele guarda o commit já resolvido, e o install responde *«up to date»* enquanto o
+que está no disco é a versão anterior. O gate traz o comando que resolve.
+
 ## [0.108.0] — 2026-09-17
 
 ### Nasce o segundo filho — o Norte Benk, do Berço ao pacote em um comando
