@@ -1,12 +1,14 @@
-# PEDIDO · Dois recursos existem no Dart e não atravessam — e os dois travam a adoção das peças
+# PEDIDO · Três recursos existem no Dart e não atravessam — e os três travam a adoção das peças
 
 - **de**: conta-bold-ds (filho B) · **para**: ds-diletta (o pai)
 - **consome**: ds-diletta `v0.194.3` · `web-v0.194.3`
 - **bloqueante?**: **sim, para a adoção**. O consumidor está trocando as 14 peças locais pelos seus
-  elementos, e estes dois param a fila: `BoldButton` (140 usos) e `BoldChip` (12).
+  elementos, e estes três param a fila: `BoldButton` (140 usos), `BoldChip` (12) e `BoldSteps` (5).
+- **adendo de 17/09**: o CASO 3 entrou **depois** que os dois primeiros já tinham saído daqui. O
+  nome do arquivo ficou com *dois* de propósito, para não quebrar o link que você já recebeu.
 
-Dois casos, um pedido, porque são a mesma classe — a que você já respondeu duas vezes: o recurso
-existe do lado Dart e o elemento web não o carrega.
+Três casos, um pedido, porque são a mesma classe — a que você já respondeu duas vezes: o recurso
+existe do lado Dart e o lado web não o carrega.
 
 ---
 
@@ -82,12 +84,61 @@ peça fica local até a resposta.
 
 ---
 
-## Por que os dois juntos
+## CASO 3 · `DilettaStepper` não tem instância web — e o que tem esse nome é outra peça
 
-Porque a resposta de um não serve ao outro, mas a **causa** é a mesma, e ela já tem nome nesta
+Aqui a lacuna não é um atributo que falta num elemento: **não há elemento**. O Dart tem a régua
+horizontal da jornada:
+
+```dart
+class DilettaStepper extends StatelessWidget {
+  const DilettaStepper({ required this.current, required this.total, this.label, this.labelText, ... });
+```
+
+> *Linha de rótulos + linha de N segmentos coloridos. Segmentos passados = primary-04, futuros =
+> primary-07.*
+
+E o pacote web tem `<diletta-web-stepper-node>`, que **o comentário dele mesmo declara não ser essa
+peça** — e a declaração está certa:
+
+> *Não é o `DilettaStepper`, que é a régua horizontal do onboarding no celular: aqui cada degrau
+> CARREGA motivo e ação, e é isso que o torna outra peça.*
+
+```js
+static observedAttributes = ['estado', 'titulo', 'descricao', 'motivo', 'ultimo'];
+```
+
+Nenhum dos cinco é posição na jornada. São duas peças com parentesco de nome e nada de gramática em
+comum: uma diz **onde estou numa fila linear**, a outra é uma **lista vertical de pendências**, cada
+uma com o seu porquê e o seu botão. Trocar uma pela outra não é adaptar, é substituir a informação.
+
+**O que isso custa aqui**: 5 usos, e os 5 são a mesma jornada de três passos — `Destinatário · Valor
+· Revisar` no Pix, no TED e na transferência interna, `Código · Valor · Revisar` no boleto,
+`Pagador · Valor · Revisar` na emissão. É a régua de topo de toda movimentação de dinheiro do
+produto. Enquanto não existir, o `BoldSteps` fica local.
+
+**O pedido**: a instância web do `DilettaStepper` — `current`, `total`, e os dois lados da linha de
+rótulos que o `///` dele já separa semanticamente (à esquerda o constante, à direita o que muda).
+
+**Uma ressalva que é nossa, não sua, e vai junto porque muda o que você desenharia**: a régua do
+Dart nasceu para o celular, onde a jornada é uma coluna e o passo é um número. Na web ela vive numa
+linha larga, com os rótulos **legíveis ao mesmo tempo** — é assim que o `BoldSteps` daqui está hoje,
+com bolinha numerada, check no passado e o nome de cada passo visível. Se a sua instância web
+reproduzir só os segmentos coloridos, ela atravessa a API e não atravessa a peça, e nós ficamos com
+a mesma escolha do CASO 2: usar errado ou não usar. Preferimos dizer isso agora do que na adoção.
+
+---
+
+## Por que os três juntos
+
+Porque a resposta de um não serve aos outros, mas a **causa** é a mesma, e ela já tem nome nesta
 família: derivação que não carrega. As curvas de movimento foram isso em 16/09 — e o seu veredito
 lá foi o que mostrou que a nossa transcrição à mão tinha trocado a fonte, não só o rótulo.
 
-Aqui não há transcrição possível: `formAssociated` e o modo de seleção não são valores que alguém
-copia errado. Ou o elemento os tem, ou o consumidor reimplementa a peça — que é exatamente o que a
-adoção veio desfazer.
+Aqui não há transcrição possível: `formAssociated`, o modo de seleção e uma peça inteira não são
+valores que alguém copia errado. Ou o lado web os tem, ou o consumidor reimplementa a peça — que é
+exatamente o que a adoção veio desfazer.
+
+E o CASO 3 mostra a borda de fora dessa classe: os dois primeiros são recurso que ficou para trás
+DENTRO de um elemento; o terceiro é um elemento que nunca saiu. O jeito de achar os próximos é o
+mesmo dos gates desta casa — um inventário que compare os widgets do Dart com os elementos do
+pacote web e reprove quando a lista divergir sem motivo escrito. Se for útil, escrevemos e mandamos.
