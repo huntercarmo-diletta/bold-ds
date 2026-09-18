@@ -96,6 +96,20 @@ lista citando campo que não existe: []
 na árvore que os desenvolvedores clonam.** Só que ele não está lá: o gate e o conserto do
 `nomeDaMarca` são o commit **`81cad85`, local e não enviado**.
 
+> **Deixou de ser simulação no mesmo dia.** Com o merge do item 4 feito (`03e73cc`), o `ref: v0.198.0`
+> e o gate passaram a viver na mesma árvore pela primeira vez, e o teste foi RODADO:
+>
+> ```
+> flutter test  →  104 passam, 1 falha
+> a_marca_do_modo_nao_perde_campo_test · «campo novo no plugue do avô derruba este gate»
+>   Expected: empty
+>     Actual: Set:['logoEscuro', 'logoFullEscuro']
+> ```
+>
+> **A `main` local está vermelha em um teste, e é o teste certo falhando pelo motivo certo** — no
+> commit em que o `ref:` sobe, e não seis telas depois. O conserto são duas linhas no `marcaNo` e dois
+> nomes na lista do gate; **não foi feito, porque é correção de código e a decisão é dela**.
+
 **E são TRÊS campos perdidos em `origin/main`, não dois.** `nomeDaMarca` também não está na lista de
 lá (`grep` por `nomeDaMarca: marca.nomeDaMarca` devolve **0** em `origin/main`). A consequência mudou
 de tamanho desde ontem e fica medida com honestidade:
@@ -169,6 +183,25 @@ deles trocou o número que as duas mãos escreviam igual**:
 
 **Quer dizer que a resolução dos oito é uma frase: fica o lado do remoto.** O `261e5af` está
 superado, não em disputa. O que exige cabeça são as duas páginas de prosa.
+
+### FEITO em 18/09, a pedido dela — `03e73cc`
+
+O merge foi executado nesta rodada e os dez conflitos estão resolvidos. **Push, PR e tag continuam
+sendo dela**; o que mudou foi só a árvore local.
+
+- **os oito de pino**: lado do remoto, nos dois `pubspec.yaml`, no `tagWebDoAvo`, nos dois
+  `package.json` da web e nos três locks. **Conferi que o lado remoto é verdade antes de tomá-lo**,
+  porque o nosso lock de 15/09 foi escrito à mão sem npm nesta máquina: `v0.198.0` → `4c05ee7` e
+  `web-v0.198.0` → `e7460ff` são os shas reais das tags no `ds-diletta`;
+- **`docs/pedidos/2026-09-11-…`**: os dois lados ficaram, em ordem cronológica — a Retificação de
+  11/09, o VEREDITO do pai (nosso), e a Retificação 2 de 15/09 (deles);
+- **`docs/PEDIDOS.md`**: base é o lado remoto, que traz os 13 pedidos novos do item 9 e os vereditos
+  de 16/09. Voltaram as três coisas que só existiam aqui — o «fio fechado» dos raios, o veredito da
+  `v0.194.4` no catálogo sem tinta (lá a coluna de estado estava vazia) e a linha inteira do
+  `copyWith`. **A linha do logo ficou com o VEREDITO de lá e a coluna de estado reescrita**: a D75 já
+  fundida, o veredito que não voltou pro arquivo, e a porta ainda fechada deste lado.
+
+**E o merge deixou a suíte vermelha em um teste, que é o item 2.**
 
 ---
 
