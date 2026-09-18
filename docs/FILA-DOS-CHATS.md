@@ -10,9 +10,360 @@ porta que ele usa chega na tag do 1.
 
 **O que é «nosso» e o que é «pedido»**: `CoreflowBackdrop`, os moods, a tela de Aparência e o repasse
 de `disabled` no botão moram em `packages/coreflow` — **são nossos, não se pede**. Ao avô
-(`ds-diletta`) só vai o que é vocabulário dele: a forma por família (respondida, e adotada), e o EIXO
-do logo (aberto, retificado em 15/09). A licença da arte não é nenhum dos dois: é pergunta para uma
-pessoa.
+(`ds-diletta`) só vai o que é vocabulário dele: a forma por família (respondida, e adotada), o EIXO
+do logo (**respondido em 16/09 e entregue na `v0.196.0`** — o que sobrou é nosso), e o `copyWith` do
+plugue de marca (escrito em 17/09, esperando o sinal). A licença da arte não é nenhum dos dois: é
+pergunta para uma pessoa.
+
+---
+
+## Rodada de 2026-09-18
+
+**Chats lidos** (transcrição, não resumo de terceiro):
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| Berço Coreflow (white label) | `claude_newbold` · `22128cb9` | 17/09 15h32 | o conserto do `nomeDaMarca`, o pedido do `copyWith`, e **a decisão dela: o negativo é ARQUIVO à parte, não o colorido repintado** |
+| Recepção de envios do Berço | `claude_newbold` · `43e09e89` | 17/09 16h47 | **o Norte Benk nasceu**, subiu na `main` remota e saiu na `v0.108.0` |
+| `aprendizado-do-dia` (rotina) | `claude_newbold` · `24ca60dc` | 17/09 10h21 | a regra do logo em três linhas, e **o encargo de MEDIR** antes de reabrir |
+| O front do onboarding / o que o Michel fez | `claude_newbold` · `a90fd506` | 17/09 15h38 | nada pra cá — é produto, e já estava no item 9 de 15/09 |
+| Norte Benk em HML | `claude_newbold` · `6bfe0d0d` | 18/09 10h39 | nada pra cá — app |
+| esta rotina, disparada em 17/09 17h37 | `bold-ds-pacote` · `37301ddd` | — | **não escreveu nada**: a rodada de 17/09 não saiu, e é por isso que esta cobre dois dias |
+
+**E o canal do pai andou o dobro da rodada passada.** `git fetch` nos dois: o `ds-diletta` recebeu
+**26 commits** e **quatro tags de linguagem** (`v0.196.0` · `v0.197.0` · `v0.198.0` · `v0.199.0`) mais
+sete da web; o `bold-ds` remoto recebeu **27 commits** e três tags (`v0.106.0` · `v0.107.0` ·
+`v0.108.0`), a última cortada por ela mesma. **`main` local × `origin/main` = ahead 15, behind 27.**
+
+**A regra segue sendo dela**: esta rodada **não deu push, não abriu PR, não mesclou nada e não criou
+tag**, e **não consertou código** — achado de código vira linha aqui, não commit. O que ficou pronto
+está no fim do arquivo, com o comando.
+
+---
+
+## 1 · O VEREDITO DO LOGO CHEGOU — **ENTRA DIFERENTE**, e já está entregue desde 16/09
+
+**Estado**: **RESPONDIDO e ENTREGUE**, e é o primeiro porque muda o desenho de tudo o que vem
+depois. O item 3 da rodada passada fecha aqui.
+
+O pedido de 14/09 (`docs/pedidos/2026-09-14-o-logo-tem-uma-arte-e-a-pagina-tem-duas.md`) foi julgado
+em **16/09 11h01** (`00c345d`) e **entregue às 11h38 do mesmo dia**, na **`v0.196.0`** (`205cba0`) —
+veredito e entrega na mesma data, que o próprio ledger dele registra como o caso raro.
+
+| | o que o pedido apostou | o que entrou |
+|---|---|---|
+| forma | convenção de sufixo, como `DilettaIllustration` | **dois campos declarados**: `DilettaBrand.logoEscuro` e `.logoFullEscuro`, nulos por default |
+| razão | — | **fronteira**: *"as 59 ilustrações são arte DESTE pacote — eu nomeio os arquivos. O logo é arte do FILHO"*, e derivar `logo-dark.svg` seria o pai escrevendo nome de arquivo dentro da casa do filho, com a falha aparecendo como asset em runtime, no escuro, calada |
+| a frase dele | — | ***tinta se deriva, desenho não se deriva*** |
+| o que o pedido não pediu | — | **declarar o par não bastaria**: o `DilettaLogo` tinha dois caminhos de tinta e **os dois pintavam**. Par declarado passa a DESLIGAR o `srcIn`, com a precedência escrita — **chamada > marca > arquivo** |
+
+E **ele reabriu, por conta própria, a porta que ele mesmo deixou em 20/08** (*arte de marca cujo
+formato não aceite `currentColor`*) num caso vizinho: **o formato aceita, a marca é que não aceita** —
+que é exatamente o que a retificação de 15/09 desta fila tinha escrito como munição.
+
+> **Duas coisas que o rito não cumpriu, e ficam registradas.**
+>
+> 1. **O veredito não voltou pro arquivo do pedido.** Não há branch `veredito/*` nova no `bold-ds`
+>    (as duas que existem são de 11/09 e 14/09), e `docs/pedidos/2026-09-14-…` em `origin/main`
+>    continua com um commit só, o `296290a` dela. Quem abrir o pedido hoje lê um pedido aberto.
+> 2. **O SINAL nunca foi dado** — e ele respondeu assim mesmo, lendo o repo. Push não é entrega
+>    (`PEDIDO-DO-FILHO.md`, passo 2), mas desta vez o passo que faltava não segurou a resposta.
+
+---
+
+## 2 · A porta está FECHADA deste lado: `marcaNo` não copia o par, e o gate que nasceu ontem já acusa
+
+**Estado**: **ABERTO, e é o item mais caro da rodada.** Depende do 1 — o campo existe no avô desde
+16/09, e a ponte até o filho não existe.
+
+`CoreflowProduto.marcaNo(brilho)` reconstrói o plugue inteiro campo a campo porque `DilettaBrand` não
+tem `copyWith`. Em `origin/main`, `packages/coreflow/lib/src/coreflow_produto.dart:227-243`, a lista
+copia **12 campos**. O plugue do avô na `v0.198.0` — que é o pino de `origin/main`
+(`packages/coreflow/pubspec.yaml:23`, subido em `c45410e`, 17/09 13h34) — tem **14**.
+
+**Não é previsão: rodei a régua do próprio gate.** A prova 2 de
+`packages/coreflow/test/a_marca_do_modo_nao_perde_campo_test.dart` lê os campos na FONTE do avô com
+`RegExp(r'^\s{2}final\s+[\w<>?,\s]+\s(\w+);')` e subtrai a lista que esta casa copia. Passando esse
+mesmo regex no `diletta_brand_assets.dart` da `v0.198.0`:
+
+```
+campos no plugue: 14
+o que o gate acusaria: ['logoEscuro', 'logoFullEscuro']
+lista citando campo que não existe: []
+```
+
+**O gate que foi escrito ontem pra fechar a CLASSE pega a instância seguinte — e a instância já está
+na árvore que os desenvolvedores clonam.** Só que ele não está lá: o gate e o conserto do
+`nomeDaMarca` são o commit **`81cad85`, local e não enviado**.
+
+**E são TRÊS campos perdidos em `origin/main`, não dois.** `nomeDaMarca` também não está na lista de
+lá (`grep` por `nomeDaMarca: marca.nomeDaMarca` devolve **0** em `origin/main`). A consequência mudou
+de tamanho desde ontem e fica medida com honestidade:
+
+- **o Bold não move um pixel** — `ContaBold.marca` (`conta_bold.dart:23`) **não declara**
+  `nomeDaMarca`, então o campo é nulo com ou sem a cópia;
+- **o Norte Benk perde o dele** — `norte_benk.dart:33` declara `nomeDaMarca: 'Norte Benk'`, e o
+  produto nasceu e saiu na `v0.108.0` com a cópia velha. Na `v0.198.0` o `?? "CPF Seguro"` já morreu
+  (o avô consertou na `v0.185.0`): `diletta_cobrand_mark.dart:158` junta os nomes com
+  `whereType<String>()`, então o leitor de tela da co-marca **não diz o nome de outro cliente — ele
+  simplesmente cala o nome deste**.
+
+**E o gerador nasce com a mesma porta fechada**: o molde da marca em
+`packages/coreflow/bin/novo_filho.dart:171-175` oferece `logo`, `logoFull` e
+`logoTingePorCurrentColor`, e não menciona `logoEscuro`. Todo filho novo nasce sem saber que o par
+existe.
+
+**Esta rodada não consertou nada disso**, por regra. O conserto é de uma linha e meia e o `copyWith`
+pedido em 17/09 tira a lista de cena inteira — os dois esperam o envio dela.
+
+---
+
+## 3 · O Norte Benk nasceu com o remendo escrito como espera — um dia DEPOIS do veredito
+
+**Estado**: **ABERTO, e fecha junto com o 2.**
+
+O segundo filho nasceu em 17/09 (`d0de5f6`, 16h00) e saiu na `v0.108.0` (`54ba76b`, 16h17). A arte
+negativa dele **está versionada e não alcança ninguém**: `assets/logos/norte_benk_mono.svg`, ao lado
+do símbolo e do lockup, com o `///` do próprio arquivo dizendo por quê —
+`packages/norte_benk_coreflow/lib/norte_benk.dart:24-31`:
+
+> *"A VERSÃO POSITIVA/NEGATIVA veio do cliente e viaja em `assets/logos/norte_benk_mono.svg`. Ela é
+> um **DESENHO à parte** — contraforma que vira traço, símbolo que perde o container —, e não o
+> colorido repintado. […] Só que `DilettaBrand` tem UM `logo` […] **Até o pedido entrar, quem monta o
+> app aplica este arquivo à mão** onde a colorida não separa do fundo."*
+
+**O pedido entrou no dia anterior.** O filho nasceu carregando a espera de uma resposta que já tinha
+chegado, numa árvore que já pinava a `v0.198.0`. Não é defeito de quem escreveu: é o custo exato de o
+veredito ter ficado só na casa do pai (item 1, ressalva 1).
+
+E a frase dela de 17/09 10h38 — *"o logo positivo/negativo pode ter um contorno diferente do logo
+padrão"* — e a do pai — *"desenho não se deriva"* — são a mesma frase, ditas no mesmo dia, em casas
+diferentes, sem uma ter lido a outra.
+
+---
+
+## 4 · A `main` local e a remota: o merge não tem mais UM conflito de prosa, tem DEZ
+
+**Estado**: **ABERTO, e é o portão de tudo o que se escrever aqui.** Depende do 5 só para a ordem do
+que se resolve dentro dele.
+
+**Retificação da rodada passada, e ela é minha.** O item 1 de 15/09 afirmou, com simulação, que o
+merge inteiro tinha **um** conflito e era de prosa. Era verdade naquele dia. Resimulado hoje com
+`git merge-tree --write-tree main origin/main`:
+
+| | 15/09 | 18/09 |
+|---|---|---|
+| divergência | ahead 10 / behind 9 | **ahead 15 / behind 27** |
+| conflitos | 1 | **10** |
+
+E a razão não é que a simulação de lá estivesse errada — é que **o remoto andou 18 commits, e um
+deles trocou o número que as duas mãos escreviam igual**:
+
+- `docs/PEDIDOS.md` e `docs/pedidos/2026-09-11-o-pacote-web-nao-sai-do-monorepo.md` — **prosa, e a
+  resolução continua sendo manter os dois lados**;
+- os outros **oito** (`packages/coreflow/pubspec.yaml`, `packages/coreflow_design_system/pubspec.yaml`,
+  `packages/coreflow/bin/novo_filho.dart`, os dois `package.json`/lock da web e os dois
+  `pubspec.lock` de exemplo) **saem todos de UM commit local, o `261e5af`** — a subida do avô pra
+  `v0.194.3`. O remoto passou por cima dela em `c45410e` (avô → `v0.198.0`) e evoluiu o gerador
+  junto.
+
+**Quer dizer que a resolução dos oito é uma frase: fica o lado do remoto.** O `261e5af` está
+superado, não em disputa. O que exige cabeça são as duas páginas de prosa.
+
+---
+
+## 5 · O aviso do prefixo do CSS está em branch — e o conserto já está na `main`, pela outra mão
+
+**Estado**: **mérito FECHADO no código, ABERTO só como papel.**
+
+Branch nova do pai: **`origin/aviso/o-prefixo-do-css`** (17/09 10h34), release `v0.198.0`, com o
+título que diz o tamanho: *"o prefixo do CSS é da linguagem, e o white label do filho cala se ele só
+subir o `ref:`"*. Toda variável emitida pra web deixou de se chamar `--cps-` (a sigla do PRIMEIRO
+consumidor) e passou a ser **`--diletta-*`**; a ponte com o nome velho sai na **`v0.210.0`**.
+
+**E o aviso é sobre nós, com o nosso arquivo citado**: ele mediu o custo já acontecido em
+`exemplos/filho_do_coreflow/web/tokens/meu_banco-tokens.css`, *"um banco inventado que nasceu com
+`--cps-` em 210 sítios, pelo seu `novo_filho`"*.
+
+O aviso manda fazer quatro coisas **nesta ordem**, e diz o preço da ordem invertida: *"você tem uma
+janela em que o white label está mudo"*. **A janela aconteceu, durou 24 minutos e foi medida por quem
+a abriu**: `c45410e` subiu o `ref:` às 13h34 e `3629a23` consertou a folha às 13h58, com a prova
+colhida num diretório vazio antes de publicar —
+
+```
+<diletta-button>  desenhou em  #17a37d   ← o verde de REFERÊNCIA
+a nossa folha declarava        #f66fa0   ← o rosa do Bold, que ninguém lia
+```
+
+— sem um erro no console, que é o modo silencioso de o CSS falhar. **Conferido hoje na ponta
+remota**: `coreflow_css.dart:26` declara `const prefixoDaLinguagem = '--diletta-'` e `:33` o
+`prefixoDaPonte`; o `meu_banco-tokens.css` tem **0** `--cps-` e **210** `--diletta-`; a folha do
+Norte Benk tem **282** nomes novos e **72** de ponte. Os quatro passos do aviso estão feitos.
+
+**Falta só trazer o papel**: `docs/avisos/2026-09-17-o-prefixo-do-css-virou-da-linguagem-e-o-seu-white-label-cala.md`
+existe apenas na branch. É a terceira vez que uma resposta do pai fica parada em branch — e desta vez
+a branch chega DEPOIS do conserto, não antes.
+
+---
+
+## 6 · A deriva: o pacote está a um degrau, o app está a seis tags e dezenove degraus
+
+**Estado**: **ABERTO.** Depende do 4.
+
+| | pino | ponta | degraus |
+|---|---|---|---|
+| `bold-ds` (ponta remota) → avô | **v0.198.0** | v0.199.0 | **1** |
+| `app-newbold` → `bold-ds` | **v0.102.1** (vendorizado) | v0.108.0 | **6 tags** |
+| `app-newbold` → avô | **v0.180.0** (`packages/diletta_design_system/pubspec.yaml:6`) | v0.199.0 | **19** — eram 15 na rodada passada |
+
+Medido junto, porque muda o tamanho do item 2: **a `v0.199.0` não acrescenta campo ao plugue de
+marca** — 14 campos, os mesmos da `v0.198.0`. Subir o pino mais um degrau não aumenta a dívida da
+cópia campo a campo.
+
+E a `v0.199.0` traz cinco pedidos do filho B julgados de uma vez, mais a regra que nasceu deles:
+*"número em comentário é medição com data de validade e sem alarme"* — 20 pares do `onXSubtle` agora
+medidos, o pior em 4,59.
+
+---
+
+## 7 · A escolha por CONTRASTE MEDIDO: esta rodada MEDIU, e **não vira pedido hoje**
+
+**Estado**: **MEDIDO e FECHADO como pedido; segue ABERTO como condição.**
+
+Em 17/09 ela cravou a regra em três linhas (registradas em `~/.claude/design-refs/aprendizados.md`):
+
+1. o logo do cliente entra com as cores dele, sem tinta do DS;
+2. positiva/negativa **sai da oferta** e vira **recurso de contraste** — positiva **preta**, negativa
+   **branca**;
+3. **entra a que gera mais contraste com o fundo daquela tela** — por medição, tela a tela.
+
+O ponto 3 não é a regra que o pai entregou: ele escolhe por **`tema.isDark`**
+(`diletta_logo.dart:90`), que é o brilho da PÁGINA. E o chat deixou o encargo escrito pra esta
+rotina, com portão: *"medir `razaoAvo` do preto e do branco contra o fundo real de cada tela onde
+`DilettaLogo` aparece (página E superfície) […] **Não reabrir o pedido sem essa medição**"*.
+
+**Medido. E a resposta é: hoje a diferença não muda nenhuma tela.**
+
+São **cinco sítios** no app, todos em `lib/features/auth/presentation/screens/` — `splash:108`,
+`boas_vindas:101`, `login:187`, `login_recorrente:434`, `ativar_acesso_rapido:145`. Os cinco assentam
+sobre `CoreflowBackground`, e o que ela pinta debaixo do logo é uma de duas coisas:
+
+- a base `s.bg` do esquema (`coreflow_background.dart:198-204`), que **é** a página; ou
+- a arte do backdrop `imagem` — e a arte é **dois arquivos declarados por modo**:
+  `bg_city_light.jpg` e `bg_city_dark.jpg` (`app.dart:691-692`, `core/theme/arte_de_fundo.dart:14-15`).
+
+**As duas viram com o tema.** Nas cinco telas, `tema.isDark` e *"o fundo real desta tela"* dão a
+mesma resposta.
+
+**E o sítio que parecia o contraexemplo não é um — é uma contradição de prosa.** O splash passa
+`color: DilettaAbsoluteColors.white` na chamada, e o comentário de `splash_screen.dart:106-107`
+justifica assim: *"o fundo desta tela é fixo (#0A0B12, casado com o splash nativo) **nos dois
+modos**, então a regra do tema — preto no claro — erraria aqui"*. Só que o `backgroundColor` do
+`Scaffold` (`:85`) é coberto: quatorze linhas abaixo, `:92` monta
+`CoreflowBackground.fixo(estilo: CoreflowBackdrop.imagem)`, que pinta `ColoredBox(s.bg)` e empilha a
+arte **do modo** por cima. **A razão escrita não se sustenta no widget logo abaixo dela** — a tinta
+branca está certa no escuro e é exceção de mão no claro, por um motivo que o código não confirma.
+
+**O que fica escrito, pro dia em que o caso aparecer** — e é munição pronta, não opinião:
+
+- **a casa do pai já decidiu isto ao contrário, uma vez.** `DilettaSystemWalletMark` (v0.28.0):
+  *"o componente escolhe claro/escuro **pela luminância do FUNDO** (e não pelo `isDark`, que erraria
+  em banner escuro no tema claro)"*. Duas peças da mesma casa, mesma pergunta, respostas opostas;
+- **e o escape de hoje não alcança o caso novo**: `color:` na chamada resolve a TINTA e **não escolhe
+  a ARTE**. Em `diletta_logo.dart:90` o `asset` sai de `tema.isDark && temPar`, e `color` não aparece
+  nessa linha. No dia em que o Bold declarar o par, o splash no tema claro recebe a arte POSITIVA
+  sobre o que quer que esteja ali, e o `color: white` de hoje não conserta isso;
+- **e isto não reabre a exclusão nº5 do pedido de 14/09** (*"o eixo que você carrega é BRILHO"*). O
+  eixo continua sendo brilho. O que muda é **de quem**: o da página ou o da superfície sob o logo.
+
+**Condição de reabrir, escrita**: um sítio medido em que a superfície debaixo do logo **não vira com
+o tema** — vidro sobre cor de marca, banner colorido, ou um splash que de fato fique fixo.
+
+---
+
+## 8 · A arte Font Awesome Pro — sem mudança, e o rastro continua aberto dos dois lados
+
+**Estado**: **mérito FECHADO por ela em 15/09 («temos a licença»); ABERTO no ledger do pai e sem
+PROCEDENCIA aqui.** Reconferido hoje:
+
+- a linha de 15/09 segue na seção de abertos do `ds-diletta/docs/PEDIDOS.md`, com *"não é decisão
+  minha"* e a condição de fechar escrita: *"a resposta do dono sobre o alcance da licença"*. **Ela
+  respondeu; ele não soube.** Viaja junto com o sinal — é a mesma viagem do item 1, e não custa
+  veredito a ninguém;
+- `find` por `PROCEDENCIA*` neste repo continua devolvendo **vazio**. O arquivo equivalente ao
+  `packages/diletta_design_system/PROCEDENCIA.md` do pai não existe aqui nem na cópia do app, que é
+  quem de fato redistribui os 355 `.svg.vec`. **Esta rotina não escreve texto de licença por
+  inferência** — onde ele mora e com que palavras é decisão dela.
+
+---
+
+## 9 · Treze pedidos novos entraram na `main` remota pela outra mão — e um deles é primo do nosso item 6
+
+**Estado**: **REGISTRO, pra ninguém escrever duas vezes a mesma coisa.**
+
+Entre 15/09 e hoje 09h53, `tatianahasimoto-diletta` escreveu **13 arquivos de pedido** em
+`docs/pedidos/` que não existem na `main` local — a frente da web e do Internet Banking:
+
+```
+2026-09-15-o-gate-que-nasceu-junto-com-o-codigo-concorda-com-ele.md
+2026-09-16-a-familia-de-banner-tem-cinco-pecas-e-nenhuma-atravessa.md
+2026-09-16-o-badge-do-spot-icon-nao-atravessa-e-a-web-marca-com-tarja.md
+2026-09-16-o-que-a-web-precisa-e-o-dart-nao-carrega.md
+2026-09-17-a-ponte-do-prefixo-nao-tem-porta.md
+2026-09-17-as-abas-nao-tem-nome-e-o-painel-perde-o-dele.md
+2026-09-17-dois-recursos-existem-no-dart-e-nao-atravessam.md
+2026-09-17-nao-existe-tinta-de-estado-sobre-a-superficie.md
+2026-09-17-o-campo-apaga-o-que-a-pessoa-digitou.md
+2026-09-17-o-campo-nao-tem-onde-por-icone-ajuda-nem-botao.md
+2026-09-17-o-render-da-linguagem-derruba-o-foco.md
+2026-09-17-os-fundos-do-app-se-apoiam-em-quatro-cores-sem-papel.md
+2026-09-18-o-verde-de-sucesso-reprova-como-texto-nos-dois-produtos.md
+```
+
+**O primo é o de 17/09 sobre os fundos**, e ele NÃO é o nosso item 6 — é o vizinho de linha. Ele
+mede que as quatro cores que sustentam os sete fundos (`#FE3976`, `#FE7B5E`, `#FEED35`, `#7B3FF2`)
+**não são papel em lugar nenhum**, e pede ao pai que as publique. O nosso item 6 mede outra coisa no
+mesmo arquivo: que dois moods decoram com a rampa de **aviso**. **Donos diferentes** — o dele é
+vocabulário do pai, o nosso se conserta aqui. Ficam separados, e citados um no outro.
+
+> **`docs/PEDIDOS.md` não foi reescrito nesta rodada, de propósito.** Nenhum pedido novo nasceu aqui
+> (ver item 7), e o índice da `main` local está **27 commits atrás** — reescrevê-lo agora fabricaria
+> o décimo-primeiro conflito do item 4. Ele se regenera depois do merge.
+
+---
+
+## 10 · Os nossos, reconferidos na ponta remota e sem mudança
+
+Medidos hoje em `origin/main`, todos iguais à rodada passada:
+
+| item | medição de hoje |
+|---|---|
+| **`CoreflowBotao` não repassa `disabled`** | `grep disabled` em `coreflow_botao.dart` devolve **zero**. Segue a única peça do pacote sem repasse e sem razão escrita |
+| **os moods decoram com a cor de ALERTA** | `coreflow_background.dart:265` · `:270` · `:272` — `warning03`/`warning04` de pé |
+| **`CoreflowBackdrop.solido` não serve de fundo de Home** | o enum tem os mesmos **sete** valores; `degradeSimples` e `liso` não existem |
+| **a tela de Aparência não conhece a curadoria** | `fundosOferecidos` devolve **zero** em `packages/` |
+
+## 11 · Levantado e NÃO medido — entra como levantamento, não como afirmação
+
+- **D81–D85** e **D92–D94**: sem nome novo nos chats desta janela, e sem o nome o `grep` mede a minha
+  escrita. Inalterados desde 15/09;
+- **os 42 consertos do onboarding** levantados em 17/09 (5 bloqueios, 27 defeitos, 10 lacunas,
+  verificados por refutação: 31 de 55 sobreviveram) — **são de produto, não de DS**, e o maior deles
+  é que o ramo pessoa física não envia nada ao servidor. Fica citado porque é a jornada em que o
+  fundo de imagem aparece nas 12 telas por acidente de default (item 7 da rodada passada), e não
+  porque peça alguma da linguagem esteja envolvida.
+
+---
+
+## O que mudou de dono desde a rodada anterior
+
+- **O item 3 (o logo) FECHOU pelo lado do pai** — respondido em 16/09, entregue na `v0.196.0`. O que
+  sobrou dele virou o item 2 desta rodada, que é nosso;
+- **o item 4 (Font Awesome) não mudou**, e continua esperando a mesma viagem;
+- **o item 1 (a divergência) piorou de propósito**: o remoto andou, e a resolução ficou mais simples,
+  não mais difícil;
+- **nasceu um filho novo** — `packages/norte_benk_coreflow`, na `main` remota desde 17/09 16h00. É a
+  primeira vez que esta fila tem dois produtos para medir, e o item 2 já mede diferente para cada um.
 
 ---
 
