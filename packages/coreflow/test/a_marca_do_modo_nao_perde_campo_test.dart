@@ -25,6 +25,13 @@ import 'package:flutter_test/flutter_test.dart';
 ///    o que esta casa sabe copiar. Campo novo lá ⇒ este teste falha aqui, no commit em que o `ref:`
 ///    sobe — e não seis telas depois, em silêncio, como aconteceu com o `nomeDaMarca`.
 ///
+/// **E a prova 2 cobrou no dia seguinte, que é o que ela existia pra fazer.** O avô entregou
+/// `logoEscuro` e `logoFullEscuro` na `v0.196.0` — o veredito do pedido de 14/09 desta casa —, o `ref:`
+/// subiu pra `v0.198.0` em 17/09 pela outra mão, e o par não atravessava o tema: o Norte Benk nasceu na
+/// `v0.108.0` com a arte negativa versionada e inalcançável. **A diferença entre os dois casos é só o
+/// gate**: o `nomeDaMarca` sumiu calado e ficou seis telas assim; o par ficou vermelho no merge em que
+/// o `ref:` entrou, dizendo os dois nomes. Os dois campos entraram na cópia e na prova 1.
+///
 /// Quando o `copyWith` entrar no avô (PEDIDO de 17/09), a prova 2 perde a razão de existir e sai junto
 /// com a cópia manual. A prova 1 fica: ela mede o comportamento, não a forma de escrevê-lo.
 void main() {
@@ -33,6 +40,8 @@ void main() {
     pacote: 'pacote_do_filho',
     logo: 'assets/logos/simbolo.svg',
     logoFull: 'assets/logos/lockup.svg',
+    logoEscuro: 'assets/logos/simbolo-negativo.svg',
+    logoFullEscuro: 'assets/logos/lockup-negativo.svg',
     logoParceiro: 'assets/logos/parceiro.svg',
     bandeiraDoCartao: 'assets/logos/bandeira.svg',
     nomeDaMarca: 'BANCO DE TESTE',
@@ -61,12 +70,19 @@ void main() {
         expect(depois.logoTingePorCurrentColor, antes.logoTingePorCurrentColor);
         expect(depois.hexesDaArte, antes.hexesDaArte);
 
-        // O caso que caiu. Fica nomeado, e não diluído na lista acima.
+        // OS CASOS QUE CAÍRAM. Ficam nomeados, e não diluídos na lista acima.
         expect(
           depois.nomeDaMarca,
           antes.nomeDaMarca,
           reason: 'o nome da marca é o rótulo de leitor de tela da co-marca; sem ele a peça do avô '
               'dizia o nome de outro produto',
+        );
+        expect(
+          [depois.logoEscuro, depois.logoFullEscuro],
+          [antes.logoEscuro, antes.logoFullEscuro],
+          reason: 'o par por brilho é o VEREDITO do pedido de 14/09 desta casa, entregue na v0.196.0. '
+              'Sem a cópia, um filho que declara o negativo recebe o positivo nos dois modos — e a '
+              'falha aparece como arte errada no escuro, sem erro e sem teste vermelho',
         );
       });
     }
@@ -109,9 +125,9 @@ void main() {
     // O que esta casa sabe copiar em `CoreflowProduto.marcaNo`. Acrescentar um nome aqui sem
     // acrescentá-lo LÁ não engana o gate: a prova de cima mede o comportamento.
     const copiados = {
-      'pacote', 'logo', 'logoFull', 'logoParceiro', 'bandeiraDoCartao', 'carteirasDeSistema',
-      'selosDeLoja', 'nomeDaMarca', 'corDoLogo', 'logoTingePorCurrentColor', 'proporcaoDoLockup',
-      'hexesDaArte',
+      'pacote', 'logo', 'logoFull', 'logoEscuro', 'logoFullEscuro', 'logoParceiro',
+      'bandeiraDoCartao', 'carteirasDeSistema', 'selosDeLoja', 'nomeDaMarca', 'corDoLogo',
+      'logoTingePorCurrentColor', 'proporcaoDoLockup', 'hexesDaArte',
     };
 
     expect(

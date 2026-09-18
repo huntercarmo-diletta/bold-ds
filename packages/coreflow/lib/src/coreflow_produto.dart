@@ -235,12 +235,39 @@ class CoreflowProduto {
   /// campos do plugue lendo o arquivo do avô e falha quando aparece um que esta lista não copia. Um
   /// `copyWith` no avô continua sendo o jeito de tirar isto daqui — está PEDIDO em
   /// `docs/pedidos/2026-09-17-a-copia-campo-a-campo-perde-campo-e-perdeu.md`.
+  ///
+  /// **E foi cobrado de novo no dia seguinte, com uma diferença que vale escrever.** O avô entregou
+  /// `logoEscuro` e `logoFullEscuro` na `v0.196.0` — o veredito do pedido de 14/09 DESTA casa —, e em
+  /// 17/09 o `ref:` subiu pra `v0.198.0` pela outra mão. **Os dois campos que nós mesmos pedimos não
+  /// chegavam a filho nenhum**, porque esta lista não os copiava — e um filho desta safra já tinha
+  /// nascido com a arte negativa declarada e inalcançável. O caso está medido na rodada de 18/09 de
+  /// `docs/FILA-DOS-CHATS.md`, que é onde nome de produto pode aparecer.
+  ///
+  /// **A diferença é o gate.** Da primeira vez o campo sumiu calado e ninguém soube por seis telas; da
+  /// segunda o teste ficou vermelho no merge em que o `ref:` entrou, dizendo os dois nomes. Não é a
+  /// dívida resolvida — é a dívida deixando de ser silenciosa, que era o que ele prometia.
+  ///
+  /// *(E este parágrafo já custou um vermelho: a primeira versão dele citava o produto pelo nome e
+  /// pelo caminho do arquivo, e o `o_coreflow_nao_cita_bold_test` reprovou — a régua lê comentário
+  /// também, que é justamente por que ela existe.)*
+  ///
+  /// A ORDEM dos campos aqui é a do construtor do avô, de propósito: quem for conferir esta lista
+  /// contra o arquivo dele lê as duas em paralelo.
   DilettaBrand marcaNo(Brightness brilho) {
     if (marca.corDoLogo != null) return marca;
     return DilettaBrand(
       pacote: marca.pacote,
       logo: marca.logo,
       logoFull: marca.logoFull,
+      // O PAR POR BRILHO, entregue na `v0.196.0`. Sem estas duas linhas o par não atravessa o tema, e
+      // um filho que declarasse o negativo veria o positivo nos dois modos — falha calada, no escuro.
+      //
+      // Não conflita com a `corDoLogo` logo abaixo: no avô, par declarado DESLIGA o `srcIn`
+      // (`pinta = color != null || !temPar`), então a tinta que esta regra preenche deixa de alcançar o
+      // desenho e a arte entra como o designer a desenhou. A precedência é dele: chamada > marca >
+      // arquivo.
+      logoEscuro: marca.logoEscuro,
+      logoFullEscuro: marca.logoFullEscuro,
       logoParceiro: marca.logoParceiro,
       bandeiraDoCartao: marca.bandeiraDoCartao,
       carteirasDeSistema: marca.carteirasDeSistema,
