@@ -146,3 +146,69 @@ lugar quando a tecla saiu. O defeito só aparece na segunda.
 E a prova de mutação que esta família cobra: apague a linha que devolve o foco e o teste tem que
 ficar vermelho. Se ele continuar verde, ele está lendo o render e não o comportamento — e aí o
 problema mudou de lugar, não sumiu.
+
+---
+
+## Retificação — 18/09, e é da minha medição, não do seu código
+
+**A tabela do `<diletta-tabs>` acima está errada numa linha, e eu a escrevi mais forte do que o
+medido sustentava.** Ela diz:
+
+> | **ArrowRight, três vezes seguidas** | **nada**: `selecionada` fica em `0`, nenhum evento `mudou` |
+
+Isso é verdade no roteiro que eu rodei — mas o roteiro **começava com um clique**, e o clique já
+tinha jogado o foco no `<body>`. As três setas não fizeram nada porque não chegavam a ninguém, não
+porque a navegação esteja quebrada.
+
+Refiz pondo o foco à mão numa aba, sem clicar antes:
+
+| | |
+|---|---|
+| foco na aba selecionada, `ArrowRight` | **funciona**: `selecionada` vai a `1` e o evento `mudou` sai |
+| e logo depois | o foco está no `<body>` — a segunda seta já não chega |
+
+**A sua navegação por seta está certa e roda.** O que ela não sobrevive é ao próprio `render()`: ela
+anda uma vez e morre junto com o nó que tinha o foco. O pedido não muda — o conserto é o mesmo, e o
+gate que eu propus («a SEGUNDA seta é o gate») já era exatamente sobre isto. O que muda é a acusação:
+não é «a navegação não roda», é «a navegação roda uma vez».
+
+Peço desculpa pelo tamanho da frase anterior. Num pedido, exagerar a medição é pior que não medir:
+quem lê perde tempo procurando um defeito que não existe do jeito descrito.
+
+### E o mesmo roteiro, refeito, achou um caso PIOR — no `<diletta-segmented-control>`
+
+Com o foco posto à mão no segmento marcado, sem clique antes:
+
+```
+ArrowRight  →  ativo continua "0", nenhum evento
+```
+
+Aqui não é o foco. **Não existe tratamento de teclado nenhum**: o arquivo tem 72 linhas e um único
+`addEventListener`, o de `click`. E o render entrega papel de rádio com tabindex rotativo —
+
+```js
+`<button class="seg" data-i="${i}" type="button" role="radio"
+   aria-checked="${on}" tabindex="${on ? 0 : -1}"`
+```
+
+— que é a gramática que **promete** seta. O resultado somado é o pior dos três: quem usa teclado
+chega ao grupo com Tab, e **não consegue trocar a opção por meio nenhum** — não por Tab, porque os
+não marcados são `-1`; não por seta, porque não há quem escute.
+
+São 6 usos deste consumidor, e a peça daqui anda com ←→, Home e End. **Este caso não depende do
+conserto do foco**: mesmo com o foco preservado, não há handler para receber a tecla.
+
+### E um que passa, para a lista não parecer uma condenação da casa
+
+O `<diletta-data-column-header>` faz tudo certo: clique e `Enter` disparam `ordenar`, e **o foco
+fica onde estava** — porque ele não reescreve o próprio shadow, ele avisa e deixa o pai decidir. É o
+contra-exemplo dentro do seu próprio pacote, e é a forma que os outros poderiam ter.
+
+### Nota de método, porque ela me custou duas medições
+
+A primeira leva de testes de tecla que eu rodei usava a grafia `Return` no meu injetor, e ela chega
+à página com `event.key === ""` — uma tecla que não é tecla nenhuma. Passei a conferir o que a
+página REALMENTE recebe (`document.addEventListener('keydown', e => log(e.key))`) antes de afirmar
+qualquer coisa sobre teclado. Se a sua suíte tiver testes de tecla, vale a mesma conferência: uma
+tecla vazia passa por qualquer `if` de tecla sem disparar nada, e o teste fica verde dizendo o
+contrário do que se pensa.
