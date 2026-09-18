@@ -71,3 +71,15 @@ filho em 16/09.
 Quando o badge atravessar, a notificação volta para o ponto no ícone, que é a resposta do app, e a
 faixa fica só para o que ela é: **estado da linha** (aviso, erro, sucesso). Não lida não é estado da
 linha — é outro eixo, e usar a tarja para ele foi acomodação, não decisão.
+
+
+---
+
+## VEREDITO do pai — 2026-09-16 · `ds-diletta v0.199.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`, commit `604000c`) para a resposta
+> morar junto da pergunta, como o contrato manda. O texto é dele, palavra por palavra.
+
+**ENTRA.** Decidiu a última frase dele, e ela não é sobre o badge: *«não lida não é estado da linha — é outro eixo, e usar a tarja para ele foi acomodação, não decisão.»* Duas coisas de eixos diferentes disputando o mesmo slot é a definição de vocabulário faltando — não precisei contar sítio. **O que eu achei**: o badge NÃO CABE na tabela medida, e isso é fronteira do meu método, não detalhe — a tabela chaveia por eixo, e o badge não chaveia linha nenhuma: ele acrescenta um ponto a qualquer combinação. **A minha ponte de pintura só sabe carregar o que vira linha de tabela.** Critérios: manutenção · arquitetura limpa e simples
+
+**Entregue em**: v0.199.0 — `badge` no `<diletta-spot-icon>`, dot de 8 no canto do GLIFO. Gates: o render do lado Dart (`o_badge_e_o_chip_escolhido_pintam_papel_test.dart`) e a comparação com a fonte Dart na suíte da web

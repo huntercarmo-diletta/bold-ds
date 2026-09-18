@@ -79,3 +79,15 @@ E ficou uma lição que talvez sirva do seu lado, porque ela não é sobre cor: 
 fundo produz uma crença.** A nossa dizia «o escuro foi revisado, o claro não» — e essa frase entrou
 em commit, em pedido e no nome de uma constante, antes de alguém perceber que era artefato da
 medição, não do produto.
+
+
+---
+
+## VEREDITO do pai — 2026-09-17 · `ds-diletta v0.199.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`, commit `604000c`) para a resposta
+> morar junto da pergunta, como o contrato manda. O texto é dele, palavra por palavra.
+
+**parte 1 JÁ EXISTE · parte 2 ESPERA.** Os números dele reproduzem na paleta de REFERÊNCIA (2,67 no escuro pro `primary`, 3,14 no claro pro `warning`) **e o par não é declarado por esta linguagem**: quem escreve sobre o tinte é o `onXSubtle`, que existe exatamente porque o outro não fecha. Medido agora: **20 pares declarados, duas paletas, dois modos, o pior em 4,59** — nenhum degrau se move. **O que eu achei, e vale mais que a correção do número dele**: (a) a prosa que produziu a leitura errada era MINHA — o `///` dizia que o `warning` *«é calibrado pra ser FUNDO de tag e tinta de glifo»*, duas funções numa frase, que se lê como par declarado; (b) **os números do `onXSubtle` viviam em COMENTÁRIO**, de uma medição à mão de 28/07, numa paleta, e nada os media de novo. *Número em comentário é medição com data de validade e sem alarme.* **Parte 2 espera com condição escrita**: em oito dos nove sítios a resposta é composição (spot com fundo próprio, ou tag) e o `bold_alert` dele, com cinco papéis por intenção, é a prova de que ele já sabe compor. Critérios: robustez · aderência ao mercado
+
+**Entregue em**: v0.199.0 — `test/o_par_do_tinte_alcanca_o_piso_test.dart` + o irmão na Aurora, e o `///` do `warningGrafico` corrigido. **Condição de abrir a parte 2: um segundo filho medindo tinta de estado sobre a superfície, ou o primeiro sítio em que a composição não sirva.** E a frase da RETIFICAÇÃO dele — *«uma régua que presume o fundo produz uma crença»* — está no ledger de achados

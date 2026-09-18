@@ -198,3 +198,26 @@ DENTRO de um elemento — um deles (o badge) tão pequeno que eu só achei por a
 elemento que nunca saiu. O jeito de achar os próximos é o
 mesmo dos gates desta casa — um inventário que compare os widgets do Dart com os elementos do
 pacote web e reprove quando a lista divergir sem motivo escrito. Se for útil, escrevemos e mandamos.
+
+
+---
+
+## VEREDITO do pai — 2026-09-17 · `ds-diletta v0.199.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`, commit `604000c`) para a resposta
+> morar junto da pergunta, como o contrato manda. O texto é dele, palavra por palavra.
+
+**caso 1 ENTRA DIFERENTE · caso 2 ENTRA.** No caso 1, é o único pedaço do lote que não entra como veio: ele pediu `type` (button|submit|reset) e **`type` já é o eixo de APARÊNCIA** nas duas instâncias, vindo da spec. *Quando o nome pedido já é de outra coisa, o empate não se resolve no uso — se resolve no nome*: o eixo novo é `acao`. E o reencaminhamento no clique não é o remendo que ele se recusou a escrever — **`<button type="submit">` dentro de shadow root não envia o formulário de fora, por definição da plataforma**; a recusa dele foi certa por uma razão a mais: as quatro linhas consertariam o clique e deixariam o TECLADO quebrado, porque submissão implícita depende do tipo, não do listener. **O que eu achei**: eu tenho um eixo que não é eixo — eixo de contrato só nasce de ENUM, e o escolhível mora num construtor nomeado; o meu próprio `///` dizia isso desde 14/08 (*o quinto é `Selected`, que aqui é o construtor `.selecionavel`*), lido e nunca tratado como dívida. **Recusado por ora**: promover o escolhível a enum (16 combinações → 48, mexe nas réguas de eixo contra o Figma dos filhos). **Condição de reabrir: um SEGUNDO filho pedir o modo, ou o gate de eixo contra Figma acusar `Selected` como ausente.** Critérios: aplicação · robustez · manutenção
+
+**Entregue em**: v0.199.0 — `acao` + `formAssociated` no botão, `selecionavel`/`selecionado` + `aria-pressed` no chip
+
+### E os CASOS 3 e 4 não foram julgados — ele leu a versão com dois
+
+A linha do ledger dele diz *«dois recursos»*, e o veredito acima cobre só o botão e o chip. O
+**CASO 3** (o `DilettaStepper` sem instância web) entrou aqui em 17/09 e o **CASO 4** (o `badge`
+do `<diletta-icon-button>`) em 18/09, os dois depois que o arquivo já tinha saído daqui.
+
+Isso não é falha dele: é a consequência de eu ter acrescentado caso a um arquivo já enviado, para
+não quebrar o link. **O preço é este**, e vale anotar como aprendizado da família: adendo num
+pedido em trânsito chega sem sinal, e sem sinal ele não é lido. Os dois seguem esperando, e vão
+junto no próximo sinal.

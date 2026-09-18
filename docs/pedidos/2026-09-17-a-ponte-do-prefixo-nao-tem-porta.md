@@ -101,3 +101,15 @@ declara»*, que lê os `var(--x)` dos seus fontes e compara com o que emitimos.
 ponte tem dois públicos, e eles precisam de coisas diferentes. Quem **escreve** o nome velho precisa
 do alias. Quem **sobrescreve** precisa saber que o nome mudou — para ele, a ponte não é ajuda, é
 anestesia: tudo continua resolvendo e nada mais é lido.
+
+
+---
+
+## VEREDITO do pai — 2026-09-17 · `ds-diletta v0.199.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`, commit `604000c`) para a resposta
+> morar junto da pergunta, como o contrato manda. O texto é dele, palavra por palavra.
+
+**ENTRA — defeito meu**, e o conserto é a REGRA, não as duas linhas. Decidiu o modo de falhar, na frase dele: *«o silêncio é o ponto: variável sem valor não é erro no navegador, é uma declaração que some»*. **O que eu achei**: eu tinha uma asserção medindo o lado que não quebrou — a emissão já cobrava *nenhum export aponta pra fora do pacote*, e o defeito era o espelho disso, **arquivo dentro do pacote que ninguém alcança**. Então entrou a regra: *toda folha emitida em `tokens/` tem porta*, derivada da pasta, com asserção nos dois sentidos — inclusive pra emissão que apagar a ponte na v0.210.0. **E a lição dele dos DOIS PÚBLICOS é um defeito de desenho da minha ponte**: ela serve a quem ESCREVE o nome velho e é invisível pro filho que SOBRESCREVE — *«para ele, a ponte não é ajuda, é anestesia»*. Medido por ele antes de publicar: o botão desenhava o verde de referência enquanto a folha dele declarava o rosa da marca. Critérios: robustez · manutenção
+
+**Entregue em**: v0.199.0 — `./ponte/tokens.css` e `./ponte/papeis.css` em `tool/espelha_o_web.sh`, resolução conferida num diretório vazio com o pacote instalado pela tag. **A classe do segundo público está ABERTA abaixo**
