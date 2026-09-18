@@ -21,14 +21,35 @@ const DilettaBrand _marcaNorteBenk = DilettaBrand(
   // passar `variant:`, então este arquivo é o que elas mostram.
   logo: 'assets/logos/norte_benk_simbolo.svg',
   logoFull: 'assets/logos/norte_benk.svg',
-  // A VERSÃO POSITIVA/NEGATIVA veio do cliente e viaja em `assets/logos/norte_benk_mono.svg`. Ela é um
-  // DESENHO à parte — contraforma que vira traço, símbolo que perde o container —, e não o colorido
-  // repintado. O caminho dela no avô é o padrão do `DilettaLogo`: sem `logoTingePorCurrentColor`,
-  // `ColorFilter.srcIn` com `corDoLogo`. Só que `DilettaBrand` tem UM `logo`, e ele está com a
-  // colorida — as duas ao mesmo tempo estão pedidas em
-  // `docs/pedidos/2026-09-14-o-logo-tem-uma-arte-e-a-pagina-tem-duas.md` (bold-ds). Até o pedido
-  // entrar, quem monta o app aplica este arquivo à mão onde a colorida não separa do fundo, com a
-  // tinta que medir mais contraste ali — o manifesto traz a medição em `marcaVisual.tintaPropostaPorFundo`.
+  // A NEGATIVA DO LOCKUP, na página escura. O pedido entrou: o avô a entregou na `v0.196.0`
+  // (`logoEscuro`/`logoFullEscuro`, veredito de 16/09), e a porta deste lado abriu em 18/09 —
+  // `CoreflowProduto.marcaNo` copiava 12 dos 14 campos do plugue e o par não atravessava o tema.
+  //
+  // **Ela é o par do `logoFull`, e não do `logo`, porque é o LOCKUP** — medido nos arquivos, não
+  // deduzido do nome: `norte_benk_mono.svg` tem `viewBox 0 0 380 166` e 7 paths, os mesmos do
+  // `norte_benk.svg`; o símbolo é `0 0 197 84` e 2 paths. Declará-la no slot do símbolo poria a palavra
+  // de volta nas seis peças que desenham só a marca.
+  //
+  // O arquivo já vem BRANCO (7 `fill="white"`, nenhum `currentColor`), que é o que o negativo é. Medido
+  // contra as páginas deste produto: **17,87:1 na escura (`#14181A`) e 1,00:1 na clara** — ele só pode
+  // ser a arte do escuro, e é exatamente o slot em que entra. O que ele conserta tem número: o azul da
+  // marca (`#2A57A5`) dá **2,56:1** na página escura, abaixo do piso gráfico de 3:1.
+  //
+  // O par declarado DESLIGA o `srcIn` no avô (`pinta = color != null || !temPar`), então nada repinta
+  // esta arte — é o desenho do cliente, como ele o entregou.
+  logoFullEscuro: 'assets/logos/norte_benk_mono.svg',
+  // NÃO existe `logoEscuro` AQUI, e a ausência é declarada em vez de improvisada: **o cliente não
+  // mandou negativa do SÍMBOLO**, e o avô não deriva desenho (*«tinta se deriva, desenho não se
+  // deriva»*, veredito de 16/09). Sem o campo, `null` ⇒ o símbolo colorido vale nos dois brilhos, que é
+  // o comportamento de antes — mas as seis peças que o desenham sem passar `variant:` (top bar densa,
+  // avatar, comprovante, cartões de carteira) seguem com o azul a 2,56:1 na página escura. **É pedido
+  // ao dono da marca, e o lugar de pedir é o Berço**, na etapa do logo, ao lado do lockup negativo.
+  // Enquanto não chega, quem precisar da marca sobre fundo escuro passa `color:` no sítio — chamada
+  // vence marca e arquivo, que é a precedência escrita no `///` do avô.
+  //
+  // Esta chave continua e é carga estrutural: sem ela o `DilettaLogo` aplica `ColorFilter.srcIn` com a
+  // `corDoLogo` que o `marcaNo` preenche (preto no claro, branco no escuro) e pinta o lockup COLORIDO
+  // de uma cor só. Os três arquivos não têm `currentColor`, então ela não tinge nada — ela impede.
   logoTingePorCurrentColor: true,
   nomeDaMarca: 'Norte Benk',
   proporcaoDoLockup: 2.2892,
