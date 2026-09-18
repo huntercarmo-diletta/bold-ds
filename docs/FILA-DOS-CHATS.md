@@ -107,8 +107,32 @@ na árvore que os desenvolvedores clonam.** Só que ele não está lá: o gate e
 > ```
 >
 > **A `main` local está vermelha em um teste, e é o teste certo falhando pelo motivo certo** — no
-> commit em que o `ref:` sobe, e não seis telas depois. O conserto são duas linhas no `marcaNo` e dois
-> nomes na lista do gate; **não foi feito, porque é correção de código e a decisão é dela**.
+> commit em que o `ref:` sobe, e não seis telas depois.
+
+### CONSERTADO em 18/09, a pedido dela — `99a5303`
+
+`logoEscuro: marca.logoEscuro` e `logoFullEscuro: marca.logoFullEscuro` entraram na cópia, na ordem
+do construtor do avô; os dois nomes entraram na lista da prova 2 e na `marcaCheia` da prova 1.
+**coreflow 105 verdes, `analyze` limpo.**
+
+**Hoje isso não move um pixel, e é bom que não mova**: nenhum produto declara o par ainda. O que muda
+é que declarar passa a funcionar — antes, quem declarasse recebia o positivo nos dois modos, sem erro
+e sem teste vermelho.
+
+**Provado por mutação**: tirando as duas linhas, a prova 1 reprova nos dois modos
+(`Expected: [...negativo.svg] · Actual: [null, null]`) e a prova 2 segue verde — que é o desenho
+declarado do gate, porque acrescentar nome à lista sem acrescentá-lo à cópia não engana quem mede
+comportamento.
+
+> **E a régua da separação pegou o meu comentário.** A primeira versão do `///` citava o produto pelo
+> nome e pelo caminho do SVG dele, e o `o_coreflow_nao_cita_bold_test` reprovou com
+> `lib/src/coreflow_produto.dart:243  assets/logos` — **ela lê comentário, que é justamente por que
+> existe**. Reescrito sem os dois, com o caso remetido a esta fila, que é onde nome de produto pode
+> aparecer. Ficou registrado no próprio `///`.
+
+**O que este conserto NÃO faz, e é decisão dela**: declarar o par no produto. A porta está aberta; a
+arte negativa do segundo filho continua sem `logoEscuro:` declarado no arquivo dele (item 3). Isso
+muda o que um cliente vê, e não é conserto de porta.
 
 **E são TRÊS campos perdidos em `origin/main`, não dois.** `nomeDaMarca` também não está na lista de
 lá (`grep` por `nomeDaMarca: marca.nomeDaMarca` devolve **0** em `origin/main`). A consequência mudou
@@ -153,6 +177,11 @@ veredito ter ficado só na casa do pai (item 1, ressalva 1).
 E a frase dela de 17/09 10h38 — *"o logo positivo/negativo pode ter um contorno diferente do logo
 padrão"* — e a do pai — *"desenho não se deriva"* — são a mesma frase, ditas no mesmo dia, em casas
 diferentes, sem uma ter lido a outra.
+
+> **A porta abriu em 18/09 (`99a5303`), e este item não fechou com ela.** O `marcaNo` já atravessa o
+> par; falta a linha no arquivo do produto — `logoEscuro:` apontando pro mono que já está versionado —
+> e o `///` que hoje diz *"até o pedido entrar"* passa a estar errado. **É mudança de produto, não de
+> porta**: muda o que o cliente vê no escuro, e a decisão é dela. Suíte do pacote: 10 verdes.
 
 ---
 
@@ -380,6 +409,15 @@ Medidos hoje em `origin/main`, todos iguais à rodada passada:
 
 - **D81–D85** e **D92–D94**: sem nome novo nos chats desta janela, e sem o nome o `grep` mede a minha
   escrita. Inalterados desde 15/09;
+- **o gate mais novo do remoto não roda nesta máquina.**
+  `packages/coreflow_design_system/test/a_peca_do_avo_le_o_que_esta_folha_declara_test.dart` (de
+  `3629a23`, 17/09) lê os fontes das peças web do avô em `node_modules` para perguntar *"a peça do avô
+  sai na cor deste produto?"*. Aqui não há **node nem npm**, e a pasta não existe: ele reprova no
+  próprio autoteste — `Expected: a value greater than <20> · Actual: <0>`, com a razão escrita
+  (*"não li os fontes das peças do avô"*). **Conferido com `git stash` que já reprovava antes do
+  conserto de hoje**, então não é regressão nossa: é o mesmo buraco de ferramenta que fez o lock da web
+  ser escrito à mão em 15/09. Entra como levantamento porque o conserto é instalar npm nesta máquina, e
+  isso é decisão dela;
 - **os 42 consertos do onboarding** levantados em 17/09 (5 bloqueios, 27 defeitos, 10 lacunas,
   verificados por refutação: 31 de 55 sobreviveram) — **são de produto, não de DS**, e o maior deles
   é que o ramo pessoa física não envia nada ao servidor. Fica citado porque é a jornada em que o
