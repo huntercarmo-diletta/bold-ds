@@ -1,4 +1,4 @@
-/* GERADO — NÃO editar à mão. Os 59 papéis da linguagem, com a tinta de Conta BOLD.
+/* GERADO — NÃO editar à mão. Os 63 papéis da linguagem, com a tinta de Conta BOLD.
    Carregue DEPOIS das folhas do avô: estas mesmas variáveis, com os valores deste produto. */
 :root {
   --diletta-bg: #f4f3f6;
@@ -8,6 +8,7 @@
   --diletta-divider: #79797912;
   --diletta-error: #ef4757;
   --diletta-errorBorder: #f7a9b1;
+  --diletta-errorOnSurface: #b42318;
   --diletta-errorSolid: #8e1b28;
   --diletta-errorSolidHover: #8e1b28;
   --diletta-errorSolidPressed: #530e16;
@@ -39,10 +40,12 @@
   --diletta-primarySubtle: #ffedf3;
   --diletta-primaryTrack: #ffb6cb;
   --diletta-secure: #c9a227;
+  --diletta-secureOnSurface: #8a6d1f;
   --diletta-secureSubtle: #fefbf0;
   --diletta-skeletonShimmer: #ffb6cb;
   --diletta-success: #0e9154;
   --diletta-successBorder: #a9efc8;
+  --diletta-successOnSurface: #157a45;
   --diletta-successSubtle: #f1fef6;
   --diletta-surface: #ffffff;
   --diletta-surfaceInverse: #3d3939;
@@ -59,6 +62,7 @@
   --diletta-warning: #f6a21a;
   --diletta-warningBorder: #fbd79b;
   --diletta-warningGrafico: #f6a21a;
+  --diletta-warningOnSurface: #85520a;
   --diletta-warningSubtle: #fef6e7;
 }
 
@@ -71,6 +75,7 @@
     --diletta-divider: #ffffff14;
     --diletta-error: #ff4d5e;
     --diletta-errorBorder: #ef4757;
+    --diletta-errorOnSurface: #ff4d5e;
     --diletta-errorSolid: #b42318;
     --diletta-errorSolidHover: #ef4757;
     --diletta-errorSolidPressed: #b42318;
@@ -102,10 +107,12 @@
     --diletta-primarySubtle: #9e1241;
     --diletta-primaryTrack: #600627;
     --diletta-secure: #e0be4d;
+    --diletta-secureOnSurface: #e0be4d;
     --diletta-secureSubtle: #5c4813;
     --diletta-skeletonShimmer: #ff87ab;
     --diletta-success: #2fd27a;
     --diletta-successBorder: #0e9154;
+    --diletta-successOnSurface: #2fd27a;
     --diletta-successSubtle: #12693a;
     --diletta-surface: #14151f;
     --diletta-surfaceInverse: #3d3939;
@@ -122,6 +129,7 @@
     --diletta-warning: #fdb43d;
     --diletta-warningBorder: #f6a21a;
     --diletta-warningGrafico: #fdb43d;
+    --diletta-warningOnSurface: #fdb43d;
     --diletta-warningSubtle: #85520a;
   }
 }
@@ -134,6 +142,7 @@
   --diletta-divider: #ffffff14;
   --diletta-error: #ff4d5e;
   --diletta-errorBorder: #ef4757;
+  --diletta-errorOnSurface: #ff4d5e;
   --diletta-errorSolid: #b42318;
   --diletta-errorSolidHover: #ef4757;
   --diletta-errorSolidPressed: #b42318;
@@ -165,10 +174,12 @@
   --diletta-primarySubtle: #9e1241;
   --diletta-primaryTrack: #600627;
   --diletta-secure: #e0be4d;
+  --diletta-secureOnSurface: #e0be4d;
   --diletta-secureSubtle: #5c4813;
   --diletta-skeletonShimmer: #ff87ab;
   --diletta-success: #2fd27a;
   --diletta-successBorder: #0e9154;
+  --diletta-successOnSurface: #2fd27a;
   --diletta-successSubtle: #12693a;
   --diletta-surface: #14151f;
   --diletta-surfaceInverse: #3d3939;
@@ -185,6 +196,7 @@
   --diletta-warning: #fdb43d;
   --diletta-warningBorder: #f6a21a;
   --diletta-warningGrafico: #fdb43d;
+  --diletta-warningOnSurface: #fdb43d;
   --diletta-warningSubtle: #85520a;
 }
 
@@ -325,7 +337,7 @@
 }
 
 /* PONTE: os nomes com o prefixo antigo, apontando para os da linguagem.
-   149 apelidos. Alias não copia valor, então o escuro segue o seletor. */
+   153 apelidos. Alias não copia valor, então o escuro segue o seletor. */
 :root {
   --cps-background: var(--diletta-background);
   --cps-bg: var(--diletta-bg);
@@ -336,6 +348,7 @@
   --cps-divider: var(--diletta-divider);
   --cps-error: var(--diletta-error);
   --cps-errorBorder: var(--diletta-errorBorder);
+  --cps-errorOnSurface: var(--diletta-errorOnSurface);
   --cps-errorSolid: var(--diletta-errorSolid);
   --cps-errorSolidHover: var(--diletta-errorSolidHover);
   --cps-errorSolidPressed: var(--diletta-errorSolidPressed);
@@ -380,10 +393,12 @@
   --cps-primaryTrack: var(--diletta-primaryTrack);
   --cps-secondaryFlow: var(--diletta-secondaryFlow);
   --cps-secure: var(--diletta-secure);
+  --cps-secureOnSurface: var(--diletta-secureOnSurface);
   --cps-secureSubtle: var(--diletta-secureSubtle);
   --cps-skeletonShimmer: var(--diletta-skeletonShimmer);
   --cps-success: var(--diletta-success);
   --cps-successBorder: var(--diletta-successBorder);
+  --cps-successOnSurface: var(--diletta-successOnSurface);
   --cps-successSubtle: var(--diletta-successSubtle);
   --cps-surface: var(--diletta-surface);
   --cps-surfaceInverse: var(--diletta-surfaceInverse);
@@ -475,5 +490,6 @@
   --cps-warning: var(--diletta-warning);
   --cps-warningBorder: var(--diletta-warningBorder);
   --cps-warningGrafico: var(--diletta-warningGrafico);
+  --cps-warningOnSurface: var(--diletta-warningOnSurface);
   --cps-warningSubtle: var(--diletta-warningSubtle);
 }

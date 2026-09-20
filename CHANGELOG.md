@@ -20,6 +20,85 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.110.0] — 2026-09-18
+
+### O pacote web passa a EMBUTIR o avô — e quem nos consome não precisa mais da chave dele
+
+**Migração obrigatória para quem consome a instância web.** Nada muda no lado Flutter.
+
+O `ds-diletta` foi trancado (só quem faz DS entra). A nossa tag web declarava
+`"diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-vX"`, então o `npm install` de quem
+instalava o NOSSO pacote caminhava até o repo dele e pedia uma chave que o time do produto não tem —
+e a CI nunca tem. A frase é do adendo de 18/09 no `ADR-003` do avô: *«acesso ao artefato não é
+acesso à fonte — e usar git como registry funde os dois»*.
+
+A emissão (`tool/espelha_o_web.sh`) passa a copiar o pacote dele para `avo/` dentro do nosso e a
+apagar a dependência. **A cópia se faz uma vez, e se faz aqui** — não é cada produto materializando
+o DS dentro de si, que seria a mesma entrega escrita N vezes com N recibos que divergem calados.
+
+**O que o consumidor faz** (medido no Internet Banking):
+
+```diff
+  // package.json
+-   "diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-v0.200.1",
+    "coreflow-design-system-web": "bitbucket:diletta/bold-ds#web-v0.110.0",
+
+  /* a folha de tokens */
+- @import 'diletta-design-system-web/tokens.css';
+- @import 'diletta-design-system-web/papeis.css';
+- @import 'diletta-design-system-web/ponte/tokens.css';
+- @import 'diletta-design-system-web/ponte/papeis.css';
++ @import 'coreflow-design-system-web/avo/tokens.css';
++ @import 'coreflow-design-system-web/avo/papeis.css';
++ @import 'coreflow-design-system-web/avo/ponte/tokens.css';
++ @import 'coreflow-design-system-web/avo/ponte/papeis.css';
+```
+
+A ordem das folhas não muda, e é a mesma pegadinha de sempre: as do avô primeiro, a nossa depois.
+
+**Quem NÃO migrar quebra alto, não calado**: declarar o avô por fora e receber a nossa cópia junto
+define o mesmo custom element duas vezes, e o navegador levanta `NotSupportedError` no primeiro
+`import`. Conferido: nenhuma peça do avô protege o `customElements.define` com um `get` antes.
+
+Três coisas que fazem a cópia não virar dívida:
+
+- a emissão **reprova** se o que está instalado não for o que a tag pina (provado: emitir a
+  `v0.109.0`, que pina a `web-v0.199.0`, com a `0.200.1` instalada, para a emissão com o número dos
+  dois lados na mensagem);
+- a cópia sai com **recibo** — `avo/ORIGEM.json` traz pacote, versão, tag, o pino e o commit
+  resolvido pelo `package-lock`;
+- o `index.js` **não é reescrito**: ele diz `#avo` nos dois lados, e o apelido (`imports` do
+  `package.json`) resolve pra dependência aqui e pra `./avo/index.js` na tag.
+
+### O avô sobe para a `v0.200.1` — quatro tintas de texto, e o foco para de cair
+
+**Só acrescenta.** Nenhum token deste produto muda de valor, nenhum papel muda de nome, nenhuma peça
+daqui muda de desenho.
+
+**As quatro cores de estado ganham par de TEXTO** — é o veredito do nosso pedido do verde, e ele
+mediu além do que pedimos: as quatro famílias reprovavam como texto, não só o `success`. Na nossa
+rampa, medido aqui sobre `#ffffff`:
+
+| papel novo | claro | contraste | antes |
+|---|---|---|---|
+| `--diletta-successOnSurface` | `#157a45` | **5,38:1** | `success` dava 4,04:1 |
+| `--diletta-errorOnSurface` | `#b42318` | **6,57:1** | — |
+| `--diletta-warningOnSurface` | `#85520a` | **6,54:1** | — |
+| `--diletta-secureOnSurface` | `#8a6d1f` | **4,90:1** | — |
+
+No escuro sobre a nossa superfície, o verde dá 9,18:1. São **59 papéis → 63**, e o CSS foi
+reemitido pela fonte (`emite_o_css_do_bold.dart`), não editado.
+
+**E o foco para de cair no render** — o avô consertou numa função só (`pinta`) o que o nosso pedido
+mediu em oito peças: a paginação mandava o foco pro `<body>` a cada troca e a seta das abas andava
+uma vez e morria. O `<diletta-segmented-control>`, que entregava `role="radio"` sem tecla nenhuma,
+anda com as quatro setas. O campo parou de apagar o que a pessoa digitou quando o erro aparece, e
+ganhou `ajuda`, `inputmode`, `maxlength`, os slots `inicio`/`fim` e o olho da senha. As abas ganharam
+`rotulo` e Home/End.
+
+**Pegamos a `v0.200.1`, não a `v0.200.0`**: três horas depois ele achou que o conserto do foco tinha
+começado a *tomá-lo* — a aba selecionada nascia com o anel em volta e a página perdia o cursor.
+
 ## [0.109.0] — 2026-09-18
 
 ### O avô sobe para a `v0.199.0` — a ponte ganhou porta, e dois recursos atravessaram
