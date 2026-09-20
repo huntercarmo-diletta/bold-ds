@@ -138,3 +138,12 @@ do slot é silencioso, igual ao da tinta fora de ordem que o seu README conta te
 E um inventário, se você quiser o de fora: uma lista que compare os campos do widget Dart com os
 `observedAttributes` do elemento e reprove quando a diferença crescer sem motivo escrito. Este
 pedido é o que essa lista teria dito sozinha.
+
+## VEREDITO do pai — 2026-09-18 · `v0.200.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`, commit `1067760`) para a resposta
+> morar junto da pergunta, como o contrato manda. O texto é dele, palavra por palavra.
+
+**TRÊS ENTRAM, DOIS ENTRAM DIFERENTE — e a fronteira virou doutrina: a instância web é a PEÇA, não a spec.** A spec declara EIXO (o que nasce de `enum`); se ela fosse a fronteira, `label`, `placeholder` e `erro` estariam fora dela pelo mesmo argumento. O que mede paridade é o widget, que tem **26 campos** — ele pediu cinco. `ajuda`, `inputmode` e `maxlength` entram como atributo repassado (e a ajuda **soma** no `aria-describedby` em vez de substituir o erro, que é divergência deliberada: no Dart o erro sobrepõe a ajuda, e quem tem de alcançar é o Dart). Os acessórios entram como slot `inicio`/`fim`, e **a caixa vira invólucro** — não se põe slot dentro de um `<input>`, e é isso que faz o ícone ficar DENTRO da borda vermelha no erro, que era o argumento dele. **E o item 4 já era meu**: o olho da senha está aberto no meu ledger desde 15/09, então ele nasce embutido em `type="password"` e o slot `fim` preenchido o substitui — precedência copiada do `_passwordEye()` do Dart, não inventada. Critério: aplicação · manutenção · escalabilidade
+
+**Entregue em**: **v0.200.0** — veredito e entrega no mesmo dia (e **v0.200.1** meia hora depois: a `pinta` tomava o foco ao montar, e quem viu foi o PNG)

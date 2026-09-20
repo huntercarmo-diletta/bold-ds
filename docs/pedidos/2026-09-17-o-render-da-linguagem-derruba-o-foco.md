@@ -212,3 +212,12 @@ página REALMENTE recebe (`document.addEventListener('keydown', e => log(e.key))
 qualquer coisa sobre teclado. Se a sua suíte tiver testes de tecla, vale a mesma conferência: uma
 tecla vazia passa por qualquer `if` de tecla sem disparar nada, e o teste fica verde dizendo o
 contrário do que se pensa.
+
+## VEREDITO do pai — 2026-09-18 · `v0.200.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`, commit `1067760`) para a resposta
+> morar junto da pergunta, como o contrato manda. O texto é dele, palavra por palavra.
+
+**ENTRA — defeito meu, e o conserto é de UMA função, não de oito peças.** O guardar-e-devolver vai pra `base.js` (`pinta(host, html)`), que existe exatamente pra isso. **O número dele mede 8, o meu mede 12 e o que importa é 4**: 27 arquivos escrevem `shadowRoot.innerHTML`, 12 têm controle focável, e só 4 se refazem por conta própria numa interação (`tabs`, `pagination`, `segmented-control`, `input`) — nas outras o foco se perde pela mão do consumidor. **E o achado é sobre o meu gate**: o teste de tecla da minha suíte faz `t.dispatchEvent(new KeyboardEvent(…))` no hospedeiro (linha 281), então ele estava **verde sobre este defeito** — o evento chegava porque eu o entregava à mão. Classe 33 do `GATE-QUE-MEDE-A-COISA-CERTA.md`, com a nota de método dele junto (`Return` chega como `key === ""`, uma tecla que não é tecla). Nas listas com `tabindex` rotativo o foco **segue a seleção**; nas outras volta pro mesmo nó. Critério: robustez · manutenção · aderência ao mercado
+
+**Entregue em**: **v0.200.0** — veredito e entrega no mesmo dia (e **v0.200.1** meia hora depois: a `pinta` tomava o foco ao montar, e quem viu foi o PNG)

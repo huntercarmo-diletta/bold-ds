@@ -111,3 +111,12 @@ que faça barulho.
    razão de existir. A prova 1 fica: ela mede o comportamento, não a forma de escrevê-lo;
 4. o sinal de um minuto: um filho declara `nomeDaMarca`, abre uma tela de co-marca com VoiceOver e
    ouve o nome dele.
+
+## VEREDITO do pai — 2026-09-17 · `v0.201.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`, commit `42997d8`) para a resposta
+> morar junto da pergunta, como o contrato manda. O texto é dele, palavra por palavra.
+
+**ENTRA, menos o critério 1.** `copyWith` cobre os **catorze** campos (não os doze do pedido: o plugue cresceu duas vezes enquanto isto esperava, que é a tese dele acontecendo na frente do gate), e o gate mede as DUAS metades separadas — parâmetro declarado e valor chegando —, porque *parâmetro que não chega é pior que parâmetro que falta*. **O nulo explícito distinguível de omissão NÃO entra**: o `copyWith` da paleta já escolheu o `??`, e duas cópias da mesma linguagem com semântica de nulo diferente é armadilha maior que a evitada. Condição de reabrir: um sítio MEDIDO onde um filho precise APAGAR um campo declarado — aí a sentinela entra nos dois, no mesmo commit
+
+**Entregue em**: v0.201.0 — `diletta_brand_assets.dart` + `a_copia_da_marca_carrega_todo_campo_test.dart`

@@ -139,3 +139,12 @@ lá. O conserto se anuncia sozinho deste lado.
 Do seu lado, o que eu escreveria é a mesma medição contra as duas superfícies do esquema, para os
 papéis que TÊM consumidor de texto — porque foi exatamente a falta dessa contagem que fez a minha
 tabela de 31/07 ter três linhas que não eram defeito.
+
+## VEREDITO do pai — 2026-09-18 · `v0.200.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`, commit `1067760`) para a resposta
+> morar junto da pergunta, como o contrato manda. O texto é dele, palavra por palavra.
+
+**ENTRA DIFERENTE — pela TINTA, não pelo degrau. É a QUINTA vez que a mesma lição volta, e desta vez o buraco é de simetria e é meu.** O precedente que ele trouxe (18/08, `primaryOnSurface`) decide **contra a forma pedida**: *tinta é consequência de legibilidade, preenchimento é decisão de marca*. Mover o papel `success` moveria o selo, o gráfico e o sólido com glifo branco — cujo piso é 3:1 e que passa. **Medindo a MINHA paleta de referência como texto sobre a superfície, cada uma das QUATRO famílias reprova em UM dos dois modos**: `success` 4,06 · `warning` 3,51 · `secure` 4,00 no claro, `error` 3,58 no escuro — nenhuma passa nos dois, nenhuma falha nos dois (a primeira tabela que eu escrevi tinha duas linhas erradas, e quem as corrigiu foi o teste). Em 18/08 eu dei piso de tinta à família da MARCA e não estendi às de ESTADO. Entram quatro papéis derivados (`successOnSurface`, `errorOnSurface`, `warningOnSurface`, `secureOnSurface`) com `_primeiroQueAlcanca(4,5)` por modo — que **devolve o degrau 02 na rampa dele**, exatamente o que ele pediu, e mantém o 03 na de referência. **E a linguagem tinha o mesmo desenho com o mesmo defeito, num par DIFERENTE**: `diletta_amount.dart:72` pinta o valor de crédito com `s.success` sobre `successSubtle` — **3,57:1** —, e o papel certo já existia (`onSuccessSubtle`, 5,52) sem consumidor. Das 8 leituras de cor de estado nos meus widgets, 7 são glifo (piso 3:1, seguem) e a oitava é a do dinheiro. **E o papel novo acordou um gate calado**: `DilettaAppList` cravava `palette.secure03` no glifo de `secure`, que sobre a superfície escura dá **2,21** — abaixo do piso gráfico, invisível, e nenhuma régua via porque leitura crua não aparece em lugar nenhum. Papel derivado é de graça pro filho: minor. Critério: aderência ao mercado · robustez · escalabilidade
+
+**Entregue em**: **v0.200.0** — veredito e entrega no mesmo dia (e **v0.200.1** meia hora depois: a `pinta` tomava o foco ao montar, e quem viu foi o PNG)

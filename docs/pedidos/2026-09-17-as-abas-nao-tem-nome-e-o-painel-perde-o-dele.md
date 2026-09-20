@@ -122,3 +122,12 @@ selecionada="1", tecla Home  → selecionada vira 0
 
 Os dois últimos só passam depois do pedido irmão: hoje a tecla não chega. **Se eles passarem antes
 dele, o teste está despachando evento em vez de teclar** — e é a mesma armadilha que descrevi lá.
+
+## VEREDITO do pai — 2026-09-18 · `v0.200.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`, commit `1067760`) para a resposta
+> morar junto da pergunta, como o contrato manda. O texto é dele, palavra por palavra.
+
+**ITEM 1 ENTRA · ITEM 2 ENTRA DIFERENTE · ITEM 3 ENTRA.** O nome entra como `rotulo` → `aria-label` no `tablist` — **e o nome já existia na minha casa, na peça ao lado**: o `<diletta-segmented-control>` lê `rotulo` e escreve o `aria-label` do `radiogroup` (e nem observa o atributo, defeito que sai na mesma tag). O `id` eu recuso **pela lei que ele mesmo mediu**: ele escreveu que *a fronteira do shadow corta referência por `id` nas duas direções* e então propôs um `aria-controls` que depende dela na outra — o atributo apareceria no inspetor e resolveria pra nada na árvore de acessibilidade, passando em qualquer gate que confira presença. Entra o padrão que funciona hoje, escrito no README: **o painel se nomeia** (`aria-label` com o rótulo da aba). Condição de reabrir escrita: quando a referência por ELEMENTO (`ariaControlsElements`/Reference Target) estiver no piso de navegador que o pacote declara, o laço volta por objeto e não por texto. Home/End sai junto com o conserto do foco, que era a dependência que ele próprio declarou na abertura. Critério: aderência ao mercado · robustez
+
+**Entregue em**: **v0.200.0** — veredito e entrega no mesmo dia (e **v0.200.1** meia hora depois: a `pinta` tomava o foco ao montar, e quem viu foi o PNG)

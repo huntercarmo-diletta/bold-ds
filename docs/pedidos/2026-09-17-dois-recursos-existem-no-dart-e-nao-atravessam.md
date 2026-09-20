@@ -221,3 +221,12 @@ Isso não é falha dele: é a consequência de eu ter acrescentado caso a um arq
 não quebrar o link. **O preço é este**, e vale anotar como aprendizado da família: adendo num
 pedido em trânsito chega sem sinal, e sem sinal ele não é lido. Os dois seguem esperando, e vão
 junto no próximo sinal.
+
+## VEREDITO do pai — 2026-09-17 · `v0.202.0 · web-v0.202.0` · CASO 4
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`, commit `fcb78ac`) para a resposta
+> morar junto da pergunta, como o contrato manda. O texto é dele, palavra por palavra.
+
+**ENTRA.** `<diletta-icon-button badge>` com a geometria do `_BadgeDot` letra por letra, e o anel é o detalhe que parece igual e não é: o `Border.all` do Flutter desenha PRA DENTRO, então os 11 são o diâmetro externo — o `box-shadow` dele crescia pra fora e o ponto de 9 media 12. `box-sizing: border-box` repete o Flutter, o anel é branco absoluto (na cor do fundo ele some no tema em que o contraste é menor) e o ponto é `aria-hidden`, porque quem conta a novidade é o rótulo. **E quem trouxe o caso não foi sinal, foi a régua da v0.201.0**, que o listou como dívida no primeiro dia — a segunda metade do aprendizado sobre adendo em pedido em trânsito: o que o protocolo perde, a medição derivada às vezes acha
+
+**Entregue em**: v0.202.0 · web-v0.202.0 — `diletta-icon-button.js` + gate com prova de mutação

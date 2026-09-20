@@ -141,3 +141,12 @@ disso na web é **manter a largura** — botão que encolhe ao carregar move a t
 E, se o degrade entrar como eixo, o gate que eu escreveria é o do próprio `///`: em `primary` o
 degrade está no FUNDO, em `secondary` na BORDA e no RÓTULO, e em `disabled` ele não aparece. Três
 asserções, uma por hierarquia — porque é aí que uma cópia divergiria sem ninguém ver.
+
+## VEREDITO do pai — 2026-09-18 · `v0.201.0 · web-v0.201.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`, commit `42997d8`) para a resposta
+> morar junto da pergunta, como o contrato manda. O texto é dele, palavra por palavra.
+
+**CASO 1 ENTRA e saiu junto do veredito.** `<diletta-button carregando>` com os números medidos no `_ThreeBounce` do Dart — ponto 4,8px, vão 1,92px, 1400ms, escada de 0,25 de ciclo, atrasos negativos pra fila nascer no meio da onda como lá. A largura NÃO muda (o rótulo fica e some por `visibility`; os pontos vêm por cima) e a pintura NÃO vira a de desligado, porque o `///` do Dart diz *«mantendo a cor do tipo»* — botão que empalidece ao ser tocado se lê como recusa. `disabled` nativo: o clique não nasce. **CASO 2 ENTRA como LINGUAGEM e não nesta tag, e a suspeita dele estava errada**: `brandLiftDe(p)` DERIVA da paleta, e essa derivação existe porque as três versões `const` vazavam o azul do primeiro filho num filho verde. Falta a perna: o degradê não tem variável CSS emitida (zero ocorrências de `primary03` na emissão), e cravar dois hexes no elemento seria reintroduzir a `const` que o Dart já pagou pra apagar
+
+**Entregue em**: v0.201.0 · web-v0.201.0 — `packages/diletta_design_system_web/src/diletta-button.js` + 1 gate com prova de mutação nas duas pontas

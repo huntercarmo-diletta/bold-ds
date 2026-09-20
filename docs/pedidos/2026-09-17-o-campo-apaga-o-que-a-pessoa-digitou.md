@@ -135,3 +135,12 @@ E um segundo, de uma linha, para o ramo curto: `valor="x"` e o campo diz `"x"`.
 Vale a prova de mutação que esta família usa: apague a linha que restaura o valor e o primeiro teste
 tem que ficar vermelho. Se ele continuar verde, o teste está lendo o render e não o comportamento —
 que é exatamente o modo de falhar que você registrou no comentário da `.caixa`.
+
+## VEREDITO do pai — 2026-09-18 · `v0.200.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`, commit `1067760`) para a resposta
+> morar junto da pergunta, como o contrato manda. O texto é dele, palavra por palavra.
+
+**ENTRA — e o conserto DELE tinha um defeito que o meu não podia herdar.** A linha proposta (`guardado \|\| getAttribute('valor')`) faz o digitado ganhar de TODO atributo, **inclusive do próprio `valor`** — e aí o consumidor que limpa o formulário ou preenche depois de uma consulta escreve no atributo e não acontece nada, sem mensagem. A regra que entra tem o *qual* no meio: **o atributo que MUDOU decide** — `valor` é o consumidor falando e ganha; `erro`, `estado`, `label`, `placeholder` é a pessoa falando e o digitado ganha. O nome do atributo existia e eu o jogava fora: **27 de 27 peças declaram `attributeChangedCallback()` sem parâmetro nenhum**. Critério: robustez · aplicação
+
+**Entregue em**: **v0.200.0** — veredito e entrega no mesmo dia (e **v0.200.1** meia hora depois: a `pinta` tomava o foco ao montar, e quem viu foi o PNG)
