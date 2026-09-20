@@ -51,12 +51,12 @@ Por **tag**, nunca por caminho local — `pubspec.yaml` de cada pacote fixa o `r
 
 | pai | versão de hoje |
 |---|---|
-| `ds-diletta` | `v0.200.1` |
+| `ds-diletta` | `v0.202.0` |
 | `catalogo-diletta` | `v0.117.0` |
 
-## Como ESTE filho chega no app — `v0.111.0`
+## Como ESTE filho chega no app — `v0.112.0`
 
-A primeira tag saiu em 2026-08-01; a de hoje é a `v0.111.0`. A entrega é a TAG, e isso não mudou. O que
+A primeira tag saiu em 2026-08-01; a de hoje é a `v0.112.0`. A entrega é a TAG, e isso não mudou. O que
 mudou em 04/09 foi o **transporte até o app**, e a razão foi medida na revisão da PR da adoção: com a
 conta de outro dev do time, `diletta/bold-ds` e `diletta/ds-diletta` respondem *"does not exist or you
 do not have access"*, o `pub get` do app morre no `git clone --mirror`, e **quem não tem acesso aos dois

@@ -20,6 +20,47 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.112.0] — 2026-09-20
+
+### O avô sobe para a `v0.202.0` — o botão aprendeu a dizer «estou indo», e o sino ganhou o ponto
+
+**Só acrescenta.** Nenhum token muda de valor, nenhum papel muda de nome, nenhuma folha mudou uma
+linha — as três emissões saíram idênticas.
+
+**O bloqueante do botão caiu.** `<diletta-button carregando>` chegou na `v0.201.0` com os números
+medidos no `_ThreeBounce` do Dart: ponto de 4,8px, vão de 1,92px, 1400ms, atrasos negativos para a
+fila nascer no meio da onda. Era o que segurava a adoção da peça mais usada do produto web — **138
+usos em 40 arquivos, 29 deles ação assíncrona**.
+
+Duas decisões dele que contrariam o que supusemos no pedido, e as duas melhoram a peça:
+
+- **a largura não muda** enquanto espera — o rótulo fica e some por `visibility`, e os pontos vêm
+  por cima. Botão que encolhe no clique move o que está ao lado;
+- **a pintura NÃO vira a de desligado**, porque o `///` do Dart diz *«mantendo a cor do tipo»*: um
+  botão que empalidece ao ser tocado *«se lê como recusa, não como espera»*.
+
+**O degradê não veio, e a razão é boa**: `brandLiftDe(p)` DERIVA da paleta, e o que falta é uma
+perna que nunca existiu — zero variável CSS emitida para ele. Cravar dois hexes no elemento
+reintroduziria a `const` que o Dart já pagou para apagar. Fica aberto, como linguagem.
+
+**O badge do botão de ícone** chegou na `v0.202.0` — é o **sino** da casca de toda tela autenticada
+do Internet Banking, e era o CASO 4 do nosso pedido de 17/09.
+
+E nasceu a **régua entre os dois lados da mesma peça** (`o_web_carrega_o_que_o_dart_declara.py`),
+que nós oferecemos em 18/09 e ele tinha adiado. A condição de reabrir caiu no mesmo dia: *«cinco
+pedidos em duas semanas com a mesma frase dentro — cinco não são cinco defeitos, são um gate
+faltando»*. Ela não cobra a diferença entre os lados; cobra a diferença **sem razão escrita**.
+
+### Os vereditos dos oito pedidos voltaram para junto das perguntas
+
+Transcritos do ledger dele, palavra por palavra, com o commit de origem citado em cada bloco — é o
+passo 4 do contrato, e quem dá push nele é o filho. Oito arquivos de `docs/pedidos/` e as sete
+linhas correspondentes do nosso índice, que ainda diziam «sem veredito».
+
+**E um caso continua sem linha**: o CASO 3 (o `DilettaStepper` sem instância web). Ele aparece na
+fila de «13 peças ainda sem instância web» que a régua nova levantou, mas fila não é veredito.
+Pelo contrato, pedido sem linha é pedido que o transporte perdeu — sinalizado de novo em 20/09.
+
 ## [0.111.0] — 2026-09-20
 
 ### As oito paradas do lockup passam a ter nome — `--diletta-lockup01` a `08`
