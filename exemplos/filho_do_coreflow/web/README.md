@@ -6,8 +6,8 @@ aqui**: a folha de CSS é a diferença inteira entre um produto e outro.
 ## Como usar
 
 ```html
-<link rel="stylesheet" href=".../diletta-design-system-web/tokens/cps-tokens.css">
-<link rel="stylesheet" href=".../diletta-design-system-web/tokens/cps-papeis.css">
+<link rel="stylesheet" href=".../diletta-design-system-web/tokens/diletta-tokens.css">
+<link rel="stylesheet" href=".../diletta-design-system-web/tokens/diletta-papeis.css">
 <link rel="stylesheet" href=".../meu-banco-web/tokens/meu_banco-tokens.css">
 ```
 

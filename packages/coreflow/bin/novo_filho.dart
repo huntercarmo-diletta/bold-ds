@@ -383,8 +383,8 @@ aqui**: a folha de CSS é a diferença inteira entre um produto e outro.
 ## Como usar
 
 ```html
-<link rel="stylesheet" href=".../diletta-design-system-web/tokens/cps-tokens.css">
-<link rel="stylesheet" href=".../diletta-design-system-web/tokens/cps-papeis.css">
+<link rel="stylesheet" href=".../diletta-design-system-web/tokens/diletta-tokens.css">
+<link rel="stylesheet" href=".../diletta-design-system-web/tokens/diletta-papeis.css">
 <link rel="stylesheet" href=".../${_arquivo(op.id).replaceAll('_', '-')}-web/tokens/${_arquivo(op.id)}-tokens.css">
 ```
 
@@ -467,7 +467,13 @@ final _instalado = Directory('web/node_modules/diletta-design-system-web');
 ///
 /// A ordem importa pro navegador e NÃO importa aqui: o gate pergunta se o nome existe em ALGUMA das
 /// duas, que é o que decide se a variável resolve. Qual delas ganha é assunto do gate de paridade.
-String _folhaDoAvo() => File('\${_instalado.path}/tokens/cps-tokens.css').readAsStringSync();
+///
+/// E a do avô é a que TEM OS VALORES — `diletta-tokens.css`. Era `cps-tokens.css`, e a partir da
+/// v0.198.0 dele esse arquivo virou PONTE: só declara `--cps-x: var(--diletta-x)`, sem um valor
+/// dentro. Gate que procura valor numa folha de apelidos reprova por motivo errado — ou, pior,
+/// encontra o apelido e aprova achando que mediu o valor.
+String _folhaDoAvo() =>
+    File('\${_instalado.path}/tokens/diletta-tokens.css').readAsStringSync();
 
 /// A folha deste produto. Pode não existir antes da primeira emissão — e antes dela não há escala
 /// nossa nenhuma, então a do avô responde sozinha, que é o estado de um produto recém-nascido.

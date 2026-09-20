@@ -15,12 +15,24 @@ de bloco é aqui.
 ## O gate
 
 ```bash
-(cd packages/coreflow && flutter analyze && flutter test)                   # 86
-(cd packages/coreflow_design_system && flutter analyze && flutter test)     # 202
-(cd packages/norte_benk_coreflow && flutter analyze && flutter test)        # 15 (pede `npm install` em web/)
-(cd packages/coreflow/example && flutter analyze && flutter test)          # 12
-(cd packages/catalog && flutter analyze && flutter test)                    # 109
+(cd packages/coreflow && flutter analyze && flutter test)                   # 105
+(cd packages/coreflow_design_system && flutter analyze && flutter test)     # 230 (pede `npm install`)
+(cd packages/norte_benk_coreflow && flutter analyze && flutter test)        # 20  (pede `npm install` em web/)
+(cd packages/coreflow/example && flutter analyze && flutter test)           # 12
+(cd packages/catalog && flutter analyze && flutter test)                    # 112
+(cd exemplos/filho_do_coreflow && flutter analyze && flutter test)          # 15  (pede `npm install` em web/)
 ```
+
+**O «Meu Banco» é de mentira e está nesta lista de propósito** — ele é a SAÍDA do
+`dart run coreflow:novo_filho` versionada, e os gates que ele carrega são os que todo filho novo
+ganha. Vermelho nele é o GERADOR envelhecendo, e é a única coisa nesta casa que sabe dizer isso: os
+dois produtos de verdade não sabem, porque quando o avô mudou eles foram consertados à mão e o molde
+ficou para trás sozinho. Foi assim que o gate do filho gerado passou 20 tags do avô lendo a folha
+errada sem ninguém ver — ele nunca rodava, porque não estava aqui.
+
+Os que pedem `npm install` **pulam com o motivo escrito na tela** quando o pacote não está instalado,
+nunca em silêncio: quem clonou e rodou `flutter test` não pega vermelho por um passo de outra
+linguagem que não veio fazer.
 
 Dois gates medem a separação (`docs/2026-09-04-adr-o-coreflow-e-o-pai.md`), com a MESMA régua de
 `packages/coreflow_design_system/tool/levanta_a_separacao.sh`, em DUAS colunas — nome (símbolos do Bold)
