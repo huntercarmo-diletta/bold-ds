@@ -336,8 +336,25 @@
   --diletta-onGradiente: #16060a;
 }
 
+/* AS PARADAS DO LOCKUP, soltas. O degradê inteiro não serve a quem precisa de UMA cor
+   dele: o `BoldBackdrop` do IB digitava `#FE7B5E` e `#FEED35` na folha do componente
+   porque a parada não tinha nome publicado. As OITO saem, e não só as duas que hoje têm
+   consumidor — meia rampa publicada é a próxima tela pedindo a que faltou.
+   Sem bloco de modo: constante de marca não inverte. `dois_gradientes_e_so_test` prende
+   esta lista ao gradiente, então as duas não divergem. */
+:root {
+  --diletta-lockup01: #fe3976;
+  --diletta-lockup02: #fe3d74;
+  --diletta-lockup03: #fe4a70;
+  --diletta-lockup04: #fe5e69;
+  --diletta-lockup05: #fe7b5e;
+  --diletta-lockup06: #fea150;
+  --diletta-lockup07: #fece40;
+  --diletta-lockup08: #feed35;
+}
+
 /* PONTE: os nomes com o prefixo antigo, apontando para os da linguagem.
-   153 apelidos. Alias não copia valor, então o escuro segue o seletor. */
+   161 apelidos. Alias não copia valor, então o escuro segue o seletor. */
 :root {
   --cps-background: var(--diletta-background);
   --cps-bg: var(--diletta-bg);
@@ -366,6 +383,14 @@
   --cps-gradiente-accent: var(--diletta-gradiente-accent);
   --cps-gradiente-primary: var(--diletta-gradiente-primary);
   --cps-infoSubtle: var(--diletta-infoSubtle);
+  --cps-lockup01: var(--diletta-lockup01);
+  --cps-lockup02: var(--diletta-lockup02);
+  --cps-lockup03: var(--diletta-lockup03);
+  --cps-lockup04: var(--diletta-lockup04);
+  --cps-lockup05: var(--diletta-lockup05);
+  --cps-lockup06: var(--diletta-lockup06);
+  --cps-lockup07: var(--diletta-lockup07);
+  --cps-lockup08: var(--diletta-lockup08);
   --cps-onError: var(--diletta-onError);
   --cps-onErrorSolid: var(--diletta-onErrorSolid);
   --cps-onErrorSubtle: var(--diletta-onErrorSubtle);

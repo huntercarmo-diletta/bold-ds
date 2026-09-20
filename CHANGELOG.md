@@ -20,6 +20,41 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.111.0] — 2026-09-20
+
+### As oito paradas do lockup passam a ter nome — `--diletta-lockup01` a `08`
+
+**Só acrescenta.** Nenhum token muda de valor, nenhum papel muda de nome.
+
+A folha já publicava o degradê INTEIRO (`--diletta-gradiente-primary`), e degradê pronto não serve
+a quem precisa de UMA cor dele. Medido no Internet Banking: a peça de fundo lê o degradê em quatro
+lugares e, nos dois em que precisa da parada solta — o coral e o amarelo —, **digita o hex na folha
+do componente**. Hex digitado em folha de produto é a cópia sem fonte que esta casa passou o mês
+desfazendo, e o gate de cor literal de lá acusava as duas.
+
+Saem as **oito**, e não só as duas com consumidor hoje: meia rampa publicada é a próxima tela
+pedindo a que faltou.
+
+```css
+:root {
+  --diletta-lockup01: #fe3976;  /* … */  --diletta-lockup05: #fe7b5e;  /* o CORAL */
+  --diletta-lockup08: #feed35;  /* o AMARELO */
+}
+```
+
+**Num `:root` só, sem os três blocos de modo** — e isso é a decisão, não economia: constante de
+marca não inverte. Um papel vale uma cor no claro e outra no escuro; a parada de um símbolo vale o
+que o símbolo vale, nos dois. Brilho que muda de cor com o tema é outro desenho.
+
+**Não cria uma segunda fonte**: `dois_gradientes_e_so_test` já prendia a lista das oito ao
+`ContaBold.gradientes.primary.colors` e aos `lockupStops`. Se uma mudar sem a outra, ele reprova.
+
+O emissor (`coreflowConstantesCss`) mora no **pai** e não conhece produto nenhum — recebe o mapa que
+o filho declara, como os outros seis. E o gate do pai pegou a primeira versão deste commit: o `///`
+que eu escrevi citava o nome da peça do Bold, e *«o Coreflow não cita Bold, comentário incluído»*.
+
+A ponte do nome antigo levou os oito junto, sozinha — 153 apelidos viraram 161.
+
 ## [0.110.0] — 2026-09-18
 
 ### O pacote web passa a EMBUTIR o avô — e quem nos consome não precisa mais da chave dele

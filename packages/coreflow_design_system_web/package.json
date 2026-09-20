@@ -1,6 +1,6 @@
 {
   "name": "coreflow-design-system-web",
-  "version": "0.110.0",
+  "version": "0.111.0",
   "private": true,
   "type": "module",
   "description": "A INSTÂNCIA WEB do DS do Conta BOLD: os custom elements da linguagem, do avô, com a tinta deste produto. Não redefine componente — troca a cor por variável CSS.",

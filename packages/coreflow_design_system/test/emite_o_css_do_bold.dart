@@ -37,6 +37,13 @@ String cssDoBold() => [
       '\n/* OS GRADIENTES DESTE PRODUTO. A curva sai do símbolo e a tinta que vai por cima é o\n'
           '   vinho-tinta — com branco, o amarelo daria 1,21:1. */\n',
       coreflowGradientesCss(ContaBold.gradientes),
+      '\n/* AS PARADAS DO LOCKUP, soltas. O degradê inteiro não serve a quem precisa de UMA cor\n'
+          '   dele: o `BoldBackdrop` do IB digitava `#FE7B5E` e `#FEED35` na folha do componente\n'
+          '   porque a parada não tinha nome publicado. As OITO saem, e não só as duas que hoje têm\n'
+          '   consumidor — meia rampa publicada é a próxima tela pedindo a que faltou.\n'
+          '   Sem bloco de modo: constante de marca não inverte. `dois_gradientes_e_so_test` prende\n'
+          '   esta lista ao gradiente, então as duas não divergem. */\n',
+      coreflowConstantesCss(_paradasDoLockup),
       // OS AJUSTES POR COMPONENTE, por último: eles redeclaram papel DENTRO de um elemento, então
       // precisam vir depois das declarações de raiz que sobrescrevem. Hoje este produto não declara
       // nenhum e isto sai vazio — o encanamento existe pra que declarar um não peça mais nada.
@@ -56,6 +63,16 @@ String _ajustes() {
   final css = coreflowAjustesCss(ContaBold.produto.ajustesDePapel, tagsWeb: tagsDaWeb());
   return css.isEmpty ? '' : '\n/* AJUSTES DE PAPEL POR COMPONENTE. */\n$css';
 }
+
+/// As oito paradas da curva do lockup, na ordem do símbolo. É a MESMA lista que
+/// `ContaBold.gradientes.primary.colors`, e `dois_gradientes_e_so_test` reprova se as duas
+/// divergirem — por isso escrever aqui não cria uma segunda fonte.
+const Map<String, Color> _paradasDoLockup = {
+  'lockup01': BoldColors.lockup01, 'lockup02': BoldColors.lockup02,
+  'lockup03': BoldColors.lockup03, 'lockup04': BoldColors.lockup04,
+  'lockup05': BoldColors.lockup05, 'lockup06': BoldColors.lockup06,
+  'lockup07': BoldColors.lockup07, 'lockup08': BoldColors.lockup08,
+};
 
 /// Os 20 degraus do `CoreflowType`, por nome. A tabela é explícita porque `TextStyle` estático não se
 /// enumera por reflexão em Dart — e tabela que alguém esquece de atualizar é melhor que reflexão que

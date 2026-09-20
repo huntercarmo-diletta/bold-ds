@@ -293,6 +293,27 @@ String coreflowGradientesCss(CoreflowGradients g) {
   return ':root {\n${linhas.join('\n')}\n}\n';
 }
 
+/// As CONSTANTES DE MARCA por nome — cor que NÃO é papel: não inverte com o modo e não deriva de
+/// nenhum dos papéis da linguagem.
+///
+/// Existe porque um gradiente publicado INTEIRO não serve a quem precisa de UMA parada dele. Medido
+/// num produto desta casa em 20/09: a peça de fundo lia o degradê pronto em quatro lugares e, nos
+/// dois em que precisava da parada solta, DIGITAVA o hex na folha do componente. Hex digitado em
+/// folha de produto é a cópia sem fonte que esta casa passou o mês desfazendo.
+///
+/// Sai num `:root` só, sem os três blocos de modo, e isso é o ponto: **constante de marca não tem
+/// modo**. Um papel inverte com o tema; a parada de um símbolo vale o que o símbolo vale, nos dois.
+/// Um brilho que muda de cor com o tema é outro desenho.
+///
+/// A função não conhece produto nenhum — recebe o mapa que o filho declarou.
+String coreflowConstantesCss(Map<String, Color> constantes) {
+  if (constantes.isEmpty) return '';
+  final linhas = [
+    for (final e in constantes.entries) '  $prefixoDaLinguagem${e.key}: ${_hex(e.value)};',
+  ];
+  return ':root {\n${linhas.join('\n')}\n}\n';
+}
+
 /// O ângulo do CSS a partir dos dois cantos do Flutter.
 ///
 /// `Alignment` vai de -1 a 1 com o Y crescendo pra BAIXO; o `deg` do CSS mede a partir do topo, no
