@@ -10,6 +10,9 @@
     "./tokens.css": "./tokens/bold-tokens.css",
     "./fontes.css": "./fontes/fontes.css"
   },
+  "imports": {
+    "#avo": "diletta-design-system-web"
+  },
   "files": [
     "index.js",
     "tokens/",
