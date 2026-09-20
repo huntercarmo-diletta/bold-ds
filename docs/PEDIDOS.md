@@ -11,6 +11,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 
 | pedido | veredito | chegou em |
 |---|---|---|
+| [cada atributo redesenha o shadow inteiro](pedidos/2026-09-20-cada-atributo-redesenha-o-shadow-inteiro.md) | **sem veredito** — montar UM botão pelo nosso embrulho custa **5 reconstruções completas** do shadow (quatro atributos + o `connectedCallback`), e reescrever o MESMO valor também desenha. Num arquivo real do IB isso foi de **3,0s para 26,5s**, e a suíte inteira 43% mais lenta — **parei a adoção do botão por causa disto**, com as 177 chamadas prontas e guardadas. **Não é uma peça: são 27 de 27**, e 18 têm a linha IDÊNTICA, caractere por caractere. Zero comparam o valor velho com o novo. Proponho agrupar por tique na `base.js` + `if (velho === novo) return` — e aponto, sem medir, que isso muda quantas vezes o `pinta` guarda e devolve o foco, que é território dos 106 gates dele | — |
 | [a barra de topo não aceita cabeçalho do filho](pedidos/2026-07-29-barra-de-topo-nao-aceita-cabecalho-do-filho.md) | ENTRA | v0.4.0 |
 | [o vidro tem blur e traço cravados](pedidos/2026-07-29-vidro-tem-blur-e-traco-cravados.md) | ENTRA COMO FORMA | v0.4.0 |
 | [falta o glifo de assistente no conjunto](pedidos/2026-07-29-falta-o-glifo-de-assistente-no-conjunto.md) | ENTRA | v0.5.0 |
