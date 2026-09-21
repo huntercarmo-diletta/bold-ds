@@ -72,10 +72,13 @@ fim de semana**, e o sexto é a retratação de um deles.
 
 **Três coisas que isto deixa aberto, e são de bookkeeping, não de código:**
 
-1. **O índice mente.** Em `origin/main`, `docs/PEDIDOS.md` tem **126 linhas de pedido e 16 sem
-   veredito** — e **cinco dessas 16 foram julgadas hoje de manhã**. A última vez que essa mesma
-   situação aconteceu, o próprio `PEDIDOS.md` escreveu a regra: *«linha sem veredito é uma pergunta em
-   aberto pro pai — e ela vira mentira no dia em que ele responde»*. Hoje ela é mentira há oito horas.
+1. **O índice mentia, e parou de mentir hoje — FECHADO.** Quando esta rodada foi escrita,
+   `docs/PEDIDOS.md` tinha **126 linhas de pedido e 16 sem veredito**, e **cinco dessas 16 tinham sido
+   julgadas na mesma manhã**. O próprio `PEDIDOS.md` já tinha escrito a regra: *«linha sem veredito é
+   uma pergunta em aberto pro pai — e ela vira mentira no dia em que ele responde»*. As cinco colunas
+   foram escritas a pedido dela, no mesmo dia: **abertas de 16 para 11**, e a linha do botão destrutivo
+   ganhou a confirmação dele e a varredura de 30 linhas aceita. *A regra sobreviveu à própria prova:
+   ela pegou oito horas, não seis versões.*
 2. **O código não tem.** O `bold-ds` pina o avô na **`v0.202.0`**
    (`packages/coreflow_design_system/pubspec.yaml:34`) e a ponta dele é a **`v0.203.0`**. Os seis
    vereditos estão a um degrau.
@@ -84,11 +87,19 @@ fim de semana**, e o sexto é a retratação de um deles.
    tinha duas e do meu gate que casava zero linhas em 35 arquivos. Ele achou em horas; as minhas
    levaram semanas.»*
 
-> **A linha pro `PEDIDOS.md`, depois da sincronia.** Não é uma linha nova: são as cinco colunas de
-> veredito das cinco linhas já existentes, mais o `chegou em` = **`v0.203.0`** em três delas
-> (shadow · relógio · anel de foco), **`fila da web`** no campo de seleção, e
-> **`v0.203.0` (o destino) + fila da web** no diálogo/folha. A do botão destrutivo recebe
-> **FECHADO pela retratação**, sem tag.
+> **O que foi escrito no `PEDIDOS.md`** (nenhuma linha nova — cinco colunas de veredito em linhas que
+> já existiam): `v0.203.0 · web-v0.203.0` no **shadow**, no **relógio** e no **anel de foco**;
+> **`fila da web`** no campo de seleção; **`v0.203.0` (o destino) · o resto na fila da web** no
+> diálogo/folha. A linha do botão destrutivo já estava marcada RETRATADA pela outra mão e ganhou só a
+> confirmação dele.
+>
+> **E um susto que valeu a conferência**: na primeira passada o casamento por nome de arquivo pegou
+> **seis** linhas onde havia cinco. Não era duplicata no índice — é o pedido do diálogo **citando** o
+> do shadow no corpo do argumento (*peça com foco preso dentro de shadow precisa que o
+> `attributeChangedCallback` não reescreva o shadow a cada atributo*). A escrita foi refeita casando o
+> link inteiro. **Três linhas do índice têm uma barra não escapada e ficam com 6 campos em vez de 5** —
+> são pré-existentes, não foram tocadas, e ficam registradas aqui porque quebram qualquer leitura
+> automática da tabela.
 
 ---
 
@@ -269,19 +280,19 @@ Um commit local, **só documentação**, em `bold-ds-pacote`, branch `main`:
 |---|---|
 | `docs/FILA-DOS-CHATS.md` | esta rodada |
 | `docs/pedidos/2026-09-18-o-fundo-padrao-e-do-cliente-e-o-filho-nasce-sem-ele.md` | **arquivo novo** (estava sem versionar): remedido na `v0.112.0`, com a nota de endereçamento e o andaime de 351 linhas |
+| `docs/PEDIDOS.md` | **num segundo commit**, depois que ela mandou subir: as cinco colunas de veredito da `v0.203.0` (item 1) |
 
-**A `main` local está 13 commits atrás**, porque o `--ff-only` foi recusado nesta sessão. Então o
-envio é em dois tempos:
+**O primeiro commit subiu a pedido dela** (*"sobe na main"*): foi rebaseado sobre os 13 commits da
+Tatiana e foi em fast-forward, `2efacd9` → `e09eea3`. **O segundo está local e espera o envio** — ela
+pediu a edição do índice, não o envio dele, e o envio é dela:
 
 ```
-cd ~/Desktop/bold-ds-pacote && git pull --rebase origin main && git push origin main
+cd ~/Desktop/bold-ds-pacote && git push origin main
 ```
 
-**Depois da sincronia**, e só depois, sobra uma edição de índice que esta rodada não fez de propósito:
-as cinco linhas de veredito do `PEDIDOS.md` descritas no fim do item 1.
-
-**Nada foi enviado. Nenhuma tag. Nenhum PR. Nenhum merge.** E nenhum código foi consertado — os itens
-3, 4 e 5 são achados, e achado vira linha aqui.
+**Nenhuma tag. Nenhum PR. Nenhum merge.** E nenhum código foi consertado — os itens 3, 4 e 5 são
+achados, e achado vira linha aqui. **O pino do avô continua na `v0.202.0`**, um degrau atrás dos seis
+vereditos: isso é conserto de código, e não é desta rotina.
 
 ---
 
