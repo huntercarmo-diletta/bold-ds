@@ -12,8 +12,276 @@ porta que ele usa chega na tag do 1.
 de `disabled` no botão moram em `packages/coreflow` — **são nossos, não se pede**. Ao avô
 (`ds-diletta`) só vai o que é vocabulário dele: a forma por família (respondida, e adotada), o EIXO
 do logo (**respondido em 16/09 e entregue na `v0.196.0`** — o que sobrou é nosso), e o `copyWith` do
-plugue de marca (escrito em 17/09, esperando o sinal). A licença da arte não é nenhum dos dois: é
-pergunta para uma pessoa.
+plugue de marca (escrito em 17/09 — **respondido e entregue na `v0.201.0`**, com os **catorze**
+campos e não os doze que o pedido contou: *"o plugue cresceu duas vezes enquanto isto esperava"*).
+A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
+
+---
+
+## Rodada de 2026-09-21
+
+**Chats lidos** (transcrição, não resumo de terceiro). A janela vai de **18/09 10h54** — onde a
+rodada passada parou — até **hoje, 21/09**:
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| Norte Benk em HML | `claude_newbold` · `6bfe0d0d` | 18/09 17h12 | **o mais caro da rodada**: a cidade do Bold no filho errado, o fundo do cliente, e **351 linhas de andaime** |
+| Berço Coreflow (white label) | `claude_newbold` · `22128cb9` | 18/09 17h36 | as 13 melhorias entraram no site (Versão 90) — **nada pra cá**, é o site |
+| Recepção de envios do Berço | `claude_newbold` · `43e09e89` | 18/09 17h39 | o rastreio M1–M13 e a página pra squad — **nada pra cá**, é o site e o app |
+| Árvore do Coreflow (diagrama) | `claude_newbold` · `84ecce8e` | 18/09 15h51 | nada pra cá — é desenho, e o link é o de sempre |
+| esta rotina, a rodada de 18/09 | `bold-ds-pacote` · `37301ddd` | 18/09 11h44 | a rodada anterior — e **o push saiu, porque ela mandou** (*"sobe na main"*, 11h41) |
+| `aprendizado-do-dia` (rotina) | `claude_newbold` · `72f5b16b` | 18/09 10h39 | ignorada por contrato — alimenta os agentes de UI/UX, não esta fila |
+| **19 e 20/09** | — | — | **fim de semana: zero sessões, zero turnos** (conferido turno a turno, não presumido) |
+
+**E aqui está a coisa estranha desta rodada: ninguém conversou, e tudo andou.** Enquanto os chats
+estavam parados, o `origin/main` do `bold-ds` recebeu **13 commits e três tags** (`v0.110.0` ·
+`v0.111.0` · `v0.112.0`) — **todos os treze da Tatiana**, entre 18/09 11h55 e **hoje 02h11**. E o pai
+recebeu **9 commits e cinco tags de linguagem** (`v0.200.0` · `v0.200.1` · `v0.201.0` · `v0.202.0` ·
+`v0.203.0`), a última **hoje às 10h29**. **`main` local × `origin/main` = ahead 0, behind 13.**
+
+> **Duas ressalvas de método, porque mudam o que você lê abaixo.**
+>
+> 1. **A `main` local NÃO foi adiantada.** O `git merge --ff-only` foi recusado pelo sandbox desta
+>    rodada. Então **tudo que está medido abaixo foi medido em `origin/main`**, não na árvore local —
+>    e o commit desta rodada nasce 13 commits atrás. O comando de sincronia está no fim.
+> 2. **O `PEDIDOS.md` não foi tocado nesta rodada, de propósito.** A Tatiana o editou em cinco dos
+>    treze commits; reescrever a cópia local, que está atrasada, apagaria o trabalho dela num rebase.
+>    **A linha que falta está escrita no item 1, pronta pra colar depois da sincronia.**
+
+**A regra segue sendo dela**: esta rodada **não deu push, não abriu PR, não mesclou nada e não criou
+tag**, e **não consertou código**.
+
+---
+
+## 1 · SEIS VEREDITOS CHEGARAM HOJE ÀS 10h29 — e nenhum deles está no nosso índice
+
+**Estado**: **ABERTO, e é o primeiro porque muda o desenho de tudo que vem depois.**
+
+A `v0.203.0` do pai (`be3f918`, hoje 10h29) tem o título que diz o tamanho: *"seis pedidos julgados, e
+os três que eram defeito saíram juntos"*. Cinco desses seis são pedidos que **a Tatiana escreveu no
+fim de semana**, e o sexto é a retratação de um deles.
+
+| pedido (nosso, no `origin/main`) | escrito | veredito no ledger do pai | onde |
+|---|---|---|---|
+| `2026-09-20-cada-atributo-redesenha-o-shadow-inteiro` | 20/09 19h20 | **ENTRA a metade que não quebra ninguém** — `mudouAtributo()` na `base.js`; o agrupamento por microtask **não** entra (quebraria `setAttribute`+leitura em 110 gates dele, nos nossos e nas 177 chamadas guardadas) | v0.203.0 |
+| `2026-09-20-o-relogio-do-pending-nao-casa-a-regra-que-o-alinha` | 20/09 19h30 | **ENTRA como escrito.** Defeito de 21/08, um mês no ar, invisível aos 110 gates *porque todos perguntam se o glifo existe, e ele existia* | v0.203.0 |
+| `2026-09-21-o-anel-de-foco-do-campo-nao-se-ve` | hoje 01h56 | **ENTRA nos dois lados.** E o número dele: **1,17 é o mesmo `surfaceMuted` que esta casa já tirou do anel do toggle** — mesmo número, outro campo, três semanas depois. *Conserto de caso não fecha classe* | v0.203.0 |
+| `2026-09-21-nao-existe-campo-de-selecao-na-familia` | hoje 01h29 | **ENTRA na fila da web, e a premissa estava errada**: `DilettaDropdown` existe na linguagem com `destino: ambos`. A busca varreu o **degrau do meio** | fila da web |
+| `2026-09-21-o-dialogo-e-a-folha-existem-no-dart-e-nao-atravessam` | hoje 01h29 | **O DIÁLOGO entra e a declaração dele estava ERRADA** (`destino: codigo` numa peça que é `ambos`; a fila da web foi de 13 pra 14). **A FOLHA é do degrau do meio** — o `coreflow_folha` mora aqui | v0.203.0 (o destino) |
+| `2026-09-21-o-botao-destrutivo-nao-passa-em-AA-no-escuro` | hoje 02h04 | **FECHADO pela retratação dela mesma**, 7 minutos depois (`2efacd9`, 02h11). O par passa: 6,57 no claro, **11,26** no escuro, porque no escuro a linguagem INVERTE o botão | — |
+
+**Três coisas que isto deixa aberto, e são de bookkeeping, não de código:**
+
+1. **O índice mente.** Em `origin/main`, `docs/PEDIDOS.md` tem **126 linhas de pedido e 16 sem
+   veredito** — e **cinco dessas 16 foram julgadas hoje de manhã**. A última vez que essa mesma
+   situação aconteceu, o próprio `PEDIDOS.md` escreveu a regra: *«linha sem veredito é uma pergunta em
+   aberto pro pai — e ela vira mentira no dia em que ele responde»*. Hoje ela é mentira há oito horas.
+2. **O código não tem.** O `bold-ds` pina o avô na **`v0.202.0`**
+   (`packages/coreflow_design_system/pubspec.yaml:34`) e a ponta dele é a **`v0.203.0`**. Os seis
+   vereditos estão a um degrau.
+3. **A lição que o pai tirou é sobre nós, e é elogiosa.** Sobre a retratação: *«matriz de combinações
+   não prova ausência quando a matriz foi montada por suposição — irmã do meu "zero chamadas" que
+   tinha duas e do meu gate que casava zero linhas em 35 arquivos. Ele achou em horas; as minhas
+   levaram semanas.»*
+
+> **A linha pro `PEDIDOS.md`, depois da sincronia.** Não é uma linha nova: são as cinco colunas de
+> veredito das cinco linhas já existentes, mais o `chegou em` = **`v0.203.0`** em três delas
+> (shadow · relógio · anel de foco), **`fila da web`** no campo de seleção, e
+> **`v0.203.0` (o destino) + fila da web** no diálogo/folha. A do botão destrutivo recebe
+> **FECHADO pela retratação**, sem tag.
+
+---
+
+## 2 · O item 7 da rodada passada virou linha ABERTA no ledger do PAI — por mão dele, e sem pedido
+
+**Estado**: **ABERTO na casa dele. Nada a fazer aqui, e é o melhor resultado possível.** Depende do 1
+(chegou na mesma leitura de ledger).
+
+A rodada de 18/09 mediu o eixo do logo, concluiu *"hoje a diferença não muda nenhuma tela"* e
+**decidiu não abrir pedido**. Essa medição está agora no ledger do pai, com data de 18/09, como item
+dele:
+
+> **duas peças minhas respondem a mesma pergunta ao contrário** — `DilettaLogo` escolhe claro/escuro
+> por `tema.isDark` (`diletta_logo.dart:90`), que é o brilho da PÁGINA, e `DilettaSystemWalletMark`
+> escolhe pela **luminância do FUNDO** desde a v0.28.0 […] O filho mediu os cinco sítios dele **e não
+> abriu pedido** porque hoje as duas respostas coincidem. **A disciplina foi dele; a incoerência é
+> minha.** — *status: ABERTO*
+
+E ele escreveu sozinho a condição que a nossa fila tinha escrito como hipótese: *"uma superfície sob o
+logo que NÃO vire com o tema (vidro sobre cor de marca, banner colorido, splash de fato fixo)"*. Mais
+o que a nossa fila não tinha visto: *"o escape de hoje não alcança — `color:` na chamada resolve a
+TINTA e não escolhe a ARTE"*.
+
+**O que isto prova, e vale mais que o item**: medição sem pedido chegou. Não foi preciso gastar um
+pedido para mover a casa do pai — bastou medir e deixar escrito. É o oposto do custo do item 3 da
+rodada passada, onde um veredito que existia e não circulou fez um filho nascer com remendo.
+
+---
+
+## 3 · O pedido do fundo está no lugar errado — e ele é TODO nosso
+
+**Estado**: **ABERTO, e é o item mais caro que é nosso.** Não depende de 1 nem de 2: não há nada a
+esperar do pai aqui.
+
+Em 18/09 11h37 o chat do HML escreveu à mão
+`docs/pedidos/2026-09-18-o-fundo-padrao-e-do-cliente-e-o-filho-nasce-sem-ele.md`. **Duas coisas com
+ele, e as duas foram resolvidas nesta rodada:**
+
+**Primeira: está endereçado pra cá.** O cabeçalho diz `para: coreflow (o pai) e o Berço` — e é o único
+dos 116 arquivos de `docs/pedidos/` que aponta pra dentro. O `PEDIDOS.md` abre com *«o que este filho
+pediu aos pais»*; os destinatários são `ds-diletta` (68 pedidos), `catalogo-diletta` (4) e a dona do
+produto (2). **Pela doutrina desta fila — *o que mora em `packages/coreflow` é nosso e se faz aqui* —
+nenhum dos quatro itens dele é pedido ao avô.** O arquivo ficou onde está, com uma nota no topo
+dizendo isso, e o item passa a ser carregado aqui.
+
+**Segunda: a medição envelheceu em três dias, e foi refeita.** O original mediu na `v0.102.1`; esta
+rodada remediu em `origin/main` (**`v0.112.0`**, hoje). **Dez tags depois, nenhum número se moveu:**
+
+| onde | v0.112.0, 21/09 |
+|---|---|
+| `coreflow_produto.dart` | **0** campos de fundo — as duas linhas que casam `fundo` são comentário sobre o **logo** (`:212`, `:217`) |
+| `CoreflowBackdrop` (`coreflow_background.dart:45`) | **7** valores. Dos 4 que o cliente marcou no Berço, **só `vidroFrio` existe** |
+| `coreflow/bin/novo_filho.dart` | **0** ocorrências de `fundo`/`backdrop` |
+| `norte_benk_coreflow/lib/norte_benk.dart` | **0** — declara paleta, marca e forma; fundo não |
+
+A ordem interna dele é **3 → 1 → 4, com o 2 solto**, e está escrita no arquivo com o porquê de cada
+espera. Só o item 2 (a arte de fundo declarada na marca) é candidato a virar pedido de verdade ao avô
+— e hoje não é, porque o `CoreflowBackdropScope` é nosso.
+
+---
+
+## 4 · A Aparência foi resolvida no APP — e o preço está medido: 351 linhas
+
+**Estado**: **ABERTO aqui, FECHADO lá.** Depende do 3 — é o mesmo eixo, e o 3 é a forma escrita dele.
+
+Os itens **7 e 8 da rodada de 15/09** (`solido` não serve de fundo de Home + a Aparência não conhece a
+curadoria do produto) foram marcados **"nosso"**, para se fazer em `packages/coreflow`. **Eles foram
+feitos — do outro lado da fronteira**, em 18/09 17h05, no `app-newbold` (`b33775de`, branch
+`feat/norte-benk-hml`, assinado por ela):
+
+| | |
+|---|---|
+| arquivo novo | `lib/core/theme/fundo_do_app.dart` — **351 linhas** |
+| commit | 8 arquivos, **+445 / −54** |
+| o que carrega | `enum FundoDoBerco { degradeSimples, harmoniaAnaloga, harmoniaComplementar }` e um `FundoDoApp` que une os fundos desta casa com os do Berço |
+| a conta | `camadasDoFundo`, `degradeSimplesDe` com teto de alfa contra `textSecondary`, `matizGirado` em OKLCH com a regra da faixa amarela — **a mesma matemática do site, copiada** |
+| como engana o DS | os fundos do Berço são rasterizados e entregues **como a ARTE do estilo `imagem`**, descontando o véu que o `imagem` pousa (branco 0,20 / preto 0,08) |
+
+**Não é crítica ao que foi feito — é a medida do que falta aqui.** O próprio commit escreve a data de
+validade: *«Quando o pai desenhar os fundos, `FundoDoBerco` vira valor do enum dele e
+`ArteDeFundoGerada` sai»*. E o andaime tem **exatamente a forma do buraco**: os três fundos que ele
+implementa são os três que faltam no `CoreflowBackdrop`, e o quarto do Norte Benk (`vidroFrio`) não
+está lá porque é o único que esta casa já desenha.
+
+**O que isto muda na fila**: os itens 7 e 8 de 15/09 deixam de ser *"nosso, e ninguém fez"* e passam a
+ser ***"nosso, e alguém já pagou por nós — em outro repo, em linhas que vão ter que ser apagadas"***.
+A matemática não precisa ser inventada: ela existe rodando em dois lugares (o Berço e estas 351
+linhas), e o trabalho aqui é **portar**, não projetar.
+
+---
+
+## 5 · A deriva: o pacote está a um degrau, e o app dobrou a distância
+
+**Estado**: **ABERTO.** Depende do 1 só no primeiro degrau.
+
+| | pino | ponta | degraus | rodada passada |
+|---|---|---|---|---|
+| `bold-ds` (ponta remota) → avô | **v0.202.0** | v0.203.0 | **1** | 1 |
+| `app-newbold` → `bold-ds` | **v0.102.1** (vendorizado) | v0.112.0 | **10 tags** | 6 |
+| `app-newbold` → avô | **v0.180.0** (`packages/diletta_design_system/pubspec.yaml:6`) | v0.203.0 | **30** | 19 |
+| `norte_benk_coreflow` no app | **v0.108.0** (`"adiantada": true`) | v0.112.0 | **4 tags** | 0 — nasceu na ponta |
+
+**O recibo do app (`packages/ds_vendor.json`) foi regerado em 18/09 e o `filho`/`base` continuam em
+`v0.102.1`**: o trabalho do Norte Benk adicionou a quarta irmã sem subir a base. A deriva do app
+**não** foi criada por esta rodada nem pelo fim de semana — ela é a de 10/09 crescendo enquanto o
+pacote anda. Onze dias, 10 tags.
+
+---
+
+## 6 · O papel do pai continua parado em branch — e agora os vereditos nem branch têm
+
+**Estado**: **ABERTO como papel** (o mérito segue fechado no código, desde a rodada passada).
+
+`docs/avisos/2026-09-17-o-prefixo-do-css-virou-da-linguagem-e-o-seu-white-label-cala.md` **continua
+existindo só em `origin/aviso/o-prefixo-do-css`** (branch de 17/09 10h34, sem commit novo). Em
+`origin/main` o último aviso é de **14/09**. É a quarta rodada seguida com essa linha.
+
+**E o canal mudou de forma no fim de semana, sem ninguém anunciar.** Nenhuma branch nova nasceu — as
+últimas são de 14/09 e 17/09. Os vereditos da `v0.200.0` até a `v0.203.0` chegaram aqui **pela leitura
+direta do ledger dele** (`ds-diletta/docs/PEDIDOS.md`), transcritos à mão pela Tatiana em `1e3caaf`
+(18/09) e `f275460` (20/09, *"os oito vereditos voltam para junto das perguntas"*).
+
+**O que isso custa, escrito antes de doer:** ler o ledger funciona e é rápido — foi assim que os oito
+voltaram. Mas **o ledger dele não sabe quando nós lemos**. A branch tinha uma data e um dono; a
+transcrição depende de alguém lembrar de reler. **Os seis vereditos de hoje são a primeira prova
+disso**: eles estão no ledger há oito horas e não estão no nosso índice (item 1), e não há branch, não
+há sinal e não há nada que vá avisar.
+
+---
+
+## 7 · Reconferidos na ponta remota, sem mudança
+
+- **A licença Font Awesome Pro** (item 8 de 18/09): sem mudança dos dois lados. Ela respondeu em 15/09
+  que **temos a licença**; o `PROCEDENCIA.md` continua não existindo e **o pai continua sem ser
+  avisado**. Isto não é código de ninguém: é uma frase que precisa sair daqui pra casa dele.
+- **O D76 e o D77** (a arte no Figma que carrega a marca de um filho): sem mudança, seguem esperando
+  decisão dela.
+- **Code Connect**: segue bloqueado por plano, e o plano B segue entregue.
+
+---
+
+## 8 · Levantado e NÃO medido — entra como levantamento, não como afirmação
+
+**As 13 melhorias do Berço (M1–M13)** foram rastreadas em 18/09 a partir de como a squad do app
+consumiu a entrega do Norte Benk, e **entraram no site no mesmo dia (Versão 90)**. O achado que as
+reordenou: a squad montou o Norte Benk num `Tenant` de doze campos
+(`app-newbold`, `lib/core/tenant/tenant.dart`, PR #747, em `origin/development` e
+`origin/release/homologation`) — **não usou nenhum arquivo do anexo do Berço, só o conteúdo**.
+
+**Isto não entra na fila como item, e a razão é a fronteira:** M1–M13 mudam o **site** e o **app**.
+Nada ali muda `packages/coreflow`. O que *pode* virar item aqui é uma pergunta que esta rodada **não
+mediu** e por isso não afirma: **o `Tenant` de doze campos do app e o `CoreflowProduto` desta casa são
+a mesma ficha escrita duas vezes?** Se forem, a segunda é dívida; se não forem, a diferença merece
+estar escrita em algum lugar. Fica pra próxima rodada, com medição.
+
+---
+
+## O que mudou de dono desde a rodada anterior
+
+- **Item 1 de 18/09** (o veredito do logo) — fechado lá, e **reaberto na casa do pai como item DELE**
+  (item 2 acima). Saiu da nossa fila.
+- **Itens 2, 3 e 4 de 18/09** — fechados em 18/09 pelos commits `99a5303`, `1fe7d93` e `03e73cc`, e o
+  push saiu no mesmo dia a pedido dela.
+- **Item 7 de 18/09** (contraste medido) — de *"medido, não vira pedido"* para *"linha aberta no
+  ledger do pai"*. **Não é mais nosso.**
+- **Itens 7 e 8 de 15/09** (os fundos e a Aparência) — de *"nosso, por fazer"* para *"nosso, e o app
+  já pagou por nós"* (item 4 acima). **Continuam nossos.**
+- **Cinco pedidos novos** entraram no `origin/main` pela mão da Tatiana no fim de semana, e **seis
+  vereditos** voltaram hoje. Nenhum deles é desta fila — mas o índice deles é (item 1).
+
+---
+
+## O que está pronto pra você enviar
+
+Um commit local, **só documentação**, em `bold-ds-pacote`, branch `main`:
+
+| arquivo | o quê |
+|---|---|
+| `docs/FILA-DOS-CHATS.md` | esta rodada |
+| `docs/pedidos/2026-09-18-o-fundo-padrao-e-do-cliente-e-o-filho-nasce-sem-ele.md` | **arquivo novo** (estava sem versionar): remedido na `v0.112.0`, com a nota de endereçamento e o andaime de 351 linhas |
+
+**A `main` local está 13 commits atrás**, porque o `--ff-only` foi recusado nesta sessão. Então o
+envio é em dois tempos:
+
+```
+cd ~/Desktop/bold-ds-pacote && git pull --rebase origin main && git push origin main
+```
+
+**Depois da sincronia**, e só depois, sobra uma edição de índice que esta rodada não fez de propósito:
+as cinco linhas de veredito do `PEDIDOS.md` descritas no fim do item 1.
+
+**Nada foi enviado. Nenhuma tag. Nenhum PR. Nenhum merge.** E nenhum código foi consertado — os itens
+3, 4 e 5 são achados, e achado vira linha aqui.
 
 ---
 
