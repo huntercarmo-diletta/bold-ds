@@ -20,6 +20,45 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.113.0] — 2026-09-21
+
+### O aviso acima do CTA entra na barra do avô, e some a segunda linha
+
+**Muda pixel** em quem usa `CoreflowRodape.button(acima:)` — hoje as quatro telas de conferência de
+dinheiro do app (Pix, TED, boleto e devolução).
+
+A dona do produto mandou uma foto da tela de revisão do Pix com **duas linhas acima do botão**.
+Medido no PNG: a de cima em `y=757` com 467px, a largura cheia da tela; a de baixo em `y=786` com
+425px, recuada uns 20 de cada lado; **29px entre elas**, que dão os 24pt do padding de topo desta
+casca mais o respiro que ela punha entre o aviso e o CTA.
+
+Eram **duas barras de vidro aninhadas**. Com `acima != null`, o `CoreflowRodape` embrulhava o
+`DilettaBottomApp.button` — que já é a barra completa, com vidro, aresta de cima e indicador de home
+— dentro de outro `DilettaGlassSurface(aresta: cima)`. Duas arestas, e o respiro de baixo contado
+duas vezes.
+
+E era **violação escrita**: a spec `design-system-bottom-app` do avô já dizia *"NÃO SHALL haver duas
+barras inferiores empilhadas na mesma tela"*. Faltava lá o cenário deste caso, e ele entrou junto com
+o conserto.
+
+O slot mudou de casa: o avô ganhou `DilettaBottomApp.button(acima:, alturaDoAcima:)` na `v0.204.0`, e
+esta casca só repassa. O desvio existia porque o `.livre` do avô exige altura declarada e o `.button`
+não recebia nada além do botão — agora recebe.
+
+**E o aviso não empurra mais o CTA para fora em tela curta.** Arte cresce: um aviso de duas linhas
+vira seis com a fonte do sistema aumentada. O slot para em 30% da altura da tela e rola dentro da
+barra a partir dali; abaixo do teto nada muda.
+
+Detalhe que vale para quem for ler o código do app: as quatro telas passam `SeloTierC()` sem
+condição, e o selo devolve caixa vazia fora de aparelho Tier C — a segunda linha aparecia para todo
+mundo por causa de um aviso que quase ninguém vê.
+
+### O avô sobe para a `v0.204.0`
+
+Oito pinos (README, os três `pubspec`, o `tagWebDoAvo` do gerador e os três `package.json` do lado
+web), mais as duas travas Dart regeneradas e as três travas npm apontadas para `web-v0.204.0`
+(commit `3f350ae`). O salto passa pela `v0.203.0`, que trouxe seis pedidos julgados do lado web.
+
 ## [0.112.0] — 2026-09-20
 
 ### O avô sobe para a `v0.202.0` — o botão aprendeu a dizer «estou indo», e o sino ganhou o ponto
