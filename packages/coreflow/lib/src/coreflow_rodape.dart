@@ -157,24 +157,22 @@ class CoreflowRodape extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (primary != null || secondary != null || tertiary != null) {
-      if (acima == null) {
-        return _RodapeDoPai(
-            primary: primary, secondary: secondary, tertiary: tertiary);
-      }
-      // Com conteúdo acima, o envelope do pai não serve: o `.livre` dele exige altura fixa e não
-      // recebe nada além do botão. Cai no vidro genérico desta casca.
-      return CoreflowRodape.child(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            acima!,
-            const SizedBox(height: DilettaSpacing.s3),
-            _RodapeDoPai(
-                primary: primary, secondary: secondary, tertiary: tertiary),
-          ],
-        ),
-      );
+      // Com ou sem conteúdo acima, o envelope é UM e é o do pai.
+      //
+      // Aqui havia um desvio: com `acima`, esta casca embrulhava o rodapé do pai numa SEGUNDA barra
+      // de vidro, porque o `.livre` do pai exige altura declarada e o `.button` não recebia nada
+      // além do botão. O preço apareceu na foto da revisão do Pix: **duas linhas acima do botão**, a
+      // 24 uma da outra, a de dentro recuada 20 de cada lado pelo padding desta casca, e o respiro
+      // de baixo contado duas vezes. E era violação escrita: a spec do pai já dizia *"NÃO SHALL
+      // haver duas barras inferiores empilhadas na mesma tela"*.
+      //
+      // O slot passou a morar no pai, onde mora a geometria — `DilettaBottomApp.button(acima:)`,
+      // que ainda trava a altura do conteúdo em tela curta. Esta casca só repassa.
+      return _RodapeDoPai(
+          primary: primary,
+          secondary: secondary,
+          tertiary: tertiary,
+          acima: acima);
     }
     if (bare) return child;
 
@@ -271,11 +269,16 @@ class _NavDeRodape<T> extends StatelessWidget {
 /// `bold_navigation_button.dart` — ela ganhou um segundo consumidor, e tabela de
 /// tipo duplicada é o defeito que não erra no dia em que nasce.
 class _RodapeDoPai extends StatefulWidget {
-  const _RodapeDoPai({this.primary, this.secondary, this.tertiary});
+  const _RodapeDoPai(
+      {this.primary, this.secondary, this.tertiary, this.acima});
 
   final CoreflowAcaoDeNavegacao? primary;
   final CoreflowAcaoDeNavegacao? secondary;
   final CoreflowAcaoDeNavegacao? tertiary;
+
+  /// O conteúdo colado por cima do CTA. Vai INTEIRO para o pai — é dele a
+  /// geometria da barra, a aresta e a trava de tela curta.
+  final Widget? acima;
 
   @override
   State<_RodapeDoPai> createState() => _RodapeDoPaiState();
@@ -284,6 +287,7 @@ class _RodapeDoPai extends StatefulWidget {
 class _RodapeDoPaiState extends State<_RodapeDoPai> with CoreflowAcoesDoPai {
   @override
   Widget build(BuildContext context) => DilettaBottomApp.button(
+        acima: widget.acima,
         button: DilettaNavigationButton(
           primary: acaoDoPai(widget.primary, 0),
           secondary: acaoDoPai(widget.secondary, 1),
