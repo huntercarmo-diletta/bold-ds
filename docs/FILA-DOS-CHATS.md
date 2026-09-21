@@ -18,6 +18,275 @@ A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
 
 ---
 
+## Rodada de 2026-09-21 · tarde
+
+A rodada da manhã fechou às 10h52. Esta cobre **10h52 → 17h57**, e o dia rendeu mais depois do
+almoço do que antes: **quatro tags do pai**, um defeito que atravessou os três níveis em três horas,
+e uma auditoria de acessibilidade que **reprovou um fluxo por três bloqueantes — e só um sobrevive à
+medição**.
+
+**Chats lidos** (transcrição, não resumo de terceiro):
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| Duas linhas acima do botão | `claude_newbold` · `a90fd506` | 17h22 | **o mais produtivo do dia**: defeito de DS achado numa foto, consertado no pai, publicado nos três níveis |
+| Meus limites (fluxo novo) | `claude_newbold` · `9ef7cfe2` | 17h56 | o protótipo no Figma, a auditoria WCAG e a **tabela «falta no DS»** — é daqui que sai o pedido desta rodada |
+| PR do Norte Benk | `claude_newbold` · `6bfe0d0d` | 16h17 | PR #768, e a branch antiga apagada do remoto — **nada de DS**, fica pelo rastro do revert |
+| esta rotina, a rodada da manhã | `bold-ds-pacote` · `aeb36817` | 11h31 | o pino do avô, interrompido por ela — e o que ele mediu antes de parar |
+| esta rotina, a rodada da tarde | `bold-ds-pacote` · `c014e6ef` | — | esta |
+| `aprendizado-do-dia` (rotina) | — | — | ignorada por contrato |
+
+---
+
+### 0 · O QUE O PAI RESPONDEU — e são quatro tags numa tarde
+
+Isto vem primeiro porque muda o desenho do que vem depois. Entre 11h08 e 17h43 o pai publicou
+**`v0.204.0`, `v0.205.0`, `v0.206.0` e `v0.207.0`**, com espelho web em cada uma. Duas delas fecham
+pedidos nossos, e uma **muda o contrato pelo qual esta rotina escreve pedido**.
+
+| tag | hora | o que é | o que fecha |
+|---|---|---|---|
+| `v0.204.0` | 11h08 | `DilettaBottomApp.button(acima:)` — o que vai acima do CTA entra na barra | o defeito do item 1, achado hoje às 10h38 |
+| `v0.205.0` | 13h11 | `<diletta-dialog>` e `<diletta-dropdown>` atravessaram | **duas linhas do índice**: o diálogo e o campo de seleção |
+| `v0.206.0` | 17h35 | `DilettaManifesto.busca` passou a ignorar acento | — · **e mexeu no contrato** |
+| `v0.207.0` | 17h43 | `semanticLabel` no botão | o pedido escrito **hoje de manhã** por outro chat |
+
+**A `v0.207.0` é o ciclo mais curto que esta família já teve.** O pedido
+[o botão não tem onde pôr o nome que o leitor de tela anuncia](pedidos/2026-09-21-o-botao-nao-tem-onde-por-o-nome-que-o-leitor-de-tela-anuncia.md)
+foi escrito pelo chat da adoção do Internet Banking (filho B) e commitado aqui em `5c26612`. O
+veredito é **ENTRA nos dois** — `semanticLabel` no Dart caindo no `label`, `rotulo-acessivel` na web
+virando `aria-label` no `<button>` INTERNO —, e a parte que interessa a esta fila é a outra:
+
+> **A dúvida do pedido virou a metade mais importante da entrega.** Quem escreveu não sabia se o
+> campo abriria a porta pra anunciar nome diferente do texto da tela, citou a §2.5.3 (*Label in
+> Name*) e disse *«você tem os 110 gates e a régua; eu tenho o caso»*. O pai respondeu que a citação
+> estava certa e **transformou a norma em `assert`** — que some em release, ignora acento e caixa.
+> A seção «o que eu NÃO sei» pagou mais que a seção «o que eu proponho».
+
+E o campo **não é obrigatório**, ao contrário do `DilettaIconButton.semanticLabel`: *«lá não há outro
+nome, aqui há, e obrigar faria 200 chamadas repetirem o rótulo»*.
+
+**O contrato mudou, e é obrigação desta rotina (v0.206.0).** `docs/PEDIDO-DO-FILHO.md` ganhou uma
+exigência: **pedido de PEÇA NOVA agora começa com uma linha de código**, e ela é uma só —
+
+```dart
+DilettaManifesto.busca('<o que você precisa>')   // e escreva aqui o que ela devolveu
+```
+
+O motivo está escrito lá e é nosso: *«outro publicou um pedido de campo de seleção medindo as 61
+peças do degrau do meio — a peça estava na linguagem, declarada»*. É a linha
+«[não existe campo de seleção na família](pedidos/2026-09-21-nao-existe-campo-de-selecao-na-familia.md)»
+deste índice, virada régua. **Vazio dela é resposta**, e conta como número. O pedido desta rodada não
+é peça nova, e por isso não abre com `busca` — mas o próximo que for, abre.
+
+### A deriva, e ela nasceu hoje de tarde
+
+| | pino | ponta | deriva |
+|---|---|---|---|
+| app (`ds_vendor.json`, 21/09) | filho `v0.113.0` · pai `v0.204.0` | — | — |
+| filho (`coreflow_design_system/pubspec.yaml:34`) | pai `v0.204.0` | pai `v0.207.0` | **3 tags** |
+
+As três são de hoje entre 13h11 e 17h43. **Nenhuma é urgente para nós**: a `v0.205.0` é instância
+web, a `v0.206.0` é a busca do manifesto, e a `v0.207.0` é o campo do botão — que interessa ao filho
+B, não a esta casa, até alguém aqui precisar anunciar um nome diferente do rótulo.
+
+---
+
+## 1 · O defeito que atravessou os três níveis numa tarde — FECHADO
+
+**Como começou**: ela mandou uma foto da tela de revisão de transação e uma pergunta de uma linha —
+*«por que nessa tela existem duas linhas acima do botão? É do design system ou da tela?»*
+
+**Era do design system.** Duas barras de vidro empilhadas, cada uma desenhando a própria aresta de
+cima. Medido no print antes de abrir código: linha 1 em y=757 com 467px (a tela inteira), linha 2 em
+y=786 com 425px (recuada dos dois lados).
+
+**A causa, e ela está escrita no arquivo que sobrou** ([coreflow_rodape.dart:162](../packages/coreflow/lib/src/coreflow_rodape.dart)):
+
+> *«Aqui havia um desvio: com `acima`, esta casca embrulhava o rodapé do pai numa SEGUNDA barra […]
+> O preço apareceu na foto da revisão do Pix: duas linhas acima do botão.»*
+
+**O conserto foi no pai, não aqui, e a razão é boa**: o slot passou a morar onde mora a geometria —
+`DilettaBottomApp.button(acima:)`, um vidro, uma aresta, um indicador de home, com teto de 30% da
+altura em tela curta. A casca ficou com **quatro linhas úteis** de repasse
+([coreflow_rodape.dart:175](../packages/coreflow/lib/src/coreflow_rodape.dart)).
+
+| nível | o que saiu | verificação |
+|---|---|---|
+| pai `ds-diletta` | `0691872` · `v0.204.0` · `web-v0.204.0` | 877 testes, +7 novos |
+| filho `bold-ds` | `4709890` + `53212e9` · `v0.113.0` | 108 testes, +3 novos |
+| app | `68ded84e`, depois refeito em `1dbab237` | 419 testes de Pix e autenticação |
+
+**E foi conferido na tela rodando, não no argumento**: preview isolado da tela real com o aparelho
+forçado a Tier C — o pior caso, que é justamente onde o selo aparece e onde a segunda linha nascia.
+Duas linhas → uma. 393 pontos de largura, e a segunda não existe mais.
+
+**Nada a pedir. Nada a fazer.** Fica aqui porque é o item que produziu a `v0.204.0`, que é o pino de
+hoje.
+
+---
+
+## 2 · A auditoria reprovou o fluxo por TRÊS bloqueantes, e dois não existem
+
+Este é o item que vale a rodada, e ele só aparece porque **duas medições independentes discordaram** —
+o `auditor-acessibilidade` leu o protótipo no Figma, o `construtor-biblioteca-figma` leu os hex reais
+das variáveis, e eu fui ao Dart da `v0.204.0` conferir os dois. **A ordem do contrato manda escrever
+a contradição antes do pedido, porque ela vale mais.**
+
+| bloqueante da auditoria | veredito da medição | onde medi |
+|---|---|---|
+| **1.4.11** · o medidor não alcança 3:1 contra o trilho | **FALSO — e a fonte do erro é nossa** | `diletta_scheme.dart:504,714` |
+| **4.1.2 / 1.1.1** · o percentual não existe em leitura nenhuma | **VERDADEIRO** | `diletta_progress_bar.dart` · zero `Semantics` |
+| **1.4.4** · o campo de valor quebra em 100% | **FALSO no código — é do Figma** | `diletta_amount_field.dart` · nenhuma largura fixa |
+
+**O 1.4.11 é o mais instrutivo, porque o defeito é de DOCUMENTAÇÃO e ele viajou três saltos.** A
+auditoria citou o comentário do componente no Figma; o comentário no Figma copiou o `///` do Dart; e
+o `///` do Dart diz, hoje, na `v0.204.0`:
+
+> *«Elemento gráfico pede 3:1 (WCAG 1.4.11). Contra o trilho `neutral07`: […] `warning` 1,82 · 1,17
+> […] Nenhum alcança 3:1»* — [diletta_progress_bar.dart:83–91](https://bitbucket.org/diletta/ds-diletta)
+
+**Só que o trilho não é `neutral07` desde a `v0.64.0`.** Quem o tirou de lá fomos nós, no pedido
+[o trilho da barra é claro nos dois temas](pedidos/2026-08-10-o-trilho-da-barra-e-claro-nos-dois-temas.md)
+(10/08), que criou `trilhoDeMedidor` **e** `warningGrafico` exatamente para resolver este número. A
+linha 121 do widget pinta `s.trilhoDeMedidor`, e o papel é derivado com piso:
+
+```dart
+warningGrafico: _primeiroQueAlcanca(3.0, trilho, [p.warning04, p.warning03, p.warning02, p.warning01])
+```
+
+**O conserto entrou há seis semanas e a tabela do `///` ficou.** Hoje ela reprovou um fluxo de
+dinheiro inteiro, por um defeito que já não existe. E nem contra `neutral07` os números batem mais:
+daria 1,22 e 1,04, que são os do nosso pedido de 10/08, não os 1,82 e 1,17 que o texto repete.
+
+> **A ressalva que nenhum dos dois agentes escreveu, e que eu medi:** `_primeiroQueAlcanca`
+> ([diletta_scheme.dart:1035](https://bitbucket.org/diletta/ds-diletta)) **não garante o piso** — se
+> nenhum candidato alcança, ele devolve o melhor da lista e segue em frente, calado. Na paleta do
+> Bold os seis tons passam (3,10 a 6,39). Em outra paleta, podem não passar, e **nada acusa**. Isso
+> é degrau de um gate, não de um `///`, e está no pedido.
+
+**O 1.4.4 é do desenho, não do código.** A auditoria viu `"4.200"` quebrar em duas linhas por uma
+largura fixa `w-[91px]` no frame. Procurei a largura no Dart e ela não existe: nem em
+`diletta_amount_field.dart` (a única medida é `SizedBox(width: DilettaSpacing.s2)`), nem na casca
+[coreflow_campo_de_valor.dart](../packages/coreflow/lib/src/coreflow_campo_de_valor.dart), que só
+repassa porte. **É defeito do protótipo**, e conserta-se no Figma.
+
+**E um quarto achado da auditoria também cai**: o glifo branco sobre o âmbar a 2,1:1. O
+`DilettaSpotIcon` não pinta branco — pinta `s.onWarning`, que é medido
+([diletta_spot_icon.dart:77](https://bitbucket.org/diletta/ds-diletta)). O comentário do próprio
+arquivo diz que *«era `palette.white` […] nos cinco»* e deixou de ser. Se a auditoria viu branco
+numa tela, o defeito é de quem montou à mão.
+
+**Placar: de três bloqueantes, um é real.** E dos dois falsos, um é culpa nossa — do `///` que não
+acompanhou o próprio conserto.
+
+---
+
+## 3 · PEDIDO NOVO — o medidor não se lê, e a sua própria bula mente
+
+**Escrito**: [o medidor não se lê, nem por quem usa leitor de tela nem por quem lê a bula dele](pedidos/2026-09-21-o-medidor-nao-se-le-nem-pela-semantica-nem-pela-bula.md)
+
+Junta os dois defeitos que sobraram do item 2, e eles são do **mesmo arquivo**, `diletta_progress_bar.dart`:
+
+- **`Semantics` ausente** — zero ocorrências no `build`, conferido na `v0.204.0`. O percentual só
+  existe se o consumidor escrever no `caption`, e o leitor de tela não anuncia progresso nenhum.
+  **Isto é a deixa do nosso pedido de 09/08**: ali o contraste do `warning` fez o pai pôr o TEXTO
+  junto dos dois medidores — mas o texto está na LINHA IRMÃ, e não na barra. Quem vê, lê. Quem ouve,
+  não.
+- **A tabela de contraste do `///`** — seis semanas atrás do conserto, e hoje custou um bloqueante
+  falso numa auditoria. Proposta: regerar a tabela a partir de `trilhoDeMedidor` e **travar num teste
+  que recalcula**, em vez de repetir texto. E, junto, o degrau que eu medi: `_primeiroQueAlcanca` que
+  não alcança devolve o melhor sem avisar.
+
+**Por que um pedido só e não dois**: são o mesmo arquivo, a mesma peça e a mesma auditoria, e a
+segunda metade é a explicação de por que a primeira demorou a aparecer — a bula dizia que o problema
+era a cor, então ninguém olhou a semântica.
+
+**Este pedido não abre com `DilettaManifesto.busca`** e a razão está escrita nele: não é peça nova, é
+campo ausente e documentação velha numa peça que existe e que nós mesmos ajudamos a consertar duas
+vezes.
+
+---
+
+## 4 · O que a tabela «falta no DS» trouxe e NÃO virou pedido
+
+O `construtor-biblioteca-figma` devolveu seis itens (F1–F6). Dois viraram o pedido do item 3. Os
+outros quatro morrem aqui, e cada um por um motivo diferente — **é o trabalho de separar «nosso» de
+«pedido» que a fila existe pra fazer**.
+
+| item | o que é | por que não é pedido |
+|---|---|---|
+| **F3** · não existe linha de limite com medidor | proposta de `DilettaLimitRow` novo | **o slot já existe**: `DilettaAppListRow.footer` está no Dart em [`diletta_app_list.dart:1450`](https://bitbucket.org/diletta/ds-diletta), e o `///` da própria barra cita esse uso. **Pedir peça nova pra um slot que existe é exatamente o que a `v0.206.0` acabou de tornar mais caro.** O que falta é a linha de limite em si, e ela é **nossa** — monta-se em `packages/coreflow` com o `footer` |
+| **F4** · a legenda do medidor não muda de tinta com o tom | `caption` é sempre `s.textPlaceholder` | **verdade, e é pequeno demais sozinho** — e esbarra na regra que o próprio pai escreveu no veredito de 09/08: cor não é informação, o texto é obrigatório de qualquer jeito. Fica anotado para pegar carona no próximo pedido do medidor, se houver |
+| **F5** · números crus onde há token | `SizedBox(height: 4)` e `height: 2` em `diletta_amount_display.dart:100,108`; `DilettaSpacing.s1` vale **4** e `s0_5` vale **2** (conferido em `tokens/spacing.tokens.json`) | **higiene do pai**, duas linhas, sem consumidor bloqueado. Vai por aviso, não por pedido |
+| **F6** · o glifo do alerta | branco sobre âmbar daria 2,08:1 | **não existe** — o código pinta `s.onWarning`. Ver item 2 |
+
+**E um que não é do DS nem nosso, é da biblioteca do Figma**: o `AppListRow` do Figma (`61:78`) não
+expõe o slot `footer` que o Dart tem. É o que faria a linha de limite existir sem widget novo. O
+construtor **não mexeu** porque a peça tem 17 instâncias no protótipo de onboarding — **decisão dela**.
+
+---
+
+## 5 · A entrega parou no meio, e nada acusou — gate escrito por outro chat
+
+Isto é de hoje e é sobre a nossa própria `v0.113.0`. Outro chat encontrou e commitou o gate em
+`ca5e226`: [uma_versao_e_uma_tag_test.dart](../packages/coreflow_design_system/test/uma_versao_e_uma_tag_test.dart).
+
+**O que aconteceu, medido nas datas das tags deste repo:**
+
+| | hora |
+|---|---|
+| `v0.113.0` emitida | **11h45** |
+| `package.json` do pacote web | ficou em **0.112.0** |
+| `web-v0.113.0` emitida | **13h21** |
+
+**96 minutos** em que o consumidor resolvia uma tag que não existia, com os 497 testes desta casa
+passando o tempo todo — *«nada acusou, porque nada olhava»*. A causa é de classe, não de caso: a tag
+do monorepo não publica a instância web; quem publica é `tool/espelha_o_web.sh`, rodado à mão depois.
+**Memória de pessoa não é gate.** E o pai já mediu a mesma classe do lado dele: 23 tags de 279
+entregavam um número diferente do nome.
+
+O gate mede as duas coisas que dão para medir sem rede — os dois números do repo, e se cada `vX.Y.Z`
+tem a `web-vX.Y.Z` ao lado. Deliberadamente **não** confere o conteúdo da tag publicada.
+
+**Nada a fazer**: já está na `main`. Fica registrado porque a rodada da manhã relatou a `v0.113.0`
+como entregue, e ela estava entregue pela metade.
+
+---
+
+## 6 · Rastro do dia no app — nenhum DS, mas muda onde o DS chega
+
+Sem item de fila, e sem nada a pedir. Fica pelo endereço, que mudou duas vezes.
+
+- A vendorização saiu primeiro na branch errada (`feat/norte-benk-hml`, commit `68ded84e`), **o push
+  saiu segundos antes do «não suba nessa branch»**, e ela escolheu **revert com commit novo** em vez
+  de reescrita de histórico — `a650da33`. A branch remota foi apagada depois, a pedido dela.
+- O endereço que vale é **`chore/ds-v0.113.0`, saída de `development`, commit `1dbab237`**, já no
+  remoto. Leva junto uma correção no `tool/ds_vendor.sh` do app, que era o que bloqueava a
+  vendorização a partir da `development`.
+- **Sem PR.** O destino pelo fluxo de lá é `release/homologation`.
+
+**Não medi o conteúdo dessa correção de script** e não vou: é `tool/` do app, fora das três casas
+desta fila, e nenhuma linha dela toca `packages/`.
+
+---
+
+## O que esta rodada escreveu, e o que espera o envio dela
+
+**Escrito, commitado local, NADA enviado:**
+
+| arquivo | o quê |
+|---|---|
+| `docs/FILA-DOS-CHATS.md` | esta rodada |
+| `docs/PEDIDOS.md` | o pedido novo, mais **três vereditos que chegaram hoje de tarde** |
+| `docs/pedidos/2026-09-21-o-medidor-nao-se-le-nem-pela-semantica-nem-pela-bula.md` | o pedido do item 3 |
+
+**Nenhuma tag. Nenhum PR. Nenhum merge. Nenhum push.** E nenhum código consertado: os itens 2, 4 e 5
+são achados, e achado vira linha aqui. **O pino do avô continua na `v0.204.0`**, três tags atrás da
+ponta — subir é conserto de código, e não é desta rotina.
+
+---
+
 ## Rodada de 2026-09-21
 
 **Chats lidos** (transcrição, não resumo de terceiro). A janela vai de **18/09 10h54** — onde a
