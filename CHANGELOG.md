@@ -20,6 +20,72 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.114.0] — 2026-09-21
+
+### O avô sobe para a `v0.207.0`: o botão ganha nome de leitor de tela, e duas peças atravessam
+
+**Não muda pixel nenhum.** Conferido: nenhuma folha de CSS mudou com a subida — o `git status` do
+repo depois de reinstalar o avô não lista um único `.css`. O que entra é vocabulário novo, opcional,
+e quem não o chamar não vê diferença.
+
+### O botão tem onde pôr o nome que o leitor de tela anuncia
+
+Era **pedido nosso**, de hoje, e o bloqueio mais duro que a adoção do `<diletta-button>` tinha.
+
+Sem ele, uma lista de linhas com ação curta — «Remover», «Revogar», «Ver» — anuncia a mesma palavra
+vinte vezes, e quem ouve não sabe qual. São **25 chamadas em 11 arquivos** do consumidor. E não era
+defeito de teste: com a troca, o `aria-label` fica no HOSPEDEIRO e não nomeia o `<button>` de dentro
+do shadow.
+
+| | Dart | web |
+|---|---|---|
+| campo | `semanticLabel` | `rotulo-acessivel` |
+| onde chega | `Semantics(label:)` | `aria-label` no `<button>` INTERNO |
+| obrigatório? | **não** — cai no rótulo | **não** — cai no rótulo |
+
+**Opcional de propósito**, ao contrário do `DilettaIconButton`, onde é obrigatório: lá não há outro
+nome, aqui há. Nas palavras do veredito, obrigar faria 200 chamadas repetirem o texto visível, e
+*«campo preenchido por obrigação vira ruído com cara de cuidado»*.
+
+E a dúvida que levantamos virou metade do conserto. Perguntamos se o campo não abriria a porta para
+anunciar um nome DIFERENTE do texto na tela — a WCAG 2.2 §2.5.3, *Label in Name*, que exige que o
+nome acessível contenha o texto visível. Ele respondeu que citamos certo e transformou a norma em
+conferência de bancada, comparando sem acento e sem caixa, *«porque a norma fala de palavra e não de
+grafia»*.
+
+### O campo de seleção e o diálogo atravessaram
+
+Os elementos web foram de **30 para 32**, e os dois novos são `<diletta-dropdown>` e
+`<diletta-dialog>` — as duas peças do nosso pedido de hoje. Existiam na linguagem e nunca tinham
+saído para a web.
+
+**E a premissa do nosso pedido estava errada**, o que vale registrar mais que a entrega: nós
+escrevemos *«não existe campo de seleção na família»* depois de varrer os 25 elementos web e as 61
+peças deste pacote. A peça estava na LINGUAGEM, declarada. A família tem três degraus, e nós
+varremos dois. Virou regra no contrato de pedido dele, e virou
+[aviso](docs/avisos/2026-09-21-o-contrato-do-pedido-ganhou-uma-primeira-linha.md) aqui.
+
+### O que mais vem junto, e não pedimos
+
+- **`carregando` no botão** — a espera de três pontos, com os números medidos do `_ThreeBounce` do
+  Dart. A peça não muda de largura ao entrar nela: o rótulo continua ocupando o lugar e some por
+  `visibility`. Botão em espera é sempre `<button disabled>`, mesmo com `href` — *link desabilitado
+  não existe em HTML*.
+- **a `busca` do manifesto parou de mentir com acento** (`v0.206.0`). `busca('seleção')` achava a
+  peça; `busca('selecao')` devolvia vazio. **É por isto que o pino deste repo importa**: até esta
+  entrega prendíamos o avô na `v0.204.0`, então a `busca` que rodava aqui era a quebrada.
+
+### O gerador de filho e o exemplo subiram junto, e um gate cobrou
+
+O `novo_filho.dart` carrega a tag do avô que o filho gerado recebe, e ela tem que ser a mesma que o
+pai pina — *uma língua, um número*. O gate pegou na primeira rodada.
+
+**E encontramos um buraco vizinho, que fica anotado**: o gate confere sete arquivos do exemplo byte
+a byte, e o `package-lock.json` não é um deles. O `resolved` dele continuava apontando para o commit
+da `v0.204.0` com o `package.json` já dizendo `v0.207.0` — a armadilha do lock, a quarta vez nesta
+família. Corrigido à mão e conferido contra o remoto (`git ls-remote` devolve `e0020169` para
+`web-v0.207.0`, que é o que o lock diz agora). **Fechar o gate é change à parte.**
+
 ## [0.113.0] — 2026-09-21
 
 ### O aviso acima do CTA entra na barra do avô, e some a segunda linha
