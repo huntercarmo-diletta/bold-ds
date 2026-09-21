@@ -282,13 +282,18 @@ Um commit local, **só documentação**, em `bold-ds-pacote`, branch `main`:
 | `docs/pedidos/2026-09-18-o-fundo-padrao-e-do-cliente-e-o-filho-nasce-sem-ele.md` | **arquivo novo** (estava sem versionar): remedido na `v0.112.0`, com a nota de endereçamento e o andaime de 351 linhas |
 | `docs/PEDIDOS.md` | **num segundo commit**, depois que ela mandou subir: as cinco colunas de veredito da `v0.203.0` (item 1) |
 
-**O primeiro commit subiu a pedido dela** (*"sobe na main"*): foi rebaseado sobre os 13 commits da
-Tatiana e foi em fast-forward, `2efacd9` → `e09eea3`. **O segundo está local e espera o envio** — ela
-pediu a edição do índice, não o envio dele, e o envio é dela:
+**Os dois subiram, e cada um esperou a palavra dela** — que é a regra de 15/09 funcionando, não uma
+formalidade: a rodada escreveu, ela mandou (*"sobe na main"*, duas vezes), e só então saiu.
 
-```
-cd ~/Desktop/bold-ds-pacote && git push origin main
-```
+| commit | o quê | como foi |
+|---|---|---|
+| `e09eea3` | a rodada e o pedido do fundo | rebaseado sobre os 13 commits da Tatiana, `2efacd9` → `e09eea3` em fast-forward |
+| `edd5511` | as cinco colunas de veredito, e esta seção | `e09eea3` → `edd5511`, fast-forward |
+
+**O `--ff-only` foi recusado pelo sandbox no meio da rodada**, então tudo aqui foi medido em
+`origin/main` e não na árvore local — e o primeiro commit nasceu 13 atrás, resolvido no rebase. Fica
+anotado porque é a segunda rodada seguida em que a medição e a árvore de trabalho não são o mesmo
+lugar.
 
 **Nenhuma tag. Nenhum PR. Nenhum merge.** E nenhum código foi consertado — os itens 3, 4 e 5 são
 achados, e achado vira linha aqui. **O pino do avô continua na `v0.202.0`**, um degrau atrás dos seis
