@@ -2,8 +2,43 @@
 
 - **de**: conta-bold-ds (filho B) · **para**: ds-diletta (o pai)
 - **consome**: ds-diletta `v0.202.0` · `web-v0.202.0`, pela tag `web-v0.112.0` deste repo
-- **bloqueante?**: **não** — usamos a melhor combinação disponível. Mas «a melhor
-  disponível» reprova, e por um centésimo.
+- **bloqueante?**: **não** — e ver a RETRATAÇÃO abaixo.
+
+---
+
+# ⚠ RETRATADO no mesmo dia — o pedido estava errado
+
+**O par existe, e passa com folga.** Medido no `<diletta-button type="primary"
+state="error">` RENDERIZADO, nos dois temas:
+
+| tema | fundo | tinta | razão | |
+|---|---|---|--:|:-:|
+| claro | `#b42318` | `#ffffff` | 6,57:1 | ✅ |
+| escuro | `#f7a9b1` | `#000000` | **11,26:1** | ✅ |
+
+São `--diletta-onErrorSubtle` e `--diletta-onPrimary`. **No escuro a linguagem
+INVERTE o botão** — rosa-claro com tinta preta, em vez de vermelho escuro com tinta
+clara —, e é essa inversão que resolve.
+
+**O erro foi de método, e vale mais registrar isso que apagar o arquivo.** Montei uma
+matriz com os tokens que PRESUMI serem o par de preenchimento e de tinta de um botão
+destrutivo (`error*` × `onError*`), medi as seis combinações, não achei nenhuma que
+passasse, e concluí que a paleta não tinha saída. A combinação que a peça usa não
+estava na matriz, porque `onPrimary` não parecia tinta de botão de erro.
+
+Uma matriz de combinações **não prova ausência** quando a matriz foi montada por
+suposição. O que prova é medir a peça que existe — e ela existia.
+
+Quem apontou foi a designer do consumidor, com uma pergunta de uma linha: «o botão
+destrutivo já existe no DS e acredito que passe — foi contra esse que mediu, ou você
+criou?».
+
+O consumidor foi corrigido para o par do elemento. **Nada é pedido aqui.** O arquivo
+fica pela lição de método, e porque o índice já o citava.
+
+---
+
+## O que o pedido dizia, e que agora se sabe errado
 
 > **Nota de procedência.** Achado no **core-flow-wa** numa varredura de contraste de
 > todo par texto-sobre-fundo do produto, nos dois temas. Foi a última coisa que sobrou.
