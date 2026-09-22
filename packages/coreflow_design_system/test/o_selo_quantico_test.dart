@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 /// O SELO QUÂNTICO — o componente exclusivo mais usado do produto (9 chamadas).
 ///
 /// Ele é animado e desenhado em `CustomPainter`, então o que se mede aqui é o que dá pra medir
-/// sem golden: os três estados renderizam nos dois modos, o ciclo de vida do controlador não
+/// sem golden: todos os estados do enum renderizam nos dois modos, o ciclo de vida não
 /// vaza, o gancho de conclusão dispara UMA vez, e nenhum dos nove literais de cor voltou.
 void main() {
   Widget montar(Widget filho, {bool escuro = false}) => MaterialApp(
@@ -15,7 +15,7 @@ void main() {
         ),
       );
 
-  testWidgets('os TRÊS estados renderizam, nos DOIS modos', (t) async {
+  testWidgets('TODOS os estados do enum renderizam, nos DOIS modos', (t) async {
     for (final escuro in [false, true]) {
       for (final estado in BoldSeloEstado.values) {
         await t.pumpWidget(montar(BoldSeloQuantico(estado: estado), escuro: escuro));
@@ -104,11 +104,17 @@ void main() {
     await t.pumpWidget(montar(const SizedBox()));
   });
 
-  test('o vocabulário é FECHADO: três estados, não quatro combinações', () {
+  test('o vocabulário é FECHADO, e cada estado é UM valor', () {
     // A API antiga era `waiting` + `failed`: quatro combinações pra três estados, e a quarta
     // (`waiting: true, failed: true`) não tinha significado — o selo mostrava o loop e ignorava o
     // `failed`. Estado impossível que se disfarça de estado válido é exatamente o que a exigência
     // 7 do contrato de componente existe pra impedir.
-    expect(BoldSeloEstado.values, hasLength(3));
+    //
+    // Passaram a ser QUATRO em 22/09: `semResposta` entrou porque o app pintava o X vermelho
+    // quando o watchdog estourava — dizia "negado" sobre dinheiro que podia ter saído. O que este
+    // gate protege não mudou: são valores de um enum fechado, não combinações de booleano.
+    expect(BoldSeloEstado.values, hasLength(4));
+    expect(BoldSeloEstado.values.toSet(), hasLength(BoldSeloEstado.values.length),
+        reason: 'valor repetido é estado que se disfarça de outro');
   });
 }

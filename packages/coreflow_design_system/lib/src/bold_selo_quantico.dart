@@ -8,11 +8,11 @@
 ///
 /// ## O que a adaptação mudou, e as três primeiras são defeito
 ///
-/// **1 · Três estados que eram dois booleanos.** A API antiga era `waiting` + `failed`, o que dá
+/// **1 · Estados que eram dois booleanos.** A API antiga era `waiting` + `failed`, o que dá
 /// quatro combinações pra três estados — e a quarta (`waiting: true, failed: true`) não tem
-/// significado: o selo mostra o loop e ignora o `failed`. Agora é [BoldSeloEstado], enum fechado,
-/// que é a exigência 7 do contrato de componente pelo motivo exato: com dois booleanos o estado
-/// impossível se disfarça de estado válido em vez de nem compilar.
+/// significado: o selo mostra o loop e ignora o `failed`. Hoje é um enum fechado (quatro estados,
+/// contando o `semResposta`), que é a exigência 7 do contrato de componente pelo motivo exato: com
+/// dois booleanos o estado impossível se disfarça de estado válido em vez de nem compilar.
 ///
 /// **2 · O rótulo era branco cravado, então o selo era só-escuro.** `Colors.white` no texto e no
 /// trilho do anel: sobre o backdrop claro do produto, o rótulo desaparecia. Agora sai de papel
@@ -39,6 +39,22 @@ import 'package:coreflow/coreflow.dart';
 import 'bold_fonts.dart';
 
 /// Os três estados do selo. Fechado, e sem quarto caso possível.
+/// O que a conclusão DESENHA. Privado de propósito: o pintor não precisa
+/// conhecer a marca, e cada menção a `Bold*` aqui dentro conta no ratchet da
+/// separação (`a_separacao_tem_numero_test`). Um enum local resolve o `switch`
+/// exaustivo que o contrato exige sem pagar esse preço.
+enum _Desfecho { autorizado, negado, semResposta }
+
+/// O ÚNICO lugar que traduz o estado público no desfecho desenhado — `null` é
+/// "ainda protegendo". O `switch` é exaustivo por exigência do contrato: estado
+/// novo quebra a compilação em vez de cair no visual de outro.
+_Desfecho? _desfechoDe(BoldSeloEstado e) => switch (e) {
+      BoldSeloEstado.protegendo => null,
+      BoldSeloEstado.autorizado => _Desfecho.autorizado,
+      BoldSeloEstado.negado => _Desfecho.negado,
+      BoldSeloEstado.semResposta => _Desfecho.semResposta,
+    };
+
 enum BoldSeloEstado {
   /// Loop indefinido de "protegendo": anel girando, nós orbitando, chave pulsando. Dura o tempo
   /// que o backend precisar.
@@ -49,13 +65,23 @@ enum BoldSeloEstado {
 
   /// Toca a conclusão de falha uma vez (anel em vermelho, chave → X, tremor, rótulo).
   negado,
+
+  /// Toca a conclusão de **não sabemos** uma vez (anel em âmbar, chave → `!`, sem tremor).
+  ///
+  /// É o desfecho de quem esperou e não teve resposta: a operação **pode ter
+  /// sido concluída**. Existe porque o app pintava o X vermelho aqui — dizer
+  /// "negado" sobre dinheiro que talvez tenha saído é a pior das três frases
+  /// possíveis, e foi o que levou alguém a repetir um Pix que já tinha ido.
+  ///
+  /// Não tem tremor: tremor é a peça dizendo "deu errado", e aqui ninguém sabe.
+  semResposta,
 }
 
 /// O selo.
 ///
 /// ```dart
 /// BoldSeloQuantico(
-///   estado: pendente ? BoldSeloEstado.protegendo : BoldSeloEstado.autorizado,
+///   estado: estadoDoSelo,
 ///   aoConcluir: fechar,
 /// )
 /// ```
@@ -68,6 +94,7 @@ class BoldSeloQuantico extends StatefulWidget {
     this.mostrarRotulo = true,
     this.rotuloAutorizado = 'Autorização Quântica',
     this.rotuloNegado = 'Autorização negada',
+    this.rotuloSemResposta = 'Sem confirmação',
   });
 
   final BoldSeloEstado estado;
@@ -83,6 +110,7 @@ class BoldSeloQuantico extends StatefulWidget {
   final bool mostrarRotulo;
   final String rotuloAutorizado;
   final String rotuloNegado;
+  final String rotuloSemResposta;
 
   @override
   State<BoldSeloQuantico> createState() => _BoldSeloQuanticoState();
@@ -97,8 +125,9 @@ class _BoldSeloQuanticoState extends State<BoldSeloQuantico>
   late final AnimationController _conclusao;
   bool _disparou = false;
 
-  bool get _protegendo => widget.estado == BoldSeloEstado.protegendo;
-  bool get _negado => widget.estado == BoldSeloEstado.negado;
+  _Desfecho? get _desfecho => _desfechoDe(widget.estado);
+
+  bool get _protegendo => _desfecho == null;
 
   @override
   void initState() {
@@ -125,7 +154,7 @@ class _BoldSeloQuanticoState extends State<BoldSeloQuantico>
   @override
   void didUpdateWidget(covariant BoldSeloQuantico velho) {
     super.didUpdateWidget(velho);
-    final eraProtegendo = velho.estado == BoldSeloEstado.protegendo;
+    final eraProtegendo = _desfechoDe(velho.estado) == null;
     if (eraProtegendo && !_protegendo) {
       // Resolveu: pula pro meio, então a conclusão leva ~1.2s em vez de 2s.
       _disparou = false;
@@ -175,17 +204,39 @@ class _BoldSeloQuanticoState extends State<BoldSeloQuantico>
                 agoraMs: ms,
                 g: _protegendo ? 0.5 : _conclusao.value,
                 protegendo: _protegendo,
-                negado: _negado,
+                desfecho: _desfecho,
                 mostrarRotulo: widget.mostrarRotulo,
-                rotulo: _negado ? widget.rotuloNegado : widget.rotuloAutorizado,
-                apoio: _negado ? 'tente novamente' : 'concluída · canal seguro',
+                rotulo: switch (_desfecho) {
+                  _Desfecho.negado => widget.rotuloNegado,
+                  _Desfecho.semResposta => widget.rotuloSemResposta,
+                  _ => widget.rotuloAutorizado,
+                },
+                // "tente novamente" é o que NÃO se diz sem resposta: pode já
+                // ter sido concluída, e repetir é o pior desfecho.
+                apoio: switch (_desfecho) {
+                  _Desfecho.negado => 'tente novamente',
+                  _Desfecho.semResposta => 'confira o extrato',
+                  _ => 'concluída · canal seguro',
+                },
                 cores: _CoresDoSelo(
                   profundo: CoreflowVinho.marcaDe(p),
                   claro: p.primary05,
                   acento: p.warning05,
-                  fim: _negado ? p.error05 : p.success05,
-                  fimApoio: _negado ? p.error06 : p.success06,
-                  tintaDoChip: _negado ? p.error01 : p.success01,
+                  fim: switch (_desfecho) {
+                    _Desfecho.semResposta => p.warning05,
+                    _Desfecho.negado => p.error05,
+                    _ => p.success05,
+                  },
+                  fimApoio: switch (_desfecho) {
+                    _Desfecho.semResposta => p.warning06,
+                    _Desfecho.negado => p.error06,
+                    _ => p.success06,
+                  },
+                  tintaDoChip: switch (_desfecho) {
+                    _Desfecho.semResposta => p.warning01,
+                    _Desfecho.negado => p.error01,
+                    _ => p.success01,
+                  },
                   tintaEmRepouso: p.primary01,
                   maisFundo: (c) => Color.lerp(c, p.black, 0.35)!,
                   trilho: s.fg.withValues(alpha: 0.08),
@@ -258,10 +309,10 @@ class _PintorDoSelo extends CustomPainter {
     required this.agoraMs,
     required this.g,
     required this.protegendo,
-    required this.negado,
     required this.mostrarRotulo,
     required this.rotulo,
     required this.apoio,
+    required this.desfecho,
     required this.cores,
     required this.estiloRotulo,
     required this.estiloApoio,
@@ -270,7 +321,7 @@ class _PintorDoSelo extends CustomPainter {
   final double agoraMs;
   final double g;
   final bool protegendo;
-  final bool negado;
+  final _Desfecho? desfecho;
   final bool mostrarRotulo;
   final String rotulo;
   final String apoio;
@@ -376,7 +427,7 @@ class _PintorDoSelo extends CustomPainter {
     final chip = raio * 0.62 * pulso;
     canvas.save();
     // Tremor horizontal amortecido na falha.
-    final tremor = negado && sucesso > 0
+    final tremor = desfecho == _Desfecho.negado && sucesso > 0
         ? math.sin(sucesso * math.pi * 5) * (1 - sucesso) * 5
         : 0.0;
     canvas.translate(cx + tremor, cy);
@@ -417,7 +468,24 @@ class _PintorDoSelo extends CustomPainter {
         ..strokeCap = StrokeCap.round
         ..strokeJoin = StrokeJoin.round
         ..color = cores.fim;
-      if (negado) {
+      if (desfecho == _Desfecho.semResposta) {
+        // chave → `!`  (atenção, e não veredito)
+        //
+        // Nem check nem X: os dois AFIRMAM um desfecho. A barra desce, o ponto
+        // aparece, e o que fica na tela é "olhe isto", que é a verdade.
+        final topo = Offset(0, -10 * escala);
+        final base = Offset(0, 3 * escala);
+        if (t < 0.6) {
+          final k = t / 0.6;
+          canvas.drawLine(
+              topo, Offset(0, _entre(topo.dy, base.dy, k)), tinta);
+        } else {
+          canvas.drawLine(topo, base, tinta);
+          final k = (t - 0.6) / 0.4;
+          canvas.drawCircle(Offset(0, 9 * escala), 2.2 * escala * k,
+              Paint()..color = cores.fim);
+        }
+      } else if (desfecho == _Desfecho.negado) {
         // chave → X
         final a1 = Offset(-9 * escala, -9 * escala);
         final a2 = Offset(9 * escala, 9 * escala);
@@ -500,7 +568,7 @@ class _PintorDoSelo extends CustomPainter {
       old.agoraMs != agoraMs ||
       old.g != g ||
       old.protegendo != protegendo ||
-      old.negado != negado ||
+      old.desfecho != desfecho ||
       old.mostrarRotulo != mostrarRotulo;
 }
 
@@ -513,7 +581,7 @@ const String kSeloQuanticoSpec = r'''
 
 O selo de autorização do Conta BOLD: a peça que diz se uma transação foi autorizada pelo par
 quântico. É marca e é estado ao mesmo tempo — o desenho é do produto, e o que ele comunica é
-irreversível (autorizado, negado, aguardando).
+irreversível (autorizado, negado, sem resposta, aguardando).
 
 ## Guidelines
 
@@ -523,7 +591,8 @@ autorizada. Fora desse assunto, o estado se comunica com `selo` (status tag), qu
 
 ### Faça
 - deixe o rótulo aparecer quando a tela não disser o estado em outro lugar
-- use os três estados do enum; o desenho de cada um é decisão de marca, não de tela
+- use os quatro estados do enum; o desenho de cada um é decisão de marca, não de tela
+- no desfecho que NÃO se sabe, use `semResposta`: nem check nem X, porque os dois afirmam
 - reserve o tamanho grande (200) pra tela cujo único assunto é o selo
 
 ### Evite
@@ -543,9 +612,14 @@ autorizada. Fora desse assunto, o estado se comunica com `selo` (status tag), qu
 O componente SHALL receber `BoldSeloEstado` e resolver cor, ícone e rótulo por `switch` sem `_ =>`.
 Estado novo SHALL quebrar a compilação em vez de cair no visual de outro estado.
 
-### Requirement: três estados, não dois booleanos
-O componente SHALL expressar `autorizado`/`negado`/`aguardando` como UM valor. A versão anterior usava
-dois booleanos, e a combinação impossível (`autorizado && negado`) era representável.
+### Requirement: os estados são UM valor, não booleanos
+O componente SHALL expressar `autorizado`/`negado`/`semResposta`/`aguardando` como UM valor. A versão
+anterior usava dois booleanos, e a combinação impossível (`autorizado && negado`) era representável.
+
+### Requirement: o desfecho sem resposta NÃO usa o vocabulário da falha
+Quando o estado é `semResposta`, o componente SHALL usar cor de atenção (não de erro), glifo que não
+seja o X, e SHALL NOT tremer — tremor é a peça dizendo "deu errado". O texto de apoio SHALL NOT
+convidar a repetir: a operação pode ter sido concluída, e repetir é o pior desfecho disponível.
 
 ### Requirement: o rótulo respeita o tema
 O texto SHALL sair de papel do scheme, não de branco cravado — o selo aparece sobre fundo claro e sobre
