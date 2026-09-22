@@ -20,6 +20,60 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.115.0] — 2026-09-22
+
+### A publicação passa a servir a mais de um filho — e nenhum filho gerado era publicável
+
+**Não muda peça nem pixel.** O pacote web do Conta BOLD sai **byte a byte idêntico** ao da
+`v0.114.0`: 47 arquivos, `diff -r` limpo. O que muda é a ferramenta que publica.
+
+### O defeito, e ele era nosso
+
+Chegou a pergunta de por que o HML da Norte Benk sai com a paleta do Conta BOLD. A folha dela
+**existe** — `#2a57a5` no claro, `#5c96fa` no escuro — e os 20 gates dela passam. O que faltava era
+publicar, e a causa estava escondida atrás disso:
+
+Em 18/09 o repositório do avô foi trancado. Em 20/09 nós fizemos a tag EMBUTIR o avô, e o mecanismo
+depende de um apelido:
+
+```
+no repo   imports: {"#avo": "diletta-design-system-web"}   → a dependência
+na tag    imports: {"#avo": "./avo/index.js"}              → a cópia embutida
+index.js  export * from '#avo';                            ← a MESMA linha nos dois lados
+```
+
+**Pusemos isso na instância e não no molde.** O `#avo` entrou no pacote do Bold e nunca tocou o
+`novo_filho.dart` — conferido por busca de conteúdo no histórico. Os dois lugares que o molde
+produziu, o exemplo versionado e o `norte_benk_coreflow`, escreviam o nome do pacote direto.
+
+**Nenhum filho gerado era publicável**, e ninguém soube até alguém perguntar pela cor de uma tela.
+
+### O que entrou
+
+- **o molde** escreve `#avo` e o `imports`; o exemplo foi regerado e a Norte Benk corrigida;
+- **o espelho recebe qual filho espelhar.** O nome do Bold saiu de cinco pontos e ficou em um. A
+  profundidade sai de contar as barras do caminho (o Bold guarda o web num pacote irmão, a Norte
+  Benk dentro do próprio) e a versão sai do `package.json` do filho, não da tag — cada filho
+  versiona sozinho, e o molde já nascia em `0.1.0`;
+- **a catraca de versão anda por filho**, e reprova filho com lado web que não esteja declarado;
+- **o avô da Norte Benk** alcançou o do Bold (`v0.204.0` → `v0.207.0`).
+
+### O espaço de tags
+
+```
+web-v0.115.0              ← Conta BOLD (o primeiro, e por isso sem prefixo próprio)
+norte-benk-web-v0.1.0     ← Norte Benk
+```
+
+A forma já estava escrita no molde: *«quem consumir precisa de uma tag órfã cuja raiz seja este
+diretório»*. O que faltava era o NOME distinguir, porque o espaço é o mesmo repositório. Derivar o
+do Bold quebraria a tag que o Internet Banking já consome.
+
+### O que ESTA versão não resolve
+
+O Internet Banking ainda aponta para a folha do Bold em todo flavor. Enquanto isso não mudar lá, a
+tela da Norte Benk continua rosa — o que esta versão entrega é o pacote para ele apontar.
+
 ## [0.114.0] — 2026-09-21
 
 ### O avô sobe para a `v0.207.0`: o botão ganha nome de leitor de tela, e duas peças atravessam
