@@ -13,6 +13,9 @@
     "index.js",
     "tokens/"
   ],
+  "imports": {
+    "#avo": "diletta-design-system-web"
+  },
   "dependencies": {
     "diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-v0.207.0"
   }
