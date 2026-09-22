@@ -267,6 +267,22 @@
   --diletta-font-family: 'Inter', system-ui, sans-serif;
 }
 
+/* A RAMPA DE MARCA, nove degraus por nome. Constante de marca — sem bloco de modo:
+   a rampa É a identidade, e quem inverte por brilho são os papéis derivados dela.
+   Ela existe para quem precisa DESENHAR com a tinta deste produto (um fundo, um
+   brilho), e não só pintar componente com papel. */
+:root {
+  --diletta-primary01: #031c04;
+  --diletta-primary02: #04390a;
+  --diletta-primary03: #1b5e20;
+  --diletta-primary04: #009820;
+  --diletta-primary05: #1fb734;
+  --diletta-primary06: #40ce4c;
+  --diletta-primary07: #a2e5a2;
+  --diletta-primary08: #e6f8e5;
+  --diletta-primary09: #f4fbf3;
+}
+
 /* O GRADIENTE DESTE PRODUTO, e ele é DERIVADO — não inventado. Quem não desenha curva
    própria recebe `CoreflowGradients.daPaleta`: dois degraus da rampa DELE (04 → 05), com
    a tinta que a paleta dele declara por cima. */

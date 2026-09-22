@@ -328,6 +328,22 @@
   --diletta-type-monoCaption-weight: 400;
 }
 
+/* A RAMPA DE MARCA, nove degraus por nome. Constante de marca — sem bloco de modo.
+   NÃO é a curva do lockup logo abaixo: a curva varre MATIZ (rosa a amarelo, o desenho do
+   símbolo) e a rampa é a escada de luminosidade da marca. Quem desenha fundo precisa da
+   rampa; quem desenha o lockup precisa da curva. */
+:root {
+  --diletta-primary01: #300313;
+  --diletta-primary02: #600627;
+  --diletta-primary03: #9e1241;
+  --diletta-primary04: #fe3976;
+  --diletta-primary05: #f66fa0;
+  --diletta-primary06: #ff87ab;
+  --diletta-primary07: #ffb6cb;
+  --diletta-primary08: #ffedf3;
+  --diletta-primary09: #fff6fa;
+}
+
 /* OS GRADIENTES DESTE PRODUTO. A curva sai do símbolo e a tinta que vai por cima é o
    vinho-tinta — com branco, o amarelo daria 1,21:1. */
 :root {
@@ -354,7 +370,7 @@
 }
 
 /* PONTE: os nomes com o prefixo antigo, apontando para os da linguagem.
-   161 apelidos. Alias não copia valor, então o escuro segue o seletor. */
+   170 apelidos. Alias não copia valor, então o escuro segue o seletor. */
 :root {
   --cps-background: var(--diletta-background);
   --cps-bg: var(--diletta-bg);
@@ -409,6 +425,15 @@
   --cps-partner: var(--diletta-partner);
   --cps-partnerSurface: var(--diletta-partnerSurface);
   --cps-primary: var(--diletta-primary);
+  --cps-primary01: var(--diletta-primary01);
+  --cps-primary02: var(--diletta-primary02);
+  --cps-primary03: var(--diletta-primary03);
+  --cps-primary04: var(--diletta-primary04);
+  --cps-primary05: var(--diletta-primary05);
+  --cps-primary06: var(--diletta-primary06);
+  --cps-primary07: var(--diletta-primary07);
+  --cps-primary08: var(--diletta-primary08);
+  --cps-primary09: var(--diletta-primary09);
   --cps-primaryHover: var(--diletta-primaryHover);
   --cps-primaryOnSurface: var(--diletta-primaryOnSurface);
   --cps-primaryPressed: var(--diletta-primaryPressed);

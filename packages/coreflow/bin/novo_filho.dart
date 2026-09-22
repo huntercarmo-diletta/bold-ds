@@ -285,6 +285,11 @@ String cssDoProduto() => [
           '   `package:flutter/widgets.dart` (de onde vêm `TextStyle` e `FontWeight`) e a tabela\\n'
           '   `_degraus` do `o_desenho_da_web_e_o_do_mobile_test.dart`, senão o gate de lá dorme. */\\n',
       coreflowFamiliaCss(coreflowFamiliaWeb(${op.id}.tipografia.familia)),
+      '\\n/* A RAMPA DE MARCA, nove degraus por nome. Constante de marca — sem bloco de modo:\\n'
+          '   a rampa É a identidade, e quem inverte por brilho são os papéis derivados dela.\\n'
+          '   Ela existe para quem precisa DESENHAR com a tinta deste produto (um fundo, um\\n'
+          '   brilho), e não só pintar componente com papel. */\\n',
+      coreflowRampaCss(${op.id}.paleta),
       '\\n/* O GRADIENTE DESTE PRODUTO, e ele é DERIVADO — não inventado. Quem não desenha curva\\n'
           '   própria recebe `CoreflowGradients.daPaleta`: dois degraus da rampa DELE (04 → 05), com\\n'
           '   a tinta que a paleta dele declara por cima. */\\n',

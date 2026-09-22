@@ -34,6 +34,11 @@ String cssDoBold() => [
       '\n/* A ESCALA DE TIPO DESTE PRODUTO. Seis degraus têm px que o avô não tem — decisão escrita\n'
           '   no `///` do `CoreflowType`, não deriva. Os homônimos SOBRESCREVEM os dele. */\n',
       coreflowTipoCss(_degrausDoBold, familia: "'${BoldFonts.familyRaw}', system-ui, sans-serif"),
+      '\n/* A RAMPA DE MARCA, nove degraus por nome. Constante de marca — sem bloco de modo.\n'
+          '   NÃO é a curva do lockup logo abaixo: a curva varre MATIZ (rosa a amarelo, o desenho do\n'
+          '   símbolo) e a rampa é a escada de luminosidade da marca. Quem desenha fundo precisa da\n'
+          '   rampa; quem desenha o lockup precisa da curva. */\n',
+      coreflowRampaCss(ContaBold.produto.paleta),
       '\n/* OS GRADIENTES DESTE PRODUTO. A curva sai do símbolo e a tinta que vai por cima é o\n'
           '   vinho-tinta — com branco, o amarelo daria 1,21:1. */\n',
       coreflowGradientesCss(ContaBold.gradientes),

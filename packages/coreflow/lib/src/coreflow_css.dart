@@ -315,6 +315,38 @@ String tagDaPeca(String componente) => componente
 /// A TINTA SOBRE O GRADIENTE sai junto, e não é detalhe: no primeiro produto ela é o vinho-tinta, e
 /// a troca dela é o que destravou o lockup — com branco, o amarelo dava **1,21:1**, que é conteúdo
 /// que não existe na tela.
+/// A RAMPA DE MARCA deste produto, nove degraus, por nome — `--diletta-primary01`…`09`.
+///
+/// **Constante de marca: sai SEM bloco de modo.** Medido antes de emitir: `primary04` da Norte Benk
+/// vale `#1d72ff` no esquema claro e no escuro, o mesmo dos dois lados. A rampa é a identidade da
+/// marca; quem inverte por brilho são os PAPÉIS que se derivam dela.
+///
+/// ## Por que ela faltava, e o que a falta custou
+///
+/// A web recebia só os papéis semânticos (`primary`, `primaryHover`, `primarySubtle`…). Eles bastam
+/// para pintar componente, e não bastam para DESENHAR: quem precisa de dois degraus da rampa para
+/// montar um fundo não tem de onde tirá-los.
+///
+/// O efeito foi medido do lado de fora. Um consumidor web monta os brilhos do fundo com três
+/// paradas da curva do LOCKUP do PRIMEIRO produto (`lockup01`, `05`, `08`), porque era o que existia
+/// publicado. Só que a curva do lockup é o desenho do símbolo daquele produto — oito paradas
+/// varrendo matiz. Quem não desenha curva própria recebe a derivada, de duas
+/// (`CoreflowGradients.daPaleta`), e os dois brilhos que faltam morrem calados: `var()` que não
+/// resolve mata a declaração inteira.
+///
+/// Com a rampa publicada, um consumidor desenha fundo com a tinta DA MARCA que está rodando — que é
+/// o que o pai já faz do lado Flutter (`coreflow_background.dart` monta os brilhos com
+/// `p.primary04`, e nenhuma parada de lockup).
+///
+/// **Não é atalho para papel.** Papel continua sendo papel: quem quer «a cor de ação» lê `primary`,
+/// que inverte por modo. A rampa é para quem precisa do DEGRAU, e a diferença aparece na primeira
+/// tela escura.
+String coreflowRampaCss(DilettaPalette p) => coreflowConstantesCss({
+      'primary01': p.primary01, 'primary02': p.primary02, 'primary03': p.primary03,
+      'primary04': p.primary04, 'primary05': p.primary05, 'primary06': p.primary06,
+      'primary07': p.primary07, 'primary08': p.primary08, 'primary09': p.primary09,
+    });
+
 String coreflowGradientesCss(CoreflowGradients g) {
   String css(LinearGradient lg) {
     final graus = _grausDe(lg.begin, lg.end);

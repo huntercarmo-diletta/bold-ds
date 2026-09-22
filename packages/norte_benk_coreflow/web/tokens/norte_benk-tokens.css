@@ -263,6 +263,22 @@
   --diletta-font-family: 'Inter', system-ui, sans-serif;
 }
 
+/* A RAMPA DE MARCA, nove degraus por nome. Constante de marca — sai sem bloco de modo,
+   porque a rampa É a identidade e quem inverte por brilho são os papéis derivados dela.
+   Publicada para quem precisa DESENHAR com a tinta desta marca (um fundo, um brilho) e
+   não só pintar componente com papel. */
+:root {
+  --diletta-primary01: #00123a;
+  --diletta-primary02: #02286a;
+  --diletta-primary03: #2a57a5;
+  --diletta-primary04: #1d72ff;
+  --diletta-primary05: #5c96fa;
+  --diletta-primary06: #85aef5;
+  --diletta-primary07: #c7d2e4;
+  --diletta-primary08: #eff2f7;
+  --diletta-primary09: #f7f8fb;
+}
+
 /* O GRADIENTE DESTE PRODUTO, e ele é DERIVADO — não inventado. Quem não desenha curva
    própria recebe `CoreflowGradients.daPaleta`: dois degraus da rampa DELE (04 → 05), com
    a tinta que a paleta dele declara por cima. Já existia em Dart desde o nascimento; o
@@ -283,7 +299,7 @@
 }
 
 /* PONTE: os nomes com o prefixo antigo, apontando para os da linguagem.
-   82 apelidos. Alias não copia valor, então o escuro segue o seletor. */
+   91 apelidos. Alias não copia valor, então o escuro segue o seletor. */
 :root {
   --cps-background: var(--diletta-background);
   --cps-bg: var(--diletta-bg);
@@ -332,6 +348,15 @@
   --cps-partner: var(--diletta-partner);
   --cps-partnerSurface: var(--diletta-partnerSurface);
   --cps-primary: var(--diletta-primary);
+  --cps-primary01: var(--diletta-primary01);
+  --cps-primary02: var(--diletta-primary02);
+  --cps-primary03: var(--diletta-primary03);
+  --cps-primary04: var(--diletta-primary04);
+  --cps-primary05: var(--diletta-primary05);
+  --cps-primary06: var(--diletta-primary06);
+  --cps-primary07: var(--diletta-primary07);
+  --cps-primary08: var(--diletta-primary08);
+  --cps-primary09: var(--diletta-primary09);
   --cps-primaryHover: var(--diletta-primaryHover);
   --cps-primaryOnSurface: var(--diletta-primaryOnSurface);
   --cps-primaryPressed: var(--diletta-primaryPressed);

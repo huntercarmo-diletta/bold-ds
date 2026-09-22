@@ -42,6 +42,11 @@ String cssDoProduto() => [
           '   ...e os ARQUIVOS da fonte precisam viajar junto, senão a folha nomeia o que o navegador\n'
           '   não tem. Hoje ele não declara, e recebe a Inter que a família publica. */\n',
       coreflowFamiliaCss(coreflowFamiliaWeb(norteBenk.tipografia.familia)),
+      '\n/* A RAMPA DE MARCA, nove degraus por nome. Constante de marca — sai sem bloco de modo,\n'
+          '   porque a rampa É a identidade e quem inverte por brilho são os papéis derivados dela.\n'
+          '   Publicada para quem precisa DESENHAR com a tinta desta marca (um fundo, um brilho) e\n'
+          '   não só pintar componente com papel. */\n',
+      coreflowRampaCss(norteBenk.paleta),
       '\n/* O GRADIENTE DESTE PRODUTO, e ele é DERIVADO — não inventado. Quem não desenha curva\n'
           '   própria recebe `CoreflowGradients.daPaleta`: dois degraus da rampa DELE (04 → 05), com\n'
           '   a tinta que a paleta dele declara por cima. Já existia em Dart desde o nascimento; o\n'
