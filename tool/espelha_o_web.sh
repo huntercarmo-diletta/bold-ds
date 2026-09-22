@@ -55,22 +55,51 @@ set -eu
 cd "$(dirname "$0")/.."
 
 tag=${1:-}
-seco=${2:-}
-[ -n "$tag" ] || { echo "uso: sh tool/espelha_o_web.sh <tag> [--seco]"; exit 2; }
+filho=${2:-bold}
+seco=${3:-}
+# compatível com a chamada antiga de dois argumentos: `... <tag> --seco`
+case "$filho" in --seco) seco=--seco; filho=bold ;; esac
+
+[ -n "$tag" ] || { echo "uso: sh tool/espelha_o_web.sh <tag> [filho] [--seco]"; exit 2; }
 git rev-parse -q --verify "refs/tags/$tag" >/dev/null || { echo "tag $tag não existe aqui"; exit 1; }
 
-versao=${tag#v}
-alvo="web-$tag"
+# OS FILHOS, e o que muda de um para o outro. A lista é DECLARADA, e o mesmo par mora no gate
+# `packages/coreflow/test/uma_versao_e_uma_tag_test.dart` — mudar um sem o outro reprova lá.
+#
+# `bold` é o primeiro, e por isso o único sem prefixo próprio: a tag dele é `web-vX.Y.Z` e o
+# Internet Banking já a consome. Derivar o nome dele hoje quebraria o consumidor.
+#
+# A VERSÃO NÃO SAI MAIS DA TAG, e sai do `package.json` do filho. Para o `bold` dá o mesmo número,
+# porque ele É a versão do monorepo; para os outros não — o molde nasce em `0.1.0` e cada filho
+# versiona sozinho. Ler do pacote é o que faz a mesma ferramenta servir aos dois.
+case "$filho" in
+  bold)
+    pacote=packages/coreflow_design_system_web
+    prefixo="web-v" ;;
+  norte-benk)
+    pacote=packages/norte_benk_coreflow/web
+    prefixo="norte-benk-web-v" ;;
+  *)
+    echo "filho desconhecido: $filho (conheço: bold, norte-benk)"; exit 2 ;;
+esac
+
+# A PROFUNDIDADE VEM DO CAMINHO, e não de um número escrito: o `bold` guarda o lado web num pacote
+# IRMÃO (2 níveis) e a `norte-benk` dentro do próprio (3). Contar as barras é o que impede o
+# próximo filho de precisar de mais uma linha aqui.
+fundo=$(printf '%s' "$pacote" | awk -F/ '{print NF}')
+
+versao=$(git show "$tag:$pacote/package.json" | python3 -c 'import json,sys; print(json.load(sys.stdin)["version"])')
+alvo="$prefixo$versao"
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' EXIT
 
-git archive "$tag" packages/coreflow_design_system_web | tar -x -C "$tmp" --strip-components=2
+git archive "$tag" "$pacote" | tar -x -C "$tmp" --strip-components="$fundo"
 rm -rf "$tmp/catalogo" "$tmp/exemplo" "$tmp/package-lock.json"
 
 # A CÓPIA DO AVÔ. Sai do `node_modules` deste pacote, que é o que o `npm` já filtrou pelo `files`
 # dele — copiar do repo do avô traria `test/` e `catalogo/`, que não são o pacote.
-avo=packages/coreflow_design_system_web/node_modules/diletta-design-system-web
-[ -d "$avo" ] || { echo "sem $avo — rode \`npm install\` em packages/coreflow_design_system_web"; exit 1; }
+avo=$pacote/node_modules/diletta-design-system-web
+[ -d "$avo" ] || { echo "sem $avo — rode \`npm install\` em $pacote"; exit 1; }
 mkdir -p "$tmp/avo"
 tar -cf - -C "$avo" . | tar -xf - -C "$tmp/avo"
 rm -rf "$tmp/avo/catalogo" "$tmp/avo/node_modules"
@@ -99,7 +128,7 @@ avo = json.loads((ondeOAvoMora / "package.json").read_text())
 esperado = "bitbucket:diletta/ds-diletta#web-v" + avo["version"]
 assert pino == esperado, (
     f"o pino da tag é `{pino}` e o INSTALADO é {avo['version']} (`{esperado}`). "
-    "Rode `npm install` em packages/coreflow_design_system_web antes de emitir")
+    "Rode `npm install` em " + ondeOAvoMora.parent.parent.as_posix() + " antes de emitir")
 if not d["dependencies"]:
     d.pop("dependencies")
 d["imports"] = {"#avo": "./avo/index.js"}
@@ -114,7 +143,7 @@ d["files"] = list(d["files"]) + ["avo/"]
 
 # O RECIBO. A cópia que o app fez em 04/09 não tinha marca de origem: ninguém sabia dizer de que
 # tag ela veio, e "olhe o conteúdo" não é resposta. O commit sai do lock, que é quem o resolveu.
-trava = json.loads(pathlib.Path("packages/coreflow_design_system_web/package-lock.json").read_text())
+trava = json.loads((ondeOAvoMora.parent.parent / "package-lock.json").read_text())
 resolvido = next((v.get("resolved") for k, v in trava.get("packages", {}).items()
                   if k.endswith("node_modules/diletta-design-system-web")), None)
 assert resolvido, "o `package-lock.json` não resolve o avô — a cópia sairia sem commit no recibo"
@@ -135,8 +164,13 @@ fora = [v for v in d["exports"].values() if v.startswith("..")]
 assert not fora, f"export aponta pra fora do pacote: {fora}"
 assert "diletta-design-system-web" not in json.dumps(d.get("dependencies", {})), \
     "a dependência do avô sobreviveu — quem instalar este pacote vai precisar da chave dele"
-for f in ("index.js", "tokens/bold-tokens.css", "avo/index.js", "avo/ORIGEM.json"):
-    assert (raiz / f).exists(), f"faltou {f} na emissão"
+# O QUE PRECISA EXISTIR SAI DO QUE O PACOTE DECLARA, e não de uma lista cravada — a mesma regra
+# que o `files` acima já segue. A versão anterior exigia `tokens/bold-tokens.css` pelo nome, e o
+# segundo filho reprovou na primeira tentativa: a folha dele chama-se `norte_benk-tokens.css`.
+# Cravar o nome de um filho numa ferramenta que serve a todos é o defeito, não o nome errado.
+declarados = [v.lstrip("./") for v in d["exports"].values() if "*" not in v]
+for f in [*declarados, "avo/index.js", "avo/ORIGEM.json"]:
+    assert (raiz / f).exists(), f"faltou {f} na emissão — o `exports` o declara e ele não veio"
 for f in d["files"]:
     assert (raiz / f.rstrip("/")).exists(), f"`files` promete {f} e a emissão não tem"
 for proibido in ("catalogo", "exemplo", "node_modules", "avo/catalogo", "avo/node_modules"):
@@ -164,7 +198,7 @@ idx=$(mktemp); rm -f "$idx"
 export GIT_INDEX_FILE="$idx"
 git --work-tree="$tmp" add -A
 arvore=$(git write-tree)
-commit=$(git commit-tree "$arvore" -m "$alvo — a instância web de $tag, com a raiz no pacote
+commit=$(git commit-tree "$arvore" -m "$alvo — a instância web de $filho em $tag, com a raiz no pacote
 
 Emitido por tool/espelha_o_web.sh. Ninguém commita aqui: esta árvore se refaz a partir
 de $tag. Catálogo e exemplo ficam no monorepo — são ferramenta, não pacote.")

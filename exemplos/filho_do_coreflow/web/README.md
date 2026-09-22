@@ -44,5 +44,16 @@ O nome sem o arquivo é falha silenciosa: a folha pede a fonte e o navegador cai
 ## Como este pacote sai daqui
 
 O `npm` não tem o `path:` do `pub` — subpasta de repo não se instala. Quem consumir precisa de uma
-**tag órfã** cuja raiz seja este diretório. O padrão está no `conta-bold-ds`
-(`tool/espelha_o_web.sh`), e o avô fez igual.
+**tag órfã** cuja raiz seja este diretório, e quem a produz é o espelho do `conta-bold-ds`:
+
+```
+sh tool/espelha_o_web.sh <tag-do-monorepo> meu-banco [--seco]
+```
+
+Ele lê a SUA versão do `package.json` daqui — não a da tag —, embute o avô em `avo/` com recibo, e
+cria a tag `meu-banco-web-v<a sua versão>`. Cada filho versiona
+sozinho: este pacote nasce em `0.1.0` e não acompanha o número da casa.
+
+**Você precisa entrar na lista de filhos do espelho** (`tool/espelha_o_web.sh`) e na do gate
+`packages/coreflow/test/uma_versao_e_uma_tag_test.dart` — o gate reprova filho com lado web que não
+esteja declarado, justamente para nenhum nascer sem catraca.
