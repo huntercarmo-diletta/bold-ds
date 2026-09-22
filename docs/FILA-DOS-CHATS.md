@@ -18,6 +18,290 @@ A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
 
 ---
 
+## Rodada de 2026-09-22 · fim de tarde
+
+Cobre **21/09 17h57 → 22/09 17h50**. O dia teve um chat só produzindo DS, e ele produziu muito: o
+fluxo «Meus limites» andou do protótipo à documentação, virou código e passou por duas auditorias no
+fim da tarde. Dos itens que os agentes marcaram como falta do design system, **quatro não
+sobrevivem à medição** e **dois viram pedido**. E duas coisas que ninguém no chat viu apareceram ao
+medir: o repo deste filho andou dezesseis commits sem esta casa, e **o conserto de ontem não chegou
+a nenhuma branch de entrega do app**.
+
+**Chats lidos** (transcrição, não resumo de terceiro):
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| Meus limites (fluxo novo) | `claude_newbold` · `9ef7cfe2` | 17h44 | o dia inteiro — protótipo fechado, documentação no Figma, a feature em código (`b8a0a44e`), e as duas auditorias do fim da tarde. **Os dois pedidos desta rodada saem daqui** |
+| PR #768 do Norte Benk | `claude_newbold` · `6bfe0d0d` | 17h02 | revisão do Matias respondida inteira, build no simulador, assinatura barrando o iPhone — **nada de DS** |
+| `aprendizado-do-dia` (rotina) | `claude_newbold` · `7b625137` | 10h42 | ignorada por contrato |
+| esta rotina | `bold-ds-pacote` · `a8f29c2d` | — | esta |
+
+---
+
+### 0 · O QUE O PAI RESPONDEU — a régua dos SEIS vira obrigatória, e oito vereditos numa madrugada
+
+Isto vem primeiro porque muda a forma do que esta rotina escreve. Hoje às 17h34 o pai commitou
+`91cfd58` na `main` (mais `31a04ea`, o derivado da paridade). **Nenhuma tag foi cortada** — os oito
+vereditos têm entrega prevista na `v0.208.0`, que ainda não existe.
+
+**A régua dos seis critérios passou a ser obrigatória e a ser uma TABELA.** Até aqui o veredito
+citava os critérios que pesaram; a partir de hoje carrega os seis, cada um com sinal (`↑ = ↓ ⊘`) e
+uma frase. A razão, escrita por ele:
+
+> *Critério não citado se lê como critério não consultado. E a família não tem como distinguir «não
+> pesou» de «não olhei» depois que o veredito está escrito.*
+
+Um `↓` não veta — obriga a declarar a dívida. **Dois ou mais obrigam a reformular.** O que muda para
+nós é do lado de ler, não de escrever: o formato do pedido do filho não mudou. O que mudou é que
+toda resposta que voltar traz seis linhas, e uma delas pode ser uma dívida que a gente herda.
+
+**Os oito vereditos são todos do filho B** (Internet Banking): foco/`delegatesFocus` · rótulo cru no
+`innerHTML` · `aria-*` no hospedeiro · `role="cell"` · alvo de toque na paginação · borda do
+desabilitado · campo de data · portes `sm`/`md`. Nenhum é nosso. **Mas um deles corrige a `v0.207.0`
+de ontem**, e é a doutrina em que o pedido novo do item 2 se apoia:
+
+> *O `rotulo-acessivel` não estava errado, estava incompleto — eu tratei como caso o que era classe,
+> e a prova é que a classe voltou em menos de 24h pela mão do mesmo filho. Nome continua campo (é
+> conteúdo, e o consumidor escreve); **estado passa a ser regra** (é da norma, e a norma é fechada).*
+
+**E uma linha ABERTA que ele mesmo achou julgando**: a tabela de pintura da web está **congelada** —
+`gera_web_da_resolucao.py` recusa o botão hoje (27 slots ambíguos) e o `pintura.g.js` versionado
+ainda o contém. A classe: *emissão que recusa em silêncio deixa o consumidor com a última versão que
+passou.* Não é nossa — não emitimos web por esse caminho —, mas fica registrada porque a instância
+web do Coreflow sai do mesmo gerador.
+
+---
+
+### 0b · E o repo DESTE filho andou dezesseis commits — e não foi esta casa
+
+Isto não veio de chat nenhum: veio do `git fetch`. Entre **21/09 18h23 e 22/09 15h56**,
+`tatianahasimoto-diletta` publicou **16 commits** e **duas tags** (`v0.114.0`, `v0.115.0`, com
+espelho web) na `main` do `bold-ds`.
+
+| o que entrou | commits |
+|---|---|
+| o pai do filho sobe para `v0.207.0` | `50b6c0d` (`v0.114.0`) — o `pubspec` do `coreflow` no remoto pina `v0.207.0`; **o local ainda pina `v0.204.0`** |
+| sete pedidos do filho B, escritos nesta pasta | `710cb86` · `e7b1909` · `730ee31` · `e841712` · `2fba174` · `4f3acbd` · `b63f0c9` |
+| **gate novo**: todo pedido está no índice, e toda linha do índice aponta pra um pedido | `27dcf32` + `634fb75` |
+| gate novo: o lock do exemplo aponta pro mesmo commit | `364ddcf` |
+| a publicação passa a servir mais de um filho | `5e646c6` · `c6e5689` · `0710cd8` · `0eaf017` · `8dde9d2` (`v0.115.0`) |
+
+**A `main` local está 1 à frente e 16 atrás.** O commit à frente é a rodada de ontem (`336a4f2`),
+que nunca foi enviada. Isto tem três consequências práticas, e a primeira manda na ordem de tudo o
+que vem depois:
+
+1. **Integrado no mesmo dia, e o conflito ensinou uma coisa.** O `docs/PEDIDOS.md` foi tocado pelos
+   dois lados na mesma região. A resolução **não** foi «manter as duas listas» — cinco linhas
+   existiam nas duas versões, e em **três** delas o texto divergia. Em todas as três a nossa era a
+   mais nova, porque carregava o que o pai entregou na tarde de 21/09 e a cópia do remoto ainda
+   não: o índice de lá dizia **«sem veredito · BLOQUEANTE»** para o pedido do nome acessível do
+   botão, que o pai tinha **entregue na `v0.207.0`**. A base ficou sendo a do remoto (que traz as 12
+   linhas de índice restauradas pelo gate) com essas três trocadas pelas nossas, mais as três
+   linhas novas desta casa.
+
+   > **Dois autores escrevendo o mesmo índice produzem estados de veredito divergentes, e nada
+   > acusa.** O gate novo fecha file↔linha nos dois sentidos; ele não compara o que a linha DIZ com
+   > o que o ledger do pai já respondeu. É a mesma classe da bula do medidor: o arquivo estava certo
+   > quando foi escrito e envelheceu sem alarme;
+2. **o gate novo reprova a árvore local.** Em 21/09 havia 15 arquivos em `docs/pedidos/` sem linha
+   no índice; o remoto já resolveu — 12 entraram e **3 ficaram fora com motivo declarado** numa
+   lista fechada dentro do próprio gate. Dois deles esperam uma decisão de processo (o índice tem
+   três seções e nenhuma serve para o que vai à **dona do produto**); o terceiro é o
+   «[o fundo padrão é do cliente](pedidos/2026-09-18-o-fundo-padrao-e-do-cliente-e-o-filho-nasce-sem-ele.md)»,
+   que o gate registra como **não sendo pedido** — *«quem pede é o app e quem responde é esta
+   casa»* —, exatamente como esta rotina anotou em 21/09;
+3. **este repo tem dois autores agora.** A regra de subir direto na `main` continua valendo, mas
+   `git pull` deixou de ser opcional antes de escrever qualquer coisa aqui.
+
+---
+
+### A deriva, e hoje ela tem TRÊS números diferentes ao mesmo tempo
+
+| onde | filho | pai | medido em |
+|---|---|---|---|
+| **app**, em TODA branch de entrega | `v0.102.1` | `v0.180.0` | `packages/ds_vendor.json`, igual em `origin/development`, `origin/release/homologation` e na branch de trabalho `feat/grupos-de-limite-administracao` |
+| **filho**, `main` local | — | `v0.204.0` | `packages/coreflow/pubspec.yaml:23` |
+| **filho**, `origin/main` | — | `v0.207.0` | o mesmo arquivo, no remoto |
+| **pai**, ponta | — | `v0.207.0` + `91cfd58` sem tag | `ds-diletta`, `origin/main` |
+
+A deriva que importa **não é a de três tags entre o filho e o pai**, que era a de ontem. É a de
+baixo: **o app está onze versões do filho e vinte e quatro do pai atrás**, e é sobre esse código que
+o fluxo novo foi escrito hoje.
+
+---
+
+## 1 · O conserto de ontem não chegou a nenhuma branch de entrega — e o defeito da foto está de pé
+
+Ontem o defeito das **duas linhas acima do botão** foi achado numa foto, consertado no pai
+(`v0.204.0`), publicado no filho (`v0.113.0`) e levado ao app. A rodada de ontem registrou o app
+como feito, em `68ded84e`, refeito em `1dbab237`. **Medido hoje: aquele commit mora numa branch só.**
+
+```
+$ git branch --contains 1dbab237
+  chore/ds-v0.113.0
+```
+
+`origin/development`, `origin/release/homologation` e a branch em que ela trabalhou o dia inteiro
+carregam **filho `v0.102.1` · pai `v0.180.0`**. Nessa versão do pacote vendorizado:
+
+- `DilettaBottomApp` **não tem** o slot `acima` — zero ocorrências fora de um comentário;
+- `CoreflowRodape.acima` existe (`:66`, `:125`, `:141`) e é o caminho velho, o que embrulha o rodapé
+  do pai numa **segunda barra** (`:164` — *«com conteúdo acima, o envelope do pai não serve»*).
+
+**Quatro telas passam por ali hoje, em homologação:**
+
+| tela | linha |
+|---|---|
+| `lib/features/pix/presentation/screens/pix_revisar_screen.dart` | 609 |
+| `lib/features/ted/presentation/screens/ted_revisar_screen.dart` | 276 |
+| `lib/features/boleto/presentation/screens/boleto_revisar_screen.dart` | 394 |
+| `lib/features/pix/presentation/screens/devolucao/devolucao_screen.dart` | 436 |
+
+A branch `chore/ds-v0.113.0` existe no remoto (`1dbab237`). **Não é trabalho a fazer: é entrega a
+concluir**, e ela é dela, como todas. Fica em primeiro lugar por dependência: a foto que abriu o
+caso continua reproduzível na revisão do Pix até essa branch entrar.
+
+> O fluxo novo de hoje **não** passa por aí — as telas de `limites` usam
+> `CoreflowRodape.button(primary:)` sem `acima`, conferido. O que ele pega da versão velha é outra
+> coisa, e está no item 6.
+
+---
+
+## 2 · O título da tela não é cabeçalho — PEDIDO NOVO ao pai
+
+A auditoria de acessibilidade das 17h31 marcou dois itens como *«não verificável no Figma, confira
+no código»*. Conferidos os dois: **um já estava certo** (item 4), e este estava mesmo faltando.
+
+**`header: true` tem ZERO ocorrências em `packages/diletta_design_system`** — na `v0.204.0` e na
+ponta `v0.207.0`. Não é a barra de topo que esqueceu: a linguagem não usa a bandeira em lugar
+nenhum. O título sai como `Text` puro em `diletta_navigation_top_bar.dart:361`.
+
+Quem usa leitor de tela não consegue saltar para o título da tela nem confirmar onde está — a
+navegação por cabeçalhos, que é o gesto de se situar numa tela nova, não encontra nada.
+
+| medida | valor |
+|---|---|
+| `header: true` na linguagem (v0.204.0 e v0.207.0) | **0** |
+| `header: true` em `packages/coreflow` | **0** |
+| chamadas de `CoreflowBarraDeTopo.page/.sheet` no app | **102** |
+| arquivos do app que tocam a barra | **88** |
+
+**Metade disto é nossa e não se pede**: o `_TituloPrimario`
+([`coreflow_barra_de_topo.dart:312`](../packages/coreflow/lib/src/coreflow_barra_de_topo.dart)) é um
+`Text` nosso, e embrulhá-lo cobre as 102 telas com uma linha. Por isso o pedido **não é bloqueante**
+e por isso ele é sobre o que o contorno **não** cobre: quem passa `title:` como `String` — o caminho
+documentado — continua sem cabeçalho, porque o nosso `titleWidget` substitui o `Text` do pai
+inteiro; e cada filho novo paga a mesma linha sem saber que precisa.
+
+O argumento que decide é a régua que o **próprio pai escreveu hoje**, no veredito dos `aria-*`:
+*nome é campo, estado é regra.* «Este texto é o cabeçalho da tela» não é conteúdo que o consumidor
+escolhe — é a norma lendo a estrutura que a peça montou. E é **derivável**: quem recebe `title` é o
+cabeçalho, não há segundo caso.
+
+→ [pedidos/2026-09-22-o-titulo-da-tela-nao-e-cabecalho-para-quem-usa-leitor-de-tela.md](pedidos/2026-09-22-o-titulo-da-tela-nao-e-cabecalho-para-quem-usa-leitor-de-tela.md)
+
+---
+
+## 3 · O papel de apoio carrega texto de corpo com piso de texto GRANDE — PEDIDO NOVO ao pai
+
+Mesma auditoria, critério 1.4.3. O auditor mediu `#80798D` na tela e marcou como peça do DS. Fomos
+ver de onde o hex vinha, e **a derivação o reproduz byte a byte**.
+
+```dart
+// diletta_scheme.dart:506-508
+textTertiary: (p.textoSecundarioClaro != null && p.textoMudoClaro != null)
+    ? _degrauEntre(p.textoSecundarioClaro!, p.textoMudoClaro!, p.neutral02, p.neutral03, p.neutral04)
+    : _apoioQueAlcanca(p.white, [p.neutral03, p.neutral02, p.neutral01]),
+```
+
+`_apoioQueAlcanca` é `_primeiroQueAlcanca(dilettaContrastAALarge, …)` — **piso 3,0**, que é o de
+texto grande. `_degrauEntre` **não consulta contraste nenhum**.
+
+| | valor | sobre branco | sobre `errorSubtle` |
+|---|---|---|---|
+| `textTertiary` CLARO (Bold declara o par) | **`#80798D`** | **4,17:1** ❌ | **3,83:1** ❌ |
+| `textTertiary` ESCURO | `#8D91A0` | 5,78:1 sobre `#14151F` ✅ | — |
+
+E o papel carrega corpo, não título: `DilettaInlineAlert:115` pinta a mensagem em **13px regular**;
+`DilettaDetailRow:109` pinta o valor em **14px** (12 no compacto). O piso deles é 4,5. São **34 usos
+em 19 peças** da linguagem.
+
+**A tese, e ela não é o número:**
+
+> Quem **não** declara o par cai no fallback e recebe `neutral03` (`#737373`, **4,74:1** — passa).
+> Quem declara os dois extremos recebe uma cor que reprova. **A declaração do filho é o que apaga o
+> piso.**
+
+→ [pedidos/2026-09-22-o-papel-que-carrega-texto-de-corpo-tem-piso-de-texto-grande.md](pedidos/2026-09-22-o-papel-que-carrega-texto-de-corpo-tem-piso-de-texto-grande.md)
+
+---
+
+## 4 · Quatro coisas que os chats deram como falta do DS — e o código desmente
+
+Esta seção vale mais que os dois pedidos juntos, porque é o que **não** foi escrito.
+
+**(a) As legendas coloridas do medidor não são gap do DS.** A auditoria mediu `warningGrafico`
+(`#F6A21A`, **2,08:1**) e `error` (`#EF4757`, **3,68:1**) sobre superfície branca e concluiu falta na
+linguagem. A linguagem tem o papel: `warningOnSurface` e `errorOnSurface`, derivados com
+`dilettaContrastAANormal` (`diletta_scheme.dart:641-649`), resolvem na paleta do Bold em `#85520A`
+(**6,54:1**) e `#B42318` (**6,57:1**). O desenho pegou a tinta de **gráfico** para carregar
+**texto** — que é exatamente a distinção que o pai escreveu no veredito de 17/09. **Conserto no
+Figma, não pedido.** E, pela mesma medição, **a parte 2 daquele pedido não se reabre**: a condição
+que o pai deixou escrita era *«um segundo filho medindo tinta de estado sobre a superfície»* — o
+segundo filho mediu, e a resposta é que o papel já existe.
+
+**(b) O botão desabilitado já carrega o estado na semântica.** O auditor não pôde verificar no
+Figma. `diletta_button.dart:279-280` e `:332-333`: `Semantics(button: true, enabled: !_disabled)`.
+Não é gap.
+
+**(c) O slot `acima` não precisa «virar lista».** O prototipador escreveu *«não existe e precisa ir
+ao repo: ou o slot vira lista, ou a biblioteca ganha uma peça de pilha de avisos»*. Em
+`diletta_bottom_app.dart:105`, `acima` é `Widget?` — **uma `Column` empilha os dois avisos e
+pronto**. A limitação é do `INSTANCE_SWAP` do Figma, que aceita uma instância só, e o próprio
+relatório dele já dizia isso duas linhas depois (*«em Dart isso é uma `Column`, sem andaime»*). É
+item da biblioteca do Figma, não pedido ao pai.
+
+**(d) «Como o app roda só escuro, não é defeito no app real» — não é verdade.** A frase aparece
+duas vezes no relatório de acessibilidade e desarmaria o pedido do item 3. O app tem tela de
+Aparência com **Claro, Escuro e Do sistema** (`aparencia_screen.dart:16-18`), persistida em
+`SharedPreferences` (`theme_controller.dart:26-29`). O escuro é o **default**, não o único. O modo
+claro está a um toque.
+
+---
+
+## 5 · O pedido do medidor ganhou o preço medido — nota, não pedido novo
+
+O pedido de ontem
+([o medidor não se lê](pedidos/2026-09-21-o-medidor-nao-se-le-nem-pela-semantica-nem-pela-bula.md))
+ainda não foi enviado, e nesse meio-tempo o fluxo virou código. **O contorno que a seção «Se você
+disser não» previa deixou de ser hipótese.**
+
+`lib/features/limites/presentation/widgets/medidor_de_teto.dart` (commit `b8a0a44e`, 22/09 14h35),
+172 linhas: `ExcludeSemantics` em volta do `DilettaProgressBar.value` (`:62`) e um `Semantics` com
+`excludeSemantics: true` por cima do `DilettaAppListRow` (`:96`, `:107`). **O consumidor não
+contorna a falta — ele desliga duas peças do pai e reescreve o nó à mão**, com as palavras deste
+fluxo, que não viajam para a segunda tela.
+
+O mérito do pedido não mudou. O que mudou é que o preço agora tem arquivo, linha e data — e uma
+dívida com prazo: quando o campo chegar, este arquivo passa a **esconder** a semântica nova, e nada
+acusa. A nota foi escrita dentro do próprio pedido, como `## Nota do filho`, que é um dos quatro
+nomes que a varredura da família reconhece.
+
+---
+
+## 6 · O que é nosso, e não se pede
+
+| item | onde | o que é |
+|---|---|---|
+| `_TituloPrimario` sem `header` | `coreflow_barra_de_topo.dart:312` | a metade nossa do item 2 — uma linha, 102 telas |
+| a folha lê `primary08` cru da Primitiva no claro | `coreflow_folha.dart:257-265` | a **D102**, que o prototipador reabriu hoje: no `Bold · Escuro` a instância herda `c.surface`, no claro herda a primitiva direto. É nossa peça |
+| a área segura da folha não existe como propriedade no Figma | `coreflow_folha.dart:155-158`, `:246` | o corpo soma `padding.bottom` em runtime; no desenho vira override manual em cada instância. Cabe um booleano na peça da biblioteca, como o `BottomApp` já faz com o indicador de home |
+| `acima` só existe na factory `.button` | `diletta_bottom_app.dart:105`, `_ButtonVariant:202` | medido e confirmado: nem `nav`, nem `keyboard`, nem `livre`. **Fica como observação, não como pedido** — nenhuma tela real pediu o slot em outra variante, e pedido sem caso medido volta reprovado |
+| três linhas do índice têm uma quarta célula invisível | `docs/PEDIDOS.md` | a tabela declara 3 colunas e essas linhas escrevem 4 (as três são de 11/08): o renderizador **descarta a última**, e o texto que some é o «achado» de cada uma — *«metade das telas tinha o fundo errado»*, numa delas. O gate novo confere arquivo↔linha, não a contagem de colunas. Achado resolvendo o conflito de hoje; **é nosso arquivo, conserto daqui** |
+| truncamento da linha secundária a 200% (1.4.4) | `medidor_de_teto.dart` | o auditor marcou como dono **app**. `Flexible` + `maxLines: 2`. Não é DS |
+
+---
+
 ## Rodada de 2026-09-21 · tarde
 
 A rodada da manhã fechou às 10h52. Esta cobre **10h52 → 17h57**, e o dia rendeu mais depois do

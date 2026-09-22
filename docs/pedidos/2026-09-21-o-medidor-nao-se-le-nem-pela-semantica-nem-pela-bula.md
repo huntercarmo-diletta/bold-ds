@@ -173,3 +173,39 @@ a semântica — que ninguém tinha olhado, porque a bula dizia que o problema e
 ausente.
 
 **O bloqueante verdadeiro estava escondido atrás do falso.**
+
+---
+
+## Nota do filho · 2026-09-22 — o remendo saiu, e ele está no app
+
+Este pedido ainda não foi enviado, e nesse meio-tempo o fluxo virou código. **O contorno previsto na
+seção «Se você disser não» deixou de ser hipótese: ele existe, medido, no app.**
+
+`lib/features/limites/presentation/widgets/medidor_de_teto.dart` (commit `b8a0a44e`, 22/09 14h35),
+**172 linhas**, faz exatamente o que este pedido dizia que teria de fazer:
+
+```dart
+ExcludeSemantics(                       // :62  — a barra sai da árvore inteira
+  child: DilettaProgressBar.value(
+```
+
+```dart
+return Semantics(                       // :96  — e a linha reconstrói o anúncio à mão
+  ...
+  excludeSemantics: true,               // :107 — apagando também o que o AppListRow diria
+  child: DilettaAppListRow(
+```
+
+Três coisas que este arquivo prova e que o pedido original só supunha:
+
+1. **o contorno não é «escrever o percentual no `caption`»** — é apagar a árvore de acessibilidade
+   de duas peças suas (`DilettaProgressBar` e `DilettaAppListRow`) e reescrever o nó por cima. O
+   consumidor não contorna a falta: ele desliga a peça;
+2. **ele não viaja.** A frase anunciada é montada no widget do produto, com as palavras deste
+   fluxo. A segunda tela que usar o medidor escreve a dela;
+3. **o `ExcludeSemantics` vira dívida no dia em que o campo chegar.** Quando `DilettaProgressBar`
+   ganhar semântica, este arquivo passa a escondê-la, e nada acusa — o app fica com o anúncio
+   antigo e a peça calada, que é o pior dos dois mundos.
+
+Nada mudou no mérito do pedido. O que mudou é o número da seção «Se você disser não»: o preço
+deixou de ser estimado e passou a ter arquivo, linha e data.
