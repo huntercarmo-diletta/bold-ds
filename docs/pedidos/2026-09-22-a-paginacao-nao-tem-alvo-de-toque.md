@@ -100,3 +100,60 @@ elemento, não há atributo de porte, e os botões não são expostos como `part
 shadow seria exatamente a cópia divergente que o `D1` proíbe.
 
 Fica registrado no console como achado conhecido, sem remendo.
+
+---
+
+## VEREDITO do pai — 2026-09-22 · `v0.207.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`) para a resposta morar junto da pergunta.
+
+**ENTRA DIFERENTE — o alvo entra, e a frase da MINHA spec sai.**
+
+### O que decidiu
+O seu achado sobre o meu texto, não sobre o meu código: *«a spec decidiu que o dedo não é caso
+dele»*. Ela decidiu mesmo, por escrito — *«no celular a mesma necessidade se resolve por rolagem
+infinita, que é outra gramática»*.
+
+**Você está certo e a spec está errada**, e o erro não é a decisão: é que ela nomeia uma alternativa
+que o censo não publica como peça. O consumidor que segue a minha orientação **sai da família**.
+Isso não é lacuna de implementação — é uma frase minha empurrando trabalho para fora de casa. A sua
+"segunda saída" era a pergunta certa, e a resposta a ela é que a primeira saída passa a valer.
+
+Registro também o que você não afirmou: **30×30 não reprova na 2.5.8**, e você disse isso em vez de
+inflar. O que ele contraria é o piso de 44 que três peças minhas declaram — e é essa incoerência
+interna, não a norma, que decide.
+
+### O que eu achei indo implementar
+**`min-height: 44` no `:host` — o arranjo das três irmãs, que você propôs de boa-fé — resolve
+metade.** O alvo é bidimensional: os botões têm `min-width: 30` com `gap: 4`, então a altura chega
+a 44 e a largura fica em 30, com 34px de passo entre centros.
+
+As irmãs escapam porque são **peças únicas num eixo**; a paginação é uma **FILA**, e fila tem a
+dimensão que as irmãs não têm. Então entram os dois: piso no hospedeiro **e** passo horizontal
+medido, com o desenho de 30 intacto.
+
+Você escreveu *«não estamos pedindo número: a escala é da linguagem»* — é, e a escala não tinha
+resposta para fila. Passa a ter.
+
+### O que eu recusei, e a condição de reabrir
+- **manter a peça só de mesa** (a sua segunda saída) — recusada: ela obrigaria a publicar a peça de
+  rolagem infinita para o consumidor não sair da família, e isso é vocabulário novo comprado para
+  não consertar uma linha de CSS;
+- **expor os botões como `part`** — você não pediu, e eu não abro: seria a porta para a cópia
+  divergente que você mesmo se recusou a escrever. Sem condição de reabrir; é fronteira.
+
+### Os seis critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | = | o `ALVO` já é o padrão de três peças; esta passa a segui-lo |
+| escalabilidade | ↑ | a próxima peça em FILA herda o passo, não só o piso |
+| aplicação | ↑ | seis telas do console passam a ser tocáveis no telefone |
+| aderência ao mercado | ↑ | 2.5.5 é o piso que o seu produto e três peças minhas já adotaram |
+| robustez | = | o modo de falhar não muda |
+| arquitetura limpa e simples | ↑ | a spec deixa de mandar o consumidor para fora da família |
+
+### O que você faz
+Quando a tag sair: suba o `ref:` e refaça a varredura do Playwright a 390×844 — o número que eu devo
+é 44 nos dois eixos, e é ele que fecha o achado que você deixou registrado no console sem remendo.
+Você estava certo em não remendar: não havia como, e forçar teria custado a cópia.

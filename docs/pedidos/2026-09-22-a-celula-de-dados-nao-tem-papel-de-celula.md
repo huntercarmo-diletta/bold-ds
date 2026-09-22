@@ -114,3 +114,63 @@ Volta a ser pergunta quando um segundo produto da família precisar da mesma tro
 
 *Escrito aqui porque veredito entregue esperando adoção que não vem ensina errado o que o
 veredito compra.*
+
+---
+
+## VEREDITO do pai — 2026-09-22 · `v0.207.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`) para a resposta morar junto da pergunta.
+
+**ENTRA — defeito meu, uma linha, e é o mais grave dos oito desta série.**
+
+### O que decidiu
+A sua frase: *«Acessibilidade é a coisa que não cede à régua de a linguagem ganha sempre.»* A régua
+realmente perde aqui, e não por concessão — **sair de um `<table>` nativo completo para uma tabela
+ARIA inválida é piorar por adoção**, e uma linguagem que obriga a isso está cobrando o preço errado.
+
+Conferi as cinco peças na fonte e o seu número está exato: quatro declaram papel, a célula tem zero
+`role=`, e ninguém supre por fora.
+
+Das suas duas observações, as duas ficam de pé: **`gridcell` não serve** (a lista declara `table`,
+não `grid`) e o **`rowheader` da primeira coluna é eixo novo**, fora deste pedido. Você o escreveu
+*«para não virar um segundo pedido em uma semana»* — é a disciplina que eu queria ver, e o eixo fica
+registrado sem consumir este veredito.
+
+### O que eu achei indo implementar
+**Pior que o pedido: a família tem cinco peças, quatro sabem o papel delas, e nenhum gate meu
+pergunta o papel de nenhuma.** A que faltava não caiu em régua nenhuma porque régua nenhuma existe —
+o papel viajou por hábito em quatro peças, e o hábito falhou na quinta. Entra junto a régua: toda
+peça cujo contrato declara papel ARIA tem de emiti-lo, medido no elemento montado.
+
+**E o seu `⚠ PRECISADO` de 22/09 vale mais que o conserto.** Você mediu o contrato depois de
+escrever o pedido e avisou que o papel entregue **não destrava a troca** — forma por largura, estado
+de carga e erro de rota continuam faltando. A frase que fica:
+
+> *Veredito entregue esperando adoção que não vem ensina errado o que o veredito compra.*
+
+Vou anotá-la como régua desta casa. E a decisão de **não** pedir as três está certa pela razão que
+você deu: uma implementação, num app só, não é vocabulário — o `formaDaTabela` é consumido só pela
+`WaDataTable`, e o IB tem zero `ResizeObserver`. Volta a ser pergunta no segundo produto.
+
+### O que eu recusei, e a condição de reabrir
+- **`rowheader` na primeira célula** — fora deste pedido, por sua própria decisão. Reabre quando
+  você trouxer o eixo (`cabecaDeLinha` ou reuso de `conteudo`) com os sítios medidos;
+- **troca de forma por largura, `aria-busy`/`inert` e os quatro estados de erro** — você não pediu
+  e eu não entrego. **Condição escrita: um segundo produto da família precisando da mesma troca.**
+
+### Os seis critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | = | uma linha; não há manutenção nova |
+| escalabilidade | ↑ | a régua de papel que vai junto cobre a sexta peça da família antes de ela existir |
+| aplicação | ↑ | destrava 49 usos parados, e 502 instâncias declaradas no outro consumidor |
+| aderência ao mercado | ↑ | *required owned elements* é a especificação ARIA, não gosto meu |
+| robustez | ↑ | a ausência passa a falhar alto em vez de desenhar certo e mentir na árvore |
+| arquitetura limpa e simples | = | nenhuma peça nova, nenhum eixo novo |
+
+### O que você faz
+Quando a tag sair: suba o `ref:` e faça a troca do `WaDataTable` **medindo antes** — o papel é
+necessário e, pelo seu próprio levantamento, não é suficiente. Se a troca parar de novo, o que
+faltar vira pedido com a medição do segundo produto junto. E você está certo em não remendar com
+`role="cell"` por fora: o papel é do elemento.

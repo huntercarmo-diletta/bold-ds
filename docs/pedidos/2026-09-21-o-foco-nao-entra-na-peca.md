@@ -81,3 +81,55 @@ leria a casca — que é o irmão exato do defeito do `aria-label` que você con
 
 **acessibilidade · manutenção.** Acessibilidade porque diálogo sem foco dentro é diálogo que o
 teclado não alcança. Manutenção porque são 15 peças com a mesma linha, e o conserto é de uma.
+
+---
+
+## VEREDITO do pai — 2026-09-22 · `v0.207.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`) para a resposta morar junto da pergunta.
+
+**ENTRA DIFERENTE — a linha é uma, mas não nas 15.**
+
+### O que decidiu
+A sua frase: *«`host.focus()` é o único cabo que o consumidor tem»*. É verdade, e é a razão pela
+qual isto não é conveniência: o `<button>` de verdade mora no shadow, e alcançá-lo de fora é
+atravessar a borda que a peça existe para fechar. Sem o cabo, a peça fecha a borda e não deixa porta.
+
+**A armadilha que você não pôde medir, eu medi:** `:host(:focus` aparece **zero** vezes nos 29
+arquivos. Você escreveu *«se o degrau custar algum deles, o desenho é seu»* — ele não custa nenhum.
+
+### O que eu achei indo implementar
+**O conjunto das 15 está certo como censo e errado como alvo.** `delegatesFocus` foca *o primeiro
+focável*, e em `tabs` e `segmented-control` o primeiro não é o selecionado: as duas têm `tabindex`
+rotativo, e focar o primeiro **desfaz a regra que esta casa escreveu na v0.200.0** — *nas listas com
+`tabindex` rotativo o foco SEGUE a seleção*. A `pagination` tem dois botões e nenhum deles é o
+primeiro por natureza.
+
+Então o degrau é de duas formas: `delegatesFocus` nas peças de **uma entrada**, e `focus()` próprio
+no hospedeiro das rotativas e da paginação.
+
+E o achado que o seu pedido me obrigou a ver: a v0.200.0 deu a essas peças o **devolver** o foco e
+nunca lhes deu o **receber**. `pinta()` sabe restaurar um foco que já era dela; não havia porta de
+entrada. Metade do contrato, seis tags atrás, e nenhum gate meu perguntou pela outra metade.
+
+### O que eu recusei, e a condição de reabrir
+- **`tabindex` no hospedeiro** — você já o tinha recusado, e pela razão certa. Confirmo: é o irmão
+  exato do defeito de `aria-label` que a v0.207.0 consertou. Sem condição de reabrir: é fronteira;
+- **`delegatesFocus` em `tabs`, `segmented-control` e `pagination`** — recusado pelo conflito com a
+  seleção. Reabre se a plataforma publicar um jeito de declarar *qual* focável é a entrada.
+
+### Os seis critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | uma linha por peça, sem API nova para ninguém manter |
+| escalabilidade | ↑ | a porta passa a existir para o filho N, não só para a sua gaveta |
+| aplicação | ↑ | o `BoldDrawer` volta a alcançar o teclado e o leitor de tela |
+| aderência ao mercado | ↑ | `delegatesFocus` é o mecanismo da plataforma para isto; não há invenção |
+| robustez | ↑ | deixa de depender de o consumidor conhecer o interior do shadow |
+| arquitetura limpa e simples | = | nenhuma peça nova; um argumento no `attachShadow` que já existe |
+
+### O que você faz
+Quando a tag sair: suba o `ref:`, devolva as duas chamadas ao `<diletta-button>` e apague a exceção
+declarada com o gate que a segurava. Nas três peças que ficam sem `delegatesFocus`, o cabo é o mesmo
+`host.focus()` — a diferença mora aqui dentro.

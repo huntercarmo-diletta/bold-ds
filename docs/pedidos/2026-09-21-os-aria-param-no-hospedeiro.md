@@ -73,3 +73,58 @@ acessibilidade — o defeito que você recusou hoje, por escrito.
 **acessibilidade · escalabilidade.** Acessibilidade porque estado que não chega é estado que não
 existe para quem ouve. Escalabilidade porque hoje é um `aria-expanded`, e o próximo padrão que
 precisar de estado não tem por onde entrar.
+
+---
+
+## VEREDITO do pai — 2026-09-22 · `v0.207.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`) para a resposta morar junto da pergunta.
+
+**ENTRA DIFERENTE — a REGRA, com lista nomeada, e não o campo.**
+
+### O que decidiu
+A sua frase sobre o número: *«o que a torna um pedido não é o volume: é que não há como escrever a
+segunda».* Um pedido cujo argumento é *não há como escrever o segundo caso* está medindo vocabulário
+faltando, e vocabulário não se mede por sítio. Uma chamada bastou.
+
+E o que fechou: **você ofereceu a saída que eu preferiria — dois campos, `expandido` e `tem-menu` —
+e argumentou contra a própria oferta**, com *«o terceiro caso chega sem aviso»*. Isso é
+escalabilidade dita por quem perderia menos com a outra forma.
+
+### O que eu achei indo implementar
+**Isto corrige a minha v0.207.0, de ontem.** O `rotulo-acessivel` não estava errado: estava
+incompleto. Eu tratei como caso o que era classe, e a prova é que a classe voltou em menos de 24
+horas pela mão do mesmo filho.
+
+A regra que fica, e que vale além deste atributo:
+
+> **Campo nomeado para um membro de uma família é a forma que garante a segunda rodada.**
+
+Então a fronteira passa a ser esta, e ela não é arbitrária: **nome continua campo** (é conteúdo, o
+consumidor escreve a frase) e **estado passa a ser regra** (é da norma, e a norma é fechada —
+`aria-expanded`, `aria-haspopup`, `aria-controls`, `aria-pressed`, `aria-describedby`, `aria-current`).
+Entra a lista declarada, repassada ao elemento com papel e **apagada do hospedeiro**, como você
+propôs. `aria-label` fica de fora por nome: tem dono desde ontem, e os dois brigariam — que é
+exatamente a armadilha que você viu.
+
+### O que eu recusei, e a condição de reabrir
+- **encaminhamento cego de todo `aria-*`** — recusado pela sua armadilha. Reabre se a lista passar
+  de uma dezena e virar manutenção: aí o certo é a regra com exclusão nomeada em vez de inclusão;
+- **`role` no hospedeiro** — você não pediu, e confirmo a recusa de ontem: papel na casca com papel
+  dentro são dois botões na árvore de acessibilidade.
+
+### Os seis critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | uma regra contra N campos acrescentados ao longo do tempo |
+| escalabilidade | ↑ | o próximo padrão ARIA entra sem tag nova |
+| aplicação | ↑ | o `ExportarMenu` passa a anunciar aberto e fechado |
+| aderência ao mercado | ↑ | WCAG 4.1.2 é a régua, e a lista é a da norma, não a minha |
+| robustez | = | nem melhora nem piora o modo de falhar |
+| arquitetura limpa e simples | ↑ | um mecanismo no lugar de uma família de campos espelhando a norma nome por nome |
+
+### O que você faz
+Quando a tag sair: suba o `ref:`, devolva o `ExportarMenu` ao `<diletta-button>` e continue
+escrevendo `aria-expanded` e `aria-haspopup` **no hospedeiro** — é de lá que a regra os leva. O
+`rotulo-acessivel` segue sendo o caminho do nome; não troque um pelo outro.
