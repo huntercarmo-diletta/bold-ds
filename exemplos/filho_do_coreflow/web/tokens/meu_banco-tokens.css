@@ -248,3 +248,38 @@
   --diletta-formaDeVidro: 16px;
   --diletta-formaDeNav: 24px;
 }
+
+/* A FAMÍLIA TIPOGRÁFICA. A ESCALA é a do avô — ele publica os degraus dele e este produto
+   os herda (`CoreflowTipografia.doAvo`), então repetir aqui seria repetir o que não é
+   nosso. A FAMÍLIA é outra história: no Flutter ela é anulável porque o app empresta a
+   dele, e NA WEB NÃO HÁ APP. Sem esta linha `var(--diletta-font-family)` não resolve, e
+   `var()` que não resolve mata a declaração inteira — a tela sai em Times. Aconteceu com
+   o segundo filho da família, em 22/09, com toda a configuração correta.
+   ESTE PRODUTO TROCA DE FONTE numa linha só, servindo Flutter e web:
+     tipografia: CoreflowTipografia.doAvo.copyWith(familia: 'packages/<pacote>/MinhaFonte'),
+   ...e os ARQUIVOS da fonte precisam viajar no pacote web, senão a folha nomeia o que o
+   navegador não tem. Sem declarar, recebe a Inter que a família publica.
+   A ESCALA PRÓPRIA, se um dia este produto quiser a dele, entra ao lado com
+   `coreflowTipoCss(meusDegraus, familia: ...)` — e junto com ela o import de
+   `package:flutter/widgets.dart` (de onde vêm `TextStyle` e `FontWeight`) e a tabela
+   `_degraus` do `o_desenho_da_web_e_o_do_mobile_test.dart`, senão o gate de lá dorme. */
+:root {
+  --diletta-font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* O GRADIENTE DESTE PRODUTO, e ele é DERIVADO — não inventado. Quem não desenha curva
+   própria recebe `CoreflowGradients.daPaleta`: dois degraus da rampa DELE (04 → 05), com
+   a tinta que a paleta dele declara por cima. */
+:root {
+  --diletta-gradiente-primary: linear-gradient(141deg, #009820 0%, #1fb734 100%);
+  --diletta-gradiente-accent: linear-gradient(145deg, #876307, #5c4304);
+  --diletta-onGradiente: #ffffff;
+}
+
+/* AS PARADAS DA CURVA, soltas — o degradê inteiro não serve a quem precisa de UMA cor
+   dele. Saem tantas quantas a curva deste produto tiver: duas, na derivada. Consumidor
+   que pedir uma parada além dessas está pedindo a curva de OUTRO produto. */
+:root {
+  --diletta-lockup01: #009820;
+  --diletta-lockup02: #1fb734;
+}

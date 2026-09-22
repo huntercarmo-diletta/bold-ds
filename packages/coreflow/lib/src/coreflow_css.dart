@@ -195,6 +195,47 @@ String coreflowMedidasCss(DilettaPalette p) {
 /// Condição de reabrir: **a segunda tradução** — outro ponto em que o Flutter diz *natural* e o
 /// CSS precise escolher a palavra —, ou uma divergência de desenho medida à mão que o gate de
 /// paridade tenha deixado passar.
+/// A FAMÍLIA TIPOGRÁFICA, sozinha — e é ela que faltava em todo filho que não é o primeiro.
+///
+/// No Flutter, um produto que não declara família herda a do app (`CoreflowTipografia.familia` é
+/// anulável de propósito). **Na web não existe app para herdar**: `font-family: var(--diletta-font-family)`
+/// com a variável ausente não é erro no console — `var()` que não resolve mata a declaração inteira,
+/// e o navegador cai no serifado padrão. Medido na Norte Benk em 22/09: a tela inteira em Times,
+/// com toda a configuração correta, e uma linha injetada à mão resolveu tudo.
+///
+/// Por isso a família sai SEMPRE, mesmo para quem herda os degraus do avô — a escala o avô publica,
+/// a família não, e não publicar era o buraco.
+String coreflowFamiliaCss(String familia) =>
+    ':root {\n  ${prefixoDaLinguagem}font-family: $familia;\n}\n';
+
+/// A família DESTE produto como pilha CSS, a partir do que ele declarou em `CoreflowTipografia`.
+///
+/// **É aqui que um filho troca de fonte**, e a declaração é UMA, servindo Flutter e web:
+///
+/// ```dart
+/// tipografia: CoreflowTipografia.doAvo.copyWith(familia: 'packages/meu_filho/MinhaFonte'),
+/// ```
+///
+/// O nome que o Flutter usa vem qualificado pelo pacote (`packages/<pacote>/<Nome>`), que é sintaxe
+/// de Flutter e não de CSS; o prefixo sai aqui. Quem não declara recebe a [familiaDaFamilia] — a
+/// Inter que viaja no pacote web, e não uma fonte do sistema.
+///
+/// **LIMITE, dito em voz alta:** trocar o nome não faz o ARQUIVO da fonte viajar. A folha passa a
+/// pedir `MinhaFonte` e o navegador só a desenha se o pacote web daquele filho publicar os arquivos
+/// dela, como o do Bold publica os da Inter em `fontes.css`. Nomear sem empacotar é a mesma falha
+/// calada de variável sem valor — o nome chega, o desenho não.
+String coreflowFamiliaWeb(String? declarada) {
+  final crua = declarada == null
+      ? familiaDaFamilia
+      : (RegExp(r'^packages/[^/]+/(.+)$').firstMatch(declarada)?.group(1) ?? declarada);
+  return "'$crua', system-ui, sans-serif";
+}
+
+/// A fonte que a família publica, e o padrão de quem não declara outra. É a mesma que viaja no
+/// pacote web (`fontes.css` reexporta o `@fontsource/inter`), então nomeá-la aqui é nomear um
+/// arquivo que existe.
+const String familiaDaFamilia = 'Inter';
+
 String coreflowTipoCss(Map<String, TextStyle> degraus, {required String familia}) {
   final linhas = <String>["  ${prefixoDaLinguagem}font-family: $familia;"];
   for (final e in degraus.entries) {

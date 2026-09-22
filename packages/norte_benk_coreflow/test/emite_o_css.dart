@@ -9,6 +9,7 @@ import 'dart:io';
 
 import 'package:coreflow/coreflow.dart';
 import 'package:norte_benk_coreflow/norte_benk.dart';
+import 'package:flutter/material.dart' show Color;
 import 'package:flutter_test/flutter_test.dart';
 
 /// As TAGS que a instância web registra, lidas do `index.js` do pacote do avô — a fonte é o pacote e
@@ -30,21 +31,27 @@ String cssDoProduto() => [
       coreflowEsquemaCss(norteBenk.paleta),
       '\n/* MEDIDA por nome. */\n',
       coreflowMedidasCss(norteBenk.paleta),
-      // A ESCALA DE TIPO entra quando este produto declarar a dele em `tipografia:`. Sem declaração,
-      // a escala é a do avô e ela já vem na folha dele — emitir de novo seria repetir o que não é
-      // nosso. Quando declarar, acrescente aqui:
-      //
-      //   coreflowTipoCss(meusDegraus, familia: "'MinhaFonte', system-ui, sans-serif"),
-      //
-      // ...e junto com ele DUAS coisas, senão a primeira tentativa não compila e a segunda passa
-      // verde sem medir:
-      //
-      //   1. `import 'package:flutter/widgets.dart';` lá em cima — é de onde vêm `TextStyle` e
-      //      `FontWeight`. Ele não está lá hoje de propósito: import sem uso o `analyze` acusa, e
-      //      um filho recém-nascido não declara escala nenhuma;
-      //   2. a tabela `_degraus` do `o_desenho_da_web_e_o_do_mobile_test.dart`, com os mesmos
-      //      degraus. O gate de lá reprova se a folha ganhar degrau e a tabela dele não — ele diz
-      //      sobre quantas declarações está dormindo.
+      '\n/* A FAMÍLIA TIPOGRÁFICA. A ESCALA continua sendo a do avô — ele publica os degraus dele\n'
+          '   e este produto os herda (`CoreflowTipografia.doAvo`), então repetir aqui seria repetir\n'
+          '   o que não é nosso. A FAMÍLIA é outra história: no Flutter ela é anulável porque o app\n'
+          '   empresta a dele, e na web NÃO HÁ APP. Sem esta linha `font-family: var(--diletta-font-family)`\n'
+          '   não resolve, e `var()` que não resolve mata a declaração inteira — a tela sai em Times.\n'
+          '   Medido no IB em 22/09, antes deste conserto.\n'
+          '   ESTE PRODUTO TROCA DE FONTE em `norte_benk.dart`, numa linha só e servindo os dois lados:\n'
+          '     tipografia: CoreflowTipografia.doAvo.copyWith(familia: \'packages/norte_benk_coreflow/MinhaFonte\'),\n'
+          '   ...e os ARQUIVOS da fonte precisam viajar junto, senão a folha nomeia o que o navegador\n'
+          '   não tem. Hoje ele não declara, e recebe a Inter que a família publica. */\n',
+      coreflowFamiliaCss(coreflowFamiliaWeb(norteBenk.tipografia.familia)),
+      '\n/* O GRADIENTE DESTE PRODUTO, e ele é DERIVADO — não inventado. Quem não desenha curva\n'
+          '   própria recebe `CoreflowGradients.daPaleta`: dois degraus da rampa DELE (04 → 05), com\n'
+          '   a tinta que a paleta dele declara por cima. Já existia em Dart desde o nascimento; o\n'
+          '   que faltava era esta chamada, e por isso o IB lia vazio. */\n',
+      coreflowGradientesCss(norteBenk.gradientes),
+      '\n/* AS PARADAS DA CURVA, soltas — o degradê inteiro não serve a quem precisa de UMA cor\n'
+          '   dele. Saem DUAS, que é o que a curva derivada tem; o Bold tem oito porque desenhou\n'
+          '   as oito. Consumidor que pedir `lockup05` está pedindo a curva do Bold, não a da\n'
+          '   família. Derivadas da mesma lista do gradiente, então as duas não divergem. */\n',
+      coreflowConstantesCss(_paradasDoLockup),
       // OS AJUSTES por componente, por último: eles redeclaram papel DENTRO de um elemento, então
       // vêm depois das declarações de raiz que sobrescrevem. Sem ajuste declarado sai vazio.
       _ajustes(),
@@ -56,6 +63,14 @@ String cssDoProdutoComPonte() {
   final css = cssDoProduto();
   return css + coreflowPonteDoNomeAntigo(css);
 }
+
+/// As paradas da curva DESTE produto, nomeadas `lockup01`, `lockup02`… — derivadas de
+/// `norteBenk.gradientes.paradasDoLockup`, e não escritas à mão: escrever seria abrir uma segunda
+/// fonte que pode divergir do gradiente emitido logo acima.
+Map<String, Color> get _paradasDoLockup => {
+  for (var i = 0; i < norteBenk.gradientes.paradasDoLockup.length; i++)
+    'lockup${(i + 1).toString().padLeft(2, '0')}': norteBenk.gradientes.paradasDoLockup[i],
+};
 
 String _ajustes() {
   final css = coreflowAjustesCss(norteBenk.ajustesDePapel, tagsWeb: tagsDaWeb());

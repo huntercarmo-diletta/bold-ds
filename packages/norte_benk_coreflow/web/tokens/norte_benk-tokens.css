@@ -249,8 +249,41 @@
   --diletta-formaDeNav: 24px;
 }
 
+/* A FAMÍLIA TIPOGRÁFICA. A ESCALA continua sendo a do avô — ele publica os degraus dele
+   e este produto os herda (`CoreflowTipografia.doAvo`), então repetir aqui seria repetir
+   o que não é nosso. A FAMÍLIA é outra história: no Flutter ela é anulável porque o app
+   empresta a dele, e na web NÃO HÁ APP. Sem esta linha `font-family: var(--diletta-font-family)`
+   não resolve, e `var()` que não resolve mata a declaração inteira — a tela sai em Times.
+   Medido no IB em 22/09, antes deste conserto.
+   ESTE PRODUTO TROCA DE FONTE em `norte_benk.dart`, numa linha só e servindo os dois lados:
+     tipografia: CoreflowTipografia.doAvo.copyWith(familia: 'packages/norte_benk_coreflow/MinhaFonte'),
+   ...e os ARQUIVOS da fonte precisam viajar junto, senão a folha nomeia o que o navegador
+   não tem. Hoje ele não declara, e recebe a Inter que a família publica. */
+:root {
+  --diletta-font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* O GRADIENTE DESTE PRODUTO, e ele é DERIVADO — não inventado. Quem não desenha curva
+   própria recebe `CoreflowGradients.daPaleta`: dois degraus da rampa DELE (04 → 05), com
+   a tinta que a paleta dele declara por cima. Já existia em Dart desde o nascimento; o
+   que faltava era esta chamada, e por isso o IB lia vazio. */
+:root {
+  --diletta-gradiente-primary: linear-gradient(141deg, #1d72ff 0%, #5c96fa 100%);
+  --diletta-gradiente-accent: linear-gradient(145deg, #876307, #5c4304);
+  --diletta-onGradiente: #ffffff;
+}
+
+/* AS PARADAS DA CURVA, soltas — o degradê inteiro não serve a quem precisa de UMA cor
+   dele. Saem DUAS, que é o que a curva derivada tem; o Bold tem oito porque desenhou
+   as oito. Consumidor que pedir `lockup05` está pedindo a curva do Bold, não a da
+   família. Derivadas da mesma lista do gradiente, então as duas não divergem. */
+:root {
+  --diletta-lockup01: #1d72ff;
+  --diletta-lockup02: #5c96fa;
+}
+
 /* PONTE: os nomes com o prefixo antigo, apontando para os da linguagem.
-   76 apelidos. Alias não copia valor, então o escuro segue o seletor. */
+   82 apelidos. Alias não copia valor, então o escuro segue o seletor. */
 :root {
   --cps-background: var(--diletta-background);
   --cps-bg: var(--diletta-bg);
@@ -267,6 +300,7 @@
   --cps-errorSolidPressed: var(--diletta-errorSolidPressed);
   --cps-errorSubtle: var(--diletta-errorSubtle);
   --cps-fg: var(--diletta-fg);
+  --cps-font-family: var(--diletta-font-family);
   --cps-formaDeBotao: var(--diletta-formaDeBotao);
   --cps-formaDeCampo: var(--diletta-formaDeCampo);
   --cps-formaDeCartao: var(--diletta-formaDeCartao);
@@ -275,10 +309,15 @@
   --cps-formaDeVidro: var(--diletta-formaDeVidro);
   --cps-glassStroke: var(--diletta-glassStroke);
   --cps-glassTint: var(--diletta-glassTint);
+  --cps-gradiente-accent: var(--diletta-gradiente-accent);
+  --cps-gradiente-primary: var(--diletta-gradiente-primary);
   --cps-infoSubtle: var(--diletta-infoSubtle);
+  --cps-lockup01: var(--diletta-lockup01);
+  --cps-lockup02: var(--diletta-lockup02);
   --cps-onError: var(--diletta-onError);
   --cps-onErrorSolid: var(--diletta-onErrorSolid);
   --cps-onErrorSubtle: var(--diletta-onErrorSubtle);
+  --cps-onGradiente: var(--diletta-onGradiente);
   --cps-onPartner: var(--diletta-onPartner);
   --cps-onPrimary: var(--diletta-onPrimary);
   --cps-onPrimarySubtle: var(--diletta-onPrimarySubtle);
