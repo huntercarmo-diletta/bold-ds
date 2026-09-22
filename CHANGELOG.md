@@ -20,6 +20,72 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.116.0] — 2026-09-22
+
+### Todo filho emite a própria família tipográfica — o segundo saía em Times
+
+**Não muda peça nem pixel do Conta BOLD.** A folha dele sai idêntica: ele já declarava a família,
+porque a emissão dele é a única escrita à mão, de antes do molde existir. Quem muda é o segundo
+filho, e quem passa a nascer certo é o terceiro.
+
+### O defeito
+
+O Internet Banking passou a carregar a folha da Norte Benk em 22/09 — cor certa, marca certa,
+domínio certo — e **a tela inteira saiu serifada**, com toda a configuração correta. Era UM nome
+sem dono.
+
+No Flutter, `CoreflowTipografia.familia` é anulável de propósito: quem não declara herda a do app, e
+o avô não emite família nenhuma. **Está certo lá.** Na web não existe app para herdar:
+
+```css
+font-family: var(--diletta-font-family);   /* a variável não existe → a declaração inteira morre */
+```
+
+`var()` que não resolve não é erro no console. O navegador cai no serifado padrão, calado — a mesma
+classe de falha que fez a ponte dos `--cps-` ser migrada antes do prazo.
+
+**A escala nunca foi o problema.** O avô publica os 92 tokens `--diletta-type-*` dele e quem herda
+os degraus recebe todos. De 109 nomes que o IB lê, faltavam 11 — e a primeira contagem desta casa
+disse 39, por comparar o segundo filho com o PRIMEIRO em vez de comparar com o que o consumidor lê.
+
+### O que entrou
+
+- **`coreflowFamiliaCss` e `coreflowFamiliaWeb`** no pai. O segundo traduz o que o produto declarou
+  — o nome do Flutter vem qualificado por pacote, que é sintaxe de lá e não de CSS — e cai na Inter
+  que a família publica quando ninguém declara.
+- **O gradiente e as paradas da curva**, que também faltavam e **já estavam em Dart desde o
+  nascimento**: `CoreflowGradients.daPaleta` deriva dois degraus da rampa do próprio filho. Nada
+  inventado; o emissor é que nunca chamava. Saem duas paradas — quem pedir `lockup05` está pedindo a
+  curva do Conta BOLD, não a da família.
+- **O molde** faz as três coisas desde o nascimento. O conserto anterior desta classe foi para a
+  instância e não para o molde, e foi assim que nenhum filho gerado ficou publicável; desta vez o
+  gate do gerador cobrou o exemplo sozinho.
+- **Um gate** que percorre a folha de todo filho — os gerados, o exemplo e o primeiro, que mora fora
+  do padrão — e exige família declarada e não vazia.
+
+### Como um filho troca de fonte
+
+Uma linha, servindo Flutter e web:
+
+```dart
+tipografia: CoreflowTipografia.doAvo.copyWith(familia: 'packages/meu_filho/MinhaFonte'),
+```
+
+O gate não olha QUAL fonte — só se alguma foi declarada. **Limite dito em voz alta:** trocar o nome
+não faz o ARQUIVO da fonte viajar. Um filho com fonte própria precisa publicar os arquivos dela,
+senão a folha nomeia o que o navegador não tem.
+
+### Medido na tela, e não só no gate
+
+Com a folha nova, `--diletta-font-family` resolve, a Inter volta e `--diletta-lockup01` sai
+`#1d72ff` — o azul dela, derivado. De 11 nomes faltando para 6, e os 6 são do outro lado:
+`lockup05`/`lockup08` e os quatro `tileLabel` são o IB assumindo decisões do primeiro filho como se
+fossem da família.
+
+**Norte Benk vai a `0.1.1`** (`norte-benk-web-v0.1.1`). O número da casa anda porque a emissão sai
+de uma tag do monorepo, e o gate cobra a `web-vX` ao lado de cada `vX`. O pacote do Conta BOLD foi
+conferido contra o da `v0.115.0` com `diff -r`: **uma linha difere, e é o número da versão**.
+
 ## [0.115.0] — 2026-09-22
 
 ### A publicação passa a servir a mais de um filho — e nenhum filho gerado era publicável
