@@ -83,3 +83,34 @@ sumir enquanto isso.
 
 Nós NÃO vamos remendar com `role="cell"` por fora: o papel é do elemento, e escrevê-lo no
 consumidor é a cópia que a adoção inteira existiu para apagar.
+
+### ⚠ PRECISADO em 22/09 — o papel é necessário, e não é suficiente
+
+**O pedido segue de pé e segue bloqueante. O que muda é o que o veredito compra.**
+
+A frase acima dá a entender que o `role="cell"` é o que trava a troca. Fomos medir o
+contrato da família depois de escrever o pedido, e não é: com o papel entregue, a
+`data-*` ainda não substitui o `WaDataTable` — e o que falta não é ARIA.
+
+Medido na fonte instalada (`avo/src/diletta-data-*.js`, pela `web-v0.114.0`):
+
+| | família `data-*` | `WaDataTable` |
+|---|---|---|
+| forma por largura | **zero** `ResizeObserver`, `@container`, `matchMedia` | troca de forma em 576px, e a expansão sobrevive à troca |
+| estado de carga | **zero** `inert`, `aria-busy`, `carregando` | `inert` discriminado entre `carregando` e `bloqueando` |
+| erro da lista | vazio **tem** (slot, `role="status"`); rota não publicada, sem permissão e genérico, não | os quatro, com prioridade declarada |
+
+**O que a família TEM, e é o que quase nos enganou**: eixo de porte na `data-row`
+(`tabela 54` · `painel 52` · `historico 64`, e o porte decide a MOLDURA, não só a altura),
+porte `regular`/`compacto` no cabeçalho, o estado vazio acima, e tom por linha
+(`aviso`/`erro`/`sucesso`). **A família resolve densidade por DECLARAÇÃO; nós resolvemos
+forma por MEDIÇÃO.** São eixos diferentes, e é por isso que o porte não destrava a troca.
+
+**E não estamos pedindo nenhuma das três.** A troca de forma passou pela régua da casa
+antes de virar pergunta: **uma implementação, num app só** — o `formaDaTabela` é consumido
+só pela `WaDataTable`, e o IB, medido hoje, tem **zero** `ResizeObserver` em produção e a
+forma de registro como estado NATURAL, não como transformação. Um app não é vocabulário.
+Volta a ser pergunta quando um segundo produto da família precisar da mesma troca.
+
+*Escrito aqui porque veredito entregue esperando adoção que não vem ensina errado o que o
+veredito compra.*
