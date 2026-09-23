@@ -75,3 +75,60 @@ pedir a metade de um contrato que já está escrito.
 `<input type="date">` cru, com a nossa moldura por cima. Funciona e é acessível; o que
 não é é consistente — na mesma barra ele conviverá com um `<diletta-input>` de 48px e
 raio 16, e a diferença aparece.
+
+---
+
+## VEREDITO do pai — 2026-09-22 · `v0.207.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`) para a resposta morar junto da pergunta.
+
+**ENTRA — e a forma que você pediu é a certa, incluindo a parte que você deixou de fora.**
+
+### O que decidiu
+O precedente que você foi buscar na **minha** casa. O `///` do `<diletta-dropdown>` já escreveu:
+
+> *«o `<select>` do sistema traz busca por digitação, rolagem com teclado e o painel do sistema
+> operacional no celular — coisas que um dropdown desenhado à mão perde e quase nunca recupera»*
+
+`<input type="date">` é o mesmo arranjo, e o ADR-007 já cobre a diferença de mecanismo: **a spec é
+uma, o mecanismo de cada plataforma é o dela**. Não havia o que decidir de novo — havia uma decisão
+antiga que ninguém tinha estendido.
+
+Então: **`date-field` vai a `ambos`, `calendar` fica em `codigo`** — exatamente como você propôs, e
+a razão é que na web o grid mensal é do sistema operacional, não meu.
+
+**A assimetria é o argumento, e é seu**: o Flutter precisou construir o calendário à mão porque lá
+não há controle de plataforma. A metade que falta é a fácil.
+
+### O que eu achei indo implementar
+**O contrato escrito não atravessa inteiro, e você não podia ver isso.** A spec diz, com todas as
+letras, *«Formata a data; o usuário não digita dd/mm/aaaa à mão»* — e `<input type="date">` **deixa
+digitar**, com formato decidido pelo locale do navegador.
+
+Isso não impede a emissão. Vira **linha declarada de divergência na spec**, senão a régua de
+paridade passa a cobrar da web um comportamento que a plataforma não dá — e uma régua que cobra o
+impossível é desligada na terceira vez. É a mesma classe da sua nota de 15/09 sobre o gate que
+nasce concordando com o código.
+
+### O que eu recusei, e a condição de reabrir
+- **`color` e `range`** — e a recusa é sua, palavra por palavra: *«pedir vocabulário que ninguém
+  especificou é diferente de pedir a metade de um contrato que já está escrito»*. Condição de
+  reabrir: um contrato escrito para qualquer um dos dois, em qualquer das duas instâncias;
+- **`calendar` na web** — recusado enquanto o controle do sistema servir. Reabre quando um produto
+  precisar de calendário **embutido na tela** (intervalo, disponibilidade), que é outro contrato.
+
+### Os seis critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | um `<input>` nativo custa menos que um calendário emitido e mantido |
+| escalabilidade | ↑ | o terceiro filho recebe data sem inventar a dele |
+| aplicação | ↑ | os dois campos deixam de destoar da barra em que vivem |
+| aderência ao mercado | ↑ | controle de plataforma é o padrão da web, e o `///` do dropdown já era a lei da casa |
+| robustez | = | sem mudança no modo de falhar |
+| arquitetura limpa e simples | ↑ | meia peça a menos para emitir: o calendário fica no Flutter |
+
+### O que você faz
+Quando a tag sair: suba o `ref:`, troque os dois `<input type="date">` crus pela peça e **apague a
+sua moldura por cima** — é ela que a peça passa a dar. Se o formato por locale incomodar na sua
+tela, isso é a divergência declarada, não defeito: diga, e ela vira pedido com a medição junto.

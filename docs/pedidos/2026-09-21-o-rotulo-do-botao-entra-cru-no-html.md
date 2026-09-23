@@ -90,6 +90,63 @@ ainda é cru — quando deixar de ser, ele reprova pedindo a remoção do remend
 **segurança · robustez.** Segurança porque é execução de código a partir de dado, em produto
 bancário. Robustez porque a forma se repete em 11 peças e o conserto é de uma função.
 
+---
+
+## VEREDITO do pai — 2026-09-22 · `v0.207.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`) para a resposta morar junto da pergunta.
+
+**ENTRA — é defeito meu, e é o único desta série que eu classifico como segurança.**
+
+### O que decidiu
+A sua frase, que não precisa de número: *«Valor cru em `innerHTML` não é estilo: é execução.»*
+
+**Conferi o seu número e ele está certo: 11 de 32.** A minha varredura ingênua achava 10 — o
+`button` guarda o texto num `const conteudo` antes de interpolar, e escapa do padrão. *A forma que
+esconde o defeito da régua é a mesma que você leu à mão*, e é por isso que o seu 11 vale mais que o
+meu 10.
+
+**O contraste que você trouxe é o desenho da correção, e é seu**: o `rotulo-acessivel` não tem o
+problema porque vira VALOR DE ATRIBUTO, e valor de atributo é texto por construção. Mesmo dado,
+dois caminhos, uma garantia. Então não entra escape cego — entra a separação que você nomeou,
+*«o que veio de fora»* × *«o que a peça escreveu»*, numa função da `base.js`, e só o primeiro passa
+por ela. Escapar tudo quebraria as interpolações que PRECISAM ser marcação, como você avisou.
+
+### O que eu achei indo implementar
+**A adoção de uma peça minha pode REMOVER uma garantia do consumidor sem que nada acuse.** No React
+o texto viajava como filho e era escapado por construção — não por cuidado de quem escreveu a
+chamada, como você diz, mas porque não havia outro jeito. Depois da troca ele viaja como atributo
+cru, em 175 chamadas, e a troca foi anunciada como melhoria.
+
+Eu não tenho régua para *«o que o consumidor perde ao adotar»*, e ela devia existir. Isto é maior
+que o escape: toda peça que substitui um elemento nativo herda as garantias dele ou as apaga, e hoje
+nada pergunta qual dos dois.
+
+Sobre o que você não confirmou (*«se um payload real chega até aí hoje depende da validação do
+servidor»*): faz bem em não afirmar, e não muda o veredito. A garantia que existia foi removida e
+nada ocupou o lugar — isso se conserta independentemente de haver caminho aberto hoje.
+
+### O que eu recusei, e a condição de reabrir
+Nada recusado. **O seu remendo morre no dia da tag**, e o desenho dele está certo: escape duplo
+mostraria `&lt;` literal, e o gate que você escreveu pergunta ao elemento **instalado** se ele ainda
+é cru. É ele quem apaga o próprio remendo, sem depender de eu avisar.
+
+### Os seis critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | uma função, onze sítios |
+| escalabilidade | ↑ | a peça 33 nasce com a garantia em vez de herdar o buraco |
+| aplicação | = | a tela não muda um pixel |
+| aderência ao mercado | ↑ | escapar dado de consumidor é o piso da prática, não o extra |
+| robustez | ↑ | deixa de existir caminho de dado para execução |
+| arquitetura limpa e simples | = | a `base.js` já é o lugar, como `mudouAtributo` e `pinta` |
+
+### O que você faz
+Quando a tag sair: suba o `ref:`, **apague o escape do `BoldButton`** e deixe o seu gate reprovar —
+é ele que confirma que a peça deixou de ser crua. Enquanto a tag não sai, o remendo fica: ele não
+custa a tela e a carga não executa.
+
 ## Nota do filho · o caminho de ATRIBUTO também quebra — e «onze sítios» cobre dez das vinte e uma peças que vazam
 
 > 22/09/2026, depois do veredito. Achado no **core-flow-wa**, que embrulha sete destas peças.
