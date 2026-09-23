@@ -1788,6 +1788,21 @@ removeu em `manifesto.material.fundosOferecidos`, e **isso não chega ao app**: 
 precisa declarar os fundos que oferece, e a tela ler essa lista. Depende do 7 — declarar uma lista
 de fundos antes de os fundos existirem é declarar o enum de novo.
 
+## 9 · O rodapé mede 20 onde a grade diz 24
+
+**Nosso**, e é de uma linha. `coreflow_rodape.dart:74` recua o conteúdo com `DilettaSpacing.s5`
+(20); `coreflow_espaco.dart` declara `gutter = DilettaSpacing.s6` (24) e diz por quê: *«o 24 ganhou
+porque é o gutter do CHROME da linguagem»*. O gate «o gutter das telas é um» cobra o corpo; o rodapé
+ficou de fora dele.
+
+Medido em 23/09 pelo `revisor-visual`, na recusa do Pix: o card do aviso começa em x=20 e o valor
+«R$ 4.200,00» logo acima começa em x=24 — **o rodapé desalinha 4 pt do corpo em toda tela que usa
+os dois**, e o app tem 46 arquivos com `CoreflowRodape`. Contra o Figma (que desenha 24) a mesma
+diferença.
+
+Conserto: `s5 → s6` na linha 74, e o gate do gutter passar a olhar o rodapé. Não foi feito nesta
+rodada porque é código, e código sem pedido dela não entra — ver «Como esta fila se mantém».
+
 ---
 
 ## O que não entra nesta fila, e por quê
