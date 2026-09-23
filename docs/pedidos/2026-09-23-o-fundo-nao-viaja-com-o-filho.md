@@ -102,3 +102,72 @@ que falta é técnica ou de processo. Dizemos o que medimos.
 
 Nenhum `↓`, e vale dizer por quê: não estamos pedindo capacidade nova. Estamos pedindo que um dado
 que já existe, já auditado, atravesse a fronteira em vez de ser copiado nela.
+
+## FORMA PROPOSTA · 23/09 — o pai repassa o fundo como VALOR (para o veredito desta casa)
+
+Chegou pelo chat que recebe os envios do Berço, com a palavra da dona do produto: **o fundo das telas
+precisa chegar aos filhos (flavors) como valor — hex já resolvido —, e é o pai quem repassa.** O
+destinatário deste pedido, portanto, é **esta casa** (`packages/coreflow`), pela mesma doutrina da
+nota de 21/09 no pedido de 18/09: o `CoreflowBackdropScope` é nosso, ninguém pede ao avô.
+
+Nada abaixo foi codificado. É a forma mínima que satisfaz os dois pedidos, medida contra
+`origin/main` (`v0.117.0`) em 23/09, para a Agatha dizer se entra.
+
+### O que esta casa mediu, e o que o recado dizia
+
+| afirmação do recado | medido aqui (`v0.117.0`, 23/09) |
+|---|---|
+| `CoreflowProduto` não tem campo de fundo | confere: `coreflow_produto.dart` casa `fundo` só em comentário do logo (`:212`, `:217`); `fundosOferecidos`/`fundoPadrao` dão **zero** em `packages/` |
+| `CoreflowBackdrop` é enum e resolve as cores na pintura | confere: 7 valores (`coreflow_background.dart:45`); a base sai de `primary08`/`bgEscuro`/`bg` (`:203-204`) e os brilhos de `primary04`/`warning03`/`warning04` (`:250-293`) — **dentro do `build`, nunca materializado** |
+| o Berço já calcula e os polos estão no manifesto como hex | confere: `berco-envios/norteBenk/manifesto.json` → `extras.analogaFria #0089B4`, `analogaQuente #8755F3`, `complementar #FCB600`; `material.fundo = harmoniaComplementar`, `fundosOferecidos` com 4 |
+| o app recalcula em `arte_de_fundo_gerada.dart`, andaime declarado | confere, **com endereço**: 359 linhas em `origin/release/homologation` (com `test/core/theme/a_conta_do_berco_test.dart`, 8 casos); **não está em `origin/development`** — o trem de HML tem o andaime e o de dev não |
+| o emissor web já tem `coreflowPapeisCss` | confere (`coreflow_css.dart:50`), ao lado de `coreflowEsquemaCss`, `coreflowMedidasCss`, `coreflowTipoCss`, `coreflowGradientesCss`, `coreflowAjustesCss` — o fundo seria o sétimo bloco |
+| o gate `o_desenho_da_web_e_o_do_mobile` anda os blocos | confere, **mas ele mora nos filhos**: `coreflow_design_system/test/` e `norte_benk_coreflow/test/`, não no pai — cada filho cobra a própria folha |
+| o molde `produtoDe` tem `marcaVisual:` e `tipografia:` comentados | confere (`novo_filho.dart:171`, `:180`); `fundo`/`backdrop` aparece **1** vez no gerador, em prosa |
+
+### A forma, em cinco degraus
+
+1. **`CoreflowFundo` como DADO, não estilo.** `{id, rotulo, claro: CoreflowFundoResolvido, escuro:
+   CoreflowFundoResolvido}`, e o resolvido é `{base: Color, camadas: [{cor: Color, alpha, x, y,
+   escala}], tintaSobreOGradiente: Color}`. Um pintor genérico de camadas
+   (`CoreflowBackground.deDados(fundo)`) desenha qualquer receita — os três fundos do Berço
+   (`degradeSimples`, `harmoniaAnaloga`, `harmoniaComplementar`) **não precisam virar membros do
+   enum**. Os sete estilos de hoje continuam; ganham `CoreflowFundo.doPai(CoreflowBackdrop, paleta)`,
+   que **materializa** os valores que hoje só existem dentro da pintura (`:203-293`).
+2. **`CoreflowProduto` ganha `fundos: List<CoreflowFundo>` e `fundoPadrao`** — os itens 1 e 2 do
+   pedido de 18/09. O `CoreflowBackdropScope` lê `produto.fundoPadrao` em vez de cravar `imagem`
+   (`coreflow_background.dart:188`); a Aparência lista `produto.fundos` em vez de `.values` (item 8
+   da fila).
+3. **Emissão web: `coreflowFundosCss(produto)`** escreve `--diletta-fundo-<id>-base`,
+   `-camada-N-cor/-alpha/-x/-y/-escala` e `-tinta`, por modo, ao lado de `coreflowPapeisCss`. O gate
+   `o_desenho_da_web_e_o_do_mobile` de cada filho passa a andar os fundos também. **O IB consome a
+   folha; nunca recalcula** — é a tese da emenda acima (o giro é constante por marca; viaja o valor).
+4. **`novo_filho`: o molde ganha `fundos:` comentado** ao lado de `marcaVisual:` e `tipografia:`. A
+   ligação com o Berço é **de processo**, não técnica: o Berço substitui o `lib/<id>.dart` que o
+   gerador escreve, e o `manifesto.json` viaja na entrega (M13 do rastreio dos envios). Isso responde
+   ao «o que não sabemos» acima — o manifesto é arquivo e chega com a entrega; **falta só o campo onde
+   escrever**.
+5. **Gate de paridade, com data de validade.** Enquanto o andaime do app existir,
+   `a_conta_do_berco_test` compara o ENTREGUE (o valor do filho) com o RECALCULADO; quando o pai
+   desenhar dos dados, o andaime sai e o gate com ele.
+
+### O que isto muda no pedido de 18/09
+
+A ordem lá era **3 → 1 → 4** («o 1 não se faz antes do 3»: declarar uma lista de fundos antes de os
+fundos existirem é declarar o enum de novo). A forma acima **desfaz essa dependência**: o fundo passa
+a ser dado, então o produto declara a receita e o pai a pinta — o item 3 (os fundos do Berço
+existirem como membros do enum) deixa de ser pré-requisito. O item 2 (a arte do `imagem` declarada na
+marca) segue solto e segue sendo o único candidato a pedido ao avô.
+
+### O que a dona decide
+
+- **Dado ou enum?** É a bifurcação. Enum é o que esta casa tem (7 valores, pintura por caso, o `_ =>`
+  seguro por construção em `:195`); dado é o que faz o valor atravessar a fronteira sem o consumidor
+  saber pintar. O recado propõe dado **e** mantém o enum para os sete de hoje — os dois convivem.
+- **Onde o `tintaSobreOGradiente` é decidido.** O pedido diz «na origem, uma vez» (o Berço, com o
+  teto de alfa do auditor). Se o pai também derivar, são duas fontes; a forma acima deixa o pai só
+  **repassar**.
+- **Versão.** É campo novo em `CoreflowProduto` com default — compatível; entraria como minor.
+
+Rastreio completo dos envios (M1–M14): `~/Desktop/berco-envios/MELHORIAS-DO-ENVIO-2026-09-18.md`
+(M14 é este). O sinal de push é da Agatha; nada aqui foi enviado.
