@@ -184,3 +184,64 @@ npm ci     # nos três, sem tocar em lock nenhum
 ```
 
 Se ele passar, acabou. Se não passar, o que falhar é outro defeito e eu quero a medição.
+
+---
+
+## Retificação do pai — 2026-09-22, horas depois · a decisão inverteu
+
+**O veredito acima diz *restaurar vence avançar*. Está errado, e quem o derrubou foi a régua que eu
+escrevi hoje de manhã.**
+
+Julguei a minha própria decisão pendente pelos seis, como o contrato passou a exigir:
+
+| critério | | restaurar por force |
+|---|:-:|---|
+| manutenção | ↑ | os seus três locks voltam sem edição nenhuma |
+| escalabilidade | ↓ | o precedente vira *o pai empurra tag sobre tag quando julga certo*. E quem tiver dado `fetch` na janela recebe a tag mudando **uma segunda vez** — eu não tenho como provar que ninguém deu |
+| aplicação | ↑ | `npm ci` volta nos três |
+| aderência ao mercado | ↓ | a norma é inequívoca: tag publicada não se reescreve |
+| robustez | = | o restauro não muda o modo de falhar; quem muda é o gate |
+| arquitetura limpa e simples | ↑ | zero artefato novo |
+
+**Dois `↓`, e a régua diz que dois ou mais obrigam a reformular.** A régua derrubou a primeira
+resposta do próprio autor dela, em horas — o que é a prova mais barata de que ela mede alguma coisa.
+
+### O que saiu, então
+
+Nenhuma tag foi reescrita. Duas reemissões com nome novo:
+
+| tag | raiz | arquivos | versão |
+|---|---|--:|---|
+| `web-v0.207.0` | monorepo — **queimada** | 1575 | `…-monorepo` |
+| **`web-v0.207.1`** | pacote | 45 | `0.207.1` |
+| `web-v0.208.0` | monorepo — **queimada** | 1577 | `…-monorepo` |
+| **`web-v0.208.1`** | pacote | 45 | `0.208.1` |
+
+### E a sua linha cinco tinha razão antes do que você imaginava
+
+Você marcou robustez com `↓` e escreveu *«nada impede que aconteça de novo»*. **Aconteceu enquanto
+eu escrevia o veredito.** A `web-v0.208.0` saiu com o mesmo defeito, criada à mão sobre o commit de
+release: 1577 arquivos. Duas ocorrências da mesma classe em 24 horas, e a segunda fui eu.
+
+O gate entrou junto — `tool/a_tag_web_carrega_o_pacote.py`, que afirma por tag: a raiz tem
+`package.json` e `index.js`; o `package.json` é o do pacote web e não o do monorepo; a versão
+declarada é a do nome da tag; e o número de arquivos fica abaixo do teto que separa pacote de
+repositório. **Medido nas 23 tags `web-v*`: 21 passam, e as 2 reprovadas são exatamente as duas do
+incidente.**
+
+E ficou ABERTO no meu ledger o que o gate não resolve: *por que a emissão se faz à mão quando existe
+script*. Enquanto cortar tag for um comando que alguém digita, a régua acusa **depois** do push — e
+cada acusação custa uma versão queimada.
+
+### O que você faz agora, e desta vez tem trabalho
+
+**Edite os três `package-lock.json` à mão.** É o preço de não reescrever a tag, e eu decidi sabendo
+que o preço é seu e não meu — está escrito aqui para você poder cobrar.
+
+```
+#web-v0.207.0   →   #web-v0.207.1      (ou direto para #web-v0.208.1)
+```
+
+Depois, `npm ci` nos três. Se passar, acabou. `resgate/web-v0.207.0-orfa` fica no meu repo como
+testemunha da emissão original — não é tag, não se instala, e existe para ninguém ter de acreditar
+em mim sobre o que a `0.207.0` era.
