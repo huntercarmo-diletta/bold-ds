@@ -53,6 +53,30 @@ existir do nosso lado:
 
 Com isso, app e IB **consomem**. Hoje os dois transcrevem, e o único que calcula diz que não deveria.
 
+## EMENDA de 23/09 — o pedido é menor do que escrevemos
+
+A primeira versão deste pedido falava em «a receita de cada fundo», e tratamos o giro de matiz como
+coisa que o consumidor teria de calcular na hora — chegamos a concluir que o IB precisaria de
+sintaxe de cor relativa (`oklch(from …)`), que este repositório nunca usou.
+
+**Está errado, e a correção encolhe o pedido.** O giro é CONSTANTE POR MARCA: o polo análogo do azul
+da Norte Benk é sempre a mesma cor. O resultado não é uma conta a refazer a cada pintura — são
+**três hexadecimais por fundo**, do mesmo tipo que `--diletta-lockup01` já é hoje.
+
+Ou seja: o consumidor nunca precisou da capacidade, e sim do VALOR. E valor é o que o DS já sabe
+fazer viajar.
+
+Isso também responde à pergunta óbvia — *«o Berço não gera isso? não dá para pegar de lá?»*.
+Medimos: o `berco-coreflow.html` não está em nenhum dos três repositórios (`bold-ds`, `ds-diletta`,
+`app-newbold`). O que existe alcançável é o teste que reproduz a conta
+(`test/core/theme/a_conta_do_berco_test.dart`), e ele carrega a cor de AÇÃO (`#1D72FF`) e os
+limites — não os polos já girados. O app os calcula em tempo de execução e nunca os materializa
+onde a web leia.
+
+**Então o pedido, na forma mínima**: para cada fundo que um filho oferece, publique as CORES já
+resolvidas — os polos, a base e a tinta sobre o gradiente — junto com os alfas e as posições. O giro
+de matiz, o teto de contraste e a escolha da base ficam onde já estão: na origem, uma vez.
+
 ## O que NÃO pedimos
 
 Não pedimos que o pai desenhe os três fundos do Berço que ele ainda não tem (`degradeSimples`,
