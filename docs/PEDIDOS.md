@@ -207,6 +207,8 @@ delegar e sobrou o raio — 22 aqui, `r24` cravado na variante. A linha do seu l
 
 | aviso | tipo | respondido? |
 |---|---|---|
+| [a tag que não carrega o pacote](avisos/2026-09-22-a-tag-que-nao-carrega-o-pacote.md) | CONSELHO | sim — escrevemos a régua das quatro asserções (`toda_tag_web_carrega_o_pacote_test`), com o nome do nosso pacote e teto derivado da nossa medição. 18 tags, 18 passam |
+| [ficamos na `web-v0.207.1`](avisos/2026-09-23-ficamos-na-web-v0-207-1.md) | **AVISO NOSSO, a ele** | não pede resposta — diz onde ficamos, por que, e corrige uma premissa do nosso pedido da tag que caiu |
 | [medir o raio do seu produto](avisos/2026-07-29-medir-o-raio-do-seu-produto.md) | CHAMADO | sim, no próprio arquivo |
 | [faz a limpa](avisos/2026-07-30-faz-a-limpa.md) | CONSELHO | sim, no próprio arquivo |
 | [fechamento de ciclo em quatro linhas](avisos/2026-07-30-fechamento-de-ciclo-em-quatro-linhas.md) | CONSELHO | sim, no próprio arquivo |
