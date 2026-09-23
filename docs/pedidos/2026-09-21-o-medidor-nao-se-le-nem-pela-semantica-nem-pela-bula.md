@@ -1,6 +1,6 @@
 # PEDIDO · O medidor não se lê — nem por quem usa leitor de tela, nem por quem lê a bula dele
 
-- **de**: conta-bold-ds (filho A) · **para**: ds-diletta
+- **de**: conta-bold-ds (filho B) · **para**: ds-diletta
 - **consome**: ds-diletta `v0.204.0` · `web-v0.204.0`
 - **bloqueante?**: **sim para um fluxo, não para a peça.** Uma auditoria WCAG 2.2 reprovou hoje o
   fluxo «Meus limites» — fluxo de dinheiro — e o 4.1.2 desta peça é um dos motivos que sobrevivem à

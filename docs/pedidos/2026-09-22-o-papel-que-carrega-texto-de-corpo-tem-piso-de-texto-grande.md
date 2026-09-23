@@ -1,6 +1,6 @@
 # PEDIDO · O papel que carrega texto de corpo tem piso de texto GRANDE — e quem declara matiz não tem piso nenhum
 
-- **de**: conta-bold-ds (filho A) · **para**: ds-diletta
+- **de**: conta-bold-ds (filho B) · **para**: ds-diletta
 - **consome**: ds-diletta `v0.204.0` (o que o filho pina) · conferido também na ponta, `v0.207.0`
 - **bloqueante?**: **sim para o modo claro deste app, e o modo claro deste app existe** — está na
   tela de Aparência, uma opção entre três, persistida

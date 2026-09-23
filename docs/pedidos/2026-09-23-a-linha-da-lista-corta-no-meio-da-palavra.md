@@ -1,6 +1,6 @@
 # PEDIDO · A linha da lista corta no meio da palavra — e o slot que eu uso não tem onde abrir a segunda
 
-- **de**: conta-bold-ds (filho A) · **para**: ds-diletta
+- **de**: conta-bold-ds (filho B) · **para**: ds-diletta
 - **consome**: ds-diletta `v0.204.0` (o que este repo pina) · conferido também no que o app
   vendoriza hoje, `v0.180.0` — **24 tags de distância, byte a byte o mesmo**
 - **bloqueante?**: **sim para uma tela, e a tela é de dinheiro.** O fluxo «Meus limites» foi ao

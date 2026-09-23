@@ -18,6 +18,221 @@ A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
 
 ---
 
+## Rodada de 2026-09-23 · fim de tarde
+
+Cobre **22/09 17h50 → 23/09 17h44**. Foi o dia em que o pai deixou de ser `0.x`: **nove tags numa
+manhã, da `v0.208.0` à `v2.1.0`**, com duas majors. Nenhuma delas responde um pedido nosso, porque
+nenhum dos nossos seis pedidos à linguagem chegou a ele. Ao medir, apareceu um erro desta casa, que
+seria barato de consertar antes do sinal ao pai: **os cinco pedidos que esta rotina e os chats
+escreveram de 21 a 23/09 se identificavam como «filho A», e no ledger do pai o filho A é o CPF
+Seguro.** O Bold é o **filho B**. Consertado nesta rodada, antes de qualquer envio.
+
+**Chats lidos** (transcrição, não resumo de terceiro):
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| Meus limites (continuação) | `claude_newbold` · `9ef7cfe2` | 16h11 | a metade de *enforcement* da feature, a comparação app × Figma do `revisor-visual`, **o DS vendorizado `v0.102.1 → v0.113.0` na branch da feature**, o pedido do trilho do medidor e o item 9 (rodapé), os dois já no remoto em `5b2c02b` |
+| a adoção do DS pelo webadmin | `claude_newbold` · `0f441ea9` | 17h44 | o `core-flow-wa` instalado, a prova no navegador de que o Bold ganha do avô em 6 de 6 papéis, a catraca da peça crua (83 em 35 arquivos) e **o remendo `::part(botao)`** a partir do handoff da Tatiana. **O pedido novo do item 1 sai daqui** |
+| fundo como valor | `claude_newbold` · `43e09e89` | 16h35 | a pergunta dela, *«o flavor deveria levar consigo essa informação como código hex»*; o M14 ao Berço e a forma proposta ao pai |
+| Envios do Berço → M14 | `claude_newbold` · `22128cb9` | 16h26 | o Berço V91: `material.fundos` resolvido no manifesto, 144 variáveis no `tokens.css`, o snippet Dart. **Nada de repo do DS** |
+| recado do Berço | `bold-ds-pacote` · `aeb36817` | 16h27 | `39f1e79`, a forma proposta no pedido do fundo, **commitado local e não enviado** |
+| esta rotina, rodada anterior | `bold-ds-pacote` · `a8f29c2d` | 10h15 | dois rebases do `PEDIDOS.md` contra a Tatiana e o diagnóstico do bump parado no app |
+| Desktop Commander | `claude_newbold` · `18a6aa53` | 15h35 | plugin da organização desinstalado; **nada de DS** |
+| `aprendizado-do-dia` (rotina) | `claude_newbold` · `ba8d0bdf` | 10h24 | ignorada por contrato |
+
+---
+
+### 0 · O QUE O PAI FEZ — a primeira major, e o que ela cobra de nós
+
+52 commits na `main` do `ds-diletta` entre 22/09 17h34 e 23/09 16h41, todos do Hunter, e as tags
+`v0.208.0` · `v0.209.0` · `v1.0.0` · `v1.0.1` · `v1.0.2` · `v1.1.0` · `v2.0.0` · `v2.0.1` · `v2.1.0`,
+cada uma com o par `web-`. **Os vereditos do dia são todos do filho A** (CPF Seguro: dropdown
+suspenso, dependência entre props, item de menu sem ícone, rótulo que não encolhe, botão
+destrutivo, `chatLift`, escada de níveis, taxonomia). **Nenhum dos nossos seis pedidos à linguagem
+está no ledger dele** (`docs/PEDIDOS.md`, conferido por assunto: medidor, título, piso de texto,
+linha da lista, trilho, fundo). Continuam escritos, não recebidos.
+
+O que a subida cobra do Bold, medido em `origin/main` deste repo (fora da cópia do avô) e na
+branch de trabalho do app:
+
+| mudança do pai | onde | Bold (`packages/`) | app (`lib/`) |
+|---|---|---|---|
+| `DilettaStatusTone.danger` → `.error` | `v1.0.0`, alias `@Deprecated` | **3 sítios** — `coreflow_autorizacao.dart:162`, `coreflow_etiqueta.dart:182`, `coreflow_saldo.dart:138` — e 1 teste (`a_autorizacao_pendente_test.dart:144`) | 8 arquivos |
+| `DilettaTextLinkTone.neutro` → `.neutral` | `v1.0.0`, alias | zero | 2 sítios, `home_tab_redesign.dart:193` e `:256` |
+| `chatLift` apagado | `v2.0.0`, **sem alias** | zero (só prosa no doc de adoção) | zero |
+| `navGlowDe` · `footerUpDe` · `heroLift` · `cardLift` · `cardPvDe` | `v1.0.0`, removidos | zero | zero |
+| o destrutivo em repouso pinta `errorSolid` | `v1.0.2` | **muda pixel** em todo botão de erro do Dart; o pai mediu 3,76 nas paletas dos filhos antes do conserto. Medir na subida, não presumir | — |
+
+**Nada quebra a compilação do Bold na subida**: os aliases continuam lá. E aí está uma contradição
+que vale uma linha ao pai: o `@Deprecated` diz *«Sai na v1.1.0»*
+(`diletta_status_tag.dart:40`, `diletta_text_link.dart:39`, na `v2.1.0`), a `v1.1.0` passou, duas
+majors passaram, e eles continuam. A própria `v1.0.0` escreveu a regra que explica: *«renomeação
+de nome público só sai em major»*. Então *«sai na v1.1.0»* nunca foi possível. Isso não é pedido,
+porque não nos custa nada. É nota para o próximo sinal: a data de saída escrita no alias está errada.
+
+**A deriva, e ela piorou num dia:**
+
+| onde | filho | pai | medido em |
+|---|---|---|---|
+| **app**, `origin/development` e `origin/release/homologation` | `v0.102.1` | `v0.180.0` | `packages/ds_vendor.json` |
+| **app**, `origin/feat/grupos-de-limite-administracao` | **`v0.113.0`** | **`v0.204.0`** | o mesmo arquivo, desde `e8e73b17` (23/09) |
+| **filho**, `main` | — | `v0.207.0` + `web-v0.207.1` | `packages/coreflow/pubspec.yaml:23` |
+| **pai**, ponta | — | **`v2.1.0`** = `origin/main` `fb30e58` | `ds-diletta` |
+
+**Nove tags entre o filho e o pai**, duas delas majors. **O `ds-diletta` local está
+600 à frente e 657 atrás do remoto**, com um arquivo solto (`MELHORIAS-DO-DS-2026-09-11.md`).
+Esse checkout não serve de medida, e esta rodada mediu tudo pelo `origin/main` e pelas tags.
+
+---
+
+### 0b · Os nossos cinco pedidos diziam «filho A» — consertado antes do sinal
+
+O ledger do pai é claro, e a razão está na primeira página dele: *«pseudônimo estável (A, B, C)…
+você reconhece os seus pelo conteúdo»*. O `CHANGELOG` da `v1.0.0` nomeia o filho A como
+`cpf-seguro-flutter`; o comentário da `v1.0.2` em `diletta_scheme.dart` diz *«O filho B declarou
+branco sobre o rosa `#FE3976`»*, que é o nosso. Dos 54 pedidos de setembro nesta pasta, 40 dizem
+`filho B`, e **5 diziam `filho A`**, justamente os cinco mais novos:
+
+- [o medidor não se lê](pedidos/2026-09-21-o-medidor-nao-se-le-nem-pela-semantica-nem-pela-bula.md)
+- [o título da tela não é cabeçalho](pedidos/2026-09-22-o-titulo-da-tela-nao-e-cabecalho-para-quem-usa-leitor-de-tela.md)
+- [o piso de texto grande](pedidos/2026-09-22-o-papel-que-carrega-texto-de-corpo-tem-piso-de-texto-grande.md)
+- [a linha da lista corta no meio da palavra](pedidos/2026-09-23-a-linha-da-lista-corta-no-meio-da-palavra.md)
+- [o trilho do medidor](pedidos/2026-09-23-o-trilho-do-medidor-e-derivado-contra-uma-pagina-que-ninguem-pinta.md)
+
+O cabeçalho de cada um trocou `(filho A)` por `(filho B)`, e nada mais mudou. **Os cinco foram
+remedidos na `v2.1.0`, e os cinco defeitos continuam lá**: `_trilhoDerivado(p.bgClaro ?? p.white…`
+em `diletta_scheme.dart:472`; zero `Semantics` em `diletta_progress_bar.dart`; `fontSize: 13` em
+`diletta_inline_alert.dart:116`; zero `header: true` em `packages/diletta_design_system/lib`; e o
+`diletta_app_list.dart` só mudou uma linha entre `v0.204.0` e `v2.1.0`, a do alias `danger`. O
+«consome: v0.204.0» de cada um continua verdadeiro, porque é o pino que o app vendoriza.
+
+> **A classe**: o pseudônimo é a única coisa num pedido que o pai não mede, porque ele confia que o
+> filho sabe quem é. Um pedido com o pseudônimo errado chega com a medição certa e a origem errada,
+> e o ledger dele passa a atribuir ao CPF Seguro o que é do Bold. Nada acusa: o gate do índice
+> confere arquivo × linha, não cabeçalho × ledger.
+
+---
+
+## 1 · PEDIDO NOVO — a peça web crava o raio que a paleta declara
+
+[o arquivo](pedidos/2026-09-23-a-peca-web-crava-o-raio-que-a-paleta-declara.md) · **ao pai da
+linguagem** · **não depende de nenhum outro item**. Por isso vem primeiro.
+
+A Tatiana mandou à Agatha em 23/09 um handoff medido (*«o raio e a forma do app contra os da
+web»*). No chat do webadmin, ela escolheu remendar no consumidor: *«quero fazer essas correções por
+aqui. todos os estilos devem seguir o que foi estipulado pelo design system e está no catálogo»*.
+O remendo entrou (`9e342ed` no `core-flow-wa`, local, não enviado). **O pedido não existia**, nem
+aqui nem no ledger do pai. Esta rotina remediu as três linhas na `v2.1.0`:
+
+| peça | web, `v2.1.0` | Bold declara | app desenha |
+|---|---|---|---|
+| botão | `diletta-button.js:148` `999px` | 16 (`bold_palette.dart:533`, `bold-tokens.css:244`) | 16 |
+| campo | `diletta-input.js:144` `8px` | 16 (`bold-tokens.css:246`) | 16 |
+| caixa do dropdown | `diletta-dropdown.js:132` `8px` | — | pílula |
+
+**O que tornou isto pedido e não preferência nasceu hoje no próprio pai.** A `v2.0.0`, que apagou
+o `chatLift`, escreveu em `specs/design-system-button/spec.md:155`: *«a FORMA é a declarada, sem
+exceção»*, e o botão é `destino: ambos`. A instância web não abre exceção à forma declarada.
+Ela simplesmente nunca a lê.
+
+**O que o chat disse e o código confirma**: o campo e o dropdown já estavam remendados no webadmin
+desde 22/09 (`tokens/index.css:134-135`), e o botão era o que sobrava, com `999px` na tela e
+`--diletta-formaDeBotao: 16px` declarado e ignorado.
+
+---
+
+## 2 · O rodapé mede 20 onde a grade diz 24 — NOSSO, de pé, e agora com dono no app
+
+O item 9 da rodada de 21/09, escrito por outro chat em `5b2c02b`. **Remedido hoje: continua**.
+`coreflow_rodape.dart:73-74` recua com `DilettaSpacing.s5` dos dois lados, e
+`coreflow_espaco.dart:25` declara `gutter = DilettaSpacing.s6`. Conserto de uma linha, e o gate do
+gutter passa a olhar o rodapé. **Código, então não entra sem pedido dela.**
+
+**O que mudou desde que foi escrito**: o rodapé com o aviso dentro da barra já chegou ao app, mas
+só à branch da feature. `e8e73b17` vendorizou `v0.113.0` em `feat/grupos-de-limite-administracao`
+(suíte: 4.041 passam, 2 falhas conhecidas). **`development` e `homologation` continuam em
+`v0.102.1`**, e a `chore/ds-v0.113.0` (`1dbab237`) ficou parada e redundante. O conserto da foto
+de 21/09 vai entrar no trem **junto com a feature de limites**, não antes dela. Isso é decisão
+dela, não defeito, mas ninguém tinha escrito.
+
+Quando o `s5 → s6` sair, ele pousa numa tag nova do filho, e o app precisa de outra vendorização.
+**Por isso vale fazer este item ANTES de vendorizar de novo**, não depois.
+
+---
+
+## 3 · O fundo viaja como valor — a forma proposta está pronta e parada no disco
+
+A pergunta foi dela (*«o flavor deveria levar consigo essa informação como código hex para ser
+aplicado a qualquer tipo de código»*), e ela mandou encaminhar ao pai. Em 23/09:
+
+- **o Berço já emite o valor** (V91, fora de qualquer repo do DS): `material.fundos` com `base`,
+  camadas em hex com alfa, posição e escala, e a tinta, por modo; 144 variáveis no `tokens.css` da
+  Norte Benk; um snippet Dart para o app;
+- **a forma de o pai repassar** entrou no [pedido do fundo](pedidos/2026-09-23-o-fundo-nao-viaja-com-o-filho.md)
+  como seção proposta, em `39f1e79`. **Esse commit é local**: a `main` está 1 à frente do remoto.
+  Ele desfaz a ordem 3 → 1 → 4 do pedido de 18/09, porque com o fundo como dado os três fundos do
+  Berço não precisam virar membros do enum;
+- **a decisão que sobra é dela**: dado × enum. A proposta mantém os sete estilos de hoje e põe o
+  dado ao lado.
+
+**Depende de**: o sinal ao pai (item 5) e a decisão dado × enum. **O app espera por ele**: o
+andaime `lib/core/theme/arte_de_fundo_gerada.dart` só se aposenta quando o pai carregar
+`CoreflowProduto.fundos`. O chat do Berço registrou um desvio de cerca de 7% entre a conta do app e
+a do site onde o véu do estilo `imagem` não tem compensação exata. **Esse número não foi medido por
+esta rotina**. Ele sai do chat e fica aqui como afirmação, não como medida.
+
+---
+
+## 4 · Rastro do dia fora dos três repos — o webadmin, que é consumidor web do Bold
+
+`~/Desktop/core-flow-wa`, branch `feat/a-adocao-do-ds-pelo-webadmin`, **quatro commits locais e
+nenhum enviado** (`9e4d50f` · `e2d43da` · `75319d7` · `9e342ed`). A branch
+`chore/o-pino-sobe-tres-tags-e-a-rampa-de-marca-chega` (`461bc31`) ficou separada, com o pino
+`web-v0.114.0 → web-v0.117.0`, que é aditivo.
+
+Não é repo desta família e não entra na lista de envio. Fica registrado por dois motivos:
+
+- **o remendo `::part(botao)` depende do item 1**. Quando o pai entregar, o remendo sai e a trava
+  dele em `formas.test.ts` tem que ser invertida, senão ela passa a guardar o remendo;
+- **a catraca da peça crua (83) mediu vocabulário que falta na linguagem web**, com razão: caixa de
+  seleção ×8, data ×2, cor, arquivo, intervalo, área de texto ×2. Destes, só a data tem veredito
+  (`date-field` vai a `ambos`, 22/09, entrega na `v0.208.0`). **Nada disso vira pedido nesta
+  rodada**: são pedidos do consumidor web, e a régua da recusa de 22/09 vale (*«pedir vocabulário
+  que ninguém especificou é diferente de pedir a metade de um contrato que já está escrito»*).
+
+---
+
+## 5 · O que ninguém está fazendo, e trava os itens 1, 3 e os cinco de 0b
+
+**O sinal ao pai.** Pelo contrato, o push não entrega: entrega o aviso humano ao `ds-diletta`.
+Hoje há **sete** pedidos à linguagem escritos e nunca recebidos: medidor, título, piso de texto,
+linha da lista, trilho, fundo (com a forma proposta) e forma na web. Enquanto isso, o filho A teve
+oito julgados num dia. **O consumo atrás cresce a cada tag**: o pai que receber os nossos pedidos
+já está na `v2.1.0`, e todos eles citam `v0.204.0` ou `v0.207.0` como o que consomem. Os pedidos
+continuam certos, porque o defeito foi remedido na ponta, mas a subida do pino deste filho (item 6)
+encurtaria a conversa.
+
+## 6 · A subida do pino deste filho — `v0.207.0 → v2.1.0`, e ela é barata
+
+A tabela do item 0 é o custo inteiro: **3 sítios e 1 teste** nossos, todos com alias, e zero
+`chatLift`. O que tem preço é o **pixel do destrutivo** (`v1.0.2`). **Depende de nada**, mas é
+código e tag, então é decisão dela. Registrado para que a próxima rodada não tenha que remedir.
+
+---
+
+## O que esta rodada escreveu, e o que espera o envio dela
+
+| arquivo | o quê |
+|---|---|
+| `docs/pedidos/2026-09-23-a-peca-web-crava-o-raio-que-a-paleta-declara.md` | pedido novo |
+| `docs/PEDIDOS.md` | a linha dele no topo da tabela da linguagem |
+| cinco pedidos de 21–23/09 | `(filho A)` → `(filho B)` no cabeçalho |
+| esta rodada | — |
+
+O gate `todo_pedido_esta_no_indice_test.dart` passou (4 de 4) com a árvore desta rodada.
+
+---
+
 ## Rodada de 2026-09-22 · fim de tarde
 
 Cobre **21/09 17h57 → 22/09 17h50**. O dia teve um chat só produzindo DS, e ele produziu muito: o

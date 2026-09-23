@@ -1,6 +1,6 @@
 # PEDIDO · O trilho do medidor é derivado contra uma página que ninguém pinta — e some no claro
 
-- **de**: conta-bold-ds (filho A) · **para**: ds-diletta
+- **de**: conta-bold-ds (filho B) · **para**: ds-diletta
 - **consome**: ds-diletta `v0.204.0` (o que este repo pina, e o que o app vendoriza desde 23/09)
 - **bloqueante?**: **sim para um fluxo de dinheiro no modo claro**, e o modo claro deste app existe
   (tela de Aparência, três opções, persistida). O medidor de teto de «Meus limites» é a única

@@ -1,6 +1,6 @@
 # PEDIDO · O título da tela não é cabeçalho — `header: true` tem ZERO ocorrências na linguagem inteira
 
-- **de**: conta-bold-ds (filho A) · **para**: ds-diletta
+- **de**: conta-bold-ds (filho B) · **para**: ds-diletta
 - **consome**: ds-diletta `v0.204.0` (o que o filho pina) · conferido também na ponta, `v0.207.0`
 - **bloqueante?**: **não.** Eu entrego sem isso embrulhando o título no meu `_TituloPrimario` — uma
   linha, na minha casa, cobrindo as 102 chamadas do app. O preço está em «Se você disser não», e
