@@ -1,6 +1,6 @@
 {
   "name": "norte-benk-web",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "type": "module",
   "description": "A INSTÂNCIA WEB do Norte Benk: os custom elements da linguagem, com a tinta deste produto.",

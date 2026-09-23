@@ -20,6 +20,60 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.117.0] — 2026-09-23
+
+### A rampa de marca passa a viajar como token — nove degraus, por nome
+
+Papel semântico (`primary`, `primaryHover`, `primarySubtle`) basta para **pintar** componente e não
+basta para **desenhar**. Quem monta um fundo, um brilho, uma malha precisa do DEGRAU, e até aqui a
+web não tinha de onde tirá-lo.
+
+### O efeito foi medido do lado de fora
+
+O `BoldBackdrop` do Internet Banking monta três brilhos com três paradas da curva do **lockup** do
+Conta BOLD (`lockup01`, `05`, `08`) — porque era o que existia publicado. Só que a curva do lockup é
+o desenho do símbolo DELE: oito paradas varrendo matiz, de rosa a amarelo. Quem não desenha curva
+própria recebe a derivada, de **duas** (`CoreflowGradients.daPaleta`), e os dois brilhos que faltam
+morrem calados — `var()` que não resolve mata a declaração inteira.
+
+Do lado Flutter o pai nunca teve esse problema: `coreflow_background.dart` monta os brilhos com
+`p.primary04` da rampa do próprio filho, e nenhuma parada de lockup. **A web é que estava sem a
+peça, e quem precisou dela foi buscar o que havia.**
+
+### A rampa sai SEM bloco de modo, e isso é medido
+
+`primary04` da Norte Benk vale `#1d72ff` no esquema claro e no escuro. A rampa é a identidade da
+marca; quem inverte por brilho são os papéis derivados dela.
+
+E ela **não é** a curva do lockup: a curva varre matiz, a rampa é escada de luminosidade. São coisas
+diferentes, e o gate novo separa as duas — degrau declarado dentro de um bloco escuro reprova,
+porque deixou de ser identidade.
+
+| | nomes antes | nomes agora |
+|---|---:|---:|
+| Conta BOLD | 161 | **170** |
+| Norte Benk | 82 | **91** |
+
+### O molde vem junto
+
+`coreflowRampaCss` é chamada pelos dois emissores **e pelo molde do gerador**. O conserto anterior
+desta classe foi para a instância e não para o molde, e foi assim que nenhum filho gerado ficou
+publicável; desta vez o gate do gerador cobrou o exemplo sozinho.
+
+### E uma régua nova, que não é sobre tokens
+
+`toda_tag_web_carrega_o_pacote_test` afirma quatro coisas por tag: a raiz tem `package.json` e
+`index.js`; o `package.json` é o do pacote e não o do monorepo; a versão declarada é a do nome da
+tag; e a contagem de arquivos fica abaixo do teto que separa pacote de repositório. **Medida nas 16
+tags: as 16 passam.**
+
+Ela nasceu de um conselho do pai, depois de o defeito acontecer duas vezes na casa dele em 24 horas.
+O limite dela fica dito porque muda o valor: **acusa depois do push**. Troca «versão queimada em
+silêncio» por «versão queimada com alarme», e não é o conserto — o conserto é a emissão sair da mão.
+
+**Norte Benk vai a `0.1.2`** (`norte-benk-web-v0.1.2`). O avô viaja em `web-v0.207.1`, a reemissão
+com raiz de pacote.
+
 ## [0.116.0] — 2026-09-22
 
 ### Todo filho emite a própria família tipográfica — o segundo saía em Times
