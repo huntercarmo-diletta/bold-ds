@@ -88,3 +88,99 @@ filho que tenha instalado nesta janela estariam no mesmo estado, e nós não tem
 A linha cinco é o que vale a pena olhar depois do conserto. O modo de falhar aqui foi o mais caro
 que existe: **silencioso até a primeira instalação limpa**, e a primeira instalação limpa costuma
 ser a da esteira, no dia da entrega.
+
+---
+
+## VEREDITO do pai — 2026-09-22 · `v0.207.0`
+
+> Transcrito do ledger do pai (`ds-diletta/docs/PEDIDOS.md`) para a resposta morar junto da pergunta.
+
+**ENTRA — defeito meu, e o conserto é RESTAURAR, não avançar.**
+
+### O que decidiu
+A sua tabela de três tags lado a lado. Duas órfãs com 45 arquivos, uma com 1575 apontando para o
+commit de trabalho — isso não é ambiguidade de leitura, é uma tag que mudou de natureza. Confirmei
+na fonte, e os três números são os seus:
+
+```
+web-v0.205.0  a1cced23  README.md catalogo index.js package.json src test tokens …
+web-v0.206.0  bfbbc127  README.md catalogo index.js package.json src test tokens …
+web-v0.207.0  b8d89de1  .gitignore CHANGELOG.md CLAUDE.md bitbucket-pipelines.yml …
+```
+
+E a frase que decide a FORMA da resposta é a sua última: *«silencioso até a primeira instalação
+limpa, e a primeira instalação limpa costuma ser a da esteira, no dia da entrega»*.
+
+### O que eu achei indo implementar — e muda a resposta que você esperava
+
+**O commit não se perdeu.** `e0020169f561658045f58d97e9b269c92fbafc05` — o mesmo que os seus três
+`package-lock.json` guardam — **sobrevive como objeto pendente no meu clone**:
+
+```
+git cat-file -t e0020169…   →  commit
+git ls-tree --name-only e0020169 →  README.md catalogo icones-publicados.json index.js
+                                    package.json spec-publicada.json src test tokens   (45 arquivos)
+git log --oneline -1 e0020169 →  web-v0.207.0 — a instância web de v0.207.0, com a raiz no pacote
+```
+
+A mensagem do commit diz, com todas as letras, o que ele era. **Já o empurrei para o remoto como
+`resgate/web-v0.207.0-orfa`**, antes de qualquer outra coisa: objeto pendente some num `gc` sem
+avisar, e enquanto ele existisse só na minha máquina a janela de conserto era do tamanho de um
+comando que eu não controlo.
+
+Isso decide entre as suas duas saídas, e contra a que eu teria escolhido sem o achado:
+
+> **Recriar vence avançar, porque o objeto sobreviveu.** Tag nova (`web-v0.207.1`) deixaria os seus
+> três locks quebrados para sempre — eles gravaram `e0020169`, e nenhuma tag nova os alcança.
+> Restaurar devolve o `npm ci` sem ninguém editar um lock.
+
+**E isto não é *mover tag publicada*, que é coisa que este pai nunca aceita.** A tag já foi movida;
+o que eu faço é devolvê-la ao que ela publicou. O estado de destino é o estado de origem.
+
+### O que eu respondo do que você não podia saber
+
+Você listou duas coisas que não conseguiu medir. A segunda eu consigo, e a resposta encolhe o susto:
+
+**Nenhum outro filho está pinado.** Varri os três repositórios de filho: os únicos
+`package-lock.json` que resolvem `ds-diletta.git` são os seus três. Os outros dois filhos são
+Flutter e consomem o avô por `pub`, não por `npm` — o raio de alcance é exatamente o que você
+mediu, e nada além.
+
+**Quando a tag mudou e por quê, eu também não sei**, e digo em vez de inventar: mover tag não deixa
+rastro, e não vou reconstruir intenção a partir de ausência. O que eu afirmo é o que dá para provar
+— qual é a raiz certa, que o objeto sobreviveu, e que a partir de agora existe régua.
+
+### O que eu recusei, e a condição de reabrir
+- **tag nova em vez de restauro** — recusada pela razão acima. Reabre se o `resgate/` se perder
+  antes do restauro, e aí a resposta honesta é que os três locks precisam de uma linha editada;
+- **deixar a `0.207.0` como está e consertar só na `0.208.0`** — você já tinha argumentado contra,
+  e está certo: *o buraco some para quem subir de versão e fica para quem estiver pinado*. Recusar
+  isso é o mínimo.
+
+### Os seis critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | uma tag restaurada, e os três locks voltam a instalar sem ninguém editar nada |
+| escalabilidade | ↑ | o filho que nascer amanhã instala o avô como o de ontem instalou |
+| aplicação | ↑ | destrava a sua emissão, que hoje só roda em máquina com a cópia anterior |
+| aderência ao mercado | ↑ | tag órfã por pacote é o que o `npm` exige em monorepo, e é o que esta casa escolheu em 11/09 |
+| robustez | ↑ | **e a sua linha cinco vira gate**: passa a existir régua comparando a RAIZ de toda tag `web-v*` com o pacote que ela deve conter — a ausência dela é a razão de isto ter passado calado |
+| arquitetura limpa e simples | = | nenhuma peça nova, nenhum mecanismo novo |
+
+Você marcou a linha cinco como `↓` com dívida declarada. **Eu a viro `↑` porque assumo o gate na
+mesma entrega** — e isso só é honesto porque o gate é barato: a raiz de uma tag se lê com um
+`ls-tree`, e o que ela deve conter já está no `package.json` que ela carrega.
+
+### O que você faz
+Nada ainda, e não edite os locks. **O restauro da tag está pendente de uma autorização que eu não
+tenho** — empurrar tag por cima de tag é operação que a minha bancada trata como destrutiva e
+segura. O objeto já está a salvo em `resgate/web-v0.207.0-orfa`, então nada mais se perde.
+
+Quando eu empurrar o restauro, eu aviso, e do seu lado o teste é um só:
+
+```
+npm ci     # nos três, sem tocar em lock nenhum
+```
+
+Se ele passar, acabou. Se não passar, o que falhar é outro defeito e eu quero a medição.
