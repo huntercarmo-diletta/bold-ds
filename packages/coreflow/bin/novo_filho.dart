@@ -232,9 +232,10 @@ derivado da sua marca daria um produto que não sabe dizer que algo deu errado.
 /// o avô publica `vX` para o pacote Dart e `web-vX` para o web, no mesmo repo, sob o mesmo número.
 ///
 /// Fica aqui como constante porque o gerador escreve JSON, não `pubspec`. O gate
-/// `o_filho_gerado_recebe_o_mesmo_avo_test` prova que este número é o mesmo que o `pubspec` do pai
-/// declara — duas tags diferentes seriam duas versões da linguagem no mesmo produto.
-const tagWebDoAvo = 'web-v0.207.0';
+/// `o_filho_gerado_recebe_o_mesmo_avo_test` prova que este número é a MESMA LINGUAGEM que o `pubspec`
+/// do pai declara — mesmo `X.Y`, patch da web igual ou maior, porque o avô reemite tag web queimada
+/// com o patch seguinte e o Dart não acompanha. Duas linguagens no mesmo produto é o que ele proíbe.
+const tagWebDoAvo = 'web-v0.207.1';  // a instância web de v0.207.0, REEMITIDA (22/09)
 
 String emissorDe(Opcoes op) => '''
 // ESCREVE `web/tokens/${_arquivo(op.id)}-tokens.css`. **Não é gate** — gate é o vizinho

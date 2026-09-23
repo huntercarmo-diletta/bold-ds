@@ -83,9 +83,13 @@ void main() {
     final pubspec = File('pubspec.yaml').readAsStringSync();
     final tagDart = RegExp(r'ref:\s*(v[\d.]+)').firstMatch(pubspec)?.group(1);
     expect(tagDart, isNotNull, reason: 'o pai deixou de pinar o avô por tag');
-    expect(gerador.tagWebDoAvo, 'web-$tagDart',
+    // O par não é mais igualdade de string: o avô reemite tag web queimada com o patch seguinte
+    // (`web-v0.207.1` é «a instância web de v0.207.0», 22/09) e o Dart não acompanha, porque não
+    // teve defeito. A régua é a mesma do `o_css_do_bold_esta_em_dia_test`: mesmo `X.Y`, patch da
+    // web igual ou maior.
+    expect(_mesmaLinguagem(dart: tagDart!, web: gerador.tagWebDoAvo), isTrue,
         reason: 'o pai recebe o avô em $tagDart e o filho gerado receberia '
-            '${gerador.tagWebDoAvo} — uma língua, um número.');
+            '${gerador.tagWebDoAvo} — uma língua, um número no `X.Y`, patch da web nunca abaixo.');
   });
 
   test('o produto gerado tem UM hex — a cor da marca — e nenhum outro valor de produto', () {
@@ -111,4 +115,14 @@ void main() {
     expect(gerador.Opcoes(id: 'x', nome: 'X', cor: '#1B5E20', saida: '.').corDart, '0xFF1B5E20');
     expect(gerador.Opcoes(id: 'x', nome: 'X', cor: '1b5e20', saida: '.').corDart, '0xFF1B5E20');
   });
+}
+
+/// `vX.Y.Z` (Dart) e `web-vX.Y.W` (web) são a mesma linguagem quando `X.Y` coincide e `W >= Z`.
+/// O `W > Z` existe por causa da reemissão do avô (22/09): tag web queimada não se reescreve, sai
+/// com o patch seguinte, e o Dart fica onde estava.
+bool _mesmaLinguagem({required String dart, required String web}) {
+  List<int> partes(String tag) =>
+      RegExp(r'(\d+)\.(\d+)\.(\d+)').firstMatch(tag)!.groups([1, 2, 3]).map((g) => int.parse(g!)).toList();
+  final d = partes(dart), w = partes(web);
+  return d[0] == w[0] && d[1] == w[1] && w[2] >= d[2];
 }

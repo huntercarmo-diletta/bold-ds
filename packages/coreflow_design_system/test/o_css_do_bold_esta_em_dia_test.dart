@@ -81,10 +81,23 @@ void main() {
         .firstMatch(File('pubspec.yaml').readAsStringSync())
         ?.group(1);
     expect(dart, isNotNull, reason: 'este pacote deixou de pinar o avô por tag');
-    final web = File('../coreflow_design_system_web/package.json').readAsStringSync();
-    expect(web, contains('#web-$dart'),
-        reason: 'o Dart recebe o avô em $dart e o pacote web recebe outra tag — uma língua, um '
-            'número. Suba o `package.json` e rode `npm install` pra re-resolver o lock.');
+    final web = RegExp(r'ds-diletta#(web-v[\d.]+)')
+        .firstMatch(File('../coreflow_design_system_web/package.json').readAsStringSync())
+        ?.group(1);
+    expect(web, isNotNull, reason: 'o pacote web deixou de pinar o avô por tag `web-vX`');
+    //
+    // «Uma língua, um número» vale no `X.Y`; o patch da web anda sozinho. Em 22/09 o avô queimou
+    // `web-v0.207.0` e `web-v0.208.0` (as duas apontavam pro monorepo, 1575 e 1577 arquivos) e,
+    // por não reescrever tag publicada, REEMITIU com nome novo: `web-v0.207.1` é «a instância web
+    // de v0.207.0», 45 arquivos, e entre ela e a `web-v0.208.1` muda uma linha — a versão. Não há
+    // `v0.207.1` em Dart, e não vai haver: o Dart não teve defeito. Então a regra que pega o
+    // incidente de 14/09 (web parada numa versão ATRÁS) sem proibir a reemissão é esta: mesmo
+    // maior e menor, e o patch da web nunca abaixo do do Dart.
+    expect(_mesmaLinguagem(dart: dart!, web: web!), isTrue,
+        reason: 'o Dart recebe o avô em $dart e o pacote web recebe $web — uma língua, um número '
+            'no `X.Y`; o patch da web só pode ser igual ou maior (reemissão). Suba o `package.json` '
+            'e rode `npm install "diletta-design-system-web@bitbucket:diletta/ds-diletta#web-$dart"` '
+            'pra re-resolver o lock.');
   });
 
   test('a forma emitida segue o ALIAS do produto, não a gramática', () {
@@ -115,4 +128,14 @@ void main() {
     expect(degraus.length, 20, reason: 'degraus emitidos: ${degraus.length} — a tabela do emissor '
         'ficou para trás do CoreflowType, ou alguém a encolheu');
   });
+}
+
+/// `vX.Y.Z` (Dart) e `web-vX.Y.W` (web) são a mesma linguagem quando `X.Y` coincide e `W >= Z`.
+/// O `W > Z` existe por causa da reemissão do avô (22/09): tag web queimada não se reescreve, sai
+/// com o patch seguinte, e o Dart fica onde estava.
+bool _mesmaLinguagem({required String dart, required String web}) {
+  List<int> partes(String tag) =>
+      RegExp(r'(\d+)\.(\d+)\.(\d+)').firstMatch(tag)!.groups([1, 2, 3]).map((g) => int.parse(g!)).toList();
+  final d = partes(dart), w = partes(web);
+  return d[0] == w[0] && d[1] == w[1] && w[2] >= d[2];
 }
