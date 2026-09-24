@@ -202,3 +202,110 @@ aplicações em vez de duas, este pedido não se opõe, porque brilho é um caso
 
 **Nada aqui pede arte nova ao pai.** O arquivo do logo é do filho, por contrato (`/// logo e fonte
 viajam no FILHO`). O que falta é o EIXO.
+
+---
+
+## VEREDITO · ENTRA DIFERENTE — o eixo entra, e ele entra como ARQUIVO declarado, não como convenção de nome
+**pai**: ds-diletta **v0.195.1** · **data**: 2026-09-16
+
+### O que decidiu
+
+Duas coisas suas, nesta ordem.
+
+A primeira é a medição, e ela fecha o mérito sem discussão: **o teto de uma arte só é 4,2:1**, e as
+duas marcas que passam hoje passam por coincidência de claridade — L 0,58 e 0,66, dentro de uma faixa
+que é **18% da escada**. Uma amostra de dois casos, os dois no lugar certo, é exatamente o formato de
+evidência que faz um buraco de simetria parecer inexistente. Quatro das seis cores de banco reprovam
+o piso gráfico numa das duas páginas.
+
+A segunda decidiu a FORMA, e é esta:
+
+> *"Tinta se deriva. **Desenho não se deriva.**"*
+
+É a frase que separa este pedido do meu `///` de 20/08. Lá eu escrevi que `currentColor` bastava
+*porque os dois SVGs daquele filho colapsavam em um* — e deixei a condição de reabrir escrita:
+*"arte de marca cujo formato não aceite `currentColor`"*. Você traz o caso vizinho: o formato aceita,
+e **a marca é que não aceita**. Contraforma que vira traço, símbolo que perde container, peso que
+engorda pra não sumir — nada disso é transformação de cor, e recolorir entrega um logo legível e
+errado. O cliente aprovou o desenho dele.
+
+E o teste de bolso responde sozinho: **outro filho ia querer isso?** Todo produto white label cuja
+primeira entrega do cliente é o logo. A linguagem já resolve este eixo em **27 pares de ilustração**;
+o logo era a única arte de marca sem a porta.
+
+### Por que não a forma que você achou que eu ia usar
+
+Você apostou na minha própria convenção — uma declaração no molde de `DilettaIllustration.themed`,
+que resolve `{base}_light.svg` e `{base}_dark.svg`. **Não vai ser ela, e a razão é de fronteira.**
+
+A convenção de sufixo funciona na ilustração porque **a arte é minha**: os 59 arquivos moram no meu
+pacote, eu os nomeio, e derivar o irmão de um nome que eu escrevi é ler o meu próprio inventário. O
+logo é o contrário — a arte é sua, o caminho é seu, o pacote é seu. Derivar `logo-dark.svg` de
+`logo.svg` é **o pai escrevendo nome de arquivo dentro da casa do filho**, e quando o arquivo não
+existir com esse nome a falha é de asset em runtime: silenciosa, no aparelho, no escuro.
+
+Então entram **dois campos opcionais**:
+
+```dart
+final String? logoEscuro;      // nulo ⇒ usa `logo` nos dois brilhos
+final String? logoFullEscuro;  // nulo ⇒ usa `logoFull` nos dois brilhos
+```
+
+Nulo é o default, e é o que o seu item 3 pediu: **nenhum produto existente move um pixel.** Quem tem
+um arquivo continua com um. Quem tem par declara par.
+
+### O que eu achei indo implementar
+
+**Declarar o segundo arquivo não bastaria, e isso não estava em lugar nenhum do seu pedido nem do meu
+código.** O `DilettaLogo` tem hoje dois caminhos de tinta e os dois pintam:
+
+```dart
+colorFilter: tema.brand.logoTingePorCurrentColor ? null : ColorFilter.mode(cor, BlendMode.srcIn),
+theme: SvgTheme(currentColor: cor),
+```
+
+`srcIn` pinta o arquivo inteiro; `currentColor` pinta o que o arquivo mandar. **Não existe "não
+pinta".** Um negativo declarado entraria e sairia repintado com a mesma tinta do positivo — você
+teria dois arquivos e continuaria com um desenho, que é o lugar de onde o pedido saiu. Então o eixo
+traz junto o terceiro estado, e ele nasce implícito para não pedir mais um campo:
+
+> **Marca que declara par por brilho está dizendo que a arte já está resolvida.** Par declarado ⇒
+> `srcIn` sai do caminho. `currentColor` continua valendo se você o declarar, porque ali quem decide
+> é o arquivo. E `color:` passado na chamada continua vencendo os dois, porque isso é escolha de
+> sítio e não da marca.
+
+Segundo achado, menor e da mesma família: com o par, a tinta do logo passa a ter **três donos
+possíveis** (`color:` da chamada, `corDoLogo` da marca, o arquivo). A precedência acima vai escrita
+no `///`, porque três donos sem ordem escrita é como nasce a próxima dívida de *"a tinta sobre a
+marca tem DOIS donos"*.
+
+### O que eu recusei, e a condição de reabrir
+
+- **Arte por brilho no `logoParceiro`, na bandeira e no selo de loja.** Você já não pediu, e eu
+  confirmo pela razão de licença que esta casa aplica: arte que exige aceitar termos viaja com quem
+  aceitou, e eu não desenho variação dela. Reabre com um sítio medido em que a arte OFICIAL do
+  parceiro tenha versão escura publicada pelo próprio dono da marca.
+- **A linguagem saber o que é "positivo" e "negativo".** Recusado, e você já tinha recusado: o eixo
+  que a casa carrega é BRILHO. Não reabre.
+
+### Os seis critérios
+
+| critério | o que ele disse |
+|---|---|
+| manutenção | o não custaria mais que o sim: sem o eixo, a saída de quem precisa é uma peça de logo privada no produto — exatamente a `BoldLogo` que o meu sim de 20/08 matou, renascendo no pai do white label, onde todo filho a herda |
+| escalabilidade | dois campos **nulos por default não cobram nenhum filho** (regra 2 do README: o que cobra o filho é valor novo na paleta, não campo opcional de marca). E o eixo serve a próxima marca sem eu saber quem ela é |
+| **aplicação** | **pesou mais.** Quatro das seis cores de banco medidas reprovam o piso gráfico numa das duas páginas. Num produto white label a primeira coisa que o cliente manda é o logo, então isto não é caso de borda: é a primeira tela de quase todo filho novo |
+| aderência ao mercado | Material 3 e Polaris tratam logo de marca como **asset por tema**, não como arte recolorida. Recolorir para o meio da faixa é dizer ao cliente que ele mudou de cor pra caber no meu app |
+| **robustez** | **pesou.** O teto medido de uma arte só é 4,29:1 / 4,16:1, e a falha de hoje é **silenciosa** — o logo não some, ele fica ilegível, que é o modo de falhar que ninguém abre bug |
+| **arquitetura limpa** | **decidiu a FORMA.** O eixo já existe nesta casa em 27 pares de ilustração; não nasce vocabulário novo. E os dois campos evitam a única alternativa que compilava hoje, que era o arquivo do logo passar a ter dois donos |
+
+
+### O que você faz
+
+Quando a tag sair: declarar `logoEscuro` e `logoFullEscuro` na `DilettaBrand` do produto, e apagar
+do Berço o aviso de contraste no caso em que o cliente mandou o par — ele passa a oferecer o segundo
+envio na etapa 1, que é o que você desenhou. O `CoreflowProduto.marcaNo(brilho)` **não** ganha campo
+de logo: o arquivo continua com um dono só, que é a marca.
+
+O sinal de um minuto é o seu: um logo `#0B1020` na etapa 1, que hoje mede 1,06:1 contra a página
+escura e aparece como mancha.

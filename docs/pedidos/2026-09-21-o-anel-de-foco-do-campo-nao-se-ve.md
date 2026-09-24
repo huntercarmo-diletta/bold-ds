@@ -69,3 +69,79 @@ o do botão sem ser invisível; o que não dá é discrição que custa a indica
 Se a casa preferir manter `primaryTrack` por coerência com o Dart, vale ao menos medir o
 lado Flutter: se lá o anel também for esse tom, o defeito não é da instância web, é da
 linguagem, e a correção rende nos dois lados.
+
+---
+
+## VEREDITO · ENTRA — e a sua divergência também não passa, que é a parte que eu devo te dizer
+**pai**: ds-diletta **v0.203.0** · irmã **web-v0.203.0** · **data**: 2026-09-21
+
+Você pediu para eu medir o lado Flutter se preferisse manter o tom. Medi, e a resposta é a que você
+suspeitava: **o Dart pinta o mesmo tom** (`diletta_input.dart`, `_isError ? s.errorSubtle :
+s.primaryTrack`). Não era a instância web divergindo — era a linguagem, nos dois lados.
+
+E na paleta de REFERÊNCIA, que não é de ninguém, o número é pior que o seu:
+
+| modo | anel | contra | razão | |
+|---|---|---|--:|:-:|
+| claro | `primaryTrack` `#a6e2d1` | `surface` `#ffffff` | **1,46:1** | ❌ |
+| escuro | `primaryTrack` `#06382c` | `surface` `#20262a` | **1,17:1** | ❌ |
+| claro | `errorSubtle` `#fbe4e2` | `surface` | **1,21:1** | ❌ |
+| escuro | `errorSubtle` `#5e110d` | `surface` | **1,14:1** | ❌ |
+
+E você achou o precedente sem saber o quanto ele era exato: **1,17** é o número do `surfaceMuted`
+que esta casa tirou do anel do toggle. Mesmo número, outro campo, três semanas depois — está escrito
+no `///` do `DilettaFoco`.
+
+> **Conserto de caso não fecha classe.** Aquele conserto foi de uma peça, e nada mediu as outras.
+
+### O que entrou
+
+O anel segue a **família do estado** e o **degrau que se vê**:
+
+- repouso → `primary` (**4,79:1** no pior dos quatro casos: dois modos × `surface`/`bg`);
+- erro → `error` (**3,58:1**).
+
+Nos DOIS lados, Dart e web, na mesma tag. O `///` de 15/09 que escolheu a família continua de pé: um
+anel verde em volta de uma borda vermelha é sinal trocado, e isso não mudou. **O que mudou foi o
+degrau dentro da família** — era a tinta fraca, virou a que passa.
+
+O argumento de desenho do seu `///` citado (*«o anel do campo não é o anel do botão»*) morre como
+argumento de TINTA e sobrevive como argumento de forma: o campo continua com `outline-offset: 1px`
+contra os 2px do botão. Discrição que custa a indicação não é discrição, é ausência.
+
+### O gate, e ele mede nas DUAS paletas
+
+`o_anel_de_foco_se_ve_test.dart`, e ele tem três camadas:
+
+1. **a decisão** — toda tinta que esta casa usa como anel, contra `surface` e `bg`, nos dois modos,
+   em duas paletas: a de referência e uma nascida da porta de UMA COR, num rosa que é quase o oposto
+   do verde da referência em matiz. Se o piso dependesse do tom da marca, é ali que ele cairia;
+2. **a peça** — o campo focado é RENDERIZADO e o anel é lido do `BoxShadow` de verdade, porque uma
+   lista declarada não prova que o widget a segue;
+3. **os três tons já rejeitados** — `primaryTrack`, `errorSubtle` e `surfaceMuted` têm que
+   CONTINUAR reprovando. Sem essa terceira, o gate ficaria verde no dia em que alguém trocasse a
+   tinta por uma paleta clara o bastante, e ninguém saberia que a regra mudou.
+
+Prova de mutação: voltar o widget para `primaryTrack` faz o gate acusar **1,46:1 no claro e 1,17:1 no
+escuro** — os seus números, ditos pelo meu teste.
+
+### E agora a parte que é sua: **o anel que vocês adotaram também reprova**
+
+Você divergiu com o número na mão, e o número que você tinha era o do tom que você REJEITOU, não o do
+que você adotou. Medi o seu, na sua paleta emitida:
+
+| modo | o anel do webadmin | contra `surface` | razão | |
+|---|---|---|--:|:-:|
+| claro | `primary` @40% = `#ffb0c8` | `#ffffff` | **1,71:1** | ❌ |
+| escuro | `primary` @40% = `#6e3953` | `#14151f` | **2,05:1** | ❌ |
+
+**1,71 contra os 1,64 do `primaryTrack` que vocês tiraram.** A divergência custou trabalho e não
+comprou acessibilidade — e ela foi feita exatamente pelo motivo certo, com a medição parando um passo
+antes do fim.
+
+O seu `primary` cheio passa: **3,46:1** no claro e **6,66:1** no escuro, na sua paleta. Tirem o alfa
+e o anel de vocês passa a valer o que ele promete. E aí a divergência some sozinha, porque vira a
+regra da linguagem.
+
+> **Alfa é a armadilha desta classe**: ele muda o contraste e não muda o nome do token, então a
+> medição feita no token continua verdadeira e passa a descrever outra cor.

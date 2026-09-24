@@ -205,3 +205,70 @@ console.log(n)                        // 4
 não rodar. Escalabilidade porque o custo multiplica por peça, por tela e por produto — são 27 peças
 e quatro implementações na família. Manutenção porque o conserto é numa função e o defeito está em
 27 cópias da mesma linha.
+
+---
+
+## VEREDITO · ENTRA a METADE que não quebra ninguém — e ela já vale 5 desenhos em 1
+**pai**: ds-diletta **v0.203.0** · irmã **web-v0.203.0** · **data**: 2026-09-21
+
+As três contagens batem exatamente aqui: **27** peças com `attributeChangedCallback`, **18** com a
+linha idêntica caractere por caractere, **zero** comparando velho com novo. A sua leitura da causa
+também: o guarda `if (this.shadowRoot)` **nunca bloqueou nada** — o shadow nasce no construtor,
+então ele é verdadeiro desde a primeira linha de vida da peça. Era um guarda que parecia guardar.
+
+### O que entrou, e o número é o seu
+
+`mudouAtributo(host, nome, velho, novo)` na `base.js`, e as 27 peças passaram a perguntar antes de
+desenhar. Duas perguntas:
+
+1. **`velho === novo`** — o mesmo valor não redesenha. Era a sua segunda proposta, inteira;
+2. **`host.isConnected`** — atributo escrito ANTES de entrar no DOM não desenha, porque quem desenha
+   é o `connectedCallback`, uma vez só.
+
+A segunda não estava no seu pedido e é a que paga os cinco. Medido no seu próprio caminho de
+reprodução, com o embrulho escrevendo quatro atributos e só então inserindo:
+
+| | antes | agora |
+|---|--:|--:|
+| montar um botão pelo embrulho | 5 | **1** |
+| reescrever o mesmo valor | 1 | **0** |
+| mudar de verdade | 1 | 1 |
+| 100 botões montados | 500 | **100** |
+
+### O que NÃO entrou, e a razão é o seu próprio contrato
+
+**O agrupamento por microtask.** Ele tornaria o desenho assíncrono, e aí
+`el.setAttribute(...)` seguido de `el.shadowRoot.querySelector(...)` passaria a ler a árvore velha —
+nos 110 gates desta casa, nos seus, nos 177 que você tem guardados no patch, e em todo consumidor
+que já escreveu código contra o síncrono.
+
+> **Trocar a lentidão de um por uma quebra de contrato de todos não é conserto.**
+
+E ele deixou de ser necessário para o caso que você mediu: os cinco desenhos eram todos **antes** da
+inserção, e o `isConnected` os mata sem tocar no relógio. O que sobra é atributo escrito um a um
+DEPOIS de montado — ali continua um desenho por atributo. **Condição de reabrir, escrita**: um sítio
+medido onde o custo apareça depois da montagem, e aí a saída é um `flush` síncrono exposto, não
+tornar tudo assíncrono.
+
+### A armadilha que você apontou e não sabia medir
+
+Você escreveu: *"o seu `pinta` guarda e devolve foco, texto digitado e cursor a cada desenho;
+agrupar muda quantas vezes isso acontece"*. Está certo, e o efeito é o que você supôs — **para
+melhor, e mais do que você imaginava**: com menos desenhos, o `pinta` é chamado menos vezes, então
+há menos idas e voltas de foco. Os 110 gates continuam verdes, incluindo os seis de foco.
+
+### O gate
+
+`montar a peça custa UM desenho, e reescrever o mesmo valor custa zero` — ele conta os desenhos
+espiando o `render`, como você fez, e afirma também que **mudar de verdade continua desenhando na
+hora**: é essa terceira asserção que impede alguém de "consertar" isto agrupando, no dia em que o
+número voltar a incomodar.
+
+Prova de mutação nas duas metades: tirar o `velho === novo` deixa vermelho; tirar o `isConnected`
+deixa vermelho.
+
+### E o que o seu pedido corrigiu além do código
+
+Você escreveu que a primeira explicação sua estava errada — culpou a consulta que atravessa shadow,
+foi contar e achou uma. **Esse parágrafo é o que fez o pedido ser julgável**: sem ele eu teria medido
+a consulta. Pedido que conta o palpite descartado economiza a rodada de quem julga.

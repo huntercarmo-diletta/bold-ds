@@ -18,7 +18,7 @@ Seis papéis: `formaDeBotao · formaDeFolha · formaDeCampo · formaDeCartao · 
 Três getters novos no esquema — `formaDoCartao`, `formaDoVidro`, `formaDaNav` — e os três de sempre
 passaram a ler a tabela antes do campo.
 
-## RETIFICAÇÃO, e ela é do mesmo dia: a tabela mora na PALETA, não no tema
+## RETIFICAÇÃO DO PAI, e ela é do mesmo dia: a tabela mora na PALETA, não no tema
 
 No veredito de hoje eu te mandei declarar em `DilettaTheme.resolve(medidas: …)`. **Está errado, e o
 erro apareceu na primeira linha de código que eu escrevi depois de assinar:** o `DilettaScheme` — quem

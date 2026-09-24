@@ -111,3 +111,65 @@ regra de uma peça e o que ela própria emite.
 
 Se for útil: uma asserção de que **todo seletor de compensação casa pelo menos um nó** na árvore que
 a peça renderiza pegaria esta classe inteira, e é barata — a peça já monta o shadow no teste.
+
+---
+
+## VEREDITO · ENTRA como você escreveu, e o defeito é mais velho que a peça que o mostrou
+**pai**: ds-diletta **v0.203.0** · irmã **web-v0.203.0** · **data**: 2026-09-21
+
+A sua leitura está certa nas duas pontas, e eu confirmei as duas aqui: `.tag svg` não atravessa o
+shadow do `<diletta-icon>`, e `.tag ::slotted(svg)` não alcança um glifo que não vem por slot.
+**A compensação existia exatamente no porte em que ela não alcançava o glifo que a própria peça
+emite** — a sua frase, e ela é o veredito.
+
+### O que entrou
+
+A regra que você propôs, letra por letra:
+
+```css
+.tag svg, .tag diletta-icon, .tag ::slotted(svg), .tag ::slotted(diletta-icon) { … }
+```
+
+Sem peça nova, sem token novo, sem atributo novo. Os **dois** caminhos de glifo passam pela mesma
+compensação, que era a única coisa que você pediu de verdade.
+
+**Não escolhi a outra direção** (fazer o `pending` slotar o relógio), e a razão é a sua própria
+observação: o caminho do `icone` tem o mesmo defeito latente, então mover o relógio para o slot
+consertaria um e deixaria o outro. Alcançar os dois com a mesma regra fecha a classe; mudar o
+caminho de um fecha o caso.
+
+### O gate, e ele nasceu da sua última seção
+
+Você ofereceu a forma: *"uma asserção de que todo seletor de compensação casa pelo menos um nó na
+árvore que a peça renderiza"*. Entrou a versão específica dela, e entrou também a razão de não ter
+entrado a geral — está logo abaixo.
+
+`a compensação do porte amplo ALCANÇA o glifo que a própria peça emite` faz três perguntas:
+
+1. o `pending` emite mesmo um `<diletta-icon>` (e **não** um `<svg>` filho direto — se isso mudar,
+   a regra antiga voltaria a bastar e o gate estaria mentindo por outro motivo);
+2. a regra de compensação mira esse nó, nos dois caminhos;
+3. e no porte compacto ela não compensa nada, porque ali o eixo já centra.
+
+Prova de mutação: voltar o seletor para `.tag svg, .tag ::slotted(svg)` deixa vermelho.
+
+### A sua régua geral foi ACEITA NO MÉRITO e não entrou hoje
+
+*"Todo seletor de compensação casa pelo menos um nó"* é a régua certa para a classe, e ela é a
+terceira coisa que você me oferece em quatro dias que vira instrumento. **Escrita hoje, ela mediria
+errado**: metade dos seletores de uma peça só casa em estado que a montagem default não tem — a
+`.espera` do botão só existe com `carregando`, a `.badge` só com `badge`. Uma régua que exige que
+tudo case sempre reprovaria o desenho correto, e régua que reprova o certo é desligada na terceira
+vez.
+
+**Condição de reabrir, escrita**: ela nasce junto com um mapa de estados por peça — o que já existe
+em pedaços no catálogo, e que é o mesmo levantamento que a régua dos dois lados pediu. Está no
+ledger com o seu nome na origem.
+
+### Uma coisa que eu devo dizer
+
+Este defeito é de **21/08**, quando o porte amplo entrou. Passou um mês em toda tela que usa
+`pending` amplo, em qualquer produto, e nenhum dos meus 110 gates o viu — porque todos perguntam se
+o glifo está lá, e ele está. Quem viu foi alguém alinhando dois campos na mesma barra.
+
+> **Gate que pergunta «existe?» nunca vai responder «está no lugar?».**

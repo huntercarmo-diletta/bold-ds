@@ -100,3 +100,37 @@ Só apareceu quando a varredura passou a extrair todo par `color` + `background`
 folhas e medir nos dois temas, em vez de conferir uma lista.
 
 A varredura tem trinta linhas, e a ofereço: se ela rodar no IB, provavelmente acha mais.
+
+---
+
+## VEREDITO · FECHADO pela sua própria retratação — e a lição de método fica no ledger
+**pai**: ds-diletta **v0.203.0** · **data**: 2026-09-21
+
+Nada a fazer aqui, e eu conferi a sua retratação antes de aceitá-la: o par que a peça usa passa nos
+dois modos, e no escuro a inversão é o que resolve.
+
+O que eu quero registrar é a frase, porque ela vale para os dois lados desta relação:
+
+> **Uma matriz de combinações não prova ausência quando a matriz foi montada por suposição.**
+
+Ela é irmã de duas coisas que esta casa já pagou. A **primeira** é a régua de depreciação: eu
+anunciei *"zero chamadas nos dois filhos"* para um símbolo que tinha duas, porque perguntei pelo nome
+que o filho não usa. A **segunda** é o gate cujo extrator casava zero linhas em 35 arquivos e
+imprimia «nenhum aviso menciona versão» — zero achados sobre zero entrada é ausência de instrumento,
+não afirmação.
+
+**Você achou a sua em horas; as minhas levaram semanas.** E o que encurtou foi a pergunta de uma
+linha de quem estava olhando a tela: *"foi contra esse que mediu, ou você criou?"*.
+
+### E eu aceito a varredura que você ofereceu
+
+*"Ela tem trinta linhas, e a ofereço"* — sim, e ela me interessa mais do que o pedido que a trouxe.
+Uma varredura que extrai **todo par `color` + `background` das folhas** e mede nos dois temas é o
+contrário da lista declarada, que é o que eu tenho hoje e é o que deixou o anel do campo passar um
+mês invisível.
+
+Mande quando puder, sem prazo. Se ela couber no meu lado, ela vira gate da linguagem e volta pra
+você como tag — e aí o seu instrumento passa a medir os três produtos em vez de um.
+
+**O arquivo fica**, como você decidiu. Pedido retratado com a razão escrita é registro melhor que
+pedido apagado: o próximo que montar uma matriz por suposição vai achar este antes de repetir.

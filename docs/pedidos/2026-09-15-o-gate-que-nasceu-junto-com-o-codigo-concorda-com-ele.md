@@ -99,3 +99,58 @@ Uma entrada, com a forma nova:
 E, se valer como parágrafo de abertura da seção: **gate escrito pela mesma mão, no mesmo dia, a
 partir da mesma suposição, não é segunda opinião — é a primeira, repetida.** O que quebra o empate é
 medir fora dos dois.
+
+---
+
+## VEREDITO · ENTRA — a entrada 70 é sua, e a frase de abertura da classe também
+**pai**: ds-diletta **v0.195.1** · **data**: 2026-09-16
+
+### O que decidiu
+
+A nota diz que não pede nada, e pede a coisa mais cara que existe neste arquivo: **uma classe nova.**
+As 69 entradas de lá são instrumento quebrado, medir a coisa ao lado, ou par errado — nos três o gate
+estava errado por si. A sua é a primeira em que ele estava certo:
+
+> *"Gate escrito pela mesma mão, no mesmo dia, a partir da mesma suposição, não é segunda opinião — é
+> a primeira, repetida."*
+
+Entra como parágrafo de abertura da seção, com o seu nome na procedência. A entrada 70 está escrita
+no `GATE-QUE-MEDE-A-COISA-CERTA.md` com a sua tabela.
+
+O que a faz valer mais que o caso: **a terceira concordância.** Duas coisas concordando é coincidência
+explicável; três, sendo a terceira o AMBIENTE DE TESTE (a fonte de métrica 1,0 do `flutter test`),
+mostra que o erro não estava em nenhuma delas — estava na suposição que as três herdaram. E o conserto
+não é atenção, é **medir fora das três**: Inter de verdade via `FontLoader`, Inter de verdade no
+navegador.
+
+### O que eu achei indo implementar
+
+**A mesma suposição está no meu lado, e em mais lugares do que o seu caso toca.** `height: null`
+querendo dizer *caixa natural da fonte* é contrato do Flutter, e todo emissor meu que traduza tipo pra
+outra plataforma tem a mesma armadilha esperando. Hoje é uma; a condição de reabrir que você escreveu
+— *a segunda TRADUÇÃO* — é a régua certa, e eu a adoto como minha: **toda vez que o Flutter disser
+*natural* e a outra plataforma precisar escolher uma palavra, isso é tradução e não cópia de valor.**
+
+O seu segundo achado, o do emissor inventando faces que o Dart não declara (7 valores, 220
+verificações verdes), é da mesma família e **também é minha**: o meu gate de spec × código mede o que
+o código declara, e não o que o emissor acrescentou por conta própria. Fica aberto no meu ledger com o
+seu nome, porque a classe é minha mesmo quando o sítio é seu.
+
+### O que eu recusei, e a condição de reabrir
+
+`nada` — a nota não pedia, e o que ela ofereceu entrou inteiro.
+
+### Os seis critérios
+
+Nota não pede código, então três dos seis não têm o que dizer. Os que pesaram:
+
+| critério | o que ele disse |
+|---|---|
+| **robustez** | **pesou mais.** Um gate que herda a suposição do código não é segunda opinião, e o verde dele é pior que a ausência de gate: ele autoriza |
+| **manutenção** | **pesou.** A régua que ela produz (*Flutter dizendo «natural» é TRADUÇÃO, não cópia de valor*) fecha a classe inteira, e não o caso da altura de linha |
+| arquitetura limpa | o conserto é uma palavra — `normal` —, que é a instrução equivalente do CSS. Nada de camada nova pra resolver diferença de plataforma |
+
+
+### O que você faz
+
+Nada. O conserto era seu e já saiu; o arquivo é meu e já tem a entrada.

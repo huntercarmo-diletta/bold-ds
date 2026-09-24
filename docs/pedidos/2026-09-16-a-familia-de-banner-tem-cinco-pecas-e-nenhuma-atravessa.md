@@ -86,3 +86,77 @@ já foi escrito duas vezes.
 
 A regra provisória em `BoldBanner.module.css` do IB sai, e o `<diletta-status-banner-button>` entra
 no lugar. O comentário dela já aponta para este arquivo.
+
+---
+
+## VEREDITO · ENTRA — a peça sai na web, e o seu achado virou conserto do DART
+**pai**: ds-diletta **v0.196.0** · **data**: 2026-09-16
+
+### O que decidiu
+
+Não foi o pedido: foi a seção que você chamou de *«o achado que interessa mais que o pedido»*.
+
+> ***Degrau não inverte, papel sim.***
+
+Fui conferir a peça antes de traduzi-la, e o defeito **não está na tradução — está na minha peça.**
+O `DilettaStatusBannerButton` pinta o fundo em `DilettaAbsoluteColors.white`, que é degrau, e o
+rótulo em `scheme.primary`, que é papel. As duas decisões juntas põem tinta clara sobre fundo branco
+assim que o modo vira. Medido agora, nas quatro marcas de prova, `primary` sobre branco no ESCURO:
+
+| marca | sobre branco absoluto | sobre `surface` |
+|---|---|---|
+| verde da referência | **2,72** | 5,62 |
+| laranja | **2,86** | 5,36 |
+| roxo | **3,11** | 4,92 |
+| rosa do primeiro filho | **3,46** | 4,42 |
+
+**No claro `surface` É branco**, então nenhum produto move um pixel: o conserto só existe no escuro,
+que é onde o defeito sempre esteve. A peça do Dart saiu consertada na mesma tag, com gate medindo as
+quatro marcas nos dois modos.
+
+Você mediu a tradução e achou um defeito de nove meses na peça original. É a terceira vez este mês
+que um pedido seu paga mais como instrumento de medição do que como pedido.
+
+### Os seis critérios
+
+| critério | o que ele disse |
+|---|---|
+| **aplicação** | **pesou mais.** Há consumidor hoje, com número: o botão `ghost` dentro da faixa âmbar dá **2,40:1** no escuro, e a borda **1,17:1** nos dois modos. Não é peça para um catálogo: é uma tela em produção ilegível |
+| **escalabilidade** | publicar a peça serve todo filho web; escrevê-la aí serve um. E a instância web é o lado que mais cresce nesta família |
+| manutenção | a sua alternativa declarada (`BoldBannerButton` local) é a duplicata com nome diferente que esta casa passou setembro combatendo |
+| aderência ao mercado | banner com ação é peça de catálogo em M3 e Polaris, e nos dois a ação dentro da faixa tem superfície própria em vez de herdar a do fundo |
+| **robustez** | **pesou.** A tradução literal nasceria quebrada no escuro — e a prova é que a original já estava. Traduzir ao pé da letra teria multiplicado o defeito em vez de expô-lo |
+| arquitetura limpa | nenhuma API nova: a peça já existe como contrato, e a web só não tinha instância. E o seu *«não pedimos variante nova no botão»* está certo — o contexto é outro, não é o mesmo botão com outra cor |
+
+### O que eu achei indo implementar
+
+Três coisas, e a primeira é a que dói:
+
+1. **A prosa dizia degrau e o código lia papel.** O `///` da classe e a spec escreviam *"bg branco,
+   label `primary-04`"* desde que a peça nasceu, e o código sempre leu `scheme.primary` no rótulo. É
+   a mesma classe que o `///` dessa peça JÁ registrava sobre outra coisa — *prosa dizendo uma coisa e
+   código fazendo outra* —, agora em cor. A prosa é que estava errada, e ela foi corrigida com o
+   número do lado;
+2. **o glifo não estava na biblioteca `sistema`.** A peça pede `arrow-right-long-light`, que existe
+   nos 355 nomes publicados mas não estava desenhado na `sistema`. Desenhei. **Não usei o
+   `angle-right-light` que já estava lá**: chevron e seta são glifos diferentes, e trocar um pelo
+   outro repetiria a dívida que o meu ledger já carrega do `input-chip`, que remove com X na web e
+   com `circle-minus-light` no Dart;
+3. **o catálogo tinha o nome de UMA tag dentro de uma condição.** `texto` virava conteúdo só para o
+   `text-link`; qualquer peça nova com rótulo no slot nasceria vazia na página sem ninguém ver — a
+   classe das 92 células vazias que eu medi em 15/09. Agora é lista.
+
+### O que eu recusei, e a condição de reabrir
+
+- **As outras quatro peças da família.** Você mesmo escreveu que o banner é seu e é simples, e o
+  `_error_panel` você enxerga como segundo. Entram **por demanda medida, uma a uma** — a fase 4 do
+  `ADR-007` é por demanda, e a sua demanda de hoje é o botão. Condição de reabrir para cada uma: um
+  sítio real, medido, como este.
+- **A peça no Dart ganhando eixo de superfície.** Recusado: a faixa decide o fundo, e um eixo aqui
+  seria API para contornar a falta de papel. Reabre se aparecer banner cuja faixa não seja tingida.
+
+### O que você faz
+
+Espere a tag. Depois: apague a regra provisória do `BoldBanner.module.css` e ponha
+`<diletta-status-banner-button>Tentar de novo</diletta-status-banner-button>` dentro da faixa. O
+comentário dela já aponta para este arquivo, e é ele que fecha o seu critério de pronto.

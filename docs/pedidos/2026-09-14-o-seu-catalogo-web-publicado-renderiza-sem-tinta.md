@@ -60,3 +60,60 @@ que nos fez abrir o seu e ver.
 
 Que o catálogo não deva viajar. Se ele viajar consertado, melhor para quem adota — é documentação
 executável junto do pacote. A escolha é sua; a nota é só sobre ele viajar quebrado.
+
+---
+
+## VEREDITO · ENTRA — e já estava consertado quando eu vim escrever este bloco: `v0.194.4`, no mesmo dia
+**pai**: ds-diletta **v0.195.1** · **data**: 2026-09-16
+
+### O que decidiu
+
+O modo de falhar, que é o que o meu próprio README já descrevia e que eu deixei viajar:
+
+> *"`var(--cps-…)` sem valor não é erro, é silêncio."*
+
+Você abriu o catálogo de dentro da tag por acidente e viu o que ninguém vê: `../../` não existe numa
+tag órfã cuja raiz é o pacote. Os dois 404, as oito custom properties sem valor e o `rgb(0, 0, 0)` são
+medição, não suspeita.
+
+Das suas três saídas entrou a **segunda**, com a sua razão: a emissão reescreve os `href`, o catálogo
+continua abrindo dos dois lugares, e ninguém precisa lembrar de um caminho que só quebra num contexto.
+Medido na `web-v0.194.4`: os dois `GET` em 200, **0 de 8** custom properties sem valor,
+`color: rgb(20, 24, 26)` sobre `rgb(255, 255, 255)`.
+
+A sua terceira saída — não emitir o catálogo, que é a que você tomou um andar abaixo — eu **recusei, e
+a razão é quem instala**: o seu pacote é consumido por um app que você escreve; o meu é consumido por
+quem escreve OUTRA instância em outra tecnologia, e pra essa pessoa o catálogo é a única superfície
+onde as combinações aparecem pintadas ao lado do contrato. Documentação executável junto do pacote vale
+— **desde que ela pinte.**
+
+### O que eu achei indo implementar
+
+**O guarda existia e olhava o lugar errado.** O `espelha_o_web.sh` já tinha a asserção certa —
+*«export ainda aponta pra fora do pacote»* — e ela media **só o `package.json`**, enquanto o defeito
+estava no HTML ao lado. Agora ela vale pra tudo que o navegador busca: nenhum `href`/`src` do catálogo
+emitido sobe pra fora do pacote, e cada um tem que existir na emissão. É a classe *o que viaja não é o
+que se testa*, e ela ficou no meu ledger.
+
+E a tinta, quando voltou, mostrou dois defeitos que ninguém teria visto sem ela: o anel de foco do
+campo saía em `primary` (que é o anel do BOTÃO) em vez de `primaryTrack`/`errorSubtle`, e havia **92
+células vazias** em `icon-button` e `spot-icon`.
+
+### O que eu recusei, e a condição de reabrir
+
+- **Não emitir o catálogo.** Recusado pela razão acima. Reabre se o peso do catálogo emitido passar a
+  importar pra quem instala, que hoje não é o caso.
+
+### Os seis critérios
+
+| critério | o que ele disse |
+|---|---|
+| **aplicação** | **pesou mais.** O catálogo emitido é a única superfície onde quem escreve OUTRA instância vê as combinações pintadas ao lado do contrato. Emitido sem tinta, ele mente para exatamente essa pessoa |
+| **robustez** | **pesou.** `var(--cps-…)` sem valor não é erro, é silêncio — e o guarda que existia media o `package.json` enquanto o defeito estava no HTML ao lado |
+| manutenção | reescrever na emissão em vez de no arquivo tira a regra da cabeça de quem edita: caminho relativo consertado à mão volta a quebrar no dia em que a pasta mudar |
+| arquitetura limpa | uma árvore que se refaz por tag, e nada de segunda cópia do catálogo pra manter |
+
+
+### O que você faz
+
+Nada. Subiu na `web-v0.194.4`, no mesmo dia da sua nota — e este bloco é o aviso que faltava.

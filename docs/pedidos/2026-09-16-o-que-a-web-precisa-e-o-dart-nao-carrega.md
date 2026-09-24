@@ -109,3 +109,97 @@ e medida — e a próxima casa que adotar a web repete a mesma escolha sem saber
 
 O nosso mapa `--bold-* → --cps-*` tem hoje **duas entradas sem destino de linguagem**, das 133. Com
 este pedido atendido, ficam zero.
+
+---
+
+## VEREDITO · caso 1 ENTRA · caso 2 JÁ EXISTE — e o degrau que você descreveu como inexistente é meu
+**pai**: ds-diletta **v0.195.1** · **data**: 2026-09-16
+
+| caso | veredito |
+|---|---|
+| 1 · as quatro curvas e os seis contextos como `--cps-*` | **ENTRA** |
+| 2 · o degrau da paginação | **JÁ EXISTE** — é `labelMd`, e nenhum dos dois lados olhou pra ele |
+
+### O que decidiu — caso 1
+
+A sua frase, e ela é a tese inteira:
+
+> *"A web recebe a camada que os componentes **não** consomem, e não recebe a que eles consomem."*
+
+O `///` do `DilettaMotion` diz, com todas as letras, que **contexto** é o que as peças consomem, e é
+justamente o que não atravessa. Emitir duração sem curva é emitir meia instrução: quem monta a
+instância web acerta o tempo e inventa o movimento. E isso não é escada nova — é **transporte**, que
+é a distinção que você mesmo fez em «O que NÃO pedimos». Entram as quatro `--cps-ease-*` e os seis
+contextos como par duração+curva.
+
+### O que eu achei indo implementar — e ele reescreve o seu diagnóstico
+
+Você escreveu que a transcrição do IB *"acertou as curvas e errou os nomes"*. **Fui conferir contra o
+SDK, e ela errou as duas coisas.** As quatro que a linguagem declara, lidas em
+`flutter/packages/flutter/lib/src/animation/curves.dart`:
+
+| camada | `Curves.*` | o valor real |
+|---|---|---|
+| `enter` | `easeOut` | `cubic-bezier(0.0, 0.0, 0.58, 1.0)` |
+| `exit` | `easeIn` | `cubic-bezier(0.42, 0.0, 1.0, 1.0)` |
+| `standard` | `easeInOut` | `cubic-bezier(0.42, 0.0, 0.58, 1.0)` |
+| `emphasized` | `easeOutCubic` | `cubic-bezier(0.215, 0.61, 0.355, 1.0)` |
+
+Os seus dois tokens são `cubic-bezier(0.33, 1, 0.68, 1)` e `cubic-bezier(0.65, 0, 0.35, 1)`. **Nenhum
+dos dois é nenhuma das quatro** — são o `easeOutCubic` e o `easeInOutCubic` de uma tabela pública de
+easings, que tem os mesmos nomes e outros números. Quem transcreveu não copiou do Dart: copiou de
+onde os nomes batiam.
+
+Isso **fortalece** o seu pedido em vez de enfraquecê-lo, e muda a classe do dano: transcrição à mão
+não erra só o rótulo, ela **troca a fonte** quando a fonte não está emitida. O gate que você propõe
+(mapa `--bold-* → --cps-*` com zero entradas sem destino) passa a valer mais que a paridade de nome.
+
+### O que decidiu — caso 2, e o achado é constrangedor dos dois lados
+
+Você escreveu que a sua paginação usa **12px, peso 500, tracking 0,5**, e que esse número *"cai entre
+as minhas duas opções"* — acima do `caption` (12/400) e abaixo de um 12/700 que não existe.
+
+**Ele não cai entre nada. Ele É um degrau meu**, e está publicado:
+
+```dart
+static const TextStyle labelMd =
+    TextStyle(fontSize: 12, fontWeight: FontWeight.w500, height: 16 / 12, letterSpacing: 0.5);
+```
+
+12 · 500 · 16 · 0,5. O seu número, campo por campo. A catraca da `pagination` ficou de pé porque a
+régua comparou a peça contra `caption` e contra um 12/700 imaginário, e **nenhum dos dois é o degrau
+de um número clicável** — número clicável é rótulo de controle, e rótulo de controle é `label`.
+
+Então a decisão, e ela não abre escada:
+
+- os números da `pagination` passam a ler **`labelMd`**;
+- o **ativo se distingue por PAPEL DE COR**, não por peso. `12/700` não entra na escada por um caso, e
+  distinguir estado por cor é o que o resto da linguagem já faz em todo lugar;
+- com isso a catraca desce de 1 pra 0, que era o seu pedido de decisão.
+
+### O que eu recusei, e a condição de reabrir
+
+- **Degrau 12/700.** Recusado: um caso não abre escada, e o caso deixou de existir quando o degrau
+  certo apareceu. Reabre se um segundo filho medir peso 700 em 12px num sítio que não seja estado de
+  item selecionado.
+- **`font: inherit` da `pagination`.** Não é recusa, é dívida minha e ela entra junto: a peça é a
+  única das 25 que ainda herda tipo da página do consumidor, e você adotando a peça em duas jornadas
+  é o segundo sítio medido. Sai na mesma tag do caso 1.
+
+### Os seis critérios
+
+| critério | o que ele disse |
+|---|---|
+| **manutenção** | **pesou.** O que não é emitido é transcrito à mão, e transcrição à mão não tem gate. Os dois tokens de curva do IB são a prova viva, e eles estavam errados **em valor**, não só em nome |
+| escalabilidade | a curva emitida serve toda instância web futura sem uma decisão nova. A segunda casa que adotar não repete a escolha sem saber que já foi feita, que é o risco que você declarou em «Se você disser não» |
+| aplicação | o contexto é o que as peças consomem. Emitir duração sem curva entrega meia instrução, e quem monta acerta o tempo e inventa o movimento |
+| aderência ao mercado | token de motion com duração **e** easing é o que Material, Carbon e Polaris publicam. Publicar só a duração é a exceção, não a regra |
+| robustez | no caso 2, distinguir o ativo por **peso** exigiria um degrau que a escada não tem; distinguir por **papel de cor** usa o que a linguagem já garante e já mede contra piso de contraste |
+| **arquitetura limpa** | **decidiu o caso 2.** Um caso não abre escada — e aqui nem precisava: o degrau existia, e o que faltava era a régua olhar para `label` em vez de `caption`. Degrau novo teria sido vocabulário criado para não ler o vocabulário |
+
+
+### O que você faz
+
+Espere a tag. Quando ela sair: apagar os dois tokens de curva do IB e apontar pro `--cps-ease-*`, e
+adotar a `pagination` sem escolher degrau — ela passa a declarar o dela. As duas entradas sem destino
+do seu mapa fecham, e o seu próprio critério de pronto (zero de 133) é o gate.

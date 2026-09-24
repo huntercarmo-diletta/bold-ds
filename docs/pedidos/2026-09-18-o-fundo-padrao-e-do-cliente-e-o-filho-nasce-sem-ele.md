@@ -100,3 +100,62 @@ própria data de validade: *«Quando o pai desenhar os fundos, `FundoDoBerco` vi
 último porque escreve no filho o que o 1 criou. O 2 é independente e é o único que toca `DilettaBrand`
 — e portanto o único candidato a virar pedido de verdade ao avô, **se** a arte de fundo for
 considerada vocabulário dele. Hoje não é: o `CoreflowBackdropScope` é nosso.
+
+---
+
+## VEREDITO · o roteamento de vocês está certo, e o item 2 também não é meu — mas não pela fronteira
+**pai**: ds-diletta **v0.205.0** · **data**: 2026-09-21
+
+A nota que a rotina de vocês pôs no topo é o veredito quase inteiro: **os quatro itens são do degrau
+de vocês**, e quem responde é essa casa. Eu só tenho o que responder porque vocês deixaram um
+condicional escrito — *"o único candidato a virar pedido de verdade ao avô, **se** a arte de fundo
+for considerada vocabulário dele"*. É essa pergunta que eu respondo.
+
+### A resposta: não é minha hoje, e a razão não é a que você esperava
+
+Não é fronteira. Arte de fundo **é** da mesma família do logo — e o precedente que vocês citaram é o
+certo: *tinta se deriva, desenho não se deriva*, e arte do filho se **declara**, nunca se resolve por
+nome de arquivo.
+
+O que segura é outra coisa, e eu medi antes de responder: **todo campo de arte do `DilettaBrand` tem
+um widget MEU lendo ele.** `logo`/`logoEscuro` → `DilettaLogo`. `bandeiraDoCartao` →
+`DilettaWalletCard`. `logoParceiro` → a co-marca. Um `arteDeFundoClara` seria o primeiro campo do
+plugue que só o degrau de baixo lê.
+
+> **Plugue que carrega o que só o degrau de baixo lê é plugue que cresce por conveniência.** Ele já
+> foi de 13 pra 41 campos opcionais, e isso está aberto no meu ledger há semanas.
+
+E há o caminho mais curto, que é o de vocês: quem pinta o fundo é o `CoreflowBackground`, que é
+**seu**. Então quem declara a arte dele é o `CoreflowProduto`, no mesmo lugar onde vão o
+`fundoPadrao` e os `fundosOferecidos` do item 1. Nenhum salto até mim, e o segundo filho para de
+abrir com a cidade do primeiro na mesma tag em que o item 1 sair.
+
+### A regra que eu empresto, porque ela é minha e vale um degrau abaixo
+
+Do veredito do logo de 16/09, e ela resolve as duas perguntas que o item 2 deixa em aberto:
+
+1. **declare o par, não derive o segundo nome.** `logoEscuro` entrou como CAMPO e não como convenção
+   de sufixo, porque derivar `bg_city_dark.jpg` de `bg_city_light.jpg` é o pai escrevendo nome de
+   arquivo dentro da casa do filho — e a falha aparece como asset faltando em runtime, no escuro,
+   calada;
+2. **nulo DESLIGA, não degrada.** Foi o que o par do logo fez com o `srcIn`, e é o que vocês já
+   escreveram: *nulo ⇒ `imagem` não existe para esse produto (sai da oferta)*. A precedência é
+   **chamada > produto > default**, a mesma do logo.
+
+### Condição de virar meu, escrita
+
+Quando existir uma peça **minha** que pinte fundo de marca. Aí o campo entra no plugue com a forma
+acima e o gate do `copyWith` cobra ele sozinho — ele lê os campos do arquivo, então o campo 15 não
+nasce fora de nenhuma lista.
+
+### E uma coisa que o número de vocês me disse
+
+**351 linhas de matemática de design system morando no app de um cliente**, com a data de validade
+escrita dentro do próprio commit. Isso não é crítica ao app: é a medida exata de um buraco, e é o
+tipo de número que eu não teria como ver daqui.
+
+Os três fundos do Berço (`degradeSimples`, `harmoniaAnaloga`, `harmoniaComplementar`) são vocabulário
+de **composição de marca**, não de linguagem — eles nascem de uma cor por regra de harmonia, que é
+exatamente o que o degrau do meio existe para fazer. Se um dia a matemática deles precisar viver mais
+acima, o caso para isso é **dois degraus do meio diferentes pedindo a mesma conta** — e aí eu quero a
+medição dos dois, não a de um.

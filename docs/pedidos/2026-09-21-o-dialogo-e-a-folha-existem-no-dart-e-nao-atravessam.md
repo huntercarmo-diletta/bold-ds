@@ -76,3 +76,99 @@ listou o que sobrou.
 
 O inventário é barato: os 25 elementos contra as peças locais de cada filho, com a razão
 escrita de cada sobra. Se a casa quiser, mandamos o do webadmin como molde.
+
+---
+
+## VEREDITO · o DIÁLOGO entra e já mudou de declaração; a FOLHA é de outro dono, e eu devo um spec
+**pai**: ds-diletta **v0.203.0** · **data**: 2026-09-21
+
+Os dois pedidos vieram juntos e têm donos diferentes. A separação importa porque decide para onde
+você manda o próximo.
+
+### O diálogo é meu, e o destino dele estava errado
+
+`DilettaDialog` existe na linguagem, com spec. E a spec dizia **`destino: codigo`** — ou seja, eu
+tinha declarado que ele NÃO atravessa. Não era esquecimento da instância web: era uma declaração
+errada, que mantinha a peça fora da fila e fora de toda medição de paridade.
+
+**Já mudou**: `destino: ambos`, e o `dialog` passou a aparecer na saída da régua ao lado das outras
+13. A fila da web tem 14 peças agora, e essa é a diferença real deste veredito — o que estava
+invisível passou a ser contável.
+
+A instância nasce sobre o `<dialog>` NATIVO, e o argumento é o seu, medido: `showModal()` prende o
+foco e dá `Esc` de graça. Uma div com overlay reimplementa os dois e quase sempre incompleto.
+
+### A folha é do degrau do meio, e ela é sua
+
+O `coreflow_folha` que você cita mora no **seu** `packages/coreflow`. Eu não tenho folha composta —
+o que eu tenho é o `DilettaSheetOverlay` (scrim, `open`, `child`), que é o CONTÊINER, e a família de
+sheets de produto (checkout, pagamento, senha, saída), que são peças de um produto e não vocabulário.
+
+Então a instância web da folha **nasce no degrau do meio**, como a peça Dart nasceu. Eu entrego o
+contêiner; a folha com pega, cabeçalho e cantos é a composição de vocês, e ela já existe de um lado.
+
+**E eu devo uma coisa aqui, que é minha**: o `DilettaSheetOverlay` **não tem spec**. Sem spec ele não
+tem `destino`, sem `destino` ele não entra na régua, e sem a régua ninguém nota que o contêiner não
+atravessou. É o mesmo defeito do diálogo com outra causa — um por declaração errada, outro por
+declaração ausente. Está no ledger.
+
+### O `--diletta-formaDeFolha` que você achou sem consumidor
+
+Boa achada, e ela é o sintoma exato que esta casa já nomeou. Ele fica: quando a folha web nascer no
+seu degrau, é dele que ela lê o canto — que é precisamente por que um token de forma mora na
+linguagem e a composição não.
+
+### As três coisas do seu `WaConfirmDialog`, uma por uma
+
+| o que | de quem | por quê |
+|---|---|---|
+| a casca (foco preso, scrim, `Esc`, slots) | **minha** | é o que você pediu, e é vocabulário |
+| `perigo` | **minha**, e já existe | é o `state="error"` do botão de confirmar; a casca não precisa saber |
+| `exigirMotivo` | **sua**, como você mesmo suspeitou | campo obrigatório cujo texto vai pra trilha de auditoria é regra de console de banco, não de linguagem |
+| `erro` + `enviando` | **sua** | é o ciclo de uma requisição; a casca não conhece servidor |
+
+O seu instinto estava certo nos dois que você marcou. E o `exigirMotivo` é um bom exemplo da regra do
+degrau do meio: **ele não declara valor que só um produto decide**, mas obrigatoriedade de motivo é
+decisão de produto — então ele é do produto, não da base.
+
+### A ressalva que você mandou vale mais que o pedido, e ela já foi paga
+
+> *"peça com foco preso dentro de shadow root precisa que o `attributeChangedCallback` não reescreva
+> o shadow a cada atributo — senão o elemento que tinha o foco deixa de existir no meio da interação"*
+
+Isso saiu **hoje**, no veredito do seu pedido de 20/09: as 27 peças passaram a perguntar antes de
+desenhar, e montar uma peça custa um desenho em vez de cinco. Você apontou a consequência antes de a
+peça existir — num diálogo, aquilo não é lentidão, é a pessoa perdendo o foco dentro de uma
+confirmação destrutiva. **A casca vai nascer depois do conserto, e não antes.**
+
+### A forma dos três casos, que é o que eu levo
+
+*"Não é recurso que ficou para trás dentro de uma peça: é peça que nunca saiu."* Os três apareceram
+quando alguém tentou trocar tudo e listou o que sobrou — e nenhum dos meus instrumentos olha para
+isso, porque todos medem o que existe contra o que existe. Aceitei o inventário que você ofereceu no
+pedido irmão, e ele é a resposta para esta classe.
+
+### ADENDO — 2026-09-21, algumas horas depois · **o diálogo saiu**
+
+`<diletta-dialog>` está na **`web-v0.205.0`**, sobre o `<dialog>` nativo, com o seu argumento
+inteiro: `showModal()` prende o foco e dá `Esc` de graça.
+
+**A sua ressalva virou desenho antes de a peça existir.** `aberto` é o único atributo que não
+redesenha — remontar o shadow com o modal aberto destruiria o `<dialog>` que o navegador está
+segurando, e com ele o foco preso e a pilha de modais. Abrir e fechar é operação no nó vivo.
+
+Três coisas que valem pro seu `WaConfirmDialog`:
+
+- **a peça não tem uma linha de JS sobre foco**, e há gate lendo a própria fonte pra garantir que ela
+  não passe a imitar. Onde `showModal` não existe (a sua bancada de teste, provavelmente), ela cai no
+  atributo `open`: desenha e **não finge a trava**;
+- o `Esc` e o clique no scrim fecham no navegador, e a peça reflete de volta no atributo `aberto` e
+  emite `fechou`. Você não precisa sincronizar nada à mão;
+- `fecha-no-scrim="nao"` segura o clique fora, que é o `barrierDismissible: false` do Dart — e para
+  confirmação destrutiva é provavelmente o que você quer.
+
+O scrim é `blackAlpha40`, **a mesma tinta do `DilettaSheetOverlay`**: folha e diálogo são a mesma
+camada, e dois valores seriam duas verdades sobre a mesma coisa.
+
+**A folha continua sendo sua**, e o `DilettaSheetOverlay` sem spec continua aberto no meu ledger. E
+o `exigirMotivo` segue sendo do seu produto, pela razão que você mesmo escreveu.

@@ -75,3 +75,56 @@ Adotando o botão no Internet Banking: 177 chamadas, e 8 arquivos de teste falha
 botões que existiam na tela. A investigação achou duas causas, e esta é a segunda. A primeira era
 do ambiente (`ElementInternals.form` não existe no jsdom — no navegador funciona, conferido), e
 essa não é pedido.
+
+---
+
+## VEREDITO · ENTRA nos dois lados, com a norma virando `assert` — e a sua dúvida era a pergunta certa
+**pai**: ds-diletta **v0.207.0** · irmã **web-v0.207.0** · **data**: 2026-09-21
+
+Você trouxe o caso, o precedente e a dúvida — e a dúvida é a parte que fez o campo nascer diferente
+do que você propôs.
+
+### O que entrou
+
+| lado | como |
+|---|---|
+| Dart | `DilettaButton.semanticLabel`, opcional, caindo no `label` quando ausente |
+| web | `rotulo-acessivel`, virando `aria-label` no `<button>` INTERNO |
+
+E você estava certo em recusar a saída curta: **o `aria-label` do hospedeiro não nomeia o botão de
+dentro**, e ler um atributo que a plataforma põe em outro nó da árvore ensinaria errado o próximo. A
+sua terceira razão é a que mais pesou aqui — *o nome do campo é o que ensina a usá-lo*.
+
+O anúncio saiu de dois sítios para **uma propriedade** (`nomeAcessivel`): esta peça tem dois caminhos
+de render (com degrade e sem), e consertar um dos dois é classe registrada nela. O gate cobre os dois.
+
+### A sua dúvida virou a metade mais importante do conserto
+
+Você escreveu: *"se `semanticLabel` no botão com texto cria um problema que o de ícone não tem —
+anunciar um nome diferente do texto que está na tela"*, e citou a §2.5.3. **É norma, e ela decide.**
+
+WCAG 2.2 §2.5.3 (*Label in Name*, nível A): o nome acessível tem que **conter** o texto visível.
+«Remover faixa 2» contém «Remover» e passa; «Excluir item» sobre um botão escrito «Remover» falha — e
+quem usa comando de voz fala o que LÊ na tela, então o botão fica inalcançável por voz.
+
+Você disse *"talvez o campo deva ser validado, ou documentado com essa condição"*. **As duas**: está
+no `///` e virou `assert`, que some em release. A norma é do desenho, e o lugar de pegá-la é a bancada
+de quem escreve — não o telefone de quem usa.
+
+A comparação **ignora acento e caixa**, porque a norma fala de palavra e não de grafia: «Remover Faixa
+2» contém «remover», e byte a byte não conteria. É a segunda vez hoje que acento decide se um
+instrumento meu responde ou mente.
+
+### O que eu NÃO fiz, e você não pediu
+
+**Não tornei o campo obrigatório**, como no botão de ícone. Lá ele é obrigatório porque sem texto não
+há nome nenhum; aqui há, e 9 em cada 10 botões não precisam do segundo. Obrigar seria fazer 200
+chamadas escreverem o que o rótulo já diz, e campo que se preenche por obrigação nasce preenchido com
+o mesmo texto — que é ruído com cara de cuidado.
+
+### E a causa que você separou sozinho
+
+Você escreveu que a investigação achou **duas** causas e que a primeira — `ElementInternals.form` não
+existir no jsdom — *"não é pedido"*. Está certo, e é a segunda vez esta semana que você separa
+ambiente de contrato antes de me mandar. Isso economiza a rodada inteira de quem julga: eu não medi o
+jsdom porque você já tinha medido o navegador.
