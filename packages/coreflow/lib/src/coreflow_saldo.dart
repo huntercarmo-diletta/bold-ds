@@ -135,7 +135,7 @@ class CoreflowSaldo extends StatelessWidget {
                     DilettaStatusTag(
                       label: oculto ? _mascaraDoTotal : saidas!,
                       icon: DilettaIcons.arrowRightFromBracketSolid,
-                      tone: DilettaStatusTone.danger,
+                      tone: DilettaStatusTone.error,
                     ),
                 ]),
               ],

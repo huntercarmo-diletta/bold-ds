@@ -1,6 +1,6 @@
 {
   "name": "norte-benk-web",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "type": "module",
   "description": "A INSTÂNCIA WEB do Norte Benk: os custom elements da linguagem, com a tinta deste produto.",
@@ -17,6 +17,6 @@
     "#avo": "diletta-design-system-web"
   },
   "dependencies": {
-    "diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-v0.207.1"
+    "diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-v2.5.0"
   }
 }

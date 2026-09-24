@@ -284,6 +284,15 @@ const Map<String, String> foto = {
   'etiqueta.claro.danger.dot.fill': '0x66FFFFFF',
   'etiqueta.claro.danger.dot.stroke': '0xBDFFFFFF',
   'etiqueta.claro.danger.dot.fg': '0xFFEF4757',
+  // `error` é o nome do tom desde a v1.1.0 do avô (v2.5.0 aqui, 24/09); `danger` ficou como
+  // apelido depreciado com a MESMA resolução. Não é corte: é o mesmo pixel com o nome novo, e a
+  // foto ganha a chave para o gate continuar cobrindo o enum inteiro.
+  'etiqueta.claro.error.fill': '0x66FFFFFF',
+  'etiqueta.claro.error.stroke': '0xBDFFFFFF',
+  'etiqueta.claro.error.fg': '0xFFEF4757',
+  'etiqueta.claro.error.dot.fill': '0x66FFFFFF',
+  'etiqueta.claro.error.dot.stroke': '0xBDFFFFFF',
+  'etiqueta.claro.error.dot.fg': '0xFFEF4757',
   'etiqueta.claro.secure.fill': '0xFFFBF3D6',
   'etiqueta.claro.secure.stroke': '0xFF8A6D1F',
   'etiqueta.claro.secure.fg': '0xFF8A6D1F',
@@ -326,6 +335,15 @@ const Map<String, String> foto = {
   'etiqueta.escuro.danger.dot.fill': '0x66FFFFFF',
   'etiqueta.escuro.danger.dot.stroke': '0xBDFFFFFF',
   'etiqueta.escuro.danger.dot.fg': '0xFFEF4757',
+  // `error` é o nome do tom desde a v1.1.0 do avô (v2.5.0 aqui, 24/09); `danger` ficou como
+  // apelido depreciado com a MESMA resolução. Não é corte: é o mesmo pixel com o nome novo, e a
+  // foto ganha a chave para o gate continuar cobrindo o enum inteiro.
+  'etiqueta.escuro.error.fill': '0x66FFFFFF',
+  'etiqueta.escuro.error.stroke': '0xBDFFFFFF',
+  'etiqueta.escuro.error.fg': '0xFFEF4757',
+  'etiqueta.escuro.error.dot.fill': '0x66FFFFFF',
+  'etiqueta.escuro.error.dot.stroke': '0xBDFFFFFF',
+  'etiqueta.escuro.error.dot.fg': '0xFFEF4757',
   'etiqueta.escuro.secure.fill': '0xFFFBF3D6',
   'etiqueta.escuro.secure.stroke': '0xFF8A6D1F',
   'etiqueta.escuro.secure.fg': '0xFF8A6D1F',

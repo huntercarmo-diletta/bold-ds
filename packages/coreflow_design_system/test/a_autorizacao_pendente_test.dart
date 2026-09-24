@@ -141,7 +141,7 @@ void main() {
       await t.pump(const Duration(milliseconds: 50));
       expect(find.text('prazo vencido'), findsOneWidget);
       expect(t.widget<DilettaStatusTag>(find.byType(DilettaStatusTag)).tone,
-          DilettaStatusTone.danger);
+          DilettaStatusTone.error);
     });
 
     testWidgets('o limite de urgência é do consumidor', (t) async {

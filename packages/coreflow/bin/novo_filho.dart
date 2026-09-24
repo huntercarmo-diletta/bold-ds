@@ -235,7 +235,7 @@ derivado da sua marca daria um produto que não sabe dizer que algo deu errado.
 /// `o_filho_gerado_recebe_o_mesmo_avo_test` prova que este número é a MESMA LINGUAGEM que o `pubspec`
 /// do pai declara — mesmo `X.Y`, patch da web igual ou maior, porque o avô reemite tag web queimada
 /// com o patch seguinte e o Dart não acompanha. Duas linguagens no mesmo produto é o que ele proíbe.
-const tagWebDoAvo = 'web-v0.207.1';  // a instância web de v0.207.0, REEMITIDA (22/09)
+const tagWebDoAvo = 'web-v2.5.0';  // a instância web de v2.5.0 — a tag dos dezesseis vereditos (24/09)
 
 String emissorDe(Opcoes op) => '''
 // ESCREVE `web/tokens/${_arquivo(op.id)}-tokens.css`. **Não é gate** — gate é o vizinho

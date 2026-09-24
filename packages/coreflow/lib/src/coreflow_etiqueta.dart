@@ -179,7 +179,11 @@ _ToneSpec _toneSpec(DilettaStatusTone t, CoreflowScheme s) {
         fg: isDark ? s.paleta.success05 : s.paleta.success04,
         fill: glassFill(),
         stroke: glassStroke()),
-    DilettaStatusTone.danger => _ToneSpec(
+    // `error` é o nome desde a v1.1.0 do avô; `danger` ficou como apelido depreciado e ainda é
+    // valor do enum, então o switch cobre os dois até ele sair — sem curinga, para o próximo tom
+    // novo continuar reprovando aqui em vez de cair num «resto».
+    // ignore: deprecated_member_use
+    DilettaStatusTone.error || DilettaStatusTone.danger => _ToneSpec(
         fg: isDark ? s.paleta.error05 : s.paleta.error04,
         fill: glassFill(),
         stroke: glassStroke()),

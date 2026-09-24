@@ -20,6 +20,46 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.118.0] — 2026-09-24
+
+### O avô sobe de `v0.207.0` para `v2.5.0` — os dois lados juntos, como a casa manda
+
+A `v2.5.0` / `web-v2.5.0` é a tag dos dezesseis vereditos de 24/09 (aviso
+`docs/avisos/2026-09-24-os-dezesseis-julgados-e-o-cano-que-estava-entupido.md`). Entre a `0.207` e
+ela há duas majors do avô — a `1.0.0` («campo obrigatório novo e renomeação de nome público só saem
+em major») e a `2.0.0` (o `chatLift` saiu, e este filho tinha zero chamadas). Os seis pinos sobem
+juntos: três `ref:` em Dart (`coreflow`, `coreflow_design_system`, `catalog`) e três `package.json`
+na web (Bold, Norte Benk, o exemplo do gerador), mais o molde do `novo_filho.dart`, porque *uma
+língua, um número* é gate e não frase (`o pacote WEB recebe o mesmo avô que este pacote Dart`).
+
+### O que mexeu de verdade, medido nos gates
+
+- **`DilettaStatusTone.danger` virou `error`** na `v1.1.0` do avô; `danger` ficou como apelido
+  depreciado, ainda valor do enum. O `switch` da etiqueta do Coreflow cobre os dois sem curinga, os
+  três usos passam a `error`, e a foto do esquema ganha as chaves `etiqueta.*.error.*` — mesmo pixel,
+  nome novo. Não é corte.
+- **Duas cores na folha emitida** (`bold-tokens.css`, regenerada pelo emissor): `--diletta-textTertiary`
+  no claro vai de `#80798d` a `#726d7f` — o piso de 4,5 do veredito do texto terciário, e é o que
+  faz o modo claro do app voltar a passar AA —, e `--diletta-onErrorSolid` vai de `#f7a9b1` a
+  `#ffffff` (a tinta do banner de erro sólido, veredito da `v1.0.2`). **Mexe pixel** nos dois.
+- **Nada mais mudou de conteúdo neste repo**: 234 testes do Bold e 146 do Coreflow verdes.
+
+### O que chega ao consumidor web por esta tag (`web-v0.118.0`)
+
+O `avo/` passa a ser a `web-v2.5.0`: `--diletta-breakpoint-sm/md/lg/xl` e `src/breakpoints.js`,
+a forma chegando à peça (`--diletta-formaDe*` lida por botão, campo e dropdown), `part="rotulo"` no
+campo, o evento `mudou` no `<diletta-input>`, `target`/`rel`/`download` no link. O webadmin tem
+remendos que viram no-op com isto e gates que avisam quais.
+
+### Uma instância web que faltava, e uma que não pode sair
+
+A `v0.116.0` e a `v0.117.0` saíram sem `web-v` — o gate `uma_versao_e_uma_tag` estava vermelho por
+elas desde 23/09. A **`web-v0.117.0`** foi emitida hoje a partir da tag, com o avô `web-v0.207.1` que
+ela pina. A **`web-v0.116.0` não sai**: a tag pina `web-v0.207.1`? Não — pina a `web-v0.207.0`, a
+tag do avô que aponta para o monorepo (aviso de 22/09), e o emissor recusa copiar um avô que não é
+pacote. Fica órfã, declarada; quem consome a web pula direto da `web-v0.115.0` para a `web-v0.117.0`,
+e o gate continua vermelho por ela — de propósito, até alguém decidir marcar o corte no gate.
+
 ## [0.117.0] — 2026-09-23
 
 ### A rampa de marca passa a viajar como token — nove degraus, por nome

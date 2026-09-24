@@ -124,6 +124,17 @@ void main() {
             'para quem lê o código:\n${fora.join('\n')}');
   });
 
+  /// As versões do monorepo SEM instância web, cada uma com a razão — e a razão é medida, não
+  /// desculpa. A `web-v0.117.0` foi emitida em 24/09 a partir da tag (faltava desde 23/09); a
+  /// `v0.116.0` não tem como sair: o `package.json` dela pina `web-v0.207.0`, a tag do avô que
+  /// aponta para o MONOREPO (aviso `2026-09-22-a-tag-que-nao-carrega-o-pacote.md`), e o emissor
+  /// recusa copiar um avô que não é pacote. Quem consome a web pula da `web-v0.115.0` para a
+  /// `web-v0.117.0`, e o que a `v0.116.0` entregou chega nela.
+  const _semInstanciaWebDeclarada = <String, String>{
+    'v0.116.0': 'pina web-v0.207.0, a tag do avô que aponta para o monorepo; o emissor recusa copiar '
+        'um avô que não é pacote. O conteúdo dela chega na web-v0.117.0.',
+  };
+
   test('o filho que versiona com o monorepo tem a tag web de cada versão', () {
     final tags = _tags();
     if (tags.isEmpty) return; // sem git, não há o que medir — e dizer isso é melhor que fingir
@@ -135,8 +146,16 @@ void main() {
       const primeiraComWeb = 'v0.103.0';
       final orfas = versoes
           .where((v) => _numero(v) >= _numero(primeiraComWeb) && !web.contains(v))
+          .where((v) => !_semInstanciaWebDeclarada.containsKey(v))
           .toList()
         ..sort();
+      // A exceção declarada tem de continuar sendo exceção: se a tag web dela aparecer, a razão
+      // aqui virou mentira e a linha sai.
+      for (final e in _semInstanciaWebDeclarada.entries) {
+        expect(web.contains(e.key), isFalse,
+            reason: '${e.key} ganhou instância web — apague a exceção declarada em _semInstanciaWebDeclarada');
+        expect(e.value.trim().length, greaterThan(40), reason: 'exceção sem razão escrita: ${e.key}');
+      }
       expect(orfas, isEmpty,
           reason: '${f.nome}: estas versões não têm instância web publicada:\n${orfas.join('\n')}\n'
               'A tag do monorepo NÃO emite o pacote web — rode `sh tool/espelha_o_web.sh <tag>` e '

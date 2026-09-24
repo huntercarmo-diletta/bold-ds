@@ -128,6 +128,9 @@ void main() {
     // Exato, e ele sobe de propósito quando alguém acrescenta opção de enum: `greaterThan(50)` com 61
     // medidos passava com 11 opções perdidas. Número que cresce é declaração, e atualizar a declaração
     // é o passo em que se percebe que a superfície mudou.
+    // Continua 122 depois do avô `v2.5.0` (24/09): `DilettaStatusTone.error` entrou e `danger` virou
+    // apelido depreciado — o catálogo deixa de oferecer o depreciado (`_tons` em `ds_do_bold.dart`),
+    // então os dois blocos que oferecem o tom trocaram uma opção por outra, e a superfície não mudou.
     expect(variacoes, 122,
         reason: 'a superfície de variação de enum mudou: era 74 — se foi de propósito, atualize aqui.'
             ' Subiu 7 em 03/09, quando cinco blocos passaram a emitir a peça DESTE produto: a'

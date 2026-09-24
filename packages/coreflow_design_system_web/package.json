@@ -1,6 +1,6 @@
 {
   "name": "coreflow-design-system-web",
-  "version": "0.117.0",
+  "version": "0.118.0",
   "private": true,
   "type": "module",
   "description": "A INSTÂNCIA WEB do DS do Conta BOLD: os custom elements da linguagem, do avô, com a tinta deste produto. Não redefine componente — troca a cor por variável CSS.",
@@ -20,6 +20,6 @@
   ],
   "dependencies": {
     "@fontsource/inter": "^5.3.0",
-    "diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-v0.207.1"
+    "diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-v2.5.0"
   }
 }

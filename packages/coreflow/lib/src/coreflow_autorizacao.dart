@@ -159,7 +159,7 @@ class CoreflowPrazoDaPendencia extends StatelessWidget {
     if (r.isNegative || r == Duration.zero) {
       return (
         rotulo: 'prazo vencido',
-        tom: DilettaStatusTone.danger,
+        tom: DilettaStatusTone.error,
         icone: DilettaIcons.circleExclamationLight,
       );
     }

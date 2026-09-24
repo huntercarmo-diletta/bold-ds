@@ -290,7 +290,12 @@ BlockDef _valor() => BlockDef(
 /// registro que copiava um enum do pai em vez de lê-lo — quinze outros blocos já usavam `_porNome`. Batia
 /// hoje, e é justamente o que faz a classe ser difícil de ver: tom novo no pai não apareceria no seletor,
 /// e nada falharia.
-List<String> get _tons => DilettaStatusTone.values.map((e) => e.name).toList();
+/// Os tons que o catálogo OFERECE — o enum inteiro menos o apelido depreciado. `danger` ficou no
+/// enum do avô como apelido de `error` (v1.1.0 dele; aqui desde a v2.5.0, 24/09) só para o código
+/// antigo compilar; oferecê-lo emitiria código que o analisador já avisa. O dia em que ele sair do
+/// enum, este filtro deixa de morder sozinho.
+// ignore: deprecated_member_use
+List<String> get _tons => DilettaStatusTone.values.where((e) => e != DilettaStatusTone.danger).map((e) => e.name).toList();
 
 DilettaStatusTone _tomDe(String t) => _daOpcao(t, _porNome(DilettaStatusTone.values),
     DilettaStatusTone.neutral);
@@ -1326,7 +1331,7 @@ BlockDef _etiqueta() => BlockDef(
       label: 'Etiqueta · CoreflowEtiqueta',
       props: {
         'rotulo': const PropDef('text', bindable: true, dartType: 'String'),
-        'tom': PropDef('enum', options: DilettaStatusTone.values.map((e) => e.name).toList()),
+        'tom': PropDef('enum', options: _tons),
         'porte': PropDef('enum', options: DilettaStatusTagPorte.values.map((e) => e.name).toList()),
         'ponto': const PropDef('bool'),
       },

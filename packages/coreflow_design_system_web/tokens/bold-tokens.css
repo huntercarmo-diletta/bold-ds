@@ -17,7 +17,7 @@
   --diletta-glassStroke: #ffedf3;
   --diletta-glassTint: #ffffff80;
   --diletta-onError: #ffffff;
-  --diletta-onErrorSolid: #f7a9b1;
+  --diletta-onErrorSolid: #ffffff;
   --diletta-onErrorSubtle: #b42318;
   --diletta-onPartner: #ffffff;
   --diletta-onPrimary: #ffffff;
@@ -57,7 +57,7 @@
   --diletta-textMuted: #8a8398;
   --diletta-textPlaceholder: #8a8398;
   --diletta-textSecondary: #6b6678;
-  --diletta-textTertiary: #80798d;
+  --diletta-textTertiary: #726d7f;
   --diletta-trilhoDeMedidor: #3d3939;
   --diletta-warning: #f6a21a;
   --diletta-warningBorder: #fbd79b;
@@ -84,7 +84,7 @@
     --diletta-glassStroke: #ff98984d;
     --diletta-glassTint: #16060a80;
     --diletta-onError: #530e16;
-    --diletta-onErrorSolid: #f7a9b1;
+    --diletta-onErrorSolid: #ffffff;
     --diletta-onErrorSubtle: #f7a9b1;
     --diletta-onPartner: #ffffff;
     --diletta-onPrimary: #000000;
@@ -151,7 +151,7 @@
   --diletta-glassStroke: #ff98984d;
   --diletta-glassTint: #16060a80;
   --diletta-onError: #530e16;
-  --diletta-onErrorSolid: #f7a9b1;
+  --diletta-onErrorSolid: #ffffff;
   --diletta-onErrorSubtle: #f7a9b1;
   --diletta-onPartner: #ffffff;
   --diletta-onPrimary: #000000;
