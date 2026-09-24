@@ -209,3 +209,49 @@ Três coisas que este arquivo prova e que o pedido original só supunha:
 
 Nada mudou no mérito do pedido. O que mudou é o número da seção «Se você disser não»: o preço
 deixou de ser estimado e passou a ter arquivo, linha e data.
+
+---
+
+## Veredito · ENTRAM AS DUAS, e a segunda é pior do que você escreveu
+**pai**: ds-diletta **v2.5.0** · **data**: 2026-09-24
+
+### (a) A barra passa a se anunciar
+
+`Semantics` continuava em **zero** no arquivo — medido aqui na v2.4.2, três tags depois da sua.
+Agora a peça embrulha o desenho e publica a fração como `value`. Sem nome ela já fala, porque a
+fração sozinha é o que faltava; com `rotuloAcessivel` o nome vem antes.
+
+`value` e não `label` de propósito: é o que o leitor anuncia como valor do controle, e é o que
+muda. Seu caso — cinco linhas de teto, «Pix, R$ 1.200 de R$ 5.000» na linha irmã e o quanto já foi
+só na pintura — passa a dizer os dois.
+
+**E a sua leitura do veredito de 09/08 está certa e eu registro contra mim**: ali o contraste do
+`warning` me fez pôr o TEXTO junto nos dois medidores, e o texto entrou **na linha irmã**.
+*Acessibilidade resolvida com peça vizinha resolve para metade das pessoas.*
+
+### (b) A bula estava mentindo, e o número novo é melhor do que você imaginava
+
+Você achou uma tabela de seis semanas atrás. Medido hoje, na paleta de referência, contra
+`trilhoDeMedidor`:
+
+| tom | claro | escuro |
+|---|---|---|
+| `normal` | 4,42 | 4,79 |
+| `warning` | 4,71 | 6,77 |
+| `error` | 5,62 | 3,58 |
+
+**Os seis passam, e o pior é 3,58.** A bula dizia *«nenhum alcança 3:1»* e uma auditoria WCAG
+reprovou um fluxo de dinheiro citando um defeito que a v0.64.0 tinha consertado — consertado *pelo
+seu pedido*.
+
+O `tokens:` do inspetor também dizia `trilho neutral-07`. Dois lugares, a mesma mentira.
+
+**A classe é a de 17/09, sobre os números do `onXSubtle`, e ela voltou**: *número em `///` é
+medição com data de validade e sem alarme*. Por isso a tabela agora carrega a data **e** o
+`o_medidor_se_le_e_alcanca_o_piso_test` mede os seis a cada rodada. Bula que envelhece em silêncio
+é a forma mais cara de documentação errada — ela não erra sozinha, ela erra na boca de quem audita.
+
+**Os sete**: manutenção ↑ a bula deixa de ser lembrança · escalabilidade = · **aplicação ↑ decide**
+— quem ouve passa a receber a fração · aderência ao mercado ↑ `value` é o mecanismo da plataforma ·
+**robustez ↑ decide** — a tabela ganhou quem a cobre · arquitetura = nenhuma peça nova · conciso ↑
+um parâmetro opcional, e ele é opcional porque a peça nunca fica muda.

@@ -142,3 +142,47 @@ vinha e a derivação o reproduziu byte a byte.
 *«só falha no modo claro da biblioteca»* e que *«como o app roda só escuro, não é defeito no app
 real»*. Não é verdade. O app tem Aparência com **Claro, Escuro e Do sistema**, persistido em
 `SharedPreferences` — o escuro é o default, não o único.
+
+---
+
+## Veredito · ENTRA — o piso era de texto grande e o papel não pinta texto grande
+**pai**: ds-diletta **v2.5.0** · **data**: 2026-09-24
+
+Você reproduziu a derivação à mão antes de escrever e chegou no mesmo `#80798D`. Eu fui contar o
+que faltava pra fechar, porque **razão sem uso é meia medição** — é a lição que este ledger guarda
+desde 31/07, e ela decide aqui:
+
+**42 sítios de `textTertiary` em 19 peças.** Os degraus que ele veste, nos que declaram degrau:
+
+| degrau | tamanho / peso | sítios |
+|---|---|---|
+| `caption` | 12 / 400 | 6 |
+| `bodyMd` | 14 / 400 | 5 |
+| `subheading` | 14 / 600 | 3 |
+| `label` | 12 / 600 | 1 |
+
+A WCAG isenta texto grande em **18pt regular ou 14pt em negrito** — 24px, ou 18,66px em negrito.
+**Nenhum dos quatro chega perto.** O piso de `textTertiary` sempre foi 4,5, e a derivação cobrava
+3,0 num ramo e **nada** no outro.
+
+### O conserto preserva o matiz, que é o que você declarou
+
+`_alcancaLendo` caminha do degrau derivado na direção do extremo ALTO — a sua tinta secundária, que
+você declarou e que já passa — até alcançar 4,5. **O que se perde é distância, não temperatura.**
+Se nem o extremo alto alcançar, ele devolve o extremo alto: a melhor coisa que a sua declaração
+oferece, sem inventar cor.
+
+O fundo de referência é a **página**, não a superfície, e isso fecha os seus dois números: a página
+é o fundo menos contrastante dos dois (3,77 contra 4,17 na sua medição), então alcançar o piso nela
+alcança na superfície.
+
+A frase que faltava aplicar é desta casa, da v0.22.0: **«tinta é consequência de legibilidade;
+preenchimento é decisão de marca»**. O `textTertiary` ficou três meses fora dela.
+
+**Na paleta de referência nada se move** — ela já media 10,23 no claro e 6,53 no escuro. O piso só
+morde onde a declaração do filho falha, que é exatamente onde ele deve morder.
+
+**Os sete**: manutenção ↑ um piso no lugar de dois comportamentos · escalabilidade ↑ vale pro filho
+N sem ninguém remedir · **aplicação ↑ decide** — o modo claro do seu app volta a passar ·
+aderência ao mercado ↑ WCAG 2.2 §1.4.3 · **robustez ↑ decide** — `_degrauEntre` não consultava
+contraste nenhum · arquitetura = uma função ao lado das duas que já existiam · conciso =.

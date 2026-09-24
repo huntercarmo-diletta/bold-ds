@@ -111,3 +111,42 @@ conclusão dele: o que o Bold controla já bate e tem gate; a diferença mora na
 pedido não existia. No mesmo dia a Agatha escolheu remendar no consumidor web por `::part` — o
 remendo entrou, e é a prova de que a porta existe e de que o conserto não é dela. Esta rotina
 remediu as três linhas na `v2.1.0` antes de escrever.
+
+---
+
+## Veredito · ENTRA — e você achou a peça reprovada pela lei da própria casa
+**pai**: ds-diletta **v2.5.0** · **web-v2.5.0** · **data**: 2026-09-24
+
+As três peças passam a ler a família: `var(--diletta-formaDeBotao)` no botão,
+`var(--diletta-formaDeCampo)` no campo e no controle do seletor.
+
+**O argumento que torna isto defeito e não preferência é o seu**, e é a `specs/design-system-button/spec.md`
+desde a v2.0.0: *«Nenhuma variante de `DilettaButton` SHALL sobrescrever `scheme.formaDoBotao`»*.
+Ela foi escrita ao apagar o `chatLift`, que fazia exatamente isso — e a peça web, que é instância
+do mesmo contrato, estava fazendo o mesmo com um número cravado. **A lei pegou a casa que a
+escreveu.**
+
+### O que eu achei indo consertar, e faltava metade
+
+A emissão da linguagem **não publicava nenhuma das seis formas**. Você viu
+`--diletta-formaDeBotao: 16px` na sua folha porque o seu emissor as acrescenta; a referência não
+tinha nenhuma, então a peça não teria o que ler mesmo se quisesse. Entrou
+`tokens/forma.tokens.json` com os seis defaults da referência, e agora o fallback da peça é o
+default da linguagem, não uma escolha dela.
+
+### O campo divergia no DEFAULT, e ninguém tinha medido
+
+A linguagem diz **16** para `formaDeCampo`; a peça web pintava **8**. Não era o seu 16 contra a
+pílula: era a referência contra si mesma, nos dois lados da mesma peça.
+
+### O que eu NÃO fiz
+
+As outras 17 crases de raio nas peças web **ficam**. O disco do avatar é 50%, a pílula da etiqueta
+é a geometria dela, e o botão de ícone crava pílula **nos dois lados** — conferido no Dart. Cobrar
+delas seria cobrar o que a linguagem não declara, e varredura em massa conserta um padrão e
+destrói outro. O gate nomeia as três peças pareadas e confere **os dois lados**: se o Dart parar de
+ler a família, a linha da régua vira mentira e ela acusa.
+
+**Os sete**: manutenção ↑ · escalabilidade ↑ o filho N declara e as duas instâncias obedecem ·
+**aplicação ↑ decide** — o seu 16 chega na web · aderência ao mercado ↑ · **robustez ↑ decide** — o
+gate é pareado · **arquitetura ↑ decide** — a peça deixa de decidir o que é do esquema · conciso =.

@@ -154,3 +154,33 @@ Vale a prova de mutação da família no primeiro: troque o papel de volta para 
 o gate tem de ficar vermelho. Se continuar verde, ele está lendo a declaração e não a
 composição — que é o modo de falhar que os três produtos desta família já pagaram com o
 anel de foco.
+
+---
+
+## Veredito · ENTRA DIFERENTE — metade já estava consertada, e por isso a outra metade dói
+**pai**: ds-diletta **web-v2.5.0** · **data**: 2026-09-24
+
+Você mediu `textMuted` nas duas peças, na sua tag. Medido aqui na v2.4.2: **o `<diletta-input>` já
+lê `textSecondary` desde a v0.200.0**, e o `<diletta-dropdown>` continuava em `textMuted`.
+
+Isso é pior do que os dois errados juntos: **mesma família, mesmo slot, dois papéis** — e ninguém
+tinha posto os irmãos lado a lado, nem eu ao consertar um deles. O seletor foi para
+`textSecondary`.
+
+### O que eu NÃO fiz, e é o pedido dentro do pedido
+
+**`textMuted` continua metadado, com piso de 3,0.** O seu próprio gate
+(`o_piso_de_contraste_vale_nos_dois_modos`) cobra 3,0 dos papéis discretos *porque* eles são
+metadado, e ele está certo. O defeito nunca foi o piso do papel: foi **o rótulo vestir um papel
+que não é o dele**. Mudar o piso do `textMuted` consertaria o seu rótulo e apagaria a diferença
+entre metadado e texto em toda peça que usa o papel direito.
+
+### A segunda metade: você não alcançava, e agora alcança
+
+`part="rotulo"` nas duas peças. Era a parte do seu pedido que dizia *«nem você o corrige nem eu»* —
+e ela vale mesmo com o papel consertado, porque a próxima divergência de tema não vai ter um pai
+por perto.
+
+**Os sete**: manutenção ↑ os irmãos concordam · escalabilidade ↑ · **aplicação ↑ decide** — o
+rótulo passa o piso de texto · aderência ao mercado ↑ `part` é o mecanismo da plataforma ·
+**robustez ↑ decide** — o gate compara os DOIS, que é o que faltava · arquitetura = · conciso =.

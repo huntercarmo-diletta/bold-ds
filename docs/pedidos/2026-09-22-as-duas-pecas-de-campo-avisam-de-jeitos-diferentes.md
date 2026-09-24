@@ -152,3 +152,34 @@ Se a decisão for «nenhuma emite», o gate é o contrário e vale igual: **zero
 `dispatchEvent` de mudança na família**, com a razão escrita. O que eu preciso é que o
 gate exista, porque hoje as duas passam nos gates que existem — cada uma sozinha está
 certa.
+
+---
+
+## Veredito · ENTRA — e o que entra é a REGRA DA FAMÍLIA, que foi o que você pediu
+**pai**: ds-diletta **web-v2.5.0** · **data**: 2026-09-24
+
+Você não pediu um evento no `input`: pediu **qual é a regra da família**. É a pergunta certa, e a
+resposta é uma frase:
+
+> **Peça de entrada avisa `mudou`, com o valor pronto no `detail`.**
+
+O `<diletta-input>` passou a emitir. O nativo continua subindo — quem já ouve `input` não perde
+nada. O que entra é a segunda porta, igual à da peça irmã.
+
+**O argumento que decide é o seu segundo embrulho**, não o primeiro. O caminho da plataforma
+cobrava de você `e.composedPath()[0]`, porque `e.target` no hospedeiro vem RETARGETADO na borda do
+shadow e não tem `.value`. Isso é conhecimento de shadow DOM cobrado de quem adotou a peça
+**justamente pra não precisar dele**. A peça existe pra fechar a borda; exigir que o consumidor a
+atravesse é a peça cobrando o preço que ela promete pagar.
+
+**O que eu achei escrevendo**: a primeira versão guardava o ouvinte com uma flag de instância. Não
+serve — `pinta()` reescreve o `innerHTML` do shadow (`base.js:169`) e o `.campo` depois do render é
+um nó NOVO. A flag diria que o ouvinte existe enquanto ele morreu junto com o nó anterior: o campo
+emudeceria no primeiro `erro` que mudasse, **sem uma linha no console**. Está no gate, com o caso
+do `erro` construído e um terceiro teste cobrando que ele não avise duas vezes.
+
+**Os sete**: manutenção ↑ um contrato em vez de dois · escalabilidade ↑ a regra vale pra peça de
+entrada N · **aplicação ↑ decide** — os seus dois embrulhos viram um · aderência ao mercado ↑
+evento de alto nível ao lado do nativo é o que Shoelace e Lion fazem · robustez ↑ o gate constrói o
+re-render, que é onde a primeira versão morria · arquitetura = nenhuma peça nova · conciso ↑ a
+regra cabe numa frase.

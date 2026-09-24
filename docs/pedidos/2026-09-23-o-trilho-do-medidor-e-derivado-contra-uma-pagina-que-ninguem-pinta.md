@@ -117,3 +117,36 @@ O `revisor-visual` comparou seis telas do app com os frames do Figma em 23/09 e 
 divergência da lista, por gravidade, foi esta. Fui ler a derivação esperando um número errado e
 achei a referência errada: a função está certa para a página que ela imagina, e a página que ela
 imagina não existe neste produto.
+
+---
+
+## Veredito · ENTRA DIFERENTE — a peça para de DEPENDER de saber o que está atrás
+**pai**: ds-diletta **v2.5.0** · **data**: 2026-09-24 · **MEXE PIXEL**
+
+Você achou o defeito exato: `_trilhoDerivado` mede separação contra `p.bgClaro ?? p.white`, uma cor
+lisa, e nenhuma tela sua pinta essa cor lisa atrás do medidor — a página é degradê e a barra ainda
+está sobre card de vidro. **A separação de ≥1,1 que a função garante no papel mediu 1,02:1 no
+pixel.**
+
+**E é por isso que eu não consertei a derivação.** Qualquer cor de referência que eu escolha ali é
+um palpite sobre uma tela que eu não vejo: degradê, vidro, foto, card sobre card. Medir contra a
+página é medir contra a que o filho **declarou**, e ele pinta outra — e isso vale para qualquer
+filho, não só para você. Uma função cega não fica menos cega com um chute melhor.
+
+Então a aresta deixa de ser decoração e vira estrutura: **o trilho ganha borda de 0,5 no papel
+`border`, nos três skins.** A borda separa o trilho do que houver atrás **sem saber o que é**, que
+é a única garantia que uma peça cega pode dar.
+
+O skin `banner` já fazia exatamente isto, com `whiteAlpha38`, desde sempre — ele mora sobre cor de
+marca e por isso alguém pensou nele. Os outros dois moram sobre *«a página»*, e ninguém pensou
+**porque «a página» parecia conhecida.** Essa é a lição, e ela não é sobre medidor: *fundo que a
+peça acha que conhece é o fundo que ninguém confere.*
+
+**Isto MEXE PIXEL em todo medidor de todo filho** — meio ponto de borda. Está declarado no
+CHANGELOG como tal, e o gate cobra a aresta nos três skins.
+
+**Os sete**: manutenção ↑ · escalabilidade ↑ vale sobre qualquer fundo · **aplicação ↑ decide** — o
+medidor de teto volta a existir no claro · aderência ao mercado ↑ WCAG 2.2 §1.4.11 · **robustez ↑
+decide** — deixa de depender de um palpite sobre a tela do filho · arquitetura ↑ o skin irmão já
+tinha a resposta · conciso = · **ressalva declarada: muda pixel, e a decisão é minha porque a
+alternativa é um medidor invisível.**

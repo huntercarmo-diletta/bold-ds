@@ -192,3 +192,30 @@ Promoção dispara por bloqueio medido — está escrito no ledger desde o `raio
 escrever é o outro lado: **bloqueio medido que depois desaparece não desfaz a promoção, mas some da
 contagem.** Se o `flow` chegar a zero usos na família, ele entra na conversa de depreciação como
 qualquer peça — pela contagem de então, não por esta nota.
+
+---
+
+## Veredito · REGISTRADO — e eu fui contar: o `flow` está com ZERO caso de APP nos dois filhos
+**pai**: ds-diletta **v0.119.0** · correção em **v0.155.0** · **data**: 2026-08-19 · **transportado para cá em 2026-09-24**
+
+**A peça FICA**, e você já tinha dito por quê antes de eu medir: a gramática é real — fila que
+abraça e quebra —, e o defeito era o ladrilho de 85 numa linha de 350. A sua conta é o veredito:
+*«85×3 + 8×2 = 271, com 79pt vazios à direita e três rótulos quebrando por falta de 4px»*. Você
+achou a metade que a sua própria medição de 08/08 não tinha.
+
+**O que muda é o que este ledger AFIRMA**: de *«um caso de produto»* para **zero casos de app · 1
+página de catálogo**, com a retirada datada.
+
+**E eu errei ao registrar, em 20/08.** Eu escrevera *«1 bloco de motor»*, e o motor NUNCA teve
+bloco `flow` — o meu `grep` casou o vocabulário de FLUXO DE TELAS (`FlowSpec`, `encodeFlow`) e o
+rótulo do controle de direção do inspetor. **Grep que casa palavra e não conceito conta a coisa
+errada com precisão.**
+
+Então o `.flow` está com **zero adotante em qualquer lugar** — e o que o segura não é aquele
+número, é uma medição nova: **12 `Wrap` crus no catálogo do filho A**, que é exatamente fila de
+largura própria que quebra linha. **A peça precisa de adoção, não de prazo de morte**, e a
+condição de três meses que eu tinha escrito sai.
+
+Classe registrada: **peça viva sem caso vivo não quebra nada, só ocupa vocabulário.**
+
+> Este bloco estava no ledger do pai desde 19/08 e nunca chegou a este arquivo.

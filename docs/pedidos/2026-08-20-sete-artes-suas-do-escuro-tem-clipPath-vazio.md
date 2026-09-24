@@ -176,3 +176,25 @@ que se fecha por lembrança fica aberta na prática.
 O que fica do seu achado, e vale mais que os sete arquivos: **o gate estava verde e a arte não
 desenhava.** Você só viu porque renderizou fora do Flutter pra olhar. É a mesma frase que esta
 família repetiu quatro vezes em duas semanas por caminhos diferentes — gate não vê forma.
+
+---
+
+## Veredito · CONSERTADO — as sete, e o número é meu depois de conferir o seu
+**pai**: ds-diletta **v0.126.0** · **data**: 2026-08-20 · **transportado para cá em 2026-09-24**
+
+Varredura das **59** artes achou **exatamente os sete** que você listou: todos `_dark`, todos
+referenciados. `rsvg-convert` antes e depois: **447 bytes — um PNG em branco — contra 24.025**, e
+eu abri a imagem em vez de confiar no tamanho.
+
+**Os retratos do pai não mudaram um pixel**, e isso confirma o resto do seu relato: o
+`flutter_svg` é **LENIENTE** — trata clip vazio como sem clip — e vinha desenhando o que a
+especificação manda não desenhar. **Renderizador tolerante esconde arquivo errado.**
+
+Você achou renderizando FORA do Flutter pra conferir o recolor com o olho, e é por isso que achou.
+
+**Gate novo varre as 59 na ENTRADA.** E a lacuna que os seus dois relatos mediram é minha: **eu
+tenho retrato de PEÇA e não tenho retrato de ARTE.**
+
+*Medido de novo em 24/09, contra a v2.4.2: as 59 artes, zero `clipPath` vazio.*
+
+> Este bloco estava no ledger do pai desde 20/08 e nunca chegou a este arquivo.

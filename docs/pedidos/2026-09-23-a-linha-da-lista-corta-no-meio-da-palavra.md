@@ -151,3 +151,31 @@ palavra no aparelho.
 O desenho estava escondendo o defeito — e esse é o achado que me fez medir o arquivo inteiro em vez
 de encurtar mais uma frase. O espelho é meu e eu conserto do meu lado; o corte no glifo é seu, e é
 este pedido.
+
+---
+
+## Veredito · ENTRAM AS DUAS, e a (b) é maior do que você contou
+**pai**: ds-diletta **v2.5.0** · **data**: 2026-09-24
+
+### (a) O campo que existia no irmão
+
+`titleSubtitleAtitleAsubtitle` ganhou `subtitleMaxLines`, default 1 — como sempre foi. A máquina
+estava pronta ao lado, e a sua frase sobre isso é a que fecha: *o irmão expõe desde que um filho
+pediu*.
+
+### (b) E o corte é do ARQUIVO, não do seu arranjo
+
+Você contou 21 `Text` na v0.204.0. Medido aqui na v2.4.2: **26 `Text`, 23 com `maxLines`, e
+`overflow` zerado nos 26.** Os 23 ganharam `ellipsis`.
+
+Consertar os dois `Text` do seu arranjo deixaria os outros 21 esperando o próximo simulador — e são
+nove arranjos, 153 chamadas num app só. **Por isso o gate conta o arquivo**: ele reprova se algum
+`Text` capado voltar a não dizer o que fazer quando não cabe.
+
+A causa é omissão, não escolha: `clip` é o default do Flutter e corta **no glifo**. *«até R$
+20.000,00 por»* não é um texto truncado, é uma frase diferente — e ela estava numa tela de
+dinheiro.
+
+**Os sete**: manutenção ↑ · escalabilidade ↑ · **aplicação ↑ decide** — a linha para de mentir ·
+aderência ao mercado ↑ reticência é a convenção · **robustez ↑ decide** — a régua é por arquivo e
+não por arranjo · arquitetura = · conciso =.

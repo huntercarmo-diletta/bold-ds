@@ -195,3 +195,36 @@ orientado a formulário encontra isto na primeira tela.
 
 A terceira é a que separa «o campo aparece no `FormData`» de «o campo participa
 do formulário», e é a que eu usaria como gate se fosse escrever um só.
+
+---
+
+## Veredito · ENTRA, e NÃO nesta tag — a obra é maior que o pedido e eu digo por quê
+**pai**: ds-diletta · **data**: 2026-09-24 · **entrega prevista**: `web-v2.6.0` · **código nesta tag**: nenhum
+
+Você está certo no mérito e a assimetria é indefensável: o botão é `formAssociated` desde a
+v0.199.0 — **pelo seu pedido irmão** — e os campos da mesma emissão não participam do formulário
+que ele envia. Medido aqui na v2.4.2: `formAssociated` aparece em **uma** peça das 29, e é o botão.
+
+**E o seu achado de procedência desmonta a razão que estava escrita**: *«os campos ficam fora de
+escopo por densidade»* — dois dos quatro campos de autenticação já estão nos 48px do elemento. A
+densidade nunca foi o que travava. Ela era a explicação que ninguém tinha conferido.
+
+**Por que não sai hoje, e isto não é fila: é medição.** `formAssociated` num campo não é a flag.
+São quatro coisas que só existem juntas, e entregar metade é pior que não entregar:
+
+1. `ElementInternals.setFormValue` a cada mudança — o que acabou de virar possível, porque o
+   `mudou` da peça entrou nesta mesma tag (o seu outro pedido);
+2. `setValidity` com `required`, e o **terceiro argumento** dela, a âncora — sem ela o navegador
+   acha um campo inválido e não tem onde pôr o foco;
+3. `formResetCallback` e `formStateRestoreCallback`, senão o campo mente no reset e no voltar;
+4. `name` e `autocomplete` observados, que sozinhos são os fáceis.
+
+Você escreveu que não mediu o caminho do foco *«porque não há peça form-associated de campo para
+medir»*. É exatamente por isso que isto não sai por dentro de um release de conserto: **o item 2 é
+o que decide se o formulário é usável, e ele não tem como ser medido antes de o resto existir.**
+Sai como obra declarada, com a peça de teste que prova o foco chegando no controle.
+
+**Os sete**: manutenção ↓ dívida declarada até a `web-v2.6.0` · escalabilidade ↑ · **aplicação ↑
+decide** — os seus formulários deixam de precisar de `<input>` nativo · aderência ao mercado ↑
+`formAssociated` é o mecanismo da plataforma · **robustez ↑ decide o PRAZO** — meia entrega aqui é
+campo que mente no reset · arquitetura = · conciso =.

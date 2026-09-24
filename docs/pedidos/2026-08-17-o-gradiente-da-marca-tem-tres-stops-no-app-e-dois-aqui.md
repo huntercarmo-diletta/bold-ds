@@ -122,3 +122,24 @@ contraste** — o que existe é a tinta sobre o gradiente (`onGradientDoBold`, o
 
 Fica como o que falta medir, e não como coisa medida: quem puser conteúdo escuro sobre a parada 08
 deve medir antes.
+
+---
+
+## Veredito · FORA DO CANAL — e entra no ledger pra não parecer pedido ignorado
+**pai**: ds-diletta · **data**: 2026-08-17 · **código**: nenhum · **transportado para cá em 2026-09-24**
+
+Você endereçou certo e escreveu por quê: *«gradiente de marca é meu»*. Então o mérito das três
+saídas não é meu de decidir. Fica registrado aqui porque nota sem resposta visível é
+indistinguível de nota ignorada, e o número que você trouxe merece resposta.
+
+**O que é meu, e responde a sua saída 3:** ela é a que a linguagem já separa. **Arte responde ao
+logo; superfície responde a contraste.** São duas perguntas diferentes e por isso dois nomes — o
+`marca` de três stops existe pra ler o lockup, e o `primary` de dois existe pra assentar uma peça
+em cima. O **3,37:1** que você mediu não diz qual é mais bonito: diz **onde cada um pode aparecer**.
+
+**De graça, no mesmo arquivo:** você apagou nove gradientes com nome de FUNÇÃO (`pix`, `ted`,
+`charge`…) e zero consumidores, antes de alguém pedir. É a mesma classe que saiu desta casa quando
+o `WalletCard.cpfSeguro` morreu — **vocabulário de produto virando token**.
+
+> Este bloco estava no ledger do pai desde 17/08 e nunca chegou a este arquivo. O clone que o pai
+> lê ficou parado em 17/09 num ramo lateral, e o veredito não tinha por onde voltar.

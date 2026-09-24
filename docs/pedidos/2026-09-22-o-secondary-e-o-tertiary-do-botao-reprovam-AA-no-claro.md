@@ -151,3 +151,27 @@ O gate precisa distinguir **texto de glifo** — senão ele reprova o `icon-butt
 `spot-icon`, que estão certos. Se essa distinção não existir na sua tabela hoje, ela é a
 informação que falta, e vale mais que o conserto: sem ela nenhum gate de contraste da
 família consegue medir a coisa certa.
+
+---
+
+## Veredito · RESOLVIDO PELO IRMÃO — e sem tocar na tabela de pintura
+**pai**: ds-diletta **v2.5.0** · **data**: 2026-09-24
+
+Os seus dois números — 3,77 sobre o `bg` e 4,17 sobre a superfície — não são defeito do botão. São
+o `textTertiary` chegando errado no botão, e você mesmo escreveu o irmão que o mede:
+[o papel que carrega texto de corpo](2026-09-22-o-papel-que-carrega-texto-de-corpo-tem-piso-de-texto-grande.md).
+
+Aquele entrou nesta tag: `textTertiary` passa a derivar com **piso 4,5 contra a página**, caminhando
+na direção da sua tinta secundária. As duas aparências do botão recebem o degrau corrigido **sem
+uma linha na `pintura.g.js`** — e isso importa, porque consertar aqui teria posto um número na
+tabela de pintura para tapar um defeito de derivação. A tabela diz *qual papel*; ela não é o lugar
+de contornar *qual cor o papel virou*.
+
+**A sua observação sobre o escuro é a parte que fica no ledger**: 6,26 e 5,78 passam com folga, e é
+isso que torna o defeito difícil de ver — *quem confere no escuro aprova*. Está registrado junto
+com a classe irmã, a de 31/07: **medir só uma paleta não mede a classe**; aqui, medir só um modo
+não mede o defeito.
+
+**Os sete**: manutenção ↑ um conserto, dois pedidos · escalabilidade ↑ · aplicação ↑ ·
+aderência ao mercado ↑ · **robustez ↑ decide** — o conserto foi na causa e não no sintoma ·
+**arquitetura ↑ decide** — zero linha nova na tabela de pintura · conciso ↑.

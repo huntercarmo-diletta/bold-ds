@@ -192,3 +192,35 @@ saíram da fonte dos tokens (`polaris-tokens`), porque as páginas de guia migra
 - Carbon · type sets: https://carbondesignsystem.com/elements/typography/type-sets/ · productive: https://v10.carbondesignsystem.com/guidelines/typography/productive/ · expressive: https://v10.carbondesignsystem.com/guidelines/typography/expressive/ · data table: https://carbondesignsystem.com/components/data-table/style/
 - Fluent 2 · typography: https://fluent2.microsoft.design/typography · layout: https://fluent2.microsoft.design/layout · density e type ramp: https://learn.microsoft.com/en-us/fluent-ui/web-components/getting-started/styling · tokens por subárvore: https://learn.microsoft.com/en-us/fluent-ui/web-components/design-system/design-tokens
 - Polaris · tokens de texto: https://github.com/Shopify/polaris/blob/main/polaris-tokens/src/themes/base/text.ts · tamanhos: https://github.com/Shopify/polaris/blob/main/polaris-tokens/src/size.ts · layout e densidade: https://shopify.dev/docs/apps/design/layout · tipografia: https://polaris-react.shopify.com/design/typography/font-and-typescale
+
+---
+
+## Veredito · ENTRA, e NÃO nesta tag — porque a resposta certa é uma DEPRECIAÇÃO
+**pai**: ds-diletta · **data**: 2026-09-24 · **entrega prevista**: `v2.6.0` · **código nesta tag**: nenhum
+
+Você está certo, e a pergunta da designer é a melhor frase do pedido: *«se vamos usar sempre o que
+a linguagem define, por que precisamos de um mapa de papéis na web?»* — **porque a linguagem define
+metade.** Dois produtos escolheram degraus diferentes para o mesmo papel e não foi descuido: não
+havia o que ler.
+
+**Não sai nesta tag porque a saída honesta é a sua segunda**, e ela é maior que escrever doze
+linhas de `///`. Os doze degraus que vieram do Figma (`displayLg/Md/Sm`, `headlineLg/Md/Sm`,
+`titleLg/Md/Sm`, `bodyLg/Md/Sm`) são um **vocabulário paralelo** ao dos onze que têm papel — dois
+nomes para a mesma pergunta, que é a classe que esta casa passou o mês matando (`chatLift`,
+`WalletCard.cpfSeguro`, `TipoConexao.chatCpf`). Escrever papel para eles **oficializa a duplicata**;
+depreciá-los é remoção de nome público, que é **major**, e major não sai como efeito colateral de
+um release de conserto.
+
+O que eu faço até lá, e é o que te destrava sem congelar a decisão: a lista dos onze com papel
+escrito vira a resposta publicada para *«que degrau é o título de tela?»*, e os doze entram no
+inventário como **candidatos a depreciação**, com a contagem de uso nos três filhos. Quem decide
+depreciar é o dono, e ele decide com o número na frente.
+
+**Sobre a densidade**: a `LINGUAGEM.md §2` promete `comfortable`/`compact` como token e não há
+nenhum. A promessa é minha e a dívida é minha — ela sai com os papéis, no mesmo lote, porque
+densidade sem papel de tipo escrito é meio token.
+
+**Os sete**: manutenção ↓ dívida declarada até a v2.6.0 · escalabilidade ↑ · **aplicação ↑ decide o
+mérito** — o terceiro produto vai escolher de novo enquanto isto não existir · aderência ao mercado
+↑ · robustez = · **arquitetura ↑ decide o PRAZO** — escrever papel para os doze oficializaria dois
+vocabulários · conciso ↑ onze nomes em vez de vinte e três.

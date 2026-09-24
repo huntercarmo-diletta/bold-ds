@@ -130,3 +130,31 @@ Auditoria WCAG 2.2 do fluxo «Meus limites» (22/09, fluxo de dinheiro). O audit
 verificar, **um já estava certo** — o botão desabilitado carrega
 `Semantics(button: true, enabled: !_disabled)` (`diletta_button.dart:279` e `:332`) — e este estava
 mesmo faltando.
+
+---
+
+## Veredito · ENTRA, e o número que você não pôde somar é o que decide
+**pai**: ds-diletta **v2.5.0** · **data**: 2026-09-24
+
+`header: true` continuava em **zero** no pacote inteiro — v0.204.0, v0.207.0 e v2.4.2. Você
+escreveu a frase certa: *não é falta na barra de topo, a linguagem não usa a bandeira em lugar
+nenhum.*
+
+O título entra como cabeçalho. Uma linha.
+
+**O que decide não são as suas 102 chamadas: é a frase que você deixou no fim.** A barra é a peça
+de entrada do slot superior de **toda** tela de **todo** filho. Você podia embrulhar no
+`_TituloPrimario` e resolver o seu app — e o segundo e o terceiro filho continuariam sem o gesto
+mais usado por quem navega com VoiceOver e TalkBack. **Você não somou o número porque ele não é
+seu, e é exatamente por isso que o conserto é meu.**
+
+### O que eu decidi e você não pediu: o `titleWidget` NÃO vira cabeçalho
+
+Quem passa widget passa uma composição que a barra não conhece — pode ser uma busca, um seletor de
+conta, um logo. **Marcar como cabeçalho o que eu não sei ler é anunciar uma coisa que a tela não
+tem**, e leitor de tela mentindo é pior que leitor de tela calado. O gate cobra as duas metades,
+porque é a segunda que envelhece.
+
+**Os sete**: manutenção ↑ uma linha · escalabilidade ↑ chega em três filhos de uma vez ·
+**aplicação ↑ decide** · aderência ao mercado ↑ · robustez ↑ o gate constrói os dois casos ·
+arquitetura ↑ mora onde toda tela passa · conciso ↑.

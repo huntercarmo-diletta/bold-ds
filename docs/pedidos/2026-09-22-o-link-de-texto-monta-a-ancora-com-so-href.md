@@ -150,3 +150,29 @@ que renda `<a>` repassa o mesmo conjunto** — hoje são **cinco** (`text-link`,
 `button`, `icon-button`, `file-card`, `rail-item`), e as cinco montam a âncora
 com só `href`. Varredura na tag instalada: **zero `target=` e zero `rel=` nos 29
 elementos.**
+
+---
+
+## Veredito · ENTRA como LISTA, e a sua leitura do precedente estava certa
+**pai**: ds-diletta **web-v2.5.0** · **data**: 2026-09-24
+
+Cinco atributos atravessam: `target`, `rel`, `download`, `hreflang`, `referrerpolicy`.
+
+Você leu o precedente do `aria-*` certo, e eu aplico o mesmo argumento no seu caso: **lista
+declarada, não campo por pedido**, porque *o terceiro caso chega sem aviso*. Aqui ele tem nome —
+você mesmo o nomeou — e por isso os cinco entram juntos.
+
+### O que eu acrescentei ao que você pediu, e é o que uma peça existe pra fazer
+
+`target="_blank"` **sem `rel`** passa a ganhar `rel="noopener noreferrer"`. Não é conforto: é
+*reverse tabnabbing* — a página aberta recebe `window.opener` para a sua. Os navegadores de hoje já
+implicam `noopener`; **«hoje» não é contrato**, e `noreferrer` ninguém implica. Quem declara `rel`
+manda, porque pode estar precisando do referrer de propósito.
+
+Os seus 15 links já traziam os dois juntos. O 16º, que alguém escrever amanhã, não vai trazer — e
+ele é a razão de a regra morar na peça e não na revisão de código.
+
+**Os sete**: manutenção ↑ uma lista, um lugar · escalabilidade ↑ · **aplicação ↑ decide** — 15
+links em dois produtos destravam · aderência ao mercado ↑ · **robustez ↑ decide** — o `_blank` nu
+deixa de existir · arquitetura = nenhum eixo novo, é passagem de atributo · conciso ↑ os cinco
+cabem numa constante nomeada.

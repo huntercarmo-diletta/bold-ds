@@ -84,3 +84,37 @@ que hoje depende de alguém lembrar.
 linguagem emitir; `breakpoints.test.ts` continua verde lendo de lá; e `grep -ri breakpoint
 packages/diletta_design_system_web` deixa de devolver zero. Se o `ib` adotar a mesma fonte, os dois
 `@media` de 640 dos dois produtos passam a vir do mesmo número — que é o gate que não existe hoje.
+
+---
+
+## Veredito · ENTRA, e você tinha razão DUAS vezes — a segunda é a que resolve
+**pai**: ds-diletta **v2.5.0** · **web-v2.5.0** · **data**: 2026-09-24
+
+### Primeiro, o que estava errado na sua medição, e o erro é meu
+
+Os quatro valores **já estavam na emissão**, desde sempre. Você procurou «breakpoint» e achou
+zero; eles saíam como `--diletta-sm: 640px`. **Nome que não diz o que é vale tanto quanto nome que
+não existe** — e o seu `40rem` era o `sm` *«sem ninguém saber»*, que é a sua frase e é a prova.
+
+Renomeados para `--diletta-breakpoint-sm/md/lg/xl`. Sem ponte: `grep --diletta-sm` neste repo, nos
+exemplos e nas specs dá zero fora do próprio gerador, e ponte é um segundo nome para o mesmo valor
+— que é sempre o que alguém usa por engano.
+
+### E agora a parte que a variável CSS NÃO resolve
+
+**Propriedade customizada não é permitida em consulta de mídia.** `@media (min-width:
+var(--diletta-breakpoint-sm))` não é inválido só nos navegadores antigos: não funciona em nenhum,
+porque a consulta é avaliada antes da cascata. A proposta que resolveria, `@custom-media`, não está
+em nenhuma engine.
+
+Então a sua cópia declarada em `.ts` **não era um contorno, era a forma certa** — faltava ela não
+ser cópia. Entrou `src/breakpoints.js`: `BREAKPOINTS`, `BREAKPOINTS_REM` e `tierDe`, com o mesmo
+corte do `DilettaBreakpoints.of` do Dart.
+
+O gate (`o_breakpoint_e_um_so.test.js`) cobra as **três grafias** — o JS, o DTCG e o Dart. Três
+fontes, um número; é isso que impede a sua cópia à mão de virar duas verdades.
+
+**Os sete**: manutenção ↑ uma fonte · escalabilidade ↑ o irmão `ib` passa a ter com o que
+concordar · **aplicação ↑ decide** — três das suas cinco larguras não eram limiar nenhum ·
+aderência ao mercado ↑ · **robustez ↑ decide** — o gate cruza as três grafias · arquitetura ↑ o
+nome passa a dizer o que a coisa é · conciso =.
