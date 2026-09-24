@@ -2015,8 +2015,15 @@ Medido em 23/09 pelo `revisor-visual`, na recusa do Pix: o card do aviso começa
 os dois**, e o app tem 46 arquivos com `CoreflowRodape`. Contra o Figma (que desenha 24) a mesma
 diferença.
 
-Conserto: `s5 → s6` na linha 74, e o gate do gutter passar a olhar o rodapé. Não foi feito nesta
-rodada porque é código, e código sem pedido dela não entra — ver «Como esta fila se mantém».
+**FEITO em 24/09, direto no `main`, a pedido dela** («vê se não tem coisa que você pode publicar
+direto na main do DS»): o recuo do `CoreflowRodape.child` passou a vir de `CoreflowEspaco.gutter`,
+e nasceu o gate `o_rodape_segue_o_gutter_test` (os dois lados pelo gutter; o gutter é 24). 147
+testes do `coreflow`, 146 verdes — o vermelho é o `uma_versao_e_uma_tag` reclamando que v0.116.0 e
+v0.117.0 não têm par web, e ele já falhava antes. **Sem tag**: a tag é dela, e é a tag que leva o
+conserto ao app pelo `ds_vendor.sh`.
+
+Regra que fica, e é dela: **o que é nosso (Coreflow, este repo) e é medido pode ir direto no
+`main`**; o que é do pai continua sendo pedido, e tag/release continua sendo dela.
 
 ---
 

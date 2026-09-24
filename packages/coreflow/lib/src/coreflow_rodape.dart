@@ -70,8 +70,14 @@ class CoreflowRodape extends StatelessWidget {
     this.glass = true,
     this.safeBottom = true,
     this.bare = false,
+    // O recuo lateral é o GUTTER da grade, e não um degrau escolhido à parte:
+    // até 23/09 era `s5` (20) enquanto `CoreflowEspaco.gutter` e o rodapé do
+    // pai (`DilettaBottomApp`, todas as variantes) valem `s6` (24). Medido na
+    // revisão do Pix: o card do aviso começava em x=20 e o valor logo acima em
+    // x=24 — o rodapé desalinhava 4 pt do corpo em toda tela que usa os dois.
+    // O gate `o_rodape_segue_o_gutter` cobra que os dois continuem um só.
     this.padding = const EdgeInsets.fromLTRB(
-        DilettaSpacing.s5, DilettaSpacing.s3, DilettaSpacing.s5, 0),
+        CoreflowEspaco.gutter, DilettaSpacing.s3, CoreflowEspaco.gutter, 0),
   });
 
   /// Navegação (tabs) — barra flutuante de vidro. Cada tab = ícone + rótulo; a
