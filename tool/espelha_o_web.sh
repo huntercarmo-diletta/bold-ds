@@ -13,6 +13,11 @@
 #
 # A tag é EMISSÃO, não autoria: **ninguém commita nela**. Ela se refaz a partir da tag do monorepo.
 #
+# ANTES DE EMITIR, `git fetch --tags origin`: a tag de commit órfão NÃO vem num `git fetch` comum,
+# e em 24/09 um clone sem elas emitiu de novo a `web-v0.117.0` que já existia no remoto desde
+# 23/09 — o push recusou («already exists»), e o gate `uma_versao_e_uma_tag` estava vermelho só
+# naquela máquina. Tag órfã ausente no local não é tag ausente.
+#
 # ## O que sai, e o que NÃO sai
 #
 # Sai o pacote: `index.js`, `tokens/`, o `README.md` e o `package.json` sem `private`.

@@ -51,14 +51,15 @@ a forma chegando à peça (`--diletta-formaDe*` lida por botão, campo e dropdow
 campo, o evento `mudou` no `<diletta-input>`, `target`/`rel`/`download` no link. O webadmin tem
 remendos que viram no-op com isto e gates que avisam quais.
 
-### Uma instância web que faltava, e uma que não pode sair
+### Uma correção ao que este próprio release escreveu
 
-A `v0.116.0` e a `v0.117.0` saíram sem `web-v` — o gate `uma_versao_e_uma_tag` estava vermelho por
-elas desde 23/09. A **`web-v0.117.0`** foi emitida hoje a partir da tag, com o avô `web-v0.207.1` que
-ela pina. A **`web-v0.116.0` não sai**: a tag pina `web-v0.207.1`? Não — pina a `web-v0.207.0`, a
-tag do avô que aponta para o monorepo (aviso de 22/09), e o emissor recusa copiar um avô que não é
-pacote. Fica órfã, declarada; quem consome a web pula direto da `web-v0.115.0` para a `web-v0.117.0`,
-e o gate continua vermelho por ela — de propósito, até alguém decidir marcar o corte no gate.
+O commit de release (`f5d1d3a`) diz que a `web-v0.117.0` «sai hoje» e que a `v0.116.0` «não pode
+sair». Os dois estavam errados, e o erro é de medição: **as duas instâncias já existiam no remoto**,
+emitidas pela Tatiana em 22/09 e 23/09. O clone que mediu não as tinha porque tag de commit órfão
+não vem num `git fetch` comum — só com `--tags`. O gate `uma_versao_e_uma_tag` estava vermelho
+nesta máquina e verde no remoto. A emissão local da `web-v0.117.0` foi descartada (o push a recusou,
+«already exists»), a exceção declarada no gate saiu, e o gate volta a ser o que era. Lição escrita
+no `tool/espelha_o_web.sh` de quem vier: `git fetch --tags` antes de julgar tag órfã ausente.
 
 ## [0.117.0] — 2026-09-23
 
