@@ -171,3 +171,76 @@ marca) segue solto e segue sendo o único candidato a pedido ao avô.
 
 Rastreio completo dos envios (M1–M14): `~/Desktop/berco-envios/MELHORIAS-DO-ENVIO-2026-09-18.md`
 (M14 é este). O sinal de push é da Agatha; nada aqui foi enviado.
+
+---
+
+## VEREDITO · ENTRA — e menor que a forma proposta, porque o trilho já existe
+
+**pai**: `packages/coreflow` **v0.1.0** · **data**: 2026-09-25
+
+### O que decidiu
+
+A frase do pedido: *«não estamos pedindo capacidade nova; estamos pedindo que um dado que já existe,
+já auditado, atravesse a fronteira em vez de ser copiado nela»*. Isso é o critério 5 desta casa, e
+sozinho já decide.
+
+**A bifurcação «dado × enum» resolve em DADO**, com os sete estilos do enum ficando — que é o que a
+forma proposta pede. E resolve sem discussão de mérito, porque **o precedente está escrito nesta
+casa e é exatamente a mesma forma**.
+
+### O que eu achei indo julgar, e é o que encolhe o pedido
+
+**`CoreflowGradients` já É o trilho pedido.** Medido em `v0.117.0`:
+
+| peça do pedido | o que já existe |
+|---|---|
+| classe de dado com valores resolvidos | `CoreflowGradients{paleta, paradasDoLockup, offsetsDoLockup, tintaSobreOGradiente}` (`coreflow_gradients.dart:49`) |
+| o filho declara no produto | `CoreflowProduto(gradientes:)` (`coreflow_produto.dart:45`), e o Bold declara com os valores dele (`conta_bold.dart:67`) |
+| emissão para a web | `coreflowGradientesCss` (`coreflow_css.dart:350`), que escreve `--diletta-gradiente-<nome>` e `--diletta-onGradiente` |
+| publicar VALOR solto por nome | `coreflowConstantesCss` (`:382`) — e o `///` dela conta esta mesma história: *«a peça de fundo lia o degradê pronto em quatro lugares e, nos dois em que precisava da parada solta, DIGITAVA o hex na folha do componente»* |
+
+Ou seja: **esta casa já pagou esta conta uma vez, na mesma área, e escreveu a lição.** O fundo não
+precisa de mecanismo novo — precisa da mesma forma e dos mesmos trilhos.
+
+### O que eu recusei, e a condição de reabrir
+
+- **O pintor genérico `CoreflowBackground.deDados(fundo)` não entra agora.** O que destrava os dois
+  consumidores é o VALOR atravessar; os sete estilos do enum continuam pintando. Reabre no primeiro
+  fundo declarado por um filho que os sete não saibam pintar — e aí ele vem com o caso, não com a
+  antecipação. *Abstração especulativa é o critério 6, e ela é a única coisa cara na sua proposta.*
+- **`tintaSobreOGradiente` no `CoreflowFundoResolvido`: NÃO.** O nome já existe em
+  `CoreflowGradients`, com o mesmo trabalho, no mesmo produto. Dois campos de mesmo nome e donos
+  diferentes é a ambiguidade que esta casa passou o mês desfazendo. A tinta do fundo chama-se
+  **`tintaSobreOFundo`** — é outra superfície: uma é a curva do lockup, a outra é a tela inteira.
+- **A ligação com o Berço não é minha de fechar.** Você mediu certo: é processo, não técnica. O
+  manifesto chega com a entrega; o que falta é o campo onde escrever, e ele entra aqui.
+
+### O que entra, nesta ordem
+
+1. `CoreflowFundo{id, rotulo, claro, escuro}` e `CoreflowFundoResolvido{base, camadas, tintaSobreOFundo}`;
+2. `CoreflowProduto` ganha `fundos` e `fundoPadrao`, com default — **minor**, como você disse;
+3. `coreflowFundosCss(produto)`, ao lado de `coreflowGradientesCss`, no mesmo formato de nome;
+4. `novo_filho`: `fundos:` comentado no molde, junto de `marcaVisual:` e `tipografia:`;
+5. o gate de paridade com data de validade, e ele morre com o andaime.
+
+O item 3 do pedido de 18/09 deixa de ser pré-requisito, como você escreveu. A ordem lá muda.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | uma decisão do cliente num lugar, contra duas transcrições e um recálculo |
+| escalabilidade | ↑ | o terceiro filho recebe o fundo sem transcrever; sem isto a conta ia a cinco lugares |
+| aplicação | ↑ | consumidores nomeados e medidos: `app-newbold` e o IB, os dois transcrevendo hoje |
+| aderência ao mercado | ↑ | é o que o resto desta casa já faz — o valor viaja no pacote e o consumidor não recalcula |
+| robustez | ↑ | o teto de contraste passa a ser aplicado uma vez, na origem, com paleta e base escolhidas juntas |
+| arquitetura limpa e simples | ↑ | **e sobe mais na minha forma que na sua**: sem pintor genérico e sem segundo `tintaSobreOGradiente`, são duas peças a menos que na proposta |
+| conciso | ↑ | some o andaime do app e não nasce o do IB — 359 linhas a menos, e um arquivo que se declarava provisório deixa de existir |
+
+Zero `↓`.
+
+### O que você faz
+
+Nada até a tag. Quando sair, o `arte_de_fundo_gerada.dart` do `origin/release/homologation` sai
+junto, e o `a_conta_do_berco_test` vira o gate de paridade do item 5 — comparando entregue contra
+recalculado — até o andaime morrer.
