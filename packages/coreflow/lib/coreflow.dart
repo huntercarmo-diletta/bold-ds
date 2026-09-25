@@ -57,6 +57,7 @@ export 'src/coreflow_campo_de_texto.dart';
 export 'src/coreflow_cartao.dart';
 export 'src/coreflow_cartao_de_pedido.dart';
 export 'src/coreflow_contexto_de_operacao.dart';
+export 'src/coreflow_coluna_da_tela.dart';
 export 'src/coreflow_corpo_de_folha.dart';
 export 'src/coreflow_etiqueta.dart';
 export 'src/coreflow_folha.dart';

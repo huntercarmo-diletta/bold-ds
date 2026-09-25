@@ -20,6 +20,47 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [Não lançado]
+
+### `CoreflowColunaDaTela` — a terceira pergunta do alinhamento ganha resposta
+
+O gutter respondeu *onde o conteúdo começa* e o teto de 600 respondeu *até onde ele estica*.
+Faltava a terceira, e ela não tinha resposta nenhuma: **para que lado os elementos se alinham
+dentro da coluna.**
+
+Medido no app do primeiro filho, na `development`: **50 colunas de tela, em 40 arquivos**, montadas
+à mão como `SingleChildScrollView(padding: …gutter…) → Column`. Sobre alinhamento elas diziam:
+
+| alinhamento | quantas |
+|---|---|
+| `CrossAxisAlignment.start` | 22 |
+| `CrossAxisAlignment.stretch` | 12 |
+| **nada declarado** | **16** |
+
+As 16 não escolheram o centro — **não escreveram nada**, e o default do `Column` é `center`. Um
+terço das telas do produto está centralizado por omissão, e é por isso que um `Center` sozinho
+dentro de uma coluna à esquerda atravessava revisão: não havia com o que comparar.
+
+O respiro de baixo dessas 50 tinha **12 valores diferentes**, entre eles `140`, `120` e `60`
+escritos à mão — com o `CoreflowEspaco.respiroDoRodape` existindo, valendo 32 e sendo usado por
+nenhuma delas. O de cima também tinha 8, e o mais comum era 24 (somando `s6` e `gutter`, que
+são o mesmo número dito de dois jeitos).
+
+**A regra: a coluna de uma tela alinha à ESQUERDA, e o centro se pede por nome.** O nome é
+`CoreflowAoCentro`, e a gramática é a que o teto de largura já usa — quem escapa da regra pede a
+fuga pelo nome dela (`CoreflowSemTeto`), em vez de escapar por acidente.
+
+`estica` é parâmetro porque as duas leituras foram medidas e nenhuma está errada (22 contra 12):
+coluna de botões e cartões é `stretch`, coluna de texto é `start`. Um `CrossAxisAlignment` livre
+seria outra coisa — transformaria as 16 omissões em 16 escolhas explícitas de centro e não
+decidiria nada.
+
+Centralizar a TELA inteira (rodela de carregando, estado vazio, ilustração) não é assunto desta
+peça e segue sendo `Center` cru: ali não existe coluna para alinhar. Das 156 ocorrências de
+`Center` do app, 48 embrulham uma rodela de carregamento.
+
+Seis testes em `a_coluna_da_tela_alinha_a_esquerda_test.dart`.
+
 ## [0.118.0] — 2026-09-24
 
 ### O avô sobe de `v0.207.0` para `v2.5.0` — os dois lados juntos, como a casa manda
