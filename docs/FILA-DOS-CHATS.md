@@ -18,6 +18,132 @@ A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
 
 ---
 
+## Rodada de 2026-09-25 · tarde
+
+Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat da adoção do DS no webadmin, com um
+escopo só: **o que a arquitetura de informação do `core-flow-wa` (blocos 1 a 6, 24–25/09, branch
+`feat/a-adocao-do-ds-pelo-webadmin`, ponta `8f7d6d2`) deixou aberto no DS.** Dez itens chegaram; cinco
+viraram pedido ao avô, e os outros cinco são do console ou não têm medição. **Cada um foi medido no
+código do webadmin e na ponta do avô (`v2.6.0` / `web-v2.6.0`), além do pino deste repo (`v2.5.0` /
+`web-v2.5.0`).** Os cinco pedidos sobem direto, sem sinal a ninguém.
+
+**Chats lidos**:
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| a adoção do DS pelo webadmin → arquitetura de informação | `claude_newbold` · `0f441ea9` | 25/09 15h | a lista dos dez itens, com arquivo; **os cinco pedidos abaixo saem daqui**. Lido pela lista que o chat entregou e pelo código que ela aponta, **não pela transcrição inteira** (37 MB) |
+| os outros chats da janela (23/09 17h44 → agora) | — | — | **não lidos nesta rodada**: a janela desta chamada foi o webadmin. Os pedidos de 24/09 que chegaram ao índice por outros chats (largura, grade, breakpoints, loop) foram conferidos pela resposta do avô, não pela conversa |
+
+---
+
+### 0 · O QUE O AVÔ RESPONDEU — a `v2.6.0`, e seis respostas antigas que estavam fora da `main`
+
+**24/09 às 23h58, `9d9d95d`, na `main` deste repo**: os três pedidos de 24/09 julgados, com o
+aviso [`2026-09-24-v2-6-0-a-largura-a-grade-e-o-porte-que-eu-devia`](avisos/2026-09-24-v2-6-0-a-largura-a-grade-e-o-porte-que-eu-devia.md).
+*«143 de 143 pedidos com veredito.»*
+
+| pedido | veredito | entra em |
+|---|---|---|
+| a largura do `content` | **ENTRA** — e o número é **928 (o nosso 58rem), não 917**: *«917 é sobra»* | `v2.6.0` / `web-v2.6.0` |
+| a grade da web | **ENTRA COMO DADO**, `src/grade.js`, não `<diletta-grade>` | `web-v2.6.0` |
+| o loop de adoção parado | **PROCEDENTE** — a causa era o clone dele 117 commits atrás | — |
+| o porte do campo (ENTRA de 22/09) | **ENTREGUE**: `sm` 28 · `md` 36 · `lg` 48, default 48 | `web-v2.6.0` |
+| o campo de data (ENTRA de 22/09) | sem tag, agora com **condição** no lugar do número: sai com o `formAssociated` | — |
+
+**Seis branches de resposta que ninguém tinha integrado**, e que esta rodada juntou na `main` com
+`--no-ff`: `aviso/o-prefixo-do-css` (17/09), `aviso/release-v0-209-0`, `aviso/release-v1-0-0`,
+`aviso/vocabulario-em-string` (as três de 23/09) — quatro arquivos novos em `avisos/`, sem conflito —
+e `veredito/` + `nota/inventario-por-marca` (09/09, do dono do catálogo). **O único conflito** foi no
+pedido de 09/09 do inventário por marca: a `main` tinha um RESUMO do veredito e a nossa resposta; a
+branch, o veredito inteiro. **Ficou o texto inteiro do pai, com a nossa resposta logo depois**; o
+resumo saiu porque repetia o veredito.
+
+**O que a resposta de 24/09 prometeu e a tag não entrega** — é o pedido 1 abaixo: *«a `WaGrade` vira
+consumidora dos cinco nomes»*, e o `src/grade.js` não se importa.
+
+**A deriva**, medida agora:
+
+| onde | filho | pai | medido em |
+|---|---|---|---|
+| **app**, `origin/development` e `origin/release/homologation` | `v0.113.0` | `v0.204.0` | `packages/ds_vendor.json` — **as duas andaram** desde 23/09 (eram `v0.102.1` / `v0.180.0`) |
+| **app**, `feat/grupos-de-limite-administracao` | `v0.113.0` | `v0.204.0` | o mesmo arquivo |
+| **filho**, `main` | tag `v0.118.0` / `web-v0.118.0` | `v2.5.0` / `web-v2.5.0` | `packages/coreflow/pubspec.yaml`, `packages/coreflow_design_system_web/package.json` |
+| **webadmin** | `web-v0.118.0` | (`web-v2.5.0`, pelo filho) | `core-flow-wa/package.json:26` |
+| **avô**, ponta | — | **`v2.6.0` / `web-v2.6.0`** (24/09 14h30) | `ds-diletta` `origin/main` `a5fcc5e` |
+
+---
+
+### 1 · PEDIDO NOVO — a grade e os breakpoints saíram em `src/`, e o pacote não deixa importar
+
+[o arquivo](pedidos/2026-09-25-a-grade-e-os-breakpoints-sairam-em-src-e-o-pacote-nao-deixa-importar.md)
+· **ao avô** · item 10 da lista · **não depende de nada**, e vem primeiro porque é o menor e porque
+destrava duas respostas de 24/09 que hoje não se cumprem. Medido no Node 22 com a árvore da
+`web-v2.6.0`: `ERR_PACKAGE_PATH_NOT_EXPORTED` para os dois módulos, e a raiz não serve de atalho
+(importá-la fora do navegador estoura: `HTMLElement is not defined`).
+
+### 2 · PEDIDO NOVO — o escape de 22/09 não saiu em dezenove tags web
+
+[o arquivo](pedidos/2026-09-25-o-escape-de-22-09-nao-saiu-em-dezenove-tags-web.md) · **ao avô** ·
+cobrança de ENTREGA · **achado desta rodada, fora da lista**: medindo o diálogo, o `<h2 …>${titulo}</h2>`
+da `web-v2.6.0` continuava cru. O ENTRA de segurança de 22/09 não está em nenhuma das 19 tags web
+seguintes, a `base.js` não tem a função prometida, e o ledger do pai ainda diz *«tag ainda NÃO
+cortada»*. **Vem antes dos itens 3 e 5 porque os dois pedem peça web**: o próprio pai escreveu, no
+veredito do diálogo, que *«a casca vai nascer depois do conserto, e não antes»*.
+
+### 3 · PEDIDO NOVO — o seletor de segmentos pinta 32 e não tem o alvo de 44
+
+[o arquivo](pedidos/2026-09-25-o-segmented-control-pinta-32-e-nao-tem-o-alvo-de-44-que-as-irmas-tem.md)
+· **ao avô** · item 3 da lista. **A peça existe** — o pedido de «grupo de escolha exclusiva» que o
+bloco 3 anotou virou pedido de ALVO: o `<diletta-segmented-control>` é a exceção entre as peças web
+que já fazem *«desenho dentro de 44 de alvo»* (botão, botão de ícone, chip). Depende do 2 só para a
+adoção, não para o veredito.
+
+### 4 · PEDIDO NOVO — o diálogo avisa que fechou e não deixa recusar o `Esc`
+
+[o arquivo](pedidos/2026-09-25-o-dialogo-web-avisa-que-fechou-e-nao-deixa-recusar-o-esc.md) · **ao
+avô** · a «guarda ao fechar» do item 9. A adoção do `<diletta-dialog>` **tirou** do console o
+`onCancel` com `preventDefault` que ele tinha; hoje ele reabre o diálogo quando o `Esc` chega em voo.
+Não depende de nenhum outro.
+
+### 5 · PEDIDO NOVO — o título da página é só-código
+
+[o arquivo](pedidos/2026-09-25-o-titulo-da-pagina-e-so-codigo-e-o-console-monta-o-seu-em-seis-areas.md)
+· **ao avô** · itens 1, 2 e 8 fundidos, porque são uma peça só: o título da área, a linha de contexto
+abaixo dele e o lugar da chegada «Vindo de X» acima. A spec `design-system-page-title` existe e diz
+`destino: codigo`. **Por último** porque é o único que pede peça web nascendo, e ela deve nascer
+depois do escape (item 2).
+
+---
+
+### 6 · O que NÃO virou pedido, e por quê — tudo isto é do console, ou não tem medição
+
+| item da lista | o que a medição disse | vai para |
+|---|---|---|
+| **4 · faixa de recorte** (`FaixaDeRecorte.tsx`) | é composição DENTRO do `content`; o veredito da grade (24/09) escreveu a fronteira: *«o que a tela faz dentro é dela»*. `busca('filtro')`/`('recorte')` devolvem o `segmented-control`, que é peça, não faixa | **console**: promover para `src/design-system/molecules`, ao lado do `WaFilterBar` |
+| **5 · doca lateral** (`TelaAoVivo.module.css:38-60`, cópia em `TelaHistorico.module.css:24-45`) | o `WaDetailPanel` é peça do console, e o mapeamento dele diz *«não tem contraparte»* na linguagem (`docs/mapeamento-ds-bold.md:541`). `busca('lateral')`/`('painel')`/`('panel')` não devolvem painel. Sem segundo consumidor, pedir peça seria pedir por um produto só | **console**: `.doca` vira variante do `WaDetailPanel`, e as duas folhas viram uma |
+| **6 · célula com nota de rodapé** (`TelaHistorico.tsx`, `CelulaDeMedida.tsx`) | a `WaDataTable` **não é feita de `diletta-data-*`** (zero import; a razão é a densidade, 52/54/64 contra 40 — `mapeamento-ds-bold.md:538`). O `diletta-data-cell` tem slot (`:60`), então a marca na célula cabe quando houver adoção | **console**, dentro da `WaDataTable` |
+| **7 · `WaDataTable` no estreito** («Mais detalhes» × abrir a linha, `WaDataTable.tsx:577-585`; ordem só no estreito, `:636-656`) | defeito da peça do console, não da linguagem | **console** |
+| **9 · `WaConfirmDialog` que aceite conteúdo** | a peça da linguagem **já aceita** — slot `conteudo` (`diletta-dialog.js:127`) desde a `web-v0.114.0`, e o nosso embrulho o usa para o motivo. Quem não expõe é o `WaConfirmDialog` (`DetalheDoGestor.tsx:324-327` concatena o aviso na descrição por isso) | **console** |
+| **9 · barra de mudanças não gravadas** e **seletor de contexto (marca)** | a guarda de rascunho não existe no console ainda (R4/R9 da `ia-da-administracao`, «feature seguinte»); `busca('salvar')`, `('rascunho')`, `('mudanças')`, `('seletor')` vazios. O seletor de marca hoje é um `tablist` cru em `TelaConfiguracao.tsx:132` e `TelaBotoes.tsx:128`, que o ledger do console registra como *«redesenho, não migração»*. **Pedido sem medição não se escreve**: volta quando a feature existir | **decisão dela** (aba × seletor de contexto) e depois a feature |
+| **10 · cor da nota de eixo** (`WaSerieTemporal`) | já pinta com `warningOnSurface` (`WaSerieTemporal.module.css:76`), papel da linguagem que deriva com piso AA (6,54 na paleta do Bold, medido no pedido do piso de texto, 22/09) | nada a pedir |
+| **10 · faixa de zoom do mapa** | o `WaMapa` é do console; `busca('mapa')`/`('zoom')` vazios | **console** |
+| **10 · peça de indicador** | `busca('indicador')`, `('métrica')`, `('kpi')`, `('estatística')` vazios — vazio é número. **Mas só medi um sítio** (`Totais.tsx`, o Painel); não contei os indicadores das outras telas | **não medido** — o pedido sai quando a contagem existir |
+| (achado) **o `///` do `AtalhosExclusivos.tsx:10-12`** diz que a linguagem não publica escolha exclusiva | falso: a peça existe (item 3 acima) | **console** |
+
+---
+
+### 7 · O que é nosso e espera decisão dela, em ordem de dependência
+
+1. **Dois commits do Coreflow na `main` LOCAL deste repo, sem push** — `a3cb7d5` (a coluna da tela
+   alinha à esquerda) e `c4db80f` (botão de rodapé sem ação nasce desabilitado), de 25/09 de manhã. A
+   memória do chat diz *«main, SEM PUSH e SEM TAG»*. **Esta rodada não os levou**: subiu a partir do
+   remoto, e a `main` local continua com os dois, agora atrás da remota.
+2. **Subir o pino deste filho para `v2.6.0` / `web-v2.6.0`** — a tag é dela. Traz o porte do campo;
+   não traz a grade importável (pedido 1).
+3. **Vendorizar no app** — `development` e `homologation` estão em `v0.113.0` / pai `v0.204.0`.
+
+---
+
 ## Rodada de 2026-09-23 · fim de tarde
 
 Cobre **22/09 17h50 → 23/09 17h44**. Foi o dia em que o pai deixou de ser `0.x`: **nove tags numa
