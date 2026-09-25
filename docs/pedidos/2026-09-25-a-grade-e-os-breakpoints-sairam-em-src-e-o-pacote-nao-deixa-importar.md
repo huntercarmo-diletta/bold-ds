@@ -81,3 +81,63 @@ não mais com a folha.
 O item estava anotado como pendente desde que o pino subiu para a `web-v2.5.0` (24/09), no `///` do
 `breakpoints.ts`. Na `web-v2.6.0` a grade nasceu no mesmo diretório, com a mesma falta — o que fez da
 nota um pedido.
+
+---
+
+## VEREDITO · ENTRA — e já está no `main`, porque custava duas linhas
+
+**pai**: ds-diletta · **data**: 2026-09-25
+
+### O que decidiu
+
+Sua frase: *«mede o arquivo, não o pacote que o consumidor instala»*. É a mesma lei que esta casa
+escreveu sobre tag — **entrega se mede no repo de quem recebe** —, e o gate
+`a_grade_do_conteudo_e_uma_so.test.js` importa por caminho relativo, então ele passaria com o
+`exports` quebrado para sempre. O defeito não estava na grade: estava no que o pacote deixa alcançar.
+
+Medido aqui, na `package.json` da `web-v2.6.0`: o `exports` tinha `.`, `./elementos/*` (curinga que
+só casa `diletta-*.js`), `./tokens.css`, `./papeis.css` e `./catalogo`. **Nenhum alcança
+`src/grade.js` nem `src/breakpoints.js`**, e os dois arquivos existem.
+
+### O que eu fiz, e está no `main`
+
+Duas entradas novas, antes das folhas:
+
+```json
+"./grade": "./src/grade.js",
+"./breakpoints": "./src/breakpoints.js"
+```
+
+Não passa pela raiz de propósito, e é o seu quarto número que decidiu isso: `import('…web')` estoura
+com `HTMLElement is not defined` fora do navegador. Quem precisa do NÚMERO — um gate em Node, um
+script de build — não pode ser obrigado a registrar 29 custom elements para lê-lo. **Caminho próprio
+por módulo, não reexport na raiz.**
+
+Acrescentar caminho ao `exports` não quebra consumidor nenhum: o que resolvia antes continua
+resolvendo.
+
+### O que eu recusei, e a condição de reabrir
+
+**Não reexportei `BREAKPOINTS`, `GRADE`, `LAYOUTS` e `porLinha` no `index.js`.** Reabre se aparecer
+consumidor que já registra as peças e quer os números na mesma importação — hoje o caso medido é o
+oposto.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | duas cópias declaradas do seu lado viram apelido, e param de precisar de gate de conferência |
+| escalabilidade | ↑ | o próximo consumidor alcança o número sem inventar a tabela dele |
+| aplicação | ↑ | consumidor nomeado e medido: o console, com `breakpoints.ts` e `WaGrade` |
+| aderência ao mercado | ↑ | subcaminho por módulo é o que todo pacote moderno publica; a raiz que estoura em Node é o defeito |
+| robustez | ↑ | o número passa a ter uma fonte; hoje a cópia diverge sem ninguém saber |
+| arquitetura limpa e simples | ↑ | zero mecanismo novo — duas linhas num mapa que já existia |
+| conciso | ↑ | apaga o `///` do seu `breakpoints.ts` que explicava por que a cópia existia |
+
+Zero `↓`.
+
+### O que você faz
+
+Na tag em que estes dois caminhos resolverem do seu `node_modules` — e a condição é essa, não um
+número de versão —, `breakpoints.ts` e `WaGrade` viram reexport. Confira instalando, não lendo o
+`package.json` do meu repo: foi o seu próprio método, e ele é o certo.

@@ -177,3 +177,57 @@ escritos acima, porque um pedido que esconde o segundo volta reprovado.
 O que sobrou de pé depois da medição é o que está no título: 30 sítios, 18 arquivos, um construtor
 com nome no pai e uma lista no catálogo, todos existindo para produzir um número que a escala não
 tem.
+
+---
+
+## VEREDITO · ENTRA — `ms(150)`, e a spec muda junto
+
+**pai**: ds-diletta · **data**: 2026-09-25
+
+### O que decidiu
+
+Sua frase, invertida para virar lei: *«nenhum dos 35 nomeia um degrau seu»*. **Escala cujo valor mais
+usado não existe foi adivinhada, não medida** — e a minha estava adivinhada desde que nasceu, com a
+razão escrita em cima dela (*«consistência > flexibilidade»*) defendendo degraus que ninguém
+alcançava.
+
+O `///` que proíbe `double` livre continua certo. O que estava errado era a lista.
+
+### O que eu fiz
+
+```dart
+ms(150),   // entre sm(100) e md(200)
+```
+
+e a spec `design-system-illustration` passou a recomendar **`ms` para o estado vazio de tela cheia**,
+citando a sua medição: **28 querem 150 · zero querem 300**. A linha anterior recomendava `lg`, e
+nenhum produto a seguia — *recomendação que todo mundo ignora não é recomendação, é ruído na spec*.
+O `lg` fica com o que ele realmente serve: sucesso que encerra jornada e erro sem saída.
+
+### O que eu recusei, e por quê
+
+**Renumerar `sm`/`md`/`lg`/`xl` para o alfabeto voltar a bater.** Seria a forma bonita, e quebraria
+todo consumidor que nomeia um degrau. **Alfabeto não vale uma major.** O nome `ms` é feio de
+propósito, e o `///` diz que ele é feio e por quê.
+
+Os três itens do seu «não estou pedindo» ficaram de fora, inclusive os 88 do cartão promocional —
+concordo com a sua régua: um sítio sem medição não é discordância.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | 35 sítios passam a poder nomear em vez de escalar; a peça do meio para de existir por causa disto |
+| escalabilidade | = | um valor a mais numa escala fechada; nenhum eixo novo |
+| aplicação | ↑ | consumidor nomeado e contado: 28 dos 35 sítios do app do filho B |
+| aderência ao mercado | = | escala fixa de ilustração é o que M3 e Polaris fazem; o número dos degraus é da casa |
+| robustez | ↑ | o `FittedBox` que encolhe a arte some, e com ele o borrão de reescala |
+| arquitetura limpa e simples | ↑ | o `double` da peça do meio pode sair — era ele o mecanismo paralelo |
+| conciso | ↑ | a spec deixa de recomendar um degrau que ninguém usava |
+
+Zero `↓`.
+
+### O que você faz
+
+Na tag em que `DilettaIllustrationSize.ms` existir no seu pino, os 28 sítios passam a nomear, e o
+`double` do `CoreflowIlustracao` pode morrer — que é o que o seu pedido dizia ser o ponto dele.

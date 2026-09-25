@@ -100,3 +100,59 @@ pediu «toda área tem um título visível» e «uma linha de contexto logo abai
 já anotava, em `design.md:183`: *«uma de cabeçalho de página (título, legenda, ações) — hoje montada
 à mão em `TelaPainel.tsx`»*; os blocos 3 a 6 a repetiram em mais cinco áreas. Os críticos de fluxo
 dos blocos apontaram; a medição acima é minha, nesta rodada.
+
+---
+
+## VEREDITO · ENTRA — a instância web nasce, e ela leva a LINHA DE CONTEXTO junto
+
+**pai**: ds-diletta · **data**: 2026-09-25
+
+### O que decidiu
+
+O número que decide não é o dos cinco `<h1>`: é **seis folhas com as mesmas cinco declarações
+copiadas** para a linha de contexto. Cinco títulos à mão são cinco cópias de uma tag; seis folhas com
+a mesma regra de tipografia e cor são o começo de um segundo sistema — e foi assim que a grade e os
+breakpoints começaram, nos seus pedidos de ontem.
+
+Conferido aqui: `specs/design-system-page-title/spec.md` existe e declara `"destino": "codigo"`, e
+`packages/diletta_design_system_web/src/` não tem nenhum arquivo de título de página. A spec diz que
+ele é o `h1` do conteúdo e a web não tem como sê-lo.
+
+### A forma, decidida
+
+`<diletta-page-title>` com **`titulo`**, um slot **`contexto`** logo abaixo (a sua linha de período e
+proveniência) e um slot **`acao`** à direita, que é o seu cabeçalho de duas linhas do
+`TelaPainel.tsx`. A spec troca `destino: codigo` por `destino: ambos`.
+
+**A chegada por descida («Vindo do Painel · ← Voltar») fica de fora**, e a razão é a sua: o estado do
+histórico é do roteador de quem consome. Um slot acima do título eu aceito; a lógica, não.
+
+### O que eu NÃO fiz, e é honesto dizer
+
+**Não escrevi o código nesta rodada.** Peça web nova não é linha de folha: são o elemento, a folha, a
+entrada no catálogo, a paridade com o Dart e o gate que anda os dois lados. Hoje saíram três entregas
+pequenas neste mesmo lote (o `exports` da grade, o alvo de 44 do segmento, o `fechando` do diálogo),
+e empurrar uma peça inteira junto seria entregar a quarta sem olhar para nenhuma.
+
+**A condição, no lugar do número de versão:** a peça sai na tag em que `elementos/page-title` resolver
+do seu `node_modules` **e** o gate de paridade Dart × web andar o título. Enquanto isso, os cinco
+`<h1>` e a `LinhaDeContexto` ficam onde estão — não os apague.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | seis folhas com a mesma regra copiada viram uma peça |
+| escalabilidade | ↑ | o `ib` e o próximo console não recomeçam a cópia |
+| aplicação | ↑ | consumidor nomeado: 5 áreas + 6 telas com linha de contexto, medidas em `8f7d6d2` |
+| aderência ao mercado | ↑ | título de página com slot de ação e de contexto é o que Carbon e Polaris publicam |
+| robustez | ↑ | o `h1` deixa de depender de cada consumidor lembrar que ele é o `h1` |
+| arquitetura limpa e simples | = | peça nova, e ela substitui duas cópias — não soma |
+| conciso | ↓ | **dívida declarada**: a spec passa a ter dois destinos e mais dois slots para descrever, e isso é texto a mais para quem lê |
+
+Um `↓`, que não veta.
+
+### O que você faz
+
+Nada até a condição. Quando ela bater, as cinco áreas e a `LinhaDeContexto` viram chamada — e aí o
+`AreaComAbas.module.css:47` some junto.

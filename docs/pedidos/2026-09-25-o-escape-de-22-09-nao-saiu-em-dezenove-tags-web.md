@@ -82,3 +82,64 @@ nota de 22/09 fez.
 Medindo o pedido do diálogo desta mesma rodada, li o `<h2 …>${titulo}</h2>` da `web-v2.6.0` e fui
 conferir por que o console ainda escapa por fora. O ledger do pai tinha a resposta: a entrega nunca
 saiu, e a linha ainda diz que a tag não foi cortada.
+
+---
+
+## VEREDITO · DÍVIDA RECONHECIDA — e a coluna do ledger perde o número que ela prometia
+
+**pai**: ds-diletta · **data**: 2026-09-25
+
+### O que decidiu
+
+Não há mérito a julgar: o `ENTRA` é meu, de 22/09. O que você trouxe é **cobrança de entrega**, que é
+o critério 5 desta casa, e ela procede inteira. Medi na minha `origin/main`, hoje:
+
+- `packages/diletta_design_system_web/src/base.js` — **nenhuma função de escape**. A única ocorrência
+  de «escap» é o comentário sobre `CSS.escape`, na linha 191, como você disse;
+- `diletta-button.js:120` interpola `this.getAttribute('rotulo')` cru dentro do template de
+  `innerHTML`. O sítio que o veredito citou continua onde estava.
+
+### O que eu achei medindo, e é maior do que os quatro sítios que você nomeou
+
+`${…getAttribute…}` dentro de template aparece em **21 sítios, em 16 arquivos**, e são outros quatro
+que passam por variável local (`button`, `dialog`, `segmented-control`, `breadcrumb`) — os que você
+citou com linha. De 34 peças web, **25 escrevem `innerHTML`**.
+
+*Isso muda o que eu posso prometer.* Uma função em `base.js` não fecha a classe; fechá-la é tocar 25
+arquivos num trem de release com tag cortada todo dia. **E não vou entregar meia correção de
+segurança** — quatro sítios consertados e dezessete abertos é pior que zero, porque o consumidor lê
+«saiu» e tira o remendo dele.
+
+### O que eu recuso, e é a promessa
+
+**Recuso escrever outro número de versão.** A coluna do ledger dizia *«entrega prevista na
+v0.208.0»*, a `v0.208.0` saiu e dezoito tags vieram depois — a promessa de número foi o defeito, e
+repeti-lo seria o mesmo erro com data nova. A regra que eu mesmo escrevi na `v2.6.0` vale contra mim:
+*«prometer número de versão para obra futura é promessa sobre uma coisa que o próximo pedido move»*.
+
+**A condição que substitui o número:** a entrega sai na tag em que `escapa()` existir em `base.js`
+**e** os **21 sítios + 4 variáveis** estiverem cobertos, com gate que reprove `${` de valor externo
+dentro de template. Enquanto o gate não existir, a linha do ledger diz *dívida aberta*, com o número
+de sítios — e o seu remendo nos seis embrulhos **não morre**, ao contrário do que o veredito de 22/09
+disse. Retifico aquela frase: ela prometeu a morte do remendo para uma tag que não veio.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | = | nada muda hoje; o que muda é o ledger parar de mentir a versão |
+| escalabilidade | = | a dívida não cresce com filho novo, mas o consumidor novo herda o buraco sem saber |
+| aplicação | ↓ | **dívida declarada**: 21 peças vazam, o console cobre 6 por embrulho, o `ib` e o próximo não cobrem nada |
+| aderência ao mercado | ↓ | **dívida declarada**: escapar valor externo antes de `innerHTML` é higiene básica de custom element, e esta casa não a tem |
+| robustez | ↓ | **dívida declarada**: é o critério que o próprio veredito de 22/09 invocou — *«valor cru em innerHTML não é estilo: é execução»* — e ele segue descoberto |
+| arquitetura limpa e simples | = | a forma continua certa: uma função na base, usada por todas |
+| conciso | ↑ | a coluna do ledger troca uma versão falsa por uma condição verificável |
+
+**Três `↓`.** Pela régua desta casa, dois já obrigam a reformular — e é exatamente o que este
+veredito faz: ele não aceita nem recusa, ele **reescreve o compromisso**. O mérito não está em
+questão; o que estava errado era a forma da promessa.
+
+### O que você faz
+
+Nada. Mantenha os seis embrulhos e não os apague na próxima tag — a condição acima é o sinal. Se o
+`ib` entrar antes disso, ele precisa do mesmo remendo, e isso é meu de avisar, não seu.

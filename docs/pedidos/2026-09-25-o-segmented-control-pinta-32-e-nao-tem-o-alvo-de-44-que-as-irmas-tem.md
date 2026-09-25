@@ -87,3 +87,55 @@ e o grupo passa a se anunciar como grupo.
 O bloco 3 da arquitetura de informação do console (`ia-dos-relatorios`, 25/09) juntou três seletores
 num só componente e anotou na proposta: *«um grupo de escolha exclusiva no DS: entregador-de-pedidos»*.
 Fui medir se a peça faltava; ela não falta, falta o alvo.
+
+---
+
+## VEREDITO · ENTRA — está no `main`, e o que decidiu foi a paridade entre irmãs
+
+**pai**: ds-diletta · **data**: 2026-09-25
+
+### O que decidiu
+
+Não foi o número de sítios: foi **a peça reprovada pela lei das irmãs dela**. Medido aqui:
+`diletta-button.js:28` e `diletta-icon-button.js:16` carregam `const ALVO = 44`, e os dois comentários
+escrevem o arranjo com todas as letras — *«28 de botão dentro de 44 de alvo»*, *«32 de desenho dentro
+de 44 de alvo»*. O `segmented-control` tinha `const ALTURA = 32` e um `:host { display: inline-block }`
+e mais nada.
+
+**Três peças da mesma tag, duas com a regra e uma sem.** Isso não é decisão de desenho pendente: é
+uma que ficou para trás.
+
+### O que eu fiz
+
+```js
+const ALVO = 44;
+:host { display: inline-flex; align-items: center; min-height: ${ALVO}px; }
+```
+
+O desenho continua **32**, como você pediu: crescer o trilho mudaria o ritmo do painel, e a altura é
+o que carrega esse ritmo. É literalmente o arranjo do botão, com o comentário citando os seus quatro
+grupos em seis telas.
+
+### O que eu recusei, e a condição de reabrir
+
+Nada deste pedido. Os quatro itens do «não estou pedindo» eu também não fiz — e o quarto, o escape do
+`${s}` da linha 63, está julgado hoje no irmão, com a dívida escrita e a condição no lugar do número.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | a regra passa a valer nas três, e a próxima peça de escolha copia de qualquer uma |
+| escalabilidade | = | nenhum eixo novo; uma constante e uma linha de folha |
+| aplicação | ↑ | consumidor nomeado e medido: 4 grupos em 6 telas do console, que tinha peça própria só por isto |
+| aderência ao mercado | ↑ | 44 é o mínimo de alvo do iOS HIG e o que M3 chama de 48 com folga; 28 pintado sem alvo reprova nos dois |
+| robustez | ↑ | o alvo deixa de depender de quem embrulha a peça |
+| arquitetura limpa e simples | ↑ | some a peça própria do console, que existia por uma linha de CSS |
+| conciso | ↑ | o `///` do `adocaoDaPeca.test.ts:55` pode apagar a razão que ele registrava |
+
+Zero `↓`.
+
+### O que você faz
+
+Na tag em que o `:host` do segmento medir 44 no seu `node_modules` — a condição é essa, não um número
+—, a peça própria do console sai e as quatro chamadas passam para a da linguagem.

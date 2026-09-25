@@ -83,3 +83,67 @@ O crítico de fluxo do bloco 6 (`ia-da-administracao`, 25/09) listou «diálogo 
 entre as peças que faltam, apontando `AvisoDeSenhaRedefinida.tsx` e `DetalheDoGestor.tsx:324-327`. A
 medição acima é desta rodada; o comentário do `WaConfirmDialog` sobre o que saiu na adoção foi o que
 transformou o achado de «falta» em «foi tirado».
+
+---
+
+## VEREDITO · ENTRA — está no `main`, e a forma é EVENTO, não atributo
+
+**pai**: ds-diletta · **data**: 2026-09-25
+
+### O que decidiu
+
+Você disse que a forma era minha, e ela se decide pelo seu próprio caso: o console recusa o
+fechamento **às vezes** — quando há rascunho sujo —, e **booleano não diz «depende»**. Um atributo
+irmão do `fecha-no-scrim` obrigaria o consumidor a ligá-lo e desligá-lo a cada tecla digitada, que é
+estado de formulário vazando para o DOM.
+
+Medido aqui, na `origin/main`: `diletta-dialog.js` tinha **zero** ocorrências de `cancel`; ouvia só o
+`close` e emitia `fechou` depois do fato. E a sua leitura da especificação está certa — o `cancel`
+nasce no `<dialog>` de dentro do shadow, não borbulha e não atravessa a fronteira. Quem está fora
+nunca o ouve.
+
+### O que eu fiz
+
+A peça passa a ouvir o `cancel` nativo e a repassá-lo como **`fechando`, cancelável**:
+
+```js
+d.addEventListener('cancel', (e) => {
+  const aviso = new CustomEvent('fechando', { bubbles: true, cancelable: true });
+  if (!this.dispatchEvent(aviso)) e.preventDefault();
+});
+```
+
+Quem chamar `preventDefault()` no `fechando` impede o `Esc`. Quem não ouvir não muda de comportamento
+— o `Esc` fecha como sempre fechou.
+
+### O que eu achei indo implementar
+
+**O `fechando` cobre o `Esc` e NÃO cobre o scrim**, porque o clique no scrim não passa pelo `cancel`
+do navegador: ele é tratado na própria peça, três linhas abaixo. Não uniformizei agora de propósito —
+o seu pedido diz *«o clique no scrim está certo»* e mexer nele mudaria o que você não pediu.
+**Condição de reabrir:** o primeiro consumidor que precise recusar os dois pelo mesmo caminho. Aí o
+scrim passa a disparar o mesmo `fechando`, e isso é uma linha.
+
+### O que eu recusei
+
+Nada. Os quatro itens do «não estou pedindo» seguem de fora, incluindo a folha de confirmação de
+saída — que, como você escreveu, vem com número quando existir consumidor.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o veto volta para a peça; o console para de reabrir o diálogo para simular recusa |
+| escalabilidade | = | nenhum eixo novo; um evento a mais no contrato |
+| aplicação | ↑ | consumidor nomeado: 8 diálogos do console, 4 deles com dado de servidor no título |
+| aderência ao mercado | ↑ | é o que a plataforma faz: `cancel` é cancelável por especificação, e a peça só o estava engolindo |
+| robustez | ↑ | o fechamento deixa de ser irreversível por construção |
+| arquitetura limpa e simples | ↑ | zero atributo novo; o estado de formulário não vai para o DOM |
+| conciso | ↑ | um nome novo no contrato apaga o contorno de reabrir |
+
+Zero `↓`.
+
+### O que você faz
+
+Trocar o contorno por `onFechando` com `preventDefault()` quando o rascunho estiver sujo, na tag em
+que o evento existir no seu `node_modules`.
