@@ -129,20 +129,95 @@ sair da aba e vê a de `a`. A conformidade, nesse estado, mede `b` quando `b` es
 
 ---
 
-## VEREDITO · ENTRA — os dois ganchos na forma pedida (motor `v0.117.0`, 09/09)
+## VEREDITO · ENTRA — os dois ganchos, na forma que você pediu, e o listener do seu lado morre
+**pai**: catalogo-diletta **v0.117.0** · **data**: 2026-09-09
 
-Resumo do que o dono do motor escreveu no CHANGELOG e no ledger dele (`catalogo-diletta`, `ee60f34`):
+### O que decidiu
 
-- `estilosDaMarca` e `fundamentosDaMarca` entram **opcionais**; `Ds.estilos`/`Ds.fundamentos` resolvem por
-  `CC.marca`; as duas abas **assinam** o notificador (Fundamentos recriando o estado da seção); a
-  conformidade lê `Ds.estilos` — a marca na tela.
-- **Gancho e não reforma do tipo**, pela medição deste pedido: 2 famílias mudam com a marca, 6 não, e as
-  3 que eu não classifiquei (`sombras`, `gradientes`, `ajustesDePapel`) ninguém mediu — *"nome de família
-  escolhido de cabeça é o defeito que esta casa mais registra"*.
-- **Condição escrita:** é o terceiro gancho «por marca» da casa (`temaDaMarca` e estes dois). *No quarto,
-  «por marca» vira um resolvedor em vez de um campo por assunto.*
-- Gate dele: `o_inventario_segue_a_marca_test.dart`, 5 casos, os dois últimos são o critério de aceite
-  daqui, sem listener do lado do teste. Provado que falha sem o conserto.
+**A sua medição contra a alternativa que você mesmo ofereceu e recusou pedir.** Você escreveu, em «Não
+estou pedindo»:
+
+> *"Que `InventarioDeEstilo` separe «marca» de «língua» por campo. Seria a forma mais honesta, mas é uma
+> reforma do tipo."*
+
+Você está certo nas duas metades, e é a sua tabela que decide qual delas vale hoje: **2 famílias mudam
+com a marca** (`cores`, 31; `papeis`, 21) e **6 não mudam**. São **8 de 11**. As três que sobram —
+`sombras`, `gradientes`, `ajustesDePapel` — você não classificou, e com razão: você não as declara.
+
+**E `gradientes` é marca por natureza.** Ou seja: pra reformar o tipo hoje eu teria que decidir de cabeça
+o lado de três famílias que ninguém mediu — e **nome de família escolhido de cabeça é o defeito que esta
+casa mais registra**. O gancho não precisa dessa classificação: ele devolve o inventário inteiro daquela
+marca, e o dia em que as três estiverem medidas a reforma chega com dados em vez de palpite.
+
+**A segunda razão é que você estava fazendo o meu trabalho, e nomeou a classe melhor do que eu:**
+
+> *"O filho está mexendo no estado global do motor de dentro de um listener."*
+
+Replugar 96 blocos, grupos, contratos e o leitor de código pra mudar duas famílias e um mapa de prosa é
+exatamente o que o `///` do `previaDeComponente` ensina a não fazer. Não custa tempo; custa clareza, e
+clareza é o que um motor vende.
+
+### O que entrou
+
+```dart
+final InventarioDeEstilo Function(String marca)? estilosDaMarca;
+final Map<String, String> Function(String marca)? fundamentosDaMarca;
+```
+
+Com as **três consequências que você listou**, sem nenhuma a menos:
+
+1. `Ds.estilos` e `Ds.fundamentos` **resolvem por `CC.marca`** quando o gancho existe, e caem nos campos
+   de hoje quando não existe — **quem tem uma marca só não muda uma linha**, que é a régua do
+   `temaDaMarca`;
+2. `AbaDeStyles` e `AbaDeFundamentos` **assinam** o notificador. A de Fundamentos com `KeyedSubtree`, pela
+   razão que você mediu antes de mim: `_sel` é estado da aba e os títulos mudam entre marcas, então
+   reconstruir mantendo o estado é o caminho errado aqui;
+3. a conformidade lê `Ds.estilos` — **a marca na tela.** Era a metade silenciosa do seu pedido: quem não
+   tivesse o seu truque media a marca default com a outra desenhada ao lado.
+
+### O que eu achei indo implementar
+
+**1 · o seu listener não era o único jeito errado de acertar — o meu getter também mentia.** `Ds.estilos`
+já era um getter estático com `?? const InventarioDeEstilo()`, e eu escrevi na v0.117.0 a linha que
+resolve a marca ali dentro. Isso faz o getter depender de estado mutável global — que é a mesma coisa que
+eu recusei no seu lado. A diferença que o torna certo aqui é que **`CC.marca` é o notificador do motor**,
+e quem exibe assina: é a forma do `CC.escuro`, com dez meses de uso. Fica escrito porque a linha entre as
+duas é fina e alguém vai perguntar.
+
+**2 · `camadas_da_linguagem.dart` também lia `Ds.atual.estilos`, em dois sítios** — a caixa de proporção
+da origem dos papéis e a amostra de papel primário. Não estava no seu número de 12 (você contou os
+leitores de `estilos`/`fundamentos` nas abas e na conformidade), e é a mesma classe: vista derivada que
+mede a marca plugada. Foram junto.
+
+**3 · e uma guarda ficou impossível.** `proporcaoDaOrigem` fazia `if (papeis == null || papeis.isEmpty)`;
+com `Ds.estilos` nunca devolvendo nulo, o `== null` virou condição morta que o analisador acusa. Encolheu
+pra `isEmpty`, com a razão escrita — **guarda que não pode disparar é a próxima pessoa achando que existe
+um caso que não existe.**
+
+### O que eu recusei, e a condição de reabrir
+
+- **a reforma do tipo** (separar marca de língua por campo) — condição escrita: **as três famílias que
+  faltam classificadas por medição**, de qualquer casa. Duas delas provavelmente são de marca
+  (`gradientes` com certeza), e aí a reforma nasce com 11 de 11 em vez de 8;
+- **um gancho por assunto, pra sempre.** Estes são o segundo e o terceiro «por marca» (o primeiro é o
+  `temaDaMarca`), e a condição vale contra mim: **no QUARTO, «por marca» vira um RESOLVEDOR** — um lugar
+  onde o filho declara o que muda com a marca — em vez de eu somar campo no plugue. É a mesma régua que o
+  DS pai aplicou hoje no terceiro `raioDeX`;
+- **mover o seletor de marca pra fora do board** — você disse que não estava pedindo, e eu não movi.
+
+### O que você faz
+
+`ref: v0.117.0`, declare os dois ganchos, e **apague o listener**: o `configurarDsDoBold` volta a receber
+zero argumentos, e o `KeyedSubtree` das duas abas no seu `main.dart` sai junto — o motor faz os dois
+agora.
+
+O commit que remove o listener é o teste de aceite, e você escreveu essa frase. O meu gate é o critério
+que você escreveu, com **nenhum listener do lado do teste** — e eu **provei que ele falha sem o
+conserto**: tirei a assinatura da aba de Styles e o vermelho é exatamente *"a aba leu `.value` sem assinar
+e travou na marca em que abriu"*.
+
+E a lápide do seu `///` pode ser cobrada: *"morre no dia em que o motor receber a marca nas duas abas."*
+É hoje.
 
 ## Resposta do filho
 
