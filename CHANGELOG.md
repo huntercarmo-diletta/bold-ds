@@ -22,6 +22,18 @@ O que cada degrau significa **pro app que adota**:
 
 ## [Não lançado]
 
+### Botão de rodapé sem ação passa a ser DESABILITADO
+
+`disabled` só olhava a trava do irmão em voo. A tela que apaga o CTA passando
+`onPressed: null` — a forma mais comum de dizer *"ainda não dá"* — ficava com um botão de tinta
+inteira, alvo de toque inteiro e nada acontecendo ao tocar.
+
+Medido no primeiro filho: **27 ações de rodapé em 17 telas** passam `null` condicional, entre elas a
+revisão de boleto, o confirmar do MED e os cinco fluxos de chave Pix. Nenhuma delas apagava.
+
+`loading` fica de fora de propósito: ali o botão está **ocupado**, não impedido, e quem desenha a
+espera é a rodela. Três testes em `o_rodape_sem_acao_e_desabilitado_test.dart`.
+
 ### `CoreflowColunaDaTela` — a terceira pergunta do alinhamento ganha resposta
 
 O gutter respondeu *onde o conteúdo começa* e o teto de 600 respondeu *até onde ele estica*.

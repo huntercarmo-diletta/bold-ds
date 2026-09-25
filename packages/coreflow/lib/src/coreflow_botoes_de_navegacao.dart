@@ -71,11 +71,23 @@ mixin CoreflowAcoesDoPai<T extends StatefulWidget> on State<T> {
     if (a == null) return null;
     final rodando = _correndo == slot;
     final travado = _correndo != null && !rodando;
+    // SEM AÇÃO É DESABILITADO, e isto não era verdade até 25/09.
+    //
+    // `disabled` só olhava a trava do irmão em voo, então uma tela que apaga o
+    // CTA passando `onPressed: null` — a forma mais comum de dizer "ainda não
+    // dá" — ganhava um botão com a tinta inteira, alvo de toque inteiro e
+    // NADA acontecendo. Medido no primeiro filho: **27 ações de rodapé em 17
+    // telas** passam null condicional, entre elas a revisão de boleto, o
+    // confirmar do MED e os cinco fluxos de chave Pix.
+    //
+    // `loading` fica de fora de propósito: ali o botão está ocupado, não
+    // impedido, e quem desenha a espera é a rodela.
+    final semAcao = a.onPressed == null && a.onPressedAsync == null;
     return DilettaNavigationAction(
       label: a.label,
       leadIcon: a.glyph,
       isLoading: a.loading || rodando,
-      disabled: travado,
+      disabled: travado || (semAcao && !a.loading && !rodando),
       type: _tipo(a.variant),
       state: a.variant == CoreflowVarianteDeBotao.destructive
           ? DilettaButtonState.error
