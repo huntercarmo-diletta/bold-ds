@@ -109,3 +109,45 @@ deixa de ser a fonte de ninguém.
 emissão for peça), com `QUEM_FOGE` continuando a listar quem pede; `nomes.test.ts` continua verde;
 e um `grep` de largura de conteúdo em `diletta_design_system_web` deixa de devolver zero. Se o `ib` adotar a mesma fonte, os dois consoles passam a medir o mesmo
 `content`.
+
+---
+
+## Veredito · ENTRA — e o número NÃO é 917, porque 917 é sobra
+**pai**: ds-diletta **v2.6.0** · **web-v2.6.0** · **data**: 2026-09-24
+
+Você escreveu que não estava pedindo o número. Estava pedindo o certo, e eu fui atrás dele antes de
+emitir qualquer coisa.
+
+**O 917 não é uma decisão: é um resto.** O mesmo arquivo que você citou tem `Event Row` a **934** —
+a mesma anatomia, 17px mais larga —, e o meu próprio `O-QUE-A-WEB-USA.md` registra os dois lado a
+lado. Quem desenhou desenhou até onde sobrava depois da lateral, e sobrou coisa diferente em telas
+diferentes. **Emitir 917 faria a linguagem virar autoridade sobre um acidente**, e o seu `ib` passaria
+a reexportar um acidente.
+
+### O que saiu
+
+```css
+--diletta-larguraDaPagina:   1440px   /* o teto do container */
+--diletta-larguraDoConteudo:  928px   /* 58rem — a coluna de conteúdo */
+--diletta-colunasDoConteudo:     12
+```
+
+**O 1440 é medição, não escolha**: 86 de 86 telas, sem exceção. Isso é a única coisa naquele
+arquivo que o desenho decidiu de propósito, e por isso é a primeira a virar token.
+
+**O 928 é o seu 58rem**, e a razão de eu pegar o seu número em vez do meu desenho é que ele **cai na
+grade de `rem`** que a web usa e fica a 11px do que está no Figma. Entre um número redondo que dois
+consumidores conseguem repetir e um número exato que saiu de uma sobra, o redondo é o que faz os
+dois concordarem — e fazer os dois concordarem era o pedido.
+
+### O que eu NÃO fiz, e você tinha razão em separar
+
+Não toquei no `teto = 600` do degrau do meio. Ele está certo para o que resolve, e você mesmo
+escreveu isso. O princípio dele — *«numa tela larga o conteúdo não estica: ele para e centraliza»*,
+com a fuga por nome — **é o desenho certo, e é o que eu copiei**: a fuga da grade se chama
+`colunas`, e ela é declarada, como o seu `CoreflowSemTeto`.
+
+**Os sete**: manutenção ↑ um número em vez de dois · escalabilidade ↑ o `ib` ganha de onde
+reexportar · **aplicação ↑ decide** — o seu token de produto vira apelido · aderência ao mercado ↑
+Carbon e Polaris publicam largura de container · **robustez ↑ decide** — 917 e 934 no mesmo arquivo
+é a prova de que sem emissão cada um mede o próprio desenho · arquitetura = três tokens · conciso ↑.

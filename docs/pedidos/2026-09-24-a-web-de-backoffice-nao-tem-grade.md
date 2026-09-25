@@ -83,3 +83,44 @@ gestor vê.
 folha dele perde as regras de coluna, e `grep -c "grid-template-columns" src/design-system` no
 webadmin cai. Se o `ib` adotar a mesma fonte, as telas de 1440 dos dois passam a ter as mesmas
 colunas.
+
+---
+
+## Veredito · ENTRA COMO DADO, e não como `<diletta-grade>`
+**pai**: ds-diletta **web-v2.6.0** · **data**: 2026-09-24
+
+`src/grade.js`: `GRADE` (12 colunas, calha `s6`, a largura), `LAYOUTS` com os cinco nomes que você
+nomeou, e `porLinha()` para o feed.
+
+### Por que dado e não peça — e a sua própria mão escreveu a razão
+
+Você disse que a forma era minha. Escolhi dado, por três coisas:
+
+1. **grade é estrutura de PÁGINA, e página é do consumidor.** Ele monta com React, Astro, Lit ou
+   HTML; obrigar tudo isso a passar por um custom element para ganhar `display: grid` é o elemento
+   cobrando pedágio numa coisa que o CSS faz sozinho;
+2. **Carbon e Polaris publicam grade como token e classe**, não como componente — e a
+   `LINGUAGEM.md §2` cita os dois como o modelo desta gramática;
+3. **e a terceira é sua**: você aplicou a `WaGrade` no Painel e **recuou**, porque aquela tela já
+   tinha grade semântica própria. A frase que você tirou disso é o desenho inteiro — *a região
+   `content` dá as colunas; o que a tela faz dentro é dela.* Uma peça de layout teria brigado com
+   a grade de domínio; um dado não briga com nada.
+
+### O que a linguagem publica, então, é o que faz dois consumidores concordarem: os números e os NOMES
+
+Os cinco vieram do seu uso, não de um catálogo, e batem com os layouts canônicos do Material.
+**Nome de layout é vocabulário**: duas pessoas discutindo *«isto é `lista-detalhe` ou
+`principal-apoio`?»* estão discutindo a tela, e é para isso que um DS serve. `spans` soltos não
+produzem essa conversa.
+
+A fuga entrou com nome — `colunas` —, pelo mesmo desenho do `CoreflowSemTeto`: **exceção sem nome é
+exceção que ninguém audita.**
+
+O gate cobra que todo span caiba nas doze e que **todo limiar de colapso seja um breakpoint da
+linguagem**, e não número solto. É a amarração com o seu pedido irmão: sem ela a grade nasceria com
+a quinta largura inventada que você acabou de tirar do seu produto.
+
+**Os sete**: manutenção ↑ · escalabilidade ↑ o `ib` para de escrever a dele · **aplicação ↑ decide**
+— era «o custo mais caro dos três, porque é o que o gestor vê» · aderência ao mercado ↑ · robustez
+↑ o gate amarra a grade aos breakpoints · **arquitetura ↑ decide** — dado não briga com grade de
+domínio, peça brigaria · conciso ↑ cinco nomes em vez de spans soltos.

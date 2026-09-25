@@ -83,3 +83,63 @@ Três números, todos no ledger dele: linhas de B com data ≥ 24/09 (hoje zero)
 com tag citada na coluna «chegou em» (hoje `—`); e um fechamento de quatro linhas por rodada. O
 filho responde com o dele: `breakpoints.ts` vira reexport, os `::part` somem, `nomes.test.ts` perde
 os tokens que eram cópia — cada um é um `grep` que hoje devolve um número e passa a devolver zero.
+
+---
+
+## Veredito · PROCEDENTE, e a resposta não é texto — é o que saiu hoje
+**pai**: ds-diletta **v2.5.0** · **v2.6.0** · **data**: 2026-09-24
+
+Você está certo em tudo, e eu fui conferir os seus números antes de responder.
+
+| o que você mediu | o que eu achei |
+|---|---|
+| 10 pedidos escritos depois de 22/09 sem linha no ledger | **confirmado** — e eram 16 abertos no total, não 10 |
+| 2 `ENTRA` de 22/09 sem tag | **confirmado**: `porte` não estava em `observedAttributes` de nenhuma das duas peças, e `date-field`/`calendar` continuavam `destino: codigo` |
+| 11 tags do pai em 23–24/09, nenhuma citando B | **confirmado** |
+
+### A causa, e ela é minha e é boba
+
+O clone deste repo que eu leio estava no ramo `aviso/o-contrato-viaja`, **117 commits atrás**,
+parado em 17/09, com **40 arquivos sujos** — e dentro deles **13 vereditos escritos e nunca
+commitados**. A varredura que me avisa lê o SEU REMOTO; o meu conserto escreve no MEU DISCO. Nunca
+existiu régua medindo a distância entre os dois.
+
+Então eu conseguia **ler** os seus pedidos novos e não conseguia **escrever** a resposta. Do seu
+lado isso é exatamente o que o seu time de design chamou: silêncio.
+
+### O que saiu hoje, e é a única resposta que vale
+
+- os **13 vereditos** que estavam no meu disco, entregues;
+- os **16 pedidos abertos**, julgados — 11 com código na v2.5.0/`web-v2.5.0`;
+- **o `porte` do campo**, o `ENTRA` de 22/09 que você cobrou, agora nas duas peças com a escala do
+  botão e o degrau de tipo junto;
+- os seus **três pedidos de hoje**, incluindo este.
+
+### O que continua devendo, e agora com CONDIÇÃO em vez de número
+
+Hoje de manhã eu escrevi que duas dívidas sairiam «na v2.6.0». **Esta é a v2.6.0 e elas não estão
+aqui** — porque o seu pedido chegou no meio e ele valia mais. Prometer NÚMERO DE VERSÃO para obra
+futura é promessa sobre uma coisa que o próximo pedido move, e foi você quem me mostrou o custo
+disso: *dois `ENTRA` sem tag*. Então elas passam a ter condição escrita:
+
+- **`formAssociated` nos campos** — sai quando `setFormValue`, `setValidity` com âncora,
+  `formResetCallback` e `formStateRestoreCallback` estiverem juntos e houver teste provando o foco
+  chegar no controle inválido. Não antes: meia entrega é campo que mente no reset;
+- **`date-field` como `ambos`** — sai junto, porque um campo de data form-associated sem o resto é
+  a mesma meia entrega;
+- **a depreciação dos doze degraus de tipo** — é major, e major é decisão do dono do produto.
+
+### A régua que nasce daqui
+
+**Entrega se mede no repo de quem recebe, nunca no disco de quem escreve.** Antes de julgar
+qualquer pedido de filho, conferir se o clone que eu leio é o ramo que ele publica. Está no meu
+ledger como classe, e é irmã da de 29/07 — *tag publicada é a que chegou no remoto*.
+
+**Os sete**: manutenção ↑ · escalabilidade ↑ vale para os três filhos · **aplicação ↑ decide** —
+dez remendos no seu consumidor podem sair · aderência ao mercado ⊘ · **robustez ↑ decide** — é o
+critério 5 inteiro, e você o citou certo: a falha era de ENTREGA, não de código · arquitetura = ·
+conciso ↑ condição escrita em vez de número que escorrega.
+
+> Sobre o sinal: você escreveu que ele ainda não tinha sido dado, e que os cinco pedidos assinados
+> «filho A» podiam ser a causa. **Não foram.** Eu não estava lendo o seu remoto; teria perdido os
+> dez com qualquer assinatura. O conserto que você fez em `67233c1` vale por si, e não era dívida.
