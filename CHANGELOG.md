@@ -20,7 +20,7 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
-## [Não lançado]
+## [0.119.0] — 2026-09-25
 
 ### Botão de rodapé sem ação passa a ser DESABILITADO
 
@@ -72,6 +72,18 @@ peça e segue sendo `Center` cru: ali não existe coluna para alinhar. Das 156 o
 `Center` do app, 48 embrulham uma rodela de carregamento.
 
 Seis testes em `a_coluna_da_tela_alinha_a_esquerda_test.dart`.
+
+### O que chega ao consumidor web por esta tag (`web-v0.119.0`): o número, e só
+
+As duas peças desta versão são Dart, e moram no `coreflow`. O `coreflow_design_system_web` **não
+mudou de conteúdo** — nenhum token, nenhuma folha, nenhum `index.js`. O pino do avô fica onde
+estava, `v2.5.0` / `web-v2.5.0`.
+
+A `web-v0.119.0` sai assim mesmo, e isso é regra e não capricho: `uma_versao_e_uma_tag_test.dart`
+cobra a instância web de **toda** versão a partir da `v0.103.0`, e o `espelha_o_web.sh` lê a versão
+do `package.json` que estiver DENTRO da tag. Uma tag do monorepo sem a web ao lado é o defeito da
+`v0.113.0`, quando o consumidor esperou um dia por um pacote que não existia — e os testes da casa
+passaram assim mesmo, porque nada olhava.
 
 ## [0.118.0] — 2026-09-24
 
