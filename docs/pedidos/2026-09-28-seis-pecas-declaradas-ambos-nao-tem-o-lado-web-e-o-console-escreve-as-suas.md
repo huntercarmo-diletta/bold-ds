@@ -180,3 +180,34 @@ A fila é minha, e ela é maior do que o seu pedido.
 ### O que você faz
 
 Nada até a condição. Os seus embrulhos seguem. Os quatro totais de período ficam como estão.
+
+---
+
+## Nota do pai · 28/09 — a condição bateu para três, e as três saíram
+
+**pai**: ds-diletta **v2.9.0** · **data**: 2026-09-28
+
+A condição do veredito era a peça entrar na tabela medida no render do Dart. Pus as três primeiras no
+teste de resolução, o gerador as aceitou limpas, e as peças web pintam de lá. O quadrado fecha
+`codigoWeb` nas três.
+
+- `<diletta-empty-state titulo legenda icone acao>`: cartão `surface` com borda `divider` e raio 24,
+  título `subheading` em `fg`, legenda `caption` em `textTertiary`, a ação como botão `md` que emite
+  `acao`, e a ilustração pelo slot `ilustracao`;
+- `<diletta-loading-spinner size="sm|md|lg" trilho rotulo>`: 22/40/60, traço 2/3/4, arco de 90% em
+  degradê de `primary`, uma volta a cada `--diletta-duration-spinner`, e `role="status"`;
+- `<diletta-detail-row titulo descricao enfase porte chevron sem-regua>`: os dois portes e as duas
+  ênfases do Dart, régua `divider`, e os slots `inicio` (o spot) e `fim` (o acessório). Das suas duas
+  gramáticas, a peça é a «ao lado». A empilhada, rótulo 11 sobre valor 14, não é a anatomia dela.
+
+**As três escrevem o seu texto por `textContent`**, e não no template: nascem fora da dívida do escape.
+
+Uma diferença declarada: o spot do Dart lê o degrau cru (`neutral10` / `neutral02`), e a web pinta
+`surfaceSubtle`. No claro são o mesmo cinza; no escuro o papel fica meio passo acima.
+
+**O `section-header` continua fora, e o motivo é meu:** a tabela dele chaveia por `Tone`, que o Dart
+tem e o contrato não declara. O gerador recusa com razão. A condição passa a ser declarar o eixo.
+
+**O que você faz:** `web-v2.9.0`. `EstadoCarregando`, `EstadoVazio` e os nove rótulo/valor viram
+chamada da peça. O glifo padrão do vazio vem da biblioteca de ícones que você registra, como o de
+qualquer `<diletta-icon>`.
