@@ -18,6 +18,68 @@ A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
 
 ---
 
+## Rodada de 2026-09-28 · manhã
+
+Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat da adoção do DS no webadmin, com um
+escopo só: **o que a ficha do cadastro do `core-flow-wa` deixou aberto ao adotar as peças web da
+linguagem** (commit `44da813`, branch `feat/a-adocao-do-ds-pelo-webadmin`, pino `web-v0.118.0` = avô
+`web-v2.5.0`). Quatro achados chegaram; **três viraram pedido ao avô e um virou nota** num pedido já
+julgado. Tudo medido na ponta do avô (`web-v2.6.0` e `origin/main` `6a2b756`, onde os arquivos são
+byte a byte os do pino) — **nada estava resolvido na fonte atual**. Sobem direto, sem sinal a ninguém.
+
+**Chats lidos**:
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| a adoção do DS pelo webadmin → a ficha do cadastro | `claude_newbold` · `0f441ea9` | 28/09 manhã | a lista dos quatro achados, com os remendos comentados nos embrulhos. Lido pela lista que o chat entregou e pelo código que ela aponta, **não pela transcrição** |
+| os outros chats da janela (25/09 tarde → agora) | — | — | **não lidos nesta rodada**: a janela desta chamada foi o webadmin |
+
+### 0 · O QUE O AVÔ RESPONDEU — os seis de 25/09, julgados no mesmo dia
+
+Em 25/09 à tarde, direto na `main` deste repo (`68b6c4b`, `2f2d080`, `b1f26f7`, do Hunter), sem
+branch de resposta pendente. **O índice ainda dizia «sem veredito» nos seis**; esta rodada escreveu
+os vereditos nas linhas.
+
+| pedido | veredito | onde |
+|---|---|---|
+| a escala de ilustração | **ENTRA** — `ms(150)`, e a spec recomenda `ms` no estado vazio | `main` do pai, **sem tag** |
+| o segmented-control | **ENTRA** — alvo de 44, desenho de 32 | `main` do pai, **sem tag** |
+| o diálogo e o `Esc` | **ENTRA COMO EVENTO** — `fechando`, cancelável; o scrim fica de fora | `main` do pai, **sem tag** |
+| a grade e os breakpoints no `exports` | **ENTRA** — `./grade` e `./breakpoints` | `main` do pai, **sem tag** |
+| o título da página | **ENTRA, sem código** — condição no lugar do número | — |
+| o escape de 22/09 | **DÍVIDA RECONHECIDA** — condição: `escapa()` na base + 21 sítios + 4 variáveis, com gate | — |
+| o fundo que não viaja (23/09) | **ENTRA, e menor** — a linha já veio escrita por ele | — |
+
+A última tag do avô continua `v2.6.0` / `web-v2.6.0` (24/09); as quatro entregas de 25/09 esperam a
+próxima.
+
+### 1 · Pedidos novos, em ordem de dependência
+
+1. **[getter sem setter e o React 19](pedidos/2026-09-28-a-peca-web-publica-getter-sem-setter-e-o-react-19-estoura.md)**
+   — primeiro porque é a porta: enquanto ele não sai, todo embrulho React destas peças escreve por
+   `ref`, e as props dos outros dois pedidos só chegam assim. 16 atributos em 13 de 29 peças,
+   executado.
+2. **[a linha não consome a grade do cabeçalho](pedidos/2026-09-28-a-linha-de-dados-nao-consome-a-grade-que-o-cabecalho-declara.md)**
+   — independente do 1; contra a própria spec. Lido na fonte, não medido em pixel.
+3. **[a lista da âncora ficou no link de texto](pedidos/2026-09-28-a-lista-da-ancora-ficou-no-link-de-texto-e-o-cartao-de-arquivo-abre-na-mesma-aba.md)**
+   — independente; pergunta o alcance do ENTRA de 24/09. 1 de 6 peças com `<a>`, executado.
+4. **Nota no [escape de 22/09](pedidos/2026-09-25-o-escape-de-22-09-nao-saiu-em-dezenove-tags-web.md)**
+   — **não é pedido novo**: a interpolação crua do `data-cell`, `data-column-header` e `file-card` já
+   está na dívida reconhecida em 25/09. A nota diz o que a condição dele não conta (as variáveis
+   dessas três peças) e **dois caminhos em que o remendo do console não fecha**: o rótulo de coluna
+   (escapado uma vez, o `<img>` nasce no `column-header`, medido) e o nome do cartão (elidido depois
+   do escape, `&…gt;` na tela).
+
+### 2 · Nosso, e espera decisão dela
+
+- **o rótulo de coluna do console está sem proteção de fato**: `WaListaDeDados.tsx:95` escapa uma
+  vez e o caminho desfaz uma. Hoje os rótulos são literais, então não há dado de servidor passando —
+  mas o comentário do embrulho diz que fecha. Conserto do lado do console (escapar duas vezes), se
+  ela quiser;
+- o pino deste repo para a próxima tag do avô, quando ela sair com as entregas de 25/09 — tag é dela.
+
+---
+
 ## Rodada de 2026-09-25 · tarde
 
 Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat da adoção do DS no webadmin, com um
