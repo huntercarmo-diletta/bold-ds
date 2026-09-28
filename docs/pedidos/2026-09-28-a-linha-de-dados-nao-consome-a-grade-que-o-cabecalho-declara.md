@@ -96,3 +96,68 @@ portes. Do lado de cá: as duas regras de `WaListaDeDados.module.css` saem e a v
 Adotando a lista de dados na ficha do cadastro do console (`feat/a-adocao-do-ds-pelo-webadmin`,
 `44da813`, 28/09): endereços, representantes, achados e contas, cinco listas curtas com cabeçalho.
 Os rótulos não caíam sobre as colunas.
+
+---
+
+## VEREDITO · ENTRA — a forma é a sua, e o recuo também atravessa
+
+**pai**: ds-diletta **v2.7.0** · **data**: 2026-09-28
+
+### O que decidiu
+
+A spec contra a peça, que você citou três vezes: *«`DilettaDataRow` SHALL consumir a mesma
+declaração»*. Não é pedido novo: é a peça descumprindo o próprio contrato. Conferi na fonte: a linha
+era `flex` e a palavra `grade` só aparecia num comentário.
+
+### O que eu fiz
+
+A sua forma, sem mecanismo novo. A lista com `colunas` publica três variáveis no `:host`:
+
+- `--diletta-data-row-display: grid`;
+- `--diletta-data-row-colunas`, a mesma grade do cabeçalho, pelo mesmo `gradeDe()`;
+- `--diletta-data-row-recuo: 16px`, o recuo do cabeçalho.
+
+A linha consome as três e cai no `flex` e no recuo da moldura quando não há lista. Com seleção, a
+coluna de 28 abre antes das declaradas.
+
+**Medido no Chrome**, `colunas="Nome:1fr | Data:145:fim"`, duas linhas por porte:
+
+```
+            cabeçalho          linhas
+tabela      40/675  731/145    40/675  731/145
+painel      40/675  731/145    40/675  731/145
+historico   40/675  731/145    40/675  731/145
+solta       display flex, padding 16
+```
+
+### O que eu achei indo implementar
+
+**A borda do cartão desloca a coluna em 1px.** A primeira medida deu 730 contra 731 nos portes
+`tabela` e `painel`: a linha tem traço de 1px e o cabeçalho não. O recuo publicado agora conta da
+borda de fora, e o cartão desconta o traço dele. **O seu remendo tem o mesmo 1px**: ele põe `16px`
+de padding por dentro do traço. Some junto com ele.
+
+### O que eu recusei, e a condição de reabrir
+
+- **A coluna de seleção no cabeçalho.** A linha já reserva os 28; o cabeçalho não. Reabre no
+  primeiro sítio com seleção visível numa lista com `colunas`.
+- **O rótulo com `:` ou `|`.** A declaração parte por esses dois e o rótulo quebra. Seu console
+  troca antes de passar. Reabre no primeiro rótulo de produção que precise de um dos dois.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | a grade se declara uma vez, e o embrulho para de repeti-la |
+| escalabilidade | ↑ | todo consumidor da lista recebe o alinhamento sem CSS próprio |
+| aplicação | ↑ | as cinco listas da ficha alinham sem `::part` |
+| aderência ao mercado | = | variável CSS atravessando o shadow é o jeito comum, nada de novo |
+| robustez | ↑ | medido em pixel nos três portes, e o 1px que ninguém tinha visto saiu |
+| arquitetura limpa e simples | ↑ | a peça passa a cumprir a spec que já existia |
+| conciso | = | nada novo para o consumidor escrever |
+
+### O que você faz
+
+`web-v2.7.0`. As duas regras de `WaListaDeDados.module.css` saem e a `--lista-grade` deixa de
+existir. **Atenção ao pixel:** no porte `historico` com cabeçalho, a linha ganha 16 de recuo, porque
+agora segue o cabeçalho.

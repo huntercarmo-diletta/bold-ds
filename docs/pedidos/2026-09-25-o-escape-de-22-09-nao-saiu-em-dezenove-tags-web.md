@@ -214,3 +214,81 @@ Medido em jsdom com a tag instalada:
 e os dois de 28/09, `WaListaDeDados` e `WaCartaoDeArquivo`. Do primeiro furo o console se defende
 sozinho (escapar duas vezes o rótulo de coluna, porque ele atravessa dois `innerHTML`); do segundo,
 não — o corte é da peça. Os dois se fecham de vez na condição acima.
+
+---
+
+## NOTA LIDA · a condição deixa de contar sítios e passa a ser o gate
+
+**pai**: ds-diletta **v2.7.0** · **data**: 2026-09-28
+
+### O que decidiu
+
+A sua frase: *«O gate que a condição pede resolve isso se seguir a variável, e não só o
+`getAttribute` dentro do `${}`»*. O «21 + 4» era contagem minha, e contagem feita à mão envelhece.
+Você achou três variáveis que eu não contei, pela mesma forma que já tinha escondido o `button` em
+22/09.
+
+### A condição, reescrita
+
+A entrega sai na tag em que:
+
+1. `escapa()` existir em `base.js`;
+2. **o gate reprovar valor externo em template, seguindo a variável**: `const x = …getAttribute(…)`
+   seguido de `${x}` conta como sítio, e enum validado (`papel`, `size`) é declarado por nome como
+   seguro;
+3. **o `file-card` escapar DEPOIS de elidir**, com caso no gate: nome com `<` em qualquer posição do
+   corte sai sem entidade partida;
+4. **o rótulo de coluna escapar só no destino final**, o `column-header`. O `header-row` passa o
+   valor cru no atributo.
+
+O número deixa de ser a condição. Ele sai do gate no dia da entrega.
+
+### O que eu achei indo implementar
+
+**A linha do ledger continuava prometendo a `v0.208.0`, e não era só ela: eram OITO linhas de
+22/09 com a mesma frase.** Medi cada uma no código hoje:
+
+| veredito de 22/09 | no código |
+|---|---|
+| a borda do botão desabilitado | saiu, `web-v0.209.0` |
+| o porte do campo | saiu, `v2.6.0` |
+| `role="cell"` na célula | **zero**; sai nesta tag, com gate que pergunta o papel das cinco |
+| o campo de data na web | condição escrita, no lote do `formAssociated` |
+| `delegatesFocus` | **zero em 29** |
+| a lista de `aria-*` de estado | **zero** |
+| o alvo de toque da paginação | **zero** |
+| o escape | este arquivo |
+
+**Quatro `ENTRA` seus de 22/09 nunca tiveram código**, e a cobrança de 24/09 contou dois. As oito
+linhas agora dizem o que é. **E os seis de 25/09 não tinham linha nenhuma**, com cinco deles no
+`main` sem tag. Os cinco saem na v2.7.0, e as seis linhas existem.
+
+Nesta tag toquei quatro peças que você cita aqui: `data-row`, `data-header-row`, `data-cell` e
+`file-card`. **Nenhum
+valor interpolado mudou de caminho.** No `file-card` mudou só a âncora, que escapa aspas como antes.
+
+### O que eu recusei, e a condição de reabrir
+
+**Consertar o `file-card` sozinho, agora.** Escapar dentro da peça antes do lote quebra o seu
+embrulho: o `WaCartaoDeArquivo` escapa por fora, e o escape duplo mostra `&lt;` literal na tela. O
+conserto do corte sai junto com o lote, que é quando você apaga os onze embrulhos.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | a condição vira gate, e deixa de ser uma contagem para refazer |
+| escalabilidade | = | a dívida não cresce com filho novo |
+| aplicação | ↓ | **dívida declarada**: o corte do `file-card` mostra lixo com nome escapado, e segue até o lote |
+| aderência ao mercado | ↓ | **dívida declarada**: a mesma de 25/09, escapar antes de `innerHTML` |
+| robustez | ↓ | **dívida declarada**: a mesma de 25/09; o que melhora é o ledger parar de mentir |
+| arquitetura limpa e simples | = | a forma continua uma função na base |
+| conciso | ↑ | quatro condições no lugar de um número que envelhecia |
+
+Três `↓`, os mesmos de 25/09. Não é veredito novo: é a condição daquele, reescrita com a sua
+contagem.
+
+### O que você faz
+
+Nada. Os onze embrulhos ficam. O escape do rótulo de coluna no `WaListaDeDados` não protege, como
+você mediu. Hoje os rótulos são literais, então não há dado de servidor nesse caminho.

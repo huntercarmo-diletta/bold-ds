@@ -86,3 +86,48 @@ Do lado de cá: o «nova aba» sai das ações do cartão, e o cartão ganha `ta
 Adotando o cartão de arquivo na ficha do cadastro do console (`feat/a-adocao-do-ds-pelo-webadmin`,
 `44da813`, 28/09). O chat viu o documento abrir na mesma aba e anotou o remendo; a varredura das seis
 é deste pedido.
+
+---
+
+## VEREDITO · ENTRA — a regra é da família, e as seis recebem
+
+**pai**: ds-diletta **v2.7.0** · **data**: 2026-09-28
+
+### O que decidiu
+
+O silêncio que você perguntou era meu. O pedido de 22/09 já escrevia o gate: *«toda peça da família
+que renda `<a>` repassa o mesmo conjunto»*. O veredito de 24/09 falou só do link de texto e deixou
+a lista numa peça de seis. Conferi a sua tabela na fonte: **1 de 6**, e as cinco montavam a âncora só
+com `href`.
+
+### O que eu fiz
+
+`ATRIBUTOS_DA_ANCORA` e `atributosDaAncora` saem do link de texto e vão para a `base.js`. As seis
+peças que rendem `<a>` observam a lista e a aplicam: `file-card`, `button`, `icon-button`,
+`rail-item`, `web-top-bar` e o próprio link de texto. O `_blank` sem `rel` ganha
+`noopener noreferrer` nas seis.
+
+### O que eu achei indo implementar
+
+O gate conta as peças com `<a>` em vez de confiar na lista: se amanhã uma sétima render `<a>`, o
+teste das seis quebra e obriga a decidir. Hoje ele dá **6 de 6**.
+
+### O que eu recusei, e a condição de reabrir
+
+Nada deste pedido. O `|| '#'` do `rail-item` e do `file-card` continua fora, como você pediu.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | uma lista e uma função, antes presas numa peça |
+| escalabilidade | ↑ | a sétima peça com `<a>` herda a regra, e o gate a cobra |
+| aplicação | ↑ | o cartão abre o documento em nova aba, e o link duplicado sai |
+| aderência ao mercado | ↑ | `rel` junto de `_blank` é o piso contra *reverse tabnabbing* |
+| robustez | ↑ | o `_blank` nu deixa de ser possível nas seis |
+| arquitetura limpa e simples | = | é mudar o endereço de uma função que já existia |
+| conciso | = | o consumidor escreve `target` no hospedeiro, como já escrevia |
+
+### O que você faz
+
+`web-v2.7.0`. O «nova aba» sai das ações do cartão, e o cartão ganha `target="_blank"`.

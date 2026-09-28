@@ -103,3 +103,56 @@ cá: `comAtributos.ts` sai, e as peças voltam a ser declaradas com as props no 
 Adotando `data-list`, `data-row`, `data-cell` e `file-card` na ficha do cadastro do console
 (`feat/a-adocao-do-ds-pelo-webadmin`, `44da813`, 28/09), a tela estourou na primeira prop. O chat
 remendou por `ref` e passou a lista das quatro; a varredura das 29 é deste pedido.
+
+---
+
+## VEREDITO · ENTRA — a forma 1, o setter espelho, e ele nasce num lugar só
+
+**pai**: ds-diletta **v2.7.0** · **data**: 2026-09-28
+
+### O que decidiu
+
+A sua frase: *«O getter em si está certo […] O defeito é só o nome: ele coincide com o atributo, e
+isso o torna alvo da escrita.»* Ela diz que o conserto não mexe no getter. Repeti a medição sem o
+React, escrevendo `el[nome] = 'x'` em cada atributo observado das 29 peças: **16 atributos, 13
+peças**, os mesmos da sua tabela. Zero setters na família, como você contou.
+
+### O que eu fiz
+
+`registra(nome, Classe)` na `base.js`, e as 29 peças passam por ela em vez de chamar
+`customElements.define` direto. Antes de registrar, ela dá setter a todo getter que tem o nome de
+um atributo observado. O setter escreve no ATRIBUTO, que continua sendo o contrato:
+
+- string vira `setAttribute(nome, valor)`;
+- `null`, `undefined` e `false` removem o atributo;
+- `true` liga o atributo vazio.
+
+Não medi o que o React 19 escreve quando a prop sai do JSX. Com `undefined` removendo o atributo, o
+resultado é o mesmo nos dois caminhos.
+
+### O que eu achei indo implementar
+
+A classe fecha na base, não nas treze. **Getter novo com nome de atributo já nasce com a porta.** O
+gate novo (`a_familia_fecha_as_tres_portas.test.js`) pergunta às 29 instaladas, não às 13 da lista.
+
+### O que eu recusei, e a condição de reabrir
+
+**A forma 2, o nome interno.** Ela apaga a API de propriedade que o elemento nativo tem (`a.href`,
+`input.type`) só para o React cair no atributo. Reabre se aparecer um getter cujo valor lido não
+possa virar atributo de volta. Hoje nenhum dos 16 é assim.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | uma função na base, não 16 setters escritos à mão |
+| escalabilidade | ↑ | a peça 30 nasce com a porta sem ninguém lembrar |
+| aplicação | ↑ | o console apaga o `useAtributos`, e o `ib` não precisa escrever o dele |
+| aderência ao mercado | ↑ | propriedade que reflete atributo é o nativo e é o Lit |
+| robustez | ↑ | a exceção no primeiro render some, e o gate executa em vez de ler |
+| arquitetura limpa e simples | = | a base já registra ajudantes, e `registra` é mais um |
+| conciso | = | o consumidor não escreve nada novo |
+
+### O que você faz
+
+`web-v2.7.0`. O `comAtributos.ts` sai, e as peças voltam a ser declaradas com as props no JSX.
