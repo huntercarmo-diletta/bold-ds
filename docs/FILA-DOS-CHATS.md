@@ -18,6 +18,102 @@ A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
 
 ---
 
+## Rodada de 2026-09-28 · tarde
+
+Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat da adoção do DS no webadmin, com um
+escopo só: **os pedidos que a passada «o DS em tudo» do `core-flow-wa` levantou** (tarefa 1.12 de
+`arquitetura-de-informacao-do-console`, commit `c928892`, branch `feat/a-adocao-do-ds-pelo-webadmin`,
+pino `web-v0.118.0` = avô `web-v2.5.0`). Sete assuntos chegaram; **seis viraram pedido ao avô e um
+virou nota em cinco pedidos já julgados**. O primeiro da lista — a «faixa de aviso» que a auditoria
+mandava ao pai — **não é do pai**, e foi fundido no pedido do `inline-alert` (ver o item 3). Tudo
+medido no código do console e na ponta do avô (`web-v2.6.0` `82c8e63` e `origin/main` `6a2b756`).
+Sobem direto, sem sinal a ninguém.
+
+**Chats lidos**:
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| a adoção do DS pelo webadmin → «o DS em tudo» | `claude_newbold` · `0f441ea9` | 28/09 13h51 (`c928892`) | o bloco «Pedidos ao DS» da tarefa 1.12. Lido pelo bloco, pelo código que ele aponta e **pelos quatro relatórios das auditorias** (`critico-de-composicao`: casca e login; Painel e Relatórios; Cadastros e Acessos; Marca e Conversas), não pela transcrição inteira do chat |
+| os outros chats da janela (28/09 manhã → agora) | — | — | **não lidos nesta rodada**: a janela desta chamada foi o webadmin |
+
+### 0 · O QUE O AVÔ RESPONDEU — nada novo desde a manhã
+
+Nenhuma branch de resposta (`veredito/`, `aviso/`, `nota/`) fora da `main` deste repo, e nenhum commit
+do Hunter depois de `68b6c4b` (25/09). Os três pedidos da manhã seguem **sem linha** no `docs/PEDIDOS.md`
+da `origin/main` do `ds-diletta`. A última tag do avô continua `v2.6.0` / `web-v2.6.0` (24/09); a
+`main` dele está em `6a2b756`, com as entregas de 25/09 sem tag.
+
+### 1 · Pedidos novos, em ordem de dependência
+
+1. **[a barra de topo pinta `bg` e a spec manda `surface`](pedidos/2026-09-28-a-barra-de-topo-web-pinta-bg-e-a-spec-dela-manda-surface.md)**
+   — primeiro porque é pergunta sobre a LEI, e decide o que o console copia hoje na casca à mão (que
+   segue a spec). Independente dos outros. Lido na fonte, não em pixel.
+2. **[as abas e os links não sabem navegar num app de página única](pedidos/2026-09-28-as-abas-e-os-links-da-linguagem-nao-sabem-navegar-num-app-de-pagina-unica.md)**
+   — antes da decisão da casca (trilho lateral × tira no topo): qualquer das duas navega por endereço,
+   e as cinco faixas de abas de área precisam dele de todo jeito. Seis faixas em `NavLink`, 14 chamadas
+   da ponte `LinkDeRota`.
+3. **[o aviso que fica é só código](pedidos/2026-09-28-o-aviso-que-fica-e-so-codigo-e-o-console-desenha-o-seu-em-cinco-receitas.md)**
+   — **funde** a «faixa de aviso» (Marca e Conversas, 4 desenhos), o `inline-alert` (Cadastros, 4
+   desenhos) e as caixas do login. Refeita a conta no código inteiro: **28 caixas, 22 folhas, cinco
+   receitas, zero glifo**. A contradição que muda o endereço: o `CoreflowAviso` é casca do
+   `DilettaInlineAlert` desde 22/08 (`packages/coreflow/lib/src/coreflow_aviso.dart:45-80`), e a
+   instância web do Bold não tem peça por desenho — o vocabulário é do avô. Traz as duas condições de
+   reabrir do 21/08 (ação dentro do aviso, `liveRegion`) com sítio contado.
+4. **[seis peças `ambos` sem o lado web](pedidos/2026-09-28-seis-pecas-declaradas-ambos-nao-tem-o-lado-web-e-o-console-escreve-as-suas.md)**
+   — o `empty-state` espera junto a escala de ilustração com `ms` (ENTRA 25/09, sem tag), que a spec
+   dele passou a recomendar. **O `menu-button` saiu da lista**: a spec é item de trilho, não menu
+   suspenso (`busca('menu suspenso')` e `busca('popover')` vazias); fica registrado, sem pedido, até o
+   segundo sítio. Duas ressalvas escritas: `amount-display` talvez não seja KPI; `skeleton` tem zero
+   sítio no console.
+5. **[o cartão de arquivo crava 356](pedidos/2026-09-28-o-cartao-de-arquivo-crava-356-corta-a-imagem-e-pinta-a-previa-de-superficie.md)**
+   — mesma folha do pedido da âncora (manhã) e da nota do escape: melhor sair na mesma tag. Largura,
+   `contain` e fundo da prévia.
+6. **[o trilho do segmented com sete opções](pedidos/2026-09-28-o-trilho-do-segmented-nao-diz-o-que-acontece-com-sete-opcoes.md)**
+   — por último e **condicional**: depende do alvo de 44 sair em tag e de a designer escolher o
+   segmented para os atalhos.
+
+E todos os que criam peça web nova (3, 4) passam pela porta do pedido da manhã **[getter sem setter e
+o React 19](pedidos/2026-09-28-a-peca-web-publica-getter-sem-setter-e-o-react-19-estoura.md)**: enquanto
+ele não sai, embrulho React escreve por `ref`.
+
+### 2 · Notas em pedidos já julgados — as tags aceitas que não saíram
+
+Uma nota datada «28/09 (tarde)» no fim de cada arquivo e na linha do índice. **Não reabrem veredito
+nem pedem número de versão** — o avô já recusou prometer número em 25/09; elas registram o estado da
+condição, medido no pino, na `web-v2.6.0` e na `origin/main`:
+
+| pedido | aceito em | estado medido em 28/09 |
+|---|---|---|
+| [segmented com alvo de 44](pedidos/2026-09-25-o-segmented-control-pinta-32-e-nao-tem-o-alvo-de-44-que-as-irmas-tem.md) | 25/09, `c26c3c5` | só na `main`; a condição (o `:host` medir 44 no `node_modules`) não bateu |
+| [título da página](pedidos/2026-09-25-o-titulo-da-pagina-e-so-codigo-e-o-console-monta-o-seu-em-seis-areas.md) | 25/09, sem código | sem elemento (esperado) — **e a spec ainda diz `destino: codigo`**, contra o veredito |
+| [campo de data](pedidos/2026-09-22-o-campo-de-data-e-declarado-so-flutter.md) | 22/09 | sem elemento; a condição (o `formAssociated`) não saiu; **a spec ainda diz `codigo`**, contra o veredito |
+| [estado ARIA atravessando](pedidos/2026-09-21-os-aria-param-no-hospedeiro.md) | 22/09 | a regra da lista não está em versão nenhuma do lado web (`git grep` vazio) |
+| [`formAssociated` nos campos](pedidos/2026-09-22-o-botao-envia-um-formulario-do-qual-os-campos-nao-fazem-parte.md) | 24/09, «entrega prevista `web-v2.6.0`» | a `web-v2.6.0` saiu com ele só no botão |
+
+O **escape** não ganhou nota nova: a de 28/09 (manhã) já está no [arquivo dele](pedidos/2026-09-25-o-escape-de-22-09-nao-saiu-em-dezenove-tags-web.md).
+
+### 3 · Nosso, e espera decisão dela
+
+Nada do Coreflow (`packages/coreflow`) saiu desta passada: o único item que a auditoria mandava ao
+pai era a faixa de aviso, e ela é vocabulário do avô (item 3). Ficam com a designer, no console, as
+decisões que a tarefa 1.12 já lista em «Fica com a designer» — e duas delas mudam pedido desta rodada:
+
+- **atalhos em segmented ou em campo de seleção** — se for campo de seleção, o pedido 6 perde o
+  consumidor e pode ser retirado;
+- **unificar já os desenhos de aviso ou esperar o `inline-alert`** — unificar agora é escolher uma das
+  cinco receitas como `WaAviso` local, com a dívida escrita apontando para o pedido 3.
+
+E o pino deste repo para a próxima tag do avô — tag é dela.
+
+### 4 · O que não foi medido nesta rodada
+
+- a **largura** que o cartão de arquivo e o trilho do segmented ocupam — os números 353, ~960 e ~786
+  são das auditorias (DOM a 1440 e soma de rótulos), não medidos aqui;
+- se `::part(cartao)` basta para o console mandar na largura do cartão — não executado;
+- se as 32 ocorrências de `text-transform: uppercase` são cabeçalho de seção — não separadas.
+
+---
+
 ## Rodada de 2026-09-28 · manhã
 
 Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat da adoção do DS no webadmin, com um
