@@ -22,6 +22,29 @@ O que cada degrau significa **pro app que adota**:
 
 ## [Não lançado]
 
+### O selo ganhou o desfecho de quem NÃO teve resposta
+
+`BoldSeloEstado.semResposta` entra ao lado de `autorizado` e `negado`.
+
+O app pintava o **X vermelho** quando o watchdog da autorização estourava — ou seja, dizia "negado"
+sobre dinheiro que **podia ter saído**. Alguém leu isso como "não foi", repetiu o Pix, e o push da
+primeira transferência chegou depois. Das três frases possíveis, "negado" era a pior.
+
+O estado novo é âmbar, o glifo é `!` (nem check nem X, porque os dois **afirmam** um desfecho), não
+tem tremor — tremor é a peça dizendo "deu errado" — e o texto de apoio é *"confira o extrato"*, nunca
+*"tente novamente"*: repetir é o pior desfecho disponível quando a operação pode ter sido concluída.
+
+O contrato do componente ganhou a exigência correspondente, então a regra viaja com a peça.
+
+**Minor**: símbolo novo, aditivo. Quem não usar `semResposta` não vê diferença — e o `switch` do
+componente é exaustivo, então estado novo quebra a compilação em vez de cair no visual de outro.
+
+**De quebra, o ratchet da separação desceu de 147 para 146.** O pintor deixou de conhecer a marca:
+ele passou a receber um enum privado de desfecho, e o único lugar que traduz o estado público é uma
+função. Era o caminho para o `switch` exaustivo sem pagar referência nova ao Bold.
+
+Reportado pelo app (item #150 do portal de feedback interno).
+
 ### O saldo parou de cortar o último algarismo
 
 `CoreflowSaldo` mede o texto e dá à caixa exatamente a largura medida. A medição é **fracionária**, e
