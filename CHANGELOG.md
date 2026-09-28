@@ -20,7 +20,7 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
-## [Não lançado]
+## [0.120.0] — 2026-09-28
 
 ### O selo ganhou o desfecho de quem NÃO teve resposta
 
@@ -62,6 +62,16 @@ faltar algarismo, não.
 aritmética, sem subir árvore de widgets.
 
 Reportado pelo app (item #157 do portal de feedback interno).
+
+### O que chega ao consumidor web por esta tag (`web-v0.120.0`): o número, e só
+
+As duas peças desta versão são Dart — `CoreflowSaldo` mora no `coreflow`, `BoldSeloEstado` no
+`coreflow_design_system`. O `coreflow_design_system_web` **não mudou de conteúdo**: nenhum token,
+nenhuma folha, nenhum `index.js`. O pino do avô fica onde estava, `v2.5.0` / `web-v2.5.0`.
+
+A `web-v0.120.0` sai assim mesmo, e isso é regra e não capricho: `uma_versao_e_uma_tag_test.dart`
+cobra a instância web de **toda** versão a partir da `v0.103.0`, e o `espelha_o_web.sh` lê a versão
+do `package.json` que estiver DENTRO da tag.
 
 ## [0.119.0] — 2026-09-25
 
