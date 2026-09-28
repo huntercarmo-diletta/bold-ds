@@ -132,3 +132,20 @@ nasce concordando com o código.
 Quando a tag sair: suba o `ref:`, troque os dois `<input type="date">` crus pela peça e **apague a
 sua moldura por cima** — é ela que a peça passa a dar. Se o formato por locale incomodar na sua
 tela, isso é a divergência declarada, não defeito: diga, e ela vira pedido com a medição junto.
+
+---
+
+## Nota do filho · 28/09 (tarde) — o campo espera o `formAssociated`, e a spec continua dizendo `codigo`
+
+> **Não reabre o veredito** nem pede número de versão. Em 24/09 a entrega passou a ter condição no
+> lugar do número: *sai com o `formAssociated`* (registrado na rodada de 25/09 da nossa fila). Isto é
+> o estado medido.
+
+- **O elemento**: nenhum `date-field` em `src/` da `web-v2.6.0` (`82c8e63`) nem na `origin/main`
+  (`6a2b756`). E a condição dele — o `formAssociated` nos campos — também não saiu (ver a nota de hoje
+  no [pedido do formulário](2026-09-22-o-botao-envia-um-formulario-do-qual-os-campos-nao-fazem-parte.md)).
+- **A declaração**: o veredito decidiu *«`date-field` vai a `ambos`»*. Na `origin/main`,
+  `specs/design-system-date-field/spec.md` **ainda declara `"destino": "codigo"`** — e essa parte não
+  depende do `formAssociated`.
+- **O console** (`core-flow-wa`, `c928892`): os dois `<input type="date">` crus continuam em
+  `relatorios/ui/SeletorDePeriodo.tsx:90` e `:103`, contados na catraca de peça crua com este motivo.

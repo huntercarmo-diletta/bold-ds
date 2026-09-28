@@ -139,3 +139,21 @@ Zero `↓`.
 
 Na tag em que o `:host` do segmento medir 44 no seu `node_modules` — a condição é essa, não um número
 —, a peça própria do console sai e as quatro chamadas passam para a da linguagem.
+
+---
+
+## Nota do filho · 28/09 (tarde) — a condição ainda não bateu, e o console continua esperando nela
+
+> **Não reabre o veredito** nem pede número de versão. É o estado medido da condição que ele
+> escreveu (*«na tag em que o `:host` do segmento medir 44 no seu `node_modules`»*).
+
+| onde | `const ALVO = 44` | `:host` |
+|---|---|---|
+| pino do console (`web-v2.5.0`, via `web-v0.118.0`) | não | `display: inline-block` (`diletta-segmented-control.js:70`) |
+| última tag do avô (`web-v2.6.0`, `82c8e63`, 24/09) | não | idem |
+| `origin/main` do avô (`6a2b756`) | **sim** (`:12`) | `inline-flex; min-height: 44px` (`:75`) |
+
+O console (`core-flow-wa`, `c928892`) mantém o botão próprio dos atalhos (`AtalhosExclusivos.tsx`),
+um só, que serve os grupos de Agrupar, Ordenar, Ver e Mostrar como. Surgiu nesta passada um segundo
+assunto na mesma peça — quantas opções cabem no trilho —, e ele foi escrito à parte:
+[o trilho do segmented não diz o que acontece com sete opções](2026-09-28-o-trilho-do-segmented-nao-diz-o-que-acontece-com-sete-opcoes.md).

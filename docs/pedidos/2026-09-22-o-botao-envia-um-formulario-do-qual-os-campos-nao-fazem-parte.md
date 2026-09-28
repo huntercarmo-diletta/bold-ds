@@ -228,3 +228,25 @@ Sai como obra declarada, com a peça de teste que prova o foco chegando no contr
 decide** — os seus formulários deixam de precisar de `<input>` nativo · aderência ao mercado ↑
 `formAssociated` é o mecanismo da plataforma · **robustez ↑ decide o PRAZO** — meia entrega aqui é
 campo que mente no reset · arquitetura = · conciso =.
+
+---
+
+## Nota do filho · 28/09 (tarde) — a `web-v2.6.0` saiu sem ele, e é a tag que o veredito previa
+
+> **Não reabre o veredito**. O veredito de 24/09 escreveu *«entrega prevista: `web-v2.6.0`»* e
+> explicou por que é obra de quatro partes; isto é só o que se mede depois dela.
+
+- `web-v2.6.0` (`82c8e63`, 24/09): `formAssociated` em **uma** peça de `src/`, o `diletta-button.js` —
+  a mesma contagem de antes do veredito;
+- `origin/main` (`6a2b756`): idem, só o botão;
+- o pino do console (`web-v2.5.0`): idem.
+
+E ele segura um segundo veredito: o **campo de data** passou a ter como condição de entrega sair com
+o `formAssociated` (nota de hoje no [pedido do campo de data](2026-09-22-o-campo-de-data-e-declarado-so-flutter.md)).
+
+O que espera no console (`core-flow-wa`, `c928892`), pela catraca de peça crua
+(`src/design-system/adocaoDaPeca.test.ts`, contagem do cabeçalho, de 23/09): **9** campos e botões
+dentro de `<form>` — 4 de senha, 2 de e-mail, o apelido da chave, o código de verificação e o `submit`
+do cadastro de chave —, nas telas de entrada (`login/ui/TelaLogin.tsx`, `FormularioDeSenha.tsx`,
+`FormularioDeSegundoFator.tsx`, `TelaCadastroDePasskey.tsx`, `TelaPareamentoDe2FA.tsx`,
+`TelaTrocaDeSenha.tsx`).

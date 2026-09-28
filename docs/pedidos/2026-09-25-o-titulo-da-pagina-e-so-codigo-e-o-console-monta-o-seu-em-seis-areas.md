@@ -156,3 +156,21 @@ Um `↓`, que não veta.
 
 Nada até a condição. Quando ela bater, as cinco áreas e a `LinhaDeContexto` viram chamada — e aí o
 `AreaComAbas.module.css:47` some junto.
+
+---
+
+## Nota do filho · 28/09 (tarde) — a condição ainda não bateu, e a spec continua dizendo `codigo`
+
+> **Não reabre o veredito** nem pede número de versão. É o estado medido da condição (*«a peça sai
+> na tag em que `elementos/page-title` resolver do seu `node_modules` e o gate de paridade Dart × web
+> andar o título»*).
+
+- **O elemento**: nenhum arquivo de título de página em `src/` da `web-v2.6.0` (`82c8e63`) nem em
+  `packages/diletta_design_system_web/src/` da `origin/main` (`6a2b756`). Esperado — o veredito
+  disse que não escreveria nesta rodada.
+- **A declaração**: o veredito decidiu *«A spec troca `destino: codigo` por `destino: ambos`»*. Na
+  `origin/main`, `specs/design-system-page-title/spec.md` **ainda declara `"destino": "codigo"`**.
+  Essa parte não depende do código, e é a que o quadrado lê para cobrar o lado web.
+- **O console** (`core-flow-wa`, `c928892`): os cinco `<h1>` de área continuam onde o veredito mandou
+  deixá-los (`app/router.tsx:242`, `:274`, `:308`, `:529`, `:541`), mais o do Painel
+  (`TelaPainel.tsx:413`).

@@ -128,3 +128,29 @@ exatamente a armadilha que você viu.
 Quando a tag sair: suba o `ref:`, devolva o `ExportarMenu` ao `<diletta-button>` e continue
 escrevendo `aria-expanded` e `aria-haspopup` **no hospedeiro** — é de lá que a regra os leva. O
 `rotulo-acessivel` segue sendo o caminho do nome; não troque um pelo outro.
+
+---
+
+## Nota do filho · 28/09 (tarde) — a regra da lista não está em versão nenhuma do lado web
+
+> **Não reabre o veredito** nem pede número de versão. O veredito é de 22/09 e diz `v0.207.0`, da
+> numeração antiga; a pergunta que eu meço é onde a regra está hoje.
+
+A regra decidida — *«estado passa a ser regra: `aria-expanded`, `aria-haspopup`, `aria-controls`,
+`aria-pressed`, `aria-describedby`, `aria-current`, repassados ao elemento com papel e apagados do
+hospedeiro»* — **não aparece** em nenhum dos três:
+
+- pino do console (`web-v2.5.0`): `base.js` e `diletta-button.js` sem nenhuma ocorrência de
+  `aria-expanded` nem `aria-haspopup` (o único `aria-*` de estado que a varredura acha no pino é um
+  `aria-controls` dentro de comentário, `diletta-tabs.js:112`);
+- `web-v2.6.0` (`82c8e63`, 24/09): nenhuma ocorrência em `src/`;
+- `origin/main` (`6a2b756`): `git grep` de `aria-expanded|aria-haspopup` em
+  `packages/diletta_design_system_web/src/` volta vazio.
+
+O que espera por ela no console (`core-flow-wa`, `c928892`):
+
+- o «Personalizar painel» — `WaBotao` com `aria-expanded` e `aria-controls` no hospedeiro
+  (`painel/ui/ConfigurarPainel.tsx:125`), que não chegam ao `<button>` de dentro: o leitor de tela
+  não ouve aberto/fechado;
+- o menu do gestor — o gatilho e os itens continuam `<button>` crus (`app/MenuDoGestor.tsx:85`), dois
+  na catraca, pelo motivo *«semântica que não atravessa shadow»*.
