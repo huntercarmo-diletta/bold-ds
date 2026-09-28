@@ -69,3 +69,49 @@ lê passa na barra.
 
 Pela passada «o DS em tudo» do webadmin (tarefa 1.12 de `arquitetura-de-informacao-do-console`,
 `c928892`, 28/09), auditoria da casca e do login, que comparou o cabeçalho à mão com a peça.
+
+---
+
+## VEREDITO · ENTRA — o elemento é a lei, e a spec muda
+
+**pai**: ds-diletta **v2.8.0** · **data**: 2026-09-28
+
+### O que decidiu
+
+A sua frase: *«As duas dizem ter medido o mesmo arquivo, e chegaram a papéis diferentes.»* Não
+mediram do mesmo jeito. A spec LEU a barra no BackOffice. O elemento mediu o PIXEL: 71px de
+`#f8faff`, 1px de `#ececec` em y=71, e o conteúdo branco só a partir de y=72. Medição vence leitura.
+A barra é `bg`, o tom da tela, com régua `borderSubtle`.
+
+### O que eu fiz
+
+A spec passa a dizer `bg` e `borderSubtle`, na frase e no `papeis` do contrato, com a procedência
+corrigida e datada. O elemento não muda um pixel.
+
+### O que eu achei indo implementar
+
+A terceira contradição que você apontou era real: o comentário do contrato dizia *«`papeis` está vazio
+de propósito»* com quatro papéis dentro. Ele envelheceu no dia em que os papéis entraram, e ninguém o
+releu. Agora ele diz de onde os papéis vêm.
+
+### O que eu recusei, e a condição de reabrir
+
+Nada deste pedido.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | uma lei no lugar de três frases que brigavam |
+| escalabilidade | ↑ | o próximo consumidor copia a lei certa |
+| aplicação | = | o elemento não muda; quem muda é a sua casca, quando adotar |
+| aderência ao mercado | = | casca no tom da tela com régua fina é o arranjo comum de backoffice |
+| robustez | ↑ | a spec volta a dizer o que o pixel diz |
+| arquitetura limpa e simples | = | nada novo |
+| conciso | ↑ | o comentário que mentia saiu |
+
+### O que você faz
+
+A sua casca à mão pinta pela frase que saiu: `surface` e `border` em `LayoutAutenticado.module.css:14-28`.
+Ao adotar o `<diletta-web-top-bar>`, a barra passa a `bg` e `borderSubtle`, e isso agora é o
+desenho decidido.

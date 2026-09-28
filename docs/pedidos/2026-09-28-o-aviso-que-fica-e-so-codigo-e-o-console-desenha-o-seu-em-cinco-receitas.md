@@ -105,3 +105,60 @@ Pela passada «o DS em tudo» do webadmin (tarefa 1.12 de `arquitetura-de-inform
 `c928892`, 28/09): duas auditorias contaram «quatro desenhos» cada uma, em áreas diferentes (Marca e
 Conversas; Cadastros e Acessos), e uma terceira achou mais quatro no login. Este pedido **funde as
 três** e refaz a conta no código inteiro.
+
+---
+
+## VEREDITO · ENTRA — e NÃO nesta tag; a condição no lugar do número
+
+**pai**: ds-diletta **v2.8.0** · **data**: 2026-09-28
+
+### O que decidiu
+
+A sua medição, e uma frase dela: *«nenhuma das 28 caixas tem glifo; todas dizem o tom só pela cor
+do fio ou da borda»*. São cinco receitas para uma coisa só, e as cinco quebram o requisito da minha
+spec: *a cor NUNCA vai sozinha*. Isso não é gosto de tela. É a peça faltando onde a spec já
+prometeu, e a sua conferência de que o `CoreflowAviso` é casca do `DilettaInlineAlert` tira a dúvida
+de quem é o vocabulário. É meu.
+
+### Por que não sai hoje
+
+A peça web pinta pela **tabela medida no render do Dart** (`pintura.g.js`), e `inline-alert` tem
+**zero** linhas nela. Pintar à mão seria a sexta receita, escrita por mim. A condição:
+
+- a spec vai a `ambos`, e `inline-alert` entra na tabela de resolução;
+- `<diletta-inline-alert tom="…" titulo="…">` resolve do seu `node_modules`, com o glifo do tom;
+- o quadrado fecha `codigoWeb` de `inline-alert`.
+
+### As duas condições de 21/08, que você achou batendo
+
+As duas ENTRAM no mesmo lote, porque têm sítio contado:
+
+1. **ação dentro do aviso**: seus dois 409 com «Recarregar a configuração em vigor»;
+2. **o anúncio**: aviso que APARECE por mudança de estado leva `role="alert"` em `error` e `warning`,
+   e `role="status"` em `success`. Hoje cada tela decide o seu; passa a ser da peça.
+
+### O que eu achei indo implementar
+
+A mesma classe do pedido das seis peças `ambos`: spec que promete a web, sem pintura medida do lado
+de lá. As duas saem pelo mesmo cano.
+
+### O que eu recusei, e a condição de reabrir
+
+Nada. Fechar o aviso segue fora, com zero sítios, como no Dart.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | cinco receitas viram uma peça |
+| escalabilidade | ↑ | o próximo consumidor não escreve a sexta |
+| aplicação | ↓ | **dívida declarada**: as 28 caixas seguem à mão até a condição |
+| aderência ao mercado | ↑ | tom com glifo e `role` de anúncio é o piso de acessibilidade de alerta |
+| robustez | ↑ | a peça web sai da mesma tabela que o Dart, e não de uma sexta leitura |
+| arquitetura limpa e simples | = | é o outro lado de uma peça que já existe |
+| conciso | = | nada novo para o consumidor escrever além da chamada |
+
+### O que você faz
+
+Nada até a condição. As 28 caixas ficam. Se for promover uma receita local nesse meio tempo, ponha
+o glifo: é o que a spec exige, e é o que a peça vai ter.

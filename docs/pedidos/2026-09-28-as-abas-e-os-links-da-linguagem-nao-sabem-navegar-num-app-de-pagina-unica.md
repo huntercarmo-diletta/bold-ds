@@ -97,3 +97,52 @@ Pela passada «o DS em tudo» do webadmin (tarefa 1.12 de `arquitetura-de-inform
 `c928892`, 28/09): a passada escreveu o `LinkDeRota` e trocou os links à mão de Cadastros,
 Conversas, casca e erro por ele (três estavam no azul padrão do navegador). A auditoria de casca e a de
 Cadastros levantaram as abas e o `breadcrumb`.
+
+---
+
+## VEREDITO · ENTRA, OS DOIS — a navegação avisa, e as abas ganham endereço
+
+**pai**: ds-diletta **v2.8.0** · **data**: 2026-09-28
+
+### O que decidiu
+
+O precedente que você foi buscar na minha casa: o `fechando` do diálogo, *«booleano não diz
+"depende"»*. A peça não sabe se o destino é interno, e quem consome sabe. E a sua ponte dependia de
+*«um detalhe de propagação que ninguém prometeu»*. Agora é promessa.
+
+### O que eu fiz
+
+1. **`navegando`, cancelável**, emitido por toda peça que rende `<a>`. Mora na base, junto da lista
+   da âncora, e sai no clique simples: botão principal, sem Ctrl/Cmd/Shift/Alt, sem `_blank`, sem
+   `download`. O `detail` é `{ href }`. O evento é `composed`, então **o nível do `breadcrumb` chega a
+   quem ouve o `breadcrumb`**: o furo que você apontou fecha sem hospedeiro por nível. Cancelado, a
+   página não recarrega.
+2. **Abas em modo navegação**: `destinos="/acessos | /relatorios | …"`, um por aba. Com ele, cada aba
+   é `<a href>` num `<nav>`, a selecionada leva `aria-current="page"`, e as setas saem, porque link se
+   anda com Tab. Quem diz qual é a atual continua sendo `selecionada`. Sem `destinos`, a peça é a de
+   sempre, com `role="tab"`.
+
+### O que eu achei indo implementar
+
+nada
+
+### O que eu recusei, e a condição de reabrir
+
+Nada deste pedido.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | a ponte e o critério de clique reescrito em cinco lugares saem |
+| escalabilidade | ↑ | toda peça com `<a>` ganha o evento pela base, inclusive a próxima |
+| aplicação | ↑ | as seis faixas viram a peça, com nova aba e voltar do navegador |
+| aderência ao mercado | ↑ | `<nav>` com `aria-current="page"` é o padrão de navegação por abas |
+| robustez | ↑ | o gate cobra o evento nas seis peças e no nível do `breadcrumb` |
+| arquitetura limpa e simples | ↑ | a peça não importa roteador; avisa e deixa cancelar |
+| conciso | = | um evento e um atributo |
+
+### O que você faz
+
+`web-v2.8.0`. O `LinkDeRota` passa a ouvir `navegando` e cancelar, em vez de interceptar o clique. As
+abas de área e a navegação principal passam a `<diletta-tabs destinos="…">`.

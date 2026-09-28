@@ -62,3 +62,47 @@ ou rolagem), um cenário com sete rótulos numa coluna de 786 não transborda.
 
 Pela passada «o DS em tudo» do webadmin (tarefa 1.12 de `arquitetura-de-informacao-do-console`,
 `c928892`, 28/09), auditoria de Painel e Relatórios, que tentou trocar os atalhos pelo segmented.
+
+---
+
+## VEREDITO · ENTRA — a regra: de dois a cinco, e acima disso é campo de seleção
+
+**pai**: ds-diletta **v2.8.0** · **data**: 2026-09-28
+
+### O que decidiu
+
+A sua terceira linha do «não estou pedindo»: *«que a peça escolha sozinha virar campo de seleção —
+basta a regra escrita»*. A regra é o que falta, e o comportamento não. O trilho não quebra e não
+rola por desenho: a pílula existe para as opções serem comparadas à vista.
+
+### O que eu fiz
+
+Requisito novo na spec do `segmented-control`: **o trilho hospeda de 2 a 5 segmentos; acima de cinco
+a escolha é `design-system-dropdown`**. O teto é o do segmented button do Material 3, que declara
+de 2 a 5. O cenário de sete opções está escrito.
+
+### O que eu achei indo implementar
+
+nada
+
+### O que eu recusei, e a condição de reabrir
+
+**Quebrar ou rolar o trilho.** Reabre com um caso medido em que seis ou mais opções precisem estar à
+vista ao mesmo tempo, e em que o campo de seleção esconda a comparação.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | = | uma frase na spec, nenhum código |
+| escalabilidade | ↑ | todo consumidor decide pela mesma contagem |
+| aplicação | ↑ | o «Ordenar» de sete vai para o seletor sem ninguém medir pixel |
+| aderência ao mercado | ↑ | é o teto do Material 3 |
+| robustez | = | não há comportamento novo para quebrar |
+| arquitetura limpa e simples | ↑ | nenhum modo de quebra ou rolagem na peça |
+| conciso | = | um requisito e um cenário |
+
+### O que você faz
+
+Se a designer escolher o segmented para os atalhos, o «Ordenar por» de sete opções é
+`<diletta-dropdown>`. É o que a regra diz, e não uma exceção de tela.

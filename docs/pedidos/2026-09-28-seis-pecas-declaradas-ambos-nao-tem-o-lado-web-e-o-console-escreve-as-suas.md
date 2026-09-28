@@ -116,3 +116,67 @@ Pela passada «o DS em tudo» do webadmin (tarefa 1.12 de `arquitetura-de-inform
 `loading-spinner`, `skeleton`, `menu-button`; Painel e Relatórios: `amount-display`, `detail-row`,
 `empty-state`, `section-header`; Cadastros: `detail-row`, `section-header`). Este arquivo funde as
 três listas e refaz as contagens no código.
+
+---
+
+## VEREDITO · ENTRAM QUATRO, UMA É OUTRA PEÇA, UMA ESPERA — e nenhuma nesta tag
+
+**pai**: ds-diletta **v2.8.0** · **data**: 2026-09-28
+
+| peça | veredito |
+|---|---|
+| `empty-state` | **ENTRA**, primeiro: 67 chamadas suas |
+| `loading-spinner` | **ENTRA**, junto: 32 chamadas |
+| `detail-row` | **ENTRA**: duas gramáticas vivas, e o eixo de ênfase já existe |
+| `section-header` | **ENTRA**: 2 sítios contados um a um |
+| `amount-display` | **É OUTRA PEÇA**: os seus quatro são totais de período, e a spec diz *«não um valor de linha»*, é o detalhe de uma transação |
+| `skeleton` | **ESPERA**: zero sítios no consumidor |
+
+### O que decidiu
+
+A sua frase: *«Não peço o que a spec não pede. Peço o lado que ela declarou aberto.»* O `ambos` é
+meu, de 06/09, e ele cobra `codigoWeb`. Seis peças com a web prometida e zero entregues é a mesma
+dívida que o ledger já declarou em outros três lugares.
+
+### Por que não sai hoje
+
+As seis têm **zero** linhas na tabela de pintura da web (`pintura.g.js`). A condição, por peça:
+
+- a peça entra na tabela de resolução medida no render do Dart;
+- o custom element resolve do seu `node_modules`, e o `empty-state` já com a escala de ilustração
+  que tem `ms`;
+- o quadrado fecha `codigoWeb` da peça.
+
+A ordem é a sua: `empty-state` e `loading-spinner` no primeiro lote, `detail-row` e `section-header`
+no segundo.
+
+### O que eu achei indo implementar
+
+A régua de paridade do pai lista **12** peças `ambos` sem instância web, e não 6: `app-list`,
+`icon-accessory`, `list-tile`, `search-input`, `stepper` e `upload` também. O aviso que fica é a 13ª.
+A fila é minha, e ela é maior do que o seu pedido.
+
+### O que eu recusei, e a condição de reabrir
+
+- **`amount-display` para KPI de painel.** Reabre com o segundo filho medindo total de período em
+  painel. Aí é peça nova, com nome próprio, e não o `amount-display` esticado;
+- **`skeleton` agora.** Reabre no primeiro sítio contado de consumidor web. A fila do Figma (56) é
+  desenho, não adoção;
+- **o menu suspenso de ações**: fica registrado como 1º caso, com o seu `MenuDoGestor`. O segundo sítio
+  medido vira pedido de peça nova.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | embrulhos que divergem viram peça com contrato |
+| escalabilidade | ↑ | o próximo consumidor web não recomeça do zero |
+| aplicação | ↓ | **dívida declarada**: 67 + 32 + 9 + 2 chamadas seguem nos embrulhos até a condição |
+| aderência ao mercado | = | estado vazio, carregando e rótulo/valor são peças comuns de DS web |
+| robustez | ↑ | a peça sai da tabela medida, não de uma leitura minha |
+| arquitetura limpa e simples | = | é o outro lado de peças que já existem |
+| conciso | = | nada novo além das chamadas |
+
+### O que você faz
+
+Nada até a condição. Os seus embrulhos seguem. Os quatro totais de período ficam como estão.

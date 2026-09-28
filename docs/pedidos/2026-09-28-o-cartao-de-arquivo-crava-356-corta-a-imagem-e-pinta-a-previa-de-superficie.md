@@ -89,3 +89,52 @@ variável ou `part`). Do lado de cá: `CampoDeLogotipo` vira `WaCartaoDeArquivo`
 Pela passada «o DS em tudo» do webadmin (tarefa 1.12 de `arquitetura-de-informacao-do-console`,
 `c928892`, 28/09): a auditoria de Marca e Conversas tentou pôr os logotipos no cartão e contou por que
 não cabe. Os números da folha são deste pedido; o 353 é da auditoria.
+
+---
+
+## VEREDITO · ENTRA — os três, e o fundo entra como porta, não como atributo
+
+**pai**: ds-diletta **v2.8.0** · **data**: 2026-09-28
+
+### O que decidiu
+
+A sua leitura da minha spec: *«o requisito é que vazio e anexado tenham a mesma largura; o 356 é a
+medida do Figma»*. Estava certa. O teto preserva a igualdade e para de transbordar.
+
+### O que eu fiz
+
+- **largura**: o hospedeiro tem 356 e `max-width: 100%`, e o cartão ocupa o hospedeiro;
+- **enquadramento**: eixo novo `enquadramento`, com `cortar` como default (foto de documento) e
+  `inteira` (logotipo). Ele está na spec, com a sua contagem de três logotipos por marca;
+- **fundo da prévia**: `part="previa"`. O fundo é a cor da marca que está sendo editada, e isso é
+  conteúdo da sua tela, não valor da linguagem. A peça abre a porta, e quem chama pinta.
+
+**Medido no Chrome:** coluna de 353 dá cartão de 353; coluna de 900 dá 356. Com `inteira` a imagem sai
+em `contain`. `::part(previa) { background: … }` pinta a prévia.
+
+### O que eu achei indo implementar
+
+**O `foto` também entra cru, no `src` da imagem.** A nota de 28/09 no escape contou o `nome` e o
+`apoio` do cartão, e não o `foto`. Ele vai para a conta da dívida do escape.
+
+### O que eu recusei, e a condição de reabrir
+
+**O fundo como atributo.** Reabre se aparecer um fundo de prévia que seja da linguagem, e não do
+conteúdo: por exemplo, um papel que todo produto use atrás de logotipo.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | a miniatura à mão sai, e a tela de Marca usa a peça |
+| escalabilidade | ↑ | toda coluna menor que 356 para de transbordar |
+| aplicação | ↑ | os três logotipos entram no cartão, e o branco sobre a marca aparece |
+| aderência ao mercado | ↑ | `object-fit` e `::part` são a forma nativa |
+| robustez | ↑ | medido em pixel nos três casos |
+| arquitetura limpa e simples | = | um eixo e uma porta, nenhum atributo de cor |
+| conciso | = | nada novo além do eixo |
+
+### O que você faz
+
+`web-v2.8.0`. `CampoDeLogotipo` vira `WaCartaoDeArquivo` com `enquadramento="inteira"`, e o logotipo
+sobre a marca pinta `::part(previa)`. A `.miniatura` sai.
