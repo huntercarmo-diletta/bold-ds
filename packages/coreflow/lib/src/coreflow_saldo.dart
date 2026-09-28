@@ -219,9 +219,26 @@ class _ValorComLarguraReservada extends StatelessWidget {
     // O máximo dos DOIS ESTADOS, medido nos dois sempre. `R$ ••••••` é mais larga que `R$ 0,14`,
     // então num saldo baixo a máscara não cabe na largura do valor — e o oculto sai cortado, que na
     // tela lê como uma peça sem máscara nenhuma.
+    //
+    // **A largura vai ARREDONDADA PARA CIMA, e sem isso o último algarismo
+    // some.** A medição devolve fracionário; uma caixa de 96,4 px recebendo um
+    // texto de 96,4 px corta o glifo final na pintura, porque o `maxLines: 1`
+    // com clip não tem para onde sobrar. Na tela do app isso apareceu como
+    // `R$ 913,2` num saldo de R$ 913,25 — e não é arredondamento de valor, é um
+    // dígito faltando num número que a pessoa confere.
     return SizedBox(
-      width: math.max(_largura(context, valor), _largura(context, mascara)),
+      width: larguraDaCaixaDoSaldo(
+          math.max(_largura(context, valor), _largura(context, mascara))),
       child: DilettaText(oculto ? mascara : valor, style: estilo, maxLines: 1),
     );
   }
 }
+
+/// A largura da caixa a partir da largura MEDIDA do texto.
+///
+/// Arredonda para cima, e é a regra inteira. Sobrar sub-pixel é invisível;
+/// faltar algarismo, não — e num saldo é o algarismo que a pessoa está lendo.
+///
+/// Público para ser testável sem subir a árvore de widgets: o defeito vive na
+/// aritmética, não no layout.
+double larguraDaCaixaDoSaldo(double medida) => medida.ceilToDouble();

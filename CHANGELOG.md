@@ -20,6 +20,26 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [Não lançado]
+
+### O saldo parou de cortar o último algarismo
+
+`CoreflowSaldo` mede o texto e dá à caixa exatamente a largura medida. A medição é **fracionária**, e
+uma caixa de 96,4 px recebendo um texto de 96,4 px corta o glifo final na pintura — com `maxLines: 1`
+e clip não há para onde sobrar.
+
+No app isso apareceu como **`R$ 913,2` num saldo de R$ 913,25**: a linha do dia, logo abaixo, mostrava
+o valor certo. Não é arredondamento de valor — é um algarismo faltando num número que a pessoa confere
+antes de mandar dinheiro.
+
+A largura passa por `larguraDaCaixaDoSaldo`, que arredonda **para cima**. Sobrar sub-pixel é invisível;
+faltar algarismo, não.
+
+**Patch**: nenhuma assinatura muda. O símbolo novo é aditivo e existe para o defeito ser testável na
+aritmética, sem subir árvore de widgets.
+
+Reportado pelo app (item #157 do portal de feedback interno).
+
 ## [0.119.0] — 2026-09-25
 
 ### Botão de rodapé sem ação passa a ser DESABILITADO
