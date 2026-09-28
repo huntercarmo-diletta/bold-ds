@@ -143,3 +143,74 @@ questão; o que estava errado era a forma da promessa.
 
 Nada. Mantenha os seis embrulhos e não os apague na próxima tag — a condição acima é o sinal. Se o
 `ib` entrar antes disso, ele precisa do mesmo remendo, e isso é meu de avisar, não seu.
+
+---
+
+## Nota do filho · 28/09 — a condição conta «4 variáveis» e deixa três peças de fora; e em dois caminhos o remendo de fora não fecha
+
+> Achado no **core-flow-wa** adotando `data-list`/`data-row`/`data-cell` e `file-card` na ficha do
+> cadastro (`44da813`). **Não reabre o veredito** — DÍVIDA RECONHECIDA continua certo, e o console
+> mantém os embrulhos, como ele mandou. Isto é sobre o que a condição de entrega precisa contar.
+
+### A contagem da condição
+
+O veredito escreve a condição como *«os **21 sítios + 4 variáveis**»*, e as quatro são as que este
+pedido citou (`button`, `dialog`, `segmented-control`, `breadcrumb`). **Há mais variáveis**, e três
+estão nas peças de hoje — o valor é lido para um `const` e interpolado cru depois, a mesma forma que
+escondeu o `button` da varredura de 22/09:
+
+```
+diletta-data-cell.js           const valor/sub (:45-46)  →  ${valor} :55 :57 :62 · ${sub} :58
+diletta-data-column-header.js  const rotulo    (:48)     →  ${rotulo} :79
+diletta-file-card.js           const nome/apoio (:65,:68) →  ${nome} :112 · ${apoio} :115 · elide(nome) :114
+```
+
+Uma varredura grossa — `const x = …getAttribute(…)` seguido de `${x}` no mesmo arquivo — acha
+**41 interpolações em 21 arquivos**, na `origin/main`. Ela não separa enum de texto (`papel`, `size`,
+`ini`/`fim` são seguros), então **não é o número**, é o aviso de que *«4»* está curto. O gate que a
+condição pede (*«reprove `${` de valor externo dentro de template»*) resolve isso se seguir a
+variável, e não só o `getAttribute` dentro do `${}`.
+
+### Dois caminhos em que escapar por fora não funciona
+
+Medido em jsdom com a tag instalada:
+
+1. **O rótulo da coluna atravessa DUAS vezes.** O `header-row` põe o rótulo num atributo do
+   `column-header` (`diletta-data-header-row.js:40-41`, troca só a aspa) e o `column-header` o
+   interpola cru (`:79`). O atributo desfaz um nível de escape:
+
+   ```
+   colunas="<img src=x onerror=1>Nome:1fr"              →  <img> no shadow do column-header
+   colunas="&lt;img src=x onerror=1&gt;Nome:1fr"        →  <img> no shadow do column-header   ← o remendo
+   ```
+
+   O escape do console no rótulo (`WaListaDeDados.tsx:95`) **não protege**. Hoje os rótulos de
+   coluna do console são literais (`TelaCliente.tsx:454`, `:488-491`, `:626-627`), então não há dado
+   de servidor nesse caminho — mas o remendo diz que fecha, e não fecha.
+
+2. **O nome do cartão de arquivo é cortado DEPOIS do escape.** A peça elide no meio a partir de 28
+   caracteres (`elide`, `:53-61`) e o consumidor só consegue escapar antes. O corte conta a entidade
+   como texto e pode parti-la:
+
+   ```
+   "Procuração <sócio> 2026 v2.pdf"   sem escape →  Procuração <…io> 2026 v2.pdf
+                                      escapado   →  Procuração &…gt; 2026 v2.pdf   ← lixo na tela
+   ```
+
+   É o caso do chip de 22/09 com outra causa: **um valor, duas transformações na peça, e o escape de
+   fora só acerta a primeira.** Aqui o nome vem do servidor (`rotuloDoTipo` do documento,
+   `TelaCliente.tsx:543`).
+
+### O que isto acrescenta à condição
+
+- as variáveis de `data-cell`, `data-column-header` e `file-card` na conta;
+- no `file-card`, **escapar depois de elidir**; no `header-row` → `column-header`, escapar no
+  destino final (o `column-header`), não no meio.
+
+### O console, hoje
+
+**Onze** embrulhos escapam (eram seis em 25/09): `WaBotao`, `WaCampoSelect`, `WaCampoTexto`,
+`WaChipDeFiltro`, `WaEtiquetaDeEstado`, `WaConfirmDialog`, `WaDialogo`, `WaFilterBar`, `WaPaginacao`,
+e os dois de 28/09, `WaListaDeDados` e `WaCartaoDeArquivo`. Do primeiro furo o console se defende
+sozinho (escapar duas vezes o rótulo de coluna, porque ele atravessa dois `innerHTML`); do segundo,
+não — o corte é da peça. Os dois se fecham de vez na condição acima.
