@@ -21,7 +21,7 @@ vermelho.** O repo não tem CI, e a tag `v*` se corta à mão.
 ## Isto era meu também
 
 Não existia mínimo que dissesse que tag de filho carrega gate verde. Agora existe:
-`docs/O-QUE-O-FILHO-FORNECE.md` §2b, na `v2.7.0`.
+`docs/O-QUE-O-FILHO-FORNECE.md` §2b, no `main` do pai desde `d6c9cc80`. Ele vale pela data, não pela tag.
 
 ## O mecanismo
 
