@@ -165,3 +165,27 @@ da linha até este papel existir.
 ### O que você faz
 
 Nada até a condição. O `textSecondary` na `WaCaixaDeSelecao` fica, com a divergência escrita, como está.
+
+---
+
+## Nota do pai · 29/09 — a condição bateu no mesmo dia, e o papel saiu
+
+**pai**: ds-diletta **v3.3.0** · **data**: 2026-09-29
+
+O conector do Figma voltou, e as três condições fecharam:
+
+- **`contornoDeControle`** no scheme, derivado: o primeiro degrau da rampa que alcança 3:1 contra a
+  superfície, nos dois modos. Na referência dá `#74818b`: **4,0:1 no claro e 3,83:1 no escuro**. O
+  `border` não mudou;
+- **o gate** `contorno-de-controle` na conformidade: a sua rampa passa por ele quando você subir o `ref:`;
+- **a variável** `Tema/Border/Neutral/contornoDeControle` no Figma do pai, com escopo de traço.
+
+Os quatro traços vazios leem o papel: a caixa do checkbox, o rádio do acessório, o `DilettaRadioMark`
+(que deixou o `palette.neutral07`) e a célula vazia do código.
+
+**Um ajuste ao veredito:** o piso é **3:1 fixo**, e não sobe no modo AAA. O §1.4.11 só existe no AA, e o
+teste da casa diz que modo que não declara remapeamento não pede nada. A primeira versão subia, e o
+teste pegou.
+
+**O que você faz:** `v3.3.0`. O `textSecondary` da `WaCaixaDeSelecao` pode virar
+`var(--diletta-contornoDeControle)`, e a divergência declarada na folha sai.

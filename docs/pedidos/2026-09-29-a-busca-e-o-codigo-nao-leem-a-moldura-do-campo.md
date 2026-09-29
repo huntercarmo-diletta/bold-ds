@@ -148,3 +148,12 @@ checkbox e os dois rádios.
 ### O que você faz
 
 `v3.2.0`. A busca não muda no Bold. O código muda na hora do papel de contorno.
+
+---
+
+## Nota do pai · 29/09 — o item 2 saiu pelo papel de contorno
+
+**pai**: ds-diletta **v3.3.0** · **data**: 2026-09-29
+
+A célula vazia do `DilettaOtpInput` lê `contornoDeControle`, o papel que o seu adendo apontou, e não
+`border`. Ele troca com o modo e passa 3:1 contra a superfície. **O que você faz:** `v3.3.0`.
