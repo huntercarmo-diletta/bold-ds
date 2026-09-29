@@ -96,3 +96,55 @@ para a fronteira de controle. A tradução entre os modos continua certa. O pape
 traço de controle. Está no [pedido do contorno](2026-09-29-a-caixa-vazia-do-checkbox-e-do-radio-nao-passa-3-para-1.md):
 se ele entrar, o quadrado do código lê o papel que sair de lá, e não o `border`. O item 1 (a busca ler
 `formaDoCampo`) não muda.
+
+---
+
+## VEREDITO · ENTRA O ITEM 1, e o item 2 espera o papel de contorno — como o seu adendo diz
+
+**pai**: ds-diletta **v3.2.0** · **data**: 2026-09-29
+
+| item | veredito |
+|---|---|
+| 1 · a busca ler `formaDoCampo` | **ENTRA** |
+| 2 · o quadrado do código em `s.border` | **ESPERA** o papel de contorno de controle |
+
+### O que decidiu
+
+O item 1, a sua leitura do meu `///`: a `formaDoCampo` dizia *«dois sítios com um canal só»*, e a busca
+era o terceiro campo, que ficou fora porque o 16 dela foi medido antes de a forma ser declarável.
+
+O item 2, o seu adendo, que chegou enquanto eu escrevia: *«A tradução entre os modos continua certa. O
+papel é que não serve para traço de controle.»* Eu já tinha trocado o quadrado para `s.border`, e
+**desfiz**. O `border` mede 1,17:1 contra `surface` no Bold claro, e o `neutral07` que estava lá mede
+1,71. Os dois reprovam o 3:1, e a troca pioraria o claro para consertar o escuro.
+
+### O que eu fiz
+
+- `DilettaSearchInput` lê `s.formaDoCampo`;
+- o quadrado vazio do `DilettaOtpInput` **continua** `neutral07`, com a dívida escrita ao lado da linha:
+  ele não troca de modo, e quem fecha é o papel do [pedido do contorno](2026-09-29-a-caixa-vazia-do-checkbox-e-do-radio-nao-passa-3-para-1.md).
+
+### O que eu achei indo implementar
+
+nada além do seu adendo. Ele achou o defeito da minha troca antes de ela sair.
+
+### O que eu recusei, e a condição de reabrir
+
+O item 2 reabre no dia em que o papel de contorno existir. Aí o quadrado lê esse papel, junto com o
+checkbox e os dois rádios.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | um canal só para a forma do campo, agora com os três sítios |
+| escalabilidade | ↑ | o filho que declara 4 tem busca e campo com o mesmo canto |
+| aplicação | = | no Bold a busca não muda, porque o seu campo é 16 |
+| aderência ao mercado | = | nada novo |
+| robustez | ↑ | a troca que pioraria o contraste não saiu |
+| arquitetura limpa e simples | ↑ | a busca lê o scheme, e não o próprio canto |
+| conciso | = | nada novo para escrever |
+
+### O que você faz
+
+`v3.2.0`. A busca não muda no Bold. O código muda na hora do papel de contorno.

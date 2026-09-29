@@ -100,3 +100,48 @@ não existem outras divergências também»*. **O rótulo não diverge no códig
 esta e mais duas, em pedidos separados:
 [o placeholder e o desligado](2026-09-29-o-placeholder-e-o-desligado-pintam-diferente-em-cada-peca-de-campo.md)
 e [a moldura da busca e do código](2026-09-29-a-busca-e-o-codigo-nao-leem-a-moldura-do-campo.md).
+
+---
+
+## VEREDITO · ENTRA — é repasse, como o de 08/08, e o erro do valor é o do campo
+
+**pai**: ds-diletta **v3.2.0** · **data**: 2026-09-29
+
+### O que decidiu
+
+O irmão que você mesmo citou: *«é repasse e não peça»*. O seletor e o campo de data montam um
+`DilettaInput` e deixavam uma porta dele fechada. E o seu último item: *«nenhum número novo»*. Não há
+número novo em nenhum dos dois.
+
+### O que eu fiz
+
+- **`helper` no `DilettaDropdown`** (as duas formas, a caixa e o silencioso) e **no `DilettaDateField`**,
+  repassado ao `DilettaInput`. A ajuda sai com o vão, o degrau e o recuo dele;
+- **`error` no `DilettaAmountField`**: `labelSm`, `s.error`, vão 8, centralizado como o número. É o
+  degrau e o papel do erro do `DilettaInput`, lidos pelo tema e não copiados.
+
+### O que eu achei indo implementar
+
+nada
+
+### O que eu recusei, e a condição de reabrir
+
+Nada deste pedido. A soma de ajuda e erro segue a linha aberta de 18/09, e as duas peças que montam o
+`DilettaInput` herdam o que ela decidir.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | a ajuda e o erro saem de 9 sítios à mão para a peça |
+| escalabilidade | ↑ | o próximo filho não escreve a quinta receita |
+| aplicação | ↑ | o seletor «Estado» e as 8 chamadas do campo de valor passam à peça |
+| aderência ao mercado | = | ajuda e erro sob o campo é o arranjo comum |
+| robustez | ↑ | o erro do valor deixa de depender do tema do Material |
+| arquitetura limpa e simples | ↑ | repasse de uma porta que já existe |
+| conciso | = | nada novo para escrever |
+
+### O que você faz
+
+`v3.2.0`. O `Text('Obrigatório')` embaixo do seletor vira `helper:`, e o `FormField` do
+`CoreflowCampoDeValor` passa o erro para `error:`.

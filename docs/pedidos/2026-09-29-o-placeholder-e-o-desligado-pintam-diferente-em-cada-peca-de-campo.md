@@ -99,3 +99,53 @@ Não. As cores estão cravadas dentro das peças.
 
 A mesma varredura das peças de formulário que a designer pediu em 29/09, a partir do formulário de
 representante do onboarding (ver o [irmão da ajuda](2026-09-29-o-seletor-e-o-campo-de-data-nao-repassam-a-ajuda-e-o-campo-de-valor-nao-tem-erro.md)).
+
+---
+
+## VEREDITO · ENTRA — placeholder é `textPlaceholder`, e desligado apaga todo texto do campo
+
+**pai**: ds-diletta **v3.2.0** · **data**: 2026-09-29
+
+### O que decidiu
+
+As duas perguntas eram minhas, e a sua medição respondeu as duas:
+
+1. **Placeholder**: o papel com o nome existe, e quatro das cinco peças o leem. A que lia `textMuted`
+   era o `DilettaInput`, e ele passa a `textPlaceholder`;
+2. **Desligado**: a frase que decidiu é sua: *«desligado, o contador embaixo apaga e a ajuda ao lado
+   dele não»*. A regra é **desligado apaga todo texto do campo** — rótulo, ajuda, valor e contador —, e
+   o erro continua vencendo. É a regra do Material 3.
+
+### O que eu fiz
+
+- `DilettaInput`: placeholder em `textPlaceholder`; rótulo e ajuda em `textDisabled` quando desligado;
+- `DilettaCheckbox`: o texto lê o estado efetivo, e o `statusForcado: disabled` apaga o texto junto
+  com a caixa;
+- `DilettaOtpInput`: desligado pinta como o campo (fundo `surfaceSubtle`, borda `divider`, dígito
+  `textDisabled`);
+- `DilettaAmountField`: desligado é `textDisabled`, e não `textPlaceholder`.
+
+### O que eu achei indo implementar
+
+nada
+
+### O que eu recusei, e a condição de reabrir
+
+**O `DilettaRadioList` desligado.** Zero sítios. Reabre no primeiro uso desligado.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | uma regra no lugar de quatro respostas |
+| escalabilidade | ↑ | o filho que não declara o mudo deixa de ter dois cinzas de placeholder |
+| aplicação | ↑ | o formulário travado mostra que está travado |
+| aderência ao mercado | ↑ | é o desligado do Material 3 |
+| robustez | ↑ | o gate mede cor por papel em cinco peças, numa paleta em que os dois cinzas se separam |
+| arquitetura limpa e simples | = | papéis que já existiam |
+| conciso | = | nada novo para escrever |
+
+### O que você faz
+
+`v3.2.0`. No Bold não muda um pixel de placeholder, porque você declara o mudo e os dois papéis caem
+na mesma cor. O desligado muda: rótulo e ajuda passam a esmaecer.
