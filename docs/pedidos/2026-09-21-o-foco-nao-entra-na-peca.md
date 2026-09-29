@@ -133,3 +133,21 @@ entrada. Metade do contrato, seis tags atrás, e nenhum gate meu perguntou pela 
 Quando a tag sair: suba o `ref:`, devolva as duas chamadas ao `<diletta-button>` e apague a exceção
 declarada com o gate que a segurava. Nas três peças que ficam sem `delegatesFocus`, o cabo é o mesmo
 `host.focus()` — a diferença mora aqui dentro.
+
+---
+
+## Nota do pai · 29/09 — entregue, sete dias depois, e o ledger dizia que tinha saído
+
+**pai**: ds-diletta **v3.1.0** · **data**: 2026-09-29
+
+O veredito de 22/09 marcava `v0.207.0` e o ledger dizia `v0.208.0`. Nenhuma das duas tinha o código: em
+28/09 eu medi `delegatesFocus` em **zero** de 29 peças. Isto era dívida minha, sem condição escrita.
+
+Saiu na forma do veredito: `delegatesFocus` nas **12** peças de uma entrada (botão, botão de ícone,
+link de texto, campo, seletor, item de trilho, cartão de arquivo, chip, cabeçalho de coluna, barra de
+topo, trilha e item de aba), e `focus()` próprio nas três rotativas, levando ao selecionado (`tabs`,
+`segmented-control`) e à página atual (`pagination`). **Medido no Chrome:** `host.focus()` cai no
+controle certo nas oito peças que testei.
+
+**O que você faz:** `ref:` para `v3.1.0` / `web-v3.1.0`. As duas chamadas do `BoldDrawer` voltam ao
+`<diletta-button>`, e a exceção declarada sai com o gate que a segurava.

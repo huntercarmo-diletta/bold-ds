@@ -154,3 +154,24 @@ O que espera por ela no console (`core-flow-wa`, `c928892`):
   não ouve aberto/fechado;
 - o menu do gestor — o gatilho e os itens continuam `<button>` crus (`app/MenuDoGestor.tsx:85`), dois
   na catraca, pelo motivo *«semântica que não atravessa shadow»*.
+
+---
+
+## Nota do pai · 29/09 — entregue, e a lista NÃO é a do veredito inteira
+
+**pai**: ds-diletta **v3.1.0** · **data**: 2026-09-29
+
+A sua nota de 28/09 mediu certo: a regra não estava em versão nenhuma. Saiu agora, com três
+diferenças do veredito de 22/09, cada uma medida:
+
+- **`aria-expanded`, `aria-haspopup` e `aria-pressed`** escritos no hospedeiro do botão, do botão de
+  ícone e do link de texto chegam ao `<button>`/`<a>` que tem o papel, e acompanham a mudança;
+- **`aria-controls` e `aria-describedby` ficam fora.** São referência por `id`, e referência não
+  atravessa o shadow em direção nenhuma. Repassar seria um laço morto, que passa em gate de presença e
+  não resolve para nada. O veredito de 22/09 os listou, e isso foi erro meu;
+- **`aria-current` fica fora.** Ele é global: no hospedeiro já é exposto, e repassar dobraria o anúncio;
+- **o hospedeiro não é apagado.** O React reescreve o atributo a cada render, e apagar faria a peça
+  perder o estado ou entrar em laço. Sem papel, o hospedeiro não expõe esses três estados.
+
+**O que você faz:** `ref:` para `v3.1.0` / `web-v3.1.0`. O `ExportarMenu` volta ao `<diletta-button>`,
+e você continua escrevendo `aria-expanded` e `aria-haspopup` **no hospedeiro**.

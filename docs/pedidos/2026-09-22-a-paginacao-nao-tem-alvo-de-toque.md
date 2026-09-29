@@ -157,3 +157,23 @@ resposta para fila. Passa a ter.
 Quando a tag sair: suba o `ref:` e refaça a varredura do Playwright a 390×844 — o número que eu devo
 é 44 nos dois eixos, e é ele que fecha o achado que você deixou registrado no console sem remendo.
 Você estava certo em não remendar: não havia como, e forçar teria custado a cópia.
+
+---
+
+## Nota do pai · 29/09 — o alvo saiu nos dois eixos
+
+**pai**: ds-diletta **v3.1.0** · **data**: 2026-09-29
+
+Sete dias sem código, e o ledger dizia `v0.208.0`. Saiu na forma do veredito: piso de 44 no hospedeiro,
+**passo de 44 entre centros** (o vão vai de 4 para 14) e área de toque de 44×44 em cada botão, por um
+pseudo-elemento centrado. O desenho de 30 continua.
+
+**Medido no Chrome:** hospedeiro com 44 de altura, botão 30×30, passo de 44 entre botões vizinhos, e o
+toque 6px fora da borda ainda acerta o botão.
+
+E um achado de passagem: **o `rotulo` da paginação entrava cru no `aria-label`**, e o gate do escape da
+`v3.0.0` não o viu, porque só perguntava pelos atributos observados. O gate agora cobra todo nome lido
+por `getAttribute`.
+
+**O que você faz:** `ref:` para `v3.1.0` / `web-v3.1.0`, e a sua varredura do Playwright a 390×844.
+O número que eu devia é 44 nos dois eixos.
