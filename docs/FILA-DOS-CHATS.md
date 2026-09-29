@@ -18,6 +18,111 @@ A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
 
 ---
 
+## Rodada de 2026-09-29 · manhã
+
+Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat do app com um escopo só: o achado do
+`critico-de-composicao` no formulário de representante do onboarding (Figma) — *o rótulo do campo de
+texto e o do seletor não seguem a mesma medida* — e o pedido da designer: *«verificar se não existem
+outras divergências também»*. Medido no código, não no Figma: avô na ponta `v3.0.0` (`c7c9c94`), no
+pino do pai `v2.5.0` e na cópia do app (avô `v0.204.0`, filho `v0.113.0`); pai em `main` (`546a71a`).
+Sobem direto, sem sinal a ninguém.
+
+**Chats lidos**:
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| a revisão do onboarding (crítico de composição + redator de UX) | `claude_newbold` | 29/09, manhã | o achado do rótulo, passado pelo chat que chamou; **a transcrição não foi lida**, só o resumo dele, e cada afirmação foi medida no código |
+| os outros chats da janela (28/09 tarde → agora) | — | — | **não lidos nesta rodada**: a janela desta chamada foi o formulário |
+
+### 0 · O QUE O AVÔ RESPONDEU desde a tarde de 28/09 — os dez, e uma versão maior
+
+O Hunter escreveu direto na `main` deste repo (9 commits, `90986a5` → `546a71a`), sem branch de
+resposta. Os dez pedidos de 25–28/09 do webadmin têm veredito no arquivo, e o índice foi atualizado
+nesta rodada:
+
+- **`v2.7.0`**: getter sem setter (ENTRA, o setter espelho), a linha de dados e a grade (ENTRA), a
+  âncora e o cartão de arquivo em nova aba (ENTRA, as seis recebem);
+- **`v2.8.0`**: barra de topo (ENTRA, a spec muda), abas e links em app de página única (ENTRA, os
+  dois), cartão de arquivo 356 (ENTRA, os três), segmented com sete (ENTRA a regra: 2 a 5, acima é
+  seletor), as seis `ambos` (julgado), o aviso que fica (ENTRA, **sem tag**: condição no lugar do
+  número);
+- **`v2.9.0`**: três das seis peças `ambos` saem, pela tabela medida;
+- **`v3.0.0` (29/09), versão MAIOR**: o escape saiu inteiro — todo atributo das peças web é texto. O
+  console apaga os onze `escapaHtml` no mesmo commit em que trocar o `ref:`
+  (`avisos/2026-09-29-release-v3.0.0-o-atributo-e-texto.md`).
+
+E um aviso de cobrança dele: [tag sobre gate vermelho não sai](avisos/2026-09-28-tag-sobre-gate-vermelho-nao-sai.md).
+
+**Deriva**: o app vendoriza o filho `v0.113.0` com o avô `v0.204.0` (`claude_newbold/packages/ds_vendor.json`,
+bloco `"pai"` = avô); o pai (Coreflow) prende o avô em `v2.5.0` (`packages/coreflow/pubspec.yaml:23`);
+a ponta do avô é `v3.0.0` / `web-v3.0.0`.
+
+### 1 · A medição — o que diverge entre as peças de formulário
+
+**O achado de origem não se confirma no código.** O `DilettaDropdown` **é** um `DilettaInput`
+(`diletta_dropdown.dart:215-228`, e `:750-770` na suspensa): rótulo, vão, recuo, altura, canto e
+borda são os mesmos por construção. Rótulo = `label` 12/600 · `textTertiary`, vão 8, recuo 0
+(`diletta_input.dart:237`, `:558-567`); ajuda/erro = `labelSm` 11/500, vão 8, recuo 12 (16 na área de
+texto) (`:282-286`, `:600-611`). O «11 medium · `textSecondary` · vão 6 · recuo 16» que o crítico
+leu no seletor **não existe em peça nenhuma**: é o componente do Figma que está fora do código. O
+«recuo 12» do rótulo do campo também não: o rótulo nasce em 0. **Conserto no Figma, não pedido.**
+
+O «11 · `textSecondary`» tem endereço, e é outro: é a **ajuda escrita à mão no app** embaixo do campo
+(`autorizacoes_screen.dart:1104-1106`, `motivo_da_recusa_do_item.dart:60-62`), porque o nosso
+`CoreflowCampoDeTexto` não repassa a ajuda.
+
+| divergência | peças | estado |
+|---|---|---|
+| ajuda não repassada | `DilettaDropdown`, `DilettaDateField` (avô) | **pedido 1** |
+| erro inexistente | `DilettaAmountField` (avô) | **pedido 1** |
+| placeholder em dois papéis (`textMuted` × `textPlaceholder`) | `DilettaInput` × busca, seletor silencioso, campo de valor | **pedido 2** (invisível no Bold) |
+| desligado com quatro respostas | `DilettaInput` (rótulo e ajuda não apagam), `DilettaCheckbox` (`statusForcado` não apaga o texto), `DilettaOtpInput` e `DilettaAmountField` (não mostram) | **pedido 2** |
+| canto cravado fora da família do campo | `DilettaSearchInput` `all16` | **pedido 3** (invisível no Bold) |
+| borda de repouso em degrau cru | `DilettaOtpInput` `neutral07` | **pedido 3** (visível no Bold, nos dois modos) |
+| ajuda não repassada | `CoreflowCampoDeTexto` (pai) | **nosso**, item 3 abaixo |
+| erro com o tema do Material | `CoreflowCampoDeValor` (pai) | **nosso**, depende do pedido 1 |
+| rótulo 0 × ajuda 12 no mesmo campo | `DilettaInput` | **decisão documentada** (v0.184.0 e 10/09, coluna do meta declarável) — não pedido |
+| quadrados 40×40, canto 8, borda 1,5 no código | `DilettaOtpInput` | **forma documentada** (`diletta_otp_input.dart:10`, `:21-22`) — não pedido |
+| campo de valor sem rótulo nem moldura | `DilettaAmountField` | **decisão documentada** (`diletta_amount_field.dart:31-33`) — não pedido |
+| título do grupo de rádio 14/600 · vão 16 × rótulo de campo 12/600 · vão 8 | `DilettaRadioList` | **não pedido**: o título é pergunta de tela (o exemplo do `///` é «Selecione o motivo»), e nenhum dos 4 usos do app passa `title` — cada tela titula à mão (`DilettaSectionHeader`, `headlineSm`, `body`). Vira pedido se a designer decidir que grupo de escolha dentro de formulário fala como rótulo de campo |
+| rótulo e descrição da opção (checkbox `bodyMd`/`caption`, rádio `bodyMd`/`bodySm`) | `DilettaCheckbox`, `DilettaRadioList` | **não pedido**: é linha de opção, não rótulo de campo; a diferença `caption` × `bodySm` é 0,2 × 0,4 de espaçamento entre letras, sem sítio lado a lado medido |
+
+### 2 · Pedidos novos, em ordem de dependência
+
+1. **[o seletor e o campo de data não repassam a ajuda — e o campo de valor não tem erro](pedidos/2026-09-29-o-seletor-e-o-campo-de-data-nao-repassam-a-ajuda-e-o-campo-de-valor-nao-tem-erro.md)**
+   — primeiro porque o conserto nosso do campo de valor (item 3.2) espera por ele, e porque encosta na
+   linha aberta do avô de 18/09 (ajuda e erro não somam), que mexe no mesmo lugar.
+2. **[o placeholder e o desligado pintam diferente em cada peça](pedidos/2026-09-29-o-placeholder-e-o-desligado-pintam-diferente-em-cada-peca-de-campo.md)**
+   — depois do 1: se a ajuda entrar no seletor, a regra do desligado vale para ela também.
+3. **[a busca e o código não leem a moldura do campo](pedidos/2026-09-29-a-busca-e-o-codigo-nao-leem-a-moldura-do-campo.md)**
+   — independente dos outros dois; o único dos três que muda pixel no Bold hoje (a borda do código).
+
+### 3 · Nosso (Coreflow), e espera decisão dela
+
+1. **`CoreflowCampoDeTexto` repassar `helper`** ao `DilettaInput` (`packages/coreflow/lib/src/coreflow_campo_de_texto.dart:181-211`
+   não passa; o avô tem desde sempre). Custo medido no app: **9 ajudas à mão embaixo de campo, quatro
+   receitas**, nenhuma com a medida do avô. Não depende de pedido nenhum. Depois dele, as 9 telas do
+   app trocam o `Text` pelo parâmetro (trabalho do app, não daqui).
+2. **`CoreflowCampoDeValor` desenhar o erro pela peça** (`coreflow_campo_de_valor.dart:126-143`, hoje
+   `Theme.of(context).textTheme.bodySmall` + `colorScheme.error`, vão 6) — **espera o pedido 1**.
+3. **Três parâmetros mortos no `CoreflowCampoDeTexto`**: `mono`, `autocorrect` e `enableSuggestions`
+   são declarados (`:55`, `:64-65`) e **não chegam a lugar nenhum** no `build` (`:167-213`). O `///`
+   do `mono` promete JetBrains Mono em CPF e chave. Achado lateral desta medição; não corrigido.
+4. **Figma**: o componente do seletor e o rótulo do campo no Figma estão fora do código (acima). É
+   espelho — conserto de lá, por quem cuida da biblioteca.
+
+E o pino do avô no pai (`v2.5.0` → `v3.0.0`, versão maior) e a vendorização no app — tag é dela.
+
+### 4 · O que não foi medido nesta rodada
+
+- **o lado web** das mesmas peças (`<diletta-input>`, `<diletta-dropdown>`): a medição foi só Dart;
+- **o Figma** do formulário de representante: não aberto; o achado chegou pelo resumo do chat;
+- **a cor final** do placeholder e do desligado num filho sem declaração: lida na derivação, não
+  renderizada;
+- se o `informar_cpf_screen.dart:110` é ajuda do campo ou frase da tela — contado entre as 9.
+
+---
+
 ## Rodada de 2026-09-28 · tarde
 
 Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat da adoção do DS no webadmin, com um
