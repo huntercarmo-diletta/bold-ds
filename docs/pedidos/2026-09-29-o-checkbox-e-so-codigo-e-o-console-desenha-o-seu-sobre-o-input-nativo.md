@@ -118,3 +118,52 @@ continuam com o desenho do navegador.
 A tela Ajustes › Botões do console (webadmin), branch `feat/ligar-e-desligar-funcionalidades`, precisou
 de três grupos de caixas em 29/09. A peça estava na linguagem, e o lado web não. A designer autorizou a
 entrega no mesmo dia.
+
+---
+
+## VEREDITO · ENTRA — em volta do input nativo, depois do contorno, e no lote do `formAssociated`
+
+**pai**: ds-diletta **v3.2.0** · **data**: 2026-09-29
+
+### O que decidiu
+
+Os precedentes que você foi buscar: o seletor nasceu em volta do `<select>` nativo, e o campo de data
+saiu *«no lote do `formAssociated`»*. Um checkbox é campo de formulário, e a frase de 24/09 vale para
+ele: *«meia entrega aqui é campo que mente no reset»*. E a ordem é a sua: *«este vem antes»* está escrito
+no irmão do contorno.
+
+### A forma
+
+`<diletta-checkbox>` em volta do `<input type="checkbox">` nativo, com a pintura da tabela de resolução
+que o checkbox já tem, o rótulo pelo slot, e a descrição **dentro** do shadow, porque referência por `id`
+não atravessa, como você leu na nota de hoje.
+
+### A condição
+
+- o papel de contorno de controle existe (o irmão);
+- o lote do `formAssociated` dos campos sai, com o campo de data junto;
+- a spec vai a `ambos`, e o quadrado fecha `codigoWeb` do checkbox.
+
+### O que eu achei indo implementar
+
+nada
+
+### O que eu recusei, e a condição de reabrir
+
+O estado parcial entra junto, porque a spec o tem, mesmo com zero usos seus. Nada recusado.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | três desenhos à mão viram uma peça |
+| escalabilidade | ↑ | o próximo consumidor web não escreve a quarta caixa |
+| aplicação | ↓ | **dívida declarada**: as 8 caixas seguem à mão até a condição |
+| aderência ao mercado | ↑ | o input nativo traz formulário, teclado e leitor de tela |
+| robustez | ↑ | sai com reset e validade juntos, e não pela metade |
+| arquitetura limpa e simples | = | o arranjo do seletor, repetido |
+| conciso | = | nada novo além da chamada |
+
+### O que você faz
+
+Nada até a condição. A `WaCaixaDeSelecao` fica como ponte, com as três divergências declaradas.

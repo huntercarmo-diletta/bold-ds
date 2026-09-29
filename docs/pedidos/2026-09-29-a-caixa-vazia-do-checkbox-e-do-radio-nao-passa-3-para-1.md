@@ -104,3 +104,64 @@ texto virou traço.
 Construindo a caixa do console (tela Ajustes › Botões, 29/09). Medido no demo, tema claro do Bold: a
 caixa vazia saiu quase invisível. O valor do `--diletta-border` bate com o `bold-tokens.css:6`. O resto
 foi medido no código das tags citadas.
+
+---
+
+## VEREDITO · ENTRA — o papel de contorno de controle, derivado com piso de 3:1; e NÃO nesta tag
+
+**pai**: ds-diletta **v3.2.0** · **data**: 2026-09-29
+
+### O que decidiu
+
+A sua frase: *«Um card não precisa de 3:1, porque o conteúdo o identifica. Uma caixa de seleção vazia é
+**só** o traço.»* Ela separa os dois papéis pela função, e não pelo gosto. E a sua tabela mostra que não
+é só do Bold: a paleta de referência também reprova (1,39 e 1,93). Isto é defeito da linguagem.
+
+Você também disse o que contradizia: o pedido de 04/08, que moveu o rádio de `neutral07` para `border`,
+foi seu, e eu aceitei sem medir contraste. **A tradução entre os modos daquela troca continua certa, e o
+papel escolhido estava errado. A falha de medição foi minha também.**
+
+### A forma
+
+Papel novo, **derivado** como as tintas de texto: o primeiro degrau da rampa que passa 3:1 contra
+`surface`, no claro e no escuro. Nenhum filho declara nada, e o `border` não muda: ele continua certo
+para card, campo e chip. Os três traços vazios da família de seleção (a caixa do checkbox, o rádio do
+acessório e o `DilettaRadioMark`) e o quadrado vazio do código passam a ler esse papel.
+
+### Por que não sai hoje
+
+Papel novo é de graça para o filho, mas não para mim: ele atravessa a lista de papéis, os geradores de
+CSS e de Figma, a origem dos papéis, e **a variável no Figma do pai**, que a reconciliação cobra. O
+conector do Figma está fora nesta sessão. A condição:
+
+- o papel existe no scheme, derivado com piso de 3:1 contra `surface` nos dois modos, com gate;
+- a variável existe no Figma do pai, e a reconciliação passa;
+- os quatro traços vazios leem o papel, e o `DilettaRadioMark` deixa de ler `palette.neutral07`.
+
+### O que eu achei indo implementar
+
+**Eu tinha trocado o quadrado do código para `s.border` hoje de manhã, pelo seu outro pedido, e ia sair
+na tag.** O seu adendo pegou antes. A troca foi desfeita. O código continua com a dívida escrita ao lado
+da linha até este papel existir.
+
+### O que eu recusei, e a condição de reabrir
+
+- **o trilho do interruptor**: você não pediu, e eu não meço o polegar agora. Reabre com a medida do
+  controle inteiro, polegar e sombras juntos;
+- **papel de texto como traço**, o atalho do console: fica como remendo seu até a condição.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | um papel com função, no lugar de quatro traços com papel de card ou degrau cru |
+| escalabilidade | ↑ | derivado: todo filho passa 3:1 sem declarar nada |
+| aplicação | ↓ | **dívida declarada**: a caixa vazia segue quase invisível até a condição |
+| aderência ao mercado | ↑ | é o §1.4.11, contraste não textual |
+| robustez | ↑ | o piso vira gate, e o próximo filho não reprova calado |
+| arquitetura limpa e simples | = | um papel a mais na família de borda, com fronteira clara contra o `border` |
+| conciso | = | nada para o consumidor escrever |
+
+### O que você faz
+
+Nada até a condição. O `textSecondary` na `WaCaixaDeSelecao` fica, com a divergência escrita, como está.
