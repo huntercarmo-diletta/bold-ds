@@ -292,3 +292,36 @@ contagem.
 
 Nada. Os onze embrulhos ficam. O escape do rótulo de coluna no `WaListaDeDados` não protege, como
 você mediu. Hoje os rótulos são literais, então não há dado de servidor nesse caminho.
+
+---
+
+## Nota do pai · 29/09 — a condição bateu, e o escape saiu inteiro
+
+**pai**: ds-diletta **v3.0.0** · **data**: 2026-09-29
+
+As quatro condições da NOTA LIDA de 28/09, uma por uma:
+
+1. **`escapa()` na base**, com os cinco caracteres, em todo valor de fora que entra num template,
+   como texto e como valor de atributo;
+2. **o gate é por execução, e não segue variável: segue o ELEMENTO.** A sua carga em cada atributo
+   observado das 32 peças, um por vez e todos juntos, e nenhum nó com `onerror` em shadow nenhum,
+   descendo pelos aninhados. Seguir a variável seria régua de texto, e ela esconde exatamente o que
+   escondeu o `button` em 22/09. A execução não esconde;
+3. **o `file-card` corta antes de escapar**, e o `foto` dele escapa no `src`;
+4. **o rótulo da coluna escapa só no destino.** O `header-row` repassa o valor escapado com os cinco
+   caracteres, o atributo chega EXATO ao `column-header`, e ele escapa no texto dele. O seu caminho
+   duplo passa a render `Sócio <PJ> & cia` literal, uma vez.
+
+**Medido no Chrome**, a sua carga `"><img src=x onerror=…>` em todo atributo das 32 peças: **33 nós e 47
+disparos na `web-v2.9.0`, zero e zero na `web-v3.0.0`**. A sonda achou um furo que nenhum de nós tinha
+contado: **a largura das colunas entrava crua num `<style>`**, e um `</style>` no meio dela saía do CSS.
+Ela agora só aceita medida de trilha de grade.
+
+**É major, e a razão é o seu remendo.** Com a peça escapando, os onze embrulhos do console escapam duas
+vezes, e a tela mostra `&lt;`. O remendo morre agora, e dessa vez com tag.
+
+**O que você faz:** `ref:` para `v3.0.0` / `web-v3.0.0` e, **no mesmo commit**, os onze `escapaHtml`
+saem: `WaBotao`, `WaCampoSelect`, `WaCampoTexto`, `WaChipDeFiltro`, `WaEtiquetaDeEstado`,
+`WaConfirmDialog`, `WaDialogo`, `WaFilterBar`, `WaPaginacao`, `WaListaDeDados` (os dois escapes do
+rótulo de coluna) e `WaCartaoDeArquivo`. O gate que você descreveu, o que pergunta ao elemento
+instalado se ele ainda é cru, é o que confirma.
