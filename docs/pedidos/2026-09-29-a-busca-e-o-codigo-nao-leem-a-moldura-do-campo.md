@@ -85,3 +85,14 @@ a dos campos da mesma tela — mais escura no claro e clara demais no escuro, no
 
 A mesma varredura das peças de formulário que a designer pediu em 29/09 (ver o
 [irmão da ajuda](2026-09-29-o-seletor-e-o-campo-de-data-nao-repassam-a-ajuda-e-o-campo-de-valor-nao-tem-erro.md)).
+
+---
+
+## Adendo do filho · 29/09, tarde — o item 2 pede o papel errado
+
+O item 2 pede o quadrado vazio do código em `s.border`. Na mesma tarde, medindo a caixa do checkbox, o
+`border` mediu **1,17:1** contra `surface` no Bold claro e **1,39:1** na referência. §1.4.11 pede 3:1
+para a fronteira de controle. A tradução entre os modos continua certa. O papel é que não serve para
+traço de controle. Está no [pedido do contorno](2026-09-29-a-caixa-vazia-do-checkbox-e-do-radio-nao-passa-3-para-1.md):
+se ele entrar, o quadrado do código lê o papel que sair de lá, e não o `border`. O item 1 (a busca ler
+`formaDoCampo`) não muda.
