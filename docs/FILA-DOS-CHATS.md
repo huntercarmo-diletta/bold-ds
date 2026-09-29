@@ -18,6 +18,73 @@ A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
 
 ---
 
+## Rodada de 2026-09-29 · tarde
+
+Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat do webadmin com a autorização dela
+(*«pode mandar, veja o que o pai responde»*). O escopo são dois achados da tela Ajustes › Botões do
+console (`core-flow-wa`, `feat/ligar-e-desligar-funcionalidades`, sobre `b3c427c`). Medido no avô na
+ponta `v3.1.0` (`e480392`) / `web-v3.1.0` (`660e3f5`) e no pino do pai `v2.5.0`; pai em `main`
+(`87fae79`). Sobem direto, sem sinal a ninguém.
+
+**Chats lidos**:
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| a tela de Botões do console | `core-flow-wa` | 29/09, tarde | os dois achados, passados pelo chat que chamou. **A transcrição não foi lida**, só o resumo, e cada afirmação foi medida no código e no arquivo do console |
+| os outros chats da janela (29/09 manhã → agora) | — | — | **não lidos nesta rodada** |
+
+### 0 · O QUE O AVÔ RESPONDEU desde a manhã — três entregas na `v3.1.0`
+
+Direto na `main` deste repo (`87fae79`), com uma nota em cada pedido e o aviso
+[`avisos/2026-09-29-release-v3.1.0.md`](avisos/2026-09-29-release-v3.1.0.md). O índice marcava os três
+como *«v0.208.0 prevista — tag NÃO cortada»* e foi atualizado nesta rodada:
+
+- **o foco entra na peça**: `delegatesFocus` em 12 peças, e `focus()` próprio em abas, segmented e
+  paginação;
+- **os `aria-*` param no hospedeiro**: entregue **com três diferenças**. `aria-controls` e
+  `aria-describedby` ficam fora (*«referência não atravessa o shadow»*), `aria-current` fica fora, e o
+  hospedeiro não é apagado;
+- **a paginação tem alvo**: 44 nos dois eixos, com o vão de 4 para 14.
+
+Os três pedidos da manhã (ajuda, placeholder e desligado, moldura) **continuam sem veredito**.
+
+**Deriva**: o app vendoriza o filho `v0.113.0` com o avô `v0.204.0` em `origin/development` e na
+branch de trabalho, e o filho `v0.120.0` com o avô `v2.5.0` em `origin/release/homologation`
+(`claude_newbold/packages/ds_vendor.json`, bloco `"pai"` = avô). O pai (Coreflow) prende o avô em
+`v2.5.0` (`packages/coreflow/pubspec.yaml:23`). A ponta do avô é `v3.1.0` / `web-v3.1.0`. O console
+instala a `web-v0.118.0` deste repo.
+
+### 1 · Pedidos novos, em ordem de dependência
+
+1. **[a caixa vazia do checkbox e do rádio não passa 3:1](pedidos/2026-09-29-a-caixa-vazia-do-checkbox-e-do-radio-nao-passa-3-para-1.md)**
+   — primeiro porque o lado web do checkbox herda o contorno que sair dele. **Contradiz dois pedidos
+   nossos** (o rádio em `border`, 04/08; o quadrado do código em `border`, hoje de manhã). O da manhã
+   ganhou um adendo apontando para cá.
+2. **[o checkbox é só código](pedidos/2026-09-29-o-checkbox-e-so-codigo-e-o-console-desenha-o-seu-sobre-o-input-nativo.md)**
+   — depois do 1, e dentro do lote do `formAssociated` que o avô já condicionou (CHANGELOG `[2.6.0]`).
+
+**Por que os dois vão ao avô, e nada ao pai**: o `destino` da spec e o elemento web são vocabulário da
+linguagem. O papel de traço, pedido como derivado com piso, não exige declaração nova do Bold: o
+`bordaClara` do Bold continua certo para card e campo.
+
+### 2 · Nosso, e espera decisão dela
+
+- **o console**: a ponte `WaCaixaDeSelecao` (fora de commit no `core-flow-wa`) e as 5 caixas cruas de
+  `EditorDePerfil`, `TelaPareamentoDe2FA` e `ConfigurarPainel` ficam como estão até o veredito. É
+  trabalho daquele repo, não deste;
+- o pino do avô no pai (`v2.5.0` → `v3.1.0`, passando por uma versão maior) e a vendorização no app
+  — tag é dela.
+
+### 3 · O que não foi medido nesta rodada
+
+- o contraste **renderizado**: os números são calculados dos valores do `bold-tokens.css` e da paleta
+  de referência. O único número de tela é o do demo do console (≈ 1,2:1), vindo do chat;
+- o **polegar** do interruptor (com as duas sombras) como identificador do controle;
+- o `neutral08` da paleta do filho A;
+- o `primary` do Bold como traço do estado apontado.
+
+---
+
 ## Rodada de 2026-09-29 · manhã
 
 Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat do app com um escopo só: o achado do
