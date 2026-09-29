@@ -18,6 +18,84 @@ A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
 
 ---
 
+## Rodada de 2026-09-29 · noite
+
+Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat do webadmin com a autorização dela
+(*«Manda»*). O escopo são três achados da área de pergunta e resposta de Relatórios do console
+(`core-flow-wa-painel`, `feat/painel`, árvore de trabalho sobre `52e2fd9`). Medido no avô na ponta
+`v3.2.0` (`f4ba5c7`) / `web-v3.2.0` (`800841e`) e na tag que o console instala (`web-v0.118.0` deste
+repo, avô `web-v2.5.0`); pai em `main` (`0563e63`). Sobem direto, sem sinal a ninguém.
+
+**Chats lidos**:
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| a pergunta e resposta de Relatórios do console | `core-flow-wa-painel` | 29/09, 17h50 | os três achados, passados pelo chat que chamou. **A transcrição não foi lida**, só o resumo; cada afirmação foi re-medida na fonte das duas tags e no código do console |
+| os outros chats da janela (29/09 tarde → agora) | — | — | **não lidos nesta rodada** |
+
+### 0 · O QUE O AVÔ RESPONDEU desde a tarde — os cinco de hoje julgados, e a `v3.2.0` cortada
+
+Direto na `main` deste repo, sem branch: `f36fe12` e `d8e50af` (vereditos nos arquivos) e `0563e63` (o
+aviso [`avisos/2026-09-29-release-v3.2.0.md`](avisos/2026-09-29-release-v3.2.0.md)). As cinco linhas estão
+no ledger dele (`ds-diletta/docs/PEDIDOS.md`, `origin/main`, linhas 25-29). O índice deste repo dizia
+*«sem veredito»* para os cinco e foi atualizado nesta rodada:
+
+- **entram na `v3.2.0`**: a ajuda no seletor e no campo de data e o erro no campo de valor; o placeholder
+  em `textPlaceholder` e o desligado apagando todo texto do campo; a busca lendo `formaDoCampo`;
+- **entram, e não nesta tag**: o **papel de contorno de controle** (derivado, piso de 3:1) e o
+  `<diletta-checkbox>`, que espera o papel e o lote do `formAssociated`. O quadrado do código **não**
+  mudou de borda: espera o mesmo papel, como o nosso adendo pediu.
+
+**Deriva**: o app vendoriza o filho `v0.113.0` com o avô `v0.204.0` em `origin/development` e na
+branch de trabalho, e o filho `v0.120.0` com o avô `v2.5.0` em `origin/release/homologation`
+(`claude_newbold/packages/ds_vendor.json`, bloco `"pai"` = avô). O pai (Coreflow) prende o avô em
+`v2.5.0` (`packages/coreflow/pubspec.yaml:23`), e o pacote web deste repo em `web-v2.5.0`
+(`packages/coreflow_design_system_web/package.json:23`). A ponta do avô é `v3.2.0` / `web-v3.2.0`. O
+console instala a `web-v0.118.0` deste repo.
+
+### 1 · Pedidos novos, em ordem de dependência
+
+1. **[o campo longo devolve o cursor ao início a cada tecla](pedidos/2026-09-29-o-campo-longo-devolve-o-cursor-ao-inicio-a-cada-tecla.md)**
+   — DEFEITO, e sozinho: não depende de nada. É o encontro de duas decisões certas (a regra do `valor`
+   de 18/09 e o reflexo do `valor` no ouvinte, de 24/09). **Não duplica** o de 17/09 (o campo apagava o
+   texto; este guarda o texto e perde o lugar), e não pede para desfazê-lo.
+2. **[o chip não tem aparência neutra para sugestão — e não ouve o teclado](pedidos/2026-09-29-o-chip-nao-tem-aparencia-neutra-para-sugestao-e-nao-ouve-o-teclado.md)**
+   — antes do 3 porque carrega os dois defeitos que valem para os dois modos: a borda apagada pelo próprio
+   CSS da peça e o `role="button"` sem teclado. **Declara contra nós**: a spec do chip diz que ele não é
+   CTA, e a sugestão é ação.
+3. **[o chip selecionável não tem aparência neutra](pedidos/2026-09-29-o-chip-selecionavel-nao-tem-aparencia-neutra.md)**
+   — depois do 2 (mesmo tom, e a borda/teclado de lá) e, se quiser, depois do **papel de contorno de
+   controle** que o avô decidiu hoje: é esse papel que o contorno da escolhida deveria ler. **Contradiz o
+   nosso de 11/08** (a inversão em `primary` foi pedido nosso) sem pedir para trocá-la, e responde à última
+   linha do veredito do segmented de 28/09: a designer escolheu pílula.
+
+**Por que os três vão ao avô, e nada ao pai**: o `<diletta-input>` e o `<diletta-input-chip>` são
+elementos da linguagem, e o pai (Coreflow) não tem cópia web de nenhum dos dois. Um tom de chip é papel,
+como o tom neutro do link (22/08).
+
+**O que já estava na fila e não foi repetido**: faixa de aviso web, `type="search"`, porte denso do
+`diletta-input`, hover do `secondary` em AA, a moldura da busca e os dois de hoje à tarde (checkbox e
+contorno) não tocam cursor nem chip. O único parente é o de 11/08, citado no 3.
+
+### 2 · Nosso, e espera decisão dela
+
+- **o console**: o `<textarea>` nativo do `WidgetDeConsulta`, a `WaSugestao` e a `WaPilulaDeEscolha` ficam
+  como pontes, com a divergência escrita em cada uma, até os vereditos. São trabalho daquele repo, **fora
+  de commit** lá hoje;
+- **subir o pino do avô** no pai e no pacote web deste repo (`v2.5.0` / `web-v2.5.0` → `v3.2.0` /
+  `web-v3.2.0`, passando pela maior `v3.0.0`) e depois a vendorização no app — tag é dela. A ajuda do
+  seletor, o erro do campo de valor e o desligado que esmaece só chegam ao app por esse caminho.
+
+### 3 · O que não foi medido nesta rodada
+
+- o cursor **no navegador** por mim: a medida de navegador é a do chat (Chromium via Playwright); a minha
+  é jsdom, nas duas tags. Safari e Firefox, ninguém;
+- os contrastes são **calculados** dos valores do `bold-tokens.css`, não medidos em tela;
+- o lado Dart do chip neutro: li as cores, não rodei;
+- a transcrição do chat do console.
+
+---
+
 ## Rodada de 2026-09-29 · tarde
 
 Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat do webadmin com a autorização dela
