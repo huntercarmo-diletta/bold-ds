@@ -136,7 +136,11 @@ class CoreflowPagina extends StatelessWidget {
           Expanded(
             child: SafeArea(top: false, bottom: bottomBar == null, child: corpo),
           ),
-          if (bottomBar != null) SafeArea(top: false, child: bottomBar!),
+          // Sem `SafeArea` aqui: os rodapés que chegam neste slot já contam o inset do aparelho
+          // (o `.button` pelo indicador de home do pai, que lê `viewPadding`; o
+          // `CoreflowAcaoDeRodape` pelo `padding`). Com ele, o vidro parava 34 pt acima da borda e
+          // o fundo da tela aparecia embaixo. Gate: `o_rodape_da_pagina_vai_ate_a_borda`.
+          if (bottomBar != null) bottomBar!,
         ]),
       ),
     );

@@ -20,6 +20,26 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [Não lançado]
+
+### O rodapé do `CoreflowPagina` vai até a borda do aparelho
+
+O `CoreflowPagina` embrulhava o `bottomBar` num `SafeArea` — e os dois rodapés que as telas passam ali
+já contam o inset sozinhos. O `CoreflowRodape.button` conta pelo `DilettaBottomHomeIndicator` do pai,
+que reserva o `viewPadding.bottom` (o `SafeArea` zera o `padding`, não o `viewPadding`); o
+`CoreflowAcaoDeRodape` soma o `padding.bottom` ao respiro dele.
+
+Medido num iPhone 14 Pro, na contestação do Pix: o vidro do rodapé parava **34 pt acima da borda**, o
+indicador de home contado duas vezes, e embaixo dele uma faixa com a cor do fundo da tela — o "risco
+logo abaixo do botão", em toda tela de `CoreflowPagina` com `.button`. O `SafeArea` saiu, e o gate
+`o_rodape_da_pagina_vai_ate_a_borda` mede as duas variantes: o vidro do `.button` encosta em 852 de
+852, e o botão do `CoreflowAcaoDeRodape` continua exatamente onde estava (inset + 12).
+
+**Patch**: nenhuma API muda. Muda pixel nas telas de `CoreflowPagina` com `CoreflowRodape.button` — a
+barra inteira (vidro e botão) desce 34 pt e a faixa some. Com `CoreflowAcaoDeRodape`, nada muda.
+
+Reportado pelo app, com print da tela de contestação.
+
 ## [0.120.0] — 2026-09-28
 
 ### O selo ganhou o desfecho de quem NÃO teve resposta
