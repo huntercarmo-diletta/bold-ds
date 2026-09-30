@@ -269,6 +269,7 @@ Block _bloco(String expr) {
   for (final par in const [
     ('ds.CoreflowCorpoDeFolha', 'corpoDeFolha'),
     ('ds.CoreflowSemTeto', 'larguraInteira'),
+    ('ds.CoreflowAoCentro', 'aoCentro'),
   ]) {
     if (!ehCtor(expr, par.$1)) continue;
     final itens = primeiraListaDeChildren(expr);
@@ -276,6 +277,29 @@ Block _bloco(String expr) {
       id: _novoId(),
       type: par.$2,
       props: const {},
+      slots: {
+        'conteudo': [
+          for (final item in separaNoTopo(itens ?? ''))
+            if (semConst(item.trim()).isNotEmpty) _bloco(semConst(item.trim())),
+        ],
+      },
+    );
+  }
+
+  // A COLUNA DA TELA: o conteúdo vem em `filhos:`, e o `primeiraListaDeChildren` do motor só procura
+  // `children:` — então a volta acha a lista pelo nome. Os dois bools são lidos só ANTES dela, porque
+  // uma coluna aninhada lá dentro pode dizer `estica` sem que a de fora diga.
+  if (ehCtor(expr, 'ds.CoreflowColunaDaTela')) {
+    final lista = RegExp(r'\bfilhos\s*:\s*(?:const\s*)?\[').firstMatch(expr);
+    final cabeca = lista == null ? expr : expr.substring(0, lista.start);
+    final itens = lista == null ? null : conteudoDoColchete(expr, lista.end - 1);
+    return Block(
+      id: _novoId(),
+      type: 'colunaDaTela',
+      props: {
+        'estica': argBool(cabeca, 'estica') ?? false,
+        'rola': argBool(cabeca, 'rola') ?? true,
+      },
       slots: {
         'conteudo': [
           for (final item in separaNoTopo(itens ?? ''))

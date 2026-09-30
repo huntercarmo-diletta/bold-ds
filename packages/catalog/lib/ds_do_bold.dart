@@ -1933,6 +1933,57 @@ Widget _larguraInteiraWidget(Widget? filho) => CoreflowSemTeto(
       child: filho ?? const SizedBox(height: 40, width: double.infinity),
     );
 
+/// A COLUNA DE UMA TELA — alinha à esquerda, com o respiro da casa. O centro se pede por nome
+/// ([_aoCentro]).
+///
+/// As duas peças entraram no pai em 25/09 (`30dcfdb`) e não no plugue, e o gate
+/// `o_plugue_fala_o_ds_inteiro` ficou vermelho desde então. `estica` é a segunda leitura (filhos de
+/// largura cheia) e `rola` evita duas rolagens no mesmo eixo. Os respiros ficam no default, porque o
+/// default É a regra que a peça existe para impor: oferecer 12 números aqui seria devolver os 12 que
+/// ela recolheu.
+BlockDef _colunaDaTela() => BlockDef(
+      type: 'colunaDaTela',
+      label: 'Coluna da tela · CoreflowColunaDaTela',
+      props: const {'estica': PropDef('bool'), 'rola': PropDef('bool')},
+      defaults: () => {'estica': false, 'rola': true},
+      slots: const {'conteudo': SlotDef(list: true)},
+      build: (p) => _colunaDaTelaWidget(p, const []),
+      slotsBuild: (p, filhos) => _colunaDaTelaWidget(p, filhos['conteudo'] ?? const []),
+      slotsCodegen: (p, codigos) =>
+          'ds.CoreflowColunaDaTela(${_argsDaColuna(p)}filhos: [${(codigos['conteudo'] ?? const []).join(', ')}])',
+      codegen: (p) => 'ds.CoreflowColunaDaTela(${_argsDaColuna(p)}filhos: const [])',
+    );
+
+String _argsDaColuna(Map<String, dynamic> p) =>
+    '${p['estica'] == true ? 'estica: true, ' : ''}${p['rola'] == false ? 'rola: false, ' : ''}';
+
+Widget _colunaDaTelaWidget(Map<String, dynamic> p, List<Widget> filhos) => CoreflowColunaDaTela(
+      estica: p['estica'] == true,
+      rola: p['rola'] != false,
+      filhos: filhos.isEmpty ? const [SizedBox(height: 60, width: double.infinity)] : filhos,
+    );
+
+/// O CENTRO PEDIDO POR NOME — UM elemento centrado dentro da coluna que alinha à esquerda (um
+/// conector, um selo). Centralizar a TELA inteira não é isto: ali não há coluna, e continua `Center`.
+BlockDef _aoCentro() => BlockDef(
+      type: 'aoCentro',
+      label: 'Ao centro · CoreflowAoCentro',
+      props: const {},
+      defaults: () => {},
+      slots: const {'conteudo': SlotDef()},
+      build: (p) => _aoCentroWidget(null),
+      slotsBuild: (p, filhos) => _aoCentroWidget((filhos['conteudo'] ?? const []).firstOrNull),
+      slotsCodegen: (p, codigos) {
+        final filho = (codigos['conteudo'] ?? const []).firstOrNull ?? 'const SizedBox.shrink()';
+        return 'ds.CoreflowAoCentro(child: $filho)';
+      },
+      codegen: (p) => 'ds.CoreflowAoCentro(child: const SizedBox.shrink())',
+    );
+
+Widget _aoCentroWidget(Widget? filho) => CoreflowAoCentro(
+      child: filho ?? const SizedBox(height: 40, width: 120),
+    );
+
 /// O ENCAIXE DA FAIXA DE OPERAÇÃO — onde a faixa entra quando a sessão é operada, e nada quando não
 /// é. Ele lê o contexto publicado; o bloco existe pra que a tela possa RESERVAR o lugar dela.
 BlockDef _encaixeDeOperacao() => BlockDef(
@@ -3597,6 +3648,8 @@ void configurarDsDoBold() {
       'rodapeDoProduto': _rodapeDoProduto(),
       'corpoDeFolha': _corpoDeFolha(),
       'larguraInteira': _larguraInteira(),
+      'colunaDaTela': _colunaDaTela(),
+      'aoCentro': _aoCentro(),
       'encaixeDeOperacao': _encaixeDeOperacao(),
       'paginaDeResumo': _paginaDeResumo(),
       'paginaComRodapeFlutuante': _paginaComRodapeFlutuante(),
@@ -3643,7 +3696,7 @@ void configurarDsDoBold() {
     grupos: const {
       'Estrutura': ['barraDeStatus', 'cascaDeTopo', 'barraDeNavegacao', 'tituloDaPagina',
         'indicadorDeHome', 'pagina', 'larguraDeConteudo', 'acaoDeRodape',
-        'barraDeTopoDoProduto', 'rodapeDoProduto', 'larguraInteira', 'encaixeDeOperacao', 'paginaDeResumo', 'paginaComRodapeFlutuante'],
+        'barraDeTopoDoProduto', 'rodapeDoProduto', 'larguraInteira', 'colunaDaTela', 'aoCentro', 'encaixeDeOperacao', 'paginaDeResumo', 'paginaComRodapeFlutuante'],
       'Conteúdo': ['texto', 'valor', 'selo', 'aviso', 'avisoEmLinha', 'icone', 'cabecalhoDeSecao',
         'ilustracao', 'logo', 'chipDeInfo', 'estadoVazio', 'avatar', 'criterios', 'expansivel',
         'cartaoDeDestaque', 'comprovante', 'bannerDeStatus', 'cartao', 'etiqueta', 'disco', 'spot',

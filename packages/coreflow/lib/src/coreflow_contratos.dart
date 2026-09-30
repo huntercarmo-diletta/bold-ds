@@ -89,6 +89,9 @@ const Map<String, String> kCoreflowSpecs = {
   'larguraInteira': _larguraInteira,
   'paginaDeResumo': _paginaDeResumo,
   'paginaComRodapeFlutuante': _paginaComRodapeFlutuante,
+  // As duas peças de coluna, que entraram no pai em 25/09 e no catálogo em 30/09.
+  'colunaDaTela': _colunaDaTela,
+  'aoCentro': _aoCentro,
 };
 
 const _saldo = r'''
@@ -1423,6 +1426,48 @@ Dentro de uma folha montada peça a peça, quando a folha inteira não serve.
 ## Compõe
 
 - DilettaBox
+''';
+
+const _colunaDaTela = r'''
+## Purpose
+
+A coluna de uma tela: alinha à esquerda, com o gutter nas bordas e o respiro da casa em cima e embaixo.
+
+## Guidelines
+
+### Quando usar
+Como corpo de uma tela de conteúdo — formulário, detalhe, lista curta — dentro da página.
+
+### Faça
+- deixe o alinhamento à esquerda: é a regra, e o centro de um elemento se pede por nome (`aoCentro`)
+- use `estica` quando os filhos são de largura cheia (botões, cartões); a coluna de texto fica sem
+- use `rola: false` quando a coluna já vive dentro de um scroll de fora (uma folha arrastável, uma aba)
+
+### Evite
+- centralizar a TELA inteira com ela: rodela de carregando, estado vazio e ilustração continuam `Center`, porque ali não há coluna
+- escrever o respiro à mão: as telas tinham 12 valores diferentes embaixo, e a peça existe para ter um
+
+## Compõe
+
+- CoreflowEspaco.gutter
+- CoreflowEspaco.respiroDoRodape
+''';
+
+const _aoCentro = r'''
+## Purpose
+
+UM elemento centrado dentro de uma coluna que alinha à esquerda — a exceção à regra, pedida por nome.
+
+## Guidelines
+
+### Quando usar
+Para um conector, um selo ou uma ilustração pequena que precisa do centro no meio de uma `colunaDaTela`.
+
+### Faça
+- use-o no elemento que pede o centro, e não em volta de um grupo: a coluna continua à esquerda
+
+### Evite
+- usá-lo para centralizar a tela inteira: ali não há coluna para alinhar, e o certo é `Center`
 ''';
 
 const _larguraInteira = r'''
