@@ -20,7 +20,7 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
-## [Não lançado]
+## [0.120.1] — 2026-09-30
 
 ### O rodapé do `CoreflowPagina` vai até a borda do aparelho
 
@@ -69,6 +69,15 @@ suítes vermelhas na `main`, e a próxima tag só é aceita com recibo verde. Me
   parar antes do `flutter test`.
 
 **Patch**: nenhuma API muda, e no app do Conta BOLD nada muda.
+
+### O que chega ao consumidor web por esta tag (`web-v0.120.1`): o número, e só
+
+O conserto do rodapé é Dart, e os do gate não tocam o `coreflow_design_system_web`: nenhum token,
+nenhuma folha, nenhum `index.js` mudou desde a `v0.120.0`. O pino do avô fica em `v2.5.0` /
+`web-v2.5.0`. A folha do Norte Benk mudou: o `norte_benk_coreflow` sobe para `0.1.4`, e a
+`norte-benk-web-v0.1.4` sai desta mesma tag, com o rótulo branco do botão destrutivo.
+
+É a primeira tag depois da cobrança do pai de 28/09, e leva o recibo do gate em `docs/recibos/v0.120.1.md`.
 
 ## [0.120.0] — 2026-09-28
 
