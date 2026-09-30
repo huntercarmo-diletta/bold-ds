@@ -46,6 +46,30 @@ barra inteira (vidro e botão) desce 34 pt, o traço falso some e a faixa també
 
 Reportado pelo app, com print da tela de contestação.
 
+### As seis suítes do gate do README voltam a ficar verdes
+
+A cobrança do pai de 28/09 (`docs/avisos/2026-09-28-tag-sobre-gate-vermelho-nao-sai.md`) contou três
+suítes vermelhas na `main`, e a próxima tag só é aceita com recibo verde. Medido de novo em 30/09, com
+`npm install`, eram as mesmas três, e o `analyze` de outras duas também saía com erro:
+
+- **Norte Benk e exemplo: o CSS é reemitido da fonte.** Muda uma cor: `--diletta-onErrorSolid` vai de
+  `#e8837c` para `#ffffff` nos dois modos. É o rótulo do botão destrutivo preenchido, e o contraste vai
+  de 3,15:1 (claro) e 3,56:1 (escuro) para 8,30:1 e 9,38:1. A spec do avô mede esse par com branco, e o
+  app Norte Benk já pintava branco: a folha em disco era de 22/09, anterior ao avô `v2.5.0`. Chega à
+  web do Norte Benk na próxima `norte-benk-web`.
+- **O catálogo fala as duas peças de coluna.** `CoreflowColunaDaTela` e `CoreflowAoCentro` entraram no
+  pai em 25/09 e não no plugue; agora são os blocos `colunaDaTela` e `aoCentro`, com grupo na paleta,
+  contrato em `coreflow_contratos.dart` e volta no leitor de código. A superfície de enum do
+  `o_emitido_compila` passa a 123, porque o `semResposta` da PR #3 é uma opção a mais no bloco do selo.
+- **O filho gerado nasce com `assets/logos/` versionado.** O gerador criava a pasta vazia, e o git não
+  versiona pasta vazia; em todo clone, o `analyze` do exemplo reprovava. O gerador passa a escrever um
+  `.gitkeep`, e um teste roda o gerador e cobra que toda pasta de asset do `pubspec` tenha arquivo, na
+  saída nova e no exemplo.
+- **O `analyze` do `coreflow` sai limpo.** Um import desnecessário num teste fazia o comando do README
+  parar antes do `flutter test`.
+
+**Patch**: nenhuma API muda, e no app do Conta BOLD nada muda.
+
 ## [0.120.0] — 2026-09-28
 
 ### O selo ganhou o desfecho de quem NÃO teve resposta
