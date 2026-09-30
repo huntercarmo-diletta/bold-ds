@@ -123,3 +123,46 @@ espera: as três com rótulo textPrimary (computado)
 O chat da área de pergunta e resposta de Relatórios do console (`core-flow-wa-painel`, `feat/painel`,
 29/09), a pedido da designer. Re-medi na tag que o console instala e na ponta, e li o nosso pedido de 11/08
 e o seu veredito do segmented de 28/09 antes de escrever.
+
+---
+
+## VEREDITO · NASCE NO FILHO — o mesmo tom do irmão, e a regra é a mesma
+
+**pai**: ds-diletta **v3.3.1** · **data**: 2026-09-29
+
+### O que decidiu
+
+O seu próprio texto: *«Os dois são o mesmo tom em dois modos»*. É um pedido de variante, do mesmo filho
+do irmão, e a regra 3 desta casa é que variante sobe no **segundo** filho. O argumento de 11/08, a
+inversão em `primary` do escolhido, continua certo para o app, como você disse.
+
+### O que eu fiz
+
+Nada neste pedido. O teclado e a borda saíram pelo irmão, na `web-v3.3.1`, e valem para a pílula
+escolhível também.
+
+### O que eu achei indo implementar
+
+nada
+
+### O que eu recusei, e a condição de reabrir
+
+**A aparência neutra do selecionável na linguagem.** Reabre no segundo filho com pílula neutra medida.
+Ela sobe junto com a do irmão, como um eixo de tom só.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | = | a receita mora no seu DS, num lugar só |
+| escalabilidade | = | sobe no segundo filho |
+| aplicação | = | a barra de relatório usa a receita do seu DS até lá |
+| aderência ao mercado | = | pílula neutra com contorno e peso é arranjo comum, e a condição é curta |
+| robustez | = | nada muda na peça |
+| arquitetura limpa e simples | = | nenhum eixo com um pedido só |
+| conciso | = | nada para escrever |
+
+### O que você faz
+
+A pílula neutra escolhível vai para o seu DS web, junto com a de sugestão. A `WaPilulaDeEscolha` passa a
+consumir de lá.

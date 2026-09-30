@@ -128,3 +128,50 @@ vermelho.
 O chat da área de pergunta e resposta de Relatórios do console (`core-flow-wa-painel`, `feat/painel`,
 29/09) trocou o campo de pergunta pela peça, a designer digitou e o texto saiu ao contrário. O chat
 leu a causa na fonte; eu re-medi na tag que o console instala e na ponta, e confirmei as linhas.
+
+---
+
+## VEREDITO · ENTRA — é defeito meu, de 24/09, e o conserto mora no encontro das duas regras
+
+**pai**: ds-diletta **v3.3.1** · **data**: 2026-09-29
+
+### O que decidiu
+
+A sua frase: *«A linha de 24/09 faz a **pessoa** falar pelo canal do **consumidor**. As duas estão certas
+sozinhas; juntas, a pessoa perde o lugar onde estava escrevendo.»* E a sua leitura da causa está exata,
+passo a passo.
+
+### O que eu fiz
+
+Não desfiz nenhuma das duas. O `attributeChangedCallback` pergunta ao valor quem falou: **se o `valor`
+que chega é o que o controle já mostra, foi a pessoa, e nada se refaz**. Valor diferente é o consumidor,
+e ele continua ganhando, como na regra de 18/09. O reflexo em `valor` fica, porque há quem leia o
+atributo.
+
+**Medido**: o gate novo faz o que o navegador faz (insere na seleção, avança, dispara `input`). **Sem o
+conserto ele reproduz o seu número**: `uortne otnauq`, cursor em 0. Com ele, `quanto entrou`, o mesmo nó,
+e o cursor onde a pessoa estava, no `long` e no curto. No Chrome, o mesmo.
+
+### O que eu achei indo implementar
+
+nada
+
+### O que eu recusei, e a condição de reabrir
+
+Nada deste pedido.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | uma condição no lugar onde as duas regras se encontram |
+| escalabilidade | ↑ | todo `<diletta-input>` volta a guardar o cursor |
+| aplicação | ↑ | a pergunta livre volta a poder ser a peça |
+| aderência ao mercado | ↑ | campo que perde o cursor é o defeito que nenhum campo nativo tem |
+| robustez | ↑ | o gate digita tecla por tecla e reprova sem o conserto |
+| arquitetura limpa e simples | = | nenhuma regra nova, só a fronteira entre as duas |
+| conciso | = | nada para escrever |
+
+### O que você faz
+
+`web-v3.3.1`. O `<textarea>` nativo da pergunta livre pode voltar a ser `<diletta-input type="long">`.

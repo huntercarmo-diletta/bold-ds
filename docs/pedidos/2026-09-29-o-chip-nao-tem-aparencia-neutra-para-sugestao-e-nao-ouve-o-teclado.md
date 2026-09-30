@@ -129,3 +129,63 @@ de 06/09 registrou, e o texto do CSS tem as duas linhas.
 
 O chat da área de pergunta e resposta de Relatórios do console (`core-flow-wa-painel`, `feat/painel`,
 29/09), a pedido da designer. Re-medi na tag que o console instala e na ponta.
+
+---
+
+## VEREDITO · OS DOIS DEFEITOS ENTRAM · A APARÊNCIA NEUTRA NASCE NO FILHO
+
+**pai**: ds-diletta **v3.3.1** · **data**: 2026-09-29
+
+| item | veredito |
+|---|---|
+| 1 · aparência neutra, para sugestão | **NASCE NO FILHO**, e fica registrado como 1º pedido |
+| 2 · Enter e Espaço na pílula | **ENTRA**: defeito |
+| 3 · a borda que a pintura declara | **ENTRA**: defeito |
+
+### O que decidiu
+
+Os itens 2 e 3 são defeito da cópia web, e você mediu os dois: zero `click` com Enter e Espaço, e a borda
+escrita e apagada na linha seguinte. **O item 3 é pior do que você contou**: o comentário da própria
+peça descreve o defeito do atalho que apaga a borda, e o bloco dele reintroduziu o mesmo defeito com
+longhand.
+
+O item 1 é outra coisa, e quem decide é a regra 3 desta casa: **variante nasce no filho, e sobe quando
+o SEGUNDO filho pede.** Os seus dois pedidos de 29/09 pedem o mesmo tom em dois modos, e são o mesmo
+filho. E a sua declaração contra si mesmo pesa: a spec do chip diz que ele *«NÃO SHALL ser usado como
+CTA»*, e sugestão que preenche o campo é ação. O Material 3 tem o chip de sugestão, e é por isso que a
+condição de subir é curta.
+
+### O que eu fiz
+
+- a pílula `role="button"` ouve Enter no `keydown` e Espaço no `keyup`, como o botão nativo; desligada,
+  não ouve;
+- a borda: o transparente vem **antes** da pintura, como reserva, e a borda que ela declara aparece.
+  No Chrome, `#d5dce1`, que é o `border` da referência.
+
+### O caminho de composição para o item 1
+
+No seu DS, e não no console: um `coreflow` web que pinte a pílula neutra por `::part(pilula)`, com
+`textPrimary` e `border`, e a escolhida por contorno e peso. O console consome dali. Assim a receita
+mora num lugar só, e é esse lugar que sobe quando o segundo filho pedir.
+
+### O que eu recusei, e a condição de reabrir
+
+**A aparência neutra na linguagem.** Reabre no segundo filho com pílula neutra medida. Aí ela sobe como
+eixo de tom do chip, com o seu pedido como o primeiro.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | os dois defeitos saem da peça, e não de cada consumidor |
+| escalabilidade | = | a variante sobe no segundo filho, como a regra manda |
+| aplicação | ↑ | a pílula passa a funcionar no teclado, e a borda aparece |
+| aderência ao mercado | ↑ | o teclado de botão é o do nativo; o chip de sugestão do Material 3 é a condição de subir |
+| robustez | ↑ | o gate cobra o teclado e a ordem da borda |
+| arquitetura limpa e simples | = | nenhum eixo novo na linguagem com um pedido só |
+| conciso | = | nada para escrever |
+
+### O que você faz
+
+`web-v3.3.1`, para o teclado e a borda. A pílula neutra vai para o seu DS web, e a `WaSugestao` passa a
+consumir de lá.
