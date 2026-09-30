@@ -20,6 +20,32 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [Não lançado]
+
+### O rodapé do `CoreflowPagina` vai até a borda do aparelho
+
+O `CoreflowPagina` embrulhava o `bottomBar` num `SafeArea` — e os dois rodapés que as telas passam ali
+já contam o inset sozinhos. O `CoreflowRodape.button` conta pelo `DilettaBottomHomeIndicator` do pai,
+que reserva o `viewPadding.bottom`; o `CoreflowAcaoDeRodape` soma o `padding.bottom` ao respiro dele.
+
+O `SafeArea` punha os 34 por fora e, por dentro, descontava o inset do `padding` **e** do
+`viewPadding` (`MediaQuery.removePadding`). O `DilettaBottomHomeIndicator` do pai lê
+`viewPadding.bottom`; com 0, entende que está no catálogo e desenha o traço de 134×5. Resultado,
+medido num iPhone 14 Pro na contestação do Pix: o vidro parava **34 pt acima da borda**, com um traço
+falso dentro dele (o "risco logo abaixo do botão") e a faixa do fundo da tela embaixo, em toda tela de
+`CoreflowPagina` com `.button`.
+
+O `SafeArea` saiu, e o gate `o_rodape_da_pagina_vai_ate_a_borda` mede as duas variantes. No `.button`:
+o vidro encosta em 852 de 852, o indicador vê `viewPadding.bottom` 34 e nenhum traço de catálogo é
+desenhado — as duas últimas porque o traço falso também mede 34 de altura, e um `removePadding` no
+slot levaria o vidro até a borda com o traço de volta. No `CoreflowAcaoDeRodape`, o botão continua
+exatamente onde estava (inset + 12).
+
+**Patch**: nenhuma API muda. Muda pixel nas telas de `CoreflowPagina` com `CoreflowRodape.button` — a
+barra inteira (vidro e botão) desce 34 pt, o traço falso some e a faixa também. Com `CoreflowAcaoDeRodape`, nada muda.
+
+Reportado pelo app, com print da tela de contestação.
+
 ## [0.120.0] — 2026-09-28
 
 ### O selo ganhou o desfecho de quem NÃO teve resposta
