@@ -61,6 +61,11 @@ uso: dart run coreflow:novo_filho --id <id> --nome <nome> --cor <#RRGGBB> [--sai
   File('${op.saida}/test/o_que_esta_instalado_e_o_que_o_pino_diz_test.dart')
       .writeAsStringSync(gateDoInstaladoDe(op));
   File('${op.saida}/web/tokens/.gitkeep').writeAsStringSync('');
+  // A pasta que o `pubspec` declara em `assets:` nasce com arquivo, pelo mesmo motivo da de cima: o
+  // git não versiona pasta vazia. Sem isto o filho gerado passava no disco de quem gerou e, em todo
+  // clone, o `analyze` reprovava com `asset_directory_does_not_exist` — medido em 30/09 no
+  // `exemplos/filho_do_coreflow`, onde a pasta existia vazia numa máquina e em nenhum remoto.
+  File('${op.saida}/assets/logos/.gitkeep').writeAsStringSync('');
 
   stdout.writeln('''
 escrito em ${op.saida}

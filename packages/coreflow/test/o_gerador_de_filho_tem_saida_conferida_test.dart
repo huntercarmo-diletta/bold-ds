@@ -76,6 +76,33 @@ void main() {
     }
   });
 
+  test('toda pasta de asset que o pubspec declara chega num clone', () {
+    // O git não versiona pasta vazia. Até 30/09 o gerador criava `assets/logos/` sem arquivo: o filho
+    // passava no disco de quem gerou e, em todo clone, o `analyze` reprovava com
+    // `asset_directory_does_not_exist`. Mede as duas pontas: a saída nova do gerador e o exemplo
+    // versionado.
+    final pastas = RegExp(r'^\s+- (assets/\S+/)\s*$', multiLine: true)
+        .allMatches(gerador.pubspecDe(op))
+        .map((m) => m.group(1)!)
+        .toList();
+    expect(pastas, isNotEmpty,
+        reason: 'o pubspec gerado não declara pasta de asset — esta régua estaria medindo o vazio');
+
+    final tmp = Directory.systemTemp.createTempSync('novo_filho_');
+    addTearDown(() => tmp.deleteSync(recursive: true));
+    final saida = '${tmp.path}/filho';
+    gerador.main(['--id', 'meuBanco', '--nome', 'Meu Banco', '--cor', '#1B5E20', '--saida', saida]);
+
+    for (final pasta in pastas) {
+      for (final filho in [saida, exemplo.path]) {
+        final d = Directory('$filho/$pasta');
+        expect(d.existsSync() && d.listSync().isNotEmpty, isTrue,
+            reason: '$filho/$pasta está vazia ou não existe: o git não a leva, e o analyze de um '
+                'clone reprova');
+      }
+    }
+  });
+
   test('o filho gerado recebe o MESMO avô que o pai pina', () {
     // Duas tags diferentes seriam duas versões da linguagem no mesmo produto: o Flutter desenhando
     // uma coisa e a web outra, sem nada acusando. O pai pina `vX` em Dart; o pacote web do filho
