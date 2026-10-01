@@ -195,3 +195,44 @@ A designer, no chat do Pix Automático do app (`claude_newbold-cobrar-pix-automa
 Re-medi na tag do pino e na ponta, rodei as cores do scheme dos dois modos num teste descartável sobre
 o `BoldPalette.bold`, e li antes de escrever o nosso pedido de 11/08, os dois de 29/09 com os
 vereditos, e o de 18/08 do `primary` como tinta.
+
+## VEREDITO · ENTRA — o não escolhido escreve em `fg` sobre `surface`, e o repouso da variante vira o do chip-base
+**pai**: ds-diletta **v3.7.0** · **data**: 2026-10-01
+
+### O que decidiu
+A sua frase: *«o `BoldChipDeFiltro` [...] pintava `color: escolhido ? s.onPrimary : s.fg`»*. A variante nasceu
+do seu pedido de 11/08 e herdou a tinta do chip-base sem ninguém decidir. É defeito, não variante: não espera
+segundo filho. Medi na `v3.7.0`: `diletta_input_chip.dart:188` (`s.primary`) e `:203` (`transparent`), iguais
+aos seus. O `primary #fe3976` sobre `bg #f4f3f6` dá **3,13**, 11 px a 400. Reproduzi o número.
+
+Opção **A**. Ela não acrescenta caso: o `.selecionavel` em repouso passa a pintar o fundo do chip-base
+(`s.surface`, `:204`), e o ramo `_selecionavel ? transparent` sai. A B pinta vinho no escuro (2,45 contra
+`bg`), que é a briga que o pedido quer tirar. Nas duas pontas: o `diletta-input-chip.js:155` troca
+`transparent` por `surface` e ganha `color: fg`. A spec ganha `fg` em `papeis` e a resolução regrava.
+
+### O que eu achei indo implementar
+- **o chip-base tem o mesmo defeito, e você o deixou de fora com razão.** A mesma `tinta` da `:188` pinta o
+  rótulo do chip-base em `primary` sobre `surface`: **3,46** na sua paleta clara. Ele não vai para `fg`, porque
+  o desenho do Figma `Input chips` é rosa. Vai para `primaryOnSurface`, que é a regra de 18/08 para texto e
+  preserva o desenho. É o décimo sítio daquela varredura, e entra no mesmo lote;
+- **o `///` da `:95` diz «os dois pares passam AA»**, e é falso na sua paleta. A frase sai;
+- **o `DilettaDevInfo` (`:271-272`) mente** sobre esta variante. Passa a ler os papéis do build.
+
+### O que eu recusei, e a condição de reabrir
+- a opção B (`primarySubtle`): reabre se um filho medir a pílula sumindo sobre `surface`, com a tela nomeada.
+
+### Os sete critérios
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | um ramo de fundo a menos; repouso igual ao do chip-base |
+| escalabilidade | ↑ | `fg` passa o piso em qualquer paleta; `primary` depende da marca |
+| aplicação | ↑ | 13 arquivos do app mudam sem tocar tela; o `ChipContornado` fica sem razão de existir |
+| aderência ao mercado | ↑ | o filter chip do M3 escreve o não escolhido em tom neutro e marca a escolha pelo fundo |
+| robustez | ↑ | teste de contraste ≥ 4,5 nos dois modos, na referência e numa paleta de `primary` claro |
+| arquitetura limpa e simples | ↑ | sai um caso especial, nenhum papel novo |
+| conciso | = | uma frase falsa do `///` sai, nenhuma entra |
+
+### O que você faz
+`ref:` a próxima minor do pai. Do seu lado: subir o pino, a casca não muda. Apagar o `ChipContornado` e
+trocar os dois usos dele pelo `CoreflowChipDeFiltro`. Eles pintam `textSecondary` e a peça vai pintar `fg`:
+se a designer quiser o secundário, é outro pedido, com o número dele.

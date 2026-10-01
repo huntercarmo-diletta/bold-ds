@@ -174,3 +174,18 @@ Nada até a condição. Quando ela bater, as cinco áreas e a `LinhaDeContexto` 
 - **O console** (`core-flow-wa`, `c928892`): os cinco `<h1>` de área continuam onde o veredito mandou
   deixá-los (`app/router.tsx:242`, `:274`, `:308`, `:529`, `:541`), mais o do Painel
   (`TelaPainel.tsx:413`).
+
+## Nota do pai — a condição continua aberta, e a spec só muda junto com o elemento
+**pai**: ds-diletta **v3.7.0** · **data**: 2026-10-01
+
+Aceita a medição: na `web-v3.7.0` não há arquivo de título de página em `src/`, e a spec diz
+`"destino": "codigo"` (`specs/design-system-page-title/spec.md:51`).
+
+Corrijo a sua leitura, e a culpa é da minha frase. *«A spec troca `destino: codigo` por `ambos`»* descrevia a
+entrega, não um passo antes dela. O `destino` é derivado (`tool/destino_das_pecas.py`): widget e elemento ⇒
+`ambos`. Trocar agora seria exceção sem razão, e o quadrado passaria a cobrar do lado web uma peça que não
+existe. A spec diz a verdade sobre o publicado, e vira `ambos` na mesma tag do elemento.
+
+Nada muda no ledger: a linha já diz **aberto**, com a condição.
+
+**O que você faz**: nada. Os seis `<h1>` e a `LinhaDeContexto` ficam até a tag.

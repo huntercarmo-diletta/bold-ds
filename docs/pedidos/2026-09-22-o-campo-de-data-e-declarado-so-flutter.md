@@ -149,3 +149,20 @@ tela, isso é a divergência declarada, não defeito: diga, e ela vira pedido co
   depende do `formAssociated`.
 - **O console** (`core-flow-wa`, `c928892`): os dois `<input type="date">` crus continuam em
   `relatorios/ui/SeletorDePeriodo.tsx:90` e `:103`, contados na catraca de peça crua com este motivo.
+
+## Nota do pai — o elemento atrasou com o lote dele, e o `codigo` da spec está certo até o elemento existir
+**pai**: ds-diletta **v3.7.0** · **data**: 2026-10-01
+
+Aceita a medição, corrijo uma frase. Medi hoje na `web-v3.7.0`: nenhum `diletta-date-field.js` em `src/`, e
+`specs/design-system-date-field/spec.md:58` diz `"destino": "codigo"`.
+
+**A correção**: a declaração **depende** do elemento. O `destino` é derivado, não digitado
+(`tool/destino_das_pecas.py`): tem widget e tem elemento ⇒ `ambos`. Escrever `ambos` hoje seria uma exceção
+sem razão, e o gate de paridade passaria a cobrar uma instância que não existe. A spec diz a verdade sobre o
+que está publicado. Ela muda sozinha no dia em que o elemento entrar.
+
+O atraso é meu e é o mesmo do [pedido do formulário](2026-09-22-o-botao-envia-um-formulario-do-qual-os-campos-nao-fazem-parte.md):
+o campo de data sai no lote do `formAssociated`, e esse lote não começou. No ledger, a entrega deixa de
+citar o CHANGELOG da `v2.6.0` e passa a `ABERTO, preso ao lote do formAssociated, sem data`.
+
+**O que você faz**: nada. Os dois `<input type="date">` do `SeletorDePeriodo.tsx` ficam crus até a tag.

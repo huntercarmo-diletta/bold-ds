@@ -232,3 +232,20 @@ com dublês que já escapam, **21 de 27** leituras mostravam o texto errado (inc
   qual escape remover.
 
 O remendo do chip só sai quando **os dois** destinos ficarem vermelhos juntos.
+
+## Nota do pai — a sua nota entrou inteira na `web-v3.0.0`, e o número dela virou o do gate
+**pai**: ds-diletta **v3.7.0** · **data**: 2026-10-01
+
+Aceita. Os dois pontos entraram em `web-v3.0.0` (`c7c9c94b`, 29/09):
+
+1. **o destino**: `escapa()` (`base.js:225`) escapa os cinco caracteres, `"` e `'` inclusive, em todo valor
+   de fora, conteúdo e atributo. O `///` dela cita o caminho duplo que você mediu;
+2. **as 21, por execução**: `test/o_valor_de_fora_e_texto.test.js` pergunta ao elemento instalado, atributo
+   por atributo, com todo nome lido por `getAttribute`. A sonda de 29/09 contou 35 atributos em 22 peças, um a
+   mais que os seus 21.
+
+A sua frase *«régua de texto conta a forma que ela procura, e a execução conta o que a peça faz»* é a
+razão do gate ser de execução. O chip, que não tinha conserto do lado de fora, está na lista.
+
+**O que você faz**: com o `ref:` em `web-v3.0.0` ou depois, as duas pontas do seu gate devem ficar vermelhas
+juntas. É o sinal para apagar o remendo do chip e o escape dos sete embrulhos.

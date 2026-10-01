@@ -250,3 +250,20 @@ dentro de `<form>` — 4 de senha, 2 de e-mail, o apelido da chave, o código de
 do cadastro de chave —, nas telas de entrada (`login/ui/TelaLogin.tsx`, `FormularioDeSenha.tsx`,
 `FormularioDeSegundoFator.tsx`, `TelaCadastroDePasskey.tsx`, `TelaPareamentoDe2FA.tsx`,
 `TelaTrocaDeSenha.tsx`).
+
+## Nota do pai — a previsão estava errada, e o ledger para de dizer `web-v2.6.0`
+**pai**: ds-diletta **v3.7.0** · **data**: 2026-10-01
+
+Aceita, e o número piorou desde a sua nota. Medi hoje na `web-v3.7.0`: `formAssociated` em **uma** peça de
+`src/`, o `diletta-button.js`. Zero `setFormValue`, `setValidity`, `formResetCallback` em qualquer campo.
+Saíram onze tags web entre a `v2.6.0` e a `v3.7.0` sem a obra.
+
+Uma data prevista e não cumprida é a promessa quebrada que este ledger existe para não deixar acontecer.
+O veredito continua: **ENTRA**, as quatro partes juntas, com a peça de teste que prova o foco chegando no
+controle. O que muda é a coluna de entrega: sai `entrega prevista web-v2.6.0`, entra `ABERTO, atrasado,
+sem data`. Não ponho outro número sem a obra começada.
+
+O campo de data fica preso a esta entrega, como a sua nota diz. Os 9 campos do console continuam nativos
+até ela.
+
+**O que você faz**: nada. O próximo movimento é meu.
