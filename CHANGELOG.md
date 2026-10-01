@@ -20,6 +20,73 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.121.0] — 2026-10-01
+
+### O avô sobe de `v2.5.0` para `v3.3.1` — os dois lados juntos, como a casa manda
+
+A pedido da Agatha (01/10): o passo 1 de uma atualização. Entre a `v2.5.0` e a `v3.3.1` há **uma
+major** do avô — a `3.0.0`, «o atributo é texto»: todo valor de fora que entra numa peça WEB vira
+texto, e quem escapava por fora passa a ver `&lt;` literal — e quatro degraus menores: `3.1.0` (o foco
+entra na peça, o estado ARIA chega ao controle, a paginação ganha alvo de 44), `3.2.0` (`helper` no
+seletor e no campo de data, `error` no campo de valor, placeholder em `textPlaceholder`, desligado
+apaga todo texto do campo), `3.3.0` (`contornoDeControle`, o papel derivado com piso de 3:1) e
+`3.3.1` (o cursor do `<diletta-input>` fica onde a pessoa escreve; o `<diletta-input-chip>` ouve
+Enter/Espaço e ganha a borda). Os cinco avisos estão em `docs/avisos/2026-09-29-release-v3.*.md`.
+
+Os seis pinos sobem juntos: três `ref:` em Dart (`coreflow`, `coreflow_design_system`, `catalog`) e
+três `package.json` na web (Bold, Norte Benk, o exemplo do gerador), mais o molde do
+`novo_filho.dart` — *uma língua, um número* é gate, não frase. O `npm install` foi **forçado por
+spec** nos três pacotes, porque o seco responde «up to date» e deixa a `2.5.0` no disco (a armadilha
+do `o_que_esta_instalado_e_o_que_o_pino_diz`); os três locks resolvem o mesmo commit da `web-v3.3.1`,
+e os dois `pubspec.lock` versionados (o exemplo da Diletta e o Meu Banco) dizem `3.3.1`.
+
+### O que mexeu de verdade, medido nos gates
+
+- **Nada quebrou, e nenhuma linha de código mudou.** A major é da WEB, e os três `index.js` desta
+  casa não escapam valor nem escrevem `innerHTML` — não há escape para apagar. O lado Dart entre as
+  duas tags é aditivo (`contornoDeControle` no scheme, `helper`/`error` nas peças de formulário):
+  nenhum símbolo renomeado ou removido, e este repo não constrói `DilettaScheme` à mão. Seis suítes
+  verdes com `analyze` limpo: Coreflow 172 · Bold 237 · Norte Benk 20 · exemplo da Diletta 12 ·
+  catálogo 112 · Meu Banco 15.
+- **Um token novo nas três folhas reemitidas, e nenhum valor antigo mudou** (medido no diff):
+  `--diletta-contornoDeControle` — Bold `#808080` no claro e `#737373` no escuro; Norte Benk e Meu
+  Banco `#74818b` nos dois modos — e o apelido `--cps-contornoDeControle`. A folha do Bold vai de 170
+  para 171 nomes; a do Norte Benk, de 91 para 92.
+- **Mexe pixel no Dart, pelo avô, nos quatro traços vazios**: a caixa do `DilettaCheckbox`, o rádio
+  do acessório de lista, o anel do `DilettaRadioList` e a célula vazia do `DilettaOtpInput` passam a
+  ler `contornoDeControle`. No Bold, a caixa e o rádio de lista liam `border` (`#00000012` no claro,
+  `#ffffff14` no escuro) e o anel e a célula liam o degrau cru `neutral07` (`#C6C6C6`, sem trocar de
+  modo); os quatro passam a `#808080` / `#737373`. No Norte Benk, de `border` `#d5dce1` (claro) e
+  `#ffffff14` (escuro) para `#74818b`. É o §1.4.11 chegando ao controle: 3:1 contra a superfície.
+- **O avô declara mais dois pixels que este repo não mede**: rótulo e ajuda de campo desligado
+  esmaecem (`3.2.0`), e o placeholder passa a ler `textPlaceholder` — no Bold, `textMuted` e
+  `textPlaceholder` têm o mesmo `#8a8398`, então aqui não muda nada.
+- **A foto do esquema não mudou**: os 25 papéis do `CoreflowScheme`, o Material, o lockup, o vidro e
+  a etiqueta medem o mesmo. O papel novo é do `DilettaScheme`, derivado, e não é nosso de redeclarar.
+
+### O que chega ao consumidor web por esta tag (`web-v0.121.0`)
+
+O `avo/` passa a ser a `web-v3.3.1`. **Todo atributo é texto** — quem escapava por fora apaga o escape
+no mesmo commit do pino (a tabela de migração está no aviso da `v3.0.0`, que conta onze `escapaHtml`
+no console). E o que entrou de `2.6.0` a `3.3.1`: `--diletta-larguraDaPagina`/`larguraDoConteudo`
+e `src/grade.js`; `porte` no campo e no seletor; setter em todo atributo observado (o React 19 deixa
+de estourar); `target`/`rel`/`download` nas seis peças que rendem `<a>`; `navegando` cancelável e
+`<diletta-tabs destinos>`; `role="cell"` na célula; `<diletta-empty-state>`, `<diletta-loading-spinner>`
+e `<diletta-detail-row>`; `host.focus()` levando ao controle e `aria-expanded`/`aria-haspopup`/
+`aria-pressed` chegando ao `<button>`; a paginação com alvo de 44 (o vão sobe de 4 para 14); `ajuda`
+no `<diletta-dropdown>`; `--diletta-contornoDeControle`; o cursor do `<diletta-input>` e o chip que
+ouve o teclado e tem borda quando não escolhido.
+
+### O Norte Benk sobe para `0.1.5`
+
+`pubspec.yaml` e `web/package.json` dizem o mesmo número, como o gate cobra. A folha dele ganha o
+token novo, e a `norte-benk-web-v0.1.5` sai desta mesma tag, como a `v0.1.4` saiu da `v0.120.1`.
+
+### O recibo
+
+`docs/recibos/v0.121.0.md` é o gate do README medido nesta árvore — a cobrança do pai de 28/09 diz que
+a `v0.121.0` só é aceita com ele verde, e o verificador o procura na árvore da tag.
+
 ## [0.120.1] — 2026-09-30
 
 ### O rodapé do `CoreflowPagina` vai até a borda do aparelho

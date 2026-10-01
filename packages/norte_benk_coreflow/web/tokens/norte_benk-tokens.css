@@ -1,10 +1,11 @@
-/* GERADO — NÃO editar à mão. Os 63 papéis da linguagem, com a tinta de Norte Benk.
+/* GERADO — NÃO editar à mão. Os 64 papéis da linguagem, com a tinta de Norte Benk.
    Carregue DEPOIS das folhas do avô: estas mesmas variáveis, com os valores deste produto. */
 :root {
   --diletta-bg: #ffffff;
   --diletta-bgMenu: #ffffff;
   --diletta-border: #d5dce1;
   --diletta-borderSubtle: #e9eef1;
+  --diletta-contornoDeControle: #74818b;
   --diletta-divider: #e9eef1;
   --diletta-error: #b3251d;
   --diletta-errorBorder: #e8837c;
@@ -72,6 +73,7 @@
     --diletta-bgMenu: #20262a;
     --diletta-border: #ffffff14;
     --diletta-borderSubtle: #20262a;
+    --diletta-contornoDeControle: #74818b;
     --diletta-divider: #ffffff14;
     --diletta-error: #d8483f;
     --diletta-errorBorder: #b3251d;
@@ -139,6 +141,7 @@
   --diletta-bgMenu: #20262a;
   --diletta-border: #ffffff14;
   --diletta-borderSubtle: #20262a;
+  --diletta-contornoDeControle: #74818b;
   --diletta-divider: #ffffff14;
   --diletta-error: #d8483f;
   --diletta-errorBorder: #b3251d;
@@ -299,13 +302,14 @@
 }
 
 /* PONTE: os nomes com o prefixo antigo, apontando para os da linguagem.
-   91 apelidos. Alias não copia valor, então o escuro segue o seletor. */
+   92 apelidos. Alias não copia valor, então o escuro segue o seletor. */
 :root {
   --cps-background: var(--diletta-background);
   --cps-bg: var(--diletta-bg);
   --cps-bgMenu: var(--diletta-bgMenu);
   --cps-border: var(--diletta-border);
   --cps-borderSubtle: var(--diletta-borderSubtle);
+  --cps-contornoDeControle: var(--diletta-contornoDeControle);
   --cps-danger: var(--diletta-danger);
   --cps-divider: var(--diletta-divider);
   --cps-error: var(--diletta-error);
