@@ -20,6 +20,25 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.122.1] — 2026-10-05
+
+### O card de saldo fala com o leitor de tela — patch sobre a `0.122.0`, no mesmo dia
+
+Achado do `auditor-acessibilidade` do app, na PR do saldo bloqueado, antes de a tag anterior chegar
+a uma tela publicada. Duas linhas do `CoreflowSaldo` eram `DilettaTappable` sem papel: a do bloqueado
+(nova na `0.122.0`) e o atalho do extrato (de sempre). O leitor dizia «R$ 1.500,00 bloqueados» sem
+dizer que se toca, e a linha é a única entrada da Home para a explicação do bloqueio (WCAG 4.1.2).
+
+- as duas linhas passam a ser **um nó só**: botão, com nome e dica (`Abre a explicação do bloqueio`;
+  `Abre o extrato`), no arranjo do `DilettaTextLink` do avô — `MergeSemantics` + `Semantics(button)`
+  por fora, o texto de dentro fora da árvore para não repetir;
+- com o olho fechado a linha se chama «Saldo bloqueado, valor oculto» e o valor grande «valor oculto»
+  (WCAG 1.3.1): o leitor não soletra a máscara nem vaza o número;
+- nada muda no desenho, no layout nem na API. Teste novo em `o_saldo_test.dart` (15 no arquivo).
+
+Avô parado em `v3.3.1`; lado web sem mudança, a `web-v0.122.1` sai só pelo número. Recibo em
+`docs/recibos/v0.122.1.md`.
+
 ## [0.122.0] — 2026-10-05
 
 ### O card de saldo aprende o saldo BLOQUEADO — `rotuloDoValor` e `bloqueado` no `CoreflowSaldo`
