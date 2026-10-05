@@ -18,6 +18,147 @@ A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
 
 ---
 
+## Rodada de 2026-10-05 · o card de saldo aprende o saldo BLOQUEADO
+
+Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat do change `saldo-bloqueado-minimo` do app
+(decisão D3 do `design.md` dele), que a Agatha aprovou em 05/10 para entrar em turnos. O escopo é **um
+item, e ele é nosso**: a peça mora em `packages/coreflow`. Medido na `main` deste repo (`f579c16`, a
+`v0.121.0`), na tag que o app vendoriza (`v0.120.0`; o `coreflow_saldo.dart` é o mesmo byte a byte nas
+duas), no pino do avô que o pai usa (`v3.3.1`, `packages/coreflow/pubspec.yaml:23`) e na ponta dele
+(`v3.9.0`). A coleta dos outros chats **não foi feita** nesta rodada.
+
+**Chats lidos**:
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| o change do saldo bloqueado | `claude_newbold-saldo-bloqueado` (`feat/saldo-bloqueado-minimo`) | 05/10 | o item 1, passado pelo chat que chamou. **A transcrição não foi lida**, só o resumo; cada afirmação foi re-medida no código das duas pontas e no app |
+| os outros chats da janela (29/09 noite → agora) | — | — | **não lidos nesta rodada** |
+
+### 0 · O QUE O AVÔ RESPONDEU desde 29/09 — o chip entra na `v3.8.0`, e cinco notas
+
+Duas branches dele, integradas nesta rodada na `main`: `nota/vereditos-2026-10-01` (`90ed744`, 01/10) e
+`nota/aviso-v3-8-0` (`c8108ba`, 02/10, o aviso
+[`avisos/2026-10-02-release-v3.8.0.md`](avisos/2026-10-02-release-v3.8.0.md)).
+
+- **[o chip selecionável não escolhido escreve em `primary`](pedidos/2026-09-30-o-chip-selecionavel-nao-escolhido-escreve-o-rotulo-em-primary.md)
+  — ENTRA na `v3.8.0`**, pela opção A: `fg` sobre `surface`, o ramo `transparent` sai. Ele achou o mesmo
+  defeito no chip-base (3,46) e o leva a `primaryOnSurface`. Conferido na tag:
+  `widgets/diletta_input_chip.dart:190-200` e `diletta-input-chip.js:157`. Linha 41 do ledger dele;
+- **cinco notas**, todas em pedidos já julgados: o escape do rótulo **entrou** na `web-v3.0.0`; o
+  segmented com 44 **entrou** na `web-v2.7.0`; o formulário e o campo de data passam a **aberto, atrasado,
+  sem data** (o lote do `formAssociated` não começou); o título de página segue aberto com a condição.
+
+O índice foi atualizado nas seis linhas. **Deriva**: o app vendoriza o filho `v0.120.0` com o avô `v2.5.0`
+em `origin/development`, em `origin/release/homologation` e em `feat/saldo-bloqueado-minimo`
+(`claude_newbold/packages/ds_vendor.json`, bloco `"pai"` = **avô**); a branch
+`feat/grupos-de-limite-administracao` ainda está no filho `v0.113.0` com o avô `v0.204.0`. O pai prende o
+avô em `v3.3.1`. A ponta do avô é `v3.9.0`.
+
+### 1 · NOSSO — o `CoreflowSaldo` ganha `rotuloDoValor` e `bloqueado`
+
+**Por que está aqui e não em `pedidos/`**: o Coreflow é nosso, e pedido é o que vai a quem decide fora
+desta casa. O precedente é o de 18/09: o único arquivo de `pedidos/` endereçado ao pai está em
+`_foraDoIndice` do gate (`todo_pedido_esta_no_indice_test.dart`) com o motivo *«quem pede é o app e quem
+responde é esta casa»*, e é carregado nesta fila. Este segue o mesmo caminho, no molde do contrato.
+
+- **Falta**: o card de saldo não tem rótulo acima do número nem linha para o que está bloqueado.
+  `CoreflowSaldo` (`packages/coreflow/lib/src/coreflow_saldo.dart:32-41`) aceita `valor`, `oculto`,
+  `aoAbrirExtrato`, `entradas`, `saidas`, `carregandoValor` e `carregandoTotais`, e nada mais. O app passa
+  a conhecer saldo bloqueado (judicial, MED) e pede dois parâmetros **opcionais**, com a peça **idêntica à
+  de hoje** quando os dois faltam:
+  1. **`rotuloDoValor`** (`String?`): rótulo curto acima do número grande. No app, «Disponível para usar»,
+     só quando há bloqueio;
+  2. **`bloqueado`**: um descritor com `valor` já formatado e `aoTocar`. A peça escreve
+     «R$ 1.500,00 bloqueados» numa linha abaixo do valor, com o glifo `lock-light` e o chevron. Com
+     `oculto`, a linha usa a **mesma máscara do valor** (`_mascaraDoValor`, `R$ ••••••`, `:62`). Sem
+     `bloqueado`, nenhuma linha e nenhum espaço reservado.
+- **Número**: **3 sítios** no app, todos dentro de `NegritoDoSistemaMedido`, medidos no worktree
+  `claude_newbold-saldo-bloqueado`: `home_tab_redesign.dart:377`, `extrato_tab_redesign.dart:251` e
+  `personalizacao_screen.dart:281`. **O chat citou `:351`, `:230` e `:279`, e as linhas são essas.**
+  Zero usos de `DilettaIcons.lockLight` no pai e no app hoje.
+- **Já tentei**: o app **não** monta a linha embaixo do card. A regra do D3 é *«a peça do DS vence o que
+  o app monta à mão; uma linha provisória vira permanente»*. As outras telas do change (D4 a D6) entram
+  sem esperar esta.
+- **Conferi no avô**: não falta vocabulário, então **nada vai a ele**.
+  - `DilettaIcons.lockLight` existe em `diletta_icon_tokens.dart:250` na `v2.5.0`, na `v3.3.1` e na
+    `v3.9.0`, com `assets/icons/lock-light.svg.vec` nas três;
+  - o rótulo acima do número já tem precedente na linguagem: `DilettaAmountDisplay.label`
+    (`widgets/diletta_amount_display.dart:36`, pintado em `DilettaType.subheading` com `fg`, `:84-90`,
+    `v3.3.1`, igual na `v3.9.0`);
+  - o alvo de 44 fora do desenho é o do chip selecionável: `ConstrainedBox(minHeight: 44)` em
+    `widgets/diletta_input_chip.dart:248-251` (`v3.3.1`), e o nosso contrato o exige em
+    `coreflow_contratos.dart:638`;
+  - `textSecondary` é papel do esquema (`diletta_scheme.dart:239`).
+
+  `DilettaManifesto.busca` (pino `v3.3.1`): `'saldo'` → `[design-system-amount-display]`;
+  `'saldo bloqueado'` → `[]`; `'bloqueado'` → `[design-system-journey-step]` (é o passo travado, outro
+  assunto); `'cadeado'`, `'retido'` e `'balance'` → `[]`.
+- **Derivável?** **Sim, inteiro**: `DilettaText` + `DilettaIcon(lockLight)` + `DilettaTappable` +
+  `angleRightSolid`, o mesmo chevron que o `_Extrato` usa (`:163`). Não precisa de papel, token nem peça
+  nova. O lado web não entra: o `CoreflowSaldo` só tem lado Flutter
+  (`o_desenho_da_web_e_o_do_mobile_test.dart:410`).
+- **O que a peça precisa garantir** (é como o pai vai saber que funcionou):
+  - sem os dois parâmetros, a árvore e a altura são as de hoje (teste de igualdade com a `v0.121.0`);
+  - **ocultar não mexe na linha**: a largura reservada vale para ela também, como o requisito
+    *«mascarar NÃO desloca a tela»* do contrato (`coreflow_contratos.dart`, `_saldo`) já exige para o
+    valor. Sem isso, o chevron anda a cada toque no olho;
+  - `oculto` mascara o valor bloqueado com a mesma máscara do valor principal (e não com a dos totais,
+    `_mascaraDoTotal`, `:63`);
+  - a linha tocável mede **44 de altura** com o desenho no tamanho dele;
+  - `aoTocar` nulo **não desenha alvo morto**: sem chevron e sem toque, pelo outro requisito do contrato;
+  - o glifo e o texto vão juntos: a cor não é a única informação. O texto do bloqueado fica em
+    `textSecondary` ou `fg`, e **o contraste sobre o vidro não foi medido** (abaixo);
+  - o `DilettaDevInfo` (`:70-77`) declara `rotuloDoValor` e `bloqueado` como presente/ausente;
+  - o contrato `_saldo` (`coreflow_contratos.dart:97`) ganha os dois requisitos, e o bloco do catálogo
+    (`packages/catalog/lib/ds_do_bold.dart:2913`) ganha as duas props e o `codegen`, senão o catálogo
+    mostra um card que o aparelho não mostra.
+- **Nomes** (vêm do change): «disponível» é o número grande; «bloqueado», nunca «retido», «reservado» ou
+  «indisponível»; «total» só na folha e na recusa, **nunca no card**.
+- **Se a resposta for não**: a Home fica sem a linha, e o bloqueio aparece só na folha e na recusa
+  (D4 a D6).
+- **Não estou pedindo**: tom de erro ou de alerta para o bloqueado, o total no card, mudança no atalho do
+  Extrato, nada no avô.
+- **Como cheguei aqui**: o pedido do chat do change, re-medido aqui; a referência visual é do Figma
+  (Novo Bold App `3hrpcqIWoXlibjTRkpKc7c`, seção `735:1883`, andaime `735:1890`, tela `736:1662`) e do
+  wireframe aprovado (Artifact `QKkv8KWgGpfRsGjWGru4FJ`, tela 1), **nenhum dos dois aberto por mim**.
+
+**Três contradições que a medição achou, nenhuma corrigida**:
+1. o contrato diz *«Só na home, uma vez. Saldo repetido em duas telas cria duas fontes de verdade
+   visual»* (`coreflow_contratos.dart`, `_saldo`), e o app usa a peça em **três** telas: Home, aba
+   Extrato e a prévia da Personalização. A linha nova deixa a pergunta mais cara: ela aparece nas três?
+2. o `## Compõe` do mesmo contrato lista `DilettaAmountDisplay` e `DilettaBox`, e o código não usa
+   nenhum dos dois: compõe `DilettaGlassSurface`, `DilettaText`, `DilettaStatusTag`, `DilettaIcon`,
+   `DilettaTappable`, `DilettaShimmer` e `DilettaSkeleton`;
+3. o `_Extrato` (`:150-166`) é tocável **sem** o alvo de 44: a linha nova seria o primeiro alvo de 44
+   do card. E o cabeçalho do arquivo (`:3-5`) ainda diz *«Nasce no filho»*, mas a peça mora no pai.
+
+### 2 · Nosso, e espera decisão dela — em ordem de dependência
+
+1. **implementar a peça no pai**: commit na `main` deste repo, sem veredito (regra de 24/09). Mexe em
+   `coreflow_saldo.dart`, no contrato `_saldo`, no `packages/coreflow/test/o_saldo_test.dart` e no
+   bloco `_saldo` do catálogo. **Não foi feito nesta rodada**: o pedido foi só subir o item;
+2. **a tag** (é dela): a próxima minor depois da `v0.121.0`. **Cuidado com o pacote**: a `v0.121.0`
+   já leva o avô `v3.3.1`, e o app está no avô `v2.5.0`. Vendorizar a tag nova no app leva junto a
+   subida do avô por cima da versão maior `v3.0.0`. Se quiser o chip consertado na mesma ida, o pino do
+   avô precisa subir antes para `v3.8.0` ou depois;
+3. **vendorizar no app**, na branch do change:
+   `DS_FILHO_REPO=~/Desktop/bold-ds-pacote DS_PAI_REPO=~/Desktop/ds-diletta sh tool/ds_vendor.sh <tag>`,
+   e depois os sítios do app passam os dois parâmetros. Isso é trabalho do app, não daqui.
+
+### 3 · O que não foi medido nesta rodada
+
+- o Figma e o wireframe: não abri nenhum dos dois. As medidas de desenho são as do chat;
+- o contraste do texto do bloqueado **sobre o vidro**: o vidro é translúcido e depende do fundo da tela,
+  então não há um número só. Nada foi calculado;
+- a transcrição do chat do change e os outros chats da janela;
+- **o índice tem dez linhas desatualizadas**: na seção da ferramenta, os pedidos de 21 a 23/08 (do
+  [material do card](pedidos/2026-08-21-o-material-do-card-e-declaracao-e-este-produto-tem-os-dois.md)
+  à [etiqueta grande](pedidos/2026-08-23-a-etiqueta-grande-e-uma-classe-de-tamanho-que-a-linguagem-nao-tem.md))
+  dizem *«sem veredito»*, mas todos são para `ds-diletta` e trazem o bloco de veredito no próprio
+  arquivo. Não foram relidos nem corrigidos nesta rodada.
+
+---
+
 ## Rodada de 2026-09-29 · noite
 
 Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat do webadmin com a autorização dela
