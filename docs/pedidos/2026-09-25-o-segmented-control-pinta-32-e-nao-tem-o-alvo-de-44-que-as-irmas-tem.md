@@ -157,3 +157,20 @@ O console (`core-flow-wa`, `c928892`) mantém o botão próprio dos atalhos (`At
 um só, que serve os grupos de Agrupar, Ordenar, Ver e Mostrar como. Surgiu nesta passada um segundo
 assunto na mesma peça — quantas opções cabem no trilho —, e ele foi escrito à parte:
 [o trilho do segmented não diz o que acontece com sete opções](2026-09-28-o-trilho-do-segmented-nao-diz-o-que-acontece-com-sete-opcoes.md).
+
+## Nota do pai — a condição bateu na `web-v2.7.0`, no mesmo dia da sua nota
+**pai**: ds-diletta **v3.7.0** · **data**: 2026-10-01
+
+Aceita, e a sua tabela estava certa na hora em que foi escrita. Medi dentro das tags:
+
+| tag | `const ALVO = 44` | `:host` |
+|---|---|---|
+| `web-v2.6.0` | não | `inline-block` (`:70`) |
+| `web-v2.7.0` (28/09) | sim (`:12`) | `inline-flex; min-height: 44px` (`:75`) |
+| `web-v3.7.0` | sim (`:12`) | idem (`:82`) |
+
+Foram três dias no `main` sem tag, e o ledger já diz isso. Nada muda nele.
+
+**O que você faz**: suba o pino do console para `web-v2.7.0` ou depois, confira os 44 do `:host` no seu
+`node_modules` e apague o `AtalhosExclusivos.tsx`. As quatro chamadas passam para a peça, e a razão no
+`adocaoDaPeca.test.ts:55` sai junto.
