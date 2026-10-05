@@ -216,13 +216,27 @@ class _Extrato extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DilettaTappable(
-      onTap: aoTocar,
-      child: Row(mainAxisSize: MainAxisSize.min, children: [
-        DilettaText('Extrato', style: DilettaType.button.copyWith(color: cor)),
-        DilettaGap.w(DilettaSpacing.s1),
-        DilettaIcon(name: DilettaIcons.angleRightSolid, size: 14, color: cor),
-      ]),
+    // UM nó para o leitor de tela: botão, com nome e dica. Sem isto o `DilettaTappable` publica o
+    // gesto sem papel e o texto solto ao lado — «Extrato», e não «Extrato, botão». É o mesmo
+    // arranjo do `DilettaTextLink` do avô, com o texto de dentro fora da árvore para não repetir.
+    return MergeSemantics(
+      child: Semantics(
+        button: true,
+        label: 'Extrato',
+        hint: 'Abre o extrato',
+        child: DilettaTappable(
+          onTap: aoTocar,
+          child: ExcludeSemantics(
+            child: Row(mainAxisSize: MainAxisSize.min, children: [
+              DilettaText('Extrato',
+                  style: DilettaType.button.copyWith(color: cor)),
+              DilettaGap.w(DilettaSpacing.s1),
+              DilettaIcon(
+                  name: DilettaIcons.angleRightSolid, size: 14, color: cor),
+            ]),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -265,11 +279,25 @@ class _Bloqueado extends StatelessWidget {
         DilettaIcon(name: DilettaIcons.angleRightSolid, size: 14, color: cor),
       ],
     ]);
-    if (aoTocar == null) return linha;
+    // O nome para o leitor de tela. Com o olho fechado ele não lê a máscara («R cifrão, bullet
+    // bullet…») nem vaza o número: diz que está oculto.
+    final nome = oculto ? 'Saldo bloqueado, valor oculto' : '$valor bloqueados';
+    if (aoTocar == null) {
+      return Semantics(label: nome, excludeSemantics: true, child: linha);
+    }
     // O toque fica POR FORA do alvo: é a caixa de 44 inteira que responde, não só a linha de 16.
-    return DilettaTappable(
-      onTap: aoTocar,
-      child: DilettaAlvoDeToque(child: linha),
+    // E é UM nó, botão com nome e dica — esta linha é a única entrada da Home para a explicação
+    // do bloqueio, e um gesto sem papel é «R\$ 1.500,00 bloqueados» sem dizer que se toca.
+    return MergeSemantics(
+      child: Semantics(
+        button: true,
+        label: nome,
+        hint: 'Abre a explicação do bloqueio',
+        child: DilettaTappable(
+          onTap: aoTocar,
+          child: ExcludeSemantics(child: DilettaAlvoDeToque(child: linha)),
+        ),
+      ),
     );
   }
 }
@@ -334,10 +362,16 @@ class _ValorComLarguraReservada extends StatelessWidget {
     // com clip não tem para onde sobrar. Na tela do app isso apareceu como
     // `R$ 913,2` num saldo de R$ 913,25 — e não é arredondamento de valor, é um
     // dígito faltando num número que a pessoa confere.
-    return SizedBox(
-      width: larguraDaCaixaDoSaldo(
-          math.max(_largura(context, valor), _largura(context, mascara))),
-      child: DilettaText(oculto ? mascara : valor, style: estilo, maxLines: 1),
+    return Semantics(
+      // Oculto, o leitor de tela diz «valor oculto» — e não soletra a máscara nem vaza o número.
+      label: oculto ? 'valor oculto' : valor,
+      excludeSemantics: true,
+      child: SizedBox(
+        width: larguraDaCaixaDoSaldo(
+            math.max(_largura(context, valor), _largura(context, mascara))),
+        child:
+            DilettaText(oculto ? mascara : valor, style: estilo, maxLines: 1),
+      ),
     );
   }
 }

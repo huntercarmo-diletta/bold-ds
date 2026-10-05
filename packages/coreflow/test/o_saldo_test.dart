@@ -275,4 +275,51 @@ void main() {
     expect(info.props['rotuloDoValor'], 'presente');
     expect(info.props['bloqueado'], 'ausente');
   });
+
+  testWidgets(
+      'para o leitor de tela a linha é UM botão com nome — e oculta não diz o número',
+      (t) async {
+    final handle = t.ensureSemantics();
+    await t.pumpWidget(montar(CoreflowSaldo(
+      valor: r'R$ 4.250,00',
+      bloqueado: r'R$ 1.500,00',
+      aoTocarNoBloqueado: () {},
+      aoAbrirExtrato: () {},
+    )));
+    await t.pump(const Duration(milliseconds: 50));
+    expect(
+        t.getSemantics(find.bySemanticsLabel(r'R$ 1.500,00 bloqueados')),
+        matchesSemantics(
+            isButton: true,
+            isFocusable: true,
+            hasTapAction: true,
+            hasFocusAction: true,
+            label: r'R$ 1.500,00 bloqueados',
+            hint: 'Abre a explicação do bloqueio'));
+    expect(
+        t.getSemantics(find.bySemanticsLabel('Extrato')),
+        matchesSemantics(
+            isButton: true,
+            isFocusable: true,
+            hasTapAction: true,
+            hasFocusAction: true,
+            label: 'Extrato',
+            hint: 'Abre o extrato'));
+    expect(t.getSemantics(find.bySemanticsLabel(r'R$ 4.250,00')),
+        matchesSemantics(label: r'R$ 4.250,00'));
+
+    await t.pumpWidget(montar(CoreflowSaldo(
+      valor: r'R$ 4.250,00',
+      oculto: true,
+      bloqueado: r'R$ 1.500,00',
+      aoTocarNoBloqueado: () {},
+    )));
+    await t.pump(const Duration(milliseconds: 50));
+    expect(
+        find.bySemanticsLabel('Saldo bloqueado, valor oculto'), findsOneWidget);
+    expect(find.bySemanticsLabel('valor oculto'), findsOneWidget);
+    expect(find.bySemanticsLabel(RegExp('1.500')), findsNothing,
+        reason: 'o número oculto não pode vazar pela semântica');
+    handle.dispose();
+  });
 }
