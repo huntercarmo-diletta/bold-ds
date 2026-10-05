@@ -2912,15 +2912,19 @@ BlockDef _pontosDePagina() => BlockDef(
 
 BlockDef _saldo() => BlockDef(
       type: 'saldo',
-      acoes: const {'aoAbrirExtrato': 'abrirExtrato'},
+      acoes: const {'aoAbrirExtrato': 'abrirExtrato', 'aoTocarNoBloqueado': 'abrirSaldoBloqueado'},
       ctor: 'ds.CoreflowSaldo',
-      args: const {'valor': Arg.texto('valor'), 'entradas': Arg.texto('entradas'), 'saidas': Arg.texto('saidas'), 'oculto': Arg.bool('oculto')},
+      args: const {'valor': Arg.texto('valor'), 'entradas': Arg.texto('entradas'), 'saidas': Arg.texto('saidas'), 'oculto': Arg.bool('oculto'), 'rotuloDoValor': Arg.texto('rotuloDoValor'), 'bloqueado': Arg.texto('bloqueado')},
       label: 'Saldo (home)',
       props: const {
         'valor': PropDef('text', bindable: true, dartType: 'String'),
         'entradas': PropDef('text', bindable: true, dartType: 'String'),
         'saidas': PropDef('text', bindable: true, dartType: 'String'),
         'oculto': PropDef('bool'),
+        // O SALDO BLOQUEADO (05/10): o rótulo acima do número e a linha abaixo dele. Vazios, a peça
+        // é a de sempre — o aparelho só os passa quando há bloqueio, e o board faz igual.
+        'rotuloDoValor': PropDef('text', bindable: true, dartType: 'String'),
+        'bloqueado': PropDef('text', bindable: true, dartType: 'String'),
         // O ATALHO é prop porque ele SOME numa tela: no extrato o card não tem "Extrato ›", e a
         // razão é do produto — quem já está no extrato não tem pra onde ir. O componente já sabia
         // fazer isso (`aoAbrirExtrato` nulo esconde o atalho, e é requisito escrito no contrato);
@@ -2934,6 +2938,8 @@ BlockDef _saldo() => BlockDef(
         'saidas': 'R\$ 120,00',
         'oculto': false,
         'atalhoDoExtrato': true,
+        'rotuloDoValor': '',
+        'bloqueado': '',
       },
       build: (p) => CoreflowSaldo(
         valor: '${p['valor']}',
@@ -2941,12 +2947,17 @@ BlockDef _saldo() => BlockDef(
         saidas: _vazio(p['saidas']) ? null : '${p['saidas']}',
         oculto: p['oculto'] == true,
         aoAbrirExtrato: p['atalhoDoExtrato'] == false ? null : () {},
+        rotuloDoValor: _vazio(p['rotuloDoValor']) ? null : '${p['rotuloDoValor']}',
+        bloqueado: _vazio(p['bloqueado']) ? null : '${p['bloqueado']}',
+        aoTocarNoBloqueado: _vazio(p['bloqueado']) ? null : () {},
       ),
       codegen: (p) => 'ds.CoreflowSaldo(valor: ${_str(p['valor'])}'
           '${_vazio(p['entradas']) ? '' : ', entradas: ${_str(p['entradas'])}'}'
           '${_vazio(p['saidas']) ? '' : ', saidas: ${_str(p['saidas'])}'}'
           '${p['oculto'] == true ? ', oculto: true' : ''}'
-          '${p['atalhoDoExtrato'] == false ? '' : ', aoAbrirExtrato: abrirExtrato'})',
+          '${p['atalhoDoExtrato'] == false ? '' : ', aoAbrirExtrato: abrirExtrato'}'
+          '${_vazio(p['rotuloDoValor']) ? '' : ', rotuloDoValor: ${_str(p['rotuloDoValor'])}'}'
+          '${_vazio(p['bloqueado']) ? '' : ', bloqueado: ${_str(p['bloqueado'])}, aoTocarNoBloqueado: abrirSaldoBloqueado'})',
     );
 
 BlockDef _seloQuantico() => BlockDef(

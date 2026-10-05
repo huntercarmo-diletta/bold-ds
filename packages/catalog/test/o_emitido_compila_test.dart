@@ -216,6 +216,7 @@ class TelaGerada extends StatelessWidget {
   void aoTocar() {}
   void aoTocarNaLinha() {}
   void abrirExtrato() {}
+  void abrirSaldoBloqueado() {}
   void aoTrocarAba(int i) {}
   void aoTrocarSegmento(int i) {}
   void aoTrocar(bool v) {}

@@ -109,6 +109,8 @@ Só na home, uma vez. Saldo repetido em duas telas cria duas fontes de verdade v
 - passe o valor JÁ FORMATADO: moeda é decisão de locale, e locale é do produto
 - use `oculto` pra o modo privacidade em vez de trocar o texto por asteriscos na tela
 - deixe entradas e saídas nulas quando o período não tem movimento — o componente encolhe
+- com saldo bloqueado, nomeie o número grande (`rotuloDoValor: 'Disponível para usar'`) e passe o
+  `bloqueado` já formatado; sem bloqueio, deixe os dois nulos e a peça é a de sempre
 
 ### Evite
 - recalcular a largura do valor a cada troca: a largura é RESERVADA de propósito, pra mascarar não
@@ -120,19 +122,32 @@ Só na home, uma vez. Saldo repetido em duas telas cria duas fontes de verdade v
 
 ## Compõe
 
-- DilettaAmountDisplay
-- DilettaBox
+- DilettaGlassSurface
 - DilettaText
+- DilettaStatusTag
 - DilettaIcon
+- DilettaTappable
+- DilettaAlvoDeToque
+- DilettaShimmer
+- DilettaSkeleton
 
 ## Requirements
 
 ### Requirement: mascarar NÃO desloca a tela
-Com `oculto: true` o componente SHALL manter a mesma largura do valor visível. Sem isso a tela dança a
-cada toque no olho.
+Com `oculto: true` o componente SHALL manter a mesma largura do valor visível — e a da linha do
+bloqueado, pelo mesmo motivo. Sem isso a tela dança a cada toque no olho, e o chevron anda.
 
 ### Requirement: o extrato é opcional e explícito
 `aoAbrirExtrato` nulo SHALL esconder o atalho, não desenhar um alvo morto.
+
+### Requirement: o bloqueado é opcional e não reserva espaço
+Sem `rotuloDoValor` e sem `bloqueado` a peça SHALL ser a de antes: nenhuma linha, nenhum espaço
+reservado. Com `bloqueado`, a linha SHALL levar o glifo junto com o texto — cor não é a única
+informação — e SHALL mascarar com a máscara do VALOR, não com a dos totais.
+
+### Requirement: a linha do bloqueado toca com 44, ou não toca
+Com `aoTocarNoBloqueado` a linha SHALL ter 44 de altura com o desenho no tamanho dele. Sem ele, a
+linha SHALL ficar sem chevron e sem toque.
 ''';
 
 const _copiar = r'''

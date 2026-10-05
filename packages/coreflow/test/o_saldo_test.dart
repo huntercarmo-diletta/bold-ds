@@ -65,7 +65,8 @@ void main() {
     expect(await largura(oculto: false), await largura(oculto: true));
   });
 
-  testWidgets('SALDO CURTO ocultado ainda cabe — a máscara é mais larga que ele',
+  testWidgets(
+      'SALDO CURTO ocultado ainda cabe — a máscara é mais larga que ele',
       (t) async {
     // O defeito de 11/08, achado por print: saldo baixo, olho fechado, e o card
     // mostrava só `R$`. A largura reservada era a do valor REAL, e isso só
@@ -102,7 +103,8 @@ void main() {
         .width;
 
     expect(caixa, greaterThanOrEqualTo(precisa),
-        reason: 'a máscara `R\$ ••••••` tem mais caracteres que `R\$ 0,14`; se a '
+        reason:
+            'a máscara `R\$ ••••••` tem mais caracteres que `R\$ 0,14`; se a '
             'caixa não a comporta, os pontos são cortados e o saldo some');
   });
 
@@ -157,5 +159,120 @@ void main() {
     expect(find.text(r'R$ 300,00'), findsNothing,
         reason: 'o selo não pode aparecer antes do skeleton dele sair');
     expect(find.byType(DilettaSkeleton), findsNWidgets(3));
+  });
+
+  // ── O BLOQUEADO (05/10) ──────────────────────────────────────────────────────────────────────
+
+  testWidgets(
+      'sem rótulo e sem bloqueado a peça é a de antes — nada a mais na árvore',
+      (t) async {
+    await t.pumpWidget(montar(const CoreflowSaldo(valor: r'R$ 4.250,00')));
+    await t.pump(const Duration(milliseconds: 50));
+    expect(find.byType(DilettaText), findsNWidgets(2),
+        reason:
+            '«Seu saldo» e o valor. Linha a mais aqui é espaço reservado que o pedido proibiu');
+    expect(find.byType(DilettaAlvoDeToque), findsNothing);
+    expect(find.textContaining('bloqueados'), findsNothing);
+  });
+
+  testWidgets(
+      'o rótulo fica ACIMA do número, e o bloqueado abaixo, com a palavra',
+      (t) async {
+    await t.pumpWidget(montar(CoreflowSaldo(
+      valor: r'R$ 4.250,00',
+      rotuloDoValor: 'Disponível para usar',
+      bloqueado: r'R$ 1.500,00',
+      aoTocarNoBloqueado: () {},
+    )));
+    await t.pump(const Duration(milliseconds: 50));
+
+    final rotulo = t.getTopLeft(find.text('Disponível para usar')).dy;
+    final numero = t.getTopLeft(find.text(r'R$ 4.250,00')).dy;
+    final bloqueado = t.getTopLeft(find.text(r'R$ 1.500,00 bloqueados')).dy;
+    expect(rotulo, lessThan(numero));
+    expect(numero, lessThan(bloqueado));
+    // O glifo e o texto vão juntos: cor não é a única informação.
+    expect(
+        find.byWidgetPredicate(
+            (w) => w is DilettaIcon && w.name == DilettaIcons.lockLight),
+        findsOneWidget);
+  });
+
+  testWidgets(
+      'OCULTAR mascara o bloqueado com a máscara do VALOR, não a dos totais',
+      (t) async {
+    await t.pumpWidget(montar(const CoreflowSaldo(
+      valor: r'R$ 4.250,00',
+      oculto: true,
+      bloqueado: r'R$ 1.500,00',
+      entradas: r'R$ 300,00',
+    )));
+    await t.pump(const Duration(milliseconds: 50));
+
+    expect(find.textContaining('1.500'), findsNothing);
+    expect(find.text(r'R$ •••••• bloqueados'), findsOneWidget);
+    expect(find.text(r'R$ ••••••'), findsOneWidget, reason: 'o valor');
+    expect(find.text(r'R$ ••••'), findsOneWidget, reason: 'o selo de entradas');
+  });
+
+  testWidgets(
+      'ocultar NÃO move o chevron — a linha reserva a largura como o valor',
+      (t) async {
+    Future<double> largura({required bool oculto}) async {
+      await t.pumpWidget(montar(Align(
+        alignment: Alignment.topLeft,
+        child: CoreflowSaldo(
+          valor: r'R$ 4.250,00',
+          oculto: oculto,
+          bloqueado: r'R$ 1.500,00',
+          aoTocarNoBloqueado: () {},
+        ),
+      )));
+      await t.pump(const Duration(milliseconds: 50));
+      return t.getSize(find.byType(DilettaAlvoDeToque)).width;
+    }
+
+    expect(await largura(oculto: false), await largura(oculto: true));
+  });
+
+  testWidgets(
+      'a linha que abre algo mede 44; a que não abre não tem chevron nem toque',
+      (t) async {
+    var abriu = 0;
+    await t.pumpWidget(montar(CoreflowSaldo(
+      valor: r'R$ 4.250,00',
+      bloqueado: r'R$ 1.500,00',
+      aoTocarNoBloqueado: () => abriu++,
+    )));
+    await t.pump(const Duration(milliseconds: 50));
+    expect(t.getSize(find.byType(DilettaAlvoDeToque)).height, DilettaAlvo.piso);
+    await t.tap(find.text(r'R$ 1.500,00 bloqueados'));
+    expect(abriu, 1);
+
+    await t.pumpWidget(montar(const CoreflowSaldo(
+      valor: r'R$ 4.250,00',
+      bloqueado: r'R$ 1.500,00',
+    )));
+    await t.pump(const Duration(milliseconds: 50));
+    expect(find.text(r'R$ 1.500,00 bloqueados'), findsOneWidget);
+    expect(find.byType(DilettaAlvoDeToque), findsNothing);
+    expect(find.byType(DilettaTappable), findsNothing,
+        reason: 'sem extrato e sem toque no bloqueado');
+    expect(
+        find.byWidgetPredicate(
+            (w) => w is DilettaIcon && w.name == DilettaIcons.angleRightSolid),
+        findsNothing,
+        reason: 'chevron sem toque é alvo morto');
+  });
+
+  testWidgets('o dev info declara os dois como presente/ausente', (t) async {
+    await t.pumpWidget(montar(const CoreflowSaldo(
+      valor: r'R$ 4.250,00',
+      rotuloDoValor: 'Disponível para usar',
+    )));
+    await t.pump(const Duration(milliseconds: 50));
+    final info = t.widget<DilettaDevInfo>(find.byType(DilettaDevInfo));
+    expect(info.props['rotuloDoValor'], 'presente');
+    expect(info.props['bloqueado'], 'ausente');
   });
 }

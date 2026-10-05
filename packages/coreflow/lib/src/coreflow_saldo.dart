@@ -1,8 +1,9 @@
 /// CONTA BOLD — o card de SALDO da home.
 ///
-/// Organismo do produto, por composição: vidro do pai + texto + selo de status + ícone. Nasce no
-/// filho porque é arranjo de UMA home — não é `AmountDisplay` com modo oculto, é uma peça com
-/// regra própria (o toggle de ocultar mora no top bar; este card só reflete).
+/// Organismo do produto, por composição: vidro do pai + texto + selo de status + ícone. Nasceu no
+/// filho como arranjo de UMA home e veio para o pai em 08/09 com as peças que não dependem de
+/// produto — não é `AmountDisplay` com modo oculto, é uma peça com regra própria (o toggle de
+/// ocultar mora no top bar; este card só reflete).
 ///
 /// 3 usos no produto antigo.
 ///
@@ -18,6 +19,15 @@
 ///
 /// **O ocultar cobre valor E totais.** Já era assim, e fica registrado porque é decisão de
 /// produto, não detalhe: esconder o saldo e deixar as entradas visíveis não esconde nada.
+///
+/// ## O saldo BLOQUEADO (05/10)
+///
+/// O app passou a conhecer saldo bloqueado (judicial, MED) e o número grande deixou de ser o saldo
+/// inteiro. Dois parâmetros opcionais, e a peça é **idêntica à de antes quando os dois faltam**:
+/// [rotuloDoValor], um rótulo curto acima do número («Disponível para usar»), e [bloqueado], uma
+/// linha abaixo dele — cadeado, «R\$ 1.500,00 bloqueados» e, quando [aoTocarNoBloqueado] existe, o
+/// chevron e o alvo de 44. A linha mascara com a MESMA máscara do valor e reserva a largura do
+/// mesmo jeito: o olho não move o chevron. O total não entra aqui — é da folha e da recusa.
 library;
 
 import 'dart:math' as math;
@@ -38,6 +48,9 @@ class CoreflowSaldo extends StatelessWidget {
     this.saidas,
     this.carregandoValor = false,
     this.carregandoTotais = false,
+    this.rotuloDoValor,
+    this.bloqueado,
+    this.aoTocarNoBloqueado,
   });
 
   /// Valor já formatado (`CoreflowDinheiro.formatar`). Mascarado aqui se [oculto].
@@ -59,6 +72,23 @@ class CoreflowSaldo extends StatelessWidget {
   /// que o card já está na tela.
   final bool carregandoTotais;
 
+  /// Rótulo curto ACIMA do número grande. Nulo: nenhuma linha, nenhum espaço.
+  ///
+  /// Existe porque com bloqueio o número grande não é o saldo inteiro, e um número sem nome é o
+  /// que a pessoa lê como «meu dinheiro». No app é «Disponível para usar», e só quando há bloqueio.
+  final String? rotuloDoValor;
+
+  /// O que está bloqueado, JÁ FORMATADO (`CoreflowDinheiro.formatar`). A peça escreve
+  /// «R\$ 1.500,00 bloqueados» abaixo do valor, com o cadeado. Nulo: nenhuma linha, nenhum espaço.
+  ///
+  /// Mascara com a mesma máscara do valor quando [oculto] — e não com a dos totais: é saldo, não
+  /// selo. A largura é reservada como a do valor, pelo mesmo motivo: o olho não move o chevron.
+  final String? bloqueado;
+
+  /// Abre a explicação do bloqueio. Nulo: a linha fica, sem chevron e sem toque — não se desenha
+  /// alvo morto. Com ele, a linha é alvo de 44 ([DilettaAlvoDeToque]) e absorve o respiro em volta.
+  final VoidCallback? aoTocarNoBloqueado;
+
   static const String _mascaraDoValor = r'R$ ••••••';
   static const String _mascaraDoTotal = r'R$ ••••';
 
@@ -73,14 +103,22 @@ class CoreflowSaldo extends StatelessWidget {
         'oculto': '$oculto',
         'entradas': entradas == null ? 'ausente' : 'presente',
         'saidas': saidas == null ? 'ausente' : 'presente',
+        'rotuloDoValor': rotuloDoValor == null ? 'ausente' : 'presente',
+        'bloqueado': bloqueado == null ? 'ausente' : 'presente',
       },
-      tokens: const ['type.headlineMd', 'scheme.fg', 'scheme.formaDoVidro'],
+      tokens: const [
+        'type.headlineMd',
+        'type.labelMd',
+        'scheme.fg',
+        'scheme.textSecondary',
+        'scheme.formaDoVidro',
+      ],
       child: DilettaGlassSurface(
         borderRadius: CoreflowScheme.of(context).formaDoVidro,
         child: Padding(
           // 16 nos lados e 8 à direita: o botão de extrato carrega o próprio respiro.
-          padding: EdgeInsets.fromLTRB(
-              DilettaSpacing.s4, DilettaSpacing.s4, DilettaSpacing.s2, DilettaSpacing.s4),
+          padding: EdgeInsets.fromLTRB(DilettaSpacing.s4, DilettaSpacing.s4,
+              DilettaSpacing.s2, DilettaSpacing.s4),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -89,9 +127,16 @@ class CoreflowSaldo extends StatelessWidget {
                 DilettaText('Seu saldo',
                     style: DilettaType.labelLg.copyWith(color: s.fg)),
                 const Spacer(),
-                if (aoAbrirExtrato != null) _Extrato(aoTocar: aoAbrirExtrato!, cor: s.fg),
+                if (aoAbrirExtrato != null)
+                  _Extrato(aoTocar: aoAbrirExtrato!, cor: s.fg),
               ]),
               DilettaGap.h(DilettaSpacing.s2),
+              if (rotuloDoValor != null) ...[
+                DilettaText(rotuloDoValor!,
+                    style:
+                        DilettaType.labelMd.copyWith(color: s.textSecondary)),
+                DilettaGap.h(DilettaSpacing.s1),
+              ],
               if (carregandoValor)
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: DilettaSpacing.s1),
@@ -99,7 +144,8 @@ class CoreflowSaldo extends StatelessWidget {
                   // do produto: a home abre nele. Chegou como *"o skeleton tem um shimmer rosinha, agora
                   // só é o frame cinza"*, e o meu conserto de ontem tinha embrulhado os 35 do APP e
                   // deixado os 3 que moram AQUI DENTRO — quem carrega o saldo vê estes, não aqueles.
-                  child: DilettaShimmer(child: DilettaSkeleton.box(width: 190, height: 26)),
+                  child: DilettaShimmer(
+                      child: DilettaSkeleton.box(width: 190, height: 26)),
                 )
               else
                 _ValorComLarguraReservada(
@@ -108,8 +154,22 @@ class CoreflowSaldo extends StatelessWidget {
                   oculto: oculto,
                   estilo: estiloDoValor,
                 ),
+              if (bloqueado != null) ...[
+                // Sem toque a linha é texto, e leva o respiro de texto. Com toque ela é alvo de
+                // 44 e o respiro mora DENTRO do alvo (14 acima e abaixo de uma linha de 16): somar
+                // o s2 por fora afastaria o bloqueado do número que ele qualifica.
+                if (aoTocarNoBloqueado == null) DilettaGap.h(DilettaSpacing.s2),
+                _Bloqueado(
+                  valor: bloqueado!,
+                  mascara: _mascaraDoValor,
+                  oculto: oculto,
+                  aoTocar: aoTocarNoBloqueado,
+                  cor: s.fg,
+                ),
+              ],
               if (carregandoTotais) ...[
-                DilettaGap.h(DilettaSpacing.s2),
+                if (bloqueado == null || aoTocarNoBloqueado == null)
+                  DilettaGap.h(DilettaSpacing.s2),
                 // UM shimmer pros dois selos, e não um por selo: a varredura atravessa o par como
                 // atravessaria o conteúdo que vem no lugar dele. Dois wrappers dariam duas bandas fora
                 // de fase, que lê como dois carregamentos independentes.
@@ -121,7 +181,8 @@ class CoreflowSaldo extends StatelessWidget {
                   ]),
                 ),
               ] else if (entradas != null || saidas != null) ...[
-                DilettaGap.h(DilettaSpacing.s2),
+                if (bloqueado == null || aoTocarNoBloqueado == null)
+                  DilettaGap.h(DilettaSpacing.s2),
                 Row(children: [
                   if (entradas != null)
                     DilettaStatusTag(
@@ -162,6 +223,53 @@ class _Extrato extends StatelessWidget {
         DilettaGap.w(DilettaSpacing.s1),
         DilettaIcon(name: DilettaIcons.angleRightSolid, size: 14, color: cor),
       ]),
+    );
+  }
+}
+
+/// A linha do BLOQUEADO: cadeado, «R\$ 1.500,00 bloqueados» e, se abre algo, o chevron.
+///
+/// O glifo e o texto vão juntos porque cor não é a única informação — a linha é da mesma cor do
+/// valor, e o que a distingue é o cadeado e a palavra. O texto passa pela mesma reserva de largura
+/// do valor, medido nos dois estados: mascarar não anda com o chevron.
+class _Bloqueado extends StatelessWidget {
+  const _Bloqueado({
+    required this.valor,
+    required this.mascara,
+    required this.oculto,
+    required this.aoTocar,
+    required this.cor,
+  });
+
+  final String valor;
+  final String mascara;
+  final bool oculto;
+  final VoidCallback? aoTocar;
+  final Color cor;
+
+  @override
+  Widget build(BuildContext context) {
+    // Como o do valor: o degrau não fixa família, e é o medidor quem funde o `DefaultTextStyle`.
+    final estilo = DilettaType.labelMd.copyWith(color: cor);
+    final linha = Row(mainAxisSize: MainAxisSize.min, children: [
+      DilettaIcon(name: DilettaIcons.lockLight, size: 14, color: cor),
+      DilettaGap.w(DilettaSpacing.s1),
+      _ValorComLarguraReservada(
+        valor: '$valor bloqueados',
+        mascara: '$mascara bloqueados',
+        oculto: oculto,
+        estilo: estilo,
+      ),
+      if (aoTocar != null) ...[
+        DilettaGap.w(DilettaSpacing.s1),
+        DilettaIcon(name: DilettaIcons.angleRightSolid, size: 14, color: cor),
+      ],
+    ]);
+    if (aoTocar == null) return linha;
+    // O toque fica POR FORA do alvo: é a caixa de 44 inteira que responde, não só a linha de 16.
+    return DilettaTappable(
+      onTap: aoTocar,
+      child: DilettaAlvoDeToque(child: linha),
     );
   }
 }
