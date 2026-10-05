@@ -20,6 +20,46 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.122.0] — 2026-10-05
+
+### O card de saldo aprende o saldo BLOQUEADO — `rotuloDoValor` e `bloqueado` no `CoreflowSaldo`
+
+A pedido do app (change `saldo-bloqueado-minimo`, D3), item **nosso** da fila de 05/10, autorizado
+pela Agatha no mesmo dia. Com bloqueio (judicial, MED) o número grande deixou de ser o saldo inteiro,
+e a peça ganha dois parâmetros opcionais — **idêntica à de antes quando os dois faltam**, nenhuma
+linha e nenhum espaço reservado:
+
+- **`rotuloDoValor`** (`String?`): rótulo curto acima do número, `labelMd` em `textSecondary`. No app,
+  «Disponível para usar», só quando há bloqueio;
+- **`bloqueado`** (`String?`, já formatado) e **`aoTocarNoBloqueado`**: a linha abaixo do valor —
+  cadeado (`lockLight`), «R$ 1.500,00 bloqueados» e o chevron. Mascara com a **mesma máscara do
+  valor** (`R$ ••••••`, não a dos totais) e reserva a largura pelo mesmo medidor: o olho não move o
+  chevron. Com toque, a linha é alvo de **44** (`DilettaAlvoDeToque`, o `DilettaTappable` por fora)
+  e absorve o respiro em volta; sem toque, fica sem chevron — não se desenha alvo morto.
+
+Flat, e não um descritor: é o idioma da própria peça (`aoAbrirExtrato`, `entradas`, `saidas`), e a
+tabela do catálogo lê valor literal, não objeto aninhado. O total **não** entra no card — é da folha
+e da recusa, no app.
+
+O que mais mudou, medido nos gates:
+
+- **contrato `_saldo`**: dois requisitos novos (*o bloqueado é opcional e não reserva espaço*; *a
+  linha do bloqueado toca com 44, ou não toca*), o de mascarar estendido à linha, e o `## Compõe`
+  corrigido — listava `DilettaAmountDisplay` e `DilettaBox`, que a peça nunca compôs;
+- **catálogo**: o bloco `saldo` ganha as duas props e o handler `abrirSaldoBloqueado`; as specs de
+  PF1 e PF7 regeradas com as props vazias (função pura do estado);
+- **`o_saldo_test.dart`**: seis testes novos — a árvore sem os dois é a de antes, a ordem rótulo →
+  número → bloqueado com o glifo, a máscara certa, a largura que não muda ao ocultar, os 44 e o
+  chevron que só existe com toque, e o `DilettaDevInfo` declarando os dois.
+
+**Nada mudou no avô** (segue `v3.3.1` / `web-v3.3.1`) nem no lado web: a `web-v0.122.0` sai só pelo
+número, como a `0.120.1`. O Norte Benk não sobe — consome a peça por `path:` e versiona sozinho.
+Recibo do gate em `docs/recibos/v0.122.0.md`.
+
+**Para o app**: a `v0.120.0` que ele vendoriza ainda leva o avô `v2.5.0`; subir para esta leva junto
+a `v3.3.1`, por cima da maior `3.0.0` — que é da web e não mexe em linha Dart nenhuma (nota da
+`0.121.0`).
+
 ## [0.121.0] — 2026-10-01
 
 ### O avô sobe de `v2.5.0` para `v3.3.1` — os dois lados juntos, como a casa manda
