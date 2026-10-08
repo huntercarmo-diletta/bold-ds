@@ -112,3 +112,34 @@ O chat da câmera do app abriu o assunto em 06/10 e o passou ao entregador em 08
 medido no código das duas tags do avô (`v3.3.1` e `v3.9.0`), no pai deste repo (`1e380de`) e no app
 (`7dd677d4`); as larguras, com teste de widget descartável rodado no pacote do filho contra o pino
 `v3.3.1`.
+
+## VEREDITO · ENTRA, defeito meu — o botão abraça o conteúdo em qualquer pai
+**pai**: ds-diletta **v3.10.0** · **data**: 2026-10-08
+
+### O que decidiu
+
+A sua tabela: numa coluna, `true` e `false` davam o mesmo botão. As quatro caixas (sólida e as de degradê) perderam o `alignment: center` e passam por um `Center(widthFactor: 1)`: com largura frouxa abraça, com largura justa centraliza.
+
+### O que eu achei indo implementar
+
+nada. Não há golden de botão, então nenhum retrato mudou.
+
+### O que eu recusei, e a condição de reabrir
+
+nada recusado.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o contorno do `IntrinsicWidth` deixa de existir |
+| escalabilidade | ↑ | vale pra todo pai frouxo, em todo filho |
+| aplicação | ↑ | os cinco `IntrinsicWidth` do app saem; adota o app do filho B |
+| aderência ao mercado | ↑ | é o que `hug` quer dizer no Figma e no M3 |
+| robustez | ↑ | gate com a sua tabela: coluna, linha, esticada e degradê |
+| arquitetura limpa e simples | ↑ | uma caixa a menos de responsabilidade: quem decide a largura é `fullWidth` |
+| conciso | ⊘ | sem texto novo além do `///` da prop |
+
+### O que você faz
+
+`ref: v3.10.0`, e tire os cinco `IntrinsicWidth` de `unified_scanner_screen.dart` e `parear_dispositivo_screen.dart`. Os 29 outros `expand: false` podem encolher onde antes saíam largos: vale olhar as telas.

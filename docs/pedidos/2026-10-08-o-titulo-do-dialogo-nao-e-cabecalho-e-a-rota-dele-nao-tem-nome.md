@@ -118,3 +118,34 @@ O auditor de acessibilidade do app marcou o título sem cabeçalho na confirmaç
 chat do Terminator passou o achado ao entregador em 08/10. Tudo acima foi medido no código das duas
 tags do avô (`v3.3.1` e `v3.9.0`, Dart e web), no app (`7dd677d4`) e neste repo (`1e380de`); a árvore de
 semântica, com teste de widget descartável rodado no pacote do filho contra o pino `v3.3.1`.
+
+## VEREDITO · ENTRA — o diálogo se anuncia pelo título, como a web já fazia
+**pai**: ds-diletta **v3.10.0** · **data**: 2026-10-08
+
+### O que decidiu
+
+A sua frase: *«A peça saiu do `AlertDialog` e a semântica não veio junto»*. Paridade da mesma peça, isenta do consumidor nomeado. O título é `header`, a caixa é `namesRoute` + `scopesRoute` + `explicitChildNodes` com o rótulo do título.
+
+### O que eu achei indo implementar
+
+a spec não tinha requisito de semântica, como você viu. Ganhou «o diálogo se anuncia pelo título».
+
+### O que eu recusei, e a condição de reabrir
+
+nada recusado.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | uma marca na peça, não 41 embrulhos no `confirmar()` |
+| escalabilidade | ↑ | todo filho que abre um diálogo recebe |
+| aplicação | = | paridade de instância, isenta |
+| aderência ao mercado | ↑ | é o que o `AlertDialog` do M3 e o `<dialog aria-labelledby>` fazem |
+| robustez | ↑ | gate com os três critérios do pedido |
+| arquitetura limpa e simples | = | a árvore ganha dois nós de semântica, nenhum de layout |
+| conciso | = | um requisito novo na spec |
+
+### O que você faz
+
+`ref: v3.10.0`. Nada a mudar no `confirmar()`.
