@@ -18,6 +18,176 @@ A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
 
 ---
 
+## Rodada de 2026-10-08 · a câmera do app manda oito, e só dois são do avô
+
+Escrita pelo **`entregador-de-pedidos`**, chamado pela sessão principal com a frase dela *«sobe os pedidos
+pro ds»*. O escopo são os **oito** que o chat da câmera (o Terminator) anotou para o DS em 06–07/10,
+vindos dos auditores de 06/10. Medido na `main` deste repo (`1e380de`, a `v0.122.1` mais um commit de
+docs), no pino do avô que o pai usa (`v3.3.1`, `packages/coreflow/pubspec.yaml:23`), na ponta dele
+(`v3.9.0` / `web-v3.9.0`) e no app (`7dd677d4`, branch `feat/terminator-scan-aprovacao-legivel`). A coleta
+dos outros chats **não foi feita** nesta rodada.
+
+**O resultado da medição, antes do detalhe**: dos oito, **dois viram pedido ao avô** (o diálogo e o botão
+que não encolhe), **cinco são nossos** (quatro peças do pai ou do filho e uma decisão de marca) e **um não
+sobrevive à medição** (o papel de status sobre imagem: o papel que segue o modo já existe).
+
+**Chats lidos**:
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| a câmera do app (Terminator) | `claude_newbold-terminator` (`feat/terminator-scan-aprovacao-legivel`) | 07/10 16h10 (último commit, `7dd677d4`) | os oito itens, passados pela sessão principal, mais a seção «Seguintes» de `openspec/changes/terminator-scan-aprovacao-legivel/tasks.md`. **A transcrição não foi lida**, só o resumo e o `tasks.md`; cada afirmação foi re-medida no código |
+| os outros chats da janela (05/10 → agora) | — | — | **não lidos nesta rodada** |
+
+**Fora desta rodada, por instrução de quem chamou**: o degrau monoespaçado (o app passou a usar a família
+do DS), o que é só da biblioteca Figma (D114, estilos `valorHeroi`/`numericXs`) e o `TextScaler.noScaling`
+(é do app, `lib/app.dart`).
+
+### 0 · O QUE O AVÔ RESPONDEU desde 05/10 — nada
+
+Nenhuma branch `veredito/`, `aviso/`, `nota/` nova sem integrar (as duas últimas, de 01 e 02/10, entraram
+na rodada de 05/10). O último commit do avô em `origin/main` é de 02/10 (`171037d`, a `v3.9.0`). O pedido do
+link de texto (05/10) segue sem veredito.
+
+**Deriva**: o app vendoriza o filho `v0.122.1` com o avô `v3.3.1` em `origin/development` e em
+`origin/release/homologation` (`claude_newbold/packages/ds_vendor.json`; lá o bloco `"pai"` é o **avô** e o
+`"base"` é o Coreflow). A branch da câmera (`feat/terminator-scan-aprovacao-legivel`) está **atrás**: filho
+`v0.120.0` com o avô `v2.5.0`. O pai prende o avô em `v3.3.1`. A ponta do avô é `v3.9.0`.
+
+### 1 · PEDIDO AO AVÔ — o título do diálogo não é cabeçalho, e a rota dele não tem nome
+
+[`pedidos/2026-10-08-o-titulo-do-dialogo-nao-e-cabecalho-e-a-rota-dele-nao-tem-nome.md`](pedidos/2026-10-08-o-titulo-do-dialogo-nao-e-cabecalho-e-a-rota-dele-nao-tem-nome.md)
+
+- O título é `DilettaText` sem `header` (`diletta_dialog.dart:137`), a caixa não tem `Semantics`
+  (`:115-125`); o arquivo é o mesmo byte a byte na `v3.3.1` e na `v3.9.0`.
+- **Medido com teste de widget no pino**: o nó do título não tem `isHeader`; **zero** nós com `namesRoute`;
+  um `scopesRoute`, que é o do `showDialog` e não da peça.
+- **A web do mesmo diálogo já faz os dois** (`src/diletta-dialog.js:121-125`, `web-v3.9.0`:
+  `aria-labelledby` e `<h2>`). É o argumento mais forte do pedido: a peça é `ambos` e só um lado nomeia.
+- No app: a função `confirmar()` (`lib/core/ui/confirmar.dart`) monta o diálogo para **41 chamadas em 28
+  arquivos**. O chat disse «no Android o título pode não ser anunciado»: **o anúncio no aparelho não foi
+  medido**; o que se mediu é a árvore.
+- **Não depende de nada.**
+
+### 2 · PEDIDO AO AVÔ — o botão sem largura total ocupa a largura toda numa coluna
+
+[`pedidos/2026-10-08-o-botao-sem-largura-total-ocupa-a-largura-toda-numa-coluna.md`](pedidos/2026-10-08-o-botao-sem-largura-total-ocupa-a-largura-toda-numa-coluna.md)
+
+- **O chat abriu como defeito do `CoreflowBotao`, e não é**: o pai só repassa `expand` como `fullWidth`
+  (`coreflow_botao.dart:157`). A causa mora no avô: `alignment: Alignment.center` no contêiner da caixa
+  (`diletta_button.dart:306-331` na `v3.9.0`; `:305-330` na `v3.3.1`), e contêiner alinhado ocupa a
+  largura que recebe.
+- **Medido no pino**: numa `Column` de 390, `fullWidth: false` mede **390**, igual a `true`; numa `Row`,
+  **60,2**; com `IntrinsicWidth`, 60,2.
+- No app: 34 `expand: false` em 25 arquivos; **5** com `IntrinsicWidth` de contorno, todos em `Column`
+  (três na câmera, dois na tela de parear).
+- **Não depende de nada.** O que espera o veredito é nosso: o `///` do `CoreflowBotao` promete *«false =
+  inline»* (`coreflow_botao.dart:96`), e isso só é verdade dentro de `Row`.
+
+### 3 · NÃO SUBIU — o «papel de status sobre imagem de câmera»: o papel que segue o modo já existe
+
+O chat descreveu a escolha como *«entre `palette.*05` (não segue modo) e `*OnSurface` (feito para texto
+sobre superfície)»*. **O código tem uma terceira opção, e ela é a resposta**:
+
+- os papéis de **preenchimento** de status seguem o modo: `success`/`warning`/`error` são o degrau **04**
+  no claro (`diletta_scheme.dart:666-678`, `v3.9.0`) e o **05** no escuro (`:869-893`). São os mesmos que a
+  `DilettaCaptureFrame` do avô pinta nos estados dela (spec `design-system-capture-frame`, *«três estados,
+  e o erro é papel»*). O traço da mira é objeto gráfico (piso 3:1), e é papel de preenchimento;
+- o app usa o degrau cru: `paleta.warning04`, `success05`, `error05` (`terminator_hud.dart:173-175`), e o
+  visor do pai faz o mesmo (`coreflow_visor_de_codigo.dart:182-186`). **Trocar por `s.success` e irmãos é
+  nosso**, no app e no pai (item 4);
+- **texto direto sobre a imagem não tem papel derivável**, porque não tem fundo medível: a câmera é
+  qualquer cor. A pílula `surface` com tinta `*OnSurface` que o app fez (`terminator_hud.dart:408-430`) é a
+  resposta derivável, e é **um sítio só**: a regra de promoção do avô pede o segundo;
+- o amarelo do fantasma (`warning06`, `terminator_hud.dart:439`) não tem papel, e é decoração.
+
+`DilettaManifesto.busca` na `v3.9.0` (rodada com a função da tag): `'câmera'` e `'camera'` → `[]`;
+`'sobre imagem'` → `[]`; `'imagem'` → `[design-system-card-surface]`; `'mira'` →
+`[design-system-capture-frame]`; `'scanner'` e `'leitor de código'` → `[]`.
+
+**Se o chat discordar**, o pedido que sobra é estreito e precisa de número que não temos: um segundo sítio
+de texto sobre mídia, ou a medição de que o traço em `s.success` some sobre uma câmera real.
+
+### 4 · NOSSO — o painel de decisão entra no `CoreflowVisorDeCodigo`, e o rótulo do visor tem o defeito que o app já consertou
+
+- **O que o pai tem**: o visor (`packages/coreflow/lib/src/coreflow_visor_de_codigo.dart`, 417 linhas)
+  pinta a mira, a varredura e o rótulo com linha de chamada. Não tem a metamorfose em painel. Quem usa o
+  visor do pai no app é só a Letti (`virtual_agent_scanner_camera_view.dart:278`); a câmera principal pinta
+  o seu (`TerminatorHudPainter`).
+- **O defeito que vem junto**: o rótulo do visor é escrito na cor crua do estado com sombra preta
+  (`:357-367`, cor de `:182-186`). É o arranjo que a auditoria do app mediu a **1,98:1** sobre o claro
+  (`terminator_hud.dart:108-113`). O app trocou por pílula `surface` + fio `bg` + tinta `*OnSurface`.
+- **As medidas do app, para nomear**: painel opaco `surface` com raio `raioDoCartao`
+  (`terminator_hud.dart:231-238`; `unified_scanner_screen.dart:1606`), contorno de **2 px** na cor do estado
+  a 75% (`terminator_hud.dart:239-245`), largura **360** no painel do IB (`unified_scanner_screen.dart:2006`)
+  e **380** no da aprovação (`:1743`), pílula do rótulo **6 × 3** de recuo e raio **6**
+  (`terminator_hud.dart:414`, `:422`), altura **medida** do conteúdo (`_MedidorDeAltura`, `:2129`).
+- **Depende do item 3** (qual papel pinta o traço) e é **código no Coreflow**: decisão dela quando fazer.
+
+### 5 · NOSSO — o selo quântico não fala nada, e não só não anuncia
+
+O pedido era `liveRegion`. **A medição achou mais**: `bold_selo_quantico.dart`
+(`packages/coreflow_design_system`) tem **zero** `Semantics`, e o rótulo do estado («autorizado»,
+«negado», «tente novamente», «confira o extrato») é **pintado no canvas** (`:196-222`, `CustomPaint`). O
+leitor de tela não lê o selo nem quando o foco chega nele. No app, o selo aparece em **12** arquivos;
+**11** não anunciam nada por conta própria (o único com `SemanticsService`/`liveRegion` é a câmera,
+`unified_scanner_screen.dart`). É peça do filho, nesta casa: um `Semantics(liveRegion: true, label: …)` com o
+rótulo e o apoio do desfecho. **Não depende de nada.**
+
+### 6 · NOSSO, já na fila — o fundo da folha (D102)
+
+**Confirmado, e o código não andou**: a folha ainda lê a primitiva crua no claro,
+`c.isDark ? c.surface : c.paleta.primary08` (`coreflow_folha.dart:265`); o `CoreflowScheme` não tem papel
+de fundo de folha, e o avô também não tem um no esquema (`diletta_scheme.dart`, `v3.9.0`). O item está na
+seção «6 · O que é nosso, e não se pede» da rodada de **22/09 fim de tarde** (a linha da D102). **O que
+chega agora**: segundo o chat, a biblioteca Figma criou em 07/10 a variável `coreflow/superficieDaFolha`
+(claro `primary08`, escuro `surface`) e espera o nome do pai. **Isso não foi medido** (sem acesso ao
+Figma nesta rodada). Se o papel nascer no `CoreflowScheme` com esse nome, a biblioteca casa sem renomear.
+O chat citou também a D113 junto; ela não aparece em nenhuma linha desta fila.
+
+### 7 · NOSSO, para a próxima major — dois parâmetros que não fazem o que dizem
+
+- **`CoreflowFolha.show(fecharEmCirculo:)`** é morto, e o próprio código diz: *«fica na assinatura sem efeito
+  por enquanto — remover parâmetro é major»* (`coreflow_folha.dart:166-172`). **O `///` do campo ainda
+  descreve o comportamento antigo** (`:97-99`: *«botão redondo… em vez do X solto»*), e isso é nosso
+  conserto de hoje, sem major. Chamadores: **zero** no app e neste repo. Um `@Deprecated` agora, a remoção
+  na major.
+- **`CoreflowEtiqueta` tem o mesmo defeito do item 2**, e essa é nossa: `alignment: Alignment.center` sem
+  largura (`coreflow_etiqueta.dart:87`), e o app embrulha em `IntrinsicWidth` num `Wrap`
+  (`boleto_modalidade_screen.dart:83-88`). Achado medindo o item 2; não estava no chat.
+
+### 8 · DECISÃO DELA — a tinta do botão primário no claro (3,46:1). Não é pedido
+
+**O chat pediu ao DS, e o DS que decide somos nós.** A tinta branca sobre `primary04` é uma **declaração
+deste filho**, em `packages/coreflow_design_system/lib/src/bold_palette.dart:514-522`
+(`DilettaTintaAssumida(papel: 'onPrimary', medida: 3.46)`, *«decisão do dono do produto em 19/08»*). O
+avô já julgou o mecanismo (pedido de 19/08, **ENTRA DIFERENTE**, `v0.115.0`): honra a declaração até o
+piso **gráfico** (3:1), e escreveu que a escolha *«é decisão de marca, e ela é sua»*. Na nota de 09/09 ele
+mediu 4.096 marcas e mostrou o limite. Reabrir lá voltaria reprovado: não há condição nova.
+
+O que se mediu (WCAG, conta feita aqui):
+
+| saída | o rótulo | contraste | o que muda |
+|---|---|---|---|
+| como está | branco sobre `primary04` `#FE3976` | **3,46** | nada. Rótulo de 14/500 não é texto grande: reprova 1.4.3 (4,5) |
+| tirar a declaração | a tinta derivada pelo avô (escura) sobre `#FE3976` | preto dá **6,06**; o tom exato é o que a paleta oferece como escuro (no modo escuro ele dá 7,70) | o CTA do app inteiro passa a ter rótulo escuro sobre o rosa |
+| outro degrau de preenchimento | branco sobre `primary03` `#9E1241` | **8,03** | o rosa do CTA vira vinho; é mudança de marca |
+
+**Depende de ninguém, e trava nada.** É uma linha na paleta (tirar a declaração) ou um degrau no esquema,
+e as duas mudam o botão mais visto do app. Quem decide é ela.
+
+---
+
+## O que esta rodada escreveu
+
+| arquivo | o quê |
+|---|---|
+| `docs/pedidos/2026-10-08-o-titulo-do-dialogo-nao-e-cabecalho-e-a-rota-dele-nao-tem-nome.md` | pedido novo ao avô |
+| `docs/pedidos/2026-10-08-o-botao-sem-largura-total-ocupa-a-largura-toda-numa-coluna.md` | pedido novo ao avô |
+| `docs/PEDIDOS.md` | as duas linhas no topo da tabela da linguagem |
+| esta rodada | — |
+
+---
+
 ## Rodada de 2026-10-05 · o card de saldo aprende o saldo BLOQUEADO
 
 Escrita pelo **`entregador-de-pedidos`**, chamado pelo chat do change `saldo-bloqueado-minimo` do app
