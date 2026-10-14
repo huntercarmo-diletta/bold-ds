@@ -66,7 +66,8 @@ papéis. O Norte Benk sobe para 0.1.6: a folha dele mudou, e a `norte-benk-web-v
 O IB apaga `--ib-superficie-marcada` (10%) e lê `--diletta-primaryWash` (20%): muda pixel no escuro,
 a linha marcada da tabela fica mais forte. A `web-v0.123.0` é o alvo da T1.5 dele.
 
-`docs/recibos/v0.123.0.md` é o gate do README medido nesta árvore.
+`docs/recibos/v0.123.0.md` é o gate do README medido nesta árvore: seis suítes verdes. A emissão
+saiu no mesmo dia: `web-v0.123.0` e `norte-benk-web-v0.1.6`.
 
 ## [0.122.1] — 2026-10-05
 
