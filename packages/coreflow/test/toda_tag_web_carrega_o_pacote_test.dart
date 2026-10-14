@@ -35,6 +35,7 @@ import 'package:flutter_test/flutter_test.dart';
 const _pacotePorPrefixo = {
   'web-v': 'coreflow-design-system-web',
   'norte-benk-web-v': 'norte-benk-web',
+  'confia-capital-web-v': 'confia-capital-web',
 };
 
 /// O TETO que separa pacote de repositório, e ele não opina sobre o tamanho da emissão.

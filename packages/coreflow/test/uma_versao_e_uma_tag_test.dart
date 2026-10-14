@@ -69,6 +69,8 @@ const _filhos = <Filho>[
       '../coreflow_design_system_web/package.json', 'web-', segueOMonorepo: true),
   Filho('Norte Benk', '../norte_benk_coreflow/pubspec.yaml',
       '../norte_benk_coreflow/web/package.json', 'norte-benk-web-'),
+  Filho('Confia Capital', '../confia_capital_coreflow/pubspec.yaml',
+      '../confia_capital_coreflow/web/package.json', 'confia-capital-web-'),
 ];
 
 String _versaoDoPubspec(String caminho) {

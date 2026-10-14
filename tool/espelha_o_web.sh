@@ -84,8 +84,11 @@ case "$filho" in
   norte-benk)
     pacote=packages/norte_benk_coreflow/web
     prefixo="norte-benk-web-v" ;;
+  confia-capital)
+    pacote=packages/confia_capital_coreflow/web
+    prefixo="confia-capital-web-v" ;;
   *)
-    echo "filho desconhecido: $filho (conheço: bold, norte-benk)"; exit 2 ;;
+    echo "filho desconhecido: $filho (conheço: bold, norte-benk, confia-capital)"; exit 2 ;;
 esac
 
 # A PROFUNDIDADE VEM DO CAMINHO, e não de um número escrito: o `bold` guarda o lado web num pacote

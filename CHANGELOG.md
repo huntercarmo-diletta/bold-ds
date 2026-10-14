@@ -20,6 +20,57 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.124.0] — 2026-10-14
+
+### Nasce o terceiro filho — a Confia Capital, a primeira com a arte do modo escuro mandada pelo cliente
+
+**Só acrescenta.** Nada do Conta BOLD muda: nenhum token, papel ou peça, e as quatro folhas web
+reemitidas saíram idênticas. A versão sobe no Bold e na instância web dele por convenção — *«uma
+língua, um número»*.
+
+| | antes | agora |
+|---|---|---|
+| filhos do Coreflow neste repo | 2 — Conta BOLD e Norte Benk | **3**, com `confia_capital_coreflow` |
+| tags web por filho | `web-v` e `norte-benk-web-v` | mais **`confia-capital-web-v`**, a primeira sendo `confia-capital-web-v0.1.0` |
+
+#### De onde ela veio
+
+Do segundo envio do Berço Coreflow (14/10), o primeiro depois das melhorias do site e o primeiro a
+usar os campos do modo escuro. Cor `#213B70`, tirada do logo; a forma «acolhedor» com as seis medidas
+por `comMaterial(medidas:)`; o dourado do logo, `#B2995B`, como cor de parceiro; e a marca visual em
+quatro artes — lockup e símbolo, claro e escuro —, com `logoFullEscuro` e `logoEscuro` vindos de
+arquivo do cliente, não derivados. A entrega saiu do próprio site, com 64 arquivos e a conferência em
+17 ok, 3 atenção e nenhuma falha. Ela mirava v0.122.1 / avô v3.3.1; o pacote nasceu sobre a v0.123.0,
+com o avô v3.13.0, e a declaração compila igual.
+
+#### O gate que o nascimento derrubou
+
+O commit do nascimento (`7966876`) pôs a Confia na `main` sem declará-la na lista de filhos web, e
+`uma_versao_e_uma_tag_test` reprovou: *«estes lados web não estão na lista deste gate»*. É o buraco
+que ele existe para pegar, e ele pegou. A lista mora em três lugares — esse gate,
+`toda_tag_web_carrega_o_pacote_test` e `tool/espelha_o_web.sh` —, e os três aprendem `confia-capital`
+nesta versão. A `main` ficou vermelha entre `7966876` e este commit.
+
+O `novo_filho` não escreve nessas três listas, e o próximo filho com lado web vai tropeçar no mesmo
+lugar. Fica registrado aqui até alguém decidir se o gerador as edita ou se o `COMO-NASCER.md` do Berço
+as lista como passo.
+
+#### Os locks
+
+O `npm install` alinhou a versão que cada lock carrega do próprio pacote: o do Bold dizia `0.122.1` e
+o do Norte Benk `0.1.5`, sobras de releases anteriores. Nenhuma resolução mudou: os quatro locks
+apontam o mesmo commit da `web-v3.13.0`.
+
+#### O que fica, e não é deste repo
+
+- **O símbolo da Confia no modo claro.** Ele é só dourado e foi mandado igual nos dois campos: 6,47:1
+  no escuro, 2,76:1 na página clara, abaixo do piso gráfico de 3:1, nas seis peças que desenham a
+  marca sem `variant:`. É pedido ao dono da marca. A cor de parceiro dá o mesmo 2,76:1 contra o branco.
+- **O app ainda não a recebe.** `tool/ds_vendor.sh` do app conhece a quarta irmã; a Confia seria a
+  quinta.
+
+Recibo das suítes: `docs/recibos/v0.124.0.md`.
+
 ## [0.123.0] — 2026-10-14
 
 ### O avô sobe de `v3.3.1` para `v3.13.0` — os sete pinos juntos, e o que mexeu está medido
