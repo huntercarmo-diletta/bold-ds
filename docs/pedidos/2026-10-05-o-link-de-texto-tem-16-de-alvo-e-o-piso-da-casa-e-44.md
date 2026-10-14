@@ -169,3 +169,34 @@ Achado pela auditoria de acessibilidade do app na tela de valor do Pix, em 05/10
 acima foi medido no código das duas tags do avô (`v3.3.1` e `v3.9.0`) e no app (branch de trabalho e
 `origin/development`); as alturas e os toques, com teste de widget descartável rodado no pacote do
 filho contra o pino `v3.3.1`.
+
+## VEREDITO · ENTRA, defeito meu — o alvo vai pra dentro do tappable, e o texto fica no início
+**pai**: ds-diletta **v3.10.0** · **data**: 2026-10-08
+
+### O que decidiu
+
+A sua frase: *«pede que a regra de 03/09 alcance uma peça que ficou de fora»*. É isso, e o meu próprio `///` do botão de ícone já dizia onde o piso mora. O seu achado do `Center` decidiu a forma: o `DilettaAlvoDeToque` ganhou `alinhamento` opcional (default o centro de hoje, nenhum chamador muda) e o link usa `AlignmentDirectional.centerStart`. `DilettaSeeAllLink` herda sem mudança.
+
+### O que eu achei indo implementar
+
+nada além do que você mediu. O arranjo do chip selecionável continua à mão; fica como está até alguém mexer nele.
+
+### O que eu recusei, e a condição de reabrir
+
+- **alvo sem ocupar layout no cabeçalho**: não. A regra de 03/09 é piso que ocupa, e os cinco cabeçalhos passarem de 16 a 44 é a consequência aceita. Reabre se um desenho aprovado medir o cabeçalho de 16 com link.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | um conserto na peça, não nove na tela |
+| escalabilidade | ↑ | todo filho que usa o link recebe o piso sem saber |
+| aplicação | ↑ | o link do Pix e os oito outros passam a pegar o toque; adota o app do filho B |
+| aderência ao mercado | ↑ | 44 da HIG, 48 do M3, e o piso da casa |
+| robustez | ↑ | 4 casos novos no gate do alvo, incluindo coluna esticada e RTL |
+| arquitetura limpa e simples | = | um parâmetro opcional numa peça que já existia |
+| conciso | = | `///` de uma linha |
+
+### O que você faz
+
+`ref: v3.10.0`. No app, nada a trocar nas telas; confira os cinco cabeçalhos (16 → 44).
