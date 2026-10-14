@@ -20,6 +20,54 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.123.0] — 2026-10-14
+
+### O avô sobe de `v3.3.1` para `v3.13.0` — os sete pinos juntos, e o que mexeu está medido
+
+A pedido da Tatiana (14/10): o passo 1 da T1.5 do IB, que precisa da tag web desta casa com o que
+o pai respondeu. Entre a `v3.3.1` e a `v3.13.0` são dez menores do avô, sem major: `3.4.0` (seis
+glifos, entre eles o pino de lugar), `3.5.x`–`3.7.0` (notas e portas de outro filho), `3.8.0` (quatro
+defeitos do pai, `errorGrafico` e `surfaceDisabled`, porte do botão declarável), `3.9.0` (calendário
+com caixa), `3.10.0` (alvo de 44 no link de texto, `fullWidth: false` abraça o conteúdo, o diálogo se
+anuncia pelo título — os três pedidos deste filho de 05 e 08/10), `3.11.0` (`primaryWash`, o pedido
+deste filho de 13/10, julgado no dia), `3.12.0` (a folha de papéis de um filho web sai do pai) e
+`3.13.0` (cinco peças ganham o par web: checkbox, lista de rádio, interruptor, esqueleto e superfície
+de cartão). Os avisos estão em `docs/avisos/2026-10-0*-release-v3.*.md`.
+
+Os sete pinos sobem juntos: três `ref:` em Dart (`coreflow`, `coreflow_design_system`, `catalog`),
+três `package.json` na web (Bold, Norte Benk, o exemplo do gerador) e o molde do `novo_filho.dart`.
+O `npm install` foi forçado por spec nos três pacotes (a armadilha do
+`o_que_esta_instalado_e_o_que_o_pino_diz`, de novo), e os três locks resolvem o mesmo commit da
+`web-v3.13.0`.
+
+### Mudado
+
+- **`CoreflowScheme.primaryWash` lê o do pai.** A derivação local (claro `primarySubtle`, escuro
+  `primary04` a 20%) sai; o pai deriva o mesmo valor desde a `v3.11.0`, pelo pedido deste filho.
+  Zero pixel no Dart.
+
+### O que mexeu, medido no diff das três folhas reemitidas
+
+Três papéis novos e nenhum valor antigo trocado, em cada folha: `--diletta-primaryWash` (Bold
+`#ffedf3` claro / `#fe397633` escuro), `--diletta-errorGrafico` (Bold `#ef4757` / `#ff4d5e`) e
+`--diletta-surfaceDisabled` (Bold `#d9d9d9` / `#ffffff14`), mais os três apelidos `--cps-`. 64 → 67
+papéis. O Norte Benk sobe para 0.1.6: a folha dele mudou, e a `norte-benk-web-v0.1.6` sai desta tag.
+
+### O que o app sente, pelo CHANGELOG do avô (decisão da dona antes da tag)
+
+- `3.8.0` mexe pixel: o trilho do medidor na largura toda; o ponto de hoje do calendário desce 14 px;
+  o botão primário desabilitado no escuro vai a branco a 8%; o chip-base e o chip selecionável não
+  escolhido mudam rótulo e fundo.
+- `3.10.0` muda layout: cabeçalho de seção com link de texto vai de 16 para 44, pelo alvo de toque.
+- `3.10.0` muda pixel na web: a borda do campo em foco troca.
+
+### Para quem consome a web
+
+O IB apaga `--ib-superficie-marcada` (10%) e lê `--diletta-primaryWash` (20%): muda pixel no escuro,
+a linha marcada da tabela fica mais forte. A `web-v0.123.0` é o alvo da T1.5 dele.
+
+`docs/recibos/v0.123.0.md` é o gate do README medido nesta árvore.
+
 ## [0.122.1] — 2026-10-05
 
 ### O card de saldo fala com o leitor de tela — patch sobre a `0.122.0`, no mesmo dia

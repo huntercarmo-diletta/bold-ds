@@ -276,10 +276,10 @@ class CoreflowScheme extends ThemeExtension<CoreflowScheme> {
       primary: escuro ? d.primary : paleta.primary03,
       primaryPressed: escuro ? d.primaryPressed : paleta.primary02,
       danger: escuro ? d.error : paleta.error03,
-      // Fill TRANSLÚCIDO no escuro contra o `primarySubtle` SÓLIDO do pai: são materiais diferentes,
-      // não versões — e o translúcido deixa a arte de fundo aparecer por baixo do tinte.
-      primaryWash:
-          escuro ? paleta.primary04.withValues(alpha: 0.20) : d.primarySubtle,
+      // A LAVAGEM É DO PAI desde a v3.11.0 (pedido do filho B de 13/10, ENTRA DIFERENTE): claro
+      // `primary08` (= `primarySubtle`), escuro `primary04` a 20% — os mesmos valores que esta linha
+      // derivava sozinha. Ler o dele apaga a derivação local, e o alfa passa a morar num lugar só.
+      primaryWash: d.primaryWash,
       // Os dois alphas de borda. Alpha não é valor de marca: ele viaja inteiro pra qualquer paleta,
       // porque o que muda de produto pra produto é a TINTA, e ela vem da paleta acima.
       borderSoft: tintaDeBorda.withValues(alpha: escuro ? 0.07 : 0.05),

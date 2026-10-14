@@ -1,4 +1,4 @@
-/* GERADO — NÃO editar à mão. Os 64 papéis da linguagem, com a tinta de Meu Banco.
+/* GERADO — NÃO editar à mão. Os 67 papéis da linguagem, com a tinta de Meu Banco.
    Carregue DEPOIS das folhas do avô: estas mesmas variáveis, com os valores deste produto. */
 :root {
   --diletta-bg: #ffffff;
@@ -9,6 +9,7 @@
   --diletta-divider: #e9eef1;
   --diletta-error: #b3251d;
   --diletta-errorBorder: #e8837c;
+  --diletta-errorGrafico: #b3251d;
   --diletta-errorOnSurface: #8a1a14;
   --diletta-errorSolid: #8e2b2b;
   --diletta-errorSolidHover: #5e110d;
@@ -40,6 +41,7 @@
   --diletta-primarySolidPressed: #04390a;
   --diletta-primarySubtle: #e6f8e5;
   --diletta-primaryTrack: #a2e5a2;
+  --diletta-primaryWash: #e6f8e5;
   --diletta-secure: #9c7b0c;
   --diletta-secureOnSurface: #6e5708;
   --diletta-secureSubtle: #fbf6e4;
@@ -49,6 +51,7 @@
   --diletta-successOnSurface: #0e6e47;
   --diletta-successSubtle: #e0f5eb;
   --diletta-surface: #ffffff;
+  --diletta-surfaceDisabled: #d5dce1;
   --diletta-surfaceInverse: #14181a;
   --diletta-surfaceLoading: #d9d9d9;
   --diletta-surfaceLoadingStrong: #929ea7;
@@ -77,6 +80,7 @@
     --diletta-divider: #ffffff14;
     --diletta-error: #d8483f;
     --diletta-errorBorder: #b3251d;
+    --diletta-errorGrafico: #d8483f;
     --diletta-errorOnSurface: #e8837c;
     --diletta-errorSolid: #8a1a14;
     --diletta-errorSolidHover: #b3251d;
@@ -108,6 +112,7 @@
     --diletta-primarySolidPressed: #1b5e20;
     --diletta-primarySubtle: #1b5e20;
     --diletta-primaryTrack: #04390a;
+    --diletta-primaryWash: #00982033;
     --diletta-secure: #c49e1e;
     --diletta-secureOnSurface: #c49e1e;
     --diletta-secureSubtle: #4a3a05;
@@ -117,6 +122,7 @@
     --diletta-successOnSurface: #2fb37b;
     --diletta-successSubtle: #0a4b31;
     --diletta-surface: #20262a;
+    --diletta-surfaceDisabled: #ffffff14;
     --diletta-surfaceInverse: #14181a;
     --diletta-surfaceLoading: #393e41;
     --diletta-surfaceLoadingStrong: #5a656e;
@@ -145,6 +151,7 @@
   --diletta-divider: #ffffff14;
   --diletta-error: #d8483f;
   --diletta-errorBorder: #b3251d;
+  --diletta-errorGrafico: #d8483f;
   --diletta-errorOnSurface: #e8837c;
   --diletta-errorSolid: #8a1a14;
   --diletta-errorSolidHover: #b3251d;
@@ -176,6 +183,7 @@
   --diletta-primarySolidPressed: #1b5e20;
   --diletta-primarySubtle: #1b5e20;
   --diletta-primaryTrack: #04390a;
+  --diletta-primaryWash: #00982033;
   --diletta-secure: #c49e1e;
   --diletta-secureOnSurface: #c49e1e;
   --diletta-secureSubtle: #4a3a05;
@@ -185,6 +193,7 @@
   --diletta-successOnSurface: #2fb37b;
   --diletta-successSubtle: #0a4b31;
   --diletta-surface: #20262a;
+  --diletta-surfaceDisabled: #ffffff14;
   --diletta-surfaceInverse: #14181a;
   --diletta-surfaceLoading: #393e41;
   --diletta-surfaceLoadingStrong: #5a656e;

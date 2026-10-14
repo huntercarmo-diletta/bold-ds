@@ -1,4 +1,4 @@
-/* GERADO — NÃO editar à mão. Os 64 papéis da linguagem, com a tinta de Conta BOLD.
+/* GERADO — NÃO editar à mão. Os 67 papéis da linguagem, com a tinta de Conta BOLD.
    Carregue DEPOIS das folhas do avô: estas mesmas variáveis, com os valores deste produto. */
 :root {
   --diletta-bg: #f4f3f6;
@@ -9,6 +9,7 @@
   --diletta-divider: #79797912;
   --diletta-error: #ef4757;
   --diletta-errorBorder: #f7a9b1;
+  --diletta-errorGrafico: #ef4757;
   --diletta-errorOnSurface: #b42318;
   --diletta-errorSolid: #8e1b28;
   --diletta-errorSolidHover: #8e1b28;
@@ -40,6 +41,7 @@
   --diletta-primarySolidPressed: #600627;
   --diletta-primarySubtle: #ffedf3;
   --diletta-primaryTrack: #ffb6cb;
+  --diletta-primaryWash: #ffedf3;
   --diletta-secure: #c9a227;
   --diletta-secureOnSurface: #8a6d1f;
   --diletta-secureSubtle: #fefbf0;
@@ -49,6 +51,7 @@
   --diletta-successOnSurface: #157a45;
   --diletta-successSubtle: #f1fef6;
   --diletta-surface: #ffffff;
+  --diletta-surfaceDisabled: #d9d9d9;
   --diletta-surfaceInverse: #3d3939;
   --diletta-surfaceLoading: #d9d9d9;
   --diletta-surfaceLoadingStrong: #b3b3b3;
@@ -77,6 +80,7 @@
     --diletta-divider: #ffffff14;
     --diletta-error: #ff4d5e;
     --diletta-errorBorder: #ef4757;
+    --diletta-errorGrafico: #ff4d5e;
     --diletta-errorOnSurface: #ff4d5e;
     --diletta-errorSolid: #b42318;
     --diletta-errorSolidHover: #ef4757;
@@ -108,6 +112,7 @@
     --diletta-primarySolidPressed: #9e1241;
     --diletta-primarySubtle: #9e1241;
     --diletta-primaryTrack: #600627;
+    --diletta-primaryWash: #fe397633;
     --diletta-secure: #e0be4d;
     --diletta-secureOnSurface: #e0be4d;
     --diletta-secureSubtle: #5c4813;
@@ -117,6 +122,7 @@
     --diletta-successOnSurface: #2fd27a;
     --diletta-successSubtle: #12693a;
     --diletta-surface: #14151f;
+    --diletta-surfaceDisabled: #ffffff14;
     --diletta-surfaceInverse: #3d3939;
     --diletta-surfaceLoading: #30313a;
     --diletta-surfaceLoadingStrong: #808080;
@@ -145,6 +151,7 @@
   --diletta-divider: #ffffff14;
   --diletta-error: #ff4d5e;
   --diletta-errorBorder: #ef4757;
+  --diletta-errorGrafico: #ff4d5e;
   --diletta-errorOnSurface: #ff4d5e;
   --diletta-errorSolid: #b42318;
   --diletta-errorSolidHover: #ef4757;
@@ -176,6 +183,7 @@
   --diletta-primarySolidPressed: #9e1241;
   --diletta-primarySubtle: #9e1241;
   --diletta-primaryTrack: #600627;
+  --diletta-primaryWash: #fe397633;
   --diletta-secure: #e0be4d;
   --diletta-secureOnSurface: #e0be4d;
   --diletta-secureSubtle: #5c4813;
@@ -185,6 +193,7 @@
   --diletta-successOnSurface: #2fd27a;
   --diletta-successSubtle: #12693a;
   --diletta-surface: #14151f;
+  --diletta-surfaceDisabled: #ffffff14;
   --diletta-surfaceInverse: #3d3939;
   --diletta-surfaceLoading: #30313a;
   --diletta-surfaceLoadingStrong: #808080;
@@ -373,7 +382,7 @@
 }
 
 /* PONTE: os nomes com o prefixo antigo, apontando para os da linguagem.
-   171 apelidos. Alias não copia valor, então o escuro segue o seletor. */
+   174 apelidos. Alias não copia valor, então o escuro segue o seletor. */
 :root {
   --cps-background: var(--diletta-background);
   --cps-bg: var(--diletta-bg);
@@ -385,6 +394,7 @@
   --cps-divider: var(--diletta-divider);
   --cps-error: var(--diletta-error);
   --cps-errorBorder: var(--diletta-errorBorder);
+  --cps-errorGrafico: var(--diletta-errorGrafico);
   --cps-errorOnSurface: var(--diletta-errorOnSurface);
   --cps-errorSolid: var(--diletta-errorSolid);
   --cps-errorSolidHover: var(--diletta-errorSolidHover);
@@ -445,6 +455,7 @@
   --cps-primarySolidPressed: var(--diletta-primarySolidPressed);
   --cps-primarySubtle: var(--diletta-primarySubtle);
   --cps-primaryTrack: var(--diletta-primaryTrack);
+  --cps-primaryWash: var(--diletta-primaryWash);
   --cps-secondaryFlow: var(--diletta-secondaryFlow);
   --cps-secure: var(--diletta-secure);
   --cps-secureOnSurface: var(--diletta-secureOnSurface);
@@ -455,6 +466,7 @@
   --cps-successOnSurface: var(--diletta-successOnSurface);
   --cps-successSubtle: var(--diletta-successSubtle);
   --cps-surface: var(--diletta-surface);
+  --cps-surfaceDisabled: var(--diletta-surfaceDisabled);
   --cps-surfaceInverse: var(--diletta-surfaceInverse);
   --cps-surfaceLoading: var(--diletta-surfaceLoading);
   --cps-surfaceLoadingStrong: var(--diletta-surfaceLoadingStrong);
