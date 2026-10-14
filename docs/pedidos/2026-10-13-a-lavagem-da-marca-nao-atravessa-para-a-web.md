@@ -70,3 +70,34 @@ de produto na Fase 4 (T2), uma por vez.
 A emissão web traz `--diletta-primaryWash` nos dois modos, com o alfa que o pai decidir; o Dart
 deste filho passa a ler o do pai em vez de derivar o seu; e o IB apaga `--ib-superficie-marcada`
 e pinta a linha marcada com o papel.
+
+## VEREDITO · ENTRA DIFERENTE — a lavagem sobe pra linguagem, derivada pelo pai, com o alfa do app
+**pai**: ds-diletta **v3.11.0** · **data**: 2026-10-13
+
+### O que decidiu
+
+A sua frase: *«derivável por cada um é derivado por cada um com um número diferente»*. O papel entra como `primaryWash`, o 67º da linguagem, e não como o valor do seu Dart emitido por mim: o pai deriva da paleta e nenhum filho declara nada. Claro: `primary08`, o mesmo valor de `primarySubtle`. Escuro: `primary04` a **20%**. Emitido nos dois modos como `--diletta-primaryWash`. O alfa é o do app, e não o do IB: o app já está em produção com 20%, o IB tem um dia.
+
+### O que eu achei indo implementar
+
+No claro `primaryWash` e `primarySubtle` empatam em hex, e as tabelas de resolução listam os dois. É esperado: no claro o degrau suave já é lavagem. O significado de `primarySubtle` perdeu «seleção» e ficou só contêiner sólido do `onPrimarySubtle`.
+
+### O que eu recusei, e a condição de reabrir
+
+- **emitir o valor do seu Dart**: não. Derivação é do pai, alias é do filho. Reabre se outra marca precisar de alfa diferente; aí o alfa vira campo da paleta.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | um alfa num lugar, não dois |
+| escalabilidade | ↑ | todo filho recebe o papel de graça |
+| aplicação | ↑ | o Dart do filho B e as 4 peças de seleção do IB |
+| aderência ao mercado | ↑ | é a camada translúcida de estado do M3 |
+| robustez | ↑ | o papel passa pelo gate de chegada na web |
+| arquitetura limpa e simples | = | um papel novo apaga duas derivações locais |
+| conciso | = | um `///` e uma linha de significado |
+
+### O que você faz
+
+`ref: v3.11.0`. No Dart, troque a derivação local de `primaryWash` pela do pai: zero pixel. No IB, apague `--ib-superficie-marcada` e leia `--diletta-primaryWash`: **muda pixel no escuro**, a linha marcada passa de 10% a 20%. No claro nada muda.
