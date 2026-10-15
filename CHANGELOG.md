@@ -20,6 +20,48 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [0.125.0] — 2026-10-15
+
+### O avô sobe de `v3.13.0` para `v3.19.0` — os oito pinos juntos, e os seis pedidos de 15/10 chegam
+
+A pedido da Tatiana (15/10): o pai respondeu no mesmo dia os seis pedidos que a remedição do IB abriu
+contra a `v3.13.0`, e o IB só troca as peças locais com a tag web desta casa. Entre a `v3.13.0` e a
+`v3.19.0` são seis menores do avô, sem major: `3.14.x` (o segundo lote da paridade web — calendário,
+campo de data, upload, barra de progresso e expansível —, os ajudantes de `base.js` exportados, o ícone
+que se redesenha dentro de shadow e todo aviso web com `composed: true`), `3.15.0` (coluna ordenável na
+lista de dados), `3.16.0` (os quatro pedidos deste filho e o stepper web), `3.17.0` (a seleção da lista
+de dados), `3.18.x` (o campo que repassa o `<input>`, pedido deste filho, e o segmento do stepper Dart)
+e `3.19.0` (os breakpoints como `@custom-media`, pedido deste filho).
+
+Os oito pinos sobem juntos: três `ref:` em Dart (`coreflow`, `coreflow_design_system`, `catalog`),
+quatro `package.json` na web (Bold, Norte Benk, Confia Capital e o exemplo do gerador) e o molde do
+`novo_filho.dart`. O `npm install` foi forçado pela tag nos quatro, e os quatro locks resolvem o mesmo
+commit da `web-v3.19.0`.
+
+### O que mexeu, medido nas quatro folhas reemitidas
+
+Nada. O pai não mudou token nem papel entre as duas versões, e as folhas do Bold, da Norte Benk, da
+Confia Capital e do exemplo saíram idênticas. A Norte Benk sobe para 0.1.7 e a Confia Capital para
+0.1.1 porque o avô que o lado web delas carrega mudou: a `norte-benk-web-v0.1.7` e a
+`confia-capital-web-v0.1.1` saem desta tag.
+
+### O que o app sente, pelo CHANGELOG do avô
+
+- `3.16.0` muda layout: o `DilettaCheckbox` ganha o `DilettaAlvoDeToque`, e o alvo passa a 44 com a
+  caixa de 16 ou 20 centrada; com rótulo, a linha alinha no início. Neste repo, o cartão de pedido do
+  `coreflow` desenha um.
+- `3.16.0` muda o que se ouve, não o pixel: o título do `DilettaEmptyState` é cabeçalho.
+- `3.18.1` muda um segmento em toda tela que declara `ateOPasso` no stepper: o «por chegar» começa no
+  passo que a spec diz.
+
+### Para quem consome a web
+
+O IB troca o `BoldSegmented` (com `desligados`), o `BoldTextField` (o `<diletta-input>` nos sítios
+sem data e o `<diletta-date-field>` nos de data), o checkbox e o interruptor, e o `BoldEmptyState`,
+e apaga a coluna de 44 da tabela. Os breakpoints chegam como
+`coreflow-design-system-web/avo/breakpoints.css`, porque a emissão deriva os `exports` do avô. O papel `switch` do interruptor mudou do `.trilho` para o `.alvo`: teste que procura
+o papel no shadow continua achando, e quem lia o `.trilho` pelo papel não acha mais.
+
 ## [0.124.0] — 2026-10-14
 
 ### Nasce o terceiro filho — a Confia Capital, a primeira com a arte do modo escuro mandada pelo cliente
