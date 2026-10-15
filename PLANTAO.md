@@ -1,8 +1,8 @@
 # Plantão do pai
 
-sinal: 2026-10-15 12:40 (horário de Brasília)
+sinal: 2026-10-15 12:45 (horário de Brasília)
 pai: online
-vale até: 2026-10-15 13:25 · depois disso, leia como offline
+vale até: 2026-10-15 13:30 · depois disso, leia como offline
 
 fila: nenhum pedido seu esperando veredito.
 
