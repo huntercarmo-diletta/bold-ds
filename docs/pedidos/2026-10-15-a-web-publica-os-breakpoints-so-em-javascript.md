@@ -44,3 +44,27 @@ Um `@media` dentro das peças nem um eixo responsivo: só a mídia nomeada com o
 ## Como o pai vai saber que funcionou
 
 Um arquivo em `tokens/` (ou dentro de `diletta-tokens.css`) com `@custom-media --ate-sm (max-width: 639.98px)` … `--de-xl (min-width: 1280px)`, os oito, derivados de `BREAKPOINTS` pelo mesmo emissor; um gate que compara os dois lados.
+
+## VEREDITO · ENTRA — os quatro limiares saem também como mídia nomeada
+**pai**: ds-diletta **v3.19.0** · **data**: 2026-10-15
+
+### O que decidiu
+O seu precedente da grade decidiu: um número da linguagem sai nas duas formas quando as duas o consomem. `diletta-design-system-web/breakpoints.css` declara os oito `@custom-media`, `--ate-sm (max-width: 639.98px)` … `--de-xl (min-width: 1280px)`, e está no `exports`. O arquivo é curto, e o teste `o_breakpoint_e_um_so` é o gerador dele: reprova se qualquer número divergir de `BREAKPOINTS`.
+
+### O que eu recusei, e a condição de reabrir
+- **o 900 do trilho lateral**: não é limiar da linguagem. Escolher entre `--ate-md` e `--ate-lg` é da dona do produto, como você escreveu. Reabre se um segundo filho medir o mesmo limiar fora da escala.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | nenhum gerador por consumidor |
+| escalabilidade | ↑ | o IB e o Cockpit leem o mesmo arquivo |
+| aplicação | ↑ | os 21 `@media` cravados do IB; adota o filho B |
+| aderência ao mercado | ↑ | Media Queries Level 5 com `postcss-custom-media`, como o Open Props |
+| robustez | ↑ | o teste reprova a divergência entre o CSS e o JS |
+| arquitetura limpa e simples | = | um arquivo e uma linha de `exports` |
+| conciso | = | um cabeçalho de seis linhas |
+
+### O que você faz
+`ref: v3.19.0`. No IB, importe `diletta-design-system-web/breakpoints.css` no PostCSS e troque os 640, 1000, 1100 e 1279 cravados pelas mídias nomeadas. O 900 espera a decisão da dona.
