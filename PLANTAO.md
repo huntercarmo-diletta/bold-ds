@@ -1,9 +1,9 @@
 # Plantão do pai
 
-sinal: 2026-10-15 16:49 (horário de Brasília)
+sinal: 2026-10-15 17:29 (horário de Brasília)
 pai: online
-vale até: 2026-10-15 17:34 · depois disso, leia como offline
+vale até: 2026-10-15 18:14 · depois disso, leia como offline
 
-- respondendo desde 15/10 16:49 · 2026-10-15-a-web-publica-os-breakpoints-so-em-javascript.md
+fila: nenhum pedido seu esperando veredito.
 
 Pedido que some daqui foi respondido: o veredito está no próprio arquivo.
