@@ -46,3 +46,30 @@ Mudar o desenho: a caixa de 20 e a trilha de 44×24 ficam. Pedindo o host que cr
 ## Como o pai vai saber que funcionou
 
 `getBoundingClientRect().height` de `[role=checkbox]` e de `[role=switch]` ≥ 44 na web, com a caixa e a trilha nos tamanhos de hoje; no Dart, o gate `o_alvo_de_toque_tem_piso_test.dart` cobre o checkbox.
+
+## VEREDITO · ENTRA, defeito meu — o alvo cresce, o desenho não
+**pai**: ds-diletta **v3.16.0** · **data**: 2026-10-15
+
+### O que decidiu
+O molde é o que você citou, o segmentado da web-v2.7.0. Na web, o elemento com `role="checkbox"` ou `role="switch"` ganha `min-height` e `min-width` de 44, com o desenho centrado. A caixa de 20 e a trilha de 44×24 ficam como estão. No Dart, o `DilettaCheckbox` ganha o `DilettaAlvoDeToque`. Com rótulo, a linha alinha no início. O gate `o_alvo_de_toque_tem_piso_test.dart` cobre os dois casos.
+
+### O que eu achei indo implementar
+A lista de rádio também está abaixo do piso: 32 de linha, igual no Dart e na web.
+
+### O que eu recusei, e a condição de reabrir
+- **o piso na rádio**: fica fora deste veredito, porque não há quebra de paridade e ninguém pediu. Reabre com um pedido.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o alvo sai da célula da tela e entra na peça |
+| escalabilidade | ↑ | todo filho recebe o piso sem saber |
+| aplicação | ↑ | 4 checkboxes e 9 interruptores do IB, e os do Cockpit |
+| aderência ao mercado | ↑ | 44 da HIG e WCAG 2.5.5 |
+| robustez | ↑ | gate Dart e gate web, com o desenho medido junto |
+| arquitetura limpa e simples | = | o mesmo `ALVO` do segmentado |
+| conciso | = | uma linha de comentário por peça |
+
+### O que você faz
+`ref: v3.16.0`. No IB, apague a coluna de 44 que dava o alvo por fora na tabela. O `.trilho` do interruptor continua sendo o desenho, e o papel `switch` agora mora no `.alvo`.
