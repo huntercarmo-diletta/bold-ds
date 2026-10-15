@@ -47,3 +47,27 @@ Tecla nova: Espaço e Enter já estão lá. Pedindo só o render pela função q
 ## Como o pai vai saber que funcionou
 
 Depois de Espaço no `[role=checkbox]` e no `[role=switch]`, `host.shadowRoot.activeElement` continua sendo o controle; o gate do foco da `base.js` cobre as três.
+
+## VEREDITO · ENTRA, defeito meu — as três desenham pela função que guarda o foco
+**pai**: ds-diletta **v3.16.0** · **data**: 2026-10-15
+
+### O que decidiu
+A sua frase: *«três chamadas trocadas»*. É isso. O checkbox, o interruptor e a lista de rádio passam a desenhar pelo `pinta()`, e o foco volta pro controle depois de Espaço, Enter ou clique. Teste: `test/a_escolha_guarda_o_foco_e_tem_piso.test.js`.
+
+### O que eu recusei, e a condição de reabrir
+nada recusado.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o foco mora numa função só |
+| escalabilidade | ↑ | a próxima peça copia o molde certo |
+| aplicação | ↑ | checkbox, interruptor e rádio do IB e do Cockpit; adota o filho B |
+| aderência ao mercado | ↑ | o foco fica no controle, como no ARIA APG |
+| robustez | ↑ | um gate cobre as três peças |
+| arquitetura limpa e simples | = | nenhuma peça nova |
+| conciso | = | nada novo a ler |
+
+### O que você faz
+`ref: v3.16.0`. Nada a trocar nas telas.

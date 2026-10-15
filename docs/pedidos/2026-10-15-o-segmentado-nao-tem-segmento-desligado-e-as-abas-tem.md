@@ -45,3 +45,27 @@ Motivo por segmento, nem tooltip: a frase do porquê fica na tela, ao lado, como
 ## Como o pai vai saber que funcionou
 
 `<diletta-segmented-control segmentos="Pix|TED" ativo="0" desligados="1">`: o segundo segmento sai com `aria-disabled="true"`, o clique nele não muda `ativo` nem dispara `mudou`, e → a partir do primeiro não anda (ou anda para o próximo ligado, quando houver). O gate das abas (`aceitavelDe`) ganha o irmão.
+
+## VEREDITO · ENTRA — o segmento desligado fica na fileira, e o teclado pula ele
+**pai**: ds-diletta **v3.16.0** · **data**: 2026-10-15
+
+### O que decidiu
+Entrou o que você pediu, com o nome que você pediu: `desligados`, no formato das `desligadas` das abas. O segmento fica visível com `aria-disabled="true"` e `textDisabled`, o clique nele não muda `ativo` nem avisa `mudou`, e setas, Home e End pulam ele. Com `Pix|TED` e `desligados="1"`, a seta → a partir de Pix não anda e não avisa. A peça é só web: o Dart não tem segmentado, então não há par a cobrar.
+
+### O que eu recusei, e a condição de reabrir
+nada recusado.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o `BoldSegmented` local morre nos 7 sítios |
+| escalabilidade | ↑ | toda fileira de escolha com opção indisponível |
+| aplicação | ↑ | o envio por agência do IB; adota o filho B |
+| aderência ao mercado | ↑ | `aria-disabled` em `radiogroup`, como no `ToggleButtonGroup` do MUI |
+| robustez | ↑ | a seta nunca para num beco, e o teste cobra |
+| arquitetura limpa e simples | = | a mesma lei das abas, sem peça nova |
+| conciso | = | um requisito na spec |
+
+### O que você faz
+`ref: v3.16.0`. No envio por agência, ponha `desligados="1"` quando o banco não aceitar TED. A frase do porquê continua ao lado.

@@ -41,3 +41,27 @@ O nível do cabeçalho como eixo da peça (`h2` × `h3`). Pedindo que seja cabe�
 ## Como o pai vai saber que funcionou
 
 Na web, `shadowRoot.querySelector('.titulo').tagName` começa com `H`; no Dart, o `Semantics` do título tem `header: true` — o gate `o_dialogo_se_anuncia_pelo_titulo_test.dart` ganha o irmão do estado vazio.
+
+## VEREDITO · ENTRA, defeito meu — o vazio se anuncia pelo título, como o diálogo
+**pai**: ds-diletta **v3.16.0** · **data**: 2026-10-15
+
+### O que decidiu
+O seu precedente decidiu: é a mesma anatomia do diálogo, e o diálogo entrou na v3.10.0 como defeito. O título vira `Semantics(header: true)` no Dart e `<h3>` na web, com o mesmo `subheading` e a mesma margem. A legenda continua texto, e o nível fica fixo em `h3`. A spec ganhou o requisito, e o gate `o_vazio_se_anuncia_pelo_titulo_test.dart` é o irmão do teste do diálogo.
+
+### O que eu recusei, e a condição de reabrir
+- **nível declarável (`h2` × `h3`)**: você não pediu, e não entrou. Reabre quando uma tela medir o vazio como seção de primeiro nível.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o `BoldEmptyState` local morre |
+| escalabilidade | ↑ | todo filho recebe o cabeçalho sem saber |
+| aplicação | ↑ | os 53 estados vazios do IB; adota o filho B |
+| aderência ao mercado | ↑ | título de bloco é cabeçalho (WCAG 1.3.1) |
+| robustez | ↑ | um teste por lado |
+| arquitetura limpa e simples | = | um `Semantics` e uma tag |
+| conciso | = | um requisito na spec |
+
+### O que você faz
+`ref: v3.16.0`. No IB, troque o `BoldEmptyState` pela peça nos 53 sítios e apague o `<h3>` de fora.
