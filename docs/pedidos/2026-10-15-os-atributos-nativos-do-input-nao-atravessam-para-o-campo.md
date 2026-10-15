@@ -53,3 +53,30 @@ Eixo novo nem validação: `pattern`, `required` e a mensagem de erro continuam 
 ## Como o pai vai saber que funcionou
 
 `<diletta-input type="search" autocomplete="off" name="busca" autofocus min="…" max="…">` → o `.campo` de dentro sai com os mesmos seis atributos, e `type="date"` desenha o seletor do navegador. O gate que confere `inputmode` e `maxlength` ganha as seis linhas.
+
+## VEREDITO · ENTRA DIFERENTE — a lista nomeada cresce, e a data vai para o campo de data
+**pai**: ds-diletta **v3.18.0** · **data**: 2026-10-15
+
+### O que decidiu
+A sua leitura do veredito de 17/09: não é eixo, é repasse. `autocomplete`, `name`, `min` e `max` entraram na mesma lista nomeada de `inputmode` e `maxlength`, e chegam ao `.campo` de dentro. `type` aceita `search`, `email`, `tel`, `url` e `number`: o desenho continua o de `text`, e o `<input>` recebe o nativo, com o `searchbox` e o teclado certo. Teste: `test/o_campo_repassa_o_que_o_input_entende.test.js`.
+
+### O que eu achei indo implementar
+`autofocus` já atravessava. É atributo global, e o host com `delegatesFocus` entrega o foco ao campo de dentro. Ponha no hospedeiro, como está.
+
+### O que eu recusei, e a condição de reabrir
+- **`type="date"`**: a data é o `<diletta-date-field>`, que já tem `min` e `max` e o calendário da linguagem. O seletor nativo desenharia uma data diferente em cada navegador. Os 12 sítios de data trocam de peça. Reabre se o campo de data não cobrir algum dos 12.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | uma lista, não um atributo por vez |
+| escalabilidade | ↑ | todo campo de formulário web |
+| aplicação | ↑ | os 85 usos do `BoldTextField`; adota o filho B |
+| aderência ao mercado | ↑ | o repasse de atributo nativo do Shoelace e do Lion |
+| robustez | ↑ | o teste cobra a lista e os `type` |
+| arquitetura limpa e simples | = | uma constante e um `map` |
+| conciso | = | uma linha de paridade |
+
+### O que você faz
+`ref: v3.18.0`. O `BoldTextField` vira embrulho do `<diletta-input>` nos 73 sítios sem data. Nos 12 de data, use `<diletta-date-field min max>`.
