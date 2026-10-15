@@ -32,6 +32,7 @@ nasce aqui) · **NASCE NO FILHO** · **MORA NO SEU DS**.
 
 | pedido | veredito | chegou em |
 |---|---|---|
+| [o segmentado não tem segmento desligado — e as abas têm `desligadas`](pedidos/2026-10-15-o-segmentado-nao-tem-segmento-desligado-e-as-abas-tem.md) | **sem veredito** (15/10). É o único buraco entre o `BoldSegmented` do IB e o elemento (teclado e alvo já entraram): 1 dos 7 sítios desliga a TED quando o banco não aceita. **Bloqueia a troca** | — |
 | [o checkbox e o interruptor web não têm o piso de 44 — e o Dart do interruptor tem](pedidos/2026-10-15-o-checkbox-e-o-interruptor-web-nao-tem-o-piso-de-44.md) | **sem veredito** (15/10). Checkbox 20×20 e interruptor 44×24 na web; o Dart do interruptor tem `DilettaAlvoDeToque`, o do checkbox não; o segmentado web já ganhou o host de 44 na `web-v2.7.0` | — |
 | [as três peças de escolha novas derrubam o foco — o `pinta()` existe e elas não o usam](pedidos/2026-10-15-as-tres-pecas-de-escolha-novas-derrubam-o-foco.md) | **sem veredito** (15/10). Checkbox, interruptor e lista de rádio da `v3.13.0` escrevem `shadowRoot.innerHTML` direto; Espaço marca e o foco cai no `<body>`; o chip e o segmentado, que usam `pinta()`, seguram o foco. **Bloqueia a troca** no IB | — |
 | [o título do estado vazio não é cabeçalho, nos dois lados](pedidos/2026-10-15-o-titulo-do-estado-vazio-nao-e-cabecalho.md) | **sem veredito** (15/10). `<p class="titulo">` na web e `Text` sem `header` no Dart; 53 estados vazios do IB perderiam o cabeçalho; o irmão do diálogo entrou na `v3.10.0` | — |
