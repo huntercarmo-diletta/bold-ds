@@ -7,6 +7,7 @@ de bloco é aqui.
 | pacote | o que é |
 |---|---|
 | `packages/coreflow` | **o PAI**: a linguagem de produto sem produto — re-exporta o `ds-diletta` e tem os 61 arquivos `Coreflow*`: componentes, `CoreflowProduto`, `CoreflowScheme`, `CoreflowTemaMaterial`, `CoreflowTipografia`, `CoreflowGradients`. Não declara valor de produto nenhum: nem cor, nem degrau, nem asset, nem família — `docs/2026-09-04-adr-o-coreflow-e-o-pai.md` |
+| `packages/coreflow_web` | **o PAI na web** (`coreflow-web`, 0.1.0, ainda sem tag): nasceu em 16/10, passo 1 da proposta `docs/propostas/2026-10-16-a-camada-web-do-coreflow.md`. Reexporta o avô (`diletta-design-system-web`, no mesmo pino do Bold) e abre o ponto de extensão `coreflow/`, vazio até a primeira fila de `<coreflow-*>`. Não pinta: a folha é do filho. Os filhos ainda apontam o `#avo` para o avô — a troca é o passo 3 |
 | `packages/coreflow_design_system` | **o primeiro filho e primeiro cliente, o Conta BOLD**: depende do pai por `path:` e o re-exporta (quem importa este recebe os três), mais a identidade do Conta BOLD — `ContaBold` (o produto com o nome dele), paleta, vinho, fonte, escala e o selo quântico, que seguem `Bold*` porque são a marca e não a linguagem |
 | `packages/norte_benk_coreflow` | **o segundo filho, o Norte Benk**: o primeiro envio do Berço Coreflow (17/09) que virou pacote pelo `dart run coreflow:novo_filho`. Depende só do pai, por `path:`. Uma cor (`#2A57A5`), a marca visual em três artes (colorido, positivo/negativo e símbolo) e a forma "descontraído" (botão 26, folha 32) por `.comMaterial`; sem `tipografia:` de propósito — a fonte pedida é licenciada e entra na implantação. O lado web nasceu junto, em `web/` |
 | `packages/confia_capital_coreflow` | **o terceiro filho, a Confia Capital**: o segundo envio do Berço Coreflow (14/10), o primeiro com a arte do modo escuro mandada pelo cliente. Nasceu pelo `dart run coreflow:novo_filho` e depende só do pai, por `path:`. Uma cor (`#213B70`), a marca visual em quatro artes (lockup e símbolo, claro e escuro), a forma "acolhedor" com as seis medidas e o dourado do logo como cor de parceiro; sem `tipografia:`, porque o cliente não pediu fonte. O lado web nasceu junto, em `web/` |
@@ -16,7 +17,7 @@ de bloco é aqui.
 ## O gate
 
 ```bash
-(cd packages/coreflow && flutter analyze && flutter test)                   # 105
+(cd packages/coreflow && flutter analyze && flutter test)                   # 200 (pede `npm install` em coreflow_web)
 (cd packages/coreflow_design_system && flutter analyze && flutter test)     # 230 (pede `npm install`)
 (cd packages/norte_benk_coreflow && flutter analyze && flutter test)        # 20  (pede `npm install` em web/)
 (cd packages/confia_capital_coreflow && flutter analyze && flutter test)    # 15  (pede `npm install` em web/)

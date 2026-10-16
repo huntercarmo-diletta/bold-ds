@@ -36,6 +36,7 @@ const _pacotePorPrefixo = {
   'web-v': 'coreflow-design-system-web',
   'norte-benk-web-v': 'norte-benk-web',
   'confia-capital-web-v': 'confia-capital-web',
+  'coreflow-web-v': 'coreflow-web', // o pai na web, desde 16/10/2026 — ainda sem tag
 };
 
 /// O TETO que separa pacote de repositório, e ele não opina sobre o tamanho da emissão.

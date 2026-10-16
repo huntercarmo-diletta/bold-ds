@@ -1,0 +1,23 @@
+{
+  "name": "coreflow-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "O PAI na web: a linguagem de produto sem produto. Reexporta os custom elements do avô e abre o ponto de extensão `coreflow/` para as peças <coreflow-*> que o avô recusou e mais de um produto usa. Não pinta: a folha é do filho.",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./coreflow": "./coreflow/index.js",
+    "./coreflow/*": "./coreflow/*"
+  },
+  "imports": {
+    "#avo": "diletta-design-system-web"
+  },
+  "files": [
+    "index.js",
+    "coreflow/"
+  ],
+  "dependencies": {
+    "diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-v3.19.0"
+  }
+}

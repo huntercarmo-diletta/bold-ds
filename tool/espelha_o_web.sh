@@ -68,8 +68,9 @@ case "$filho" in --seco) seco=--seco; filho=bold ;; esac
 [ -n "$tag" ] || { echo "uso: sh tool/espelha_o_web.sh <tag> [filho] [--seco]"; exit 2; }
 git rev-parse -q --verify "refs/tags/$tag" >/dev/null || { echo "tag $tag não existe aqui"; exit 1; }
 
-# OS FILHOS, e o que muda de um para o outro. A lista é DECLARADA, e o mesmo par mora no gate
-# `packages/coreflow/test/uma_versao_e_uma_tag_test.dart` — mudar um sem o outro reprova lá.
+# OS FILHOS — e o pai, desde 16/10 —, e o que muda de um para o outro. A lista é DECLARADA, e o
+# mesmo par mora nos gates `packages/coreflow/test/uma_versao_e_uma_tag_test.dart` e
+# `toda_tag_web_carrega_o_pacote_test.dart` — mudar um sem os outros reprova lá.
 #
 # `bold` é o primeiro, e por isso o único sem prefixo próprio: a tag dele é `web-vX.Y.Z` e o
 # Internet Banking já a consome. Derivar o nome dele hoje quebraria o consumidor.
@@ -87,8 +88,13 @@ case "$filho" in
   confia-capital)
     pacote=packages/confia_capital_coreflow/web
     prefixo="confia-capital-web-v" ;;
+  # O PAI na web (16/10/2026): não é filho, mas sai pelo mesmo espelho — reexporta o avô, carrega
+  # a cópia dele em `avo/` como os outros, e não tem folha nenhuma porque não pinta.
+  coreflow)
+    pacote=packages/coreflow_web
+    prefixo="coreflow-web-v" ;;
   *)
-    echo "filho desconhecido: $filho (conheço: bold, norte-benk, confia-capital)"; exit 2 ;;
+    echo "filho desconhecido: $filho (conheço: bold, norte-benk, confia-capital, coreflow)"; exit 2 ;;
 esac
 
 # A PROFUNDIDADE VEM DO CAMINHO, e não de um número escrito: o `bold` guarda o lado web num pacote

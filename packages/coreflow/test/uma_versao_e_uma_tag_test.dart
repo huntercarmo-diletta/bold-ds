@@ -71,6 +71,11 @@ const _filhos = <Filho>[
       '../norte_benk_coreflow/web/package.json', 'norte-benk-web-'),
   Filho('Confia Capital', '../confia_capital_coreflow/pubspec.yaml',
       '../confia_capital_coreflow/web/package.json', 'confia-capital-web-'),
+  // O PAI, que desde 16/10/2026 também tem lado web — `packages/coreflow_web`, o `coreflow-web`
+  // (`docs/propostas/2026-10-16-a-camada-web-do-coreflow.md`, aprovada pela Agatha). Não é filho,
+  // mas publica no MESMO espaço de tags e tem os mesmos dois números. O `coreflow` em Dart está em
+  // `0.1.0` porque é consumido por `path:` e nunca teve tag; os dois lados andam juntos daqui.
+  Filho('Coreflow (o pai)', '../coreflow/pubspec.yaml', '../coreflow_web/package.json', 'coreflow-web-'),
 ];
 
 String _versaoDoPubspec(String caminho) {

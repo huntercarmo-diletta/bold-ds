@@ -1,6 +1,6 @@
 # Proposta · a camada web do Coreflow — o degrau que falta entre o avô e os filhos
 
-**Estado:** proposta, aguarda decisão da Agatha · **data:** 2026-10-16 · **de:** o chat do webadmin (console da Conta BOLD) · **toca:** `packages/coreflow`, `packages/coreflow_design_system_web`, `packages/*/web`, `tool/espelha_o_web.sh`, `packages/coreflow/bin/novo_filho.dart`.
+**Estado:** aprovada pela Agatha em 16/10/2026 — passo 1 em andamento · **data:** 2026-10-16 · **de:** o chat do webadmin (console da Conta BOLD) · **toca:** `packages/coreflow`, `packages/coreflow_design_system_web`, `packages/*/web`, `tool/espelha_o_web.sh`, `packages/coreflow/bin/novo_filho.dart`.
 
 ## O fato, medido em 16/10
 

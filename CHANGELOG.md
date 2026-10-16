@@ -20,6 +20,23 @@ O que cada degrau significa **pro app que adota**:
 | **minor** | componente novo, papel novo, token novo | sobe sem mexer em nada |
 | **patch** | conserto que não muda API | sobe sem ler |
 
+## [Unreleased]
+
+### Nasce `packages/coreflow_web` (`coreflow-web` 0.1.0) — o pai na web
+
+Passo 1 da proposta `docs/propostas/2026-10-16-a-camada-web-do-coreflow.md`, aprovada pela Agatha
+em 16/10. No Flutter a casa tem três degraus (avô → `coreflow` → filho); na web tinha dois, e todo
+veredito «nasce no filho» não tinha onde nascer. O pacote novo reexporta o avô
+(`diletta-design-system-web`, `web-v3.19.0` — o mesmo pino do Bold, lock no mesmo commit) e abre o
+ponto de extensão `coreflow/`, vazio por enquanto (`pecasDoCoreflow = []`), com a regra de entrada
+escrita: só o que o avô recusou ou declarou «do produto» E mais de um produto usa; peça aceita pelo
+avô sai de lá. Não pinta — sem `tokens/`, sem hex.
+
+**Os filhos ainda apontam o `#avo` para o avô**; a troca é o passo 3, junto com a tag
+`coreflow-web-v0.1.0`, que é da Agatha. O espelho (`tool/espelha_o_web.sh`) ganha o alvo `coreflow`
+(tag `coreflow-web-v<versão>`), e os gates `uma_versao_e_uma_tag`, `toda_tag_web_carrega_o_pacote`
+e o novo `o_pai_na_web_recebe_o_mesmo_avo` passam a conhecê-lo. O número do Bold não muda.
+
 ## [0.125.0] — 2026-10-15
 
 ### O avô sobe de `v3.13.0` para `v3.19.0` — os oito pinos juntos, e os seis pedidos de 15/10 chegam
