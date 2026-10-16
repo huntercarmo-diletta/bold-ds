@@ -18,6 +18,115 @@ A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
 
 ---
 
+## Rodada de 2026-10-16 · o console manda treze peças, e oito viram pedido ao avô
+
+Escrita pelo **`entregador-de-pedidos`**, chamado pela sessão principal do `core-flow-wa` com a frase dela
+*«sobe os pedidos»*. O escopo são os **treze** itens que o trabalho do webadmin (07–16/10) anotou como
+peça web montada à mão, mais a lista do que é só do espelho no Figma. Medido na `main` deste repo
+(`8f7640b`: pacote `0.125.0`, avô `v3.19.0` / `web-v3.19.0`), na ponta do avô (`web-v3.19.0`, 15/10) e no
+console em `release/homologation` (`afb1fec4`, 15/10). `DilettaManifesto.busca` foi reproduzida sobre
+`specs/` da `v3.19.0` com a mesma regra do código (`diletta_manifesto.dart:155-172`: slug ou `## Purpose`,
+sem acento).
+
+**O resultado, antes do detalhe**: **oito pedidos ao avô**, cinco itens que **não** viram pedido (dois já
+existem na linguagem, um tem recusa de pé, dois são receita do console), e um defeito de código do console
+achado ao medir.
+
+**Chats lidos**:
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| a sessão principal do console | `core-flow-wa` · `0f441ea9` | 16/10 11h43 | a lista dos treze, passada pela sessão. **Da transcrição li só** os relatórios do protótipo «Cadastros › Por passo» (08/10) e da crítica de composição dele (13/10). Cada item foi medido de novo no código |
+| os outros chats da janela (08/10 → agora) | — | — | **não lidos nesta rodada** |
+
+### 0 · O QUE O AVÔ RESPONDEU desde 08/10, e já está na `main`
+
+Nenhuma branch `veredito/`, `aviso/` ou `nota/` sem integrar: as de 08, 14 e 15/10 já entraram pela mão de
+outras sessões. Em resumo: o diálogo, o botão e o link **ENTRAM** na `v3.10.0`; o segmentado desligado, o
+piso de 44, o foco das peças de escolha e o título do vazio **ENTRAM** na `v3.16.0`; os atributos do campo
+**ENTRAM DIFERENTE** na `v3.18.0` (a data vai para o `<diletta-date-field>`); os breakpoints em CSS
+**ENTRAM** na `v3.19.0`. Sem veredito: o Enter no campo (16/10).
+
+**Deriva**:
+
+- **o console** prende `web-v0.118.0`, que embute o avô `web-v2.5.0`, em `release/homologation` e em `development`;
+- **a última tag web deste repo** é a `web-v0.124.0` (avô `web-v3.13.0`). A `main` já declara `0.125.0` com o
+  avô `web-v3.19.0`, mas **a tag `web-v0.125.0` não existe**;
+- **o pai** (Coreflow) prende o avô em `v3.19.0` (`packages/coreflow/pubspec.yaml:23`);
+- **o app** vendoriza o filho e a base `v0.122.1`, com o avô `v3.3.1`, em `origin/development` e em
+  `origin/release/homologation` (lá o bloco `"pai"` é o **avô**). A branch aberta no checkout,
+  `feat/grupos-de-limite-administracao`, está em `v0.113.0` (avô `v0.204.0`);
+- **a ponta do avô** é `v3.19.0` / `web-v3.19.0`.
+
+### 1 a 8 · PEDIDOS AO AVÔ, em ordem de dependência
+
+A gaveta vem primeiro porque **três dos outros moram dentro dela** nas telas medidas (a ficha, a linha do
+tempo e o degrau aberto). Isso pesa na ordem de adoção, não no veredito: cada um se julga sozinho. A barra
+e o campo de data não dependem de nada. Os gráficos vêm depois porque o item 1 deles (as cores de série) é
+pré-requisito dos outros três. O trilho vem por último, porque não depende de nada e não impede nada.
+
+| # | pedido | o número que decide |
+|---|---|---|
+| 1 | [a gaveta lateral não existe](pedidos/2026-10-16-a-gaveta-lateral-nao-existe-e-dois-filhos-escrevem-a-sua.md) | `WaDetailPanel`: 30 chamadas em 18 arquivos. **E o censo do próprio avô** (`O-QUE-A-WEB-USA.md:360`) conta 325 linhas de gaveta no backoffice do filho A, o que derruba a razão desta casa em 25/09 para não pedir («sem segundo consumidor») |
+| 2 | [a ficha de rótulo sobre valor](pedidos/2026-10-16-a-ficha-de-rotulo-sobre-valor-nao-e-o-detail-row.md) | `Par`/`Pares` em duas cópias idênticas, 67 chamadas; 45 `<dl>` em 32 arquivos. Responde à nota de 28/09: *«a empilhada não é a anatomia»* do `detail-row` |
+| 3 | [a linha do tempo](pedidos/2026-10-16-a-linha-do-tempo-nao-existe-e-o-console-tem-duas-receitas-e-uma-copia-quebrada.md) | 4 sítios, 2 receitas, 1 cópia quebrada |
+| 4 | [o degrau web da esteira não abre](pedidos/2026-10-16-o-degrau-web-da-esteira-nao-abre-e-nao-diz-qual-e-o-passo-atual.md) | `web-stepper-node`: 3 estados, só o slot `acao`. **O número é UM protótipo, sem código**: o pedido aceita `ESPERA` |
+| 5 | [a região `bottom` da web](pedidos/2026-10-16-a-web-nao-tem-a-regiao-bottom-e-o-console-fixa-a-acao-em-tres-copias.md) | a mesma folha `sticky` em três telas; o `navigation-button` é `ambos` e não tem elemento web |
+| 6 | [o campo de data não tem hora](pedidos/2026-10-16-o-campo-de-data-nao-tem-hora.md) | 3 `datetime-local` em 2 telas |
+| 7 | [gráfico de dado e cores de série](pedidos/2026-10-16-a-linguagem-nao-tem-grafico-de-dado-e-o-console-pinta-fatia-com-papel-de-estado.md) | 24 chamadas, 1.204 linhas; a pizza usa `success` e `warningBorder` como categoria |
+| 8 | [o item do trilho não deixa compor o ativo](pedidos/2026-10-16-o-item-do-trilho-nao-deixa-o-filho-compor-o-ativo-dele.md) | 0 usos do `<diletta-rail-item>`; o console anotou o pedido no código e não o escreveu |
+
+### 9 · O que NÃO virou pedido, e por quê
+
+| item da lista | o que a medição disse | vai para |
+|---|---|---|
+| **4 · cartão de total** | **a recusa de 28/09 está de pé**: *«`amount-display` para KPI de painel. Reabre com o segundo filho medindo total de período em painel. Aí é peça nova»*. Só nós medimos. A contagem que faltava em 25/09 agora existe: `painel/ui/Totais.tsx`, `conversas/ui/ResumoDeQuedas.tsx` e `tarifacao/ui/comum.tsx:174` (`QuadroDeTotais`, 3 chamadas), mais os 4 totais contados em 28/09 | **console**: uma peça compartilhada até a condição bater |
+| **7 · texto longo** | **já existe**: `<diletta-input type="long">` (`diletta-input.js:21`, `:164`), e o cursor foi consertado na `web-v3.3.1` (pedido de 29/09). O console tem 10 `<textarea>` em 9 arquivos porque está preso na `web-v2.5.0` | **subir o pino do console** |
+| **8 · seletor com ajuda** | **já existe** desde a `web-v3.2.0` (pedido de 29/09, ENTRA): `ajuda` em `diletta-dropdown.js:79`. Não está na `web-v2.5.0` que o console usa | **subir o pino do console**; e o Dropdown do Figma sem a ajuda vai à lista do espelho |
+| **9 · chip neutro e texto legível** | **NASCE NO FILHO** (veredito de 29/09, com o caminho `::part(pilula)`). O rótulo do chip é `caption`, 12px (`diletta-input-chip.js:151`), e não 11. Frase inteira em chip é escolha da tela. **O pai (Coreflow) não tem camada web** (registrado na rodada de 29/09 · noite), então «pedir ao pai» é decidir criar essa camada | **decisão dela** (item 11.3) |
+| **10 · campo de pergunta com ações** | um sítio só (`relatorios/ui/WidgetDeConsulta.tsx`, o `<textarea>` em `:863`), montado com peças da linguagem (campo longo, chip, botão, cartão). O `chat-input` é de código e de celular | **console**: receita local |
+| **13 · faixa de passos com contagem** | `kyc/ui/DiagramaDoProcesso.tsx` é a versão alta; a baixa só existe no protótipo. Nenhum pedido sem o pai querer | **console**: receita local |
+| (achado) **`Tentativas` sem estilo** | `tarifacao/ui/TelaTarifasDoCliente.tsx:343` usa `comum.linhaDoTempo`, `marco`, `hora`, `corpoDoMarco`, `oQue` e `detalhes` de `tarifacao/ui/comum.module.css`, que não declara nenhuma dessas classes. A linha do tempo das tentativas de débito sai sem a grade | **console**: defeito de código, fora deste repo |
+| (achado) **5 `type="date"` nativos** | `TelaExtratoDoCliente.tsx:308`, `EspelhoDoApp.tsx:358-359`, `SeletorDePeriodo.tsx:90` e `:103`: o `<diletta-date-field>` cobre os cinco desde a `web-v3.14.0` | **console**, depois do pino |
+| (registro) **o rótulo ativo do trilho** | o console pinta em `textPrimary`, e a linguagem em `primary`. No Bold, `primary` passa como texto (8,03 no claro, 6,66 no escuro, calculado). O que reprova é o glifo `primary` sobre a pílula `primarySubtle` do console no escuro (2,94). A divergência é do console, e é consequência da pílula | **console**, registrada no pedido 8 |
+
+### 10 · Só do espelho no Figma, e NÃO é pedido ao pai nem ao avô
+
+Para ela levar ao **`construtor-biblioteca-figma`**:
+
+- a tabela de dados (`diletta-data-row`, `diletta-data-cell`) e a paginação (`diletta-pagination`) não têm componente no Figma;
+- o controle segmentado web não tem Figma (o `Coreflow / Segmentos` do app tem 44 de altura);
+- o link de texto avulso: só existe o `SeeAllLink`;
+- o `CardSurface` não aceita outro `CardSurface` no conteúdo;
+- o Dropdown sem a ajuda abaixo do campo (o código já tem, item 8 acima);
+- o item do trilho: o protótipo usou `Nav / item` (a barra do celular), cujo `Ativo=sim` não mostra o glifo. O `diletta-rail-item` não tem par no Figma;
+- o degrau da esteira (`web-stepper-node`): no Figma, só a versão da Rev 01, que é proibida.
+
+### 11 · O que é nosso e espera decisão dela, em ordem de dependência
+
+1. **Cortar a `web-v0.125.0`**: a `main` já declara o pacote `0.125.0` com o avô `web-v3.19.0`, e a tag web não
+   foi emitida. O campo de data (`web-v3.14.0`) só chega ao console por uma tag com o avô `≥ 3.14.0`. **Tag é dela.**
+2. **Subir o pino do console** de `web-v0.118.0` para essa tag. Isso traz o texto longo com o cursor certo, a
+   ajuda do seletor e o campo de data, e destrava a troca dos 10 `<textarea>`, dos 5 `type="date"` e das
+   ajudas à mão. É trabalho do repo do console.
+3. **Criar ou não a camada web do Coreflow**: é onde o veredito de 29/09 manda nascer o chip neutro, e onde
+   uma pílula do trilho ou uma ficha local morariam se o avô disser «nasce no filho». É decisão de desenho.
+4. **No console, enquanto os vereditos não chegam**: consertar o `Tentativas`, juntar as duas cópias de
+   `Par`/`Pares` e as duas receitas da linha do tempo numa peça só, e manter a pílula do trilho com a
+   divergência escrita.
+
+### 12 · O que não foi medido nesta rodada
+
+- as transcrições inteiras: só os dois relatórios citados;
+- o IB: a gaveta, a ficha e os gráficos podem ter sítios lá, e eu não contei;
+- o código do filho A: o número dele é o do censo do avô, não medição minha;
+- o Figma: não abri. Os nós citados vêm dos relatórios do protótipo;
+- os contrastes: calculados dos valores de `bold-tokens.css`, não medidos em tela;
+- os 32 arquivos com `<dl>`: não separei os empilhados dos lado a lado;
+- a «pilha com volta» da gaveta: não achei sítio no código.
+
+---
+
 ## Rodada de 2026-10-08 · a câmera do app manda oito, e só dois são do avô
 
 Escrita pelo **`entregador-de-pedidos`**, chamado pela sessão principal com a frase dela *«sobe os pedidos
