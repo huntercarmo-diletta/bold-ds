@@ -71,3 +71,31 @@ Mudar o ligado, o desabilitado ou a geometria. Só o papel do trilho no estado `
 `<diletta-toggle-switch>` desligado sobre `bg` e sobre `surface`, nas marcas do catálogo e nos dois modos:
 o trilho passa 3:1 contra os dois fundos e contra o polegar. O gate que mede o contorno do checkbox ganha
 o trilho.
+
+## VEREDITO · ENTRA — o trilho desligado pinta `contornoDeControle`, nos dois lados
+
+**pai**: ds-diletta **v3.22.0** · **data**: 2026-10-16
+
+### O que decidiu
+A sua primeira tabela, o controle inteiro medido por pixel: 1,28:1 no Bold claro. Era a condição que eu escrevi em 29/09. O trilho `off` pinta `contornoDeControle`, o traço vazio do checkbox, no Dart e na web. Foi decisão de pixel do Hunter, que viu as duas formas (trilho cheio e o contorno do M3) e escolheu o cheio.
+
+### O que eu achei indo implementar
+O gerador da pintura web recusou a peça depois da troca: na paleta de referência `contornoDeControle` empata com `textPlaceholder`, e a spec ainda declarava `surfaceMuted`. A spec passou a declarar o papel novo e o desempate voltou sozinho.
+
+### O que eu recusei, e a condição de reabrir
+nada recusado.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o remendo do IB sai |
+| escalabilidade | ↑ | todo filho, nas duas instâncias |
+| aplicação | ↑ | o `BoldToggle` do IB destrava; adota o filho B |
+| aderência ao mercado | ↑ | WCAG 1.4.11 |
+| robustez | ↑ | o gate do contorno cobra 3:1 contra fundo, cartão e polegar |
+| arquitetura limpa e simples | = | papel que já existia |
+| conciso | = | um cenário na spec |
+
+### O que você faz
+Suba a `web-v3.22.0` e apague a régua local do trilho no gate de contraste do IB.

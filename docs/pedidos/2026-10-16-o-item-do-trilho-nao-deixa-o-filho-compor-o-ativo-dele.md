@@ -50,3 +50,31 @@ O trilho do console continua sem a peça, e a navegação cancelável que entrou
 ## Como cheguei aqui
 
 Lote do webadmin de 07–16/10, item 12. O console anotou este pedido no código e não o escreveu.
+
+## VEREDITO · ENTRA — `::part(casca)` e `::part(rotulo)`
+
+**pai**: ds-diletta **v3.22.0** · **data**: 2026-10-16
+
+### O que decidiu
+A sua frase: «o caminho já é seu». É o caminho do chip: a pílula do M3 nasce no filho, por `::part`. O `<diletta-rail-item>` publica `part="casca"` e `part="rotulo"`. O recolhido segue sem rótulo, então ali só a casca existe.
+
+### O que eu achei indo implementar
+nada.
+
+### O que eu recusei, e a condição de reabrir
+nada recusado.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o trilho à mão do console sai |
+| escalabilidade | = | dois `part`; o próximo filho herda só isso |
+| aplicação | ↑ | o trilho do console; adota o filho B |
+| aderência ao mercado | ↑ | `::part` é o caminho do Shoelace para estilo de fora |
+| robustez | = | sem mudança de comportamento |
+| arquitetura limpa e simples | = | dois atributos |
+| conciso | = | uma linha de comentário |
+
+### O que você faz
+Suba a `web-v3.22.0` e componha a pílula por `::part(casca)`; a navegação cancelável de 28/09 vem junto.

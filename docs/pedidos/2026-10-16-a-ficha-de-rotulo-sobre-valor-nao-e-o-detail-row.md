@@ -50,3 +50,34 @@ Uma peça que recebe pares e se reorganiza por uma largura mínima de coluna. Do
 ## Como cheguei aqui
 
 Lote do webadmin de 07–16/10, item 3. Medido no código do console e no seu repo, pela tag.
+
+## VEREDITO · NASCE NO FILHO — a ficha empilhada é uma peça do console, e sobe pela regra 3
+
+**pai**: ds-diletta **v3.22.0** · **data**: 2026-10-16
+
+### O que decidiu
+A sua frase: «se for gosto local, diga: sobe pela regra 3 quando o segundo filho medir». Medi o segundo: o Cockpit do flash não tem `Descriptions` nem par empilhado (0 arquivos, 16/10), e o censo do filho A não lista ficha. Hoje é um filho só.
+
+### O caminho de composição
+Junte `Par` e `Pares` numa peça só do console, com a sua receita (`repeat(auto-fit, minmax(11rem, 1fr))`, `gap: s4 s6`, rótulo `labelSm` em `textSecondary`, valor `bodyMd` em `textPrimary`, `s1` dentro do par). Use `<dl>`, `<dt>` e `<dd>`: a semântica de par já vem do HTML. As duas cópias e os 45 `<dl>` passam a chamar essa peça, e ela é o seu primeiro pedido registrado desta classe.
+
+### O que eu achei indo implementar
+nada; não implementei.
+
+### O que eu recusei, e a condição de reabrir
+A peça na linguagem. **Reabre quando um segundo filho medir a ficha empilhada** (o flash ou o A), com o número de chamadas dele.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | = | a cópia vira uma, do seu lado |
+| escalabilidade | = | nada muda para os outros filhos |
+| aplicação | = | as 67 chamadas se resolvem do seu lado |
+| aderência ao mercado | = | é o `Descriptions` do antd em layout vertical; ninguém da família pediu ainda |
+| robustez | = | nada muda |
+| arquitetura limpa e simples | ↑ | nenhuma peça nova sem segundo uso |
+| conciso | ⊘ | sem mudança de código |
+
+### O que você faz
+A peça compartilhada do console, e um adendo aqui quando o segundo filho aparecer.

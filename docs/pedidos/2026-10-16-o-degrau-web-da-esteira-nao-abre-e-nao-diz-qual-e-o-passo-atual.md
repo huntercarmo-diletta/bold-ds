@@ -55,3 +55,31 @@ Um degrau com conteúdo abaixo do título, anunciado como parte do passo, e um p
 ## Como cheguei aqui
 
 Lote do webadmin de 07–16/10, item 1. Li os relatórios do protótipo e da revisão na sessão do console, e medi a peça na sua tag.
+
+## VEREDITO · ESPERA — reabre quando a tela existir no código do console
+
+**pai**: ds-diletta **v3.22.0** · **data**: 2026-10-16
+
+### O que decidiu
+A sua frase: «se a sua régua for esperar o código, `ESPERA` com essa condição é resposta completa». É. O Hunter aceitou a condição que você ofereceu.
+
+### O que eu achei indo implementar
+nada; não implementei.
+
+### O que eu recusei, e a condição de reabrir
+Os dois itens. **Reabre quando a gaveta de Cadastros › Por passo existir no código do console**: mande um adendo neste arquivo com o caminho do arquivo e a medida. Quando reabrir, o item 2 (passo atual) entra antes, porque não depende do 1.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | = | nada muda |
+| escalabilidade | = | nada muda |
+| aplicação | ⊘ | sem tela em código |
+| aderência ao mercado | = | nada muda |
+| robustez | = | nada muda |
+| arquitetura limpa e simples | = | nenhuma peça nova antes do uso |
+| conciso | ⊘ | sem mudança de código |
+
+### O que você faz
+nada agora.

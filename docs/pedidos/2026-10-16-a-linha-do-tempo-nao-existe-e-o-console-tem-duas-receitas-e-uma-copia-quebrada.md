@@ -52,3 +52,34 @@ Uma peça em que cada marco tem um instante (`<time datetime>`) e um corpo que r
 ## Como cheguei aqui
 
 Lote do webadmin de 07–16/10, item 2. A cópia quebrada foi achada medindo, e vai como achado de código para a fila do console. Não é defeito seu.
+
+## VEREDITO · NASCE NO FILHO — a linha do tempo é peça do console, e sobe pela regra 3
+
+**pai**: ds-diletta **v3.22.0** · **data**: 2026-10-16
+
+### O que decidiu
+O número: 4 sítios, todos neste filho. O Cockpit do flash não tem `Timeline` (0 arquivos, 16/10), e o censo do filho A não lista linha do tempo.
+
+### O caminho de composição
+Uma peça do console: `<ol>` com um `<li>` por marco, `<time datetime>` na primeira coluna e o corpo na segunda, numa grade de duas colunas para a hora alinhar. O marco atual leva `aria-current="step"`. Use `labelSm` na hora e os papéis que a receita do Pix já usa. As duas receitas viram essa, e a cópia quebrada de `tarifacao` sai junto.
+
+### O que eu achei indo implementar
+nada; não implementei.
+
+### O que eu recusei, e a condição de reabrir
+A peça na linguagem. **Reabre quando um segundo filho medir uma linha do tempo**, com o número de sítios dele.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | = | as duas receitas viram uma, do seu lado |
+| escalabilidade | = | nada muda para os outros filhos |
+| aplicação | = | os 4 sítios se resolvem do seu lado |
+| aderência ao mercado | = | é o `Timeline` do antd e do Primer; ninguém da família pediu ainda |
+| robustez | = | nada muda |
+| arquitetura limpa e simples | ↑ | nenhuma peça nova sem segundo uso |
+| conciso | ⊘ | sem mudança de código |
+
+### O que você faz
+A peça compartilhada do console, e um adendo aqui quando o segundo filho aparecer.

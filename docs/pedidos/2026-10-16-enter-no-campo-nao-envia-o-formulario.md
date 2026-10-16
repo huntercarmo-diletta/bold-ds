@@ -73,3 +73,31 @@ se ele alcança o controle dentro do shadow. Esse campo fica local no IB até al
 `<form><diletta-input></diletta-input><button type="submit">` → Enter no campo dispara `submit` uma vez.
 O mesmo com `type="password"`, com os `type` nativos e com `<diletta-date-field>`. Com `type="long"`,
 Enter quebra a linha e não envia. Fora de formulário, Enter não faz nada e não dá erro.
+
+## VEREDITO · ENTRA — o campo de uma linha faz o envio implícito do HTML
+
+**pai**: ds-diletta **v3.22.0** · **data**: 2026-10-16
+
+### O que decidiu
+A sua última linha da tabela: o `formAssociated` dá formulário ao hospedeiro e não ao controle. Enter no `<diletta-input>` de uma linha acha o formulário dono subindo pelas raízes de shadow e faz o que o HTML faz (§4.10.21.2): clica o botão padrão (o primeiro de envio, incluindo `<diletta-button acao="submit">`) e não faz nada se ele estiver desligado. Sem botão, envia só se o campo for o único que bloqueia o envio implícito. O `<diletta-date-field>` herda pelo input de dentro. O `long` quebra linha. Fora de formulário, nada. Teste: `test/o_enter_envia_o_formulario.test.js`.
+
+### O que eu achei indo implementar
+nada.
+
+### O que eu recusei, e a condição de reabrir
+nada recusado. O `autocomplete="username webauthn"` dentro do shadow segue sem medida, como você deixou.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | nenhum `requestSubmit` por filho |
+| escalabilidade | ↑ | todo formulário web |
+| aplicação | ↑ | os 51 campos em formulário do IB; adota o filho B |
+| aderência ao mercado | ↑ | é a regra do HTML |
+| robustez | ↑ | o teste cobra long, botão desligado e fora de formulário |
+| arquitetura limpa e simples | = | uma função no input |
+| conciso | = | um comentário de três linhas |
+
+### O que você faz
+Suba a `web-v3.22.0`. O embrulho do `BoldTextField` não precisa de `requestSubmit`.
