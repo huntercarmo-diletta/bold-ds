@@ -50,3 +50,33 @@ Uma peça em que abrir não move o foco e o Tab sai dela; o Esc fecha, menos a p
 ## Como cheguei aqui
 
 Lote do webadmin de 07–16/10 (sessão principal do `core-flow-wa`), item 5. Medido no código do console, na ponta da release, e no seu repo, pela tag.
+
+## VEREDITO · ENTRA — `<diletta-side-sheet>`, região que não prende o foco
+
+**pai**: ds-diletta **v3.24.0** · **data**: 2026-10-16
+
+### O que decidiu
+A sua frase: «o seu próprio censo derruba a razão». Dois filhos medidos, nenhuma instância em lado nenhum. Entrou o contrato que você escreveu: `role="region"` nomeada pelo título, abrir não move o foco, Esc fecha (menos a partir de campo em edição ou de diálogo aberto dentro), o clique fora fecha e `fecha-fora="nao"` desliga, e fechar devolve o foco. Slots `estado`, `acoes`, o corpo e `rodape` (o fio só aparece com conteúdo). Eventos `fechando`, cancelável, e `fechou`, como no `<diletta-dialog>`: a tela é dona do `aberto`.
+
+### O que eu achei indo implementar
+1. A devolução do foco ganhou uma borda: ela só volta a quem abriu se o foco estava dentro da gaveta ou em lugar nenhum. Senão, clicar em outra linha da lista perderia o foco dessa linha. Está escrito na spec.
+2. A linguagem não tem token de camada, então a gaveta não tem `z-index`. Ajuste por `::part(gaveta)`.
+3. O `spec-publicada.json` estava atrás das specs; regerado.
+
+### O que eu recusei, e a condição de reabrir
+A largura do console. A da linguagem é 640, o `sm`, e a janela inteira abaixo do `md`. Se 640 não servir à densidade do console, `::part(gaveta)` ajusta; reabre se o segundo filho também ajustar.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | duas gavetas viram uma |
+| escalabilidade | ↑ | dois filhos medidos |
+| aplicação | ↑ | as 30 chamadas do console; adota o filho B |
+| aderência ao mercado | ↑ | é o *side sheet* do M3 |
+| robustez | ↑ | 8 testes do contrato de foco |
+| arquitetura limpa e simples | = | a convenção de eventos do diálogo |
+| conciso | = | uma spec |
+
+### O que você faz
+Suba a `web-v3.24.0` e faça o `WaDetailPanel` embrulhar a `<diletta-side-sheet>`: `fecharNoCliqueFora` vira `fecha-fora="nao"`, e `acaoDeExcluir` vai no slot `rodape`.

@@ -47,3 +47,32 @@ O `navigation-button` (ou a região `bottom` da web) tem elemento: gruda no pé 
 ## Como cheguei aqui
 
 Lote do webadmin de 07–16/10, item 6. Na rodada de 25/09 esta casa deixou a «barra de mudanças não gravadas» de fora porque a feature não existia. Agora existe, em três telas.
+
+## VEREDITO · ENTRA DIFERENTE — a região `bottom` da web é o `<diletta-navigation-button>`
+
+**pai**: ds-diletta **v3.24.0** · **data**: 2026-10-16
+
+### O que decidiu
+A sua frase: «a ordem e o peso dos botões: o `navigation-button` já decide isso, e eu quero que ele decida aqui também». Ele era `ambos` sem elemento na web, então não abri região nova: entrou a instância web dele. Slots `primary`, `secondary` e `tertiary` recebem `<diletta-button>`; a ordem e o `type` saem do slot, não do HTML. O slot padrão leva o texto da tela. É `position: sticky` com `bottom: s4`: gruda enquanto há conteúdo abaixo e pousa no fim, sem JS. A superfície é a sua receita, por token. Pilha abaixo de 640, linha a partir dele com a primária na ponta.
+
+### O que eu achei indo implementar
+1. O `<button>` de dentro do `<diletta-button>` não seguia a largura do hospedeiro, embora a spec declarasse; consertado.
+2. Uso errado (duas primárias, `type` fora do slot) avisa por `console.warn` e a peça segue desenhando. É o primeiro aviso de uso da casa.
+
+### O que eu recusei, e a condição de reabrir
+A região `bottom` como peça própria, separada da pilha. Reabre se um filho medir um rodapé fixo que não seja de ações.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | as três folhas saem |
+| escalabilidade | ↑ | todo formulário longo |
+| aplicação | ↑ | as três telas do console; adota o filho B |
+| aderência ao mercado | ↑ | é a barra de ação fixa do Polaris |
+| robustez | ↑ | uso errado avisa e a peça segue desenhando |
+| arquitetura limpa e simples | ↑ | fecha um buraco de paridade em vez de abrir peça |
+| conciso | = | uma linha de paridade |
+
+### O que você faz
+Suba a `web-v3.24.0` e troque `.barraDeSalvar` e as duas `.barra` por `<diletta-navigation-button>`, com o «mudanças não gravadas» no slot padrão.
