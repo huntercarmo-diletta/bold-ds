@@ -59,3 +59,32 @@ Os papéis de série existem, com piso de 3:1 contra a superfície nos dois modo
 ## Como cheguei aqui
 
 Lote do webadmin de 07–16/10, item 11. Medido no código do console e no seu repo, pela tag.
+
+## VEREDITO · ENTRA DIFERENTE — os papéis de série entram; as três formas esperam
+
+**pai**: ds-diletta **v3.24.0** · **data**: 2026-10-16
+
+### O que decidiu
+A sua frase: «o 1 vem antes dos outros três, porque são eles que pintam com ele». Entrou o 1: `serie1` a `serie7`. `serie1` parte do `primary`; as outras giram 2/7 do círculo em OKLCH e ajustam a luz até 3:1 contra `surface`, nos dois modos. Na web, `--diletta-serie1..7`. A marca que quiser a própria série declara `DilettaPalette.serieDeDado` (até 7), e a conformidade mede o piso. A decisão de escopo foi do Hunter.
+
+### O que eu achei indo implementar
+1. O comando que conta papéis no `CLAUDE.md` do pai não casava dígito: `serie1..7` contavam como um. Consertado, e o cabeçalho dizia 59 papéis com 67 no código.
+2. Na paleta de referência `serie1` vale o mesmo que `primary`, então a tabela de resolução os lista juntos em 15 peças, como já acontecia com `errorGrafico`.
+
+### O que eu recusei, e a condição de reabrir
+As barras, a rosca e a série temporal. O Cockpit do flash tem gráfico recharts em 4 arquivos: **reabre quando o flash pedir as formas**, ou quando você mandar um adendo com o segundo consumidor medido.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | a paleta emprestada sai |
+| escalabilidade | ↑ | todo gráfico de todo filho |
+| aplicação | ↑ | a pizza do console; adota o filho B |
+| aderência ao mercado | ↑ | paleta categórica separada da de estado, como no Carbon |
+| robustez | ↑ | o gate cobra 3:1 e a distância entre séries |
+| arquitetura limpa e simples | ↓ | **dívida**: sete papéis a mais no esquema |
+| conciso | = | um verbete por papel |
+
+### O que você faz
+Suba a `web-v3.24.0` e troque as sete cores de `WaPizza.module.css` por `--diletta-serie1..7`, com `textMuted` para «outras».
