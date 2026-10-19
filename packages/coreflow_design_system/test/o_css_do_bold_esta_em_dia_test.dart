@@ -35,7 +35,9 @@ void main() {
   });
 
   test('a folha cobre os mesmos papéis de cor que o avô', () {
-    final nossos = RegExp('${RegExp.escape(prefixoDaLinguagem)}([A-Za-z]+):')
+    // O NOME DE PAPEL PODE TER DÍGITO desde a v3.24.0 do avô (`serie1` a `serie7`). Com `[A-Za-z]+` os sete
+    // contavam como sem tinta, e a colisão abaixo deixava de ver papel com número.
+    final nossos = RegExp('${RegExp.escape(prefixoDaLinguagem)}([A-Za-z][A-Za-z0-9]*):')
         .allMatches(coreflowPapeisCss(BoldPalette.bold, produto: 'x'))
         .map((m) => m.group(1)!)
         .toSet();
@@ -48,7 +50,7 @@ void main() {
 
   test('o esquema do produto só sobrescreve o que está declarado', () {
     Set<String> nomes(String css) =>
-        RegExp('${RegExp.escape(prefixoDaLinguagem)}([A-Za-z]+):').allMatches(css).map((m) => m.group(1)!).toSet();
+        RegExp('${RegExp.escape(prefixoDaLinguagem)}([A-Za-z][A-Za-z0-9]*):').allMatches(css).map((m) => m.group(1)!).toSet();
     final doAvo = nomes(coreflowPapeisCss(BoldPalette.bold, produto: 'x'));
     final doProduto = nomes(coreflowEsquemaCss(BoldPalette.bold));
     expect(doProduto.intersection(doAvo), _colisoesDeclaradas,
