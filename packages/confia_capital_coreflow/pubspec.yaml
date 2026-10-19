@@ -1,7 +1,7 @@
 name: confia_capital_coreflow
 description: A identidade do Confia Capital — um produto do Coreflow.
 publish_to: none
-version: 0.1.1
+version: 0.1.2
 
 environment:
   sdk: ^3.9.0

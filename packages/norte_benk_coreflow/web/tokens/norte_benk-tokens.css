@@ -1,4 +1,4 @@
-/* GERADO — NÃO editar à mão. Os 67 papéis da linguagem, com a tinta de Norte Benk.
+/* GERADO — NÃO editar à mão. Os 74 papéis da linguagem, com a tinta de Norte Benk.
    Carregue DEPOIS das folhas do avô: estas mesmas variáveis, com os valores deste produto. */
 :root {
   --diletta-bg: #ffffff;
@@ -45,6 +45,13 @@
   --diletta-secure: #9c7b0c;
   --diletta-secureOnSurface: #6e5708;
   --diletta-secureSubtle: #fbf6e4;
+  --diletta-serie1: #2a57a5;
+  --diletta-serie2: #943152;
+  --diletta-serie3: #625d00;
+  --diletta-serie4: #006773;
+  --diletta-serie5: #733f90;
+  --diletta-serie6: #8b4400;
+  --diletta-serie7: #006c41;
   --diletta-skeletonShimmer: #5c96fa;
   --diletta-success: #12905c;
   --diletta-successBorder: #6acca2;
@@ -116,6 +123,13 @@
     --diletta-secure: #c49e1e;
     --diletta-secureOnSurface: #c49e1e;
     --diletta-secureSubtle: #4a3a05;
+    --diletta-serie1: #5c96fa;
+    --diletta-serie2: #e6688e;
+    --diletta-serie3: #a49d00;
+    --diletta-serie4: #00acbf;
+    --diletta-serie5: #b978df;
+    --diletta-serie6: #e1781b;
+    --diletta-serie7: #00b570;
     --diletta-skeletonShimmer: #02286a;
     --diletta-success: #2fb37b;
     --diletta-successBorder: #12905c;
@@ -187,6 +201,13 @@
   --diletta-secure: #c49e1e;
   --diletta-secureOnSurface: #c49e1e;
   --diletta-secureSubtle: #4a3a05;
+  --diletta-serie1: #5c96fa;
+  --diletta-serie2: #e6688e;
+  --diletta-serie3: #a49d00;
+  --diletta-serie4: #00acbf;
+  --diletta-serie5: #b978df;
+  --diletta-serie6: #e1781b;
+  --diletta-serie7: #00b570;
   --diletta-skeletonShimmer: #02286a;
   --diletta-success: #2fb37b;
   --diletta-successBorder: #12905c;
@@ -311,7 +332,7 @@
 }
 
 /* PONTE: os nomes com o prefixo antigo, apontando para os da linguagem.
-   95 apelidos. Alias não copia valor, então o escuro segue o seletor. */
+   102 apelidos. Alias não copia valor, então o escuro segue o seletor. */
 :root {
   --cps-background: var(--diletta-background);
   --cps-bg: var(--diletta-bg);
@@ -383,6 +404,13 @@
   --cps-secure: var(--diletta-secure);
   --cps-secureOnSurface: var(--diletta-secureOnSurface);
   --cps-secureSubtle: var(--diletta-secureSubtle);
+  --cps-serie1: var(--diletta-serie1);
+  --cps-serie2: var(--diletta-serie2);
+  --cps-serie3: var(--diletta-serie3);
+  --cps-serie4: var(--diletta-serie4);
+  --cps-serie5: var(--diletta-serie5);
+  --cps-serie6: var(--diletta-serie6);
+  --cps-serie7: var(--diletta-serie7);
   --cps-skeletonShimmer: var(--diletta-skeletonShimmer);
   --cps-success: var(--diletta-success);
   --cps-successBorder: var(--diletta-successBorder);

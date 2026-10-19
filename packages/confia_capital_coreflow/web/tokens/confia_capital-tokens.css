@@ -1,4 +1,4 @@
-/* GERADO — NÃO editar à mão. Os 67 papéis da linguagem, com a tinta de Confia Capital.
+/* GERADO — NÃO editar à mão. Os 74 papéis da linguagem, com a tinta de Confia Capital.
    Carregue DEPOIS das folhas do avô: estas mesmas variáveis, com os valores deste produto. */
 :root {
   --diletta-bg: #ffffff;
@@ -45,6 +45,13 @@
   --diletta-secure: #9c7b0c;
   --diletta-secureOnSurface: #6e5708;
   --diletta-secureSubtle: #fbf6e4;
+  --diletta-serie1: #213b70;
+  --diletta-serie2: #662236;
+  --diletta-serie3: #424000;
+  --diletta-serie4: #004651;
+  --diletta-serie5: #502b62;
+  --diletta-serie6: #602f00;
+  --diletta-serie7: #004b2e;
   --diletta-skeletonShimmer: #6295fa;
   --diletta-success: #12905c;
   --diletta-successBorder: #6acca2;
@@ -116,6 +123,13 @@
     --diletta-secure: #c49e1e;
     --diletta-secureOnSurface: #c49e1e;
     --diletta-secureSubtle: #4a3a05;
+    --diletta-serie1: #6295fa;
+    --diletta-serie2: #e7698a;
+    --diletta-serie3: #a19e00;
+    --diletta-serie4: #00abc2;
+    --diletta-serie5: #bc77dc;
+    --diletta-serie6: #e07a15;
+    --diletta-serie7: #00b576;
     --diletta-skeletonShimmer: #002177;
     --diletta-success: #2fb37b;
     --diletta-successBorder: #12905c;
@@ -187,6 +201,13 @@
   --diletta-secure: #c49e1e;
   --diletta-secureOnSurface: #c49e1e;
   --diletta-secureSubtle: #4a3a05;
+  --diletta-serie1: #6295fa;
+  --diletta-serie2: #e7698a;
+  --diletta-serie3: #a19e00;
+  --diletta-serie4: #00abc2;
+  --diletta-serie5: #bc77dc;
+  --diletta-serie6: #e07a15;
+  --diletta-serie7: #00b576;
   --diletta-skeletonShimmer: #002177;
   --diletta-success: #2fb37b;
   --diletta-successBorder: #12905c;

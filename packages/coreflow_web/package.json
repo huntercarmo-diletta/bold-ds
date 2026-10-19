@@ -18,6 +18,6 @@
     "coreflow/"
   ],
   "dependencies": {
-    "diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-v3.19.0"
+    "diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-v3.24.0"
   }
 }

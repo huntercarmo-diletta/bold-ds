@@ -37,6 +37,47 @@ avô sai de lá. Não pinta — sem `tokens/`, sem hex.
 (tag `coreflow-web-v<versão>`), e os gates `uma_versao_e_uma_tag`, `toda_tag_web_carrega_o_pacote`
 e o novo `o_pai_na_web_recebe_o_mesmo_avo` passam a conhecê-lo. O número do Bold não muda.
 
+## [0.126.0] — 2026-10-19
+
+### O avô sobe de `v3.19.0` para `v3.24.0` — os nove pinos juntos, e os três pedidos do IB de 16/10 chegam
+
+A pedido da Tatiana (19/10): o pai julgou no mesmo dia os três pedidos que o IB abriu em 16/10, e o IB só
+troca o campo e o interruptor com a tag web desta casa. Entre a `v3.19.0` e a `v3.24.0` são cinco menores do
+avô, sem major: `3.20.x` (lista de app e chat na web, o fundo do esqueleto como porta), `3.21.x` (o `nome` do
+checkbox, o cabeçalho e a célula da lista de dados), `3.22.0` (Enter envia o formulário, o interruptor com
+`label` e `descricao`, o trilho desligado em `contornoDeControle`, as partes do item do trilho), `3.23.0` (a
+segunda linha da pessoa e a tarja da linha na lista de dados) e `3.24.0` (a gaveta lateral, o rodapé de ações
+na web e os papéis de série).
+
+Os nove pinos sobem juntos: três `ref:` em Dart (`coreflow`, `coreflow_design_system`, `catalog`), cinco
+`package.json` na web (Bold, Norte Benk, Confia Capital, o exemplo do gerador e o `coreflow-web`, que nasceu em
+16/10 e o gate dele pede o mesmo avô do Bold) e o molde do `novo_filho.dart`. O `npm install` foi forçado pela
+tag nos cinco, e os cinco locks resolvem o mesmo commit da `web-v3.24.0`. O `coreflow-web` segue em 0.1.0 e
+em [Unreleased], onde a Agatha o descreve: ainda não tem tag emitida, e o pino dele agora é a `web-v3.24.0`.
+
+### O que mexeu, medido nas quatro folhas reemitidas
+
+Sete papéis novos e nenhum valor antigo trocado: `--diletta-serie1` a `--diletta-serie7`, mais os sete
+apelidos `--cps-`. 67 → 74 papéis. No Bold, `serie1` é `#fe3976` no claro e `#f66fa0` no escuro. A Norte Benk
+sobe para 0.1.8 e a Confia Capital para 0.1.2, porque a folha delas ganhou as séries e o avô do lado web
+delas mudou: a `norte-benk-web-v0.1.8` e a `confia-capital-web-v0.1.2` saem desta tag.
+
+### O que o app sente, pelo CHANGELOG do avô
+
+- `3.22.0` muda pixel: o trilho do `DilettaToggleSwitch` desligado pinta `contornoDeControle`, mais escuro
+  que o `surfaceMuted` de antes. Em `surfaceMuted` o controle inteiro media 1,28:1 no claro.
+- `3.24.0` não muda nada sem uso: os papéis de série só pintam quem os lê.
+
+### Para quem consome a web
+
+- O `<diletta-input>` de uma linha e o `<diletta-date-field>` enviam o formulário no Enter: o `BoldTextField`
+  do IB destrava.
+- O `<diletta-toggle-switch>` ganha `label` e `descricao`, e o desligado se vê: o `BoldToggle` do IB destrava,
+  e a régua local do trilho no gate de contraste dele sai.
+- O `<button>` de dentro do `<diletta-button>` passa a seguir a largura do hospedeiro, como a spec declarava.
+  Hospedeiro esticado por grade ou coluna flexível estica o botão junto: o IB mede isso na subida do pino.
+- Peças novas na web: `<diletta-side-sheet>`, `<diletta-navigation-button>`, `<diletta-app-list>` e o chat.
+
 ## [0.125.0] — 2026-10-15
 
 ### O avô sobe de `v3.13.0` para `v3.19.0` — os oito pinos juntos, e os seis pedidos de 15/10 chegam

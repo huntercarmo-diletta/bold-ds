@@ -60,11 +60,11 @@ packages:
     dependency: transitive
     description:
       path: "packages/diletta_design_system"
-      ref: "v3.19.0"
-      resolved-ref: a2c081d25a8114393f059fd7c96cbbb70dc525bf
+      ref: "v3.24.0"
+      resolved-ref: "54ab7a06b66d521c6bef7eba31be70b8e99e9c23"
       url: "git@bitbucket.org:diletta/ds-diletta.git"
     source: git
-    version: "3.19.0"
+    version: "3.24.0"
   fake_async:
     dependency: transitive
     description:

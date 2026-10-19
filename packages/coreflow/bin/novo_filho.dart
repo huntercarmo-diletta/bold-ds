@@ -240,7 +240,7 @@ derivado da sua marca daria um produto que não sabe dizer que algo deu errado.
 /// `o_filho_gerado_recebe_o_mesmo_avo_test` prova que este número é a MESMA LINGUAGEM que o `pubspec`
 /// do pai declara — mesmo `X.Y`, patch da web igual ou maior, porque o avô reemite tag web queimada
 /// com o patch seguinte e o Dart não acompanha. Duas linguagens no mesmo produto é o que ele proíbe.
-const tagWebDoAvo = 'web-v3.19.0';  // a instância web de v3.19.0 — o foco e o piso de 44 nas peças de escolha, o segmento desligado, o campo que repassa o input e os breakpoints em CSS
+const tagWebDoAvo = 'web-v3.24.0';  // a instância web de v3.24.0 — Enter que envia, o interruptor com texto e o desligado visível, a gaveta lateral, o rodapé de ações e os papéis de série
 
 String emissorDe(Opcoes op) => '''
 // ESCREVE `web/tokens/${_arquivo(op.id)}-tokens.css`. **Não é gate** — gate é o vizinho
