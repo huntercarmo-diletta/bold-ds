@@ -59,3 +59,33 @@ Mudar o desenho do trilho, o tamanho ou o alvo. O Dart fica a seu critério.
 `<diletta-toggle-switch rotulo="Computador compartilhado" descricao="Não guarda o CPF…">` → o `switch`
 de dentro tem o nome do rótulo e a descrição por `aria-describedby`; clicar no texto alterna e avisa
 `mudou` uma vez; sem `descricao`, nada de descrição vazia.
+
+## VEREDITO · ENTRA DIFERENTE — `label` e `descricao`, e o `rotulo` segue só nomeando
+
+**pai**: ds-diletta **v3.22.0** · **data**: 2026-10-16
+
+### O que decidiu
+A sua frase: «referência por `id` não atravessa o shadow». `<diletta-toggle-switch label="Computador compartilhado" descricao="Não guarda o CPF…">` desenha o texto, nomeia o `switch` pelo `label` e liga a descrição por `aria-describedby` dentro do shadow. Clicar no texto alterna e avisa `mudou` uma vez. Sem `descricao`, não há `aria-describedby`.
+
+**A forma pedida não serviu** porque o `rotulo` já é nome sem desenho no Cockpit, com o texto fora, em dois sítios. Fazer o `rotulo` desenhar duplicaria o texto lá, e mudar o sentido de um atributo é major. A gramática que entrou é a do `<diletta-input>`: `label` desenha, `rotulo` só nomeia.
+
+### O que eu achei indo implementar
+A família tem duas gramáticas de texto: no `<diletta-checkbox>` o `rotulo` desenha (e `nome` só nomeia); no input e agora no interruptor, `label` desenha e `rotulo` só nomeia. Fica como dívida no ledger.
+
+### O que eu recusei, e a condição de reabrir
+O `rotulo` que desenha. Reabre numa major que unifique a família.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | nenhum texto montado fora sem ligação |
+| escalabilidade | ↑ | todo interruptor com explicação |
+| aplicação | ↑ | os 5 interruptores do IB; adota o filho B |
+| aderência ao mercado | ↑ | é o `help-text` do `sl-switch` |
+| robustez | ↑ | o teste cobra nome, descrição e o clique no texto |
+| arquitetura limpa e simples | = | a gramática do `<diletta-input>` |
+| conciso | ↓ | **dívida**: duas gramáticas de texto na família |
+
+### O que você faz
+Suba a `web-v3.22.0` e passe o texto do `BoldToggle` por `label` e `descricao`.
