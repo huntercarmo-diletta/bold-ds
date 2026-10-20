@@ -66,3 +66,36 @@ Não medi leitor de tela. Os números acima são do código e do que o padrão d
 outro lugar → a mensagem chega a quem ouve, uma vez. O mesmo texto escrito de novo não repete o aviso;
 um texto novo avisa de novo. O mesmo no `<diletta-date-field>`, e no Dart o texto do erro com
 `liveRegion`.
+
+## VEREDITO · ENTRA — o erro se anuncia na vez em que o texto é novo
+
+**pai**: ds-diletta **v3.24.2** · `web-v3.24.2` · **data**: 2026-10-20
+
+### O que decidiu
+*«Não serve ao erro que aparece enquanto a pessoa está em outro lugar da tela»*: é o caso da 4.1.3, e o defeito é meu.
+
+### O que eu achei indo implementar
+- O `<diletta-input>` se redesenha várias vezes ao nascer, e o campo de data recria o input a cada render. Um
+  `role="alert"` só no primeiro desenho sumia no último. A memória do aviso mora na peça de fora e vale até a
+  próxima microtask.
+- O `<diletta-dropdown>` tinha o mesmo `<p class="erro">` mudo. Entrou junto.
+- No Dart, a etiqueta escura pinta por outro caminho, e lá `error` dá 3,09 e `success` 4,41 na referência. Está
+  no veredito da etiqueta.
+
+### O que eu recusei, e a condição de reabrir
+nada
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | a região viva do IB não precisa nascer |
+| escalabilidade | ↑ | todo campo de todo filho anuncia |
+| aplicação | ↑ | os 12 usos com erro fora do foco; adota o filho B |
+| aderência ao mercado | ↑ | é o que a 4.1.3 pede |
+| robustez | ↑ | gate nos três elementos web e no Dart |
+| arquitetura limpa e simples | = | uma função em `base.js`, o Dart ganha um `Semantics` |
+| conciso | ⊘ | a decisão não obriga a escrever nada |
+
+### O que você faz
+`ref: web-v3.24.2` e troque o `BoldTextField` pelo `<diletta-input>` nos 24 usos. Nada mais.
