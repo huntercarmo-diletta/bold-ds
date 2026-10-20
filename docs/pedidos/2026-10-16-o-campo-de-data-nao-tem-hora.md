@@ -52,3 +52,36 @@ O campo de data com hora: o `valor` em `AAAA-MM-DDTHH:MM`, e `min` e `max` no me
 ## Como cheguei aqui
 
 Lote do webadmin de 07–16/10, item 7. A metade do texto longo deste item **não** virou pedido: o `<diletta-input type="long">` já existe, e o cursor foi consertado na `web-v3.3.1` (pedido de 29/09). Falta o console subir o pino.
+
+## VEREDITO · ENTRA — a peça de data sabe a hora, com `hora`
+
+**pai**: ds-diletta **v3.25.0** · `web-v3.25.0` · **data**: 2026-10-20
+
+### O que decidiu
+*«Não peço que o `<diletta-input>` aceite. Peço que a peça de data saiba a hora.»* É o formato do valor da
+peça, como `min` e `max`, e não uma variante visual.
+
+### O que eu achei indo implementar
+- **Este pedido ficou 4 dias fora da minha fila.** A régua casava o título no ledger em cinco palavras sem
+  acento: «não» virava «n o», e «o campo de data n» casou com o seu pedido de 29/09. Agora são oito
+  palavras, sem acento dos dois lados. Achado na primeira varredura semanal do pai.
+- O calendário só sabe o dia. Escolher o dia guarda a hora que já estava, e um instante fora do limite
+  fica preso no limite.
+
+### O que eu recusei, e a condição de reabrir
+nada. Fuso, segundos e intervalo você já deixou de fora.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o `CampoNativo` do console perde a razão de existir |
+| escalabilidade | ↑ | todo campo de instante de todo filho |
+| aplicação | ↑ | os 3 campos do console; adota o filho B |
+| aderência ao mercado | ↑ | é o `datetime-local` do HTML |
+| robustez | = | testes de digitação, limite e calendário; a régua da fila mudou junto |
+| arquitetura limpa e simples | = | um atributo numa peça que existe |
+| conciso | ⊘ | a decisão não obriga a escrever nada |
+
+### O que você faz
+`ref: web-v3.25.0`, `<diletta-date-field hora>` nos três campos, e o `CampoNativo` sai.
