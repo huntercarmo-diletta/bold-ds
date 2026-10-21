@@ -148,6 +148,16 @@ class _CoreflowBotaoState extends State<CoreflowBotao> {
     return DilettaButton(
       label: widget.label,
       onPressed: _loading ? null : _onPressed,
+      // Sem ação é DESLIGADO, e o pai só pinta desligado quando ouve isso: lá,
+      // `onPressed` nulo é só "não interativo" (mock, handoff) e mantém o visual
+      // normal. Sem esta linha, todo `CoreflowAcaoDeRodape(enabled: false)` do
+      // app desenhava o CTA aceso e não respondia ao toque — "Enviar 0
+      // pagamentos para aprovação" em rosa cheio, morto (app, 21/10, S8).
+      // Carregando não é desligado: quem desenha a espera é a rodela — a mesma
+      // regra do `CoreflowRodape` (o_rodape_sem_acao_e_desabilitado_test).
+      disabled: !_loading &&
+          widget.onPressed == null &&
+          widget.onPressedAsync == null,
       type: tipo,
       size: _tamanho,
       state: estado,
