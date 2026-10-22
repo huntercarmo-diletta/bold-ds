@@ -100,7 +100,8 @@ Para ela levar ao **`construtor-biblioteca-figma`**:
 - o `CardSurface` não aceita outro `CardSurface` no conteúdo;
 - o Dropdown sem a ajuda abaixo do campo (o código já tem, item 8 acima);
 - o item do trilho: o protótipo usou `Nav / item` (a barra do celular), cujo `Ativo=sim` não mostra o glifo. O `diletta-rail-item` não tem par no Figma;
-- o degrau da esteira (`web-stepper-node`): no Figma, só a versão da Rev 01, que é proibida.
+- o degrau da esteira (`web-stepper-node`): no Figma, só a versão da Rev 01, que é proibida;
+- o botão primário do Bold no claro (21/10): no Figma, `primary/default` › `Bold · Claro` aponta para `primary/04` (#fe3976, branco a 3,46:1), e o `Button` do DS preenche com ela. A web (colisão declarada `{'primary', 'border'}` em `o_css_do_bold_esta_em_dia_test.dart:22`) e o `BoldButton` do app pintam `primary03` (#9e1241, 8,03:1), pelo porquê de `coreflow_scheme.dart:272-276`. O pedido: o alias do modo passa a `primary/03`, que é o que `coreflow/primary` já resolve. No escuro e no `border` nada muda. Medido no protótipo de Limites (página `282:2099` do Web-Admin), onde as 27 telas saem rosa.
 
 ### 11 · O que é nosso e espera decisão dela, em ordem de dependência
 
