@@ -37,6 +37,28 @@ avô sai de lá. Não pinta — sem `tokens/`, sem hex.
 (tag `coreflow-web-v<versão>`), e os gates `uma_versao_e_uma_tag`, `toda_tag_web_carrega_o_pacote`
 e o novo `o_pai_na_web_recebe_o_mesmo_avo` passam a conhecê-lo. O número do Bold não muda.
 
+## [0.127.0] — 2026-10-23
+
+### Nasce o quarto filho — a BluOn, o primeiro envio do Berço que chegou em peças
+
+**Só acrescenta**, como a Confia Capital na `0.124.0`: nada do Conta BOLD muda por ela, e a versão
+sobe por convenção — *«uma língua, um número»*.
+
+| | antes | agora |
+|---|---|---|
+| filhos do Coreflow neste repo | 3 — Conta BOLD, Norte Benk e Confia Capital | **4**, com `bluon_coreflow` |
+| tags web por filho | `web-v`, `norte-benk-web-v` e `confia-capital-web-v` | mais **`bluon-web-v`**, a primeira sendo `bluon-web-v0.1.0` |
+| suítes do gate do README | 7 | **8** |
+
+Veio do terceiro envio do Berço Coreflow (22/10, id `bluon`), pelo `dart run coreflow:novo_filho`
+(`83dcb79`). A declaração é a da entrega: lockup e símbolo nos dois brilhos, com as quatro artes de
+arquivo do cliente em `assets/logos/`, e a forma «formal» (botão 4, folha 8) com as seis `medidas:`.
+Sem `tipografia:`, porque o cliente não pediu fonte. Desta vez a `main` não ficou vermelha: a BluOn
+nasceu já declarada nas três listas de lados web, que a Confia ensinou a cobrar.
+
+A cor é a original do logo, `#1F91FF`, por decisão da dona. **Texto branco sobre ela dá 3,20:1**,
+abaixo do 4,5:1 do AA: quem desenhar botão ou faixa com essa cor precisa saber.
+
 ### Botão sem ação passa a ser DESABILITADO também fora do rodapé — muda pixel
 
 A regra da `0.119.0` ficou no `CoreflowRodape`. O `CoreflowBotao` — e com ele o
@@ -56,6 +78,14 @@ O que muda no primeiro filho, contado na `development` do app (`755cf89d`, 19/10
   a espera com outra condição, **ficam apagados durante a operação**. Quase todos são o par de um
   botão que está trabalhando ("Recusar" no login do IB, o cancelar da Letti, os dois do modal de
   onboarding pendente). É o comportamento certo: enquanto o outro trabalha, este não dá.
+
+### O que chega ao consumidor web por esta tag
+
+- **`web-v0.127.0`: o número, e só.** O conserto do botão é Dart, e o `coreflow_design_system_web`
+  não mudou desde a `v0.126.0`. O avô fica em `v3.24.0` / `web-v3.24.0`;
+- **`bluon-web-v0.1.0`**, a primeira da BluOn, sai desta tag;
+- Norte Benk (`0.1.8`) e Confia Capital (`0.1.2`) não mudaram desde a `v0.126.0` e não ganham tag;
+- o `coreflow-web` segue em `0.1.0`, sem tag — a primeira é da Agatha, no passo 3 da proposta.
 
 ## [0.126.0] — 2026-10-19
 
