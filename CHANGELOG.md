@@ -37,6 +37,26 @@ avô sai de lá. Não pinta — sem `tokens/`, sem hex.
 (tag `coreflow-web-v<versão>`), e os gates `uma_versao_e_uma_tag`, `toda_tag_web_carrega_o_pacote`
 e o novo `o_pai_na_web_recebe_o_mesmo_avo` passam a conhecê-lo. O número do Bold não muda.
 
+### Botão sem ação passa a ser DESABILITADO também fora do rodapé — muda pixel
+
+A regra da `0.119.0` ficou no `CoreflowRodape`. O `CoreflowBotao` — e com ele o
+`CoreflowAcaoDeRodape`, que passa `onPressed: null` quando `enabled: false` — não dizia `disabled`
+ao `DilettaButton`, e o avô só pinta desligado quando ouve isso: lá, `onPressed` nulo é só "não
+interativo" e mantém o visual (`diletta_button.dart:182`, `v3.24.0`). Visto no app em 21/10, num
+S8: "Enviar 0 pagamentos para aprovação" em rosa cheio, sem responder ao toque.
+
+Agora, sem `onPressed` nem `onPressedAsync` e sem estar carregando, vai `disabled: true`.
+`loading` continua de fora, pelo mesmo motivo do rodapé: ali o botão está **ocupado**, não
+impedido. Seis testes em `o_botao_sem_acao_e_desabilitado_test.dart`.
+
+O que muda no primeiro filho, contado na `development` do app (`755cf89d`, 19/10):
+
+- **26 arquivos** com `CoreflowAcaoDeRodape` e `enabled:` — o CTA apagado agora aparece apagado;
+- **15 `CoreflowBotao`** que passam `<ocupado> ? null : ação` sem `loading:`, e mais 2 que misturam
+  a espera com outra condição, **ficam apagados durante a operação**. Quase todos são o par de um
+  botão que está trabalhando ("Recusar" no login do IB, o cancelar da Letti, os dois do modal de
+  onboarding pendente). É o comportamento certo: enquanto o outro trabalha, este não dá.
+
 ## [0.126.0] — 2026-10-19
 
 ### O avô sobe de `v3.19.0` para `v3.24.0` — os nove pinos juntos, e os três pedidos do IB de 16/10 chegam
