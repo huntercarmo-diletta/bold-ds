@@ -18,6 +18,156 @@ A licença da arte não é nenhum dos dois: é pergunta para uma pessoa.
 
 ---
 
+## Rodada de 2026-10-26 · o onboarding manda treze, e cinco viram pedido ao avô
+
+Escrita pelo **`entregador-de-pedidos`**, chamado pela sessão principal com a frase dela *«sobe os pedidos
+pro DS»*. O escopo são os **treze** itens da coluna «Ao design system» do quadro de Pendências da proposta
+de onboarding (Figma `3hrpcqIWoXlibjTRkpKc7c`, página `1014:8027`, doc `1057:1646`), levantados pelas
+críticas de composição e de acessibilidade. Medido na `main` deste repo (`a8fa2a4`, pacote `0.127.0`), no
+pino do avô que o pai usa (`v3.24.0`, `packages/coreflow/pubspec.yaml:23`), na ponta dele (`v3.25.0`) e no
+app em `origin/development`. Cores e alvos medidos com teste de widget no pino, tema do Bold, nos dois
+modos (teste descartável, fora do repo). `DilettaManifesto.busca` rodada no pino.
+
+**O resultado, antes do detalhe**: **cinco pedidos ao avô**; **seis itens não sobem** (dois já existem,
+um é derivável, três não têm sítio no código); **quatro são nossos**, dois deles decisão dela; e **duas
+contradições** entre o que o desenho disse e o que o código faz.
+
+**Chats lidos**:
+
+| chat | cwd | até | o que ele produziu pra cá |
+|---|---|---|---|
+| a sessão principal (onboarding) | `claude_newbold` | 26/10 | a lista dos treze, passada pela sessão. **A transcrição não foi lida**; cada item foi medido de novo no código |
+| os outros chats da janela (16/10 → agora) | — | — | **não lidos nesta rodada** |
+
+### 0 · O QUE O AVÔ RESPONDEU desde 16/10, e entrou agora
+
+Duas branches de resposta estavam sem integrar, e entraram nesta rodada (`merge --no-ff`, sem conflito):
+
+- `nota/veredito-v3.24.2` (20/10): **a etiqueta no tom de marca ENTRA** (o texto é o `onPrimarySubtle`
+  do contêiner) e **o erro do campo ENTRA** (anuncia na vez em que o texto é novo; no Dart,
+  `Semantics(liveRegion: error)`). Achado dele, aberto do lado dele: no Dart escuro a etiqueta do avô pinta
+  tinte translúcido, e `error` dá 3,09 e `success` 4,41 na referência.
+- `nota/veredito-v3.25.0` (20/10): **o campo de data com hora ENTRA** (`<diletta-date-field hora>`).
+
+As três linhas do índice foram atualizadas (o nosso lado dizia «sem veredito»; venceu o veredito, que é o
+mais novo).
+
+**Deriva**:
+
+- **a ponta do avô** é `v3.25.0` / `web-v3.25.0` (20/10);
+- **o pai** (Coreflow) prende o avô em `v3.24.0`: os dois vereditos da `v3.24.2` e o da `v3.25.0` **ainda
+  não chegam** aqui;
+- **o app** vendoriza o filho e a base `v0.127.0`, com o avô `v3.24.0`, em `origin/release/homologation`
+  (23/10); em `origin/development`, ainda `v0.122.1` com o avô `v3.3.1`. A branch aberta no checkout,
+  `feat/grupos-de-limite-administracao`, está em `v0.113.0` (avô `v0.204.0`). Em todos, o bloco `"pai"` do
+  `ds_vendor.json` é o **avô**.
+
+### 1 · PEDIDO AO AVÔ — o campo do Dart não aceita dica de preenchimento automático
+
+[`pedidos/2026-10-26-o-campo-do-dart-nao-aceita-dica-de-preenchimento-e-a-web-aceita.md`](pedidos/2026-10-26-o-campo-do-dart-nao-aceita-dica-de-preenchimento-e-a-web-aceita.md)
+
+- `DilettaField` e `DilettaInput` sem `autofillHints` (`diletta_field.dart:53-107`, `:159`;
+  `diletta_input.dart:450-469`), iguais na `v3.24.0` e na `v3.25.0`. A web tem desde a `v3.18.0`, e o avô
+  escreveu a dívida (`diletta-input.js:80-81`).
+- App: 12 campos de senha em 9 arquivos, 8 de senha nova; **zero** `autofillHints` no app.
+- **O `AutofillGroup` do item é do app**, não do DS: não sobe.
+- **Não depende de nada.** O repasse no `CoreflowCampoDeTexto` (nosso, item 8) espera este.
+
+### 2 · PEDIDO AO AVÔ — o campo de código não tem nome, não recebe o SMS e não deixa colar
+
+[`pedidos/2026-10-26-o-campo-de-codigo-nao-tem-nome-nao-recebe-o-sms-e-nao-deixa-colar.md`](pedidos/2026-10-26-o-campo-de-codigo-nao-tem-nome-nao-recebe-o-sms-e-nao-deixa-colar.md)
+
+- Teste no pino: um nó de campo de texto com `label=""`; `autofillHints=[]`;
+  `enableInteractiveSelection: false` (`diletta_otp_input.dart:136`). 7 chamadas no app pelo `OtpBoxesField`.
+- **Não depende do 1**, mas é o mesmo mecanismo: faz sentido entrar na mesma tag.
+
+### 3 · PEDIDO AO AVÔ — o olho da senha e os botões `sm` e `md` abaixo do piso de 44
+
+[`pedidos/2026-10-26-o-olho-da-senha-e-os-botoes-sm-e-md-ficam-abaixo-do-piso-de-44.md`](pedidos/2026-10-26-o-olho-da-senha-e-os-botoes-sm-e-md-ficam-abaixo-do-piso-de-44.md)
+
+- Teste no pino: olho **18 × 18**; botão `sm` **40 × 28**; `md` **47 × 36**. `diletta_button.dart` sem
+  `DilettaAlvoDeToque`. O olho do `DilettaChatInput` tem o piso.
+- O item 11 da lista («confirmar o piso do `Sm`») **confirmou o defeito**, e o `md` veio junto.
+- **Não depende de nada.**
+
+### 4 · PEDIDO AO AVÔ — a mensagem do aviso que fica some no escuro, e o aviso novo não se anuncia
+
+[`pedidos/2026-10-26-a-mensagem-do-aviso-que-fica-some-no-escuro-e-o-aviso-novo-nao-se-anuncia.md`](pedidos/2026-10-26-a-mensagem-do-aviso-que-fica-some-no-escuro-e-o-aviso-novo-nao-se-anuncia.md)
+
+- `textTertiary` sobre o contêiner do tom: Bold escuro **2,87 · 2,09 · 2,16** (o desenho mediu 2,86 e
+  2,09); a paleta de referência escura também reprova aviso (3,39) e sucesso (3,72). O `on…Subtle` passa
+  nos oito casos. No claro, o Bold passa (4,60 a 4,82).
+- O `liveRegion` foi recusado **de propósito** no código (`diletta_inline_alert.dart:76-79`) para o aviso
+  estático; o pedido é um interruptor desligado por padrão, para os 11 avisos de erro pós-ação do app.
+- **Não depende de nada.**
+
+### 5 · PEDIDO AO AVÔ — a lista de rádio não nomeia o grupo, e a linha tem 32
+
+[`pedidos/2026-10-26-a-lista-de-radio-nao-nomeia-o-grupo-e-a-linha-tem-32.md`](pedidos/2026-10-26-a-lista-de-radio-nao-nomeia-o-grupo-e-a-linha-tem-32.md)
+
+- Teste no pino: título sem `header` e sem papel de grupo; linha **390 × 32**. 9 listas no app, 1 com
+  `title`. Responde à porta do veredito de 15/10 sobre a linha de 32.
+- **Não depende de nada.**
+
+### 6 · NÃO SOBEM — o que a medição derrubou
+
+| item da lista | o que o código diz | por que não sobe |
+|---|---|---|
+| 3 · borda do `DilettaCheckbox` a 1,2:1 | a caixa vazia lê `contornoDeControle` desde a `v3.2.0` (`diletta_checkbox.dart:244-245`): **3,95** claro e **3,83** escuro no Bold | já existe; é **espelho no Figma** |
+| 7 · `DilettaStepper` sem `Semantics` | medido no pino: **um** nó, «Cadastro · Passo 2 de 5» | já é um nó só. O «Passo» fixo (`diletta_stepper.dart:78`) não tem tela medida que peça outra palavra |
+| 7 · ProgressBar sem N passos | `DilettaProgressBar(confirmed:, total:)` aceita qualquer N, e `.value` aceita 0..1 (`diletta_progress_bar.dart:25-55`) | já existe; os «sextos e sétimos» são da biblioteca do Figma: **espelho** |
+| 8 · `DilettaCaptureFrame` sem estado e sem variante janela | **confirmado**: zero `Semantics`, fundo opaco `primarySubtle` (`diletta_capture_frame.dart:43-47`, `:72`) | **zero usos** no app. A captura de documento do onboarding é a WebView do provedor mais o `image_picker` (`kyc_documento_screen.dart:80-90`, `:162-180`). Sem número. Reabre quando a tela de captura própria existir no código |
+| 9 · `DilettaIconButton` sem `toggled` | a casa alterna trocando rótulo e glifo pela AÇÃO: o olho da senha (`diletta_input.dart:370-380`) e o olho do saldo no app (`saldo_bloqueado_folha.dart:66-67`) | derivável: «Ligar flash» / «Desligar flash». E não há flash no app |
+| 12 · botão de disparo, glifo de flash | `busca('disparo')`, `('câmera')`, `('captura')`, `('flash')`, `('lanterna')` → `[]`; nenhum glifo de flash no kit (`diletta_icon_tokens.dart`, `v3.25.0`) | sem câmera própria no app: sem número. Reabre com a tela |
+| 12 · lista com marcador ou ícone | `busca('regras')` → `design-system-criteria-list`: o `DilettaCriteriaList` é a lista de regras com estado. Dica com ícone é a `CoreflowLinhaDeLista` | regras: **já existe**. Marcador de texto: 2 sítios no app (`ajuda_da_contestacao.dart:44`, `pix_auto_confirmar_screen.dart:234`), abaixo da régua de promoção do avô (segundo filho) |
+| 12 · superfície de texto rolável (termos) | o termo de uso é uma WebView com o conteúdo do tenant (`aceite_termos_screen.dart:40-115`) | não é vocabulário: o contêiner é página com rolagem |
+| 13 · a seta de voltar não chega à margem de 24 | medido no pino, `CoreflowBarraDeTopo.page`: glifo em **x 24** (alvo 22–66); `diletta_navigation_top_bar.dart:436-457` ancora pelo glifo | o código está certo; é **espelho no Figma** |
+
+### 7 · AS CONTRADIÇÕES, que valem mais que o pedido
+
+- **Item 6, «a etiqueta não segue o modo escuro»**: segue. A `CoreflowEtiqueta` tem um ramo escuro para
+  cada tom (`coreflow_etiqueta.dart:154-225`). O que é verdade é que ela pinta com **primitivas** da
+  paleta, não com papéis, e que o defeito é no **claro** (item 8).
+- **Itens 3 e 4, «borda e placeholder do `DilettaInput`»**: os dois números são **declaração nossa**, não
+  derivação do avô. `bordaEscura` `#14FFFFFF` e `bordaClara` `#12000000` (`bold_palette.dart:288`, `:294`);
+  `textoMudoEscuro` `#686D7E` e `textoMudoClaro` `#8A8398` (`:270`, `:287`). Não vão ao avô (item 9).
+
+### 8 · NOSSO — a `CoreflowEtiqueta` compacta reprova no claro
+
+Medido no pino, 11/500 (texto pequeno, piso 4,5):
+
+| tom | claro, sobre `surface` | claro, sobre `bg` | escuro, sobre `surface` |
+|---|--:|--:|--:|
+| neutro | 4,39 | 4,39 | 5,36 |
+| sucesso | 4,04 | 3,81 | 5,88 |
+| erro | 3,68 | 3,47 | 3,58 |
+| aviso / espera | 3,14 | 3,14 | 7,64 |
+| marca | 3,08 | 3,08 | 5,62 |
+
+21 usos no app. A peça é do pai e se conserta aqui, sem pedido: o caminho que o avô acabou de escolher na
+`v3.24.2` (texto `on…Subtle` sobre o contêiner `…Subtle`) mede, no Bold, 4,77 a 6,09 nos tons de erro, aviso e sucesso (a medição do item 4); o neutro e o de marca não medi. **Muda pixel nas
+21 etiquetas**: é código no Coreflow, e quando fazer é decisão dela. O defeito de alinhamento da mesma
+peça (`coreflow_etiqueta.dart:87`) está na rodada de 08/10, item 7.
+
+**Também nosso, esperando o avô**: o repasse da dica de preenchimento no `CoreflowCampoDeTexto`
+(`coreflow_campo_de_texto.dart:181`) depois que o pedido 1 entrar; e a **subida do pino** do avô de
+`v3.24.0` para a `v3.25.0`, que traz os três vereditos de 20/10.
+
+### 9 · DECISÃO DELA — borda e placeholder do campo
+
+- **O placeholder** mede **3,52** no escuro e **3,63** no claro, sobre `surface`. É a nossa tinta muda
+  declarada, e o piso de **3:1** para texto de apoio é decisão escrita do avô (`diletta_scheme.dart`,
+  `_apoioQueAlcanca`). Subir só o placeholder não dá: a mesma porta pinta o `textMuted` do app inteiro. As
+  saídas: aceitar o 3:1 da casa, ou escurecer a tinta muda (move todo metadado do app).
+- **A borda do campo** mede **1,17** no claro e **1,23** no escuro, e o fundo do campo contra a página dá
+  1,11 / 1,08. Em 29/09 **nós** dissemos ao avô que o `border` *«é certo para card, campo e chip»*, e ele
+  concordou. Pedir agora que a moldura do campo leia o `contornoDeControle` (3,95 / 3,83) contradiz o nosso
+  pedido e muda todo formulário do app. Se ela quiser, vira pedido com essa contradição declarada.
+- **As ilustrações de orientação do documento** são arte do produto (o kit de arte é nosso), e só fazem
+  sentido se a captura própria existir (item 6, linha 8).
+
+---
+
 ## Rodada de 2026-10-16 · o console manda treze peças, e oito viram pedido ao avô
 
 Escrita pelo **`entregador-de-pedidos`**, chamado pela sessão principal do `core-flow-wa` com a frase dela
