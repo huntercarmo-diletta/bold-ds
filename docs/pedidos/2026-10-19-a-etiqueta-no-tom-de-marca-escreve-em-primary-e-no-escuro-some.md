@@ -82,3 +82,36 @@ tabela, o app tem o mesmo defeito no escuro.
 `<diletta-status-tag tone="primary">` no escuro, sobre `surface`, nas marcas do catálogo: o texto passa 4,5:1
 contra o fundo da etiqueta. No claro, nenhum pixel muda nas duas marcas medidas aqui. O gate que mede as
 pinturas ganha o par.
+
+## VEREDITO · ENTRA — o texto da etiqueta é a tinta do contêiner
+
+**pai**: ds-diletta **v3.24.2** · `web-v3.24.2` · **data**: 2026-10-20
+
+### O que decidiu
+*«Os outros quatro tons coloridos já pintam o texto com o `on…Subtle` do seu contêiner»*. O tom `primary` era a
+exceção sem razão. O Hunter decidiu nos dois modos, sabendo que muda pixel no claro onde os dois papéis diferem.
+
+### O que eu achei indo implementar
+- O par `primarySubtle × onPrimarySubtle` já tinha gate. Faltava a peça usar o par: gate novo
+  `a_etiqueta_escreve_com_o_par_do_tinte`.
+- Na referência, o claro muda: 4,60 vira 7,61. No Bold e na Norte Benk, como você mediu, zero pixel.
+- **No Dart escuro a etiqueta não lê esta tabela**: pinta tinte translúcido com o tom base. O `primary` lá passa
+  (4,96), mas `error` dá 3,09 e `success` 4,41 na referência. Fica aberto do meu lado.
+
+### O que eu recusei, e a condição de reabrir
+nada
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o tom deixa de ser exceção na tabela |
+| escalabilidade | ↑ | toda marca recebe o par que passa |
+| aplicação | ↑ | as 6 etiquetas do IB no escuro; adota o filho B |
+| aderência ao mercado | ↑ | texto sobre contêiner usa a tinta dele, como no M3 |
+| robustez | ↑ | o gate cobra a peça, não só o par |
+| arquitetura limpa e simples | = | papel que já existia |
+| conciso | ⊘ | a decisão não obriga a escrever nada |
+
+### O que você faz
+`ref: web-v3.24.2`. Nada mais.
