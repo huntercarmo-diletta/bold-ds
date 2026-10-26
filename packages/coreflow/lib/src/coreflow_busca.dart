@@ -50,19 +50,21 @@ class _CoreflowBuscaState extends State<CoreflowBusca> {
     // na busca, e a razão dele é boa — busca não valida, busca procura. O sítio que
     // usa é a busca de chave Pix, onde o texto digitado PODE ser inválido como
     // chave. Enquanto for um, fica embrulhado aqui: um caso não vira pedido.
-    if (!widget.error) {
-      return DilettaSearchInput(
-        controller: widget.controller,
-        placeholder: widget.placeholder,
-        onChanged: widget.onChanged,
-        onSubmitted: widget.onSubmitted,
-        focusNode: widget.focusNode,
-      );
-    }
+    //
+    // A ÁRVORE TEM UMA FORMA SÓ, com erro ou sem. Era `DilettaSearchInput` na raiz sem erro e
+    // `DecoratedBox(child: DilettaSearchInput)` com erro, e trocar a raiz RECRIA o campo: o
+    // `FocusNode` interno do avô morre no `dispose`, a conexão de texto fecha e o teclado desce
+    // no mesmo frame em que a mensagem de erro aparece. Medido no app em 26/10, na Área Pix,
+    // digitando `1`. Sem erro a moldura fica na árvore, só que sem borda.
+    //
+    // E a borda vai em `foreground`: o campo do avô pinta fundo opaco e a própria borda no mesmo
+    // retângulo, então o vermelho em `background` ficava embaixo e nunca apareceu.
+    final esquema = CoreflowScheme.of(context);
     return DecoratedBox(
+      position: DecorationPosition.foreground,
       decoration: BoxDecoration(
-        border: Border.all(color: CoreflowScheme.of(context).danger, width: 1),
-        borderRadius: CoreflowScheme.of(context).formaDoCampo,
+        border: widget.error ? Border.all(color: esquema.danger, width: 1) : null,
+        borderRadius: esquema.formaDoCampo,
       ),
       child: DilettaSearchInput(
         controller: widget.controller,
