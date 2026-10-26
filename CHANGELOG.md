@@ -37,6 +37,8 @@ avô sai de lá. Não pinta — sem `tokens/`, sem hex.
 (tag `coreflow-web-v<versão>`), e os gates `uma_versao_e_uma_tag`, `toda_tag_web_carrega_o_pacote`
 e o novo `o_pai_na_web_recebe_o_mesmo_avo` passam a conhecê-lo. O número do Bold não muda.
 
+## [0.127.1] — 2026-10-26
+
 ### `CoreflowBusca` não derruba mais o teclado ao entrar ou sair do erro, e a borda de erro aparece — muda pixel
 
 Visto no app em 26/10, num Motorola edge 60 neo (Android 16), na busca de chave da Área Pix: digitar
@@ -49,6 +51,12 @@ Agora a árvore tem uma forma só: o `DecoratedBox` fica sempre, sem borda quand
 borda vai em `DecorationPosition.foreground` — em `background` ela ficava embaixo do fundo opaco do
 campo do avô e **nunca apareceu**; com erro, o campo passa a mostrar o contorno `danger` de 1px.
 API igual, nenhum chamador muda. Seis testes em `a_busca_nao_derruba_o_teclado_no_erro_test.dart`.
+
+### O que chega ao consumidor web por esta tag (`web-v0.127.1`): o número, e só
+
+O conserto da busca é Dart, e nenhum lado web mudou desde a `v0.127.0`: nem o do Bold, nem os de
+Norte Benk, Confia Capital e BluOn, que não ganham tag. O avô fica em `v3.24.0` / `web-v3.24.0`, e o
+`coreflow-web` segue em `0.1.0`, sem tag.
 
 ## [0.127.0] — 2026-10-23
 
