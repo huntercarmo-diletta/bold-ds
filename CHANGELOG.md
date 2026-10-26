@@ -37,6 +37,19 @@ avô sai de lá. Não pinta — sem `tokens/`, sem hex.
 (tag `coreflow-web-v<versão>`), e os gates `uma_versao_e_uma_tag`, `toda_tag_web_carrega_o_pacote`
 e o novo `o_pai_na_web_recebe_o_mesmo_avo` passam a conhecê-lo. O número do Bold não muda.
 
+### `CoreflowBusca` não derruba mais o teclado ao entrar ou sair do erro, e a borda de erro aparece — muda pixel
+
+Visto no app em 26/10, num Motorola edge 60 neo (Android 16), na busca de chave da Área Pix: digitar
+`1` liga o `error`, a mensagem aparece e **o teclado fecha no mesmo frame** (`HIDE_SOFT_INPUT
+fromUser false`); o mesmo ao sair do erro. O `build` devolvia o `DilettaSearchInput` na raiz sem
+erro e embrulhado num `DecoratedBox` com erro, e trocar a raiz recria o campo: o `FocusNode` interno
+do avô morre no `dispose` e a conexão de texto fecha junto.
+
+Agora a árvore tem uma forma só: o `DecoratedBox` fica sempre, sem borda quando não há erro. E a
+borda vai em `DecorationPosition.foreground` — em `background` ela ficava embaixo do fundo opaco do
+campo do avô e **nunca apareceu**; com erro, o campo passa a mostrar o contorno `danger` de 1px.
+API igual, nenhum chamador muda. Seis testes em `a_busca_nao_derruba_o_teclado_no_erro_test.dart`.
+
 ## [0.127.0] — 2026-10-23
 
 ### Nasce o quarto filho — a BluOn, o primeiro envio do Berço que chegou em peças
