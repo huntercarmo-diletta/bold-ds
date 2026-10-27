@@ -22,6 +22,29 @@ O que cada degrau significa **pro app que adota**:
 
 ## [Unreleased]
 
+### Corrigido: na folha web, o `primary` do esquema sai com a tinta dele (`onPrimary`)
+
+O `coreflowEsquemaCss` publica o `primary` do `CoreflowScheme`, que no claro é o degrau profundo
+(`primary03`, escolhido como tinta sobre a página branca), por cima do `--diletta-primary` do avô. A
+web usa esse papel também como PREENCHIMENTO (botão primário, bolha, passo atual), e a tinta por cima
+continuava a da paleta, derivada da marca no degrau 05. Com marca escura as duas casam; com marca
+clara, não. A BluOn (`#1F91FF`) saía com `#14181a` sobre `#084d8e`: **2,10:1**, medido pelo gate de
+contraste do Internet Banking em 27/10, em sete pares.
+
+Agora o esquema emite também `onPrimary`: a da paleta quando ela passa AA sobre o `primary` dele, e a
+que mais contrasta (o branco do avô) quando não passa. **Só a BluOn muda de valor**, no claro:
+`#14181a` → `#ffffff` (8,53:1). Nas folhas do Conta BOLD, da Norte Benk, da Confia Capital e do Meu
+Banco entra uma linha por bloco com o MESMO valor que já valia. O Flutter não muda (o emissor é só da web).
+No app, a `CoreflowNavFlutuante` pinta o par do AVÔ (`DilettaTheme.schemeOf`): `#1F91FF` com
+`#14181a`, 5,58:1 na BluOn.
+
+Gate novo: `coreflow/test/o_primary_do_esquema_leva_a_tinta_dele_test.dart` (marca clara passa AA,
+marca escura não muda). O `o_desenho_da_web_e_o_do_mobile` de cada filho e o molde do `novo_filho`
+pulam o `onPrimary` na paridade, como já pulavam o `primary`: os dois viajam em par.
+
+**Para a BluOn sair consertada: `bluon-web` 0.1.0 → 0.1.1 (patch) no release.** Os outros filhos
+não mudam de valor; publicá-los é opcional.
+
 ### Nasce `packages/coreflow_web` (`coreflow-web` 0.1.0) — o pai na web
 
 Passo 1 da proposta `docs/propostas/2026-10-16-a-camada-web-do-coreflow.md`, aprovada pela Agatha
