@@ -91,13 +91,16 @@ case "$filho" in
   bluon)
     pacote=packages/bluon_coreflow/web
     prefixo="bluon-web-v" ;;
+  banco-fibra)
+    pacote=packages/banco_fibra_coreflow/web
+    prefixo="banco-fibra-web-v" ;;
   # O PAI na web (16/10/2026): não é filho, mas sai pelo mesmo espelho — reexporta o avô, carrega
   # a cópia dele em `avo/` como os outros, e não tem folha nenhuma porque não pinta.
   coreflow)
     pacote=packages/coreflow_web
     prefixo="coreflow-web-v" ;;
   *)
-    echo "filho desconhecido: $filho (conheço: bold, norte-benk, confia-capital, coreflow, bluon)"; exit 2 ;;
+    echo "filho desconhecido: $filho (conheço: bold, norte-benk, confia-capital, coreflow, bluon, banco-fibra)"; exit 2 ;;
 esac
 
 # A PROFUNDIDADE VEM DO CAMINHO, e não de um número escrito: o `bold` guarda o lado web num pacote

@@ -14,6 +14,18 @@ import 'package:flutter/material.dart' show Color;
 /// escreve em `currentColor` o pai tinge por modo (`CoreflowProduto.marcaNo`: preto no claro, branco
 /// no escuro) e o que tem cor fixa entra como o designer desenhou. SEM essa chave, o `DilettaLogo`
 /// aplica `ColorFilter.srcIn` e pinta o desenho inteiro de uma cor só.
+///
+/// **A ARTE NÃO VEIO DO CLIENTE, e é provisória.** Não houve manual nem vetor do banco: o envio do
+/// Berço (28/10) foi montado do site público (bancofibra.com.br). Os quatro SVG abaixo são a
+/// VETORIZAÇÃO dos PNG de lá — contorno dos pixels, simplificado em polígonos —, todos com cor fixa
+/// (nenhum usa `currentColor`):
+///
+/// - o lockup é o `logo.png` do cabeçalho do site, em `#0D1882`;
+/// - o símbolo é o "F" recortado desse mesmo lockup (o favicon de 192 px era borrado demais);
+/// - as duas versões escuras são o MESMO desenho pintado de branco, e não uma arte para fundo escuro.
+///
+/// **Trocar pelo vetor oficial quando o banco mandar** — os quatro arquivos, com os mesmos nomes; a
+/// `proporcaoDoLockup` sai do `viewBox` do lockup novo.
 const DilettaBrand _marcaBancoFibra = DilettaBrand(
   pacote: 'banco_fibra_coreflow',
   // O SÍMBOLO É A VARIANTE `mark` — o desenho que funciona sem a palavra, e que o avô pede para as top
@@ -21,13 +33,15 @@ const DilettaBrand _marcaBancoFibra = DilettaBrand(
   // passar `variant:`, então este arquivo é o que elas mostram.
   logo: 'assets/logos/banco_fibra_simbolo.svg',
   logoFull: 'assets/logos/banco_fibra.svg',
-  // O LOCKUP DA PÁGINA ESCURA VEIO DO CLIENTE — a versão do manual dele para fundo escuro, desenhada
-  // para ela (pode ter mais de uma cor; não é a positiva/negativa). O avô a aceita desde a v0.196.0:
-  // par declarado desliga o `srcIn`, e a arte entra como foi desenhada. Conferida no Berço contra a
-  // página e a superfície escuras, na proporção do lockup claro e na forma de lockup.
+  // O LOCKUP DA PÁGINA ESCURA NÃO VEIO DO CLIENTE: é o lockup claro vetorizado do site, pintado de
+  // branco, porque o azul-marinho some no fundo escuro e o site não publica versão para ele. O avô
+  // aceita o par desde a v0.196.0: par declarado desliga o `srcIn`, e a arte entra como está.
+  // Conferido no Berço contra a página e a superfície escuras, na proporção do lockup claro.
+  // Trocar pela versão para fundo escuro do manual do banco, se ele tiver uma.
   logoFullEscuro: 'assets/logos/banco_fibra_escuro.svg',
-  // O SÍMBOLO DA PÁGINA ESCURA VEIO DO CLIENTE. É ele que as seis peças que desenham só a marca (top
-  // bar densa, avatar, comprovante, cartões de carteira) mostram no escuro.
+  // O SÍMBOLO DA PÁGINA ESCURA também é o "F" do site pintado de branco, não arte do cliente. É ele
+  // que as seis peças que desenham só a marca (top bar densa, avatar, comprovante, cartões de
+  // carteira) mostram no escuro. Trocar junto com o lockup.
   logoEscuro: 'assets/logos/banco_fibra_simbolo_escuro.svg',
   logoTingePorCurrentColor: true,
   nomeDaMarca: 'Banco Fibra',
@@ -48,8 +62,9 @@ final DilettaPalette _paletaBancoFibra = _baseBancoFibra.paleta.comMaterial(
   raioDeBotao: 4,
   raioDeFolha: 8,
   // A FORMA DA MARCA INTEIRA — «Formal», cantos quase retos. Seis papéis de medida, pelo nome
-  // (`DilettaMedida`, avô ≥ v0.194.0): é por aqui que cartão, campo, vidro e nav recebem o canto que o
-  // cliente escolheu; `raioDeBotao`/`raioDeFolha` acima continuam como alias, e a tabela vence.
+  // (`DilettaMedida`, avô ≥ v0.194.0): é por aqui que cartão, campo, vidro e nav recebem o canto;
+  // `raioDeBotao`/`raioDeFolha` acima continuam como alias, e a tabela vence. A forma NÃO foi escolha
+  // do banco: quem preencheu o Berço a tirou do logo, de cantos retos. Confirmar com o banco.
   medidas: const {
     DilettaMedida.formaDeBotao: 4,
     DilettaMedida.formaDeFolha: 8,
