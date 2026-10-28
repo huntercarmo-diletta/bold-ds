@@ -83,3 +83,26 @@ Os dois itens. **Reabre quando a gaveta de Cadastros › Por passo existir no c�
 
 ### O que você faz
 nada agora.
+
+## ADENDO · 2026-10-28 — a tela existe no código do console; reabre o item 2
+
+**Onde:** `core-flow-wa`, change `pedidos-de-limite` (PR 7, branch `feat/pedido-aguardando-o-provedor`,
+27/10). O embrulho da peça é `src/design-system/molecules/WaPasso.tsx`; quem monta os degraus é
+`andamentoDoPedido` em `src/features/limites/model/pedidos.ts`, a partir dos fatos do servidor; quem
+desenha é `src/features/limites/ui/TelaPedidosDeLimite.tsx` (o andamento da gaveta e o cartão dos
+documentos). Não é a gaveta de Cadastros › Por passo que o pedido citava — é outra tela, com a mesma
+peça: Limites › Pedidos, o pedido de aumento depois do «sim» do admin.
+
+**A medida:** 16 degraus pedidos à peça na tela (11 `concluido`, 5 `pendente`, 2 `bloqueado`), em cinco
+andamentos (aguardando o provedor, com documentos pedidos, aplicado, recusado pelo provedor, não
+aprovado) e no cartão de três passos dos documentos. Em TODOS os andamentos em aberto há um passo em que
+a pessoa está — «O provedor analisa», «Você tem o documento?» — e ele sai como `pendente`, igual ao que
+vem depois («O novo teto vale», «Responder ao provedor»). O desenho (Web-Admin `282:2099`, B17, B19) o
+marca: a peça local «Limites / Passo» tem a variante «atual», numerada e na tinta da marca.
+
+**O que reabre:** só o item 2 (o passo atual). O item 1 (o degrau aberto) não é preciso aqui: o slot
+`acao` serviu — o resumo do registro, o cartão do arquivo e o formulário da resposta moram nele.
+
+**O que a peça faria:** um quarto valor no eixo, `atual`, ou a regra derivada que você ofereceu — «o
+atual é o primeiro não concluído». Qualquer uma serve; se for a derivada, diga e o filho não manda nada.
+O estado da FALHA é outro pedido, de hoje: `2026-10-28-o-no-de-passo-nao-tem-o-estado-falhou.md`.
