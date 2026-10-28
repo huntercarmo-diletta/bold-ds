@@ -22,6 +22,23 @@ O que cada degrau significa **pro app que adota**:
 
 ## [Unreleased]
 
+### Nasce `packages/coreflow_web` (`coreflow-web` 0.1.0) — o pai na web
+
+Passo 1 da proposta `docs/propostas/2026-10-16-a-camada-web-do-coreflow.md`, aprovada pela Agatha
+em 16/10. No Flutter a casa tem três degraus (avô → `coreflow` → filho); na web tinha dois, e todo
+veredito «nasce no filho» não tinha onde nascer. O pacote novo reexporta o avô
+(`diletta-design-system-web`, `web-v3.19.0` — o mesmo pino do Bold, lock no mesmo commit) e abre o
+ponto de extensão `coreflow/`, vazio por enquanto (`pecasDoCoreflow = []`), com a regra de entrada
+escrita: só o que o avô recusou ou declarou «do produto» E mais de um produto usa; peça aceita pelo
+avô sai de lá. Não pinta — sem `tokens/`, sem hex.
+
+**Os filhos ainda apontam o `#avo` para o avô**; a troca é o passo 3, junto com a tag
+`coreflow-web-v0.1.0`, que é da Agatha. O espelho (`tool/espelha_o_web.sh`) ganha o alvo `coreflow`
+(tag `coreflow-web-v<versão>`), e os gates `uma_versao_e_uma_tag`, `toda_tag_web_carrega_o_pacote`
+e o novo `o_pai_na_web_recebe_o_mesmo_avo` passam a conhecê-lo. O número do Bold não muda.
+
+## [0.127.2] — 2026-10-28
+
 ### Corrigido: na folha web, o `primary` do esquema sai com a tinta dele (`onPrimary`)
 
 O `coreflowEsquemaCss` publica o `primary` do `CoreflowScheme`, que no claro é o degrau profundo
@@ -45,20 +62,14 @@ pulam o `onPrimary` na paridade, como já pulavam o `primary`: os dois viajam em
 **Para a BluOn sair consertada: `bluon-web` 0.1.0 → 0.1.1 (patch) no release.** Os outros filhos
 não mudam de valor; publicá-los é opcional.
 
-### Nasce `packages/coreflow_web` (`coreflow-web` 0.1.0) — o pai na web
+### O que chega ao consumidor web por esta tag
 
-Passo 1 da proposta `docs/propostas/2026-10-16-a-camada-web-do-coreflow.md`, aprovada pela Agatha
-em 16/10. No Flutter a casa tem três degraus (avô → `coreflow` → filho); na web tinha dois, e todo
-veredito «nasce no filho» não tinha onde nascer. O pacote novo reexporta o avô
-(`diletta-design-system-web`, `web-v3.19.0` — o mesmo pino do Bold, lock no mesmo commit) e abre o
-ponto de extensão `coreflow/`, vazio por enquanto (`pecasDoCoreflow = []`), com a regra de entrada
-escrita: só o que o avô recusou ou declarou «do produto» E mais de um produto usa; peça aceita pelo
-avô sai de lá. Não pinta — sem `tokens/`, sem hex.
-
-**Os filhos ainda apontam o `#avo` para o avô**; a troca é o passo 3, junto com a tag
-`coreflow-web-v0.1.0`, que é da Agatha. O espelho (`tool/espelha_o_web.sh`) ganha o alvo `coreflow`
-(tag `coreflow-web-v<versão>`), e os gates `uma_versao_e_uma_tag`, `toda_tag_web_carrega_o_pacote`
-e o novo `o_pai_na_web_recebe_o_mesmo_avo` passam a conhecê-lo. O número do Bold não muda.
+- **`bluon-web-v0.1.1`**: a BluOn sobe de `0.1.0` para `0.1.1`, e é a única folha que muda de valor
+  — no claro, o rótulo sobre o `primary` passa a branco;
+- **`web-v0.127.2`**: a folha do Bold ganha a linha do `onPrimary` com o mesmo valor que o avô já dava;
+- Norte Benk (`0.1.8`) e Confia Capital (`0.1.2`) ganham a mesma linha, com o mesmo valor, e não
+  ganham tag: para quem consome, nada muda;
+- o avô fica em `v3.24.0` / `web-v3.24.0`, e o `coreflow-web` segue em `0.1.0`, sem tag.
 
 ## [0.127.1] — 2026-10-26
 
