@@ -1,0 +1,337 @@
+/* GERADO — NÃO editar à mão. Os 74 papéis da linguagem, com a tinta de Banco Fibra.
+   Carregue DEPOIS das folhas do avô: estas mesmas variáveis, com os valores deste produto. */
+:root {
+  --diletta-bg: #ffffff;
+  --diletta-bgMenu: #ffffff;
+  --diletta-border: #d5dce1;
+  --diletta-borderSubtle: #e9eef1;
+  --diletta-contornoDeControle: #74818b;
+  --diletta-divider: #e9eef1;
+  --diletta-error: #b3251d;
+  --diletta-errorBorder: #e8837c;
+  --diletta-errorGrafico: #b3251d;
+  --diletta-errorOnSurface: #8a1a14;
+  --diletta-errorSolid: #8e2b2b;
+  --diletta-errorSolidHover: #5e110d;
+  --diletta-errorSolidPressed: #3d0a08;
+  --diletta-errorSubtle: #fbe4e2;
+  --diletta-fg: #14181a;
+  --diletta-glassStroke: #eff2f7;
+  --diletta-glassTint: #ffffff80;
+  --diletta-onError: #ffffff;
+  --diletta-onErrorSolid: #ffffff;
+  --diletta-onErrorSubtle: #8a1a14;
+  --diletta-onPartner: #ffffff;
+  --diletta-onPrimary: #ffffff;
+  --diletta-onPrimarySubtle: #1a18db;
+  --diletta-onSecure: #14181a;
+  --diletta-onSecureSubtle: #4a3a05;
+  --diletta-onSuccess: #ffffff;
+  --diletta-onSuccessSubtle: #0e6e47;
+  --diletta-onSurface: #14181a;
+  --diletta-onWarning: #ffffff;
+  --diletta-onWarningSubtle: #5c4304;
+  --diletta-partner: #6b3fa0;
+  --diletta-partnerSurface: #1c2124;
+  --diletta-primary: #0d1882;
+  --diletta-primaryHover: #c9d1e4;
+  --diletta-primaryOnSurface: #1a18db;
+  --diletta-primaryPressed: #eff2f7;
+  --diletta-primarySolidHover: #1a18db;
+  --diletta-primarySolidPressed: #0d1882;
+  --diletta-primarySubtle: #eff2f7;
+  --diletta-primaryTrack: #c9d1e4;
+  --diletta-primaryWash: #eff2f7;
+  --diletta-secure: #9c7b0c;
+  --diletta-secureOnSurface: #6e5708;
+  --diletta-secureSubtle: #fbf6e4;
+  --diletta-serie1: #0d1882;
+  --diletta-serie2: #5d0020;
+  --diletta-serie3: #2f3200;
+  --diletta-serie4: #003540;
+  --diletta-serie5: #4c005d;
+  --diletta-serie6: #482400;
+  --diletta-serie7: #003925;
+  --diletta-skeletonShimmer: #6c92fa;
+  --diletta-success: #12905c;
+  --diletta-successBorder: #6acca2;
+  --diletta-successOnSurface: #0e6e47;
+  --diletta-successSubtle: #e0f5eb;
+  --diletta-surface: #ffffff;
+  --diletta-surfaceDisabled: #d5dce1;
+  --diletta-surfaceInverse: #14181a;
+  --diletta-surfaceLoading: #d9d9d9;
+  --diletta-surfaceLoadingStrong: #929ea7;
+  --diletta-surfaceMuted: #e9eef1;
+  --diletta-surfaceSubtle: #f5f8f9;
+  --diletta-textDisabled: #929ea7;
+  --diletta-textMuted: #5a656e;
+  --diletta-textPlaceholder: #74818b;
+  --diletta-textSecondary: #20262a;
+  --diletta-textTertiary: #39424a;
+  --diletta-trilhoDeMedidor: #e9eef1;
+  --diletta-warning: #b0810a;
+  --diletta-warningBorder: #e6c86b;
+  --diletta-warningGrafico: #876307;
+  --diletta-warningOnSurface: #876307;
+  --diletta-warningSubtle: #fbf2da;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --diletta-bg: #14181a;
+    --diletta-bgMenu: #20262a;
+    --diletta-border: #ffffff14;
+    --diletta-borderSubtle: #20262a;
+    --diletta-contornoDeControle: #74818b;
+    --diletta-divider: #ffffff14;
+    --diletta-error: #d8483f;
+    --diletta-errorBorder: #b3251d;
+    --diletta-errorGrafico: #d8483f;
+    --diletta-errorOnSurface: #e8837c;
+    --diletta-errorSolid: #8a1a14;
+    --diletta-errorSolidHover: #b3251d;
+    --diletta-errorSolidPressed: #8a1a14;
+    --diletta-errorSubtle: #5e110d;
+    --diletta-fg: #f5f8f9;
+    --diletta-glassStroke: #8eacf54d;
+    --diletta-glassTint: #040a4680;
+    --diletta-onError: #3d0a08;
+    --diletta-onErrorSolid: #ffffff;
+    --diletta-onErrorSubtle: #e8837c;
+    --diletta-onPartner: #ffffff;
+    --diletta-onPrimary: #14181a;
+    --diletta-onPrimarySubtle: #c9d1e4;
+    --diletta-onSecure: #14181a;
+    --diletta-onSecureSubtle: #f6ecc8;
+    --diletta-onSuccess: #06301f;
+    --diletta-onSuccessSubtle: #6acca2;
+    --diletta-onSurface: #f5f8f9;
+    --diletta-onWarning: #3a2a02;
+    --diletta-onWarningSubtle: #e6c86b;
+    --diletta-partner: #6b3fa0;
+    --diletta-partnerSurface: #1c2124;
+    --diletta-primary: #6c92fa;
+    --diletta-primaryHover: #436cff;
+    --diletta-primaryOnSurface: #8eacf5;
+    --diletta-primaryPressed: #1a18db;
+    --diletta-primarySolidHover: #436cff;
+    --diletta-primarySolidPressed: #1a18db;
+    --diletta-primarySubtle: #1a18db;
+    --diletta-primaryTrack: #0d1882;
+    --diletta-primaryWash: #436cff33;
+    --diletta-secure: #c49e1e;
+    --diletta-secureOnSurface: #c49e1e;
+    --diletta-secureSubtle: #4a3a05;
+    --diletta-serie1: #6c92fa;
+    --diletta-serie2: #e86882;
+    --diletta-serie3: #9aa100;
+    --diletta-serie4: #00aac7;
+    --diletta-serie5: #c175d7;
+    --diletta-serie6: #dc7d00;
+    --diletta-serie7: #00b480;
+    --diletta-skeletonShimmer: #0d1882;
+    --diletta-success: #2fb37b;
+    --diletta-successBorder: #12905c;
+    --diletta-successOnSurface: #2fb37b;
+    --diletta-successSubtle: #0a4b31;
+    --diletta-surface: #20262a;
+    --diletta-surfaceDisabled: #ffffff14;
+    --diletta-surfaceInverse: #14181a;
+    --diletta-surfaceLoading: #393e41;
+    --diletta-surfaceLoadingStrong: #5a656e;
+    --diletta-surfaceMuted: #39424a;
+    --diletta-surfaceSubtle: #2d343a;
+    --diletta-textDisabled: #5a656e;
+    --diletta-textMuted: #74818b;
+    --diletta-textPlaceholder: #74818b;
+    --diletta-textSecondary: #b2bcc4;
+    --diletta-textTertiary: #929ea7;
+    --diletta-trilhoDeMedidor: #20262a;
+    --diletta-warning: #d4a62a;
+    --diletta-warningBorder: #b0810a;
+    --diletta-warningGrafico: #d4a62a;
+    --diletta-warningOnSurface: #d4a62a;
+    --diletta-warningSubtle: #5c4304;
+  }
+}
+
+:root[data-theme="dark"] {
+  --diletta-bg: #14181a;
+  --diletta-bgMenu: #20262a;
+  --diletta-border: #ffffff14;
+  --diletta-borderSubtle: #20262a;
+  --diletta-contornoDeControle: #74818b;
+  --diletta-divider: #ffffff14;
+  --diletta-error: #d8483f;
+  --diletta-errorBorder: #b3251d;
+  --diletta-errorGrafico: #d8483f;
+  --diletta-errorOnSurface: #e8837c;
+  --diletta-errorSolid: #8a1a14;
+  --diletta-errorSolidHover: #b3251d;
+  --diletta-errorSolidPressed: #8a1a14;
+  --diletta-errorSubtle: #5e110d;
+  --diletta-fg: #f5f8f9;
+  --diletta-glassStroke: #8eacf54d;
+  --diletta-glassTint: #040a4680;
+  --diletta-onError: #3d0a08;
+  --diletta-onErrorSolid: #ffffff;
+  --diletta-onErrorSubtle: #e8837c;
+  --diletta-onPartner: #ffffff;
+  --diletta-onPrimary: #14181a;
+  --diletta-onPrimarySubtle: #c9d1e4;
+  --diletta-onSecure: #14181a;
+  --diletta-onSecureSubtle: #f6ecc8;
+  --diletta-onSuccess: #06301f;
+  --diletta-onSuccessSubtle: #6acca2;
+  --diletta-onSurface: #f5f8f9;
+  --diletta-onWarning: #3a2a02;
+  --diletta-onWarningSubtle: #e6c86b;
+  --diletta-partner: #6b3fa0;
+  --diletta-partnerSurface: #1c2124;
+  --diletta-primary: #6c92fa;
+  --diletta-primaryHover: #436cff;
+  --diletta-primaryOnSurface: #8eacf5;
+  --diletta-primaryPressed: #1a18db;
+  --diletta-primarySolidHover: #436cff;
+  --diletta-primarySolidPressed: #1a18db;
+  --diletta-primarySubtle: #1a18db;
+  --diletta-primaryTrack: #0d1882;
+  --diletta-primaryWash: #436cff33;
+  --diletta-secure: #c49e1e;
+  --diletta-secureOnSurface: #c49e1e;
+  --diletta-secureSubtle: #4a3a05;
+  --diletta-serie1: #6c92fa;
+  --diletta-serie2: #e86882;
+  --diletta-serie3: #9aa100;
+  --diletta-serie4: #00aac7;
+  --diletta-serie5: #c175d7;
+  --diletta-serie6: #dc7d00;
+  --diletta-serie7: #00b480;
+  --diletta-skeletonShimmer: #0d1882;
+  --diletta-success: #2fb37b;
+  --diletta-successBorder: #12905c;
+  --diletta-successOnSurface: #2fb37b;
+  --diletta-successSubtle: #0a4b31;
+  --diletta-surface: #20262a;
+  --diletta-surfaceDisabled: #ffffff14;
+  --diletta-surfaceInverse: #14181a;
+  --diletta-surfaceLoading: #393e41;
+  --diletta-surfaceLoadingStrong: #5a656e;
+  --diletta-surfaceMuted: #39424a;
+  --diletta-surfaceSubtle: #2d343a;
+  --diletta-textDisabled: #5a656e;
+  --diletta-textMuted: #74818b;
+  --diletta-textPlaceholder: #74818b;
+  --diletta-textSecondary: #b2bcc4;
+  --diletta-textTertiary: #929ea7;
+  --diletta-trilhoDeMedidor: #20262a;
+  --diletta-warning: #d4a62a;
+  --diletta-warningBorder: #b0810a;
+  --diletta-warningGrafico: #d4a62a;
+  --diletta-warningOnSurface: #d4a62a;
+  --diletta-warningSubtle: #5c4304;
+}
+
+/* O ESQUEMA DESTE PRODUTO — os papéis que o avô não tem. */
+:root {
+  --diletta-background: #ffffff;
+  --diletta-secondaryFlow: #ffffff;
+  --diletta-textPrimary: #14181a;
+  --diletta-border: #d5dce1;
+  --diletta-overlay: #ffffffd9;
+  --diletta-primary: #1a18db;
+  --diletta-onPrimary: #ffffff;
+  --diletta-danger: #8a1a14;
+  --diletta-infoSubtle: #20262a1c;
+  --diletta-vinho: #1618bf;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --diletta-background: #14181a;
+    --diletta-secondaryFlow: #020526;
+    --diletta-textPrimary: #f5f8f9;
+    --diletta-border: #ffffff14;
+    --diletta-overlay: #14181ab3;
+    --diletta-primary: #6c92fa;
+    --diletta-onPrimary: #14181a;
+    --diletta-danger: #d8483f;
+    --diletta-infoSubtle: #b2bcc41c;
+    --diletta-vinho: #1618bf;
+  }
+}
+
+:root[data-theme="dark"] {
+  --diletta-background: #14181a;
+  --diletta-secondaryFlow: #020526;
+  --diletta-textPrimary: #f5f8f9;
+  --diletta-border: #ffffff14;
+  --diletta-overlay: #14181ab3;
+  --diletta-primary: #6c92fa;
+  --diletta-onPrimary: #14181a;
+  --diletta-danger: #d8483f;
+  --diletta-infoSubtle: #b2bcc41c;
+  --diletta-vinho: #1618bf;
+}
+
+/* MEDIDA por nome. */
+:root {
+  --diletta-formaDeBotao: 4px;
+  --diletta-formaDeFolha: 8px;
+  --diletta-formaDeCampo: 6px;
+  --diletta-formaDeCartao: 8px;
+  --diletta-formaDeVidro: 6px;
+  --diletta-formaDeNav: 10px;
+}
+
+/* A FAMÍLIA TIPOGRÁFICA. A ESCALA é a do avô — ele publica os degraus dele e este produto
+   os herda (`CoreflowTipografia.doAvo`), então repetir aqui seria repetir o que não é
+   nosso. A FAMÍLIA é outra história: no Flutter ela é anulável porque o app empresta a
+   dele, e NA WEB NÃO HÁ APP. Sem esta linha `var(--diletta-font-family)` não resolve, e
+   `var()` que não resolve mata a declaração inteira — a tela sai em Times. Aconteceu com
+   o segundo filho da família, em 22/09, com toda a configuração correta.
+   ESTE PRODUTO TROCA DE FONTE numa linha só, servindo Flutter e web:
+     tipografia: CoreflowTipografia.doAvo.copyWith(familia: 'packages/<pacote>/MinhaFonte'),
+   ...e os ARQUIVOS da fonte precisam viajar no pacote web, senão a folha nomeia o que o
+   navegador não tem. Sem declarar, recebe a Inter que a família publica.
+   A ESCALA PRÓPRIA, se um dia este produto quiser a dele, entra ao lado com
+   `coreflowTipoCss(meusDegraus, familia: ...)` — e junto com ela o import de
+   `package:flutter/widgets.dart` (de onde vêm `TextStyle` e `FontWeight`) e a tabela
+   `_degraus` do `o_desenho_da_web_e_o_do_mobile_test.dart`, senão o gate de lá dorme. */
+:root {
+  --diletta-font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* A RAMPA DE MARCA, nove degraus por nome. Constante de marca — sem bloco de modo:
+   a rampa É a identidade, e quem inverte por brilho são os papéis derivados dela.
+   Ela existe para quem precisa DESENHAR com a tinta deste produto (um fundo, um
+   brilho), e não só pintar componente com papel. */
+:root {
+  --diletta-primary01: #040a46;
+  --diletta-primary02: #0d1882;
+  --diletta-primary03: #1a18db;
+  --diletta-primary04: #436cff;
+  --diletta-primary05: #6c92fa;
+  --diletta-primary06: #8eacf5;
+  --diletta-primary07: #c9d1e4;
+  --diletta-primary08: #eff2f7;
+  --diletta-primary09: #f7f8fb;
+}
+
+/* O GRADIENTE DESTE PRODUTO, e ele é DERIVADO — não inventado. Quem não desenha curva
+   própria recebe `CoreflowGradients.daPaleta`: dois degraus da rampa DELE (04 → 05), com
+   a tinta que a paleta dele declara por cima. */
+:root {
+  --diletta-gradiente-primary: linear-gradient(141deg, #436cff 0%, #6c92fa 100%);
+  --diletta-gradiente-accent: linear-gradient(145deg, #876307, #5c4304);
+  --diletta-onGradiente: #ffffff;
+}
+
+/* AS PARADAS DA CURVA, soltas — o degradê inteiro não serve a quem precisa de UMA cor
+   dele. Saem tantas quantas a curva deste produto tiver: duas, na derivada. Consumidor
+   que pedir uma parada além dessas está pedindo a curva de OUTRO produto. */
+:root {
+  --diletta-lockup01: #436cff;
+  --diletta-lockup02: #6c92fa;
+}

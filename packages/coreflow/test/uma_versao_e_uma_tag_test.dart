@@ -73,6 +73,8 @@ const _filhos = <Filho>[
       '../confia_capital_coreflow/web/package.json', 'confia-capital-web-'),
   Filho('BluOn', '../bluon_coreflow/pubspec.yaml',
       '../bluon_coreflow/web/package.json', 'bluon-web-'),
+  Filho('Banco Fibra', '../banco_fibra_coreflow/pubspec.yaml',
+      '../banco_fibra_coreflow/web/package.json', 'banco-fibra-web-'),
   // O PAI, que desde 16/10/2026 também tem lado web — `packages/coreflow_web`, o `coreflow-web`
   // (`docs/propostas/2026-10-16-a-camada-web-do-coreflow.md`, aprovada pela Agatha). Não é filho,
   // mas publica no MESMO espaço de tags e tem os mesmos dois números. O `coreflow` em Dart está em
