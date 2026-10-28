@@ -37,6 +37,7 @@ const _pacotePorPrefixo = {
   'norte-benk-web-v': 'norte-benk-web',
   'confia-capital-web-v': 'confia-capital-web',
   'bluon-web-v': 'bluon-web',
+  'banco-fibra-web-v': 'banco-fibra-web',
   'coreflow-web-v': 'coreflow-web', // o pai na web, desde 16/10/2026 — ainda sem tag
 };
 
