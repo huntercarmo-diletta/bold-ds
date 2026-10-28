@@ -759,9 +759,10 @@ void main() {
       for (final papel in dilettaNomesDePapelGen) {
         final cor = dilettaCorDoPapelGen(modo.s, papel);
         if (cor == null) continue;
-        // Os dois que o esquema do produto sobrescreve de propósito saem com o valor DELE — é assim
-        // que o white label acontece na cascata, e a conferência deles é o teste abaixo.
-        if (papel == 'primary' || papel == 'border') continue;
+        // Os três que o esquema do produto sobrescreve de propósito saem com o valor DELE — é assim
+        // que o white label acontece na cascata, e a conferência deles é o teste abaixo. O `onPrimary`
+        // viaja com o `primary`: é a tinta que se lê sobre ele (`coreflowEsquemaCss`).
+        if (papel == 'primary' || papel == 'onPrimary' || papel == 'border') continue;
         if (modo.css[papel] != _hex(cor)) {
           divergem.add('\${modo.nome}/\$papel: mobile \${_hex(cor)} × web \${modo.css[papel] ?? "ausente"}');
         }

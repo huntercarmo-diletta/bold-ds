@@ -241,6 +241,7 @@
   --diletta-border: #d5dce1;
   --diletta-overlay: #ffffffd9;
   --diletta-primary: #084d8e;
+  --diletta-onPrimary: #ffffff;
   --diletta-danger: #8a1a14;
   --diletta-infoSubtle: #20262a1c;
   --diletta-vinho: #06437d;
@@ -254,6 +255,7 @@
     --diletta-border: #ffffff14;
     --diletta-overlay: #14181ab3;
     --diletta-primary: #1f91ff;
+    --diletta-onPrimary: #14181a;
     --diletta-danger: #d8483f;
     --diletta-infoSubtle: #b2bcc41c;
     --diletta-vinho: #06437d;
@@ -267,6 +269,7 @@
   --diletta-border: #ffffff14;
   --diletta-overlay: #14181ab3;
   --diletta-primary: #1f91ff;
+  --diletta-onPrimary: #14181a;
   --diletta-danger: #d8483f;
   --diletta-infoSubtle: #b2bcc41c;
   --diletta-vinho: #06437d;

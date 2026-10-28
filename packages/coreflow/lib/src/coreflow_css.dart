@@ -100,18 +100,43 @@ String _hex(Color c) {
   return alfa == 0xFF ? '#$rgb' : '#$rgb${alfa.toRadixString(16).padLeft(2, '0')}';
 }
 
+/// A razão de contraste WCAG entre duas cores opacas.
+double _contraste(Color a, Color b) {
+  final la = a.computeLuminance(), lb = b.computeLuminance();
+  return (math.max(la, lb) + 0.05) / (math.min(la, lb) + 0.05);
+}
+
+/// A TINTA que se lê sobre [fundo]: [daPaleta] quando ela passa AA (4,5:1), e senão a que mais
+/// contrasta entre ela e o branco absoluto do avô. Nenhum hex é escrito aqui: as duas candidatas vêm de
+/// quem decide cor.
+Color _tintaSobre(Color fundo, Color daPaleta) {
+  if (_contraste(fundo, daPaleta) >= 4.5) return daPaleta;
+  const branco = DilettaAbsoluteColors.white;
+  return _contraste(fundo, branco) > _contraste(fundo, daPaleta) ? branco : daPaleta;
+}
+
 /// Os papéis do ESQUEMA DO PRODUTO — os que o avô não tem e o `CoreflowScheme` acrescenta —
 /// escritos como `--cps-*`, no mesmo namespace e na mesma forma de três blocos.
 ///
 /// Mesmo namespace de propósito: é UMA língua. O que o filho acrescenta entra ao lado do que o avô
 /// declara, e o gate `nenhum papel do produto colide com o do avo` prova que nenhum nome é roubado.
+///
+/// **O `primary` sai com a tinta DELE (`onPrimary`), e é o único papel do avô que viaja em par.** O
+/// `primary` do esquema, no claro, é o degrau profundo (`primary03`), escolhido como TINTA sobre a
+/// página branca; na web ele cai em `--diletta-primary`, que o avô usa também como PREENCHIMENTO (o
+/// botão primário, a bolha, o passo atual). A tinta por cima continuava a da paleta, derivada da cor de
+/// marca no degrau 05. Quando a marca é escura, as duas casam e ninguém vê; quando é clara, não. A
+/// BluOn (`#1F91FF`) saiu com `#14181a` sobre `#084d8e`, 2,10:1, medido pelo gate de contraste do IB em
+/// 27/10. Agora: a da paleta quando ela passa AA sobre esse `primary`, e a que mais contrasta quando não
+/// passa. Produto em que ela já passa sai com o MESMO valor de antes.
 String coreflowEsquemaCss(DilettaPalette p) {
   Map<String, Color> papeis(Brightness b) {
     final s = CoreflowScheme.de(p, brilho: b);
     return {
       'background': s.background, 'secondaryFlow': s.secondaryFlow,
       'textPrimary': s.textPrimary, 'border': s.border, 'overlay': s.overlay,
-      'primary': s.primary, 'danger': s.danger, 'infoSubtle': s.infoSubtle, 'vinho': s.vinho,
+      'primary': s.primary, 'onPrimary': _tintaSobre(s.primary, s.onPrimary),
+      'danger': s.danger, 'infoSubtle': s.infoSubtle, 'vinho': s.vinho,
     };
   }
 

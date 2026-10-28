@@ -19,7 +19,12 @@ import 'emite_o_css_do_bold.dart' show cssDoBold, cssDoBoldComPonte;
 ///
 /// **O gate não proíbe colisão — proíbe colisão que ninguém declarou.** A terceira que aparecer sem
 /// entrar aqui é um papel do avô sendo roubado sem ninguém ver.
-const _colisoesDeclaradas = {'primary', 'border'};
+///
+/// O `onPrimary` é a terceira, e entrou DECLARADA (27/10): ele é a tinta do `primary` que o esquema já
+/// sobrescreve, e viaja em par com ele. Sem ele, um produto de marca clara recebia na web o `primary`
+/// profundo com a tinta da marca clara por cima — a BluOn saiu com 2,10:1. No Conta BOLD ele colide
+/// com o MESMO valor, como o `border`.
+const _colisoesDeclaradas = {'primary', 'onPrimary', 'border'};
 
 void main() {
   test('o CSS emitido é o que está no disco', () {
