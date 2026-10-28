@@ -37,6 +37,57 @@ avô sai de lá. Não pinta — sem `tokens/`, sem hex.
 (tag `coreflow-web-v<versão>`), e os gates `uma_versao_e_uma_tag`, `toda_tag_web_carrega_o_pacote`
 e o novo `o_pai_na_web_recebe_o_mesmo_avo` passam a conhecê-lo. O número do Bold não muda.
 
+## [0.128.0] — 2026-10-28
+
+### Nasce o quinto filho — o Banco Fibra, o primeiro montado do site, sem manual do cliente
+
+**Só acrescenta**, como a BluOn na `0.127.0`: nada do Conta BOLD muda por ele, e a versão sobe por
+convenção — *«uma língua, um número»*.
+
+| | antes | agora |
+|---|---|---|
+| filhos do Coreflow neste repo | 4 — Conta BOLD, Norte Benk, Confia Capital e BluOn | **5**, com `banco_fibra_coreflow` |
+| tags web por filho | `web-v`, `norte-benk-web-v`, `confia-capital-web-v` e `bluon-web-v` | mais **`banco-fibra-web-v`**, a primeira sendo `banco-fibra-web-v0.1.0` |
+| suítes do gate do README | 8 | **9** |
+
+Veio do quarto envio do Berço Coreflow (28/10, id `bancoFibra`), pelo `dart run coreflow:novo_filho`,
+na PR #10 do Wesley (`b83a098` e `87594cb`, mesclada em `1c01758`). Uma cor, `#0D1882`, a do logo do
+site; a forma «formal» (botão 4, folha 8) com as seis `medidas:`; sem `tipografia:`.
+
+**A arte é provisória.** Não houve manual nem vetor do banco: os quatro SVG de `assets/logos/` são a
+vetorização dos PNG do site público, o símbolo é o «F» recortado do lockup e as versões escuras são o
+mesmo desenho pintado de branco. Em tamanho grande o contorno mostra os polígonos (o «O» e o «C» de
+BANCO). A forma também não foi escolha do banco: quem preencheu o Berço a tirou do logo, de cantos
+retos. **Trocar pelo vetor oficial quando o banco mandar**, os quatro arquivos com os mesmos nomes; a
+troca é patch do filho (`banco-fibra-web` 0.1.1).
+
+O botão primário sai em `#1a18db`, e não no `#0D1882` do logo: o esquema pinta com o `primary03`, e a
+marca entrou no degrau 02, então o 03 é um azul mais claro e mais vivo. Branco sobre ele dá 9,56:1.
+
+### O gate confere as três listas de lados web
+
+Um lado web novo entra em três lugares: o `tool/espelha_o_web.sh`, o `uma_versao_e_uma_tag_test` e o
+`toda_tag_web_carrega_o_pacote_test`. Só o segundo conferia o disco, e o Banco Fibra entrou numa
+lista só com o gate verde — sem o caso no espelho, a tag dele não sairia. O
+`todo_lado_web_esta_nas_tres_listas_test` (`3ef0d9b`) cobra que as três digam o mesmo que o disco
+(caminho, prefixo da tag e nome do pacote), que o «filho desconhecido» do espelho liste os casos que
+ele tem e que o comando ensinado no README de cada lado web emita aquele lado. Só teste: nada muda
+para quem consome.
+
+### Os locks do Bold e da BluOn voltam a dizer o número do pacote
+
+Os commits de versão desde a `0.127.0` subiram o `package.json` e deixaram o `package-lock.json`: o do
+Bold dizia `0.126.0`, o da BluOn `0.1.0`. O espelho apaga o lock da emissão, então nenhuma tag
+publicada levou o número errado.
+
+### O que chega ao consumidor web por esta tag
+
+- **`banco-fibra-web-v0.1.0`**, a primeira do Banco Fibra, sai desta tag, com o avô `web-v3.24.0`
+  copiado em `avo/`, como os outros filhos;
+- **`web-v0.128.0`: o número, e só.** O `coreflow_design_system_web` não mudou desde a `v0.127.2`;
+- Norte Benk (`0.1.8`), Confia Capital (`0.1.2`) e BluOn (`0.1.1`) não mudaram e não ganham tag;
+- o avô fica em `v3.24.0` / `web-v3.24.0`, e o `coreflow-web` segue em `0.1.0`, sem tag.
+
 ## [0.127.2] — 2026-10-28
 
 ### Corrigido: na folha web, o `primary` do esquema sai com a tinta dele (`onPrimary`)
