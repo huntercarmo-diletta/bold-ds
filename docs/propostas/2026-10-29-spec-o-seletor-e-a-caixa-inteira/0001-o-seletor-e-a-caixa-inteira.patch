@@ -1,0 +1,901 @@
+From 8b33eaa9915f65d0bc1192054e0cfd701760b3c1 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Andr=C3=A9=20Cano?= <andre.cano@dilettasolutions.com>
+Date: Thu, 29 Oct 2026 16:19:15 -0300
+Subject: [PATCH] fix(seletor): a caixa inteira abre a lista, e a lista aberta
+ tem a superficie da folha
+
+Web: o recuo sai da .caixa e vai para o <select>, que estica ate a borda; a
+seta fica absolute com pointer-events none, e o fim do recuo reserva o lugar
+dela (a largura intrinseca e a mesma soma). O fundo do <select> e declarado:
+surface na caixa, pintado so no conteudo para nao repintar o antisserrilhado
+dos cantos; transparente no silencioso. option e optgroup em surface/fg, e so
+o marcador em textPlaceholder.
+
+Medido no Chrome contra v3.25.0: a caixa abre por 95-96% (era 37-49%), o
+silencioso por 100% (era 92%); vista fechada com 0 pixels diferentes no claro
+e no escuro, com e sem anel; mesma largura intrinseca.
+
+Spec: dois requisitos novos em design-system-dropdown (o gatilho inteiro e o
+controle; a lista aberta tem a superficie da folha). Contrato nao muda.
+Gate: catraca de papel no jsdom, tool/o_seletor_e_a_caixa_inteira.py no
+navegador (com --contra <tag> para a vista fechada), e o teste de widget
+que trava o toque na seta e no recuo do lado Dart.
+
+Pedido do filho B, 29/10. Pendente: a lista aberta conferida a mao no Chrome
+do Windows; Firefox e Safari sem medida.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+---
+ CLAUDE.md                                     |   2 +-
+ manifesto.json                                |  12 +-
+ .../lib/src/specs/diletta_specs.g.dart        |  97 +++++++
+ ..._seletor_abre_pela_caixa_inteira_test.dart | 105 +++++++
+ .../src/diletta-dropdown.js                   |  51 +++-
+ .../test/o_seletor_e_a_caixa_inteira.test.js  | 121 ++++++++
+ specs/design-system-dropdown/spec.md          |  97 +++++++
+ tool/o_seletor_e_a_caixa_inteira.py           | 268 ++++++++++++++++++
+ 8 files changed, 741 insertions(+), 12 deletions(-)
+ create mode 100644 packages/diletta_design_system/test/o_seletor_abre_pela_caixa_inteira_test.dart
+ create mode 100644 packages/diletta_design_system_web/test/o_seletor_e_a_caixa_inteira.test.js
+ create mode 100644 tool/o_seletor_e_a_caixa_inteira.py
+
+diff --git a/CLAUDE.md b/CLAUDE.md
+index 954aba2..7f4e8b2 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -77,7 +77,7 @@ python3 tool/nenhum_arquivo_zerou.py . ../catalogo-diletta && python3 tool/a_doc
+ python3 tool/gera_specs_dart.py                        # ANTES da suíte: a spec que viaja é ENTRADA do teste
+ (cd packages/diletta_design_system && flutter test --exclude-tags "retrato || resolucao || figma")  # 824 · a linguagem
+ (cd exemplos/aurora && flutter analyze && flutter test) # 51 · o segundo filho (e a SEGUNDA paleta do gate de contraste)
+-bash tool/testa_como_copia.sh && (cd packages/diletta_design_system_web && npm test) && python3 tool/o_espaco_do_web_e_token.py && python3 tool/o_tipo_do_web_e_token.py && python3 tool/o_prefixo_e_da_linguagem.py   # a suíte NUMA CÓPIA ISOLADA · e o lado WEB: 79 contra a mesma spec, mais os dois ratchets dele (espaço e tipo saem de token, e o teto só desce) · e o PREFIXO é da linguagem (`--diletta-`), com a ponte do nome velho coberta até a v0.210.0
++bash tool/testa_como_copia.sh && (cd packages/diletta_design_system_web && npm test) && python3 tool/o_espaco_do_web_e_token.py && python3 tool/o_tipo_do_web_e_token.py && python3 tool/o_prefixo_e_da_linguagem.py && python3 tool/o_seletor_e_a_caixa_inteira.py   # a suíte NUMA CÓPIA ISOLADA · e o lado WEB: 79 contra a mesma spec, mais os dois ratchets dele (espaço e tipo saem de token, e o teto só desce) · e o PREFIXO é da linguagem (`--diletta-`), com a ponte do nome velho coberta até a v0.210.0 · e o seletor NO NAVEGADOR, porque o jsdom não calcula layout: a caixa inteira abre a lista (sem Chromium, pula e diz; `--contra <tag>` prova a vista fechada ao pixel)
+ python3 tool/tag_publicada.py . ../catalogo-diletta && python3 tool/uma_lingua_um_numero.py   # chegou no remoto? e a versão é UMA?
+ python3 tool/faz_a_limpa.py . ../catalogo-diletta ../<filho-a> ../<filho-b>   # classe 8, e o corpo INTEIRO
+ python3 tool/gera_paleta_por_nome.py                    # a rampa pelo nome + as famílias, do marcador da fonte
+diff --git a/manifesto.json b/manifesto.json
+index 38d6686..2bbe051 100644
+--- a/manifesto.json
++++ b/manifesto.json
+@@ -1127,7 +1127,17 @@
+         "A `suspensa` de um valor SHALL fechar em três situações, e nas três sem deixar rastro: ao escolher um item, ao",
+         "tocar o gatilho de novo, e ao tocar FORA. O toque de fora SHALL ser capturado por um véu que cobre a",
+         "A peça NÃO SHALL escolher a superfície por si — nem por largura de janela, nem por plataforma. Quem",
+-        "`label`, `placeholder`, `error` e `disabled` SHALL seguir a mesma gramática de"
++        "`label`, `placeholder`, `error` e `disabled` SHALL seguir a mesma gramática de",
++        "O gatilho do `DilettaDropdown` SHALL abrir a seleção por qualquer ponto visível dele, nas duas molduras",
++        "Na web, quem SHALL receber o clique em todo esse interior é o `<select>` nativo, que carrega o recuo e",
++        "estica até a borda, com a seta por cima dele sem receber ponteiro. NÃO SHALL ser um ouvinte na caixa",
++        "A peça SHALL fazer isso **sem mudar a vista fechada**, em nenhum porte, moldura ou tema, e **sem mudar a",
++        "O que já vale SHALL continuar valendo: desabilitado não abre em ponto nenhum e tem cursor `default`; o",
++        "Onde o sistema pinta a lista aberta com o estilo da página (Chrome no Windows e no Linux), ela SHALL ter",
++        "Os papéis SHALL ser **declarados pela peça**, e NÃO herdados por acaso. Com `background: none` no",
++        "A cor das opções NÃO SHALL seguir o marcador. Com o placeholder escolhido, o `<select>` se pinta em",
++        "marcador. Na lista aberta, as opções SHALL estar em `fg`, e só a opção-marcador em `textPlaceholder`.",
++        "caixa não pinta fundo, e o gatilho fechado SHALL continuar transparente: o fundo da lista NÃO SHALL"
+       ]
+     },
+     "design-system-empty-state": {
+diff --git a/packages/diletta_design_system/lib/src/specs/diletta_specs.g.dart b/packages/diletta_design_system/lib/src/specs/diletta_specs.g.dart
+index 01e4bde..14e2c29 100644
+--- a/packages/diletta_design_system/lib/src/specs/diletta_specs.g.dart
++++ b/packages/diletta_design_system/lib/src/specs/diletta_specs.g.dart
+@@ -5437,6 +5437,103 @@ campo do `DilettaInput` (erro inline, borda no role error).
+ - **WHEN** o dropdown é obrigatório e está vazio ao validar
+ - **THEN** `error: 'Escolha um tipo'` com a borda error, igual ao Input
+ 
++### Requirement: O gatilho inteiro é o controle
++O gatilho do `DilettaDropdown` SHALL abrir a seleção por qualquer ponto visível dele, nas duas molduras
++e nas duas plataformas: na `caixa`, todo o interior da borda, com o texto, o recuo e a seta; no
++`silencioso`, o valor, o respiro e a seta. Área de clique morta dentro de um controle é o defeito que a
++pessoa sente e não sabe nomear: ela clica na seta, que é o desenho que diz «abre aqui», e nada acontece.
++Pedido do filho B em 29/10, quando a web abria por 27 a 32% da caixa.
++
++No Dart, a `caixa` é um `DilettaInput` `readOnly` cujo contêiner inteiro está num `DilettaTappable`
++opaco, com o campo em `IgnorePointer`; no `silencioso`, o `DilettaTappable` opaco envolve valor e seta
++juntos.
++
++Na web, quem SHALL receber o clique em todo esse interior é o `<select>` nativo, que carrega o recuo e
++estica até a borda, com a seta por cima dele sem receber ponteiro. NÃO SHALL ser um ouvinte na caixa
++que chama `showPicker()`: o clique no `<select>` traz de uma vez o cursor, o foco e a abertura do
++sistema, e o `showPicker()` traz só a abertura, com suporte que varia entre navegadores. É o mesmo
++argumento que mantém a peça em volta do `<select>`: o que o sistema faz de graça a peça não refaz à mão.
++
++A peça SHALL fazer isso **sem mudar a vista fechada**, em nenhum porte, moldura ou tema, e **sem mudar a
++largura intrínseca**: um seletor que ninguém dimensiona mede o mesmo de antes, porque é essa largura que
++o põe numa fileira de filtros.
++
++O que já vale SHALL continuar valendo: desabilitado não abre em ponto nenhum e tem cursor `default`; o
++Tab para no controle; o anel de foco é o `outline` da caixa, inteiro, sem corte nos cantos; o nome
++acessível vem do `<label for>`; a seta é `aria-hidden`.
++
++#### Scenario: a seta abre a lista
++- **WHEN** `moldura: caixa` e a pessoa clica no centro da seta
++- **THEN** a lista abre e o foco está no `<select>`
++
++#### Scenario: o recuo abre a lista
++- **WHEN** `moldura: caixa`, `porte: lg`, e a pessoa clica no recuo à esquerda do texto, ou acima dele
++- **THEN** a lista abre, como se o clique tivesse sido no texto
++
++#### Scenario: o silencioso também
++- **WHEN** `moldura: silencioso` e a pessoa clica na seta ou no respiro entre o valor e a seta
++- **THEN** a lista abre
++
++#### Scenario: a mãozinha na caixa toda
++- **WHEN** o ponteiro passa sobre a seta ou o recuo de um seletor habilitado
++- **THEN** o cursor é `pointer`, como sobre o texto
++
++#### Scenario: a vista fechada não muda
++- **WHEN** um seletor com a opção «Operador de atendimento de segundo nível» escolhida é desenhado nos
++  três portes, nas duas molduras, no claro e no escuro
++- **THEN** caixa, borda, raio, seta e posição do texto são os mesmos pixels de antes
++- **AND** o texto comprido é cortado antes da seta, sem passar por baixo dela
++
++#### Scenario: a largura de quem ninguém dimensiona
++- **WHEN** o seletor está numa fileira flex sem largura declarada
++- **THEN** ele mede o mesmo que media antes, com o mesmo conteúdo
++
++#### Scenario: desabilitado
++- **WHEN** `estado: desabilitado` e a pessoa clica na seta, no recuo ou no texto
++- **THEN** a lista não abre, e o cursor é `default` em todos esses pontos
++
++#### Scenario: teclado e foco
++- **WHEN** a pessoa chega ao seletor com Tab
++- **THEN** o anel aparece inteiro em volta da caixa, sem corte nos cantos arredondados
++- **AND** o nome anunciado continua sendo o do rótulo
++
++### Requirement: A lista aberta tem a superfície da folha
++Onde o sistema pinta a lista aberta com o estilo da página (Chrome no Windows e no Linux), ela SHALL ter
++fundo `surface` e opções em `fg`: os mesmos papéis da folha e da lista suspensa do Dart. A web não
++inventa um papel para o painel; ela usa o que a linguagem já usa para ele.
++
++Os papéis SHALL ser **declarados pela peça**, e NÃO herdados por acaso. Com `background: none` no
++`<select>`, o fundo da caixa não chegava à lista, o painel saía no branco do sistema, e a cor que
++chegava era o `fg` do tema: no escuro, texto claro em fundo claro.
++
++A cor das opções NÃO SHALL seguir o marcador. Com o placeholder escolhido, o `<select>` se pinta em
++`textPlaceholder`, e as opções herdariam essa cor pela cascata: a lista inteira abriria em cinza de
++marcador. Na lista aberta, as opções SHALL estar em `fg`, e só a opção-marcador em `textPlaceholder`.
++
++Na `caixa`, o fundo declarado é o mesmo papel da caixa, e a vista fechada não muda. No `silencioso` a
++caixa não pinta fundo, e o gatilho fechado SHALL continuar transparente: o fundo da lista NÃO SHALL
++aparecer na vista fechada, qualquer que seja a superfície em volta.
++
++Onde o sistema desenha a lista com o próprio tema (macOS, iOS, Android), a peça não promete cor: o painel
++é do sistema, e isso é o argumento da peça, não uma falha dela.
++
++#### Scenario: a lista no escuro
++- **WHEN** tema escuro, `moldura: caixa`, Chrome no Windows, e a pessoa abre a lista
++- **THEN** o fundo da lista é `surface` e as opções estão em `fg`, legíveis, e não só a destacada
++
++#### Scenario: o silencioso sobre outra superfície
++- **WHEN** tema escuro, `moldura: silencioso` dentro de uma linha pintada em `bg`
++- **THEN** o gatilho fechado não tem fundo próprio
++- **AND** a lista aberta tem fundo `surface` e opções em `fg`
++
++#### Scenario: o marcador escolhido não acinzenta a lista
++- **WHEN** o seletor está no placeholder e a pessoa abre a lista
++- **THEN** as opções estão em `fg`, e a opção-marcador em `textPlaceholder`
++
++#### Scenario: o claro não muda
++- **WHEN** tema claro, nas duas molduras
++- **THEN** a vista fechada é a de antes, e a lista aberta tem fundo `surface` e opções em `fg`
++
+ ## Contrato
+ 
+ <!-- A LEI, legível por máquina. O Dart e o Figma OBEDECEM; o gate prova.
+diff --git a/packages/diletta_design_system/test/o_seletor_abre_pela_caixa_inteira_test.dart b/packages/diletta_design_system/test/o_seletor_abre_pela_caixa_inteira_test.dart
+new file mode 100644
+index 0000000..7ce7ad0
+--- /dev/null
++++ b/packages/diletta_design_system/test/o_seletor_abre_pela_caixa_inteira_test.dart
+@@ -0,0 +1,105 @@
++/// O SELETOR ABRE PELA CAIXA INTEIRA — o lado Dart do pedido do filho B (29/10).
++///
++/// Na web, só o `<select>` abria a lista: o recuo era da caixa e a seta era um `<span>`, e 27 a 32%
++/// da caixa respondia. O filho leu o Dart e escreveu que aqui a área morta não existe, e pediu que o
++/// veredito confirmasse. A leitura estava certa: na `caixa` o `DilettaInput` envolve o contêiner
++/// inteiro num `DilettaTappable` opaco, com o campo `readOnly` em `IgnorePointer`; no `silencioso` o
++/// `DilettaTappable` opaco envolve valor e seta juntos.
++///
++/// Leitura de código não é contrato. Este arquivo é: o toque na seta, no recuo e no respiro abre a
++/// folha, e desabilitado não abre em ponto nenhum.
++library;
++
++import 'package:diletta_design_system/diletta_design_system.dart';
++import 'package:flutter/material.dart';
++import 'package:flutter_test/flutter_test.dart';
++
++Future<void> monta(WidgetTester t, DilettaDropdownMoldura moldura, {bool disabled = false}) async {
++  await t.pumpWidget(DilettaThemeScope(
++    theme: DilettaTheme.resolve(palette: DilettaPalette.referencia),
++    child: MaterialApp(
++      home: Scaffold(
++        body: Center(
++          child: SizedBox(
++            width: 320,
++            child: Align(
++              alignment: Alignment.centerLeft,
++              child: DilettaDropdown(
++                label: 'Cargo',
++                items: const ['Analista', 'Operador de atendimento de segundo nível'],
++                value: 'Analista',
++                moldura: moldura,
++                disabled: disabled,
++                onChanged: (_) {},
++              ),
++            ),
++          ),
++        ),
++      ),
++    ),
++  ));
++  await t.pump();
++}
++
++Finder get seta => find.byWidgetPredicate(
++    (w) => w is DilettaIcon && w.name == DilettaIcons.chevronDownLight);
++
++Future<bool> abriuTocandoEm(WidgetTester t, Offset ponto) async {
++  await t.tapAt(ponto);
++  await t.pumpAndSettle();
++  final abriu = find.byType(BottomSheet).evaluate().isNotEmpty;
++  if (abriu) {
++    Navigator.of(t.element(find.byType(BottomSheet).first)).pop();
++    await t.pumpAndSettle();
++  }
++  return abriu;
++}
++
++void main() {
++  group('caixa', () {
++    // A caixa visível é o contêiner que o `DilettaInput` envolve no toque: o `DilettaTappable` dele.
++    Rect caixa(WidgetTester t) => t.getRect(find
++        .descendant(of: find.byType(DilettaInput), matching: find.byType(DilettaTappable))
++        .first);
++
++    testWidgets('a seta abre a folha', (t) async {
++      await monta(t, DilettaDropdownMoldura.caixa);
++      expect(await abriuTocandoEm(t, t.getCenter(seta)), isTrue,
++          reason: 'a seta é o desenho que diz «abre aqui»');
++    });
++
++    testWidgets('o recuo à esquerda do texto e acima dele abre a folha', (t) async {
++      await monta(t, DilettaDropdownMoldura.caixa);
++      final r = caixa(t);
++      expect(await abriuTocandoEm(t, Offset(r.left + 3, r.center.dy)), isTrue,
++          reason: 'o recuo à esquerda é área morta');
++      expect(await abriuTocandoEm(t, Offset(r.left + r.width / 3, r.top + 3)), isTrue,
++          reason: 'o recuo acima do texto é área morta');
++    });
++
++    testWidgets('desabilitado não abre em ponto nenhum', (t) async {
++      await monta(t, DilettaDropdownMoldura.caixa, disabled: true);
++      final r = caixa(t);
++      for (final p in [t.getCenter(seta), Offset(r.left + 3, r.center.dy), r.center]) {
++        expect(await abriuTocandoEm(t, p), isFalse, reason: 'abriu desabilitado em $p');
++      }
++    });
++  });
++
++  group('silencioso', () {
++    testWidgets('a seta e o respiro entre o valor e a seta abrem a folha', (t) async {
++      await monta(t, DilettaDropdownMoldura.silencioso);
++      expect(await abriuTocandoEm(t, t.getCenter(seta)), isTrue);
++      final valor = t.getRect(find.text('Analista'));
++      final glifo = t.getRect(seta);
++      expect(await abriuTocandoEm(t, Offset((valor.right + glifo.left) / 2, glifo.center.dy)), isTrue,
++          reason: 'o respiro entre o valor e a seta é área morta');
++    });
++
++    testWidgets('desabilitado não abre', (t) async {
++      await monta(t, DilettaDropdownMoldura.silencioso, disabled: true);
++      expect(await abriuTocandoEm(t, t.getCenter(seta)), isFalse);
++      expect(await abriuTocandoEm(t, t.getCenter(find.text('Analista'))), isFalse);
++    });
++  });
++}
+diff --git a/packages/diletta_design_system_web/src/diletta-dropdown.js b/packages/diletta_design_system_web/src/diletta-dropdown.js
+index 5370be8..d46b36a 100644
+--- a/packages/diletta_design_system_web/src/diletta-dropdown.js
++++ b/packages/diletta_design_system_web/src/diletta-dropdown.js
+@@ -47,6 +47,9 @@ const PORTE_DO_CAMPO = {
+   lg: { h: 'var(--diletta-alturaDoCampo, 48px)', px: 'var(--diletta-s3)', tipo: 'bodyMd' },
+ };
+ const PORTE = ['sm', 'md', 'lg'];
++// A seta mede 16, e a medida aparece duas vezes: no glifo e no recuo do fim do `<select>`, que
++// reserva o lugar dela. Uma constante só, para as duas não discordarem.
++const SETA = 16;
+ 
+ class DilettaDropdown extends HTMLElement {
+   // A RÉGUA DOS DOIS LADOS desta peça — `tool/o_web_carrega_o_que_o_dart_declara.py`.
+@@ -152,32 +155,60 @@ class DilettaDropdown extends HTMLElement {
+            texto que a pessoa precisa ler pra saber o que digitar. */
+         label { display: block; margin-bottom: var(--diletta-s1);
+                 color: var(--diletta-textSecondary); ${degrau('caption')} }
++        /* A CAIXA E SO MOLDURA: borda, raio, piso e fundo. O recuo saiu dela e foi para dentro do
++           select (pedido do filho B, 29/10): com o recuo aqui, o clique nele caia num div, e so
++           27 a 32% da caixa abria a lista. O overflow recorta o select nos cantos arredondados,
++           para o clique fora da curva nao abrir a lista, e nao recorta o outline da propria
++           caixa, que e o anel de foco. */
+         .caixa {
+-          box-sizing: border-box; width: 100%;
+-          display: flex; align-items: center; gap: var(--diletta-s2);
++          box-sizing: border-box; width: 100%; position: relative; overflow: hidden;
++          display: flex; align-items: center;
+           ${moldura === 'caixa' ? `
+             border-width: 1px; border-style: solid;
+             border-color: var(--diletta-${estado === 'erro' ? 'error' : 'divider'});
+             /* Mesma familia do campo: o controle do seletor e campo. */
+             border-radius: var(--diletta-formaDeCampo, 16px);
+-            padding: var(--diletta-s2) ${g.px}; min-height: ${g.h};
++            min-height: ${g.h};
+             background: var(--diletta-surface);` : ''}
+           color: var(--diletta-${off ? 'textDisabled' : 'fg'});
+         }
+-        /* O CONTROLE NU: a moldura e da caixa, e a seta e nossa — por isso
+-           appearance none. Tudo o mais continua sendo do sistema, que e o ponto
+-           desta peca. */
++        /* O CONTROLE NU, e ele e a caixa inteira: estica ate a borda e carrega o recuo, e o fim
++           do recuo reserva o lugar da seta (recuo + seta + vao). A largura de quem ninguem
++           dimensiona e a mesma soma de antes. O clique e do select e nao de um ouvinte com
++           showPicker: o nativo traz cursor, foco e abertura de uma vez.
++           O FUNDO E DECLARADO, nao herdado: no Chrome do Windows e do Linux a lista aberta pinta
++           o fundo do select, e com background none ela saia branca, com o texto claro do escuro.
++           Na caixa ele e o surface dela, pintado so na caixa de conteudo: o recuo ja e surface
++           por baixo, e o fundo que chegasse aos cantos repintaria o antisserrilhado da borda
++           (medido: mil pixels mudavam). No silencioso e transparente, e quem pinta a lista sao
++           as option. */
+         select {
+-          flex: 1 1 auto; min-width: 0;
++          flex: 1 1 auto; min-width: 0; align-self: stretch; box-sizing: border-box; margin: 0;
+           appearance: none; -webkit-appearance: none;
+-          border-width: 0; border-style: none; padding: 0; background: none;
++          border-width: 0; border-style: none;
++          padding: ${moldura === 'caixa' ? `var(--diletta-s2) ${g.px}` : '0'};
++          padding-inline-end: calc(${moldura === 'caixa' ? `${g.px} + ` : ''}${SETA}px + var(--diletta-s2));
++          background-color: ${moldura === 'caixa' ? 'var(--diletta-surface)' : 'transparent'};
++          background-clip: content-box; background-image: none;
+           color: inherit; outline: none; cursor: ${off ? 'default' : 'pointer'};
+           ${degrau('bodyMd')}
+         }
+         select[disabled] { -webkit-text-fill-color: currentColor; opacity: 1; }
+         /* O placeholder e uma option desabilitada, e ela se pinta como marcador. */
+         select:has(option[value=""]:checked) { color: var(--diletta-textPlaceholder); }
+-        .seta { flex: 0 0 auto; display: inline-flex; color: var(--diletta-textMuted); }
++        /* A LISTA ABERTA tem a superficie da folha: surface e fg, os papeis da folha e da lista
++           suspensa do Dart. A cor e declarada aqui e nao herdada, senao o placeholder escolhido
++           acinzentaria a lista inteira; so a option-marcador fica em textPlaceholder. Onde o
++           sistema desenha o painel com o tema dele (macOS, iOS, Android), isto nao pinta nada. */
++        option, optgroup { background-color: var(--diletta-surface); color: var(--diletta-fg); }
++        option[value=""] { color: var(--diletta-textPlaceholder); }
++        /* A seta sai do fluxo e fica sobre o recuo do fim, no mesmo lugar de antes; o clique
++           atravessa ela e cai no select. */
++        .seta {
++          position: absolute; inset-inline-end: ${moldura === 'caixa' ? g.px : '0'};
++          top: 50%; translate: 0 -50%; pointer-events: none;
++          display: inline-flex; color: var(--diletta-textMuted);
++        }
+         /* O ANEL segue a familia do estado, no degrau que se ve — a mesma lei do campo,
+            medida em 21/09: o degrau fraco de cada familia fica abaixo de 3:1. */
+         .caixa:has(:focus-visible) {
+@@ -196,7 +227,7 @@ class DilettaDropdown extends HTMLElement {
+           ${erro ? 'aria-invalid="true"' : ''}
+           ${descritores ? `aria-describedby="${descritores}"` : ''}></select>
+         <span class="seta" aria-hidden="true"><diletta-icon biblioteca="sistema"
+-          name="chevron-down-light" size="16"></diletta-icon></span>
++          name="chevron-down-light" size="${SETA}"></diletta-icon></span>
+       </div>
+       <span class="fonte"><slot></slot></span>
+       ${ajuda ? `<p class="ajuda" id="${this.id_}-ajuda">${aspas(ajuda)}</p>` : ''}
+diff --git a/packages/diletta_design_system_web/test/o_seletor_e_a_caixa_inteira.test.js b/packages/diletta_design_system_web/test/o_seletor_e_a_caixa_inteira.test.js
+new file mode 100644
+index 0000000..c11499b
+--- /dev/null
++++ b/packages/diletta_design_system_web/test/o_seletor_e_a_caixa_inteira.test.js
+@@ -0,0 +1,121 @@
++// O SELETOR É A CAIXA INTEIRA, e a lista aberta tem a superfície da folha. Pedido do filho B em
++// 29/10: o recuo era da `.caixa`, o `<select>` tinha `padding: 0` e a seta era um `<span>`, então
++// só 27 a 32% da caixa abria a lista (medido pelo console no Edge). E o `background: none` deixava
++// a lista aberta do Chrome no Windows branca, com o texto claro do escuro.
++//
++// Isto é a CATRACA DE PAPEL: o jsdom não calcula layout nem abre lista, então aqui se prende o que
++// a peça escreve. A área de clique e a vista fechada se medem no navegador, em
++// `tool/o_seletor_e_a_caixa_inteira.py`; a lista aberta não entra em captura, e a conferência
++// dela no Chrome do Windows é manual, com o registro no veredito.
++import { test, before } from 'node:test';
++import assert from 'node:assert/strict';
++import { readFileSync } from 'node:fs';
++import { fileURLToPath } from 'node:url';
++import { JSDOM } from 'jsdom';
++
++before(async () => {
++  const dom = new JSDOM('<!doctype html><html><body></body></html>');
++  for (const k of ['window', 'document', 'customElements', 'HTMLElement', 'Node',
++                   'CustomEvent', 'Event', 'KeyboardEvent', 'DOMParser']) {
++    globalThis[k] = k === 'window' ? dom.window : dom.window[k];
++  }
++  await import('../src/diletta-dropdown.js');
++});
++
++const RECUO = { sm: 'var(--diletta-s1_5)', md: 'var(--diletta-s2)', lg: 'var(--diletta-s3)' };
++
++const monta = (attrs = {}) => {
++  const d = document.createElement('diletta-dropdown');
++  for (const [k, v] of Object.entries(attrs)) d.setAttribute(k, v);
++  d.innerHTML = '<option value="a">Curto</option><option value="b">Operador de atendimento</option>';
++  document.body.append(d);
++  return d;
++};
++
++// O corpo de uma regra, pelo seletor exato no começo da linha.
++const regra = (css, seletor) => {
++  const m = css.match(new RegExp(`(^|\\n)\\s*${seletor.replace(/[.[\]()"]/g, '\\$&')}\\s*\\{([^}]*)\\}`));
++  assert.ok(m, `a regra «${seletor}» sumiu da folha`);
++  return m[2];
++};
++
++for (const moldura of ['caixa', 'silencioso']) {
++  for (const porte of ['sm', 'md', 'lg']) {
++    test(`${moldura}/${porte}: o recuo é do select, e a seta deixa o clique passar`, () => {
++      const d = monta({ moldura, porte });
++      const css = d.shadowRoot.querySelector('style').textContent;
++      const caixa = regra(css, '.caixa');
++      const select = regra(css, 'select');
++      const seta = regra(css, '.seta');
++
++      // A caixa é só moldura: recuo nela é área que não abre a lista.
++      assert.doesNotMatch(caixa, /padding/, 'o recuo voltou para a caixa');
++      assert.match(caixa, /overflow: hidden/, 'sem o recorte, a quina fora da curva abre a lista');
++      assert.match(caixa, /position: relative/);
++
++      // O select estica até a borda e carrega o recuo; o fim reserva recuo + seta + vão, que é a
++      // mesma soma de antes, e é ela que mantém a largura intrínseca.
++      assert.match(select, /align-self: stretch/);
++      if (moldura === 'caixa') {
++        assert.match(select, new RegExp(`padding: var\\(--diletta-s2\\) ${RECUO[porte].replace(/[()]/g, '\\$&')};`));
++        assert.match(select, new RegExp(
++          `padding-inline-end: calc\\(${RECUO[porte].replace(/[()]/g, '\\$&')} \\+ 16px \\+ var\\(--diletta-s2\\)\\);`));
++      } else {
++        assert.match(select, /padding: 0;/);
++        assert.match(select, /padding-inline-end: calc\(16px \+ var\(--diletta-s2\)\);/);
++      }
++
++      // A seta fica sobre o recuo do fim, e o clique atravessa ela.
++      assert.match(seta, /pointer-events: none/, 'a seta voltou a engolir o clique');
++      assert.match(seta, /position: absolute/);
++      assert.match(seta, new RegExp(`inset-inline-end: ${moldura === 'caixa'
++        ? RECUO[porte].replace(/[()]/g, '\\$&') : '0'};`));
++      d.remove();
++    });
++  }
++
++  test(`${moldura}: a lista aberta é surface com fg, e só o marcador é textPlaceholder`, () => {
++    const d = monta({ moldura, placeholder: 'Escolha' });
++    const css = d.shadowRoot.querySelector('style').textContent;
++    // Declarado pela peça, e não herdado: com o marcador escolhido o select se pinta em
++    // textPlaceholder, e a cascata acinzentaria a lista inteira.
++    const opcao = regra(css, 'option, optgroup');
++    assert.match(opcao, /background-color: var\(--diletta-surface\)/);
++    assert.match(opcao, /color: var\(--diletta-fg\)/);
++    assert.match(regra(css, 'option[value=""]'), /color: var\(--diletta-textPlaceholder\)/);
++
++    // O fundo do select é o que o Chrome do Windows e do Linux dá ao painel. Na caixa é o surface
++    // dela, pintado só no conteúdo, para não repintar o antisserrilhado da borda nos cantos; no
++    // silencioso é transparente, e o gatilho fechado não ganha fundo próprio.
++    const select = regra(css, 'select');
++    assert.match(select, moldura === 'caixa'
++      ? /background-color: var\(--diletta-surface\);/ : /background-color: transparent;/);
++    assert.match(select, /background-clip: content-box/);
++    assert.doesNotMatch(select, /background: none/, 'o fundo voltou a ser «nenhum», e a lista sai branca');
++    d.remove();
++  });
++}
++
++test('o que já valia continua: desabilitado não abre, nome do rótulo, seta muda para o leitor', () => {
++  const d = monta({ label: 'Cargo', estado: 'desabilitado' });
++  const raiz = d.shadowRoot;
++  const sel = raiz.querySelector('select');
++  assert.equal(sel.disabled, true);
++  assert.match(regra(raiz.querySelector('style').textContent, 'select'), /cursor: default/);
++  assert.equal(raiz.querySelector('label').getAttribute('for'), sel.id);
++  assert.equal(raiz.querySelector('.seta').getAttribute('aria-hidden'), 'true');
++  // O anel continua sendo o outline da caixa, que o overflow não recorta.
++  assert.match(raiz.querySelector('style').textContent, /\.caixa:has\(:focus-visible\) \{\s*outline: 3px solid/);
++  d.remove();
++
++  const ligado = monta();
++  assert.match(regra(ligado.shadowRoot.querySelector('style').textContent, 'select'), /cursor: pointer/);
++  ligado.remove();
++});
++
++test('quem abre a lista é o clique no select nativo, e não um ouvinte com showPicker', () => {
++  // O clique no select traz cursor, foco e abertura de uma vez; o showPicker traz só a abertura,
++  // com suporte que varia entre navegadores. É o argumento que mantém a peça em volta do nativo.
++  const fonte = readFileSync(fileURLToPath(new URL('../src/diletta-dropdown.js', import.meta.url)), 'utf8');
++  assert.doesNotMatch(fonte.replace(/\/\/.*$|\/\*[\s\S]*?\*\//gm, ''), /showPicker/);
++});
+diff --git a/specs/design-system-dropdown/spec.md b/specs/design-system-dropdown/spec.md
+index 10061d0..a2c1230 100644
+--- a/specs/design-system-dropdown/spec.md
++++ b/specs/design-system-dropdown/spec.md
+@@ -151,6 +151,103 @@ campo do `DilettaInput` (erro inline, borda no role error).
+ - **WHEN** o dropdown é obrigatório e está vazio ao validar
+ - **THEN** `error: 'Escolha um tipo'` com a borda error, igual ao Input
+ 
++### Requirement: O gatilho inteiro é o controle
++O gatilho do `DilettaDropdown` SHALL abrir a seleção por qualquer ponto visível dele, nas duas molduras
++e nas duas plataformas: na `caixa`, todo o interior da borda, com o texto, o recuo e a seta; no
++`silencioso`, o valor, o respiro e a seta. Área de clique morta dentro de um controle é o defeito que a
++pessoa sente e não sabe nomear: ela clica na seta, que é o desenho que diz «abre aqui», e nada acontece.
++Pedido do filho B em 29/10, quando a web abria por 27 a 32% da caixa.
++
++No Dart, a `caixa` é um `DilettaInput` `readOnly` cujo contêiner inteiro está num `DilettaTappable`
++opaco, com o campo em `IgnorePointer`; no `silencioso`, o `DilettaTappable` opaco envolve valor e seta
++juntos.
++
++Na web, quem SHALL receber o clique em todo esse interior é o `<select>` nativo, que carrega o recuo e
++estica até a borda, com a seta por cima dele sem receber ponteiro. NÃO SHALL ser um ouvinte na caixa
++que chama `showPicker()`: o clique no `<select>` traz de uma vez o cursor, o foco e a abertura do
++sistema, e o `showPicker()` traz só a abertura, com suporte que varia entre navegadores. É o mesmo
++argumento que mantém a peça em volta do `<select>`: o que o sistema faz de graça a peça não refaz à mão.
++
++A peça SHALL fazer isso **sem mudar a vista fechada**, em nenhum porte, moldura ou tema, e **sem mudar a
++largura intrínseca**: um seletor que ninguém dimensiona mede o mesmo de antes, porque é essa largura que
++o põe numa fileira de filtros.
++
++O que já vale SHALL continuar valendo: desabilitado não abre em ponto nenhum e tem cursor `default`; o
++Tab para no controle; o anel de foco é o `outline` da caixa, inteiro, sem corte nos cantos; o nome
++acessível vem do `<label for>`; a seta é `aria-hidden`.
++
++#### Scenario: a seta abre a lista
++- **WHEN** `moldura: caixa` e a pessoa clica no centro da seta
++- **THEN** a lista abre e o foco está no `<select>`
++
++#### Scenario: o recuo abre a lista
++- **WHEN** `moldura: caixa`, `porte: lg`, e a pessoa clica no recuo à esquerda do texto, ou acima dele
++- **THEN** a lista abre, como se o clique tivesse sido no texto
++
++#### Scenario: o silencioso também
++- **WHEN** `moldura: silencioso` e a pessoa clica na seta ou no respiro entre o valor e a seta
++- **THEN** a lista abre
++
++#### Scenario: a mãozinha na caixa toda
++- **WHEN** o ponteiro passa sobre a seta ou o recuo de um seletor habilitado
++- **THEN** o cursor é `pointer`, como sobre o texto
++
++#### Scenario: a vista fechada não muda
++- **WHEN** um seletor com a opção «Operador de atendimento de segundo nível» escolhida é desenhado nos
++  três portes, nas duas molduras, no claro e no escuro
++- **THEN** caixa, borda, raio, seta e posição do texto são os mesmos pixels de antes
++- **AND** o texto comprido é cortado antes da seta, sem passar por baixo dela
++
++#### Scenario: a largura de quem ninguém dimensiona
++- **WHEN** o seletor está numa fileira flex sem largura declarada
++- **THEN** ele mede o mesmo que media antes, com o mesmo conteúdo
++
++#### Scenario: desabilitado
++- **WHEN** `estado: desabilitado` e a pessoa clica na seta, no recuo ou no texto
++- **THEN** a lista não abre, e o cursor é `default` em todos esses pontos
++
++#### Scenario: teclado e foco
++- **WHEN** a pessoa chega ao seletor com Tab
++- **THEN** o anel aparece inteiro em volta da caixa, sem corte nos cantos arredondados
++- **AND** o nome anunciado continua sendo o do rótulo
++
++### Requirement: A lista aberta tem a superfície da folha
++Onde o sistema pinta a lista aberta com o estilo da página (Chrome no Windows e no Linux), ela SHALL ter
++fundo `surface` e opções em `fg`: os mesmos papéis da folha e da lista suspensa do Dart. A web não
++inventa um papel para o painel; ela usa o que a linguagem já usa para ele.
++
++Os papéis SHALL ser **declarados pela peça**, e NÃO herdados por acaso. Com `background: none` no
++`<select>`, o fundo da caixa não chegava à lista, o painel saía no branco do sistema, e a cor que
++chegava era o `fg` do tema: no escuro, texto claro em fundo claro.
++
++A cor das opções NÃO SHALL seguir o marcador. Com o placeholder escolhido, o `<select>` se pinta em
++`textPlaceholder`, e as opções herdariam essa cor pela cascata: a lista inteira abriria em cinza de
++marcador. Na lista aberta, as opções SHALL estar em `fg`, e só a opção-marcador em `textPlaceholder`.
++
++Na `caixa`, o fundo declarado é o mesmo papel da caixa, e a vista fechada não muda. No `silencioso` a
++caixa não pinta fundo, e o gatilho fechado SHALL continuar transparente: o fundo da lista NÃO SHALL
++aparecer na vista fechada, qualquer que seja a superfície em volta.
++
++Onde o sistema desenha a lista com o próprio tema (macOS, iOS, Android), a peça não promete cor: o painel
++é do sistema, e isso é o argumento da peça, não uma falha dela.
++
++#### Scenario: a lista no escuro
++- **WHEN** tema escuro, `moldura: caixa`, Chrome no Windows, e a pessoa abre a lista
++- **THEN** o fundo da lista é `surface` e as opções estão em `fg`, legíveis, e não só a destacada
++
++#### Scenario: o silencioso sobre outra superfície
++- **WHEN** tema escuro, `moldura: silencioso` dentro de uma linha pintada em `bg`
++- **THEN** o gatilho fechado não tem fundo próprio
++- **AND** a lista aberta tem fundo `surface` e opções em `fg`
++
++#### Scenario: o marcador escolhido não acinzenta a lista
++- **WHEN** o seletor está no placeholder e a pessoa abre a lista
++- **THEN** as opções estão em `fg`, e a opção-marcador em `textPlaceholder`
++
++#### Scenario: o claro não muda
++- **WHEN** tema claro, nas duas molduras
++- **THEN** a vista fechada é a de antes, e a lista aberta tem fundo `surface` e opções em `fg`
++
+ ## Contrato
+ 
+ <!-- A LEI, legível por máquina. O Dart e o Figma OBEDECEM; o gate prova.
+diff --git a/tool/o_seletor_e_a_caixa_inteira.py b/tool/o_seletor_e_a_caixa_inteira.py
+new file mode 100644
+index 0000000..e22e897
+--- /dev/null
++++ b/tool/o_seletor_e_a_caixa_inteira.py
+@@ -0,0 +1,268 @@
++#!/usr/bin/env python3
++"""O SELETOR É A CAIXA INTEIRA — medido no navegador, porque o jsdom não calcula layout.
++
++    python3 tool/o_seletor_e_a_caixa_inteira.py [--contra <ref>]
++
++## O número que o trouxe
++
++Pedido do filho B em 29/10: no `<diletta-dropdown>` o recuo era da `.caixa`, o `<select>` tinha
++`padding: 0` e a seta era um `<span>`. Clicar no recuo ou na seta caía num `div` ou num `span`, e
++**27 a 32% da caixa abria a lista** (medido pelo console no Edge). A catraca de papel está em
++`packages/diletta_design_system_web/test/o_seletor_e_a_caixa_inteira.test.js`; ela prende o que a
++peça ESCREVE, e só o navegador diz onde o clique CAI.
++
++## As duas camadas
++
++1. **A área de clique**, sempre. Nos três portes × duas molduras, num Chromium sem cabeça: a seta, o
++   recuo à esquerda, o recuo acima do texto e um ponto a 2px da borda por dentro, nos quatro lados,
++   caem no `<select>`; a varredura pixel a pixel da caixa não acha ponto morto fora da borda e das
++   quinas arredondadas; o cursor é `pointer` habilitado e `default` desabilitado.
++2. **A vista fechada não muda**, com `--contra <ref>`: a peça daquele ref e a de agora são capturadas
++   lado a lado, no claro e no escuro, com e sem o anel de foco, e a diferença tem que ser zero pixel.
++   A largura intrínseca também, numa fileira flex sem largura declarada. Rode contra a tag anterior
++   quando mexer na montagem do seletor.
++
++A LISTA ABERTA não entra: o painel do `<select>` é do sistema e não sai em captura. A conferência
++dela no Chrome do Windows é manual, uma vez, e o registro mora no veredito.
++
++Sem Chromium na máquina, a ferramenta diz que pulou e por quê — nunca em silêncio. `CHROME` aponta
++um executável quando ele não está num dos lugares de costume.
++"""
++from __future__ import annotations
++
++import functools
++import http.server
++import json
++import os
++import re
++import shutil
++import subprocess
++import sys
++import tempfile
++import threading
++from pathlib import Path
++
++RAIZ = Path(__file__).resolve().parent.parent
++SRC = RAIZ / "packages" / "diletta_design_system_web" / "src"
++TOKENS = RAIZ / "packages" / "diletta_design_system" / "tokens" / "generated"
++
++LUGARES = [
++    r"C:\Program Files\Google\Chrome\Application\chrome.exe",
++    r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
++    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
++    "google-chrome", "google-chrome-stable", "chromium", "chromium-browser",
++]
++
++PAGINA = r"""<!doctype html>
++<html><head><meta charset="utf-8">
++<link rel="stylesheet" href="tokens/diletta-tokens.css">
++<link rel="stylesheet" href="tokens/diletta-papeis.css">
++<style>
++  body { margin: 0; padding: 16px; background: var(--diletta-bg); }
++  .linha { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 12px; }
++  .fixo { width: 220px; }
++  pre { display: none; }
++</style></head>
++<body><div id="palco"></div><pre id="saida"></pre>
++<script type="module">
++  const q = new URLSearchParams(location.search);
++  if (q.get('tema')) document.documentElement.dataset.theme = q.get('tema');
++  await import(`./${q.get('v')}/diletta-dropdown.js`);
++  const opcoes = '<option value="a">Curto</option><option value="b">Operador de atendimento de segundo nível</option>';
++  const PORTES = ['sm', 'md', 'lg'], MOLDURAS = ['caixa', 'silencioso'];
++  const palco = document.getElementById('palco');
++  for (const m of MOLDURAS) for (const p of PORTES) palco.insertAdjacentHTML('beforeend', `
++    <div class="linha">
++      <div class="fixo"><diletta-dropdown data-k="fixo-${m}-${p}" moldura="${m}" porte="${p}" valor="b" label="Cargo">${opcoes}</diletta-dropdown></div>
++      <diletta-dropdown data-k="flex-${m}-${p}" moldura="${m}" porte="${p}" valor="a">${opcoes}</diletta-dropdown>
++      <diletta-dropdown data-k="marc-${m}-${p}" moldura="${m}" porte="${p}" placeholder="Escolha">${opcoes}</diletta-dropdown>
++      <diletta-dropdown data-k="off-${m}-${p}" moldura="${m}" porte="${p}" estado="desabilitado" valor="a">${opcoes}</diletta-dropdown>
++    </div>`);
++  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
++  if (q.get('foco')) document.querySelector(`[data-k="${q.get('foco')}"]`).focus();
++  if (q.get('so') !== 'captura') {
++    const nome = (e) => e ? e.tagName.toLowerCase() + (e.className ? '.' + e.className : '') : 'nada';
++    const out = {};
++    for (const m of MOLDURAS) for (const p of PORTES) {
++      const host = document.querySelector(`[data-k="flex-${m}-${p}"]`);
++      const sr = host.shadowRoot, caixa = sr.querySelector('.caixa');
++      const r = caixa.getBoundingClientRect(), s = sr.querySelector('.seta').getBoundingClientRect();
++      const raio = Math.min(parseFloat(getComputedStyle(caixa).borderTopLeftRadius) || 0, r.height / 2);
++      const naQuina = (x, y) => (x < r.left + raio || x > r.right - raio) && (y < r.top + raio || y > r.bottom - raio);
++      let total = 0, abre = 0; const mortos = [];
++      for (let x = Math.ceil(r.left); x < r.right; x++) for (let y = Math.ceil(r.top); y < r.bottom; y++) {
++        const px = x + 0.5, py = y + 0.5, e = sr.elementFromPoint(px, py);
++        total++;
++        if (e?.tagName === 'SELECT') { abre++; continue; }
++        const naBorda = px - r.left < 2 || r.right - px < 2 || py - r.top < 2 || r.bottom - py < 2;
++        if (!naBorda && !naQuina(px, py)) mortos.push(`${(px - r.left).toFixed(1)},${(py - r.top).toFixed(1)}:${nome(e)}`);
++      }
++      const pontos = {
++        seta: [s.left + s.width / 2, s.top + s.height / 2],
++        recuoEsquerdo: [r.left + 3, r.top + r.height / 2],
++        recuoAcima: [r.left + r.width / 3, r.top + 3],
++        dentro2pxEsquerda: [r.left + 2.5, r.top + r.height / 2],
++        dentro2pxDireita: [r.right - 2.5, r.top + r.height / 2],
++        dentro2pxTopo: [r.left + r.width / 2, r.top + 2.5],
++        dentro2pxBase: [r.left + r.width / 2, r.bottom - 2.5],
++      };
++      const quem = Object.fromEntries(Object.entries(pontos).map(([k, [x, y]]) => [k, nome(sr.elementFromPoint(x, y))]));
++      const cursor = (raiz, x, y) => { const e = raiz.elementFromPoint(x, y); return e ? getComputedStyle(e).cursor : 'nada'; };
++      const off = document.querySelector(`[data-k="off-${m}-${p}"]`).shadowRoot;
++      const ro = off.querySelector('.caixa').getBoundingClientRect(), so = off.querySelector('.seta').getBoundingClientRect();
++      out[`${m}/${p}`] = {
++        largura: host.getBoundingClientRect().width,
++        abre: +(100 * abre / total).toFixed(1), mortos: mortos.slice(0, 5), nMortos: mortos.length, quem,
++        cursorLigado: [cursor(sr, ...pontos.seta), cursor(sr, ...pontos.recuoEsquerdo)],
++        cursorDesligado: [cursor(off, so.left + so.width / 2, so.top + so.height / 2), cursor(off, ro.left + 3, ro.top + ro.height / 2)],
++      };
++    }
++    document.getElementById('saida').textContent = 'MEDIDA=' + JSON.stringify(out);
++  }
++</script></body></html>
++"""
++
++DIFERENCA = r"""<!doctype html><meta charset="utf-8"><pre id="saida"></pre>
++<script type="module">
++  const carrega = (src) => new Promise((ok, erro) => { const i = new Image(); i.onload = () => ok(i); i.onerror = erro; i.src = src; });
++  const px = (img) => { const c = document.createElement('canvas'); c.width = img.width; c.height = img.height;
++    const g = c.getContext('2d'); g.drawImage(img, 0, 0); return g.getImageData(0, 0, img.width, img.height).data; };
++  const out = {};
++  for (const par of new URLSearchParams(location.search).getAll('par')) {
++    const [a, b] = par.split(',');
++    const [ia, ib] = await Promise.all([carrega(a), carrega(b)]);
++    if (ia.width !== ib.width || ia.height !== ib.height) { out[par] = -1; continue; }
++    const da = px(ia), db = px(ib); let n = 0;
++    for (let i = 0; i < da.length; i += 4) if (da[i] !== db[i] || da[i + 1] !== db[i + 1] || da[i + 2] !== db[i + 2]) n++;
++    out[par] = n;
++  }
++  document.getElementById('saida').textContent = 'DIFERENCA=' + JSON.stringify(out);
++</script>
++"""
++
++
++def acha_o_chromium() -> str | None:
++    for c in [os.environ.get("CHROME"), *LUGARES]:
++        if not c:
++            continue
++        if Path(c).is_file():
++            return c
++        achado = shutil.which(c)
++        if achado:
++            return achado
++    return None
++
++
++class Navegador:
++    def __init__(self, exe: str, pasta: Path, porta: int):
++        self.exe, self.pasta, self.porta = exe, pasta, porta
++        self.perfil = pasta / "_perfil"
++
++    def _roda(self, *args: str) -> str:
++        r = subprocess.run([self.exe, "--headless=new", "--disable-gpu", "--no-first-run", "--hide-scrollbars",
++                            "--force-device-scale-factor=1", f"--user-data-dir={self.perfil}",
++                            "--window-size=1400,1000", "--virtual-time-budget=5000", *args],
++                           capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120)
++        return r.stdout
++
++    def le(self, pagina: str, marca: str) -> dict:
++        dom = self._roda("--dump-dom", f"http://127.0.0.1:{self.porta}/{pagina}")
++        m = re.search(rf"{marca}=(\{{.*?\}})</pre>", dom, flags=re.S)
++        if not m:
++            raise RuntimeError(f"a página {pagina} não devolveu {marca} — o módulo carregou?")
++        return json.loads(m.group(1).replace("&amp;", "&").replace("&lt;", "<").replace("&gt;", ">"))
++
++    def captura(self, nome: str, consulta: str) -> str:
++        self._roda(f"--screenshot={self.pasta / nome}", f"http://127.0.0.1:{self.porta}/medida.html?so=captura&{consulta}")
++        return nome
++
++
++def serve(pasta: Path) -> tuple[http.server.ThreadingHTTPServer, int]:
++    class Quieto(http.server.SimpleHTTPRequestHandler):
++        def log_message(self, *_):
++            pass
++    Quieto.extensions_map = {**Quieto.extensions_map, ".js": "text/javascript"}
++    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), functools.partial(Quieto, directory=str(pasta)))
++    threading.Thread(target=srv.serve_forever, daemon=True).start()
++    return srv, srv.server_address[1]
++
++
++def confere_a_area(medida: dict) -> list[str]:
++    falhas = []
++    for k, x in medida.items():
++        for ponto, quem in x["quem"].items():
++            if quem != "select":
++                falhas.append(f"{k}: {ponto} cai em {quem}, e não no select")
++        if x["nMortos"]:
++            falhas.append(f"{k}: {x['nMortos']} pontos mortos dentro da caixa, como {x['mortos']}")
++        if any(c != "pointer" for c in x["cursorLigado"]):
++            falhas.append(f"{k}: cursor {x['cursorLigado']} na seta e no recuo, e não pointer")
++        if any(c != "default" for c in x["cursorDesligado"]):
++            falhas.append(f"{k}: desabilitado com cursor {x['cursorDesligado']}, e não default")
++    return falhas
++
++
++def main() -> int:
++    contra = sys.argv[sys.argv.index("--contra") + 1] if "--contra" in sys.argv else None
++    exe = acha_o_chromium()
++    if not exe:
++        print("· pulado: nenhum Chromium achado (aponte `CHROME`). A catraca de papel continua no `npm test`.")
++        return 0
++
++    with tempfile.TemporaryDirectory() as tmp:
++        pasta = Path(tmp)
++        shutil.copytree(SRC, pasta / "atual")
++        shutil.copytree(TOKENS, pasta / "tokens")
++        (pasta / "medida.html").write_text(PAGINA, encoding="utf-8")
++        (pasta / "diferenca.html").write_text(DIFERENCA, encoding="utf-8")
++        if contra:
++            (pasta / "antes").mkdir()
++            arq = subprocess.run(["git", "archive", contra, "packages/diletta_design_system_web/src"],
++                                 cwd=RAIZ, capture_output=True, check=True).stdout
++            subprocess.run(["tar", "-x", "-C", str(pasta / "antes"), "--strip-components=3"], input=arq, check=True)
++
++        srv, porta = serve(pasta)
++        nav = Navegador(exe, pasta, porta)
++        try:
++            agora = nav.le("medida.html?v=atual", "MEDIDA")
++            falhas = confere_a_area(agora)
++            print(f"camada 1 · a área de clique ({Path(exe).name}):")
++            for k, x in agora.items():
++                print(f"  {k:<14} abre {x['abre']:>5}% da caixa · largura {x['largura']:.0f}px")
++
++            if contra:
++                antes = nav.le("medida.html?v=antes", "MEDIDA")
++                print(f"camada 2 · a vista fechada contra {contra}:")
++                for k in agora:
++                    if abs(agora[k]["largura"] - antes[k]["largura"]) > 0.01:
++                        falhas.append(f"{k}: largura intrínseca {antes[k]['largura']} → {agora[k]['largura']}")
++                casos = [(f"{t}{'-foco' if f else ''}", f"tema={t}" + (f"&foco={f}" if f else ""))
++                         for t in ("light", "dark") for f in ("", "fixo-caixa-lg", "flex-caixa-sm")]
++                casos = [(f"{n}-{i}" if "foco" in n else n, c) for i, (n, c) in enumerate(casos)]
++
++                def compara() -> dict:
++                    pares = [f"{nav.captura(f'antes-{n}.png', f'v=antes&{c}')},{nav.captura(f'atual-{n}.png', f'v=atual&{c}')}"
++                             for n, c in casos]
++                    return nav.le("diferenca.html?" + "&".join(f"par={p}" for p in pares), "DIFERENCA")
++
++                # A primeira captura de um perfil frio às vezes sai com um punhado de pixels de ruído, e
++                # o mesmo ref capturado duas vezes discorda neles. Só reprova a diferença que se repete.
++                dif = compara()
++                if any(dif.values()):
++                    dif = compara()
++                for par, n in dif.items():
++                    print(f"  {par.split(',')[1].removeprefix('atual-').removesuffix('.png'):<22} {n} pixels diferentes")
++                    if n:
++                        falhas.append(f"a vista fechada mudou: {par} com {n} pixels")
++        finally:
++            srv.shutdown()
++
++    if falhas:
++        print("\n✗ " + "\n✗ ".join(falhas))
++        return 1
++    print("✓ a caixa inteira é o controle" + (", e a vista fechada é a mesma" if contra else ""))
++    return 0
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+-- 
+2.55.0.windows.3
+
