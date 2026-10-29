@@ -6,7 +6,9 @@
 - **lido em**: `web-v3.25.0` (`src/diletta-dropdown.js`); avô `7f988b4` (`diletta_dropdown.dart`,
   `diletta_input.dart`); spec `design-system-dropdown` da `v3.24.0`, igual na `7f988b4`
 - **estado**: **aplicada num clone local do avô, sem release** (29/10): branch
-  `fix/o-seletor-e-a-caixa-inteira` sobre `7f988b4`, commit `8b33eaa`, sem push. O CHANGELOG, o ledger, o
+  `fix/o-seletor-e-a-caixa-inteira` sobre `7f988b4`, commit `8b33eaa`, sem push. O commit está ao lado,
+  em [`0001-o-seletor-e-a-caixa-inteira.patch`](2026-10-29-spec-o-seletor-e-a-caixa-inteira/0001-o-seletor-e-a-caixa-inteira.patch)
+  (`git am` sobre a `7f988b4`, que ele aplica sem conflito). O CHANGELOG, o ledger, o
   número (`patch` ou `minor`) e a tag são do avô. O que mudou do desenho e o que foi medido estão em
   «Aplicação», no fim. Os cenários são o que o filho precisa ver funcionando; o mecanismo é do avô,
   e as notas de desenho no fim não são lei
@@ -33,7 +35,7 @@ pessoa sente e não sabe nomear: ela clica na seta, que é o desenho que diz «a
 **No Dart isso já vale.** Na `caixa`, o `DilettaDropdown` é um `DilettaInput` `readOnly` com `onTap`
 (`diletta_dropdown.dart:253-264`), e o `DilettaInput` envolve o contêiner inteiro num `DilettaTappable`
 opaco, com o campo `readOnly` em `IgnorePointer` (`diletta_input.dart:266-284`, `:407-413`). No
-`silencioso`, o `DilettaTappable` opaco envolve texto e seta juntos (`diletta_dropdown.dart:266-288`).
+`silencioso`, o `DilettaTappable` opaco envolve texto e seta juntos (`diletta_dropdown.dart:267-288`).
 Este requisito escreve o que o Dart já faz, para a web ter o que cumprir.
 
 **Na web, quem SHALL receber o clique em todo esse interior é o `<select>` nativo.** NÃO SHALL ser um
@@ -134,8 +136,9 @@ outras não alcançam:
 
 1. **No navegador (Chromium), a área de clique.** Para os três portes nas duas molduras, o
    `shadowRoot.elementFromPoint` devolve o `select` no centro da seta, no meio de cada recuo e a 2px
-   da borda por dentro, nos quatro lados. É o número que o console mediu (27–32% da caixa hoje), e o
-   gate só passa perto de 100%: o que sobra é a borda de 1px.
+   da borda por dentro, nos quatro lados. É o número do pedido (31–42% da caixa de 192 px na
+   `web-v3.25.0`; 27–32% no console, na `web-v2.5.0`), e o gate só passa perto de 100%: o que sobra é
+   a borda de 1px.
 2. **No navegador, a vista fechada.** Captura da peça fechada antes e depois, nos três portes × duas
    molduras × dois temas, com diferença zero. É o que prende «nenhum pixel» e a largura intrínseca.
 3. **No jsdom, a catraca de papel.** As regras que a peça escreve declaram fundo e cor nas `<option>`
@@ -196,9 +199,10 @@ As contas que fazem a vista fechada não mudar:
 - **Altura**: a caixa segue com `min-height` e o `<select>` estica até ela. **A conferir**: o
   centramento vertical do texto num `<select>` mais alto que a linha. O Chromium centra; no Firefox e no
   Safari, quem diz é a captura da camada 2 do gate.
-- **Silencioso e lista aberta**: com o `<select>` transparente e as `<option>` em `surface`, **a
-  conferir** no Chrome do Windows se a moldura do painel (a faixa fora das linhas) herda o branco. Se
-  herdar, o caminho é outro, e é do avô.
+- **Silencioso e lista aberta**: com o `<select>` transparente e as `<option>` em `surface`, a dúvida
+  era se a moldura do painel (a faixa fora das linhas) herdava o branco. **Conferido** no Chrome do
+  Windows, depois da aplicação: não herda, e o painel inteiro sai em `surface`
+  ([print](2026-10-29-spec-o-seletor-e-a-caixa-inteira/lista-escuro-4-conserto-silencioso.png)).
 
 ## Fora desta spec
 
@@ -211,7 +215,9 @@ As contas que fazem a vista fechada não mudar:
 ## Aplicação (29/10, clone local do avô)
 
 Branch `fix/o-seletor-e-a-caixa-inteira` sobre `7f988b4`, num clone do espelho do pub
-(`Design-System/ds-diletta`). O que entrou:
+(`Design-System/ds-diletta`). O commit `8b33eaa` não teve push; para reproduzir, o patch está em
+[`2026-10-29-spec-o-seletor-e-a-caixa-inteira/`](2026-10-29-spec-o-seletor-e-a-caixa-inteira/), com os
+prints da lista aberta e o script que os tirou. O que entrou:
 
 | arquivo | o que é |
 |---|---|
@@ -230,17 +236,29 @@ cantos arredondados (Δ ≤ 9/255): o fundo opaco repintava a parte de dentro da
 painel continua lendo a cor declarada. O `overflow: hidden` ficou, para o clique fora da curva não abrir
 a lista.
 
-**Medido no Chrome 156 do Windows (`156.0.8078.48`), sem cabeça** (`python tool/o_seletor_e_a_caixa_inteira.py --contra v3.25.0`):
+**Medido no Chrome 156 do Windows (`156.0.8078.48`)**: a área de clique e a vista fechada sem cabeça
+(`python tool/o_seletor_e_a_caixa_inteira.py --contra v3.25.0`); a lista aberta com janela, capturada
+da tela ([`abre-a-lista.cjs`](2026-10-29-spec-o-seletor-e-a-caixa-inteira/abre-a-lista.cjs)):
 
 | | antes (`v3.25.0`) | depois |
 |---|---|---|
-| área da caixa que abre a lista, `caixa` sm · md · lg | 48,9 · 48,2 · 37,3% | 95,4 · 95,4 · 96,3% (o resto é a borda de 1px e as quinas fora da curva) |
-| idem, `silencioso` | 92,1% (a seta engolia) | 100% |
+| área da caixa de 192 px que abre a lista, `caixa` sm · md · lg | 42,2 · 41,1 · 30,8% | 94,3 · 94,3 · 95,4% (o resto é a borda de 1px e as quinas fora da curva) |
+| idem, `silencioso` | 87,5% (a seta engolia) | 100% |
+| idem, sem largura declarada (`caixa` 289 · 293 · 301 px; `silencioso` 275 px) | 45,7 · 45,1 · 34,7% · 91,3% | 95,4 · 95,4 · 96,3% · 100% |
 | seta, recuo esquerdo, recuo acima, 2px por dentro nos quatro lados | `diletta-icon` / `div.caixa` | `select`, nos 6 casos |
 | cursor habilitado / desabilitado | `auto` na seta e no recuo | `pointer` / `default` |
 | largura intrínseca, fileira flex sem largura | — | a mesma nos 6 casos |
 | vista fechada, claro e escuro, com e sem anel de foco | — | **0 pixels** diferentes |
 | cor das `<option>` com o marcador escolhido | `textPlaceholder` em todas, fundo transparente | `fg` em `surface`; só o marcador em `textPlaceholder` |
+| lista aberta no escuro, fundo × opções, nas duas molduras | `#ffffff` × `#f5f8f9`, **1,07:1**, com ou sem `color-scheme: dark` ([print](2026-10-29-spec-o-seletor-e-a-caixa-inteira/lista-escuro-1-peca-pura.png)) | `#20262a` × `#f5f8f9` (`surface` × `fg`), 14,34:1 ([caixa](2026-10-29-spec-o-seletor-e-a-caixa-inteira/lista-escuro-3-conserto-caixa.png), [silencioso](2026-10-29-spec-o-seletor-e-a-caixa-inteira/lista-escuro-4-conserto-silencioso.png)) |
+| lista aberta no claro | — | `#ffffff` × `#14181a`, 17,87:1 ([print](2026-10-29-spec-o-seletor-e-a-caixa-inteira/lista-claro-5-conserto-caixa.png)) |
+
+**Duas medidas da área, e por que o «antes» mudou.** A coluna «antes» é a área do `<select>` sobre a da
+caixa, a mesma conta do pedido e da revisão da PR. A ferramenta varre pixel a pixel e, na peça antiga,
+conta um pixel a mais em volta do `<select>`, cerca de 2 pontos (44,6 · 43,5 · 32,6% a 192 px). Os
+48,9 · 48,2 · 37,3% e 92,1% que esta tabela trazia eram essa varredura, sem largura declarada. Repetida
+duas vezes em 29/10, ela dá 48,2 · 47,5 · 36,6% e 91,3%, e a primeira rodada não se reproduziu. O
+«depois» é a varredura, que é o que o gate confere.
 
 A ferramenta reprova a peça antiga (testado pondo a `v3.25.0` no lugar), e o teste Dart reprova um
 `silencioso` com `deferToChild` no toque: os dois gates pegam o defeito que existem para pegar.
@@ -252,9 +270,8 @@ A ferramenta reprova a peça antiga (testado pondo a `v3.25.0` no lugar), e o te
 
 **O que ficou aberto**:
 
-1. **A lista aberta no Chrome do Windows, à mão**: o painel não sai em captura sem cabeça. Abrir no
-   claro e no escuro, nas duas molduras, e conferir se a faixa do painel fora das linhas (no
-   `silencioso`, onde o `<select>` é transparente) herda o branco. Se herdar, o caminho é do avô.
+1. **A lista aberta em HML**: na bancada ela está conferida (a tabela acima, com os prints). Falta a
+   tarefa 5.2 da `acabamento-cadastros-e-senha` do console, no ambiente dele, depois da subida.
 2. **Firefox e Safari**: não há na máquina. O centramento vertical do texto no `<select>` esticado só
    foi medido no Chromium.
 3. **O release**: CHANGELOG, ledger do avô, número e tag. Pelo que muda para quem consome, a porta
