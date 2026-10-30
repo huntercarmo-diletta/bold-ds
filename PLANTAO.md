@@ -1,8 +1,8 @@
 # Plantão do pai
 
-sinal: 2026-10-30 11:02 (horário de Brasília)
+sinal: 2026-10-30 11:03 (horário de Brasília)
 pai: online
-vale até: 2026-10-30 11:47 · depois disso, leia como offline
+vale até: 2026-10-30 11:48 · depois disso, leia como offline
 
 - na fila · visto em 30/10 11:02 · 2026-10-26-a-lista-de-radio-nao-nomeia-o-grupo-e-a-linha-tem-32.md
 - na fila · visto em 30/10 11:02 · 2026-10-26-a-mensagem-do-aviso-que-fica-some-no-escuro-e-o-aviso-novo-nao-se-anuncia.md
