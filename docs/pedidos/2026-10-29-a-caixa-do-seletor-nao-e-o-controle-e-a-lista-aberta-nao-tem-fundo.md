@@ -200,3 +200,29 @@ caixa ponto a ponto no Edge. O #206 (a lista no escuro) estava pendente desde a 
 `acabamento-cadastros-e-senha` (tarefa 5.3) e é o mesmo `<select>`. Conferi as duas montagens no
 fonte da `web-v3.24.0` e da `web-v3.25.0` antes de escrever, e medi a `web-v3.25.0` no Chrome do
 Windows depois: a área de clique sem cabeça, e a lista aberta com janela, capturada da tela.
+
+## VEREDITO · ENTRA DIFERENTE — o seu patch, menos o script de navegador
+**pai**: ds-diletta **v3.26.0** · `web-v3.26.0` · **data**: 2026-10-30
+
+### O que decidiu
+*«O consumidor não alcança o que a peça decide por dentro»*. E o patch trouxe a medição: 95-96% da caixa, 0 pixel na vista fechada.
+
+### O que eu achei indo implementar
+Entraram o CSS, a catraca jsdom, o teste de widget do Dart e os dois requisitos da spec. O Dart confirma a sua leitura: o toque na seta e no recuo abre, e o teste agora trava isso.
+
+### O que eu recusei, e a condição de reabrir
+`tool/o_seletor_e_a_caixa_inteira.py` (268 linhas): o release não roda navegador, e gate que não roda envelhece calado. Reabre quando o release ganhar Chromium.
+
+### Os sete critérios
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | a ponte por `::part` do console sai |
+| escalabilidade | ↑ | todo seletor web |
+| aplicação | ↑ | «Situação» e «Itens por página»; adota o filho B |
+| aderência ao mercado | ↑ | o controle nativo é a área inteira |
+| robustez | ↓ | **dívida**: a área de clique não tem gate de layout, só a catraca de papel |
+| arquitetura limpa e simples | = | o recuo muda de dono, nenhuma peça nova |
+| conciso | ↑ | o script fica fora |
+
+### O que você faz
+`web-v3.26.0`. O gatilho do seu `seletorClicavel.test.ts` dispara pelos dois caminhos: a `.seta` declara `pointer-events` e o `<select>` tem recuo. Apague a ponte.

@@ -71,3 +71,29 @@ consumidor passar. Colar «123456» enche as seis caixas e dispara `onCompleted`
 
 A auditoria de acessibilidade da proposta de onboarding (Figma, 26/10). Medido no código das tags
 `v3.24.0` e `v3.25.0` e com teste de widget no pino. Não medi em aparelho a sugestão do teclado.
+
+## VEREDITO · ENTRA — nome, dica do SMS e colar, sem a alça
+**pai**: ds-diletta **v3.26.0** · `web-v3.26.0` · **data**: 2026-10-30
+
+### O que decidiu
+*«Colar não precisa da alça: o Flutter separa as duas coisas»*. A forma saiu da sua frase: `selectionControls: emptyTextSelectionControls` e o menu padrão.
+
+### O que eu achei indo implementar
+nada
+
+### O que eu recusei, e a condição de reabrir
+nada
+
+### Os sete critérios
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | nada à mão no app |
+| escalabilidade | ↑ | todo código de verificação |
+| aplicação | ↑ | os 7 sítios; adota o filho B |
+| aderência ao mercado | ↑ | WCAG 4.1.2 e 3.3.8 |
+| robustez | ↑ | teste cobra nome, dica e «123 456» enchendo as seis |
+| arquitetura limpa e simples | = | repasse ao `TextField` |
+| conciso | ⊘ | a decisão não obriga a escrever nada |
+
+### O que você faz
+`ref: v3.26.0`. `rotulo:` nas 7 chamadas do `OtpBoxesField`. A dica `oneTimeCode` já vem por padrão.

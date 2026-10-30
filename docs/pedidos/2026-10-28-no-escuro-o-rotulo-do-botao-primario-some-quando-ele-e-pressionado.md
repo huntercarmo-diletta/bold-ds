@@ -60,3 +60,29 @@ No escuro, o rótulo do botão primário pressionado fica entre 1,64 e 2,62 nas 
 ## Como o pai vai saber que funcionou
 
 O `o_rotulo_alcanca_o_preenchimento_test` sem as células `primary/*/hover` e `primary/*/pressed` do escuro nas três paletas, com o teto da catraca descendo junto. Do nosso lado, refaço a medição das seis folhas na tag que trouxer o conserto.
+
+## VEREDITO · ENTRA — no escuro o estado se afasta do rótulo
+**pai**: ds-diletta **v3.26.0** · `web-v3.26.0` · **data**: 2026-10-30
+
+### O que decidiu
+*«Sob a tinta escura que o `_tintaHonrada` escolhe no escuro, [escurecer] aproxima o fundo da tinta»*. A forma foi decisão do Hunter, entre três.
+
+### O que eu achei indo implementar
+`_longeDaTinta`: rótulo mais escuro que a marca, o estado clareia (06, 07); mais claro, escurece (04, 03). Na referência, 3,46 e 2,09 viram 7,77 e 12,27. A catraca do `o_rotulo_alcanca_o_preenchimento_test` desce de 98 para 68, sem nenhuma célula `primary/normal`. Tentei a mesma regra no destrutivo e piorou: o repouso dele é `errorSolid` com `onErrorSolid`, outro par. Voltou como estava.
+
+### O que eu recusei, e a condição de reabrir
+O destrutivo do Bold (3,68 no hover) e o claro que clareia com marca abaixo do 04: reabrem com pedido que meça cada um.
+
+### Os sete critérios
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | nenhuma folha copia papel do pai |
+| escalabilidade | ↑ | toda paleta, derivado da tinta |
+| aplicação | ↑ | ~107 botões do app; adota o filho B |
+| aderência ao mercado | ↑ | WCAG 1.4.3 |
+| robustez | ↑ | a catraca desce 30 |
+| arquitetura limpa e simples | = | uma função |
+| conciso | ⊘ | a decisão não obriga a escrever nada |
+
+### O que você faz
+`ref: v3.26.0`. Refaça a medição das seis folhas. **Muda pixel** do primário no escuro: hover e pressionado clareiam.

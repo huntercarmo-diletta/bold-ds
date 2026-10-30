@@ -92,3 +92,29 @@ num contêiner de 342 px:
   depois de cada seta.
 
 A 1440 px nada muda.
+
+## VEREDITO · ENTRA — o rótulo numa linha e a fileira que rola
+**pai**: ds-diletta **v3.26.0** · `web-v3.26.0` · **data**: 2026-10-30
+
+### O que decidiu
+*«O item 1 sozinho já destrava quem consome; o item 2 é a peça fazer isso sozinha»*. Entram os dois.
+
+### O que eu achei indo implementar
+A selecionada vem à vista pelo `scrollLeft` do trilho, e não por `scrollIntoView`, que rolaria a página quando a fileira está fora da tela. O hospedeiro ganhou `min-width: 0`, senão dentro de um flex ele empurra a página.
+
+### O que eu recusei, e a condição de reabrir
+nada
+
+### Os sete critérios
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o menu substituto do IB sai |
+| escalabilidade | ↑ | toda fileira de abas web |
+| aplicação | ↑ | «Pagamentos por estado»; adota o filho B |
+| aderência ao mercado | ↑ | é o `isScrollable` do M3 |
+| robustez | ↓ | **dívida**: o teste mede com layout simulado, não no navegador |
+| arquitetura limpa e simples | = | CSS e uma função |
+| conciso | ⊘ | a decisão não obriga a escrever nada |
+
+### O que você faz
+`web-v3.26.0`. Tire o `BoldMenu` de `PagamentosScreen.tsx` e a consulta de contêiner. Meça os 342 px no Chrome: é a medição que o gate não faz.
