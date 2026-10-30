@@ -115,8 +115,8 @@
     --diletta-primaryHover: #009820;
     --diletta-primaryOnSurface: #40ce4c;
     --diletta-primaryPressed: #1b5e20;
-    --diletta-primarySolidHover: #009820;
-    --diletta-primarySolidPressed: #1b5e20;
+    --diletta-primarySolidHover: #40ce4c;
+    --diletta-primarySolidPressed: #a2e5a2;
     --diletta-primarySubtle: #1b5e20;
     --diletta-primaryTrack: #04390a;
     --diletta-primaryWash: #00982033;
@@ -193,8 +193,8 @@
   --diletta-primaryHover: #009820;
   --diletta-primaryOnSurface: #40ce4c;
   --diletta-primaryPressed: #1b5e20;
-  --diletta-primarySolidHover: #009820;
-  --diletta-primarySolidPressed: #1b5e20;
+  --diletta-primarySolidHover: #40ce4c;
+  --diletta-primarySolidPressed: #a2e5a2;
   --diletta-primarySubtle: #1b5e20;
   --diletta-primaryTrack: #04390a;
   --diletta-primaryWash: #00982033;
