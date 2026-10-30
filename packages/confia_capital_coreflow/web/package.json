@@ -1,6 +1,6 @@
 {
   "name": "confia-capital-web",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "type": "module",
   "description": "A INSTÂNCIA WEB do Confia Capital: os custom elements da linguagem, com a tinta deste produto.",

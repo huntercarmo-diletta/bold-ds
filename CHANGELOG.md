@@ -37,6 +37,100 @@ avô sai de lá. Não pinta — sem `tokens/`, sem hex.
 (tag `coreflow-web-v<versão>`), e os gates `uma_versao_e_uma_tag`, `toda_tag_web_carrega_o_pacote`
 e o novo `o_pai_na_web_recebe_o_mesmo_avo` passam a conhecê-lo. O número do Bold não muda.
 
+## [0.129.0] — 2026-10-30
+
+### O avô sobe de `v3.24.0` para `v3.26.0` — os dez pinos juntos, e os dez vereditos de 30/10 chegam
+
+A pedido da Tatiana (30/10). O pai julgou em 30/10 os dez pedidos deste filho de 26 a 29/10, todos ENTRA ou
+ENTRA DIFERENTE, e eles só chegam aos produtos por esta tag. Entre a `v3.24.0` e a `v3.26.0` são três patches e
+dois menores do avô, sem major:
+- `3.24.1`: o cartão ocupa a altura do host;
+- `3.24.2`: o erro do campo se anuncia, e a etiqueta `primary` escreve com `onPrimarySubtle`;
+- `3.24.3`: a etiqueta escura do Dart pinta como a web;
+- `3.25.0`: o cartão de KPI, o modal largo, a forma do gráfico e o campo de data com hora; o botão sem ação
+  sai desabilitado, e o valor oculto se anuncia;
+- `3.26.0`: os dez pedidos.
+
+Os dez pinos sobem juntos:
+- três `ref:` em Dart: `coreflow`, `coreflow_design_system` e `catalog`;
+- sete `package.json` na web: Bold, Norte Benk, Confia Capital, BluOn, Banco Fibra, o exemplo do gerador e o
+  `coreflow-web`;
+- o molde do `novo_filho.dart`.
+
+O `npm install` sem o nome manteve o commit antigo do lock. Foi forçado pela tag nos sete, e os sete locks
+resolvem o mesmo commit da `web-v3.26.0` (`e1c6cf8`). O `coreflow-web` segue em 0.1.0 e em [Unreleased],
+sem tag, e o pino dele agora é a `web-v3.26.0`. O README dizia `v3.3.1` na tabela dos pais; passa a dizer
+`v3.26.0`.
+
+### O que mexeu, medido nas seis folhas reemitidas
+
+Mudam duas tintas, nos dois blocos do escuro: `--diletta-primarySolidHover` e `--diletta-primarySolidPressed`
+clareiam para os degraus 06 e 07 da marca. É o `_longeDaTinta`, o veredito do pedido de 28/10. No Bold, o hover
+vai de `#fe3976` a `#ff87ab`, e o pressionado de `#9e1241` a `#ffb6cb`. Rótulo `onPrimary` sobre cada um, no
+escuro:
+
+| folha | sobre o hover | sobre o pressionado |
+|---|--:|--:|
+| Conta BOLD | 6,06 → 9,31 | 2,62 → 12,81 |
+| Norte Benk | 4,17 → 7,97 | 2,56 → 11,71 |
+| Confia Capital | 4,15 → 7,95 | 1,64 → 11,63 |
+| BluOn | 4,31 → 8,07 | 2,10 → 11,73 |
+| Banco Fibra | 4,11 → 7,97 | 1,87 → 11,68 |
+| o exemplo do gerador | 4,69 → 8,64 | 2,27 → 12,14 |
+
+Abaixo de 4,5 seguem só os preenchimentos de estado que o avô julgou em 18/09, com piso de 3:1 para o glifo
+branco, e todos passam de 3,5. Nenhum outro valor muda. As quatro marcas sobem um patch, porque a folha delas
+mudou de valor e o avô do lado web delas também: Norte Benk 0.1.9, Confia Capital 0.1.3, BluOn 0.1.2 e Banco
+Fibra 0.1.1. A troca do logo do Banco Fibra pelo vetor oficial passa a ser a 0.1.2.
+
+### Adicionado
+
+- **`CoreflowCampoDeTexto.autofillHints`**: o repasse ao `DilettaInput`, que o veredito de 30/10 pediu. Default
+  vazio, como no pai, então nenhuma tela muda até declarar. O `AutofillGroup` é da tela. O teste
+  `o_campo_diz_o_que_e_ao_preenchimento` mede no `TextField` de dentro e pega 4 de 4 mutantes.
+
+### O que o app sente, pelo CHANGELOG do avô
+
+- **Muda layout (`3.26.0`):**
+  - os portes `sm` e `md` do botão passam a ocupar 44, com a caixa pintada em 28 e 36;
+  - o olho da senha ganha o alvo de 44, e o glifo anda 13 px para dentro;
+  - a linha da lista de rádio ocupa 44, e o vão de 8 entre linhas sai.
+- **Muda pixel (`3.26.0`):**
+  - a mensagem do aviso em linha escreve com a tinta do contêiner (`textSecondary` no `normal`);
+  - hover e pressionado do primário clareiam no escuro.
+- **Muda o desenho do escuro (`3.24.3`):** a etiqueta pinta o contêiner sólido e o texto `onXSubtle` em todos os
+  tons coloridos.
+- **Botão sem ação (`3.25.0`):** o `DilettaButton` sem ação sai desabilitado. O `CoreflowBotao` já dizia
+  `disabled` desde a PR #7, e ele continua passando o estado explícito.
+- **Muda sozinho, sem chamada nova (`3.26.0`):** o `DilettaOtpInput` passa a aceitar colar e declara
+  `oneTimeCode` por padrão.
+- **Novos sem uso, que não mudam nada:** `DilettaInlineAlert(anunciar:)`, `DilettaRadioList.rotulo`,
+  `DilettaOtpInput.rotulo`, `DilettaInput.autofillHints` e `DilettaField.autofillHints`.
+
+O que cada tela do app faz com eles está no índice de pedidos, na coluna do veredito.
+
+### Para quem consome a web
+
+- **`<diletta-dropdown>`:** a caixa inteira abre a lista, e a lista aberta tem fundo no escuro. O console apaga
+  a ponte por `::part`.
+- **`<diletta-tabs>`:** o rótulo fica numa linha, e a fileira rola com a selecionada à vista. O IB tira o
+  `BoldMenu` de Pagamentos.
+- **Peças novas:**
+  - `<diletta-inline-alert>`, com `state`, `titulo`, slot `acao` e `anunciar`;
+  - `<diletta-web-stepper-node estado="falhou">`;
+  - `<diletta-radio-list rotulo>`;
+  - da `3.25.0`: `<diletta-kpi-card>`, `<diletta-modal>`, `formaDoGrafico` e `<diletta-date-field hora>`.
+- **Da `3.24.2`:** o erro do `<diletta-input>`, do `<diletta-date-field>` e do `<diletta-dropdown>` se anuncia.
+  A etiqueta `primary` escreve com `onPrimarySubtle`, o que **muda pixel no claro**.
+- **Da `3.24.1`:** o `<diletta-card-surface>` ocupa a altura do host.
+
+### As tags desta versão
+
+- **`v0.129.0` e `web-v0.129.0`;**
+- **as quatro marcas:** `norte-benk-web-v0.1.9`, `confia-capital-web-v0.1.3`, `bluon-web-v0.1.2` e
+  `banco-fibra-web-v0.1.1`, cada uma com o avô `web-v3.26.0` copiado em `avo/`;
+- **o `coreflow-web`:** segue em 0.1.0, sem tag.
+
 ## [0.128.0] — 2026-10-28
 
 ### Nasce o quinto filho — o Banco Fibra, o primeiro montado do site, sem manual do cliente
