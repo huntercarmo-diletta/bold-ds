@@ -83,3 +83,29 @@ toast.
 
 A auditoria de acessibilidade da proposta de onboarding (Figma, 26/10) mediu 2,86 e 2,09 no desenho. O
 código confirma os dois (2,87 e 2,09) e acrescenta o sucesso (2,16) e a paleta de referência.
+
+## VEREDITO · ENTRA — a mensagem é a tinta do contêiner, e o aviso que aparece se anuncia
+**pai**: ds-diletta **v3.26.0** · `web-v3.26.0` · **data**: 2026-10-30
+
+### O que decidiu
+*«O aviso é a mesma anatomia [da etiqueta]: contêiner do tom e texto sobre ele»*.
+
+### O que eu achei indo implementar
+O `///` dos dois mapas gêmeos (toast e aviso) prometia `a_mensagem_que_fica_test.dart`, e ele não existia. Escrito agora: fundo e borda dos gêmeos papel a papel, e 4,5 da mensagem sobre o fundo nos quatro tons e dois modos. O `normal` também caía no limite (4,62 no escuro da referência) e foi para `textSecondary`.
+
+### O que eu recusei, e a condição de reabrir
+nada
+
+### Os sete critérios
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o anúncio à mão de 2 arquivos sai |
+| escalabilidade | ↑ | toda paleta, os dois modos |
+| aplicação | ↑ | 73 avisos com mensagem; adota o filho B |
+| aderência ao mercado | ↑ | WCAG 1.4.3 e 4.1.3 |
+| robustez | ↑ | gate de 4,5 e o teste gêmeo que faltava |
+| arquitetura limpa e simples | = | a regra da etiqueta, de 20/10 |
+| conciso | = | um requisito na spec |
+
+### O que você faz
+`ref: v3.26.0`. `anunciar: true` nos 11 avisos pós-ação, e apague o anúncio à mão de parear aparelho e saldo bloqueado. **Muda pixel** da mensagem nos quatro tons.

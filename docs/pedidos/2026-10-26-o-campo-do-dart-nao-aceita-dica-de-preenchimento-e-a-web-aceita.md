@@ -79,3 +79,29 @@ recebe a lista. Sem o parâmetro → o comportamento de hoje, sem mudar um pixel
 A auditoria de acessibilidade da proposta de onboarding (Figma, 26/10) apontou os dois critérios. Medido
 no código do avô nas tags `v3.24.0` e `v3.25.0`, no Flutter instalado e no app em `origin/development`.
 Não medi em aparelho o que o iOS sugere hoje sem dica.
+
+## VEREDITO · ENTRA — `autofillHints` é repasse, como o `autocomplete` da web
+**pai**: ds-diletta **v3.26.0** · `web-v3.26.0` · **data**: 2026-10-30
+
+### O que decidiu
+*«O veredito de 15/10 decidiu que atributo nativo é repasse, não eixo»*. É o mesmo veredito, do outro lado.
+
+### O que eu achei indo implementar
+A dívida estava escrita na web (*«SÓ NA WEB desde a v3.18.0»*). A régua de paridade agora lê `autocomplete = autofillHints`.
+
+### O que eu recusei, e a condição de reabrir
+nada
+
+### Os sete critérios
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | fecha a dívida de paridade escrita na web |
+| escalabilidade | ↑ | todo campo de todo filho |
+| aplicação | ↑ | os 12 campos de senha; adota o filho B |
+| aderência ao mercado | ↑ | WCAG 1.3.5 |
+| robustez | = | default vazio, igual a hoje |
+| arquitetura limpa e simples | = | repasse ao `TextField` |
+| conciso | = | uma linha de paridade |
+
+### O que você faz
+`ref: v3.26.0`. Passe `autofillHints` no `CoreflowCampoDeTexto` e ponha o `AutofillGroup` nas telas: `password` no login, `newPassword` nas 8 de senha nova.

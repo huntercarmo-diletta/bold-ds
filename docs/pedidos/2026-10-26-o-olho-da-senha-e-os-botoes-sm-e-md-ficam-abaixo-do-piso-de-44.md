@@ -77,3 +77,29 @@ altura, com a caixa pintada em 28 e 36.
 As críticas de composição e de acessibilidade da proposta de onboarding (Figma, 26/10) pediram para
 confirmar o piso do `Sm` e mediram o olho em 18 × 18 no desenho. Os dois se confirmaram no código, e o
 `md` apareceu na mesma medição.
+
+## VEREDITO · ENTRA — a web já tinha o piso nos dois, e o Dart estava atrás
+**pai**: ds-diletta **v3.26.0** · `web-v3.26.0` · **data**: 2026-10-30
+
+### O que decidiu
+*«O olho do `DilettaChatInput` tem o piso, e o olho do `DilettaInput` não»*: a mesma função em duas peças, com duas respostas. E a web respondia certo nas duas.
+
+### O que eu achei indo implementar
+A web já tinha `min-height: 44px` no `<diletta-button>` e o olho de 44 no `<diletta-input>`. Era paridade, não peça nova. E o olho web tinha o mesmo comentário escrito duas vezes; uma saiu.
+
+### O que eu recusei, e a condição de reabrir
+nada
+
+### Os sete critérios
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | 11 embrulhos locais não nascem |
+| escalabilidade | ↑ | todo filho, as duas instâncias |
+| aplicação | ↑ | 11 botões e 12 olhos do app; adota o filho B |
+| aderência ao mercado | ↑ | WCAG 2.5.8 e o HIG |
+| robustez | ↑ | teste cobra alvo, caixa pintada e toque na borda |
+| arquitetura limpa e simples | = | peça que já existe |
+| conciso | ⊘ | a decisão não obriga a escrever nada |
+
+### O que você faz
+`ref: v3.26.0`. Nada a mudar no `CoreflowBotao`. **Muda layout**: `sm` e `md` passam a ocupar 44, com a caixa em 28 e 36; confira a barra de topo e o passo da jornada. O olho fica centrado no alvo, como na web: o glifo anda 13 px para dentro.

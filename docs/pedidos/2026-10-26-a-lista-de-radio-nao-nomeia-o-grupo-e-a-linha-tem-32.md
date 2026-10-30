@@ -67,3 +67,29 @@ Cada linha com alvo ≥ 44 de altura, o marcador e o texto no mesmo lugar.
 
 A auditoria de acessibilidade da proposta de onboarding (Figma, 26/10) pediu o nome do grupo. A linha de
 32 apareceu ao medir, e casa com a porta que o veredito de 15/10 deixou aberta.
+
+## VEREDITO · ENTRA — o grupo tem nome e papel, e a linha tem 44
+**pai**: ds-diletta **v3.26.0** · `web-v3.26.0` · **data**: 2026-10-30
+
+### O que decidiu
+*«Cada opção já tem `inMutuallyExclusiveGroup` e `checked`, então o que falta é só o contêiner»*.
+
+### O que eu achei indo implementar
+A web já tinha `role="radiogroup"` com o título, e não tinha `rotulo`; a linha dela também tinha 32. As duas instâncias mudaram juntas. O vão de 8 entre linhas saiu: o passo vai de 40 a 44, e não a 52.
+
+### O que eu recusei, e a condição de reabrir
+nada
+
+### Os sete critérios
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | nenhum `Semantics` por fora |
+| escalabilidade | ↑ | as duas instâncias |
+| aplicação | ↑ | as 9 listas; adota o filho B |
+| aderência ao mercado | ↑ | WCAG 1.3.1, o `radiogroup` da ARIA |
+| robustez | ↑ | teste cobra papel, nome sem duplicar e altura |
+| arquitetura limpa e simples | = | peça que existe |
+| conciso | = | uma linha de paridade |
+
+### O que você faz
+`ref: v3.26.0`. `rotulo:` nas 8 listas sem `title`. **Muda layout**: cada linha ganha 4 px.

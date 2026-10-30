@@ -88,3 +88,29 @@ A tela de Limites › Pedidos do console (PRs 5 a 8 da change `pedidos-de-limite
 B24 procurei a faixa no pacote web e achei só o botão dela; ao montar a classificação explicada e a
 recusa do provedor, escrevi o `.destaque` e vi que era a mesma coisa sem ação. A spec do avô fechou o
 nome: `inline-alert`, `destino: codigo`.
+
+## VEREDITO · ENTRA DIFERENTE — `<diletta-inline-alert>`, com o eixo `state` e não `tom`
+**pai**: ds-diletta **v3.26.0** · `web-v3.26.0` · **data**: 2026-10-30
+
+### O que decidiu
+*«O botão do aviso chegou à web; o aviso, não»*.
+
+### O que eu achei indo implementar
+O eixo é o do Dart e do `<diletta-toast>`: `state` com `normal`, `success`, `error`, `warning`. `tom="atencao"` seria um segundo vocabulário para o mesmo eixo. A pintura sai medida do Dart, já com a mensagem na tinta do contêiner do pedido irmão.
+
+### O que eu recusei, e a condição de reabrir
+`tom` com nomes em português: reabre se a família inteira de mensagem (toast, aviso, banner) trocar de eixo junto.
+
+### Os sete critérios
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | `WaLinhaDeAviso` e `.destaque` saem |
+| escalabilidade | ↑ | todo filho web |
+| aplicação | ↑ | B2, B23 e B24 do console; adota o filho B |
+| aderência ao mercado | ↑ | é o *inline alert* do Polaris |
+| robustez | ↑ | pintura medida no Dart e gate jsdom |
+| arquitetura limpa e simples | ↑ | fecha paridade com um vocabulário de tom |
+| conciso | = | uma linha de paridade |
+
+### O que você faz
+`web-v3.26.0`. `<diletta-inline-alert state="warning" titulo="…">texto<diletta-status-banner-button slot="acao">Abrir pedido</diletta-status-banner-button></diletta-inline-alert>`. `anunciar` no que aparece depois de uma ação.

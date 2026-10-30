@@ -83,3 +83,29 @@ valores continua caindo em `pendente`. A spec ganha o quarto valor no eixo.
 A tela de Limites › Pedidos do console (PR 7 da change `pedidos-de-limite`, 27/10): ao montar o
 andamento da B23 com a peça, escolhi `bloqueado` por ser o mais próximo e escrevi o desvio na descrição
 da PR. Este pedido é o desvio virando pedido.
+
+## VEREDITO · ENTRA — `falhou` é o quarto valor, e não é trava
+**pai**: ds-diletta **v3.26.0** · `web-v3.26.0` · **data**: 2026-10-30
+
+### O que decidiu
+*«Bloqueado é "não dá para seguir por enquanto"; recusado é "não vai seguir".»*
+
+### O que eu achei indo implementar
+A spec do nó tinha o cenário *«WHEN a análise foi negada THEN o medalhão é `warning`»*: a lei mandava pintar a recusa como trava. O cenário virou `falhou`, e o de trava ganhou um exemplo de trava.
+
+### O que eu recusei, e a condição de reabrir
+nada
+
+### Os sete critérios
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o desvio escrito na PR sai |
+| escalabilidade | ↑ | toda esteira com recusa |
+| aplicação | ↑ | B23 e os três andamentos do console; adota o filho B |
+| aderência ao mercado | ↑ | o passo com erro do Carbon e do MUI |
+| robustez | ↑ | teste cobra glifo, tinta e motivo |
+| arquitetura limpa e simples | = | um valor num eixo |
+| conciso | = | um cenário trocado |
+
+### O que você faz
+`web-v3.26.0`. `estado="falhou"` nos três andamentos de `andamentoDoPedido`. O motivo sai em `errorOnSurface`.
