@@ -63,6 +63,7 @@ class CoreflowCampoDeTexto extends StatelessWidget {
     this.focusNode,
     this.autocorrect = true,
     this.enableSuggestions = true,
+    this.autofillHints = const <String>[],
   });
 
   final String? label;
@@ -74,6 +75,12 @@ class CoreflowCampoDeTexto extends StatelessWidget {
   /// Corretor/sugestões do teclado. Desligar em campos técnicos (e-mail, chave).
   final bool autocorrect;
   final bool enableSuggestions;
+
+  /// O que o campo É para o preenchimento automático: `AutofillHints.password`
+  /// no login, `newPassword` na senha nova. É repasse ao `DilettaInput`, como o
+  /// `autocomplete` da web (veredito de 30/10, avô `v3.26.0`). O `AutofillGroup`
+  /// que junta usuário e senha é da tela, não do campo.
+  final Iterable<String> autofillHints;
 
   /// Trailing widget (e.g. a visibility toggle).
   final Widget? suffixIcon;
@@ -191,6 +198,7 @@ class CoreflowCampoDeTexto extends StatelessWidget {
           maxLength: maxLength,
           textCapitalization: textCapitalization,
           textInputAction: textInputAction,
+          autofillHints: autofillHints,
           onSubmitted: onSubmitted,
           // `autofocus` do pai atravessa só na variante de uma linha — decisão
           // declarada por ele. Os dois sítios multilinha deste app que pedem foco
