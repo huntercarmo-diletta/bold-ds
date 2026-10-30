@@ -51,7 +51,13 @@ const _pacotePorPrefixo = {
 /// A primeira tentativa foi 200, escolhido a olho porque o monorepo do pai tem mais de mil. O
 /// autoteste abaixo reprovou: o NOSSO repositório é menor que o dele, e 200 não deixava a folga que
 /// o próprio teste exige. Foi a régua medindo a régua.
-const _teto = 150;
+///
+/// **30/10/2026: 150 → 200, pela mesma régua.** O avô `web-v3.26.0` trouxe o `<diletta-inline-alert>`,
+/// e as cinco emissões da `v0.129.0` foram a 76 arquivos: 2 × 76 = 152 passou do teto, e o autoteste
+/// reprovou com as tags já publicadas. Medido de novo, o repositório tem 777. O 200 guarda a mesma
+/// distância do repositório que o 150 guardava em 22/09 (3,9× abaixo) e fica 2,6× acima da maior
+/// emissão, que pode crescer até 100 arquivos antes do alarme.
+const _teto = 200;
 
 String _correGit(List<String> args) =>
     (Process.runSync('git', args, workingDirectory: '../..').stdout as String).trim();
