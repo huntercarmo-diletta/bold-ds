@@ -47,16 +47,25 @@ passava `autofocus && !_multiline` ao `DilettaInput`, com um comentário dizendo
 prop na variante de uma linha e que um `_FocoNaAbertura` cuidava do resto por aqui. O `_FocoNaAbertura`
 nunca foi escrito, e o pai cedeu: no avô fixado (`v3.26.0`), as duas ramificações do `build` do
 `DilettaInput` passam `autofocus: widget.autofocus`, e o dartdoc da prop diz que ela *«atravessa as DUAS
-variantes»*. O caso que o fez ceder é a linha digitável do boleto, 47 dígitos em `maxLines: 2`.
+variantes desde a v0.182.0»*. O caso que o fez ceder é a linha digitável do boleto, 47 dígitos em
+`maxLines: 2`.
+
+**Desde quando:** o filtro entrou aqui em 01/09, quando o pai ainda recusava a prop no multilinha, e
+então não custava nada. O pai passou a repassá-la na `v0.182.0`, de 09/09, e a primeira tag do Bold com
+esse avô por baixo é a `v0.103.0`, de 14/09. **De 14/09 até a `v0.129.0`, o campo multilinha daqui
+descartou um `autofocus` que o avô já atendia.** É daí que vem a linha digitável abrindo sem teclado.
 
 Agora a prop atravessa como veio, em qualquer `maxLines`/`minLines`. A API não muda, mas **quem passa
 `autofocus: true` num campo multilinha passa a abrir com teclado**. É o que a prop sempre prometeu, e é
 visível. Sabidos no app do Conta BOLD:
 - **Digitar boleto** (`boleto_digitar_screen.dart`, `autofocus: true`, `maxLines: 2`): passa a abrir com
   teclado, que é o pedido original;
-- **Folha «Colar código» do leitor** (`unified_scanner_screen.dart`): hoje pede o foco por fora (um
-  `FocusNode` próprio + `requestFocus` no primeiro frame). Com o conserto, o pedido duplicado não faz mal,
-  e o contorno pode sair depois do bump.
+- **Folha «Colar código» do leitor** (`unified_scanner_screen.dart:1670`, `autofocus: true`,
+  `maxLines: 4`): passa a abrir com teclado, como a tela pede. No `release/homologation` e na
+  `development` a chamada é só essa, sem contorno. Um contorno existe numa branch local do app que não
+  subiu, a `fix/colar-codigo-abre-vazio` (`b2ed8721`). Ela tira o `autofocus` e pede o foco por fora, com
+  um `FocusNode` da tela e um pedido no primeiro frame. Com este bump ele não é mais preciso, e a branch
+  pode voltar ao `autofocus: true`.
 
 Quem passa `autofocus: false` (o default) não muda. Nenhum outro ponto do `coreflow` ou das marcas filtrava
 `autofocus` por linhas. Gate novo: `coreflow/test/o_campo_multilinha_respeita_o_autofocus_test.dart`, com
