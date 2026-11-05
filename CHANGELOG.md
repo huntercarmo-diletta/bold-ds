@@ -37,6 +37,47 @@ avô sai de lá. Não pinta — sem `tokens/`, sem hex.
 (tag `coreflow-web-v<versão>`), e os gates `uma_versao_e_uma_tag`, `toda_tag_web_carrega_o_pacote`
 e o novo `o_pai_na_web_recebe_o_mesmo_avo` passam a conhecê-lo. O número do Bold não muda.
 
+## [0.129.1] — 2026-11-05
+
+### Corrigido: o `CoreflowCampoDeTexto` multilinha respeita o `autofocus` que a tela declarou — muda comportamento
+
+Achado no app em 05/11, na folha «Colar código» do leitor de pagamentos:
+`CoreflowCampoDeTexto(autofocus: true, maxLines: 4)` abria **sem foco e sem teclado**. O `build`
+passava `autofocus && !_multiline` ao `DilettaInput`, com um comentário dizendo que o pai só aceitava a
+prop na variante de uma linha e que um `_FocoNaAbertura` cuidava do resto por aqui. O `_FocoNaAbertura`
+nunca foi escrito, e o pai cedeu: no avô fixado (`v3.26.0`), as duas ramificações do `build` do
+`DilettaInput` passam `autofocus: widget.autofocus`, e o dartdoc da prop diz que ela *«atravessa as DUAS
+variantes desde a v0.182.0»*. O caso que o fez ceder é a linha digitável do boleto, 47 dígitos em
+`maxLines: 2`.
+
+**Desde quando:** o filtro entrou aqui em 01/09, quando o pai ainda recusava a prop no multilinha, e
+então não custava nada. O pai passou a repassá-la na `v0.182.0`, de 09/09, e a primeira tag do Bold com
+esse avô por baixo é a `v0.103.0`, de 14/09. **De 14/09 até a `v0.129.0`, o campo multilinha daqui
+descartou um `autofocus` que o avô já atendia.** É daí que vem a linha digitável abrindo sem teclado.
+
+Agora a prop atravessa como veio, em qualquer `maxLines`/`minLines`. A API não muda, mas **quem passa
+`autofocus: true` num campo multilinha passa a abrir com teclado**. É o que a prop sempre prometeu, e é
+visível. Sabidos no app do Conta BOLD:
+- **Digitar boleto** (`boleto_digitar_screen.dart`, `autofocus: true`, `maxLines: 2`): passa a abrir com
+  teclado, que é o pedido original;
+- **Folha «Colar código» do leitor** (`unified_scanner_screen.dart:1670`, `autofocus: true`,
+  `maxLines: 4`): passa a abrir com teclado, como a tela pede. No `release/homologation` e na
+  `development` a chamada é só essa, sem contorno. Um contorno existe numa branch local do app que não
+  subiu, a `fix/colar-codigo-abre-vazio` (`b2ed8721`). Ela tira o `autofocus` e pede o foco por fora, com
+  um `FocusNode` da tela e um pedido no primeiro frame. Com este bump ele não é mais preciso, e a branch
+  pode voltar ao `autofocus: true`.
+
+Quem passa `autofocus: false` (o default) não muda. Nenhum outro ponto do `coreflow` ou das marcas filtrava
+`autofocus` por linhas. Gate novo: `coreflow/test/o_campo_multilinha_respeita_o_autofocus_test.dart`, com
+6 casos (uma linha, `maxLines: 4` e `minLines: 3`, cada um com `true` e `false`). Os dois multilinha com
+`true` reprovam com a linha antiga.
+
+### O que chega ao consumidor web por esta tag (`web-v0.129.1`): o número, e só
+
+O conserto é Dart, e nenhum lado web mudou desde a `v0.129.0`. Norte Benk (`0.1.9`), Confia Capital
+(`0.1.3`), BluOn (`0.1.2`) e Banco Fibra (`0.1.1`) não sobem nem ganham tag. O avô fica em `v3.26.0` /
+`web-v3.26.0`, e o `coreflow-web` segue em `0.1.0`, sem tag.
+
 ## [0.129.0] — 2026-10-30
 
 ### O avô sobe de `v3.24.0` para `v3.26.0` — os dez pinos juntos, e os dez vereditos de 30/10 chegam
