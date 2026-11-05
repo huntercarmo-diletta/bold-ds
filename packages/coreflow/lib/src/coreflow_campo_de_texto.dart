@@ -137,6 +137,7 @@ class CoreflowCampoDeTexto extends StatelessWidget {
   /// Keyboard action button (next / done / search …).
   final TextInputAction? textInputAction;
 
+  /// Abre com foco e teclado. Vale na linha única e na multilinha: quem decide é a tela.
   final bool autofocus;
   final FocusNode? focusNode;
 
@@ -200,12 +201,13 @@ class CoreflowCampoDeTexto extends StatelessWidget {
           textInputAction: textInputAction,
           autofillHints: autofillHints,
           onSubmitted: onSubmitted,
-          // `autofocus` do pai atravessa só na variante de uma linha — decisão
-          // declarada por ele. Os dois sítios multilinha deste app que pedem foco
-          // (a linha digitável de 47 dígitos, que QUEBRA em duas) estão medidos e
-          // foram mandados como nota; enquanto isso o `_FocoNaAbertura` abaixo
-          // resolve pelo lado de cá, que é comportamento e não desenho.
-          autofocus: autofocus && !_multiline,
+          // `autofocus` atravessa como a tela declarou, nas duas variantes. O pai
+          // repassa nas duas (o dartdoc do `autofocus` do `DilettaInput`, desde que
+          // a linha digitável do boleto, 47 dígitos em `maxLines: 2`, foi medida):
+          // abrir teclado é decisão de fluxo, e quem sabe é a tela, não o número de
+          // linhas. Aqui havia um `&& !_multiline` da época em que o pai recusava; ele
+          // ignorava a prop em silêncio. Gate: o_campo_multilinha_respeita_o_autofocus.
+          autofocus: autofocus,
           type: obscureText
               ? DilettaInputType.password
               : (_multiline ? DilettaInputType.long : DilettaInputType.text),
