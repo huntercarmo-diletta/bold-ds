@@ -37,6 +37,38 @@ avô sai de lá. Não pinta — sem `tokens/`, sem hex.
 (tag `coreflow-web-v<versão>`), e os gates `uma_versao_e_uma_tag`, `toda_tag_web_carrega_o_pacote`
 e o novo `o_pai_na_web_recebe_o_mesmo_avo` passam a conhecê-lo. O número do Bold não muda.
 
+## [0.129.1] — 2026-11-05
+
+### Corrigido: o `CoreflowCampoDeTexto` multilinha respeita o `autofocus` que a tela declarou — muda comportamento
+
+Achado no app em 05/11, na folha «Colar código» do leitor de pagamentos:
+`CoreflowCampoDeTexto(autofocus: true, maxLines: 4)` abria **sem foco e sem teclado**. O `build`
+passava `autofocus && !_multiline` ao `DilettaInput`, com um comentário dizendo que o pai só aceitava a
+prop na variante de uma linha e que um `_FocoNaAbertura` cuidava do resto por aqui. O `_FocoNaAbertura`
+nunca foi escrito, e o pai cedeu: no avô fixado (`v3.26.0`), as duas ramificações do `build` do
+`DilettaInput` passam `autofocus: widget.autofocus`, e o dartdoc da prop diz que ela *«atravessa as DUAS
+variantes»*. O caso que o fez ceder é a linha digitável do boleto, 47 dígitos em `maxLines: 2`.
+
+Agora a prop atravessa como veio, em qualquer `maxLines`/`minLines`. A API não muda, mas **quem passa
+`autofocus: true` num campo multilinha passa a abrir com teclado**. É o que a prop sempre prometeu, e é
+visível. Sabidos no app do Conta BOLD:
+- **Digitar boleto** (`boleto_digitar_screen.dart`, `autofocus: true`, `maxLines: 2`): passa a abrir com
+  teclado, que é o pedido original;
+- **Folha «Colar código» do leitor** (`unified_scanner_screen.dart`): hoje pede o foco por fora (um
+  `FocusNode` próprio + `requestFocus` no primeiro frame). Com o conserto, o pedido duplicado não faz mal,
+  e o contorno pode sair depois do bump.
+
+Quem passa `autofocus: false` (o default) não muda. Nenhum outro ponto do `coreflow` ou das marcas filtrava
+`autofocus` por linhas. Gate novo: `coreflow/test/o_campo_multilinha_respeita_o_autofocus_test.dart`, com
+6 casos (uma linha, `maxLines: 4` e `minLines: 3`, cada um com `true` e `false`). Os dois multilinha com
+`true` reprovam com a linha antiga.
+
+### O que chega ao consumidor web por esta tag (`web-v0.129.1`): o número, e só
+
+O conserto é Dart, e nenhum lado web mudou desde a `v0.129.0`. Norte Benk (`0.1.9`), Confia Capital
+(`0.1.3`), BluOn (`0.1.2`) e Banco Fibra (`0.1.1`) não sobem nem ganham tag. O avô fica em `v3.26.0` /
+`web-v3.26.0`, e o `coreflow-web` segue em `0.1.0`, sem tag.
+
 ## [0.129.0] — 2026-10-30
 
 ### O avô sobe de `v3.24.0` para `v3.26.0` — os dez pinos juntos, e os dez vereditos de 30/10 chegam
