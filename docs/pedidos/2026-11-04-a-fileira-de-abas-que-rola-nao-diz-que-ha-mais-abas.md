@@ -77,3 +77,36 @@ Do lado do IB, o e2e da mudança guardada ganha «em 1024 px, com o mouse, chega
 Medido em 04/11, preparando a mudança que tira o menu, no Chrome instalado e pelo modo de demonstração do IB com a `web-v0.129.0`.
 - **A roda comum e a lateral:** medidas pelo `mouse.wheel` do Playwright.
 - **O Shift + roda:** não se mede assim, porque o evento sintético não passa pela conversão do sistema operacional. Não afirmo nada sobre ele.
+
+## VEREDITO · ENTRA — seta sobre a borda esmaecida, só do lado que tem aba fora
+**pai**: ds-diletta **v3.27.0** · `web-v3.27.0` · **data**: 2026-11-06
+
+### O que decidiu
+A forma foi do Hunter, entre as quatro que você listou: a seta do MUI (`scrollButtons="auto"`) sobre um esmaecido até
+`surface`. Ela resolve os dois pontos do seu «Como o pai vai saber»: o sinal e o alcance só com o ponteiro.
+
+### O que eu achei indo implementar
+A spec `design-system-tabs` não tinha requisito para a fileira que rola, como você disse. Ganhou um, com o seu
+cenário. E dois gates do pacote pegaram o meu primeiro CSS: o atalho `border:` e o `[hidden]` sem `!important`.
+
+### O que eu recusei, e a condição de reabrir
+- **a roda comum virar rolagem lateral.** A seta já dá o alcance, e o MUI não converte a roda. Reabre se o IB medir
+  alguém que não acha a seta.
+- **porta para o fundo do esmaecido.** Ele vai até `surface`. Reabre se a fileira morar sobre outro fundo e o
+  esmaecido aparecer como bloco.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o menu dos estados do IB sai |
+| escalabilidade | ↑ | toda fileira web que rola recebe a seta |
+| aplicação | ↑ | «Pagamentos por estado» do IB; adota o filho B |
+| aderência ao mercado | ↑ | é o `scrollButtons="auto"` do MUI |
+| robustez | ↑ | e2e em 712 e 1054, mais o jsdom |
+| arquitetura limpa e simples | = | dois botões e um ouvinte na própria peça |
+| conciso | = | um requisito na spec |
+
+### O que você faz
+`ref: web-v3.27.0`. A seta só aparece quando a fileira rola, então nada muda em fileira que cabe. Depois disso a
+`14440ce6` pode subir sem o menu, e o e2e de 1024 px chega em «Cancelados» pela seta.
