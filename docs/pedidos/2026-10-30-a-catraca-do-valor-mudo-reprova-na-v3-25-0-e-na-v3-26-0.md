@@ -54,3 +54,31 @@ O `python3 tool/o_valor_mudo_so_diminui.py` sai com 0 na próxima tag. Se o lote
 ## Como cheguei aqui
 
 Achado de passagem na revisão da PR #11 do bold-ds (o seletor), em 29/10, contra a `7f988b4`. A proposta do André também registra o «47 > 44» no fim. Refeito em 30/10, tag por tag.
+
+## VEREDITO · ENTRA — a catraca volta a 44, e agora roda no release
+**pai**: ds-diletta **v3.27.0** · **data**: 2026-11-06
+
+### O que decidiu
+A sua frase: *«A linha cita o eixo, e não os valores.»* Defeito do pai, pago com três frases de escolha no `kpi-card`.
+
+### O que eu achei indo implementar
+A catraca estava no gate do `CLAUDE.md` e fora do `tool/release.sh`. Por isso duas tags saíram vermelhas. Ela entrou
+no script. E a saída agora diz `… e N outros`, com `--todos` para a lista inteira: os seus três estavam no resto.
+
+### O que eu recusei, e a condição de reabrir
+nada
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o vermelho volta a segurar o próximo valor mudo |
+| escalabilidade | = | só a peça que veio do flash |
+| aplicação | ⊘ | gate do pai, nenhum filho roda |
+| aderência ao mercado | ⊘ | régua interna da casa |
+| robustez | ↑ | a catraca falha no release, não só no doc |
+| arquitetura limpa e simples | = | uma linha no script |
+| conciso | ↑ | três frases curtas, uma por valor |
+
+### O que você faz
+Nada. `ref: v3.27.0` quando quiser.
