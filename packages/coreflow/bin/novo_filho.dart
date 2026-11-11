@@ -383,7 +383,7 @@ String packageJsonDe(Opcoes op) => '''
     "#avo": "diletta-design-system-web"
   },
   "dependencies": {
-    "diletta-design-system-web": "bitbucket:diletta/ds-diletta#$tagWebDoAvo"
+    "diletta-design-system-web": "git+ssh://git@ssh.bitbucket.org/diletta/ds-diletta.git#$tagWebDoAvo"
   }
 }
 ''';
@@ -575,7 +575,7 @@ void main() {
 
   test('a versão INSTALADA do avô é a que o pino diz', skip: temPacote ? null : porque, () {
     final pino = File('web/package.json').readAsStringSync();
-    final tag = RegExp(r'ds-diletta#web-v([\\d.]+)').firstMatch(pino)?.group(1);
+    final tag = RegExp(r'ds-diletta(?:\\.git)?#web-v([\\d.]+)').firstMatch(pino)?.group(1);
     expect(tag, isNotNull, reason: 'o pacote web deixou de pinar o avô por tag `web-vX`');
 
     final noDisco = (jsonDecode(File('\${_instalado.path}/package.json').readAsStringSync())
@@ -585,7 +585,7 @@ void main() {
         reason: 'o `package.json` pede web-v\$tag e o que está instalado é \$noDisco.\\n'
             'O `npm install` responde «up to date» neste estado: o lock guarda o COMMIT já '
             'resolvido, e trocar o nome da tag não o invalida. Rode:\\n'
-            '  npm install "diletta-design-system-web@bitbucket:diletta/ds-diletta#web-v\$tag"');
+            '  npm install "diletta-design-system-web@git+ssh://git@ssh.bitbucket.org/diletta/ds-diletta.git#web-v\$tag"');
   });
 
   test('todo degrau que as peças PEDEM resolve nas quatro faces',

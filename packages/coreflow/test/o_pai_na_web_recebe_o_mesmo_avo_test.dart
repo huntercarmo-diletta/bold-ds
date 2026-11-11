@@ -33,7 +33,7 @@ final _instalado = Directory('${_pai.path}/node_modules/$_pacoteDoAvo');
 Map<String, dynamic> _json(String caminho) =>
     jsonDecode(File(caminho).readAsStringSync()) as Map<String, dynamic>;
 
-/// O que o `package.json` PEDE — `bitbucket:diletta/ds-diletta#web-vX.Y.Z`.
+/// O que o `package.json` PEDE — `git+ssh://git@ssh.bitbucket.org/diletta/ds-diletta.git#web-vX.Y.Z`.
 String _pino(Directory d) =>
     (_json('${d.path}/package.json')['dependencies'] as Map<String, dynamic>)[_pacoteDoAvo] as String;
 
@@ -131,7 +131,7 @@ void main() {
         reason: 'o `package.json` pede web-v$tag e o que está instalado é $noDisco.\n'
             'O `npm install` responde «up to date» neste estado: o lock guarda o COMMIT já '
             'resolvido, e trocar o nome da tag não o invalida. Rode:\n'
-            '  npm install "$_pacoteDoAvo@bitbucket:diletta/ds-diletta#web-v$tag"');
+            '  npm install "$_pacoteDoAvo@git+ssh://git@ssh.bitbucket.org/diletta/ds-diletta.git#web-v$tag"');
   });
 
   test('o pai NÃO pinta: sem `tokens/`, sem folha nos `exports`, sem um hex no JS', () {

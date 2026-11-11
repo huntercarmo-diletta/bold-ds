@@ -41,7 +41,7 @@ final _nosso = Directory('../coreflow_design_system_web');
 Map<String, dynamic> _json(String caminho) =>
     jsonDecode(File(caminho).readAsStringSync()) as Map<String, dynamic>;
 
-/// O que o `package.json` PEDE — `bitbucket:diletta/ds-diletta#web-vX.Y.Z`.
+/// O que o `package.json` PEDE — `git+ssh://git@ssh.bitbucket.org/diletta/ds-diletta.git#web-vX.Y.Z`.
 String _pedido(Directory d) {
   final deps = _json('${d.path}/package.json')['dependencies'] as Map<String, dynamic>;
   return deps[_pacoteDoAvo] as String;

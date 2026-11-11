@@ -145,7 +145,7 @@ d["exports"] = {k: v for k, v in d["exports"].items() if not k.startswith("./cat
 pino = d.get("dependencies", {}).pop("diletta-design-system-web", None)
 assert pino, "a tag não declara a dependência do avô — não há o que copiar, nem pino pra conferir"
 avo = json.loads((ondeOAvoMora / "package.json").read_text())
-esperado = "bitbucket:diletta/ds-diletta#web-v" + avo["version"]
+esperado = "git+ssh://git@ssh.bitbucket.org/diletta/ds-diletta.git#web-v" + avo["version"]
 assert pino == esperado, (
     f"o pino da tag é `{pino}` e o INSTALADO é {avo['version']} (`{esperado}`). "
     "Rode `npm install` em " + ondeOAvoMora.parent.parent.as_posix() + " antes de emitir")

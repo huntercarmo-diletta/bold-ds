@@ -20,6 +20,6 @@
   ],
   "dependencies": {
     "@fontsource/inter": "^5.3.0",
-    "diletta-design-system-web": "bitbucket:diletta/ds-diletta#web-v3.27.0"
+    "diletta-design-system-web": "git+ssh://git@ssh.bitbucket.org/diletta/ds-diletta.git#web-v3.27.0"
   }
 }

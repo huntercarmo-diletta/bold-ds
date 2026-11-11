@@ -30,7 +30,7 @@ dependencies:
   # commit como descrições diferentes.
   diletta_catalog_core:
     git:
-      url: git@bitbucket.org:diletta/catalogo-diletta.git
+      url: git@ssh.bitbucket.org:diletta/catalogo-diletta.git
       ref: v0.117.0
       path: packages/diletta_catalog_core
 
@@ -42,7 +42,7 @@ dev_dependencies:
   # Vinha de carona pelo pai, e carona some sem aviso na versão em que o pai parar de usá-la.
   diletta_design_system:
     git:
-      url: git@bitbucket.org:diletta/ds-diletta.git
+      url: git@ssh.bitbucket.org:diletta/ds-diletta.git
       ref: v3.27.0
       path: packages/diletta_design_system
   flutter_lints: ^4.0.0

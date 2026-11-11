@@ -88,7 +88,7 @@ void main() {
         .firstMatch(File('pubspec.yaml').readAsStringSync())
         ?.group(1);
     expect(dart, isNotNull, reason: 'este pacote deixou de pinar o avô por tag');
-    final web = RegExp(r'ds-diletta#(web-v[\d.]+)')
+    final web = RegExp(r'ds-diletta(?:\.git)?#(web-v[\d.]+)')
         .firstMatch(File('../coreflow_design_system_web/package.json').readAsStringSync())
         ?.group(1);
     expect(web, isNotNull, reason: 'o pacote web deixou de pinar o avô por tag `web-vX`');
@@ -103,7 +103,7 @@ void main() {
     expect(_mesmaLinguagem(dart: dart!, web: web!), isTrue,
         reason: 'o Dart recebe o avô em $dart e o pacote web recebe $web — uma língua, um número '
             'no `X.Y`; o patch da web só pode ser igual ou maior (reemissão). Suba o `package.json` '
-            'e rode `npm install "diletta-design-system-web@bitbucket:diletta/ds-diletta#web-$dart"` '
+            'e rode `npm install "diletta-design-system-web@git+ssh://git@ssh.bitbucket.org/diletta/ds-diletta.git#web-$dart"` '
             'pra re-resolver o lock.');
   });
 

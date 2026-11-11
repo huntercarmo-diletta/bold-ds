@@ -11,7 +11,7 @@ Não é preguiça, é medição. O catálogo depende dos dois pais por `git:` **
 ```yaml
 diletta_catalog_core:
   git:
-    url: git@bitbucket.org:diletta/catalogo-diletta.git
+    url: git@ssh.bitbucket.org:diletta/catalogo-diletta.git
     ref: v0.33.1
 ```
 

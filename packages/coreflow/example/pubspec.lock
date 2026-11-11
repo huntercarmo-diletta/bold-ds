@@ -62,7 +62,7 @@ packages:
       path: "packages/diletta_design_system"
       ref: "v3.27.0"
       resolved-ref: "84f5af616ca2676255e1b36b875c5061276a0928"
-      url: "git@bitbucket.org:diletta/ds-diletta.git"
+      url: "git@ssh.bitbucket.org:diletta/ds-diletta.git"
     source: git
     version: "3.27.0"
   fake_async:

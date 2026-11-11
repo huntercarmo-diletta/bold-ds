@@ -22,6 +22,22 @@ O que cada degrau significa **pro app que adota**:
 
 ## [Unreleased]
 
+### Os pinos dos pais vão pelo host novo do Bitbucket
+
+O Bitbucket moveu o SSH para `ssh.bitbucket.org` em 12/11/2026. A chave de host é a mesma do
+`bitbucket.org`, então muda só o endereço.
+- **No `pubspec.yaml`:** o avô e a ferramenta passam a `git@ssh.bitbucket.org:diletta/<repo>.git`.
+- **No `package.json` dos sete lados web:** o atalho `bitbucket:` do `npm` sempre resolve para o host
+  antigo, então o pino passa a ser a URL inteira,
+  `git+ssh://git@ssh.bitbucket.org/diletta/ds-diletta.git#web-v3.27.0`.
+
+Os locks apontam para os mesmos commits de antes, e nenhuma folha muda. O gerador de filho e o
+espelho da tag web usam o formato novo. Quem cobra é o
+`todo_pino_git_usa_o_host_novo_do_bitbucket_test`.
+
+**Para quem consome:** as tags web já publicadas carregam o avô copiado em `avo/` e não buscam nada.
+O app vendoriza o DS. A próxima tag Dart leva o pino novo.
+
 ### Nasce `packages/coreflow_web` (`coreflow-web` 0.1.0) — o pai na web
 
 Passo 1 da proposta `docs/propostas/2026-10-16-a-camada-web-do-coreflow.md`, aprovada pela Agatha
