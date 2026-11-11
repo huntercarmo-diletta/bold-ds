@@ -37,6 +37,54 @@ avô sai de lá. Não pinta — sem `tokens/`, sem hex.
 (tag `coreflow-web-v<versão>`), e os gates `uma_versao_e_uma_tag`, `toda_tag_web_carrega_o_pacote`
 e o novo `o_pai_na_web_recebe_o_mesmo_avo` passam a conhecê-lo. O número do Bold não muda.
 
+## [0.130.0] — 2026-11-11
+
+### O avô sobe de `v3.26.0` para `v3.27.0` — a seta da fileira de abas chega, e nenhuma folha muda
+
+O pai julgou em 06/11 os dois pedidos deste filho de 30/10 e de 04/11, os dois ENTRA, e publicou a
+`v3.27.0`. É um menor do avô, sem major:
+- **`<diletta-tabs>`: a seta da ponta.** Quando a fileira não cabe, uma seta sobre a borda esmaecida
+  aparece do lado que tem aba fora, e some no fim ou quando tudo cabe. O clique anda 80% da parte à vista
+  e não seleciona. Ela fica fora do Tab e do leitor de tela. É o veredito do pedido de 04/11 («a fileira
+  de abas que rola não diz que há mais abas, e a roda do mouse não chega nelas»). **Muda pixel em fileira
+  que rola**; fileira que cabe não muda.
+- **A catraca do valor mudo do avô** volta a 44 e passa a rodar no `release.sh` dele. É o veredito do
+  pedido de 30/10, e daqui não pede nada.
+
+Os dez pinos sobem juntos: três `ref:` em Dart (`coreflow`, `coreflow_design_system`, `catalog`), sete
+`package.json` na web e o molde do `novo_filho.dart`. O `npm install` foi pedido pela tag nos sete, e os
+locks resolvem o mesmo commit da `web-v3.27.0` (`7c57d39`). O Dart resolve o `84f5af6`, que já traz o
+conserto da seta que saiu depois da release do avô. O `coreflow-web` segue em 0.1.0 e em [Unreleased],
+sem tag, e o pino dele agora é a `web-v3.27.0`. A tabela dos pais no README passa a dizer `v3.27.0`.
+
+### O que mexeu nas folhas: nada
+
+As seis folhas reemitidas saem idênticas às da `v0.129.1`, sem nenhum valor de token mudado. As quatro
+marcas sobem um patch mesmo assim, porque o `package.json` delas passa a declarar o avô `web-v3.27.0`, e
+a tag de cada uma carrega a cópia desse avô em `avo/`: Norte Benk 0.1.10, Confia Capital 0.1.4, BluOn
+0.1.3 e Banco Fibra 0.1.2. Para quem só lê a folha, como o Internet Banking, nada muda. A troca do logo
+do Banco Fibra pelo vetor oficial passa a ser a 0.1.3.
+
+### Para quem consome a web
+
+- **A fileira de abas que rola mostra a seta** do lado que tem aba fora. No Internet Banking, isso
+  destrava a mudança guardada que tira o menu dos estados de Pagamentos (o «O que você faz» do veredito).
+  O esmaecido vai até `surface`; onde a fileira fica sobre outro fundo, vale medir se ele aparece como um
+  bloco, que é a condição de reabrir que o pai deixou escrita.
+
+### O que o app sente
+
+Nada na tela. A `v3.27.0` não muda nenhuma peça Dart: a seta é da web, e a catraca é gate do avô. No
+pacote Dart muda só a spec que viaja com ele (`diletta_specs.g.dart`), que ganha o requisito da fileira
+que rola e as três frases de escolha do `kpi-card`.
+
+### As tags desta versão
+
+- **`v0.130.0` e `web-v0.130.0`;**
+- **as quatro marcas:** `norte-benk-web-v0.1.10`, `confia-capital-web-v0.1.4`, `bluon-web-v0.1.3` e
+  `banco-fibra-web-v0.1.2`, cada uma com o avô `web-v3.27.0` copiado em `avo/`;
+- **o `coreflow-web`:** segue em 0.1.0, sem tag.
+
 ## [0.129.1] — 2026-11-05
 
 ### Corrigido: o `CoreflowCampoDeTexto` multilinha respeita o `autofocus` que a tela declarou — muda comportamento
