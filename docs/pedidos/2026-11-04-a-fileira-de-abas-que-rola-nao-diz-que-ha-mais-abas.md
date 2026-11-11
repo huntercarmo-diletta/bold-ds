@@ -110,3 +110,50 @@ cenário. E dois gates do pacote pegaram o meu primeiro CSS: o atalho `border:` 
 ### O que você faz
 `ref: web-v3.27.0`. A seta só aparece quando a fileira rola, então nada muda em fileira que cabe. Depois disso a
 `14440ce6` pode subir sem o menu, e o e2e de 1024 px chega em «Cancelados» pela seta.
+
+## ADENDO · 2026-11-11 — a fileira mora sobre outro fundo, e o esmaecido aparece como bloco; reabre a porta do fundo
+
+**Onde:** `core-flow-ib`, PR `fix/ds-web-v0.130.0` (`ab896ae5`, 11/11), que sobe o pino para a `web-v0.130.0`
+deste repo (avô `web-v3.27.0`). A peça chega pelo `BoldTabs`, que embrulha a `<diletta-tabs>`. Medido no mock
+do IB, no Chrome, a 390 px, na marca BOLD, nos dois temas. O esmaecido que a peça pinta é
+`linear-gradient(to left, <surface> 55%, transparent)`, com `surface` `#14151f` no escuro e `#ffffff` no claro.
+
+**A medida.** O IB tem seis fileiras de abas. No telefone, duas rolam, e as duas moram sobre outro fundo:
+
+| tela | fileira | quanto rola | fundo atrás da fileira | o que se vê |
+|---|---|--:|---|---|
+| Recebimentos | «Situação das cobranças» | 335 de 300 px | cartão translúcido (`rgba(22, 6, 10, 0.5)` no escuro), sobre a foto da marca | a seta num bloco, nos dois temas |
+| Investimentos | «Investimentos» | 648 de 342 px | a própria página, sobre a foto da marca | a seta num bloco, nos dois temas |
+
+As outras quatro não rolam a 390 px. «Notas ou contratos» (Antecipação) e «Ver por» (Risco sacado) moram em
+cartão `surface`, onde o esmaecido se confunde com o fundo, como o veredito previu (no console, uma fileira
+estreitada à mão num cartão `surface` confirmou isso nos dois temas). «Estados dos pagamentos» ainda está
+atrás do menu dos estados. Quando a `14440ce6` subir sem o menu, ela vai rolar no telefone e no notebook até
+1279 px (as medidas de 768 e 1024 estão no pedido, acima), também sobre a página. Pelo mesmo fundo, deve
+mostrar o mesmo bloco.
+
+**No `core-flow-wa`, com o mesmo pino:** a fileira das marcas de Ajustes › Botões mora sobre `background`
+(`#0a0b12` no escuro, `#f4f3f6` no claro). Hoje ela não rola, porque só aparece com mais de uma marca.
+Simulada com cinco marcas a 360 px, ela rola (442 de 336 px) e mostra o mesmo bloco.
+
+**As imagens**, na pasta ao lado deste arquivo (`2026-11-04-a-fileira-de-abas-que-rola-nao-diz-que-ha-mais-abas/`):
+- `ib-recebimentos-escuro.png` e `ib-recebimentos-claro.png`;
+- `ib-investimentos-escuro.png` e `ib-investimentos-claro.png`;
+- `console-marcas-escuro.png` e `console-marcas-claro.png`.
+
+**O que reabre:** só a porta do fundo do esmaecido. A seta fica como está: o sinal e o alcance com o ponteiro
+funcionam nas duas fileiras. A roda comum também fica de fora: não medimos ninguém que não achasse a seta.
+
+**Não estou pedindo uma forma.** Duas que resolveriam:
+- uma porta para a cor do esmaecido, que o hospedeiro declara;
+- um esmaecido que não pinta cor nenhuma, como uma máscara no trilho, que vale sobre qualquer fundo,
+  inclusive foto e cartão translúcido, sem o hospedeiro declarar nada.
+
+**Se você disser não:** o IB sobe a seta assim mesmo, porque o sinal vale mais do que o bloco. O bloco fica em
+Recebimentos e Investimentos no telefone e, depois da `14440ce6`, em Pagamentos no notebook. O filho não
+remenda o esmaecido por fora.
+
+**Como o pai vai saber que funcionou:** no e2e da fileira que rola, um hospedeiro com fundo diferente de
+`surface`, por exemplo `background` ou uma imagem: o pixel da região do esmaecido, no fim da fileira, é o do
+fundo do hospedeiro, e não `surface`, nos dois temas. Do lado do IB, Recebimentos e Investimentos a 390 px
+sem o bloco.
