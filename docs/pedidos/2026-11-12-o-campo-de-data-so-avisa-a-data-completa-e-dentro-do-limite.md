@@ -92,3 +92,34 @@ Do lado do IB, as 13 datas trocam pela peça, e o formulário do cadastro de not
 ## Como cheguei aqui
 
 No levantamento para trocar o campo de texto e as datas do IB pelas peças da linguagem, em 12/11. A troca estava parada desde 19/10, à espera do pedido do erro anunciado, que entrou em 20/10. A leitura do código apontou os itens 1 a 3, e a medida confirmou os quatro.
+
+## VEREDITO · ENTRA — o campo esvazia, avisa, diz o erro e delega o foco
+**pai**: ds-diletta **v3.28.0** · `web-v3.28.0` · **data**: 2026-11-13
+
+### O que decidiu
+Os quatro itens, na peça web:
+1. **apagar**: `valor` some e `mudou` avisa `''`;
+2. **incompleta, inexistente ou fora do limite**: o mesmo `''`, uma vez. Ao sair do campo, a peça mostra o erro
+   dela: «Digite a data completa: dd/mm/aaaa.» ou «Escolha uma data entre … e ….». O texto é do Hunter. O seu
+   `erro` vence o da peça;
+3. **foco**: o hospedeiro delega, e entrou na régua das peças de uma entrada;
+4. **iPhone**: a barra é opcional. `12112026` vira `2026-11-12`, e o campo reescreve `12/11/2026`.
+
+### O que eu achei indo implementar
+O teste antigo afirmava «fora do limite não avisa». Ele mudou: avisar `''` é o contrato novo, e a spec diz isso.
+Com `hora`, vale o mesmo. O Dart não muda: lá o campo é `readOnly` e só o calendário escreve.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o IB não entra no shadow para saber do texto |
+| escalabilidade | ↑ | o `BoldDateRange` vem pela mesma peça |
+| aplicação | ↑ | 13 datas do IB; adota o filho B |
+| aderência ao mercado | ↑ | campo que diz o erro ao sair é o padrão |
+| robustez | ↑ | o `valor` velho não fica mentindo depois de apagar |
+| arquitetura limpa e simples | = | três métodos na peça, nenhum atributo novo |
+| conciso | = | um requisito na spec |
+
+### O que você faz
+`ref: web-v3.28.0`. Quem trata `mudou` passa a receber `''`: o filtro de Recebimentos precisa aceitar vazio.

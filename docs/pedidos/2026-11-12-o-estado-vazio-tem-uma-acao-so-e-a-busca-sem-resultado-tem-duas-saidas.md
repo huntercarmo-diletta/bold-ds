@@ -70,3 +70,29 @@ Do lado do IB, o vazio da busca do Risco sacado vira a peça.
 ## Como cheguei aqui
 
 Na adoção do `<diletta-empty-state>` no IB, em 12/11. A Tatiana decidiu trocar o vazio local pela peça da linguagem, revendo o «fica local» de 16/10. O levantamento varreu as 59 chamadas do `BoldEmptyState`, em 42 arquivos, e separou as que têm conteúdo depois da legenda. Das 4 que têm, 2 são um link só (viram a `acao`), e 2 são os sítios acima.
+
+## VEREDITO · ENTRA — a segunda saída, `tertiary`, ao lado da principal
+**pai**: ds-diletta **v3.28.0** · `web-v3.28.0` · **data**: 2026-11-13
+
+### O que decidiu
+`acao-secundaria` e o evento `acao-secundaria` (Dart: `secondaryActionLabel` + `onSecondaryAction`). A forma é do
+Hunter: `tertiary` `md` na mesma linha, depois da principal no Tab, e a linha quebra no estreito.
+
+### O que eu achei indo implementar
+O lote fora do canal (`LoteDetalheScreen`) não é `vazio`: ninguém pode criar nada ali, e a rota só não existe.
+Ele cabe na peça com as duas ações, mas a escolha de peça é sua.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | = | dois parâmetros, sem slot livre |
+| escalabilidade | ↑ | toda lista aberta com busca |
+| aplicação | ↑ | Risco sacado do IB; adota o filho B |
+| aderência ao mercado | ↑ | Polaris `secondaryAction`, Atlassian |
+| robustez | = | um evento por saída |
+| arquitetura limpa e simples | = | um `Wrap` no Dart, um `flex` na web |
+| conciso | = | um requisito na spec |
+
+### O que você faz
+`ref: web-v3.28.0`. «Cadastrar fornecedor» em `acao` e «Limpar busca» em `acao-secundaria`.

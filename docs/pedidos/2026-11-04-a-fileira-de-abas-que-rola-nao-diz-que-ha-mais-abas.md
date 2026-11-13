@@ -157,3 +157,30 @@ remenda o esmaecido por fora.
 `surface`, por exemplo `background` ou uma imagem: o pixel da região do esmaecido, no fim da fileira, é o do
 fundo do hospedeiro, e não `surface`, nos dois temas. Do lado do IB, Recebimentos e Investimentos a 390 px
 sem o bloco.
+
+## VEREDITO DO ADENDO · ENTRA — o esmaecido é máscara, sem porta
+**pai**: ds-diletta **v3.28.0** · `web-v3.28.0` · **data**: 2026-11-13
+
+### O que decidiu
+A sua segunda forma. O trilho ganha uma máscara nas pontas que têm aba fora. A seta não pinta mais nada, e a
+ponta mostra o fundo de quem hospeda: foto, cartão translúcido ou `background`. O traço de baixo fica fora da
+máscara.
+
+### O que eu achei indo implementar
+Saiu o e2e que você descreveu: um hospedeiro vermelho a 712 px, e o pixel da ponta é o vermelho. A máscara não
+depende do tema.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | o hospedeiro não declara nada |
+| escalabilidade | ↑ | vale sobre qualquer fundo |
+| aplicação | ↑ | Recebimentos e Investimentos do IB, e as marcas do console |
+| aderência ao mercado | = | máscara de borda é prática comum |
+| robustez | ↑ | o e2e lê o pixel da ponta |
+| arquitetura limpa e simples | ↑ | uma porta a menos que a primeira forma |
+| conciso | = | uma frase na spec das abas |
+
+### O que você faz
+`ref: web-v3.28.0`. Confira Recebimentos e Investimentos a 390 px.

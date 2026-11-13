@@ -71,3 +71,28 @@ Do lado do IB, a troca dos 76 campos de texto sobe.
 ## Como cheguei aqui
 
 Medindo o pedido irmão no simulador do iPhone, em 12/11. O zoom apareceu no primeiro toque no campo de data, e o `<input>` comum de 16 px, posto na mesma página para comparar o teclado, não ampliou.
+
+## VEREDITO · ENTRA — 16 px no mínimo, em todo porte, em toda tela
+**pai**: ds-diletta **v3.28.0** · `web-v3.28.0` · **data**: 2026-11-13
+
+### O que decidiu
+O Hunter escolheu 16 px em todo lugar, e não só em tela de toque. O texto do `<diletta-input>` é
+`max(16px, degrau)` nos três portes e no `long`. O Dart fica nos 14 medidos: no aplicativo não há zoom.
+
+### O que eu achei indo implementar
+Nada além do que você mediu. **Muda pixel** no desktop também, e o CHANGELOG diz isso.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | uma linha de CSS, nenhuma regra por tela |
+| escalabilidade | ↑ | todo filho com página no celular |
+| aplicação | ↑ | 89 campos do IB; adota o filho B |
+| aderência ao mercado | ↑ | GOV.UK e Bootstrap usam 16 ou mais |
+| robustez | ↑ | falhava calado: no Chromium do desktop nada acontecia |
+| arquitetura limpa e simples | = | um `max()` na peça |
+| conciso | = | um requisito na spec do input |
+
+### O que você faz
+`ref: web-v3.28.0`. A troca dos 76 campos sobe. Confira o CPF da entrada no simulador.

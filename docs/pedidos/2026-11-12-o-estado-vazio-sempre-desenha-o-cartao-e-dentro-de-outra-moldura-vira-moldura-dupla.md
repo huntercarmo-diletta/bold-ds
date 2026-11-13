@@ -70,3 +70,32 @@ Do lado do IB, os 18 sítios trocam pela peça, e o `BoldEmptyState` local sai d
 ## Como cheguei aqui
 
 Na adoção do `<diletta-empty-state>` no IB, em 12/11. A Tatiana decidiu trocar o vazio local pela peça da linguagem, revendo o «fica local» de 16/10. O levantamento varreu as 59 chamadas do `BoldEmptyState`, em 42 arquivos. A medida pela suíte mostrou que os 11 sítios com `semCartao` não eram todos: a regra `.card .card` escondia outros 8.
+
+## VEREDITO · ENTRA — o eixo `Moldura`, com `cartao` de default
+**pai**: ds-diletta **v3.28.0** · `web-v3.28.0` · **data**: 2026-11-13
+
+### O que decidiu
+`moldura="nenhuma"` (Dart: `DilettaEmptyStateMoldura.nenhuma`) tira borda, fundo e raio, e mantém o recuo e o
+miolo. O default continua o cartão. O segundo consumidor é o próprio pai: o `_NadaComOTermo` do seletor passou
+a `nenhuma`, e a folha perdeu a borda dupla.
+
+### O que eu achei indo implementar
+O achado à parte procede. A spec segue o verbete agora: a peça serve `vazio`, e só ele. «Internet Banking
+indisponível» e «Não foi possível abrir esta tela» são falha, e não trocam por esta peça. «Gráfico
+indisponível» também é falha.
+
+### Os sete critérios
+
+| critério | | |
+|---|:-:|---|
+| manutenção | ↑ | sem `::part(cartao)` por fora |
+| escalabilidade | ↑ | 61 vazios em tabela no console |
+| aplicação | ↑ | 18 sítios do IB e o seletor do pai |
+| aderência ao mercado | ↑ | Polaris e Atlassian não desenham moldura |
+| robustez | = | o default desenha igual a hoje |
+| arquitetura limpa e simples | ↑ | eixo, e não uma peça nova |
+| conciso | = | um requisito e duas linhas de escolha |
+
+### O que você faz
+`ref: web-v3.28.0`. `moldura="nenhuma"` nos 18 sítios, menos as três falhas. A regra `.card .card` pode sair
+quando o último vazio local for embora.
